@@ -2,7 +2,7 @@
 if ($uri != '') {
  $mime = match ($uri) {
   default => 'image/png',
-  'font.woff2' => 'application/font-woff2',
+  'font.woff2' => 'font/woff2',
   'serviceWorker.js' => 'application/javascript',
   'manifest.json' => 'application/json'
  };
