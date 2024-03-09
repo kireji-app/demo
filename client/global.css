@@ -1,22 +1,36 @@
 :host, :root {
+ --ui-fill-rgb: 58, 72, 82;
  --u2w: calc(var(--uw) * 2);
  --u2h: calc(var(--uh) * 2);
  --u3w: calc(var(--uw) * 3);
  --u3h: calc(var(--uh) * 3);
  --huw: calc(var(--uw) / 2);
  --huh: calc(var(--uh) / 2);
+ --hhuw: calc(var(--uw) / 4);
+ --hhuh: calc(var(--uh) / 4);
+ --u-hw: var(--uh) var(--uw);
+ --hu-hw: var(--huh) var(--huw);
+ --hhu-hw: var(--hhuh) var(--hhuw);
  --white-paper: url(blue-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--vellum-white);
- --blue-paper: url(white-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--prussian-blue);
- --vellum-white: #EBE4CD;
- --prussian-blue: #19517f;
+ --blue-paper: url(white-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--ui-fill);
+ --vellum-white-rgb: 235, 228, 205;
+ --approval-green-rgb: 36, 180, 95;
+ --vellum-white: rgb(var(--vellum-white-rgb));
+ --ui-fill: rgb(var(--ui-fill-rgb));
+ --approval-green: rgb(var(--approval-green-rgb));
  --border: inset 0 0 0 0.5px var(--vellum-white), 0 0 0 0.5px var(--vellum-white);
  --paper-shadow: 0 0 var(--huw) #0003, 1px 1px 2px -0.5px #0008, inset 0 0 var(--u2w) -3px #ffffff07;
+ --paper-shadow-in: inset 0 0 var(--huw) #0003, inset 1px 1px 2px -0.5px #0008, 0 0 var(--u2w) -3px #ffffff07;
  --vp-corners: var(--c-tl) var(--c-tr) var(--c-br) var(--c-bl);
  --inner-corners: max(var(--huw), calc(var(--c-tl) - var(--uw))) max(var(--huw), calc(var(--c-tr) - var(--uw))) max(var(--huw), calc(var(--c-br) - var(--uw))) max(var(--huw), calc(var(--c-bl) - var(--uw)));
  --canvas-width: calc(2 * var(--vw));
  --canvas-height: calc(2 * var(--vh));
- overscroll-behavior: contain;
- --kireji-sans: 100 var(--uw) / var(--uh) 'kireji sans', sans-serif;
+ font: 100 var(--uw) / var(--uh) 'kireji sans', sans-serif;
+}
+
+* {
+ overscroll-behavior: contain !important;
+ user-select: none;
 }
 
 input,
@@ -29,16 +43,25 @@ iframe {
 
 /* width */
 ::-webkit-scrollbar {
- width: var(--uw) !important;
- -webkit-overflow-scrolling: auto !important;
+ width: 0 !important;
+ overflow: hidden;
+ border-radius: inherit;
+ border-top-left-radius: 0;
+ border-bottom-left-radius: 0;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
- background: transparent !important;
+ background: var(--ui-fill) !important;
+ border-radius: inherit;
+ border-top-left-radius: 0;
+ border-bottom-left-radius: 0;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
  background: var(--vellum-white) !important;
+ border-radius: inherit;
+ border-top-left-radius: 0;
+ border-bottom-left-radius: 0;
 }

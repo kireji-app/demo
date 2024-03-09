@@ -1,0 +1,54 @@
+:host {
+ width: 100%;
+ display: grid;
+ grid-template-columns: 1fr;
+ grid-template-rows: 1fr;
+ grid-template-areas: "body";
+ padding: var(--hu-hw);
+ box-sizing: border-box;
+ position: relative;
+ color: var(--vellum-white);
+}
+
+:host(:hover)::after {
+ content: '';
+ width: 100%;
+ height: 100%;
+ top: 0;
+ left: 0;
+ display: block;
+ position: absolute;
+ background-color: rgba(var(--vellum-white-rgb), 0.1) !important;
+ pointer-events: none;
+}
+
+:host::before {
+ content: var(--symbol) var(--times);
+ grid-area: type;
+}
+
+:host>stack- {
+ position: absolute;
+ top: 0;
+ right: 0;
+ --scale: 2;
+}
+
+:host(:not(:hover))>stack- {
+ opacity: 0.5;
+ pointer-events: none;
+ --scale: 1;
+}
+
+:host>output {
+ grid-area: body;
+}
+
+:host(warning-),
+:host(success-) {
+ color: black;
+}
+
+:host(:nth-child(even):not(:hover))::after {
+ background-color: rgba(var(--vellum-white-rgb), 0.05) !important;
+}

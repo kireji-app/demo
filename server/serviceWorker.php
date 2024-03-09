@@ -9,12 +9,12 @@
      const bytes = atob(file.base64);
      var arrayBuffer = new ArrayBuffer(bytes.length);
      var intArray = new Uint8Array(arrayBuffer);
-     for (var i = 0; i < bytes.length; i++) intArray[i] = bytes.charCodeAt(i);
+     for (var index = 0; index < bytes.length; index++) intArray[index] = bytes.charCodeAt(index);
      file.body = new Blob([intArray], { type: file.options['content-type'] });
     }
    }
    getFile = uri => {
-    if (uri === '') uri = 'index.html';
+    if (uri === ''||uri.endsWith('.word')) uri = 'index.html';
     return json[uri in json ? uri : 'icon.png']
    }
   }
@@ -23,7 +23,7 @@
  let getFile, fetching;
 
  onfetch = event => {
-  const uri = event.request.url.replace('https://$host/', '').replace(/\?.*/, '');
+  const uri = event.request.url.replace('https://$host/', '');
   if (!fetching) fetching = controller.refetch();
   event.respondWith(fetching.then(() => {
    const file = getFile(uri);

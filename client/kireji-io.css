@@ -1,0 +1,17 @@
+:host {
+ line-height: var(--uh);
+ background: var(--ui-fill);
+ background-color: black;
+ overflow-x: visible;
+ color: var(--vellum-white);
+ display: flex;
+ flex-flow: column nowrap;
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: var(--vw);
+ height: var(--vh);
+ box-sizing: border-box;
+ box-shadow: var(--paper-shadow);
+ border-radius: var(--inner-corners);
+}

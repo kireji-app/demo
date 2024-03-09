@@ -1,0 +1,69 @@
+:host {
+ flex: 1;
+ border-radius: var(--uh);
+ margin: var(--hu-hw);
+ position: relative;
+ z-index: 100;
+ height: max(var(--u2h), min(calc((var(--results) + 1) * var(--u2h)), calc(var(--vh) - 6 * var(--uh))));
+ overflow: hidden;
+ overflow-y: scroll;
+ background-color: var(--vellum-white);
+ color: var(--ui-fill);
+}
+
+input, search-bar-item {
+ font-family: inherit;
+ font-size: inherit;
+ outline: none;
+}
+
+input, numeral- {
+ position: sticky;
+ top: 0;
+ background-color: var(--vellum-white);
+ margin: none;
+ padding: 0;
+ z-index: 1;
+ height: var(--u2h);
+ line-height: var(--u2h);
+ vertical-align: top;
+}
+
+input {
+ display: inline-block;
+ width: calc(100% - var(--u2w));
+ height: var(--u2h);
+ box-sizing: border-box;
+ z-index: 1;
+ padding-left: var(--huw);
+}
+
+numeral- {
+ display: inline-block;
+ font-size: calc(var(--uw) + var(--huw));
+ width: var(--u2w);
+}
+
+search-bar-item {
+ display: flex;
+ height: var(--u2h);
+ vertical-align: middle;
+ white-space: nowrap;
+}hell
+
+search-bar-item:hover {
+ background-color: var(--ui-fill);
+ color: var(--vellum-white);
+}
+
+search-bar-item[selected] {
+ background-color: var(--approval-green);
+ color: var(--vellum-white);
+}
+
+:host(:not([focus="true"]))>search-bar-item {
+ display: none;
+}
+:host(:not([focus="true"])) {
+ height: var(--u2h);
+}

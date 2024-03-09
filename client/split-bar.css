@@ -1,0 +1,33 @@
+:host {
+ z-index: 10;
+ display: block;
+ position: relative;
+}
+
+:host::before {
+ content: "";
+ position: absolute;
+}
+
+:host(h-rule)::before {
+ height: var(--uh);
+ top: calc(-1 * var(--huh));
+ left: 0;
+ right: 0;
+ cursor: row-resize;
+ border-radius: var(--huh);
+}
+
+:host(v-rule)::before {
+ width: var(--uw);
+ left: calc(-1 * var(--huw));
+ top: 0;
+ bottom: 0;
+ cursor: col-resize;
+ border-radius: var(--huw);
+}
+
+:host(:hover)::before {
+ background: var(--ui-fill);
+ box-shadow: inset 0 0 0 2px var(--vellum-white);
+}

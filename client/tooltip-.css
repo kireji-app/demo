@@ -1,0 +1,31 @@
+:host {
+ pointer-events: none;
+ position: fixed;
+ --offset-y: var(--depth) * var(--u2h);
+ --width: calc(8 * var(--uw));
+ left: min(calc(100% - var(--width) - var(--uw)), max(calc(var(--x) + var(--depth) * var(--huw)), 0px));
+ top: min(calc(100% - var(--u2h)), max(calc(var(--y) + var(--u2h) + var(--depth) * var(--huh) - var(--offset-y)), 0px));
+ background: var(--ui-fill);
+ width: calc(var(--uw) * 8);
+ padding: var(--hu-hw);
+ white-space: nowrap;
+ border-radius: var(--huh);
+}
+
+:host([depth='0']) {
+ box-shadow: var(--paper-shadow);
+ background: var(--vellum-white);
+ color: var(--ui-fill);
+}
+
+:host(:not([depth='0'])) {
+ display: none;
+}
+
+:host([state="gone"]) {
+ display: none;
+}
+
+my-numeral {
+ width: var(--uw);
+}

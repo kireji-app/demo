@@ -1,0 +1,105 @@
+:host {
+ display: grid;
+ grid-template-rows: var(--u2h) 1fr;
+ box-sizing: border-box;
+ overflow: hidden !important;
+ --success-color: var(--approval-green);
+ --log-color: var(--ui-fill);
+ --warning-color: goldenrod;
+ --error-color: firebrick;
+ --times: '';
+ width: calc(32 * var(--uw));
+ height: 100%;
+ position: relative;
+ background: var(--ui-fill);
+}
+
+menu {
+ margin: 0;
+ padding: 0;
+ white-space: nowrap;
+ position: relative;
+ z-index: 1;
+ box-sizing: border-box;
+ display: flex;
+ flex-flow: row nowrap;
+}
+
+div {
+ display: flex;
+ flex-flow: column nowrap;
+ height: 100%;
+ min-height: none;
+ overflow-y: auto;
+ overflow-x: hidden;
+}
+
+menu::after {
+ content: '';
+ position: absolute;
+ top: 100%;
+ left: 0;
+ height: 100%;
+ background: linear-gradient(to bottom, #0007, transparent);
+ width: 100%;
+ pointer-events: none;
+ z-index: 10;
+}
+
+:host(:not([success-="1"])) success-,
+:host(:not([log-="1"])) log-,
+:host(:not([warning-="1"])) warning-,
+:host(:not([error-="1"])) error- {
+ opacity: 0;
+ height: 0;
+ pointer-events: none;
+ padding: 0;
+ margin: 0;
+}
+
+menu>stat-pill[type="success-"] {
+ --color: var(--success-color);
+ --content: var(--success-count);
+}
+
+menu>stat-pill[type="log-"] {
+ --color: var(--log-color);
+ --content: var(--log-count);
+}
+
+menu>stat-pill[type="warning-"] {
+ --color: var(--warning-color);
+ --content: var(--warning-count);
+}
+
+menu>stat-pill[type="error-"] {
+ --color: var(--error-color);
+ --content: var(--error-count);
+}
+
+menu>error-btn {
+ width: var(--u2h);
+ height: var(--u2h);
+ padding: 0;
+ display: inline-block;
+}
+
+success- {
+ background-color: var(--success-color);
+}
+
+log- {
+ background-color: var(--log-color);
+}
+
+warning- {
+ background-color: var(--warning-color);
+}
+
+error- {
+ background-color: var(--error-color);
+}
+
+div>*[times] {
+ --times: '(' attr(times)')';
+}

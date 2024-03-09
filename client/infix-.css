@@ -1,0 +1,18 @@
+:host {
+ background: var(--white-paper);
+ cursor: text;
+ padding: var(--uh);
+ display: flex;
+ flex-flow: row wrap;
+ align-content: start;
+ height: 100%;
+}
+
+input {
+ position: fixed;
+ left: 0;
+ top: 0;
+ right: 0;
+ line-height: var(--uh);
+ height: var(--uh);
+}

@@ -1,0 +1,11 @@
+:host {
+ left: calc(var(--uw) * (var(--x) + var(--hw)));
+ top: calc(var(--uh) * (var(--y) + var(--hh)));
+ background-color: var(--ui-fill);
+ border-radius: 50%;
+ width: var(--uw);
+ height: var(--uh);
+ margin: calc(-1 * var(--huh)) calc(-1 * var(--huw));
+ display: block;
+ position: absolute
+}

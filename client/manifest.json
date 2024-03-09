@@ -3,7 +3,7 @@
  "description": "Standalone viewer and editor. Alpha release - do not use.",
  "display": "standalone",
  "background_color": "#19517f",
- "theme_color": "#004983",
+ "theme_color": "#19517f",
  "display_override": [
   "window-controls-overlay"
  ],

@@ -27,5 +27,5 @@
  color: #0007;
 ">
 <i>
- Nothing is here
+ Thanks for visiting! This project is currently undergoing maintenance. 
 </i>

@@ -1,0 +1,219 @@
+{
+ "sort-rule": {
+  "thoughts-": "+The parts in this model have a specific order: how often the item is mentioned, descending. The first will be the most mentioned word, which is mentioned with frequency. Descending, words with decreasing connectedness, culminating in the list of words with only one mention.+"
+ },
+ "tooltip-": {
+  "origin-": "[depth=-1 state=gone]('tooltip-.css')my-numeral(\"tooltip-.js\")"
+ },
+ "core-parts": {
+  "origin-": "[address=0.blank-.word]\"log('build core.parts');on.setWord(msg=>{$address(msg)})\"('core-parts.css')(\"core-parts.js\")^Kireji Word Maker^ my-toolbar  word-inspector +<v-rule key=v-left edge=0>+ h-rule +<v-rule key=v-right edge=1>+ console-"
+ },
+ "ejaugust-com": {
+  "origin-": "^Eric Augustinowicz | ^('portfolio.css')"
+ },
+ "blank-": {
+  "origin-": ""
+ },
+ "word-inspector": {
+  "origin-": "('word-inspector.css')(\"word-inspector.js\")"
+ },
+ "v-rule": {
+  "origin-": "[offset=12 key=v-split edge=1 dragging=false]('split-bar.css')(\"split-bar.js\")"
+ },
+ "h-rule": {
+  "origin-": "[offset=3 key=h-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
+ },
+ "kireji-app": {
+  "origin-": "^kireji infix^{display:grid}+<infix- focus=true>+"
+ },
+ "kireji-io": {
+  "origin-": "^kireji chat^ ('kireji-io.css')"
+ },
+ "stack-recurring": {
+  "origin-": "[index=0]('stack-.css'){--scale:2}`${getContext(index).stack.node.map(node => '<numeral- word='+node.word+'></numeral->').join('')}` my-numeral"
+ },
+ "my-numeral": {
+  "origin-": "[word=one-]('numeral-.css')(\"marks.js\")\"$word(host.word)\"(\"numeral-.js\")"
+ },
+ "numeral-": {
+  "origin-": "[word=one-]('numeral-.css')(\"marks.js\")(\"numeral-.js\")"
+ },
+ "chat-header": {
+  "kireji-io": "{ flex: 0 0 calc(4 * var(--uh)); }"
+ },
+ "chat-keyboard": {
+  "kireji-io": "('chat-keyboard.css') \"this.onclick = ()=> this.setAttribute('raised','')\" chat-input keyboard-panel"
+ },
+ "chat-input": {
+  "origin-": "(\"p2p.js\"){ background: var(--white-paper); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
+ },
+ "text-input": {
+  "chat-input": "{color: var(--ui-fill); }\"const nodesToWipe = []; on.clearChatInput(i => {nodesToWipe.forEach(node=>node.remove()); nodesToWipe.push(...echo(i.websafe().wrap('+'))) })\""
+ },
+ "send-btn": {
+  "chat-input": "{ height: var(--u2h); display: block; width: var(--u3w); cursor:pointer; background: var(--approval-green); }"
+ },
+ "chat-box": {
+  "kireji-io": "('chat-box.css')(\"chat-box.js\")"
+ },
+ "gravity-tiles": {
+  "origin-": "+Hi+"
+ },
+ "cursor-trap": {
+  "origin-": "{ background: var(--white-paper) !important }'legend-{ margin: var(--u2h) var(--u2w) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'\"const [dot,arrow,cursor] = echo('dot- arrow- cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })\"legend-"
+ },
+ "legend-": {
+  "origin-": "+<keyboard-key>Esc</keyboard-key> to return+"
+ },
+ "keyboard-key": {
+  "origin-": "{background-color: var(--ui-fill); padding: var(--hu-hw); color:var(--vellum-white); border-radius: var(--huh); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 0 0 rgba(255, 255, 255, 0.7) inset; display: inline-block; font-weight: 700; white-space: nowrap}`${innerHTML}`"
+ },
+ "dot-": {
+  "origin-": "[x=0 y=0]('dot.css')\"this.to=(x,y)=>this.set({x,y,'style':`--x:${x};--y:${y}`}); this.to(x,y);\""
+ },
+ "arrow-": {
+  "origin-": "[ax=0 ay=0 bx=3 by=3]('arrow-.css')(\"arrow-.js\")"
+ },
+ "cursor-": {
+  "origin-": "[x=0 y=0]{position:absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px); width: var(--uw); height: var(--u2h); background: var(--ui-fill); box-shadow: 0 0 0 1.5 px var(--vellum-white), 0 0 5px var(--ui-fill)}\"this.to=(x,y)=>this.set({x,y,style:`--x:${x};--y:${y};`}); this.to(x,y)\""
+ },
+ "success-": {
+  "origin-": "('console-message.css')`${innerHTML}`"
+ },
+ "log-": {
+  "origin-": "('console-message.css')`${innerHTML}`"
+ },
+ "warning-": {
+  "origin-": "('console-message.css')`${innerHTML}`"
+ },
+ "error-": {
+  "origin-": "('console-message.css')`${innerHTML}`"
+ },
+ "console-": {
+  "origin-": "[success-=1 log-=1 warning-=1 error-=1]('console-.css')(\"console-.js\")"
+ },
+ "stat-pill": {
+  "origin-": "[type]{ text-align: center; background-color: var(--color); display: inline-block; box-sizing: border-box; height: var(--u2h); line-height: var(--u2h); width: var(--u2w); }':host(:hover){ cursor: pointer; } :host(:not([active])) { background-color: dimgrey; } :host::before{ width: 100%; display: block; content: \\'\\00A0\\'var(--content); color: var(--vellum-white); }'\"this.driveBool('active',type,'1',x=>host.setType(type, x));tip('Show '+type.replace('-',''))\""
+ },
+ "stack-": {
+  "origin-": "[index=0]('stack-.css')`${getContext(index).stack.node.map(node => '<numeral- word='+node.word+'></numeral->').join('')}`"
+ },
+ "collapse-btn": {
+  "origin-": ""
+ },
+ "multi-word": {
+  "origin-": "+<i>Some kinda multi word.+",
+  "bug-item": "+<b>Am I a bug?+",
+  "task-item": "`<b>Am I a ${'<u>'}task?${'</u>'}`"
+ },
+ "width-": {
+  "origin-": "':host:after { content: counter(width) }'"
+ },
+ "height-": {
+  "origin-": "':host:after { content: counter(height) }'"
+ },
+ "crock-": {
+  "crock-": "+and then +"
+ },
+ "crock-model": {
+  "origin-": "+There is no proof that \"+crock-model+\"+"
+ },
+ "crock-a": {
+  "crock-b": "+me to +"
+ },
+ "crock-b": {
+  "crock-a": "+you to +"
+ },
+ "bug-0001": {
+  "bug-list": "bug-item",
+  "origin-": "+The bug list lacks features.+"
+ },
+ "bug-item": {
+  "origin-": "`${inside('bug-list') ? '<b>BUG:</b> All bugs look the same.': 'Bug outside buglist.'}`"
+ },
+ "task-list": {
+  "origin-": "(+tasks.html+)"
+ },
+ "task-item": {
+  "origin-": "`${inside('task-list') ? '<b>TASK:</b> Make tasks not all the same.': 'Make switch case concept for inside(...) word.'}`"
+ },
+ "task-234": {
+  "task-list": "task-item",
+  "origin-": "+Understand Tasks+"
+ },
+ "my-toolbar": {
+  "origin-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); }"
+ },
+ "clear-btn": {
+  "my-toolbar": "[action='uncache()' info='Reset']('shelf-btn.css') (\"shelf-btn.js\")"
+ },
+ "refresh-btn": {
+  "my-toolbar": "[action='refresh()' info='Reload']('shelf-btn.css') (\"shelf-btn.js\")"
+ },
+ "refetch-btn": {
+  "my-toolbar": "[action='refetch()' info='Fetch']('shelf-btn.css') (\"shelf-btn.js\")"
+ },
+ "error-btn": {
+  "origin-": "[action='error(\"Test Error #\"+Math.random())' info='Error']('shelf-btn.css') (\"shelf-btn.js\")"
+ },
+ "search-bar": {
+  "my-toolbar": "([search-bar.ini])('search-bar.css')(\"search-bar.js\")"
+ },
+ "search-bar-item": {
+  "origin-": "[word]':host,*{vertical-align:middle; line-height:var(--u2h);}numeral-{width: var(--u2w); margin-right: var(--huw); font-size: calc(var(--huw) + var(--uw)); line-height: var(--u2h); pointer-events: none; }'`<numeral- word=${word}></numeral-><label>${word}</label>`"
+ },
+ "hello-world": {
+  "origin-": "+<h1><pre>Hello World</pre></h1><p>Welcome to me.</p>+"
+ },
+ "json-": {
+  "origin-": "('json-.css')(\"json-.js\")"
+ },
+ "sets-": {
+  "origin-": "':host>*{position:fixed;top:0;left:0;bottom:0;right:0;}'\"[...backlinks.keys()].map(word=>echo(word)[0])\""
+ },
+ "about-lake-mead": {
+  "thoughts-": "+I wish Lake Mead was a lake of mead.+"
+ },
+ "change-membrane": {
+  "thoughts-": "+<p>Membrane-based memory storage. The membrane doesn't necessarily differentiate between inside and outside. Instead, the membrane is either incredibly easy to cross (no updates needed to components) or it provides update instructions. The membrane can be crossed by electricity with regularity (i.e. 60 fps or higher) and even if there is an update we should aim not to drop below that rate so as not to provide an unpleasant experience.+"
+ },
+ "frame-rate": {
+  "thoughts-": "+<p>For each frame, we start it off with whichever node had just finished computation. In this system, presume every node already knows which node should perform an update next and presume that the cycle of node updates will reach a node that it started with and then repeat along the same nodes. This way, the frame rate of the browser is acknowledged along with a possibly faster but possibly slower natural frame rate produced by the cpu and gpu doing their jobs together (as best available on the users device) at some rate to cylce through the nodes back to the first at 1 iteration of the looping list nodes (1 natural hrz) per some frame rate which can vary.+"
+ },
+ "nectar-haiku": {
+  "thoughts-": "+<p>sweet smell of nectar++<p>when you don't drown and consume++<p>you fill and set free+"
+ },
+ "thoughts-": {
+  "origin-": "{display: grid;}':host>* { padding: var(--hu-hw); box-sizing: border-box; }'"
+ },
+ "spec-": {
+  "origin-": ""
+ },
+ "infix-": {
+  "origin-": "[expressions='hello-world' focus=false]('infix-.css')(\"infix-.js\")"
+ },
+ "text-cursor": {
+  "origin-": "('cursor-.css')"
+ },
+ "character-": {
+  "origin-": "[code=31](\"marks.js\")('character-.css')(\"character-.js\")"
+ },
+ "natural-": {
+  "variable-": "[decimal]"
+ },
+ "complex-": {
+  "variable-": "[real imaginary] real- imaginary-"
+ },
+ "real-": {
+  "variable-": "[decimal]"
+ },
+ "imaginary-": {
+  "variable-": "[decimal]"
+ },
+ "pi-": {
+  "constant-": "[decimal=3.14159]"
+ },
+ "prime-rho": {
+  "constant-": "[decimal=0.41468250985111166024810962215430770836577423813791697786824541448864096061935733419629004842847577793961615935208298595783574997845302200990412081465003395899370197411918628561557923719163725148816107107342843248021801697985681513424679474]"
+ }
+}

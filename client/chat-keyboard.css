@@ -1,0 +1,29 @@
+:host {
+ --height: 6;
+ display: flex;
+ flex-flow: column nowrap;
+ min-height: calc(var(--height) * var(--uh));
+ transition: cubic-bezier(0.55, 0.055, 0.675, 0.19) 0.125s;
+ background: var(--ui-fill);
+ position: relative;
+ padding: var(--huh) calc(var(--u3w) / 2);
+ box-sizing: border-box;
+}
+
+:host([raised]) {
+ --height: var(--hh);
+}
+
+:host([raised])>keyboard-panel {
+ --height: calc(var(--hh) - 3);
+}
+
+:host(:not([raised]))>keyboard-panel {
+ opacity: 0;
+ pointer-events: none;
+}
+
+keyboard-panel {
+ display: block;
+ height: 0;
+}

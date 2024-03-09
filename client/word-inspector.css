@@ -1,0 +1,14 @@
+:host {
+ background: var(--ui-fill)
+}
+
+textarea {
+ width: 100%;
+ max-height: calc(8 * var(--uh));
+ margin: 0;
+ padding: 0;
+ white-space: nowrap;
+ resize: none;
+ background: transparent;
+ color: var(--vellum-white);
+}
