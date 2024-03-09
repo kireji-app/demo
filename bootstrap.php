@@ -5,13 +5,7 @@
 } ?>
 <!DOCTYPE html>
 <meta name=robots content=noindex>
-<link rel="preload" href="https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isfFJXUdVNF.woff2" as="font" type="font/woff" crossorigin>
 <style>
- @font-face {
-  font-family: 'bootstrap';
-  src: url(https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isfFJXUdVNF.woff2) format('woff2');
- }
-
  body {
   background: rgb(28, 32, 38);
   color: white;
