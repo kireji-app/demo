@@ -1,0 +1,8 @@
+:host {
+ display: block;
+ background: var(--blue-paper);
+ height: calc(9 * var(--uh));
+ box-sizing: border-box;
+ overflow-x: hidden;
+ overflow-y: scroll
+}

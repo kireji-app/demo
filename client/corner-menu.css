@@ -1,0 +1,36 @@
+:host {
+ background: var(--blue-paper);
+ background-attachment: scroll;
+ display: block;
+ position: absolute;
+ scroll-snap-type: y mandatory;
+ overflow: hidden;
+ overflow-y: scroll;
+ transition: width 0.33s, height 0.33s;
+ width: calc(10 * var(--uw));
+ height: 100%;
+}
+
+part- {
+ height: var(--u2h);
+ transition: opacity 0.33s;
+}
+
+:host(:not(:hover))>part-:not([open]) {
+ height: 0;
+ opacity: 0;
+}
+
+:host(:not(:hover))>part- {
+ pointer-events: none;
+ width: calc(10 * var(--uw));
+ background: transparent !important;
+ padding-left: var(--u2w);
+}
+
+:host(:not(:hover)) {
+ width: var(--u2w);
+ height: var(--u2h);
+ overflow: visible;
+ border-bottom-right-radius: var(--u2w);
+}

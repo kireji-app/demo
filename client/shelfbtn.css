@@ -1,0 +1,50 @@
+:host {
+ display: block;
+ pointer-events: all;
+ position: relative;
+ cursor: pointer;
+ height: var(--height);
+}
+
+img {
+ transition: all 0.2s;
+}
+
+label {
+ font: var(--kireji-sans);
+ border-radius: calc(var(--huh) / 2);
+ pointer-events: none;
+ opacity: 0;
+ position: absolute;
+ user-select: none;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+ top: 100%;
+ padding: var(--huh) var(--huw) var(--huh) var(--huw);
+ margin: var(--huh) var(--huw) var(--huh) var(--huw);
+ background: var(--prussian-blue);
+ left: 0;
+ box-shadow: var(--border);
+}
+
+:host(:hover)>label {
+ opacity: 100%;
+ z-index: 2;
+}
+
+:host(:hover)>img {
+ transform: scale(116%)
+}
+
+:host>img {
+ height: var(--u3h);
+ width: var(--u3w);
+}
+
+@media (display-mode: window-controls-overlay) {
+ :host {
+  -webkit-app-region: no-drag;
+  app-region: no-drag !important;
+ }
+}

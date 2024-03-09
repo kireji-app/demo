@@ -1,0 +1,8 @@
+* {
+ font-weight: 900;
+}
+
+:host,
+:root {
+ --uh: 10px;
+}

@@ -8,10 +8,15 @@
   maximum-scale = 0.8,
   user-scalable = no
 ">
+<meta
+ name = robots
+ content = noindex
+>
 <title>
  <?=$host?> - Under Construction
 </title>
 <body
+ user = "<?=$user?>"
  style = "
  height: 50vh;
  margin: 0;

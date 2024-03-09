@@ -1,0 +1,7 @@
+:host {
+ position: absolute;
+ left: calc(var(--vw) + var(--uw));
+ top: calc(var(--vh) + var(--uh));
+ width: calc(var(--w) - var(--u2w));
+ height: calc(var(--h) - var(--u2h));
+}

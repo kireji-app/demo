@@ -1,0 +1,37 @@
+:host {
+ display: flex;
+ flex-flow: column nowrap;
+ position: absolute;
+ top: calc(var(--vh) / 2);
+ left: calc(var(--vw) / 2);
+ width: var(--w);
+ height: var(--h);
+ box-sizing: border-box;
+}
+
+shelf- {
+ overflow-x: auto;
+}
+
+editor-,
+editor-io,
+editor-ejaugust,
+editor-parts {
+ flex: 1 1 0;
+ height: 0px;
+ position: relative;
+}
+
+status- {
+ font: var(--kireji-sans);
+ padding: var(--hu);
+ box-sizing: border-box;
+}
+
+shelf-,
+status- {
+ flex: 0 0 var(--height);
+ overflow: visible;
+ --height: var(--u3);
+ max-height: var(--height);
+}
