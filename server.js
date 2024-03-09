@@ -14,14 +14,18 @@ onfetch = (core = new Proxy({
    defaultMIME = 'text/plain',
    string = "" + core[υυ],
    MIME = !υυ.includes('?') && MIMELookup[υυ.split('.').at(-1)] || defaultMIME,
-   isBinary = binaryMIMEs.includes(MIME);
+   isBinary = binaryMIMEs.includes(MIME),
+   clientId = event.clientId || event.resultingClientId,
+   user_key = 'client-' + clientId,
+   start_time = parseInt(Δ[user_key] ?? (Δ[user_key] = Date.now().toString()));
+  Δ[user_key + '/' + (Date.now() - start_time).toString()] = υυ;
   var body = new TextEncoder().encode(string);
   if (isBinary) {
    const B = atob(string), k = B.length, A = new ArrayBuffer(k), I = new Uint8Array(A);
    for (var i = 0; i < k; i++) I[i] = B.charCodeAt(i);
    body = new Blob([I], { type: MIME });
   }
-  event.respondWith(fetch('server.js').then(_ => new Response(body, { headers: { "content-type": `${MIME}${isBinary ? '' : '; charset=UTF-8'}`, "expires": "Sun, 20 Jul 1969 20:17:00 UTC", "server": "kireji" } })))
+  event.respondWith(new Response(body, { headers: { "content-type": `${MIME}${isBinary ? '' : '; charset=UTF-8'}`, "expires": "Sun, 20 Jul 1969 20:17:00 UTC", "server": "kireji" } }))
  }),
  "core/apply.js": "" + ((γ, _, A) => {
   if (!(υ in Δ)) {
@@ -52,16 +56,21 @@ onfetch = (core = new Proxy({
   }
   return Δ[υ]
  }),
- "[index.html]": "[doctype, head, body].join('\\n')",
- "index.html?doctype": "core/html/doctypes/html5.html",
- "index.html?head": "core/html/boilerplate.html",
- "index.html?body": "core/html/body.html",
- "core/html/doctypes/html5.html": "<!DOCTYPE html>",
- "core/html/boilerplate.html": "<head><script src=client.js></script></head>",
- "[core/html/body.html]": "`<body><part-list></part-list></body>`",
+ "[index.html]": "`<!DOCTYPE html><style>${light_css}</style><script>onload=()=>{const shadow=document.body.attachShadow({mode:'open'});const sheet=new CSSStyleSheet();shadow.adoptedStyleSheets.push(sheet);sheet.replaceSync(\\`${shadow_css}\\`);shadow.innerHTML=\\`${shadow_html}\\`}</script>${light_html}`",
+ "index.html?light_css": "client/light.css",
+ "index.html?light_html": "client/light.html",
+ "index.html?shadow_css": "client/shadow.css",
+ "index.html?shadow_html": "client/shadow.html",
+ "[client/light.html]": "Object.keys(Δ).map(k=>`<iframe src=\"${k}\" slot=\"${k}\"></iframe>`).join('\\n')",
+ "client/light.css": ":root { display: grid; height: 100% }",
+ "client/shadow.html": "<slot name='desktop'></slot><slot name='taskbar'></slot>",
+ "client/shadow.css": ":host{ margin: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr 28px; grid-template-areas: \"desktop\" \"taskbar\" } slot{ display: grid } [name=\"desktop\"]{ grid-area: desktop } [name=\"taskbar\"]{ grid-area: taskbar }",
+ "client/windows.css": ":host { background: #377f7f } #taskbar { position: fixed; bottom: 0; left: 0; right: 0; height: 28px; box-shadow: inset 0 1px #c3c3c3, inset 0 2px white; } .ui { background: #c3c3c3 } .btn { box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a; }",
+ "taskbar": "",
+ "desktop": "",
  "apple-touch-icon.png": "<?=b64('icon.png')?>",
  "favicon.ico?src": "apple-touch-icon.png",
- "client.js": "",
+ "regex/tagname.txt": "/^[a-z][a-z0-9]*-[a-z0-9-]*$/",
  "[favicon.ico]": "src",
  "core.js?apply": `core/apply.js`,
  "core.js?construct": `core/construct.js`,
@@ -93,8 +102,3 @@ onfetch = (core = new Proxy({
  "core/toString.js": "() => Δ[υ]",
  "core/valueOf.js": "() => Δ[υ]",
 }, { get: (Δ, υ) => eval(Δ[`core.js`]) }))['onfetch.js'];
-
-
-// given an incumbent child list and an incoming child list,
-//  suggest the smallest number of operations to update the children
-// then, implement the change operation within the custom element

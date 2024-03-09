@@ -13,7 +13,7 @@
  }
 
  body {
-  background: rgb(58, 72, 82);
+  background: rgb(28, 32, 38);
   color: white;
   font-family: 'bootstrap', monospace;
   white-space: pre;
@@ -29,7 +29,7 @@
    target: t
   }) => t.state === 'activated' ? f(t) : null);
   f(z)
- }))(a.controller) : console.error('!sw'))(navigator.serviceWorker, () => 'location'.reload?.())
+ }))(a.controller) : console.error('!sw'))(navigator.serviceWorker, () => location.reload?.())
 </script>
 $ > core.parts
 $ > installing...
