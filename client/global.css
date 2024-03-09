@@ -10,6 +10,7 @@
  --hhuh: calc(var(--uh) / 4);
  --hhhuw: calc(var(--uw) / 8);
  --hhhuh: calc(var(--uh) / 8);
+ --u2-hw: var(--u2h) var(--u2w);
  --u-hw: var(--uh) var(--uw);
  --hu-hw: var(--huh) var(--huw);
  --hhu-hw: var(--hhuh) var(--hhuw);
@@ -30,7 +31,7 @@
  --inner-corners: max(var(--huw), calc(var(--c-tl) - var(--uw))) max(var(--huw), calc(var(--c-tr) - var(--uw))) max(var(--huw), calc(var(--c-br) - var(--uw))) max(var(--huw), calc(var(--c-bl) - var(--uw)));
  --canvas-width: calc(2 * var(--vw));
  --canvas-height: calc(2 * var(--vh));
- font: 100 var(--uw) / var(--uh) 'kireji sans', sans-serif;
+ font: 400 var(--uw) / var(--uh) 'kireji sans', sans-serif;
 }
 
 * {

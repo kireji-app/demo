@@ -1,0 +1,17 @@
+:host {
+ display: grid;
+ grid-template-rows: var(--u3h) calc(100% - var(--u3h));
+}
+
+:host([variable]) {
+ overflow: hidden !important;
+}
+
+:host([variable])>:not(:first-child) {
+ overflow-y: auto;
+}
+
+label>button {
+ float: right;
+ color: var(--vellum-white);
+}

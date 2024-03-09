@@ -1,4 +1,4 @@
-echo('my-numeral');
+echo('my-glyph');
 
 tip(info);
 

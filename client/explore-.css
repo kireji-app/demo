@@ -1,0 +1,13 @@
+:host {
+ display: flex;
+ flex-flow: column nowrap;
+ overflow-x: visible;
+}
+
+:not([selected]) {
+ display: none;
+}
+
+[selected] {
+ height: 100%;
+}

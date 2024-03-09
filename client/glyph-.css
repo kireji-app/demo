@@ -1,22 +1,29 @@
 :host {
- --height: calc(3 * var(--uh));
- --bg: dimgrey;
- --color: var(--vellum-white);
- display: flex;
- flex-flow: row nowrap;
- width: 100%;
- height: var(--height);
- box-sizing: border-box;
+ --scale: inherit;
+ --w-size: calc(var(--scale) * var(--uw));
+ --h-size: calc(var(--scale) * var(--uh));
+ width: var(--w-size);
+ height: var(--h-size);
+ font-size: calc(var(--w-size) - var(--huw));
+ line-height: var(--h-size);
  position: relative;
+ text-align: center;
+ display: inline-block;
+ overflow: hidden;
 }
 
-glyph- {
- pointer-events: none;
- width: calc(3 * var(--uw));
- font-size: var(--u2w);
- line-height: var(--height);
- vertical-align: middle;
- flex: 0 0 auto;
+:host::after {
+ position: relative;
+ content: var(--mark);
+ text-align: center;
+ display: block;
+ width: 100%;
+ height: 100%;
+}
+
+:host(:hover)::after {
+ background-color: rgba(var(--vellum-white-rgb), 0.8);
+ color: var(--ui-fill);
 }
 
 var {
@@ -27,6 +34,12 @@ var {
  color: var(--color);
  position: relative;
  z-index: 2;
+ max-width: calc(var(--u2w) + var(--huw));
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ box-sizing: border-box;
+ color: var(--vellum-white);
 }
 
 var::before {
@@ -47,7 +60,6 @@ var::before {
  display: block;
  width: calc(var(--u2w) + var(--huw));
  height: calc(var(--u2h) + var(--huh));
- z-index: -10;
 }
 
 var::before,
@@ -62,33 +74,26 @@ var,
  bottom: var(--hhuh);
 }
 
-label {
- font-size: var(--uw);
- line-height: var(--height);
- overflow: hidden;
- text-overflow: ellipsis;
-}
-
-:host([extension="css"]) {
+:host([word="css-"]) {
  --bg: darkblue;
 }
 
-:host([extension="js"]) {
+:host([word="js-"]) {
  --bg: gold;
  --color: black;
 }
 
-:host([extension="txt"]) {
+:host([word="txt-"]) {
  --bg: black;
 }
 
-:host([extension="ini"]),
-:host([extension="json"]) {
+:host([word="ini-"]),
+:host([word="json-"]) {
  --bg: var(--vellum-white);
  --color: black;
 }
 
-:host([extension="html"]),
-:host([extension="png"]) {
+:host([word="html-"]),
+:host([word="png-"]) {
  --bg: darkred;
 }

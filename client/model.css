@@ -1,0 +1,26 @@
+:host {
+ --height: calc(3 * var(--uh));
+ --bg: dimgrey;
+ display: flex;
+ flex-flow: row nowrap;
+ width: 100%;
+ height: var(--height);
+ box-sizing: border-box;
+ position: relative;
+}
+
+glyph- {
+ pointer-events: none;
+ width: calc(3 * var(--uw));
+ font-size: var(--u2w);
+ line-height: var(--height);
+ vertical-align: middle;
+ flex: 0 0 auto;
+}
+
+label {
+ font-size: var(--uw);
+ line-height: var(--height);
+ overflow: hidden;
+ text-overflow: ellipsis;
+}

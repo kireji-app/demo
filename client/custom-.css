@@ -1,0 +1,12 @@
+td,
+td>pre {
+ font: var(--uw) / var(--uh) 'kireji sans', sans-serif;
+}
+
+td:first-child {
+ font-weight: 700;
+}
+
+td>pre {
+ margin: 0;
+}

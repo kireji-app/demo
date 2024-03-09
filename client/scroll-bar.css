@@ -1,0 +1,17 @@
+:host {
+ background-color: var(--ui-fill);
+ position: absolute;
+ right: 0;
+ top: 0;
+ width: var(--uw);
+ height: 100%;
+}
+
+:host::after {
+ content: '';
+ position: absolute;
+ width: 100%;
+ height: calc(var(--page-ratio) * 100%);
+ top: calc(var(--scroll) * 100%);
+ background-color: var(--vellum-white);
+}

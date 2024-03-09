@@ -234,8 +234,10 @@ addEventListener('load', () => {
      get() {
       return () => {
        OFFSCREEN_NODE.textContent = this;
-       const result = OFFSCREEN_NODE.innerHTML;
+       let result = OFFSCREEN_NODE.innerHTML;
        OFFSCREEN_NODE.innerHTML = ''
+       result = result.replace(/"/g,'&quot;')
+       result = result.replace(/'/g,'&apos;')
        return result;
       }
      }
@@ -243,6 +245,11 @@ addEventListener('load', () => {
     ungroup: {
      get() {
       return r => [...this.matchAll(/((?:(?:'(?:\\'|[^'])*')|(?:"(?:\\"|[^"])*")|(?:<(?:\\>|[^>]])*>])|(?:\[(?:\\\]|[^\]])*\])|(?:\^(?:(?:\\\^)|[^^])*\^)|(?:\+(?:\\\+|[^+])*\+)|(?:`(?:\\`|[^`])*`)|(?:\w*\s*\*(?:\\\*|[^*])*\*(?:\\\*|[^*])*\*)|(?:\w*\s*!(?:\\!|[^!])*!)|[-\w_]+|(?:\([^\)]*\))|(?:{[^}]*})))/g)].map($ => $[1])
+     }
+    },
+    parseINI: {
+     get() {
+      return (fn = (k, v) => { }) => [...this.matchAll(/([a-z][a-z-0-9]*)(?:\s*=\s*(?:([^\s'"`\]]+)|"([^"]+)"|'([^']+)'|`([^`]+)`))?/g)].map(match => match.slice(1).filter(x => x !== undefined)).map(fn)
      }
     },
     isLetter: {
@@ -320,7 +327,7 @@ addEventListener('load', () => {
        for (const child of subject.children) recursive_model(child, fork('node', child));
       } else {
        DEFINE_NODE(word);
-       const model = word in archive ? archive[word] : { "origin-": "`${innerHTML}`" };
+       const model = word in archive ? archive[word] : { "desktop-": "`${innerHTML}`" };
        append('model', model, subject);
       }
      }
@@ -332,7 +339,9 @@ addEventListener('load', () => {
      this.shadowRoot.adoptedStyleSheets = [GLOBAL_SHEET]
      const [word, expressions] = pickOne(argument);
      if (word in argument) returnable.push(...append('expressions', expressions, this));
-     backlinks.get(this.word)?.forEach(word => returnable.push(...append('node', create(word, document, _ => _.toNodes()[0]), this)));
+     /*backlinks.get(this.word)?.forEach(word => {
+      returnable.push(...append('node', create(word, document, _ => _.toNodes()[0]), this))
+     });*/
      return returnable;
     }
     buffername({ append, argument }) {
@@ -362,7 +371,7 @@ addEventListener('load', () => {
        return results.flat(2);
       },
       { query, flip, enableHost } = this,
-      $ = (childWord = 'origin-', parentWord = this.word) => echo(archive[parentWord][childWord]),
+      $ = (childWord = 'desktop-', parentWord = this.word) => echo(archive[parentWord][childWord]),
       attributes = this.customizations && Object.keys(this.customizations),
       identifiers = attributes && attributes.map(key => key.replace('-', '_')),
       hasCustom = attributes && attributes.length,
@@ -373,6 +382,13 @@ addEventListener('load', () => {
        innerHTML: this.innerHTML,
        echo, send, $,
        say: html => echo(html.wrap('+')),
+       incoming: (callback = word => { }) => {
+        const myLinks = backlinks.get(this.word);
+        myLinks?.forEach(word => {
+         callback?.(word)
+        })
+       },
+       state: attr => e[attr](this.get(attr)),
        inside, stack, fork, index,
        query, flip, enableHost,
        log: msg => send(msg, 'log'),
@@ -384,13 +400,13 @@ addEventListener('load', () => {
         this.onmousedown = () => {
          window.telecursor.trackDrag(
           pos => {
-           ontoggle(true);
+           ontoggle(true, pos);
            update(pos, width, height)
           },
           update,
           pos => {
-           ontoggle(false);
            update(pos);
+           ontoggle(false, pos);
           }
          );
         }
@@ -438,13 +454,11 @@ addEventListener('load', () => {
        custom: _ => {
         // TODO: No more cache. Work using changes in the model.
         if (!this.customizations) this.customizations = {};
-        [..._.matchAll(/([a-z][a-z-0-9]*)(?:\s*=\s*(?:([^\s'"`\]]+)|"([^"]+)"|'([^']+)'|`([^`]+)`))?/g)].map(match => match.slice(1).filter(x => x !== undefined)).map(([attr, value]) => {
+        _.parseINI(([attr, value]) => {
          const key = this.customizations[attr] = version + '|' + index + '|' + attr;
          let finalValue = value;
-         if (this.has(attr)) finalValue = this.get(attr);
-         else {
-          if (key in localStorage) finalValue = localStorage[key];
-         }
+         if (key in localStorage) finalValue = localStorage[key]
+         else if (this.has(attr)) finalValue = this.get(attr);
          this.set(attr, finalValue);
         })
        },
@@ -701,6 +715,7 @@ addEventListener('load', () => {
       else if (mime === 'font/woff2') {
        pending = file.arrayBuffer();
        const font = new FontFace('kireji sans', await pending);
+       font.weight = buffername.split('.')[0].split('-')[1];
        await font.load();
        document.fonts.add(font);
       }
@@ -761,13 +776,10 @@ addEventListener('load', () => {
         },
         inside: word => stack.node.filter(node => node.word === word).length - (word === stack.node.at(-1)?.word ? 1 : 0),
         pickOne: model => {
-         const word = stack.node.filter(node => node.word in model).at(-1)?.word ?? 'origin-';
-         if (word !== 'origin-') {
+         const word = stack.node.filter(node => node.word in model).at(-1)?.word ?? 'desktop-';
+         if (word !== 'desktop-') {
           const setModel = archive[word];
           if (!setModel) console.warn('element is in unknown set', word)
-          else if ('object-' in setModel){
-           console.warn(setModel['object-'])
-          }
          }
          return [word, model[word]];
         },
@@ -785,6 +797,7 @@ addEventListener('load', () => {
      },
      GLOBALS = {
       ip: { get: () => CLIENT.ip },
+      save: { get: () => () => POST('save') },
       fonts: { get: () => document.fonts },
       client: { get: () => CLIENT },
       origin: { get: () => ORIGIN_CONTEXT },
@@ -797,10 +810,10 @@ addEventListener('load', () => {
       glossary: { get: () => GLOSSARY },
       globalcss: { get: () => BUFFERS['global.css'] },
       backlinks: { get: () => ii2I },
-      getContext: { get: () => index => CONTEXT_INDEX[index] },
+      moments: { get: () => CONTEXT_INDEX },
       statics: { get: () => STATICS },
      },
-     ORIGIN_CONTEXT = CREATE_CONTEXT(null, 'word', "origin-");
+     ORIGIN_CONTEXT = CREATE_CONTEXT(null, 'word', "desktop-");
     Object.entries(ARCHIVE).forEach(([localTagname, model]) => {
      ADD_WORD(localTagname);
      Object.keys(model).forEach(remoteTagname => {

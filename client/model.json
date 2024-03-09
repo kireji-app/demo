@@ -1,75 +1,132 @@
 {
- "folder-explorer": {
-  "origin-": "[selection]('folder.css')(\"folder.js\")"
+ "birthday-theta": {
+  "desktop-": "[min=711633600 max=711640800]('birthday-theta.css')(\"birthday-theta.js\")"
  },
- "file-": {
-  "origin-": "[buffername]('file.css')(\"file.js\")"
+ "folder-explorer": {
+  "desktop-": "[selection]('explore.css')(\"explore.js\")(\"folder.js\")"
+ },
+ "explore-": {
+  "desktop-": "[tabs='desktop-explorer folder-explorer model-explorer moment-explorer'](\"explore-.js\")('explore-.css')"
+ },
+ "title-bar": {
+  "desktop-": "[tabs tab](\"title-bar.js\")('title-bar.css')"
+ },
+ "desktop-explorer": {
+  "desktop-": "[selection]('explore.css')(\"explore.js\")(\"desktop.js\")"
+ },
+ "moment-explorer": {
+  "desktop-": "[selection]('explore.css')(\"explore.js\")(\"time-index.js\")"
+ },
+ "desktop-": {
+  "desktop-": "\"incoming(word => { say(`<model-item word=${word}>`) })\""
+ },
+ "file-item": {
+  "desktop-": "[buffername]('file.css')(\"file.js\")"
+ },
+ "model-item": {
+  "desktop-": "[word]('model.css')(\"model.js\")"
  },
  "sort-rule": {
   "thoughts-": "+The parts in this model have a specific order: how often the item is mentioned, descending. The first will be the most mentioned word, which is mentioned with frequency. Descending, words with decreasing connectedness, culminating in the list of words with only one mention.+"
  },
  "tooltip-": {
-  "origin-": "[depth=-1 state=gone]('tooltip-.css')my-numeral(\"tooltip-.js\")"
+  "desktop-": "[depth=-1 display=gone]('tooltip-.css')my-glyph(\"tooltip-.js\")"
  },
  "core-parts": {
-  "origin-": "[address=0.blank-.word]\"log('build core.parts');on.setWord(msg=>{$address(msg)})\"my-toolbar('core-parts.css')(\"core-parts.js\")^Kireji Word Maker^ +<v-rule key=v-left edge=0>+ h-rule +<v-rule key=v-right edge=1>+ console-"
+  "desktop-": "[word=birthday-theta]('core-parts.css')^Kireji Word Maker^\"on.clear(word=>{$word(word)})\"title-bar explore- +<v-rule offset=17>+ +<h-rule edge=1 offset=3>+ console- (\"core-parts-old.js\")"
+ },
+ "part-menu": {
+  "desktop-": "{display:grid;grid-template-columns:var(--u2w) var(--u2w) 1fr var(--u2w);line-height:var(--u2h)}+<reorder-handle parent=1>++<collapse-handle parent=1>+`<label>${this.get('label')}</label>` delete-btn"
+ },
+ "delete-btn": {
+  "desktop-": "'my-glyph{line-height:var(--u2h)}'{text-align:center}+<my-glyph show-tip=false>+"
  },
  "ejaugust-com": {
-  "origin-": "^Eric Augustinowicz | ^('portfolio.css')"
+  "desktop-": "^Eric Augustinowicz | ^('portfolio.css')"
  },
  "blank-": {
-  "origin-": ""
+  "desktop-": ""
  },
- "root-table": {
-  "origin-": "[word=blank-]('root-table.css')(\"root-table.js\")"
+ "model-explorer": {
+  "desktop-": "[word=blank-]('model-explorer.css')(\"model-explorer.js\")"
  },
  "buffername-": {
-  "origin-":"[content alt='File'](\"expression.js\")('expression.css'){--mark:'(';--unmark:')'}\"\""
+  "desktop-": "[content]{width:100%}\"tip('Buffer');\"`<file-item buffername=${atob(content).websafe()}>`"
+ },
+ "buffername-part": {
+  "desktop-": "[content]{width:100%}('part-.css')(\"buffername-part.js\")"
  },
  "template-": {
-  "origin-":"[content alt='Template'](\"expression.js\")('expression.css'){--mark:'`'}"
+  "desktop-": "[content alt='Template'](\"expression.js\")('expression.css'){--mark:'`'}"
+ },
+ "template-part": {
+  "desktop-": "[content alt='Template'](\"part-.js\")('part-.css'){--mark:'`'}"
  },
  "css-": {
-  "origin-":"[content alt='CSS'](\"expression.js\")('expression.css'){--mark:'\\''}"
+  "desktop-": "[content alt='CSS'](\"expression.js\")('expression.css'){--mark:'\\''}"
+ },
+ "css-part": {
+  "desktop-": "[content alt='CSS'](\"part-.js\")('part-.css'){--mark:'\\''}"
  },
  "custom-": {
-  "origin-":"[content alt='Customization'](\"expression.js\")('expression.css'){--mark:'[';--unmark:']'}"
+  "desktop-": "[content]('custom-.css')(\"custom-.js\")"
+ },
+ "custom-part": {
+  "desktop-": "[content]('part-.css')('custom-part.css')(\"custom-part.js\")"
  },
  "html-": {
-  "origin-": "[content alt='HTML'](\"expression.js\")('expression.css'){--mark:'+'}"
+  "desktop-": "[content alt=HTML](\"expression.js\")('expression.css'){--mark:'+'}"
+ },
+ "html-part": {
+  "desktop-": "[content alt=HTML](\"part-.js\")('part-.css'){--mark:'+'}"
  },
  "hostcss-": {
-  "origin-": "[content alt='Style'](\"expression.js\")('expression.css'){--mark:'{';--unmark:'\\7D'}"
+  "desktop-": "[content alt=Style](\"expression.js\")('expression.css'){--mark:'{';--unmark:'\\7D'}"
+ },
+ "hostcss-part": {
+  "desktop-": "[content alt=Style](\"part-.js\")('part-.css'){--mark:'{';--unmark:'\\7D'}"
  },
  "title-": {
-  "origin-": "[content alt='Title'](\"expression.js\")('expression.css'){--mark:'^'}"
+  "desktop-": "[content alt=Title](\"expression.js\")('expression.css'){--mark:'^'}"
+ },
+ "title-part": {
+  "desktop-": "[content alt=Title](\"part-.js\")('part-.css'){--mark:'^'}"
  },
  "javascript-": {
-  "origin-": "[content alt='JS'](\"expression.js\")('expression.css'){--mark:'\"'}"
+  "desktop-": "[content alt=JS](\"expression.js\")('expression.css'){--mark:'\"'}"
  },
- "word-inspector": {
-  "origin-": "('word-inspector.css')(\"word-inspector.js\")"
+ "javascript-part": {
+  "desktop-": "[content alt=JS](\"part-.js\")('part-.css'){--mark:'\"'}"
+ },
+ "reorder-handle": {
+  "desktop-": "'my-glyph{line-height:var(--u2h)}'{text-align:center}+<my-glyph show-tip=false>+(\"reorder-handle.js\")('reorder-handle.css')"
+ },
+ "collapse-handle": {
+  "desktop-": "'my-glyph, glyph-{line-height:var(--u2h)}:host(:not([open]))>glyph-,:host([open])>my-glyph{display:none}'{text-align:center;cursor:pointer}+<my-glyph show-tip=false>++<glyph- show-tip=false word=expand-handle>+(\"collapse-handle.js\")"
  },
  "v-rule": {
-  "origin-": "[offset=23 key=v-split edge=1 dragging=false]('split-bar.css')(\"split-bar.js\")"
+  "desktop-": "[offset=23 key=v-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
  },
  "h-rule": {
-  "origin-": "[offset=3 key=h-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
+  "desktop-": "[offset=3 key=h-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
  },
  "kireji-app": {
-  "origin-": "^kireji infix^{display:grid}+<infix- focus=true>+"
+  "desktop-": "^kireji infix^{display:grid}+<infix- focus=true>+"
  },
  "kireji-io": {
-  "origin-": "^kireji chat^ ('kireji-io.css')"
+  "desktop-": "^kireji chat^ ('kireji-io.css')"
  },
  "stack-recurring": {
-  "origin-": "[index=0]('stack-.css'){--scale:2}`${getContext(index).stack.node.map(node => '<numeral- word='+node.word+'></numeral->').join('')}` my-numeral"
+  "desktop-": "[index=0]('stack-.css'){--scale:2}`${moments[index].stack.node.map(node => '<glyph- word='+node.word+'></glyph->').join('')}` my-glyph"
  },
- "my-numeral": {
-  "origin-": "[word=one-]('numeral-.css')(\"marks.js\")\"$word(host.word)\"(\"numeral-.js\")"
+ "version-pill": {
+  "desktop-": "\"tip('Kireji Version')\"{border-radius: var(--huh); padding: 0 var(--huw); box-shadow: 0 0 0 2px goldenrod; line-height: var(--u2h); color: goldenrod;}`α${version}`"
  },
- "numeral-": {
-  "origin-": "[word=one-]('numeral-.css')(\"marks.js\")(\"numeral-.js\")"
+ "my-glyph": {
+  "desktop-": "[word=one- show-tip=true]('glyph-.css')(\"marks.js\")\"$word(host.word)\"(\"glyph-.js\")"
+ },
+ "glyph-": {
+  "desktop-": "[word=one- show-tip=true]('glyph-.css')(\"marks.js\")(\"glyph-.js\")"
  },
  "chat-header": {
   "kireji-io": "{ flex: 0 0 calc(4 * var(--uh)); }"
@@ -78,7 +135,7 @@
   "kireji-io": "('chat-keyboard.css') \"this.onclick = ()=> this.setAttribute('raised','')\" chat-input keyboard-panel"
  },
  "chat-input": {
-  "origin-": "(\"p2p.js\"){ background: var(--white-fill-grid); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
+  "desktop-": "(\"p2p.js\"){ background: var(--white-fill-grid); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
  },
  "text-input": {
   "chat-input": "{color: var(--ui-fill); }\"const nodesToWipe = []; on.clearChatInput(i => {nodesToWipe.forEach(node=>node.remove()); nodesToWipe.push(...say(i.websafe())) })\""
@@ -89,70 +146,79 @@
  "chat-box": {
   "kireji-io": "('chat-box.css')(\"chat-box.js\")"
  },
+ "hungry-orbs": {
+  "thoughts-": "(+hungry-orbs.html+)"
+ },
  "gravity-tiles": {
-  "origin-": "+Hi+"
+  "desktop-": "+Hi+"
  },
  "cursor-trap": {
-  "origin-": "{ background: var(--white-fill-dots) !important }'legend-{ margin: var(--u2h) var(--u2w) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'\"const [dot,arrow,cursor] = echo('+<dot- center><vector- label arrow center>+ cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })\"legend-"
+  "desktop-": "{ background: var(--white-fill-dots) !important }'legend-{ margin: var(--u2h) var(--u2w); color: var(--ui-fill) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'\"const [dot,arrow,cursor] = echo('+<dot- center>++<vector- label arrow center>+ cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })\"legend-"
+ },
+ "sub-part": {
+  "desktop-": "('part-.css')+<part-menu label=Part>+`<model-item word=${this.get('word')}>`"
+ },
+ "complex-input": {
+  "desktop-": "'cursor-trap { position: relative; width: calc(15 * var(--uw)); height: var(--u2h) }' cursor-trap"
  },
  "legend-": {
-  "origin-": "+<keyboard-key>Esc</keyboard-key> to return+"
+  "desktop-": "+<keyboard-key>Esc</keyboard-key> to return+"
  },
  "keyboard-key": {
-  "origin-": "{background-color: var(--ui-fill); padding: var(--hu-hw); color:var(--vellum-white); border-radius: var(--huh); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 0 0 rgba(255, 255, 255, 0.7) inset; display: inline-block; font-weight: 700; white-space: nowrap}`${innerHTML}`"
+  "desktop-": "{background-color: var(--ui-fill); padding: var(--hu-hw); color:var(--vellum-white); border-radius: var(--huh); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 0 0 rgba(255, 255, 255, 0.7) inset; display: inline-block; font-weight: 700; white-space: nowrap}`${innerHTML}`"
  },
  "dot-": {
-  "origin-": "[x=0 y=0 color]('dot.css')\"this.to=(x,y,color)=>{tip(`Point (${x},${y})`); this.set({x,y,color,'style':`--x:${x};--y:${y};--color:${color}`})}; this.to(x,y,color);\""
+  "desktop-": "[x=0 y=0 color]('dot.css')\"this.to=(x,y,color)=>{tip(`Point (${x},${y})`); this.set({x,y,color,'style':`--x:${x};--y:${y};--color:${color}`})}; this.to(x,y,color);\""
  },
  "symbol-": {
-  "origin-": "[x=0 y=0 word=zero-]('numeral-.css')('symbol.css')(\"marks.js\")(\"numeral-.js\")\"this.to=(x,y,w=word)=>{ this.cover(w); tip(`${w} (${x},${y})`); this.set({x,y,'style':`--x:${x};--y:${y}`})}; this.to(x,y,word);\""
+  "desktop-": "[x=0 y=0 word=zero-]('glyph-.css')('symbol.css')(\"marks.js\")(\"glyph-.js\")\"this.to=(x,y,w=word)=>{ this.cover(w); tip(`${w} (${x},${y})`); this.set({x,y,'style':`--x:${x};--y:${y}`})}; this.to(x,y,word);\""
  },
  "vector-": {
-  "origin-": "[ax=0 ay=0 bx=3 by=3]('arrow-.css')(\"arrow-.js\")"
+  "desktop-": "[ax=0 ay=0 bx=3 by=3]('arrow-.css')(\"arrow-.js\")"
  },
  "cursor-": {
-  "origin-": "[x=0 y=0]{position:absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px); width: var(--uw); height: var(--u2h); background: var(--ui-fill); box-shadow: 0 0 0 1.5 px var(--vellum-white), 0 0 5px var(--ui-fill)}\"this.to=(x,y)=>this.set({x,y,style:`--x:${x};--y:${y};`}); this.to(x,y)\""
+  "desktop-": "[x=0 y=0]{position:absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px); width: var(--uw); height: var(--u2h); background: var(--ui-fill); box-shadow: 0 0 0 1.5 px var(--vellum-white), 0 0 5px var(--ui-fill)}\"this.to=(x,y)=>this.set({x,y,style:`--x:${x};--y:${y};`}); this.to(x,y)\""
  },
  "success-": {
-  "origin-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "('console-message.css')`${innerHTML}`"
  },
  "log-": {
-  "origin-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "('console-message.css')`${innerHTML}`"
  },
  "warning-": {
-  "origin-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "[index json]('console-message.css')`<stack- index=${index}></stack-><json->${atob(json)}`"
  },
  "error-": {
-  "origin-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "('console-message.css')`${innerHTML}`"
  },
  "console-": {
-  "origin-": "[success-=1 log-=1 warning-=1 error-=1]('console-.css')(\"console-.js\")"
+  "desktop-": "[success-=1 log-=1 warning-=1 error-=1]('console-.css')(\"console-.js\")"
  },
  "stat-pill": {
-  "origin-": "[type]{ text-align: center; background-color: var(--color); display: inline-block; box-sizing: border-box; height: var(--u2h); line-height: var(--u2h); width: var(--u2w); }':host(:hover){ cursor: pointer; } :host(:not([active])) { background-color: dimgrey; } :host::before{ width: 100%; display: block; content: \\'\\00A0\\'var(--content); color: var(--vellum-white); }'\"this.driveBool('active',type,'1',x=>host.setType(type, x));tip('Show '+type.replace('-',''))\""
+  "desktop-": "[type]{ text-align: center; background-color: var(--color); display: inline-block; box-sizing: border-box; height: var(--u3h); line-height: var(--u3h); width: var(--u2w); }':host(:hover){ cursor: pointer; } :host(:not([active])) { background-color: dimgrey; } :host::before{ width: 100%; display: block; content: \\'\\00A0\\'var(--content); color: var(--vellum-white); }'\"this.driveBool('active',type,'1',x=>host.setType(type, x));tip('Show '+type.replace('-',''))\""
  },
  "stack-": {
-  "origin-": "[index=0]('stack-.css')`${getContext(index).stack.node.map(node => '<numeral- word='+node.word+'></numeral->').join('')}`"
+  "desktop-": "[index=0]('stack-.css')(\"stack-.js\")"
  },
  "collapse-btn": {
-  "origin-": ""
+  "desktop-": ""
  },
  "multi-word": {
-  "origin-": "+<i>Some kinda multi word.+",
+  "desktop-": "+<i>Some kinda multi word.+",
   "bug-item": "+<b>Am I a bug?+",
   "task-item": "`<b>Am I a ${'<u>'}task?${'</u>'}`"
  },
  "width-": {
-  "origin-": "':host:after { content: counter(width) }'"
+  "desktop-": "':host:after { content: counter(width) }'"
  },
  "height-": {
-  "origin-": "':host:after { content: counter(height) }'"
+  "desktop-": "':host:after { content: counter(height) }'"
  },
  "crock-": {
   "crock-": "+and then +"
  },
  "crock-model": {
-  "origin-": "+There is no proof that \"+crock-model+\"+"
+  "desktop-": "+There is no proof that \"+crock-model+\"+"
  },
  "crock-a": {
   "crock-b": "+me to +"
@@ -162,50 +228,53 @@
  },
  "bug-0001": {
   "bug-list": "bug-item",
-  "origin-": "+The bug list lacks features.+"
+  "desktop-": "+The bug list lacks features.+"
  },
  "bug-item": {
-  "origin-": "`${inside('bug-list') ? '<b>BUG:</b> All bugs look the same.': 'Bug outside buglist.'}`"
+  "desktop-": "`${inside('bug-list') ? '<b>BUG:</b> All bugs look the same.': 'Bug outside buglist.'}`"
  },
  "task-list": {
-  "origin-": "(+tasks.html+)"
+  "desktop-": "(+tasks.html+)"
  },
  "task-item": {
-  "origin-": "`${inside('task-list') ? '<b>TASK:</b> Make tasks not all the same.': 'Make switch case concept for inside(...) word.'}`"
+  "desktop-": "`${inside('task-list') ? '<b>TASK:</b> Make tasks not all the same.': 'Make switch case concept for inside(...) word.'}`"
  },
  "task-234": {
   "task-list": "task-item",
-  "origin-": "+Understand Tasks+"
+  "desktop-": "+Understand Tasks+"
  },
- "my-toolbar": {
-  "origin-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); align-items: flex-end; }"
+ "old-toolbar": {
+  "desktop-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); align-items: flex-end; }\"incoming(echo)\""
  },
  "clear-btn": {
-  "my-toolbar": "[action='uncache()' info='Reset']('shelf-btn.css') (\"shelf-btn.js\")"
+  "console-": "[action='uncache()' info='Reset']('shelf-btn.css')(\"shelf-btn.js\")"
  },
  "refresh-btn": {
-  "my-toolbar": "[action='refresh()' info='Reload']('shelf-btn.css') (\"shelf-btn.js\")"
+  "console-": "[action='refresh()' info='Reload']('shelf-btn.css')(\"shelf-btn.js\")"
+ },
+ "save-btn": {
+  "console-": "[action='save()' info='Save']('shelf-btn.css')(\"shelf-btn.js\")"
  },
  "refetch-btn": {
-  "my-toolbar": "[action='refetch()' info='Fetch']('shelf-btn.css') (\"shelf-btn.js\")"
+  "console-": "[action='refetch()' info='Fetch']('shelf-btn.css')(\"shelf-btn.js\")"
  },
  "error-btn": {
-  "origin-": "[action='error(\"Test Error #\"+Math.random())' info='Error']('shelf-btn.css') (\"shelf-btn.js\")"
+  "console-": "[action='error(\"Test Error #\"+Math.random())' info='Error']('shelf-btn.css')(\"shelf-btn.js\")"
  },
  "search-bar": {
-  "my-toolbar": "([search-bar.ini])('search-bar.css')(\"search-bar.js\")"
+  "thought-": "([search-bar.ini])('search-bar.css')(\"search-bar.js\")(\"search-bar-thought-.js\")"
  },
  "search-bar-item": {
-  "origin-": "[word]':host,*{vertical-align:middle; line-height:var(--u2h);}numeral-{width: var(--u2w); margin-right: var(--huw); font-size: calc(var(--huw) + var(--uw)); line-height: var(--u2h); pointer-events: none; }'`<numeral- word=${word}></numeral-><label>${word}</label>`"
+  "desktop-": "[word]':host,*{vertical-align:middle; line-height:var(--u2h);}glyph-{width: var(--u2w); margin-right: var(--huw); font-size: calc(var(--huw) + var(--uw)); line-height: var(--u2h); pointer-events: none; }'`<glyph- word=${word}></glyph-><label>${word}</label>`"
  },
  "hello-world": {
-  "origin-": "+<h1><pre>Hello World</pre></h1><p>Welcome!</p>+"
+  "desktop-": "+<h1><pre>Hello World</pre></h1><p>Welcome!</p>+"
  },
  "json-": {
-  "origin-": "('json-.css')(\"json-.js\")"
+  "desktop-": "('json-.css')(\"json-.js\")"
  },
  "sets-": {
-  "origin-": "':host>*{position:fixed;top:0;left:0;bottom:0;right:0;}'\"[...backlinks.keys()].map(word=>echo(word)[0])\""
+  "desktop-": "':host>*{position:fixed;top:0;left:0;bottom:0;right:0;}'\"[...backlinks.keys()].map(word=>echo(word)[0])\""
  },
  "meditation-": {
   "thoughts-": ""
@@ -214,7 +283,7 @@
   "thoughts-": "+<svg viewBox=\"-180 -240 360 360\"><path stroke=black stroke-width=4 stroke-dasharray=\"12 12\" id=\"curve\" d=\"M -140 -60 C 30 -100 110 -10 40 50 C -50 120 -120 -100 160 -140\" fill=none /><text font-size=\"51\" width=\"500\"><textPath alignment-baseline=\"text-after-edge\" xlink:href=\"#curve\">&nbsp;&nbsp;I'm&nbsp;&nbsp;&nbsp;&nbsp;expressing myself</textPath></text></svg>+"
  },
  "one-platform": {
-  "origin-":"[top=00100.001 bottom=000010001001.0000100100110111001111000110100 x=0 t=0]('one.css')(\"one.js\")"
+  "desktop-": "[top=00100.001 bottom=000010001001.0000100100110111001111000110100 x=0 t=0]('one.css')(\"one.js\")"
  },
  "space-guy": {
   "thoughts-": "(+space-guy.html+)"
@@ -235,20 +304,22 @@
   "thoughts-": "+<p>sweet smell of nectar++<p>when you don't drown and consume++<p>you fill and set free+"
  },
  "thoughts-": {
-  "origin-": "{display:grid}+<h1>Thoughts</h1><subtitle>Like <a href=//0.nodes-.word>Notes</a>, only less coherent.</subtitle>+",
-  "object-": "{padding:var(--hu-hw);box-sizing:border-box}`${innerHTML}`"
+  "desktop-": "('thoughts-.css')+<h1>Thoughts</h1><h5>Like notes, only less coherent.</h5>+\"incoming(word => { say(`<thought- word=${word}>`) })\""
+ },
+ "thought-": {
+  "desktop-": "[word]('thought-.css')(\"thought-.js\")"
  },
  "spec-": {
-  "origin-": "('spec-.css')(+spec-.html+)"
+  "desktop-": "('spec-.css')(+spec-.html+)"
  },
  "infix-": {
-  "origin-": "[expressions focus=false]('infix-.css')(\"infix-.js\")"
+  "desktop-": "[expressions focus=false]('infix-.css')(\"infix-.js\")"
+ },
+ "sub-model": {
+  "desktop-": "[word rootword focus=false]('part-.css')('sub-model.css')(\"sub-model.js\")"
  },
  "text-cursor": {
-  "origin-": "('cursor-.css')"
- },
- "character-": {
-  "origin-": "[code=31](\"marks.js\")('character-.css')(\"character-.js\")"
+  "desktop-": "('cursor-.css')"
  },
  "natural-": {
   "variable-": "[decimal]"
@@ -269,6 +340,12 @@
   "constant-": "[decimal=0.41468250985111166024810962215430770836577423813791697786824541448864096061935733419629004842847577793961615935208298595783574997845302200990412081465003395899370197411918628561557923719163725148816107107342843248021801697985681513424679474]"
  },
  "d-structure": {
-  "origin-": "(\"d-structure.js\")"
+  "desktop-": "(\"d-structure.js\")"
+ },
+ "unicode-list": {
+  "desktop-": "('unicode-list.css')(\"unicode-list.js\")"
+ },
+ "scroll-bar": {
+  "desktop-": "('scroll-bar.css')(\"scroll-bar.js\")"
  }
 }

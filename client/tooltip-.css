@@ -22,10 +22,10 @@
  display: none;
 }
 
-:host([state="gone"]) {
+:host([display="gone"]) {
  display: none;
 }
 
-my-numeral {
+my-glyph {
  width: var(--uw);
 }

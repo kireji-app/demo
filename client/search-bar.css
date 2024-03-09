@@ -17,7 +17,7 @@ input, search-bar-item {
  outline: none;
 }
 
-input, numeral- {
+input, glyph- {
  position: sticky;
  top: 0;
  background-color: var(--vellum-white);
@@ -38,7 +38,7 @@ input {
  padding-left: var(--huw);
 }
 
-numeral- {
+glyph- {
  display: inline-block;
  font-size: calc(var(--uw) + var(--huw));
  width: var(--u2w);

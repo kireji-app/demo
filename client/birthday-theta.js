@@ -1,0 +1,1 @@
+const sun = echo('sun-');

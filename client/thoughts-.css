@@ -1,0 +1,34 @@
+:host {
+ background: var(--vellum-white);
+ padding: var(--u-hw);
+ display: flex;
+ flex-flow: column nowrap;
+ overflow-y: auto;
+}
+
+h1 {
+ font-size: var(--u3w);
+ line-height: calc(5 * var(--uh));
+ margin: 0;
+ padding: 0;
+ color: var(--ui-fill);
+}
+
+h5 {
+ font-size: var(--uw);
+ line-height: var(--u2h);
+ margin: 0;
+ padding: 0;
+ color: var(--ui-fill);
+}
+
+thought- {
+ margin: var(--hu-hw);
+ padding: var(--u-hw);
+ overflow: hidden;
+ box-sizing: border-box;
+ border-radius: var(--huh);
+ background: var(--ui-fill);
+ flex-shrink: 0;
+ box-shadow: var(--paper-shadow);
+}

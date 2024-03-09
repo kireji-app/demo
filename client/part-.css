@@ -1,0 +1,32 @@
+:host {
+ width: 100%;
+ padding: var(--hu-hw);
+ box-sizing: border-box;
+ display: grid;
+ grid-template-rows: var(--u2h) 1fr;
+ grid-template-columns: 1fr;
+ background: var(--vellum-white);
+ box-shadow:
+  inset 0 0 0 0.25px var(--ui-fill),
+  0 0 0 0.25px var(--ui-fill);
+}
+
+label {
+ font-size: calc(var(--uw) + var(--hhuw));
+ line-height: var(--u2h);
+}
+
+:host([dragging]) {
+ position: relative;
+ z-index: 10000;
+ top: calc(var(--uh) * (var(--drag-y) - var(--old-y)));
+ left: calc(var(--uw) * (var(--drag-x) - var(--old-x)));
+ box-shadow:
+  inset 0 0 0 1.25px var(--approval-green),
+  0 0 0 1.25px var(--approval-green),
+  2px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+:host(:not([open]))>:not(part-menu) {
+ display: none;
+}

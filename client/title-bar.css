@@ -1,0 +1,59 @@
+:host {
+ display: flex;
+ flex-flow: row nowrap;
+ padding: var(--hhu-hw);
+ box-sizing: border-box;
+ --shade: rgba(var(--ui-fill-rgb), 0.5);
+ position: relative;
+ background:
+  linear-gradient(var(--shade), var(--shade)),
+  black;
+}
+
+glyph- {
+ line-height: calc(var(--u2h) + var(--huh));
+ font-size: calc(var(--uw) + var(--huw));
+ height: calc(var(--u2h) + var(--huh));
+ width: calc(var(--u2w) + var(--huw));
+ background-color: var(--ui-fill);
+ cursor: pointer;
+}
+
+glyph-[selected] {
+ background-color: var(--approval-green);
+}
+
+glyph-:first-of-type {
+ border-radius: var(--uh) 0 0 var(--uh);
+}
+
+glyph-:last-of-type {
+ border-radius: 0 var(--uh) var(--uh) 0;
+}
+
+h1 {
+ margin: 0;
+ padding: 0;
+ line-height: calc(var(--u2h) + var(--huh));
+ font-size: calc(var(--uw) + var(--hhuw));
+ font-weight: 400;
+}
+
+#partname {
+ order: 100;
+ padding-left: var(--huw);
+}
+
+#appname {
+ position: absolute;
+ left: 0;
+ right: 0;
+ text-align: center;
+}
+
+version-pill {
+ position: absolute;
+ right: var(--huw);
+ top: var(--huh);
+ bottom: var(--huh);
+}

@@ -1,0 +1,15 @@
+:host {
+ background: var(--vellum-white);
+ cursor: text;
+ display: flex;
+ flex-flow: column nowrap;
+ align-content: start;
+ position: relative;
+ color: var(--ui-fill);
+ overflow: visible;
+}
+
+:host>part-menu {
+ background-color: var(--ui-fill);
+ color: var(--vellum-white);
+}

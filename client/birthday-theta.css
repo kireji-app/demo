@@ -1,0 +1,14 @@
+:host {
+ background: var(--ui-fill-grid);
+ position: relative;
+}
+
+sun- {
+ border-radius: 50%;
+ position: absolute;
+ left: calc(var(--uw) * var(--hw));
+ top: calc(var(--uh) * var(--hh));
+ background-color: wheat;
+ width: var(--uw);
+ height: var(--uh);
+}

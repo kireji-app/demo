@@ -4,8 +4,12 @@ this.setType = (type, value) => {
 const
  messages = new Map(),
  counters = attributes.reduce((obj, attr) => (obj[attr] = 0, obj), {});
+let shelfBtns = ''
+incoming(word => {
+ shelfBtns += `<${word}></${word}>`
+})
 const
- container = say(`<menu>${attributes.map(attr => `<stat-pill type=${attr}></stat-pill>`).join('')}<error-btn></menu><div></div>`).at(-1),
+ container = say(`<menu>${attributes.map(attr => `<stat-pill type=${attr}></stat-pill>`).join('')}${shelfBtns}</menu><div></div>`).at(-1),
  message = (word, msg, sender, depth, index) => {
   switch (word) {
    case 'log-':
@@ -34,7 +38,7 @@ const
    node.set('times', parseInt(node.get('times') ?? 1) + 1)
    return;
   }
-  const node = say(`<${word}><stack- index=${index}></stack-><json->${JSON.stringify(msg, serializer)}`)[0];
+  const node = say(`<${word} index=${index} json=${btoa(JSON.stringify(msg.websafe(), serializer))}>`)[0];
   container.appendChild(node);
   messages.set(payload, node);
  }

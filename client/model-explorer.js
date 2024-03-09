@@ -6,8 +6,10 @@ this.cover = w => {
  const model = archive[word];
  if (!model) warning('!model '+word)
  Object.keys(model).forEach(rootword => {
-  views.add(say(`<infix- expressions=${btoa(model[rootword])}>`)[0])
+  views.add(say(`<sub-model open rootword=${rootword} word=${word}>`)[0])
  })
 }
 
-this.cover(word)
+on.clear(word => {
+ this.cover(word)
+})

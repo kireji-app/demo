@@ -9,7 +9,7 @@ const
 
   atob(expressions).ungroup().forEach(e => {
    e.parseExpression({
-    word: _ => make(`<numeral- word=${_}>`),
+    word: _ => make(`<glyph- word=${_}>`),
     fallback: (_, key) => make(`<${key}- content=${btoa(_)}>`)
    })
   })

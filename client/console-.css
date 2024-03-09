@@ -1,6 +1,6 @@
 :host {
  display: grid;
- grid-template-rows: var(--u2h) 1fr;
+ grid-template-rows: var(--u3h) 1fr;
  box-sizing: border-box;
  overflow: hidden !important;
  --success-color: var(--approval-green);
@@ -73,13 +73,6 @@ menu>stat-pill[type="warning-"] {
 menu>stat-pill[type="error-"] {
  --color: var(--error-color);
  --content: var(--error-count);
-}
-
-menu>error-btn {
- width: var(--u2h);
- height: var(--u2h);
- padding: 0;
- display: inline-block;
 }
 
 success- {

@@ -1,0 +1,50 @@
+table,
+tbody,
+tr,
+td,
+pre {
+ margin: 0;
+ padding: 0;
+ border: none;
+ border-collapse: collapse;
+}
+
+td,
+pre {
+ font: var(--uw) / var(--uh) 'kireji sans', sans-serif;
+}
+
+td:first-child {
+ font-weight: 700;
+}
+
+tbody>tr:first-child>td:first-child {
+ border-top-left-radius: var(--huh);
+}
+
+tbody>tr:last-child>td:first-child {
+ border-bottom-left-radius: var(--huh);
+}
+
+tbody>tr:first-child>td:last-child {
+ border-top-right-radius: var(--huh);
+}
+
+tbody>tr:last-child>td:last-child {
+ border-bottom-right-radius: var(--huh);
+}
+
+td {
+ padding: var(--hu-hw);
+ background-color: var(--ui-fill);
+ color: var(--vellum-white);
+ box-shadow: var(--border);
+}
+
+pre {
+ margin: 0;
+}
+
+tr {
+ height: var(--u2h);
+}

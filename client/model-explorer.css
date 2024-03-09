@@ -1,0 +1,9 @@
+:host {
+ width: 100%;
+ overflow-x: visible;
+ background-color: var(--vellum-white);
+}
+
+sub-model {
+ padding: 0;
+}

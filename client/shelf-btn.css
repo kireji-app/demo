@@ -7,7 +7,7 @@
  padding: var(--hu-hw);
 }
 
-my-numeral {
+my-glyph {
  line-height: var(--u2h);
  font-size: var(--u2w);
  height: var(--u2h);
@@ -16,7 +16,7 @@ my-numeral {
  pointer-events: none;
 }
 
-:host(:hover)>my-numeral {
+:host(:hover)>my-glyph {
  --hover: rgba(var(--vellum-white-rgb), 0.3);
  background-color: var(--hover);
  box-shadow: 0 0 0 var(--hhuh) var(--hover);

@@ -1,5 +1,5 @@
 const
- html = Object.keys(buffers).reduce((html, buffername) => html + `<file- buffername=${buffername}></file->`, ''),
+ html = Object.keys(buffers).reduce((html, buffername) => html + `<file-item buffername=${buffername}></file-item>`, ''),
  files = new Set(say(html)),
  dblClickTime = 250,
  selected = new Set(selection.split(' ')),
@@ -22,6 +22,7 @@ files.forEach(file => {
   else if (!amongSelected) { selected.clear(); selected.add(name); saveSelection(); file.set('selected'); selectedNodes.forEach(node => node.unset('selected')); selectedNodes.clear(); selectedNodes.add(file) }
   if (file === doubleClickTarget) {
    log(location.href)
+   window.open(`https://${location.hostname}/${name}`);
   }
   else {
    doubleClickTarget = file
