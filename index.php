@@ -1,10 +1,10 @@
 <? $Δ = [
- "https://core.parts/components/button-/construct.js" => '
-  (url, layout = "", manifest = "", onclickjs = `()=>{ console.info("button click ${url}") }`) => {
-   let parts = ("" + Ω["https://core.parts/components/button-/construct.json"]).replace(/\$1/g, url).replace(/\$2/, layout.replace(/\n/g, "\\\\n").replace(/"/g, \'\\\\"\')).replace(/\$3/, manifest).replace(/"\$4"/, JSON.stringify(""+onclickjs))
+ "https://core.parts/components/button/construct.js" => '
+  (url, layout = "", manifest = "", onclickjs = `()=>{ console.trace("button click ${url}") }`) => {
+   let parts = ("" + Ω["https://core.parts/components/button/construct.json"]).replace(/\$1/g, url).replace(/\$2/, layout.replace(/\n/g, "\\\\n").replace(/"/g, \'\\\\"\')).replace(/\$3/, manifest).replace(/"\$4"/, JSON.stringify(""+onclickjs))
    Object.entries(JSON.parse(parts)).forEach(([url, value]) => Ω[url] = value)
   }',
- "https://core.parts/components/button-/construct.json" => '
+ "https://core.parts/components/button/construct.json" => '
   {
    "$1layout.css?constructor": "$1layout.css.c.js",
    "$1layout.css.c.js": "{ return `:host { background-color: #c3c3c3;${(``+down) === `1` ? `background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white), linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white); background-size: 2px 2px; background-position: 0 0, 1px 1px;`:``}; box-sizing: border-box; box-shadow: ${(``+down) === `1` ? `inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a` : `inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb`}} $2` }",
@@ -20,7 +20,7 @@
    "$1down.txt?fx": "$1down-fx.uri",
    "$1down-fx.uri": "$1layout.css"
   }',
- "https://core.parts/components/cell-/construct.js" => '
+ "https://core.parts/components/cell/construct.js" => '
   (url, layout, manifest, layout_by_reference = false, manifest_by_reference = false) => {
    if (layout) {
     if (layout_by_reference) Ω[url + "?layout"] = layout
@@ -39,17 +39,16 @@
     }
    }
   }',
- "https://core.parts/components/click-/construct.json" => '
+ "https://core.parts/components/click/construct.json" => '
   {
    "$1?onclick": "$1onclick.js",
-   "$1onclick.js": "e => Ω[\'https://core.parts/components/click-/handler.js\'](e, \'$2\',\'$3\')"
+   "$1onclick.js": "e => Ω[\'https://core.parts/components/click/handler.js\'](e, \'$2\',\'$3\')"
   }',
- "https://core.parts/components/click-/construct.js" => '
-  ($1, $2 = "https://core.parts/components/click-/single-click.js", $3 = "https://core.parts/components/click-/double-click.js") => {
-   return Ω["https://core.parts/components/click-/instantiate.js"]("click-", $1, $2, $3)
+ "https://core.parts/components/click/construct.js" => '
+  ($1, $2 = "https://core.parts/const/do-nothing.js", $3 = "https://core.parts/const/do-nothing.js") => {
+   return Ω["https://core.parts/components/click/instantiate.js"]("click", $1, $2, $3)
   }',
- "https://core.parts/components/click-/double-click.js" => '({ target }) => { console.info("double click", target) }',
- "https://core.parts/components/click-/handler.js" => '
+ "https://core.parts/components/click/handler.js" => '
   (e, $2, $3) => {
    const
     key = "%double_click_timer%",
@@ -72,18 +71,17 @@
    // Handle single click.
    return Ω[$2](e)
   }',
- "https://core.parts/components/click-/single-click.js" => '({ target }) => { console.info("single click", target) }',
- "https://core.parts/components/click-/instantiate.js" => '
+ "https://core.parts/components/click/instantiate.js" => '
   (template_name, ...$) => Object.assign(Δ, JSON.parse($.reduce(
    (x, $n, n) => x.replace(new RegExp("\\\\$" + (n+1), "g"), $n),
    "" + Ω[`https://core.parts/components/${template_name}/construct.json`]
   )))',
- "https://core.parts/components/transform-/construct.js" => <<<JS
+ "https://core.parts/components/transform/construct.js" => <<<JS
   (transform_url, position_url, directions = "nesw", move_handle_url) => {
    if (!/^n?e?s?w?$/.test(directions)) throw new TypeError(`transform component requires format /^n?e?s?w?$/ (got \${directions})`)
    const
     manifest = [],
-    core_url = transform_url + "core-/",
+    core_url = transform_url + "core/",
     behavior_url = "https://core.parts/behaviors/resize/",
     resize_cell = dir => {
      const
@@ -117,12 +115,12 @@
    return manifest.join(" ")
   }
   JS,
- "https://core.parts/php/index.php" => '<?
-  $base = "https://core.parts/php";
+ "https://core.parts/index.php" => '<?
+  $base = "https://core.parts";
   $Δ = array_merge($Δ, [
-   "$base/strap.js" => $script = \'var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy($1, { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"]; onmessage = Ω["https://core.parts/client-to-server.js"]\',
+   "$base/strap.js" => $script = \'var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy($1, { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"], onmessage = Ω["https://core.parts/client-to-server.js"]\',
    "$base/maintenance.txt" => "" . ($maintenance = true),
-   "$base/version.txt" => "0.023",
+   "$base/version.txt" => "0.024",
    "$base/user.txt" => $user = $_SERVER["REMOTE_ADDR"],
    "$base/user.txt?fx" => "$base/username-fx.uri",
    "$base/users.json" => json_encode($users = ["eric house" => "35.138.226.122", "eric library" => "97.76.210.20", "jason" => "68.103.68.155"]),
@@ -133,22 +131,27 @@
    "$base/show_everything.txt" => "" . ($show_everything = $registered || !$maintenance),
    "$base/installer.html" => \'
      <script>
-      var run = false;
-      ((a, f) => a ? (a.addEventListener("message", _ => location.reload()), b => b ? f(b) : a.register(`https://${location.hostname}/everything.js`).then(({
-       waiting: x,
-       installing: y,
-       active: z
-      }) => {
-       (x || y)?.addEventListener("statechange", ({
-        target: t
-       }) => t.state === "activated" ? f(t) : null);
-       f(z)
-      }))(a.controller) : console.error("!sw"))(navigator.serviceWorker, () => {
-       if (run) return;
-       run = true;
-       location.reload?.()
-      })
-     </script>$ > core.parts<br>$ > installing...<br>$ > protocol \' . $_SERVER["SERVER_PROTOCOL"]
+      var
+       run = false,
+       log = msg => document.body.innerHTML += msg + "<br>",
+       onload = () => {
+        document.body.innerHTML += location.hostname + "... ";
+        ((a, f) => a ? (
+         b => b ? f(b) : a.register(`https://${location.hostname}/everything.js`).then(
+          ({ waiting: x, installing: y, active: z }) => {
+           (x || y)?.addEventListener("statechange", ({ target: t }) => t.state === "activated" ? f(t) : null);
+           if(z) f(z);
+          }
+         )
+        )(a.controller) : console.error("!sw")
+       )(navigator.serviceWorker, controller => {
+         if (run) return;
+         run = true;
+         log("done.<br>Booting pilot...")
+         setTimeout(() => location.reload(), 175)
+        })
+      }
+     </script>██╗  ██╗██╗██████╗ ██████╗     ██╗██╗<br>██║ ██╔╝██║██╔══██╗██╔═══╝     ██║██║<br>█████╔╝ ██║██████╔╝████╗       ██║██║<br>██╔═██╗ ██║██╔══██╗██╔═╝  ██   ██║██║<br>██║  ██╗██║██║  ██║██████╗╚█████╔╝██║<br>╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚════╝ ╚═╝<br>------* connecting everything *------<br><br>Installing \'
   ]);
   if ($_SERVER["REQUEST_URI"] === "/everything.js" && $show_everything) {
    header("content-type:text/javascript");
@@ -158,8 +161,8 @@
    echo $Δ["$base/" . ($show_everything ? "installer.html" : "maintenance.html")];
   }
   ?>',
- "https://core.parts/php/maintenance.html" => '$ > closed for maintenance',
- "https://core.parts/php/boilerplate.html" => '
+ "https://core.parts/maintenance.html" => '$ > closed for maintenance',
+ "https://core.parts/boilerplate.html" => '
   <!DOCTYPE html>
   <meta name=robots content=noindex>
   <style>
@@ -170,21 +173,30 @@
     white-space: pre;
    }
   </style>',
- "https://core.parts/php/username.txt?constructor" => 'https://core.parts/php/username.txt.c.js',
- "https://core.parts/php/username.txt.c.js" => 'return (""+registered === "1") ? JSON.parse(""+usernames)[user] : "guest"',
- "https://core.parts/php/username-fx.uri" => 'https://core.parts/php/username.txt',
- "https://core.parts/php/username.txt?registered" => 'https://core.parts/registered.txt',
- "https://core.parts/php/username.txt?usernames" => 'https://core.parts/php/usernames.json',
- "https://core.parts/php/username.txt?user" => 'https://core.parts/user.txt',
- "https://core.parts/php/everything.php?constructor" => 'https://core.parts/php/everything.php.c.js',
- "https://core.parts/php/everything.php.c.js" => 'console.warn("produce everything.php right now. it will need the conversion from json to php array...", "$Δ = [ $1 ]; eval(\"?>\" . $Δ[\"https://core.parts/php/index.php\"] . \"<?php \");");',
- "https://core.parts/?layout" => 'https://core.parts/layout.css',
- "https://core.parts/?manifest" => 'https://core.parts/os-95/manifest.uri',
- "https://core.parts/?onpointermove" => 'https://core.parts/onpointermove.js',
- "https://core.parts/?onpointerup" => 'https://core.parts/onpointerup.js',
- "https://core.parts/?oncontextmenu" => 'https://core.parts/oncontextmenu.js',
+ "https://core.parts/username.txt?constructor" => 'https://core.parts/username.txt.c.js',
+ "https://core.parts/username.txt.c.js" => 'return (""+registered === "1") ? JSON.parse(""+usernames)[user] : "guest"',
+ "https://core.parts/username-fx.uri" => 'https://core.parts/username.txt',
+ "https://core.parts/username.txt?registered" => 'https://core.parts/registered.txt',
+ "https://core.parts/username.txt?usernames" => 'https://core.parts/usernames.json',
+ "https://core.parts/username.txt?user" => 'https://core.parts/user.txt',
+ "https://core.parts/everything.php?constructor" => 'https://core.parts/everything.php.c.js',
+ "https://core.parts/everything.php.c.js" => 'console.warn("produce everything.php right now. it will need the conversion from json to php array...", "$Δ = [ $1 ]; eval(\"?>\" . $Δ[\"https://core.parts/index.php\"] . \"<?php \");");',
+ "https://core.parts/?core" => 'https://pilot.parts/',
+ "https://core.parts/.htaccess" => 'Options -Indexes -MultiViews +FollowSymlinks
+  DirectoryIndex everything.php
+  AddDefaultCharset UTF-8
+  ServerSignature Off
+  FileETag none
+  Header unset ETag
+  ErrorDocument 404 /everything.php
+  RewriteEngine on
+  RewriteCond %{REMOTE_ADDR} !^(35\.138\.226\.122|68\.103\.68\.155|97\.76\.210\.20)
+  RewriteRule ^ - [L,R=451]
+  RewriteCond %{REQUEST_URI} !^/?everything.php$
+  RewriteRule . everything.php',
  "https://core.parts/const/zero.txt" => '0',
  "https://core.parts/const/one.txt" => '1',
+ "https://core.parts/const/do-nothing.js" => '()=>{}',
  "https://core.parts/img/white-dots.png" => 'iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAFAAAAABAAAAUAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAyKADAAQAAAABAAAAyAAAAAAyqgsrAAAACXBIWXMAAAxOAAAMTgF/d4wjAAACymlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNi4wLjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpZUmVzb2x1dGlvbj44MDwvdGlmZjpZUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+ODA8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj4yMDA8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjIwMDwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgqnAx1IAAAGuklEQVR4Ae3dsXIbVRQG4F0Z8gR0qcgMLoCHIEBvkrGbdMATQOhooICKioonYBjLcSyHpKGgCsOQxh2WyAtQ8ACZRFp2N3NHUmGvVnt35kr6XK20dw/nfGc9qX6cnZyP/8si/RyPxn+djCb/RiqXbUq94WhyGmNm83ZXrN6/WPuouhlkWf5n97ZeV3jx4tW9Ist/27V6Rwf7d2PMvCl+qc5b7aB6/2L1F2OnahAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQCAdgeOH44tY3Zyej78Ynl0+3bV6vzz+ez/GzJvil+q81Q6q9y9Wf1W9Qb6X36wuYvxMZ8VhWfFWjFpVjU2pt/dq75sYM5s3gmL5/sXaR9XNIM/yZxHaqktM3yw+zYr8912rV2ag78WYeVP8Up233kH5/sXqL8ZO1SBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgEA6AjLp6+8iZMhjZaBDvfU7Wn6yr3qpzltNL5O+/A60+tRX5jtWBrqv/lohXXM49JfqvHXrMunXbLDhVl+Z71gZ6L76a2BZ+XboL9V560Fk0lfep4MECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAga0UOD6bfL2VgxmKQASBQVYURxHq1CX6ykCn3l+qGe2+9pHqvNV7IpPe4bclZKo7lFh6NNRLNaMd+ltqusOHUC/VeevRZNLX33DIVK9fYfnJUC/VjHbob7nr9T+FeqnOW08mk77+gj1JgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIENgGAZn0bdiiGfoSkEnvIBsy36lmtEN/HUZcejTUS3XeqlmZ9KWVtfsQMtXtnrr6dKiXakY79Hf1BO3uhHqpzltPI5PebqmLp0OmevG7LtehXqoZ7dBflxkXnw31Up237lUmfXFlrgkQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQILAgcPxwfLHwsdNlyCx3KrLw8KbUSzWj3ZdfqvNWr45M+sIvUNvLkKlu+9xV50O9VDPaob+r+m/7faiX6rz1PDLpbdc6Px8y1fNvul2FeqlmtEN/3aacPx3qpTpv3alM+nxhrggQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECuyjg76Tv4tbNvKrAIMuzo1UPN507efzPl8PR+GnTuVXvp16vnPV+zAx0XxnyVb2bzoX+diuTnhc3m2BWvT+bzu6Wv3C3Vj3fdC71ekWe3ckiZqBD5rvJZdX7fdXbsUz64Nmq4E3nZnuzz7IyE9x0btX7m1Iv1Yx2yJCv6t10LtRLdd66f5n0pjW6T4AAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBDYbgGZ9O3er+m6CQwGETPpD548vz88v/yjW0vzp1OvN/x18pVM+nxfba9Cxr3tc9edj7mP6r8zKKJm0qefZFn+9nUDtLk3m6ZdLyuKA5n0NhtdPhs7M19Xj/j/CKjqlf+AxMukTwezz2Nm0jelXqoZ7ZAhX34t1/8U6qU6bz2ZTPr6C/YkAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQJbLnAymlzEGjH1DHns/mTSu705Mund/DKZ9G6AsTPfod4u/Z30N8pY+g/d1jB/+mWW3blR5Ifzb7pdbUq9w4P9n7pN+vrpl3v5wY1ZRL+e6qU6b6WYF/m3sfqLsVM1CBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgkI7A8GzyY6xuTp88/3D4aPz9rtQrZ/1oeDb+7udH47dizPxgdHm7qhejVlWjr3qpzlvNHHMfVb1B+ZfS36kuYvxMp7PbWZG9G6NWVSP1emXA84NS8L1YMdlZkX+c5fn7sfz6qpfqvLVb6Rerv1h7UIcAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIDABgv8DzpjxjbC9kAMAAAAAElFTkSuQmCC',
  "https://core.parts/img/white-grid.png" => 'iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAFAAAAABAAAAUAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAyKADAAQAAAABAAAAyAAAAAAyqgsrAAAACXBIWXMAAAxOAAAMTgF/d4wjAAACymlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNi4wLjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpZUmVzb2x1dGlvbj44MDwvdGlmZjpZUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+ODA8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj40MDA8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjQwMDwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgrSRM/eAAAKqklEQVR4Ae2dz24URxCHu5cFbESQQiKHSETiEnJIOMXPFOUFIp4qOQI3XiB+AyQjkUNysRAcbOP1dLp37OnqmtUyPT2Wmp1vpZCq+VM7/XX9Zna8+9u17tPJa9OYF8a6r5rGRyMei0XYyV4Y5w6MtT/55LXP7zVN40aUM9SDX07fTN0vyXO7s5M/kgUFiXv//mtf77eCEsmu1EtwZCfwy0bW22EZrhxhqXNu35ijVW+LQQv2rbU/fzJ7FwfGLB6s6717t28e/0c9+G0gUHu/xENexpdVRytrDy/iquGRF5dtt25WjVm0L9MeP76w9odRAqGepwm/wQ04db/IJ17fPcgFxBCAQCSAQCILIgj0CCCQHhIWQCASQCCRBREEegQQSA8JCyAQCSCQyIIIAj0CCKSHhAUQiAQQSGRBBIEeAQTSQ8ICCEQCCCSyIIJAjwAC6SFhAQQiAQQSWRBBoEcAgfSQsAACkcCyNZuEBfs2fioybjAwCp/m9eYoa6Pijqg3EJ7fDH6mqn7pZm65dgKGGQp+jvGP1jl4d3Fqzt36I/NjPzp/dQjUG2k9gN8k/dcpYRlsssF51pqdmlH+jSAvE8Rx5p6axa1Hzn341pybh8acXnbPlBVQD345DTN1v8Tntu785JW/wP9lGvfAO53GedLX9bxy7cKLw/ziX2e99PXuUy+C3ha1L0vhV0u/JHPlBfI8WVCQhCuH/xKI3wtKJLtSL8GRncAvG1lvB3/ysvfCUuc95P4mfTnuv79vryuHl1X+yrGud3y8N65WOAbqOfhl9OLU/RJ14D3pV1/N479godxDfnrZmGX7Mu3JE1/PjrqniX9No976xJP5D/w8sIL+k7jjX2XlUmIIQGBNAIHQCBDYQgCBbIHDKgggEHoAAlsIIJAtcFgFAQRCD0BgCwEEsgUOqyCAQOgBCGwhgEC2wGEVBBAIPQCBLQQQyBY4rIIAAqEHILCFAALZAodVEMCTPq4H8JDX5SGfej66rsCT3qHICvDM77ZnvmsGPOkdipxgag809ery4MdewJMeWQyO2hs3POS1eMinno+kEfCkJziyEjzfWbh6G9fOLxywFx+e9Hzv/NQeaOrV5cHHk17kWcbz7U+tBZ7v2vnJSx3vg0gaxBBQBBCIAkIKAUkAgUgaxBBQBBCIAkIKAUkAgUgaxBBQBBCIAkIKAUkAgUgaxBBQBBCIAkIKAUkAgUgaxBBQBBCIAkIKAUkAgUgaxBBQBBCIAkIKAUkAgUgaxBBQBPCkKyAD06k90NSry+PetQGe9A5FVoAnHU96TsPgqa7LU818lM1H7H086ZHF4Ki9ccOTjid9cMu0G9buMeb4MidUbT43fmH4/mSIJx1PevRgb2YxN8985MHvpKuz5JC0dk81x+dnscAzL3uA90EkDWIIKAIIRAEhhYAkgEAkDWIIKAIIRAEhhYAkgEAkDWIIKAIIRAEhhYAkgEAkDWIIKAIIRAEhhYAkgEAkDWIIKAIIRAEhhYAkgEAkDWIIKAIIRAEhhYAkgEAkDWIIKAJ40hWQgSke8ro85FPPR9cGeNI7FFkBnnQ86TkNgwe6zAMNv7r4xd7Hkx5ZDI7aGzc86XjSB7dMu+HcPMuMN7NB1Oa18wuH60+GeNI3+7CjL7m/fm4e7bmNN849nnR1VhuS4vn2lAo837Xzkz3A+yCSBjEEFAEEooCQQkASQCCSBjEEFAEEooCQQkASQCCSBjEEFAEEooCQQkASQCCSBjEEFAEEooCQQkASQCCSBjEEFAEEooCQQkASQCCSBjEEFAEEooCQQkASQCCSBjEEFAE86QrIwHRqDzT16vK4d22AJ71DkRXgSceTntMweKrr8lQzH2XzEXsfT3pkMThqb9zwpONJH9wy7Ya1e4w5vswJVZvPjV8Yvj8Z4knve86jJ3nzurl5tOc23jj/eNLVWXJIWrunmuPzs1jgmZc9wPsgkgYxBBQBBKKAkEJAEkAgkgYxBBQBBKKAkEJAEkAgkgYxBBQBBKKAkEJAEkAgkgYxBBQBBKKAkEJAEkAgkgYxBBQBBKKAkEJAEkAgkgYxBBQBBKKAkEJAEkAgkgYxBBQBPOkKyMAUD3ldHvKp56NrAzzpHYqsAE86nvSchsEDXeaBhl9d/GLv40mPLAZH7Y0bnnQ86YNbpt1wbp5lxpvZIGrz2vmFw/UnQzzpm33n0ZfcXz83j/bcxhvnHk+6OqsNSfF8e0oFnu/a+cke4H0QSYMYAooAAlFASCEgCSAQSYMYAooAAlFASCEgCSAQSYMYAooAAlFASCEgCSAQSYMYAooAAlFASCEgCSAQSYMYAooAAlFASCEgCSAQSYMYAooAAlFASCEgCSAQSYMYAorADXrSjY2f2lTP+vl0g8e49npHE4+Xep9vk26LDf1SxK8rfIOedHvRPUt+sMHzXXu9w4nHS72MttnQL0X8uqdeGme+cx/++cbYvQNzu1l1a7KCu8Y0qzOzuvWjcc337uO/B+bO8qGPL7PKdBt/GfVWZ+6pvwQ/Cs64ujzVeNzL5qNrRP+y5fzkpWncn8aaB36xtxmPfQSPtvXNYp/5690LY9z9OdTzpsxnnuIrz/D+rnq02xvV+XjwEwV4gTxPFhQktXuMOb6CyfW7zo1foOVPDleedOf2+t7r6M3dvu7as3z+MJxJQ2F3fEw9l8vPTMyPetv79vPzEz3p5ujS2sNR9yDxr1XNZWMW7cu0STzLc6t36vktJ+RHvXCyLnnwPkgJPfbdeQIIZOenmAGWEEAgJfTYd+cJIJCdn2IGWEIAgZTQY9+dJ4BAdn6KGWAJAQRSQo99d54AAtn5KWaAJQQQSAk99t15Aghk56eYAZYQQCAl9Nh35wkgkJ2fYgZYQgCBlNBj350ngCd93BRP7YGmXl2/u951BZ70DkVWMLUHmnp1/e561wx40jsUOUHrmceTfjryOwdq98zHXsCTHllkRq0HH096Jja/eXvjW6/HPRkRnvQER1YyN4/23MYbmsGLGU96vm/5pjz4eMjz5yL4yq/nYyp+0auOJz3rmtFufHMefDzkI6bDf9uKC38F9I9p+LW12n95H0TSIIaAIoBAFBBSCEgCCETSIIaAIoBAFBBSCEgCCETSIIaAIoBAFBBSCEgCCETSIIaAIoBAFBBSCEgCCETSIIaAIoBAFBBSCEgCCETSIIaAIoBAFBBSCEgCCETSIIaAIoAnXQEZmOIhr8tDPvV8dG2AJ71DkRXgIa/LQz71fHTNgCe9Q5ET4Ekv+x1yPOn8TnqG3tobwXo92nM7vmTq8KQnOLKSuXm05zbe0Az+5IAnPd8Hfe2Bnvp34afyVF8fH/Xy5zb60cO+eNKzrhntxtEDPfXvuE/jqY7HR70R05vswvsgCQ4SCKQEEEjKgwwCCQEEkuAggUBKAIGkPMggkBBAIAkOEgikBBBIyoMMAgkBBJLgIIFASgCBpDzIIJAQQCAJDhIIpAQQSMqDDAIJAQSS4CCBQEoAgaQ8yCCQEEAgCQ4SCKQEhEB+TdeMyrzTbtLH3OpNCo9iExBY+Efr5zXm+v/ZZa21V55g4+ZWLxsWO3xRBPyXNjTtVeTtW/9jiG6sSLxG7Mqc21vGXLb13rwJ9cbC+DLqfbxYLu6Ii/DY0bJftQT+B9vZoAKwY3bfAAAAAElFTkSuQmCC',
  "https://core.parts/img/blue-grid.png" => 'iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAFAAAAABAAAAUAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAyKADAAQAAAABAAAAyAAAAAAyqgsrAAAACXBIWXMAAAxOAAAMTgF/d4wjAAACymlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNi4wLjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iPgogICAgICAgICA8dGlmZjpZUmVzb2x1dGlvbj44MDwvdGlmZjpZUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+ODA8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj40MDA8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxZRGltZW5zaW9uPjQwMDwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgrSRM/eAAAK20lEQVR4Ae2dvY4URxSFq3sHzCJ+ZGQj5AhZMk7sB7DkANY8iCNkCxIHFun4CbAd+hFAdghkOHPkEGJHpAQIA7O7U66aaW7f6rta+qckF/S3yZ6603On56t7dnp39uxWu9duPnLO3a9qf3bt3TroER91vM9+5f1FX7vPK+8eee9Ou1AY0SzchX7wGzI5uedFPXYwyI9qOUme//r7D09fu3VjUhN1Z/opGCMk/EZA69xlEV85NrWvfth1qxcHndv7LV89q9zje6tXJ9zFunLn6NcPmxwFP+dKmj/ZGOcWclkVzfH3b/vqtiGy2hxcLQ6cX28v0z44v+/+ujPOcM7RD37/5/zJY28u3mSFgAAEEgIYJMHBAgIpAQyS8mAFgYQABklwsIBASgCDpDxYQSAhgEESHCwgkBLAICkPVhBICGCQBAcLCKQEMEjKgxUEEgIYJMHBAgIpAQyS8mAFgYQABklwsIBASgCDpDxYQSAhEAzSeCT+yvX2t2hHfF5uf/t2fVi9aeeePx3RZ/NbvOF+9IPfm1no8zn3vLSPuQim2P6Ke8hzJNYZtFhukoN1vX7p/GLbb/yvzodHpt+E6AH84uxOmr/YYPtRhUThLyf318sYdnIxzzHmI7xyRHP4qr5Sr6vrO37/zmrnxAXn68Mx7Rz94DdkcHLPi3rs6tQ3Nx+Gof7DxySg9+My6fEqzVcxk34p9PmictWD8JJyhn6K9HESfmXNi96r3b2bt/V6ij579cZHp/dufTelh74v/TSN4Rp+w5l177HY/PWMWI2Z4BjzHPMRvyEP13zxsqr24ZUjflz99pRzl8ddstEPfkPmMPe8qMdeyJ/miZn0qRny+D3Hm0x6NMefy3EGeZNJpx/81LAeI7c/Rc03L/JQzc94ZY2AAAQUAQyiYCAh0CWAQbpEWENAEcAgCgYSAl0CGKRLhDUEFAEMomAgIdAlgEG6RFhDQBHAIAoGEgJdAhikS4Q1BBQBDKJgICHQJYBBukRYQ0ARwCAKBhICXQIYpEuENQQUgWCQxiNk0gdk6HNnoOlXVgafTPrEzDKZ+WmZ79L5tS8hZNJbFv1V7gw0/crK4KtJIJOuYPSW8aqUDP77+zcH9CCQSdc0hmky38N4dY8unV88XzLp3V3rs86dgaZfWRl8NQNk0hWMATJ3Bpp+Zf0NAxkF3gcRFAgIWAIYxDKhAgEhgEEEBQIClgAGsUyoQEAIYBBBgYCAJYBBLBMqEBACGERQICBgCWAQy4QKBIQABhEUCAhYAhjEMqECASGAQQQFAgKWAAaxTKhAQAhgEEGBgIAlEAzSeIRMOpn07X/2OoLD3DLzZNLJpNsvlsdUSs+Q5z6/FgWZ9JZFf0WGvKwMee79UJNAJl3B6C3jVSmZdDLpvQemObD0jDHnN3RH0+Pnxi8+ezLp6Qz0W5EhLytDnns/1BSQSVcwBkgy5GVlyHPvh4wC74MICgQELAEMYplQgYAQwCCCAgEBSwCDWCZUICAEMIigQEDAEsAglgkVCAgBDCIoEBCwBDCIZUIFAkIAgwgKBAQsAQximVCBgBDAIIICAQFLAINYJlQgIAQwiKBAQMASCAZpPEIm/YgsdptNDujU7XPLaM/t+bZ7vQgbv7/xzeN7K+ufvpXcmWD6vd//h7z0/W3nnkx6y6K/yp2Bpl9ZGXc1CWTSFYzeMl6Vkkknk957YJoD55ZZ5vkOnZD0+NL5xbMlk57uWb9V7gw0/crKuKspIJOuYAyQuTPQ9Csr4y6jwPsgggIBAUsAg1gmVCAgBDCIoEBAwBLAIJYJFQgIAQwiKBAQsAQwiGVCBQJCAIMICgQELAEMYplQgYAQwCCCAgEBSwCDWCZUICAEMIigQEDAEsAglgkVCAgBDCIoEBCwBIJBGo+QSVeZ8zaTHJAdUZ9bRntuz7fdczLp9otGj0rpmWrOb1qmvx0BMukti/6KDHlZGfLc+6EmgUy6gtFbxqtSMulk0nsPTHNg6Rljzm/ojqbHz41ffPZk0tMZ6LciQ15Whjz3fqgpIJOuYAyQZMjLypDn3g8ZBd4HERQICFgCGMQyoQIBIYBBBAUCApYABrFMqEBACGAQQYGAgCWAQSwTKhAQAhhEUCAgYAlgEMuECgSEAAYRFAgIWAIYxDKhAgEhgEEEBQIClgAGsUyoQEAIYBBBgYCAJRAM0niETPoR2fM2mxzQqdvnltGe2/Nt95pMuv2i0aNC5nta5rt0fu0IkElvWfRXuTPQ9Csr464mgUy6gtFbxqtSMulk0nsPTHPg3DLLPN+hE5IeXzq/eLZk0tM967fKnYGmX1kZdzUFZNIVjAEydwaafmVl3GUUeB9EUCAgYAlgEMuECgSEAAYRFAgIWAIYxDKhAgEhgEEEBQIClgAGsUyoQEAIYBBBgYCAJYBBLBMqEBACGERQICBgCWAQy4QKBIQABhEUCAhYAhjEMqECASGAQQQFAgKWQDBI45FPn6nMdZvJDXd5e32ZObM8t34uMz/6ORcjBH1m9y3HtJn0e/dW1j89K8vMGeO59XOZ+dHPTcvMt3Nf7e7d/HVx3v30euUvVtXioL1pmKp3Fq/8y9Vn9aG/Xp/b/Xn14tWF6mR9OKxLe/Q70e/f11fqA7e34/fLylSTcZ+2H+0YuphJfxCusn6v1u5cuJhaq9sGyNpVfr0f7n/Je/dlVVX3vfdnZtPPVw+9c+9vRjtehc8pg68nP7yC3NbrKbr0jDHnN2V3nZsbv0irzaRfXZ4K63GXWGSqy8pUsx/T9kN9HVmEa6NwdRA+nj89DN/YjDPI9icB4WU4fM/h181l2uUD9+eSfgr2MZJMOpn0Y8aDmyBQKAHeKCx0YzitMghgkDL2gbMolAAGKXRjOK0yCGCQMvaBsyiUAAYpdGM4rTIIYJAy9oGzKJQABil0YzitMghgkDL2gbMolAAGKXRjOK0yCGCQMvaBsyiUAAYpdGM4rTIIYJAy9oGzKJRAMEjjETLp/TPMuTPzZMgnZshzZ/pD1K/JqpNJH/OVK3dmngz5xAx57kx/OxRk0lsWg9QmM08mfdzfHCg9M68mgUy6gtFfdjL4ZNL7o4tHxqv6kjPu+tmQSdc0hum5ZbTn9nzjNJBJH+aJ7dFkvqdlvkvnp2aCTLqCMUCSIS8rQ557P2QUeB9EUCAgYAlgEMuECgSEAAYRFAgIWAIYxDKhAgEhgEEEBQIClgAGsUyoQEAIYBBBgYCAJYBBLBMqEBACGERQICBgCWAQy4QKBIQABhEUCAhYAhjEMqECASGAQQQFAgKWQDBI4xEy6ZJDDpiO12TSC8uQk0mfllnOnSHP3Y9M+rT9zc6vfSUhk96yGKTIpJ+4sPmflIOoNQeTSef/pA+am3iVW3JGe27npzePTLqmMUzPLaM9t+cbp4FM+jBPbI8uPVPN+U3LzKuZIJOuYAyQuTPQ9Csr4y6j0PyMV9YICEBAEcAgCgYSAl0CGKRLhDUEFAEMomAgIdAlgEG6RFhDQBHAIAoGEgJdAhikS4Q1BBQBDKJgICHQJYBBukRYQ0ARwCAKBhICXQIYpEuENQQUAQyiYCAh0CWAQbpEWENAEQgGwSOKBxICCYHgjrXfVM5+sv2c3Nx7sblvVR+Ez9W2z8ePZ9KvNyMOfAcJhDxItX0JufzPwt29O26onzyp3HJ54E+d2KleHmz7XboU+41D8q70O1kvqpfjniL3ejcI/AdA+/9EDPBmVAAAAABJRU5ErkJggg==',
@@ -198,6 +210,7 @@
  "https://core.parts/behaviors/resize/onpointerdown.js?stop_propagation" => 'https://core.parts/const/zero.txt',
  "https://core.parts/behaviors/resize/onpointerdown.js?should_focus" => 'https://core.parts/const/zero.txt',
  "https://core.parts/behaviors/resize/onpointerdown.js?constructor" => 'https://core.parts/behaviors/resize/onpointerdown.c.js',
+ "https://core.parts/debug/event.js" => 'e => console.trace(e)',
  "https://core.parts/behaviors/resize/bottom-right.css" => '
   :host {
    position: absolute;
@@ -306,7 +319,6 @@
     east_resize = ${"`w: Math.max(${min_w}, ${W} - (${x} - x))`"},
     west_resize = [east_west_pan, ${"`w: Math.max(${min_w}, ${W} + (${x} - x))`"}].join(", "),
     properties = [original_properties, ${output_properties}].join(", ");
-   
    ${stop}
    ${focus}
    Ω["${transformer_url}"] = \`({ clientX: x, clientY: y }) => {
@@ -349,6 +361,29 @@
  "https://core.parts/behaviors/resize/left-right.txt" => "ew-resize",
  "https://core.parts/behaviors/resize/top-left-bottom-right.txt" => "nwse-resize",
  "https://core.parts/behaviors/resize/top-right-bottom-left.txt" => "nesw-resize",
+ "https://core.parts/behaviors/window-close.c.js" => '
+  const
+   task_url = task.headerOf().href,
+   window_url = window.headerOf().href;
+  return `
+   e => {
+    const
+     windows_uri = "https://pilot.parts/windows.uri",
+     tasks_uri = "https://pilot.parts/tasks.uri",
+     windows_string = Ω[windows_uri].toPrimitive(),
+     tasks_string = Ω[tasks_uri].toPrimitive(),
+     windows = windows_string ? windows_string.split(" ") : [],
+     tasks = tasks_string ? tasks_string.split(" ") : [],
+     own_window = "${window_url}",
+     own_task = "${task_url}";
+    const window_index = windows.indexOf(own_window);
+    const task_index = tasks.indexOf(own_task);
+    if (window_index !== -1) windows.splice(window_index, 1)
+    if (task_index !== -1) tasks.splice(task_index, 1)
+    Ω[windows_uri] = windows.join(" ")
+    Ω[tasks_uri] = tasks.join(" ")
+   }
+  `',
  "https://core.parts/behaviors/window-focus.c.js" => '
   const
    active_url = active.headerOf().href,
@@ -357,7 +392,7 @@
    e => {
     Ω["${active_url}"] = "1";
     const
-     windows_uri = "https://core.parts/os-95/windows.uri",
+     windows_uri = "https://pilot.parts/windows.uri",
      windows_string = Ω[windows_uri].toPrimitive(),
      windows = windows_string ? windows_string.split(" ") : [],
      own_window = "${window_url}";
@@ -369,16 +404,19 @@
     }
    }
   `',
- "https://core.parts/client-to-server.js" => '
-  ({ data }) => {
-   if (data === "restart") registration.unregister()
-   else { Object.assign(Δ, data) }
-  }',
+ "https://core.parts/client-to-server.js" => <<<JS
+  ({ data, source }) => {
+   const restart = () => source.postMessage({ restart: 1 })
+   if ("restart" in data) registration.unregister().then(restart)
+   else if ("save" in data) { Object.assign(Δ, data.save) }
+   else throw new RangeError(`unhandled client to server command "\${JSON.stringify(data)}"`)
+  }
+  JS,
  "https://core.parts/core-part/" => '
   <!DOCTYPE html>
   <script src="https://core.parts/everything.js"></script>
    <script>Ω["https://core.parts/core-part/bootstrap.js"]()</script>
-  <meta name="viewport" content="width=device-width, initial-scale=0.5" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.8" />
   <style>
    html, body {
     overscroll-behavior-y: contain !important;
@@ -396,7 +434,10 @@
  "https://core.parts/core-part/?getPrototypeOf" => 'https://core.parts/proxy/beta/getPrototypeOf.js',
  "https://core.parts/core-part/?has" => 'https://core.parts/proxy/beta/has.js',
  "https://core.parts/core-part/?headerOf" => 'https://core.parts/proxy/beta/headerOf.js',
+ "https://core.parts/core-part/?getEmbedTag" => 'https://core.parts/proxy/beta/getEmbedTag.js',
  "https://core.parts/core-part/?isExtensible" => 'https://core.parts/proxy/beta/isExtensible.js',
+ "https://core.parts/relative-core/?layout" => 'layout.css',
+ "https://core.parts/relative-core/?manifest" => 'manifest.uri',
  "https://core.parts/core-part/?layout" => 'https://core.parts/core-part/layout.css',
  "https://core.parts/core-part/?manifest" => 'https://core.parts/core-part/manifest.uri',
  "https://core.parts/core-part/?ownKeys" => 'https://core.parts/proxy/beta/ownKeys.js',
@@ -409,22 +450,12 @@
  "https://core.parts/core-part/?core" => 'https://core.parts/core-part/',
  "https://core.parts/core-part/?hash" => 'https://core.parts/core-part/hash.js',
  "https://core.parts/core-part/hash.js" => '(x, y = 0x811c9dc5) => [...x].reduce((y, c) => (y ^= c.charCodeAt(0)) + (y << 1) + (y << 4) + (y << 7) + (y << 8) + (y << 24), y).toString(36)',
- "https://core.parts/demo/hello.txt?mood" => 'https://core.parts/demo/mood.txt',
- "https://core.parts/demo/hello.txt?noun" => 'https://core.parts/demo/noun.txt',
- "https://core.parts/demo/hello.txt?past_phrasal_verb" => 'https://core.parts/demo/past_phrasal_verb.txt',
- "https://core.parts/demo/hello.txt?persons_name" => 'https://core.parts/demo/persons_name.txt',
- "https://core.parts/demo/hello.txt?time_interval" => 'https://core.parts/demo/time_interval.txt',
- "https://core.parts/demo/hello.txt?verb_ending_in_ing" => 'https://core.parts/demo/verb_ending_in_ing.txt',
- "https://core.parts/demo/hello.txt?constructor" => 'https://core.parts/demo/hello.txt.c.js',
- "https://core.parts/demo/hello.txt.c.js" => 'return `Welcome to my ${noun}, ${persons_name}! I\'ve been ${verb_ending_in_ing} on it all ${time_interval}. I\'m so ${mood} you ${past_phrasal_verb}.`',
- "https://core.parts/demo/mood.txt" => 'glad',
- "https://core.parts/demo/noun.txt" => 'website',
- "https://core.parts/demo/past_phrasal_verb.txt" => 'stopped by',
- "https://core.parts/demo/persons_name.txt" => 'stranger',
- "https://core.parts/demo/time_interval.txt" => 'day',
- "https://core.parts/demo/verb_ending_in_ing.txt" => 'working',
  "https://core.parts/core-part/bootstrap.js" => '
   () => {
+   navigator.serviceWorker.onmessage = ({ data }) => {
+    if ("restart" in data) location.reload()
+    else throw new RangeError(`unhandled server to client command "\${JSON.stringify(data)}"`)
+   }
    globalThis.nodePool = { }
    const eventKireji = { onclick: 0, oncontextmenu: 0, onpointerdown: 0, onpointerup: 0, onpointermove: 0, ondblclick: 0, onfocus: 0, layout: 1, manifest: 1, ondragstart: -1 };
    Object.defineProperties(HTMLElement.prototype, {
@@ -445,9 +476,6 @@
        [...C.children].forEach(x => x.remove())
        return;
       }
-      // deprecated
-      // const repair = this._repair;
-      // if (O.join(" ") === && !repair) return;
       if (O.join(" ") === v) return;
       const N = v.split(" ")
       let o, n, i = -1;
@@ -473,19 +501,9 @@
        const
         poolNode = (url in nodePool ? [...nodePool[url]].find(x => !x.isConnected && !x.parentNode) : undefined),
         hadPoolNode = !!poolNode,
-        node = hadPoolNode ? poolNode : document.createElement(Ω[url].headerOf().groups.part);
+        node = hadPoolNode ? poolNode : document.createElement(Ω[url].getEmbedTag());
        if (index === undefined || index >= this.shadow.children.length) this.shadow.appendChild(node); else this.shadow.insertBefore(node, this.shadow.children[index])
-       if (node._url !== url) node.url = url// deprecated ; else node.repair();
-      }
-     }
-    },
-    repair: {
-     get() {
-      return () => {
-       console.warn("deprecated function called: repair")
-       this._repair = true
-       this.manifest = this.proxy.manifest?.toPrimitive() ?? ""
-       this._repair = false
+       if (node._url !== url) node.url = url
       }
      }
     },
@@ -496,8 +514,6 @@
      get() { if (!this._url) throw new ReferenceError("attempted to get url before it was defined."); return this._url },
      set(v) {
       if (this._url) throw new TypeError(`cannot change HTMLElement\'s url (is ${this._url}, tried to set to ${v})`);
-      // console.groupCollapsed("node > set url", { v })
-      // console.trace()
       this._url = v
       if (!(v in nodePool)) nodePool[v] = new Set()
       nodePool[v].add(this)
@@ -515,7 +531,6 @@
          break;
         case 1:
          const primitive = subproxy.toPrimitive()
-         // console.log(v, primitive)
          this[kireji] = primitive
          const url = subproxy.headerOf().href;
          if (!(url in causality)) causality[url] = {}
@@ -525,34 +540,18 @@
         }
        }
       }
-      // console.groupEnd()
      }
     }
    })
    onload = () => document.body.url = location.href;
   }',
- "https://core.parts/os-95/taskbar-/tray-/factory-reset/layout.css" => '
-  :host {
-   width: 16px;
-   height: 16px;
-   cursor: pointer;
-  }
-  :host::before {
-   content: "🧼";
-   font-size: 16px;
-   line-height: 16px;
-  }',
- "https://core.parts/os-95/taskbar-/tray-/factory-reset/?layout" => 'https://core.parts/os-95/taskbar-/tray-/factory-reset/layout.css',
- "https://core.parts/os-95/taskbar-/tray-/factory-reset/?onclick" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/onclick.js',
  "https://core.parts/file.js" => '
   event => {
    const
     direct = typeof event === "string",
     url = direct ? event : event.request.url;
-   // console.groupCollapsed("file.js", { url });
    if (url === "https://core.parts/everything.js") {
-    console.groupEnd()
-    return event.respondWith(new Response("var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy(" + JSON.stringify(Δ) + \', { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"]\', { headers: { "content-type": "application/json" } }))
+    return event.respondWith(new Response("var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy(" + JSON.stringify(Δ) + \', { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"], onmessage = Ω["https://core.parts/client-to-server.js"]\', { headers: { "content-type": "application/json" } }))
    }
    if (url.includes("&")) {
     throw "deprecated"
@@ -591,7 +590,6 @@
     body = new Blob([I], { type });
    }
    const response = new Response(body, { headers: { "content-type": `${type}${binary ? "" : "; charset=UTF-8"}`, "expires": "Sun, 20 Jul 1969 20:17:00 UTC", "server": "kireji" } })
-   // console.groupEnd()
    return direct ? response : event.respondWith(response);
   }',
  "https://core.parts/flex-spacer/layout.css" => '
@@ -599,40 +597,6 @@
    flex: 1 1;
   }',
  "https://core.parts/flex-spacer/?layout" => 'https://core.parts/flex-spacer/layout.css',
- "https://core.parts/os-95/taskbar-/tray-/fullscreen-/layout.css" => '
-  :host {
-   width: 16px;
-   height: 16px;
-   cursor: pointer;
-  }
-  :host::before {
-   content: "⛶";
-   font-size: 16px;
-   line-height: 16px;
-  }',
- "https://core.parts/os-95/taskbar-/tray-/fullscreen-/onclick.js" => '()=>document.documentElement.requestFullscreen()',
- "https://core.parts/os-95/taskbar-/tray-/fullscreen-/?layout" => 'https://core.parts/os-95/taskbar-/tray-/fullscreen-/layout.css',
- "https://core.parts/os-95/taskbar-/tray-/fullscreen-/?onclick" => 'https://core.parts/os-95/taskbar-/tray-/fullscreen-/onclick.js',
- "https://core.parts/layout.css?height" => 'https://core.parts/os-95/taskbar-/css-height.txt',
- "https://core.parts/layout.css?constructor" => 'https://core.parts/layout.css.c.js',
- "https://core.parts/layout.css.c.js" => '
-  return `
-   :host {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
-    height: 100%;
-    margin: 0;
-    display: grid;
-    grid-template-rows: 1fr ${height};
-    font: 11px / 16px sans-serif;
-   }
-  `',
- "https://core.parts/onpointermove.js" => '
-  () => {
-  }',
  "https://core.parts/onpointermove.js?behavior" => 'https://core.parts/behaviors/grab/src.uri',
  "https://core.parts/onpointermove.js?constructor" => 'https://core.parts/onpointermove.c.js',
  "https://core.parts/onpointermove.c.js" => 'return (""+behavior) ? (""+Ω[behavior]) : "( ) => { }"',
@@ -640,2013 +604,19 @@
  "https://core.parts/onpointerup.js?grab" => 'https://core.parts/behaviors/grab/src.uri',
  "https://core.parts/onpointerup.js?release" => 'https://core.parts/behaviors/release/src.uri',
  "https://core.parts/onpointerup.js?constructor" => 'https://core.parts/onpointerup.c.js',
- "https://core.parts/onpointerup.c.js" => 'return `e => { ${(""+grab) ? `Ω["https://core.parts/behaviors/grab/src.uri"] = ""; ` : ""}${(""+release) ? `Ω["${release}"](e); Ω["${release.headerOf().href}"] = ""; ` : ""}}`',
- "https://core.parts/os-95/desktop-/layout.css" => '
-  :host {
-   position: relative;
-   width: 100%;
-   box-sizing: border-box;
-   height: 100%;
-   margin: 0;
-   background: #377f7f;
-  }',
- "https://core.parts/os-95/desktop-/onfocus.js?selected" => 'https://core.parts/os-95/taskbar-/selected.txt',
- "https://core.parts/os-95/desktop-/onfocus.js?constructor" => 'https://core.parts/os-95/desktop-/onfocus.c.js',
- "https://core.parts/os-95/desktop-/onfocus.c.js" => '
-  const has_active = "" + selected !== "-1", active_url = selected.headerOf().href;
-  return `
-   () => {
-    ${has_active ? `Ω["${active_url}"] = "-1"` : ``}
-   }
-  `',
- "https://core.parts/os-95/desktop-/?layout" => 'https://core.parts/os-95/desktop-/layout.css',
- "https://core.parts/os-95/desktop-/?onfocus" => 'https://core.parts/os-95/desktop-/onfocus.js',
- "https://core.parts/os-95/horizontal-line/layout.css" => '
-  :host {
-   height: 2px;
-   border-top: 1px solid #7f7f7f;
-   border-bottom: 1px solid white;
-   box-sizing: border-box;
-   margin: 4px 0;
-  }',
- "https://core.parts/os-95/horizontal-line/?layout" => 'https://core.parts/os-95/horizontal-line/layout.css',
- "https://core.parts/os-95/manifest.uri?windows" => 'https://core.parts/os-95/windows.uri',
- "https://core.parts/os-95/manifest.uri?start_menu" => 'https://core.parts/os-95/start-menu/open.txt',
- "https://core.parts/os-95/manifest.uri?constructor" => 'https://core.parts/os-95/manifest.uri.c.js',
- "https://core.parts/os-95/manifest.uri.c.js" => '
-  const
-   urls = ["https://core.parts/os-95/desktop-/"],
-   list = ("" + windows).split(" ").forEach(url => {
-    if (("" + Ω[url + "minimized.txt"]) === "0") urls.push(url)
-   })
-  urls.push("https://core.parts/os-95/taskbar-/");
-  if (""+start_menu === "1") urls.push(
-   "https://core.parts/os-95/taskbar-/start-menu/click-to-close/",
-   "https://core.parts/os-95/taskbar-/start-menu/"
-  );
-  return urls.join(" ")',
- "https://core.parts/os-95/programs/locate-/task-/datum.txt" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/task-/index.txt" => '1',
- "https://core.parts/os-95/programs/locate-/task-/index.txt?datum" => 'https://core.parts/os-95/programs/locate-/task-/datum.txt',
- "https://core.parts/os-95/programs/locate-/task-/index.txt?fx" => 'https://core.parts/os-95/programs/locate-/task-/index/fx.uri',
- "https://core.parts/os-95/programs/locate-/task-/index.txt?order" => 'https://core.parts/os-95/taskbar-/selected/fx.uri',
- "https://core.parts/os-95/programs/locate-/task-/index.txt?constructor" => 'https://core.parts/os-95/programs/locate-/task-/index.txt.c.js',
- "https://core.parts/os-95/programs/locate-/task-/index.txt.c.js" => 'return ""+(""+order).split(" ").indexOf(""+datum)',
- "https://core.parts/os-95/programs/locate-/task-/index/fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/task-/layout.css?open" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/task-/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/task-/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/task-/layout.css.c.js" => 'return `
-  :host {
-   position: relative;
-   height: 100%;
-   margin: 0;
-   width: 160px;
-   display: flex;
-   flex-flow: row nowrap;
-   gap: 3px;
-   border: none;${("" + open) === "1" ? `
-   font: bold 11px sans-serif;` : ""}
-   box-sizing: border-box;
-   padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
-   text-align: left;
-   box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
-  }
-  :host(:focus)::after {
-   border: 1px dotted black;
-   content: "";
-   position: absolute;
-   margin: 3px;
-   left: 0;
-   right: 0;
-   top: 0;
-   bottom: 0;
-   pointer-events: none;
-  }${("" + open) === "1" ? `
-  :host > * {
-   z-index: 3
-  }
-  :host::before {
-   content: "";
-   position: absolute;
-   margin: 2px;
-   border-top: 1px solid white;
-   left: 0;
-   right: 0;
-   top: 0;
-   bottom: 0;
-   background-image:
-    linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
-    linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
-   background-size: 2px 2px;background-position: 0 0, 1px 1px;
-  }` : ``}
-  app-icon {
-   width: 16px;
-   height: 16px;
-  }`',
- "https://core.parts/os-95/programs/locate-/task-/manifest.uri" => 'https://core.parts/os-95/icons/folder-icon/ https://core.parts/os-95/programs/locate-/app-label/',
- "https://core.parts/os-95/programs/locate-/task-/manifest.uri?open" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/task-/onpointerdown.js?minimized" => 'https://core.parts/os-95/programs/locate-/window-/minimized.txt',
- "https://core.parts/os-95/programs/locate-/task-/onpointerdown.js?active" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/task-/onpointerdown.js?window" => 'https://core.parts/os-95/programs/locate-/window-/',
- "https://core.parts/os-95/programs/locate-/task-/onpointerdown.js?core" => 'https://core.parts/os-95/programs/relate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/task-/open/fx.uri" => 'https://core.parts/os-95/programs/locate-/task-/layout.css https://core.parts/os-95/taskbar-/selected.txt https://core.parts/os-95/programs/locate-/window-/layout.css https://core.parts/os-95/programs/locate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/task-/?layout" => 'https://core.parts/os-95/programs/locate-/task-/layout.css',
- "https://core.parts/os-95/programs/locate-/task-/?manifest" => 'https://core.parts/os-95/programs/locate-/task-/manifest.uri',
- "https://core.parts/os-95/programs/locate-/task-/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/app-label/layout.css?address" => 'https://core.parts/os-95/programs/locate-/window-/address.uri',
- "https://core.parts/os-95/programs/locate-/app-label/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/app-label/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/app-label/layout.css.c.js" => 'return `
-  :host {
-   margin: 0;
-   height: 16px;
-   vertical-align: center;
-   text-overflow: ellipsis;
-   overflow: clip;
-  }
-  :host::after {
-   content: "Locate - ${address}";
-   white-space: nowrap;
-  }`',
- "https://core.parts/os-95/programs/locate-/app-label/?layout" => 'https://core.parts/os-95/programs/locate-/app-label/layout.css',
- "https://core.parts/os-95/programs/locate-/start-menu-item/app-label/layout.css" => ':host::after {
-    height: 24px;
-    content: "Locate";
-   }',
- "https://core.parts/os-95/programs/locate-/start-menu-item/app-label/?layout" => 'https://core.parts/os-95/programs/locate-/start-menu-item/app-label/layout.css',
- "https://core.parts/os-95/programs/locate-/start-menu-item/layout.css" => '
-   :host {
-    position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    padding: 4px 0 }
-   :host(:hover) {
-    background: #00007f;
-    color: white }
-   folder-icon {
-    width: 24px;
-    height: 24px;
-    margin: 0 10px;
-    --size: 24px;
-   }',
- "https://core.parts/os-95/programs/locate-/start-menu-item/manifest.uri" => 'https://core.parts/os-95/icons/folder-icon/ https://core.parts/os-95/programs/locate-/start-menu-item/app-label/',
- "https://core.parts/os-95/programs/locate-/start-menu-item/?layout" => 'https://core.parts/os-95/programs/locate-/start-menu-item/layout.css',
- "https://core.parts/os-95/programs/locate-/start-menu-item/?manifest" => 'https://core.parts/os-95/programs/locate-/start-menu-item/manifest.uri',
- "https://core.parts/os-95/programs/locate-/start-menu-item/?onclick" => 'https://core.parts/os-95/programs/locate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/active.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/active.txt?fx" => 'https://core.parts/os-95/programs/locate-/task-/open/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/active.txt?index" => 'https://core.parts/os-95/programs/locate-/task-/index.txt',
- "https://core.parts/os-95/programs/locate-/window-/active.txt?minimized" => 'https://core.parts/os-95/programs/locate-/window-/minimized.txt',
- "https://core.parts/os-95/programs/locate-/window-/active.txt?selected" => 'https://core.parts/os-95/taskbar-/selected.txt',
- "https://core.parts/os-95/programs/locate-/window-/active.txt?constructor" => 'https://core.parts/os-95/programs/locate-/window-/active.txt.c.js',
- "https://core.parts/os-95/programs/locate-/window-/active.txt.c.js" => 'return ("" + minimized) === "1" ? "0" : ("" + selected) === ("" + index) ? "1" : "0"',
- "https://core.parts/os-95/programs/locate-/window-/address-fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri https://core.parts/os-95/programs/locate-/app-label/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/address.uri" => 'https://core.parts/os-95/programs/relate-/window-/graph-/',
- "https://core.parts/os-95/programs/locate-/window-/address.uri?fx" => 'https://core.parts/os-95/programs/locate-/window-/address-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/exit-button/layout.css" => '
-  :host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   margin-left: 2px;
-   box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb }
-  :host::before, :host::after {
-   --color: #7f7f7f;
-   content: "";
-   display: block;
-   position: absolute;
-   width: 8px;
-   height: 7px;
-   left: 4px;
-   top: 3px;
-   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%) }
-  :host::before {
-   --color: white;
-   left: 5px;
-   top: 4px;
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/exit-button/?layout" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/exit-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/column-fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css?name_width" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css?type_width" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css?size_width" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css.c.js" => 'return `
-  :host {
-   position: relative;
-   display: grid;
-   grid-template-columns: ${JSON.parse(""+name_width).w}px ${JSON.parse("" + type_width).w}px ${JSON.parse("" + size_width).w}px;
-   grid-auto-rows: 18px;
-   flex: 1 1;
-   overflow: auto;
-  }`',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?address" => 'https://core.parts/os-95/programs/locate-/window-/address.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?cell" => 'https://core.parts/components/cell-/construct.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?click" => 'https://core.parts/components/click-/construct.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?fx" => 'https://core.parts/os-95/programs/locate-/window-/status/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?header_json" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/list.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?show_kireji" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?label_css" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/label_css.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/label_css.js" => 'x => `:host { overflow: clip; text-overflow: ellipsis; line-height: 18px } :host::before { content: "${x}" }`',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?item_layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/item_layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/item_layout.css" => '
-  :host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   padding: 2px 0;
-   overflow: clip;
-   box-sizing: border-box;
-   padding-right: 6px;
-  }
-  :host>:first-child {
-   --size: 16px;
-   margin-right: 4px
-  }
-  :host(:focus) {
-   background: silver;
-   width: min-content;
-   background: #00007f;
-   color: white;
-   outline: 1px dotted black;
-  }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?sort_order" => 'https://core.parts/os-95/programs/locate-/window-/sort_order.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri?constructor" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri.c.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri.c.js" => '
-  const
-   browse_url = "" + address, icon_urlbase = "https://core.parts/os-95/icons/", fileurlbase = υ.replace(/\/manifest.uri$/, "/file-"), file_list = [], url_list = [], O = JSON.parse(sort_order), K = Object.keys(O), header = JSON.parse(header_json),
-   file_urls = Object.keys(Δ).filter(url => (url !== browse_url) && url.startsWith(browse_url)).map(x => x.replace(browse_url, "").includes("/") ? x.slice(0, browse_url.length + x.replace(browse_url, "").indexOf("/") + 1) : x);
-  file_urls.push(...file_urls.filter(x => x.includes("?") && x.split("?")[0] !== browse_url).map(x =>x.split("?")[0]));
-  const filenames = [...new Set(file_urls)].map(url => [url, url.replace(browse_url, "")])
-  let kireji_count = 0, folder_count = 0, file_count = 0;
-  for (const [url, name, i] of filenames) {
-   if (name.includes("?") && ("" + show_kireji === "0")) continue;
-   const
-    proxy = Ω[url],
-    groups = proxy.headerOf().groups,
-    row_data = {
-     ...groups,
-     size: groups.size,
-     entry_size: groups.entry_size,
-     name,
-     url,
-     manifest: [],
-     type: url.match(/\?[\w\d_$]+$/)
-      ? (kireji_count++, "kireji") : url.endsWith("/")
-      ? (folder_count++, url.match(/[^:]\/$/)
-         ? url.match(/^https:\/\/[\w\d]+\.[\w\d]{2,}\/$/)
-         ? "domain" : "folder" :
-           "protocol" )
-      : (file_count++, groups.type),
-     size_label: groups.size + " byte" + (groups.size === 1 ? "" : "s")
-    },
-    is_index = ["folder", "domain", "protocol"].includes(row_data.type),
-    item_url = fileurlbase + hash(url) + "-",
-    label_url = item_url + "app-label/",
-    icontag = row_data.type.replace(/[^a-zA-Z0-9]+/g, "-") + "-icon",
-    icon_url = icon_urlbase + icontag + "/",
-    item_manifest = icon_url + " " + label_url,
-    focus_item_url = item_url + "onfocus.js",
-    open_item_url = item_url + "open.js";
-   
-   Ω[focus_item_url] = `() => { [...nodePool["${item_url + "name-/"}"]].find(x => x.isConnected).focus() }`
-   Ω[open_item_url] = `() => { ${is_index ? `Ω["https://core.parts/os-95/programs/locate-/window-/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}"` : `Ω["https://core.parts/os-95/programs/relate-/window-/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}"`} }`
-   for (const key in header) {
-    const keyurl = item_url + key + "-/";
-    Ω[keyurl + "?onfocus"] = focus_item_url
-    row_data.manifest.push(keyurl)
-    if (key === "name") {
-     cell(label_url, label_css(["folder", "domain"].includes(row_data.type) ? name.slice(0, -1) : name))
-     cell(keyurl, ""+item_layout, item_manifest)
-    } else {
-     cell(keyurl, label_css(row_data[key + (key === "size" ? "_label" : "")]))
-    }
-    click(keyurl, undefined, open_item_url)
-   }
-   file_list.push(row_data)
-  }
-  Ω["https://core.parts/os-95/programs/locate-/window-/status/file_count.txt"] = file_count
-  Ω["https://core.parts/os-95/programs/locate-/window-/status/folder_count.txt"] = folder_count
-  Ω["https://core.parts/os-95/programs/locate-/window-/status/kireji_count.txt"] = kireji_count
-  file_list.sort((a, b) => {
-   const c = (((a[K[0]] > b[K[0]]) === O[K[0]]) ? 1 : (a[K[0]] === b[K[0]] ? (((a[K[1]] > b[K[1]]) === O[K[1]]) ? 1 : (a[K[1]] === b[K[1]] ? (((a[K[2]] > b[K[2]]) === O[K[2]]) ? 1 : (a[K[2]] === b[K[2]] ? 0 : -1)) : -1)) : -1))
-   return c;
-  })
-  url_list.push(...file_list.map(({ manifest }) => manifest).flat())
-  return url_list.join(" ")',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/?layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css?name_width" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css?type_width" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css?size_width" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css.c.js" => 'return `:host {
-   display: grid;
-   width: 100%;
-   grid-template-columns: ${JSON.parse(""+name_width).w}px ${JSON.parse("" + type_width).w}px ${JSON.parse("" + size_width).w}px 1fr;
-  }`',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri?button" => 'https://core.parts/components/button-/construct.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri?fx" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest-fx.uri?sort_order" => 'https://core.parts/os-95/programs/locate-/window-/sort_order.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest-fx.uri?constructor" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest-fx.uri.c.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest-fx.uri.c.js" => 'return Object.keys(JSON.parse(""+sort_order)).map(key => `https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/${key}-button/layout.css`).join(" ")',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri?headers" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/list.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri?item_layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/item_layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/item_layout.css" => '
-  :host {
-   position: relative;
-   width: 100%;
-   text-overflow: ellipsis;
-   overflow: clip;
-   white-space: nowrap;
-   line-height: 18px;
-  }
-  :host::before {
-   vertical-align: center;
-   margin-left: 6px;
-   width: calc(100% - 22px);
-  }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri?sort_order" => 'https://core.parts/os-95/programs/locate-/window-/sort_order.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri?constructor" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri.c.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri.c.js" => '
-  const header_obj = JSON.parse("" + headers), urls = []
-  const string_order = "" + sort_order, my_order = JSON.parse(string_order), first_key = Object.keys(my_order)[0], first_dir = my_order[first_key];
-  Object.keys(header_obj).forEach((key, i, arr) => {
-   button(
-    urls[i] = "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/" + key + "-button/",
-    `${item_layout}
-    :host::before {
-     content: "${header_obj[key]}";
-    }${first_key === key ? `
-    :host::after {
-     --size: 8px;
-     position: absolute;
-     right: 5px;
-     top: 5px;
-     width: var(--size);
-     height: var(--size);
-     content: "${ first_dir ? "▼" : "▲" }";
-     font-size: var(--size);
-     line-height: var(--size);
-     text-align: center;
-     vertical-align: center;
-    }`: ``}`,
-    `${urls[i]}resize-/`,
-    `() => {
-     let order = ${string_order};
-     const
-      keys = Object.keys(order),
-      key = "${key}",
-      keyplace = keys.indexOf(key);
-     if (keyplace !== 0) {
-      keys.splice(keyplace, 1);
-      keys.unshift(key);
-      order = keys.reduce((o, k) => (o[k]=order[k],o), {})
-     }
-     order[key] = (keyplace !== 0) || !order[key];
-     Ω["${sort_order.headerOf().href}"] = JSON.stringify(order)
-    }`
-   )
-  })
-  urls.push("https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/filler-/")
-  return urls.join(" ")',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/position.json" => '{ "w": 128, "range": { "w": [0] } }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/position.json?fx" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/column-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/resize-/?core" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/resize-/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/resize-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/resize-/onpointerdown.js?core" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/resize-/onpointerdown.js?position" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/name-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/position.json" => '{ "w": 64, "range": { "w": [0] } }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/position.json?fx" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/column-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/resize-/?core" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/resize-/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/resize-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/resize-/onpointerdown.js?core" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/resize-/onpointerdown.js?position" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/type-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/position.json" => '{ "w": 96, "range": { "w": [0] } }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/position.json?fx" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/column-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/resize-/?core" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/resize-/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/resize-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/resize-/onpointerdown.js?core" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/resize-/onpointerdown.js?position" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/size-button/position.json',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/filler-/?layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/filler-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/filler-/layout.css" => ':host { background: #c3c3c3; box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onpointerdown.js?mode" => 'https://core.parts/behaviors/resize/right-.txt',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onpointerdown.js?stop_propagation" => 'https://core.parts/const/one.txt',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onclick.js" => 'e => { e.stopPropagation() }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/?onclick" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/onclick.js',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/?layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/resize-/layout.css" => '
-  :host {
-   z-index: 1;
-   position: absolute;
-   right: -4px;
-   width: 8px;
-   cursor: col-resize;
-   top: 0;
-   bottom: 0;
-  }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/?layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/list.json" => '{"name":"Name","type":"Type","size":"Size"}',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt.fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt.fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri https://core.parts/os-95/programs/locate-/window-/tool-bar/toggle-kireji/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/layout.css" => '
-  :host {
-   position: relative;
-   flex: 1 1;
-   box-shadow: -0.5px -0.5px 0 0.5px black, 0 0 0 1px #dbdbdb, -0.5px -0.5px 0 1.5px #7a7a7a, 0 0 0 2px white;
-   background: white;
-   margin: 2px;
-   display: grid;
-   grid-template-rows: 18px 1fr;
-   overflow: clip;
-   height: 100%;
-  }',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/manifest.uri" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/ https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/?layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/explorer-view/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/layout.css?active" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/window-/layout.css?maximized" => 'https://core.parts/os-95/programs/locate-/window-/maximized.txt',
- "https://core.parts/os-95/programs/locate-/window-/layout.css?position" => 'https://core.parts/os-95/programs/locate-/window-/position.json',
- "https://core.parts/os-95/programs/locate-/window-/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/layout.css.c.js" => '
-  const common = `
-     position: absolute;
-     display: flex;
-     flex-flow: column nowrap;
-     gap: 2px; background: #c3c3c3;
-     box-sizing: border-box;`,
-   titlebar = ("" + active) === "1" ? `title-bar {
-     background: rgb(0, 0, 163);
-    }` : ``;
-     
-  if (("" + maximized) === "1") {
-   return `
-    :host {
-     position: absolute;
-     top: 0;
-     left: 0;
-     right: 0;
-     bottom: 28px;
-     padding: 2px;
-     ${common};
-    }
-    ${titlebar}
-   `
-  } else {
-   const { x = 0, y = 0, w = 0, h = 0 } = JSON.parse("" + position);
-   return `
-    :host {
-     width: ${w}px;
-     height: ${h}px;
-     left: ${x}px;
-     top: ${y}px;
-     min-height: fit-content;
-     padding: 4px;
-     background: #c3c3c3;
-     box-shadow:
-      inset -1px -1px black,
-      inset 1px 1px #c3c3c3,
-      inset -2px -2px #7a7a7a,
-      inset 2px 2px white,
-      5px 7px 3px #0002;
-     ${common};
-    }
-    ${titlebar}
-   `
-  }',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?title" => 'https://core.parts/os-95/programs/locate-/window-/title-bar/',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?tools" => 'https://core.parts/os-95/programs/locate-/window-/tool-bar/',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?explorer" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?status" => 'https://core.parts/os-95/programs/locate-/window-/status-bar/',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?transform_path" => 'https://core.parts/os-95/programs/locate-/window-/transform-/',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?transform" => 'https://core.parts/components/transform-/construct.js',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?position" => 'https://core.parts/os-95/programs/locate-/window-/position.json',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri?constructor" => 'https://core.parts/os-95/programs/locate-/window-/manifest.uri.c.js',
- "https://core.parts/os-95/programs/locate-/window-/manifest.uri.c.js" => <<<JS
-  const [title_url, tools_url, explorer_url, status_url, transform_url, position_url] = [title, tools, explorer, status, transform_path, position].map(x => x.headerOf().href)
-  const transform_urls = transform(transform_url, position_url, "nesw", title_url);
-  return [title_url, tools_url, explorer_url, status_url, transform_urls].join(" ")
-  JS,
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down-fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/layout.css?down" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down.txt',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(\'\'+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: \'\';
-   width: 9px;
-   height: 9px;
-   top: 2px;
-   left: 3px;
-   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color)
-  }
-  :host(:hover)::before {
-   --color: blue }`',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/manifest.uri" => '',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/onclick.js" => '
-  () => {
-   Ω[\'https://core.parts/os-95/programs/locate-/window-/maximized.txt\'] = \'1\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/release.js\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/release.js" => 'e => { Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/down.txt\'] = \'0\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/?layout" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/?onclick" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/onclick.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/maximize-button/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/maximized.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/maximized.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/maximized/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/maximized/fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/layout.css https://core.parts/os-95/programs/locate-/window-/window-controls/manifest.uri https://core.parts/os-95/programs/locate-/window-/title-bar/ondblclick.js',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/layout.css" => '
-  :host {
-   height: 18px;
-   display: flex;
-   flex-flow: row nowrap;
-   gap: 4px;
-   align-items: center;
-   padding: 2px;
-  }
-  :host > * {
-   box-shadow:
-  }',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri?button" => 'https://core.parts/components/button-/construct.js',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri?show_kireji" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri?constructor" => 'https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri.c.js',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri.c.js" => '
-  const
-   common_css = ":host { cursor: pointer; --size: 16px; min-width: calc(var(--size) + 4px); padding: 2px; height: calc(var(--size) + 4px); font-size: var(--size); line-height: var(--size); display: flex; flex-flow: row nowrap } :host::before { content: \'\' } :host::after { padding: 0 2px; font-size: 11px }",
-   common_url = "https://core.parts/os-95/programs/locate-/window-/tool-bar/";
-  return [[
-   common_url + "go-up/",
-   common_css + ":host::before { content: \'📁\' } :host::after { content: \'Enclosing Folder\' }",
-   "",
-   `() => { const url = ("" + Ω["https://core.parts/os-95/programs/locate-/window-/address.uri"]).match(${/^.*?(?=[^/]*\/*$)/})[0]; Ω["https://core.parts/os-95/programs/locate-/window-/address.uri"] = url }`,
-  ],[
-   common_url + "toggle-kireji/",
-   common_css + `:host::before { content: \'🔗\' } :host::after { content: \'${("" + show_kireji) === "0" ? "Show" : "Hide"} Kireji\' }`,
-   "",
-   `() => { Ω["https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt"] = (Ω["https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt"].toPrimitive() === "1") ? "0" : "1" }`,
-  ]].map($ => { button(...$); return $[0] }).join(" ")',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/?layout" => 'https://core.parts/os-95/programs/locate-/window-/tool-bar/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/tool-bar/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/tool-bar/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down-fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/layout.css?down" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down.txt',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/layout.css.c.js" => 'return `
-  :host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 6px;
-   height: 2px;
-   background: var(--color);
-   top: 9px;
-   left: 4px }
-  :host(:hover)::before {
-   --color: blue
-  }`',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/onclick.js" => '()=>{Ω[\'https://core.parts/os-95/programs/locate-/window-/minimized.txt\'] = \'1\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/release.js\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/release.js" => 'e => { Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/down.txt\'] = \'0\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/?layout" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/?onclick" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/onclick.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/minimized.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/minimized.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/minimized/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/minimized/fx.uri" => 'https://core.parts/os-95/manifest.uri https://core.parts/os-95/programs/locate-/window-/active.txt https://core.parts/os-95/programs/locate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/onfocus.js?active" => 'https://core.parts/os-95/programs/locate-/window-/active.txt',
- "https://core.parts/os-95/programs/locate-/window-/onfocus.js?window" => 'https://core.parts/os-95/programs/locate-/window-/',
- "https://core.parts/os-95/programs/locate-/window-/onfocus.js?core" => 'https://core.parts/os-95/programs/relate-/window-/onfocus.js',
- "https://core.parts/os-95/programs/locate-/window-/position.json" => '
-  {
-   "x": 136, "y": 118, "w": 412, "h": 245,
-   "range": {
-    "x": [-64, 512],
-    "y": [-2, 256],
-    "w": [96, 256],
-    "h": [64, 128]
-   }
-  }',
- "https://core.parts/os-95/programs/locate-/window-/position.json?fx" => 'https://core.parts/os-95/programs/locate-/window-/position/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/position/fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down-fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/layout.css?down" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down.txt',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before, :host::after {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 6px;
-   height: 6px;
-   top: 5px;
-   left: 3px;
-   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color);
-   background: #c3c3c3 }
-  :host::before {
-   top: 2px;
-   left: 5px }
-  :host(:hover)::before, :host(:hover)::after {
-   --color: blue }`',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/onclick.js" => '()=>Ω[\'https://core.parts/os-95/programs/locate-/window-/maximized.txt\'] = \'0\'',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/release.js\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/release.js" => 'e => { Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/down.txt\'] = \'0\'
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/?layout" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/?onclick" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/onclick.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/?onpointerdown" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/restore-button/onpointerdown.js',
- "https://core.parts/os-95/programs/locate-/window-/sort-order-fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/files-/manifest.uri https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest.uri https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/manifest-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/sort_order.json" => '
-  {
-   "size": false,
-   "type": true,
-   "name": false
-  }',
- "https://core.parts/os-95/programs/locate-/window-/sort_order.json?fx" => 'https://core.parts/os-95/programs/locate-/window-/sort-order-fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css?file_count" => 'https://core.parts/os-95/programs/locate-/window-/status/file_count.txt',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css?folder_count" => 'https://core.parts/os-95/programs/locate-/window-/status/folder_count.txt',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css?kireji_count" => 'https://core.parts/os-95/programs/locate-/window-/status/kireji_count.txt',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css?show_kireji" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/show_kireji.txt',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css?constructor" => 'https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css.c.js',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css.c.js" => '
-  const
-   num_files = parseInt("" + file_count),
-   has_files = !!num_files,
-   num_folders = parseInt("" + folder_count),
-   has_folders = !!num_folders,
-   do_kireji = ("" + show_kireji) === "1",
-   num_kireji = do_kireji ? parseInt("" + kireji_count) : undefined,
-   has_kireji = do_kireji ? !!num_kireji : undefined,
-   status_items = [];
-  if (has_folders) status_items.push(`${folder_count} folder${num_folders === 1 ? "" : "s"}`)
-  if (has_files) status_items.push(`${file_count} file${num_files === 1 ? "" : "s"}`)
-  if (has_kireji) status_items.push(`${kireji_count} kireji`)
-  return `
-   :host {
-    padding: 0 3px;
-    height: 17px;
-    box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-   }
-   :host::after {
-    content: "${status_items.join(", ")}"
-   }
-  `;',
- "https://core.parts/os-95/programs/locate-/window-/status-bar/?layout" => 'https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/status/file_count.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/status/file_count.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/status/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/status/folder_count.txt" => '5',
- "https://core.parts/os-95/programs/locate-/window-/status/folder_count.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/status/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/status/fx.uri" => 'https://core.parts/os-95/programs/locate-/window-/status-bar/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/status/kireji_count.txt" => '0',
- "https://core.parts/os-95/programs/locate-/window-/status/kireji_count.txt?fx" => 'https://core.parts/os-95/programs/locate-/window-/status/fx.uri',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/layout.css" => '
-  :host {
-   background: #7f7f7f;
-   color: white;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   gap: 3px;
-   height: 18px;
-   padding: 0px 2px;
-   box-sizing: border-box;
-  }
-  app-icon {
-   width: 16px;
-   height: 16px
-  }',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/manifest.uri" => 'https://core.parts/os-95/icons/folder-icon/ https://core.parts/os-95/programs/locate-/app-label/ https://core.parts/flex-spacer/ https://core.parts/os-95/programs/locate-/window-/window-controls/',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/ondblclick.js?maximized" => 'https://core.parts/os-95/programs/locate-/window-/maximized.txt',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/ondblclick.js?constructor" => 'https://core.parts/os-95/programs/locate-/window-/title-bar/ondblclick.c.js',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://core.parts/os-95/programs/locate-/window-/window-controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/?layout" => 'https://core.parts/os-95/programs/locate-/window-/title-bar/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/title-bar/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/title-bar/?ondblclick" => 'https://core.parts/os-95/programs/locate-/window-/title-bar/ondblclick.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/layout.css" => '
-  :host {
-   display: flex;
-   flex-flow: row nowrap
-  }',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/manifest.uri?maximized" => 'https://core.parts/os-95/programs/locate-/window-/maximized.txt',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/manifest.uri?constructor" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/manifest.uri.c.js',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/manifest.uri.c.js" => 'return `https://core.parts/os-95/programs/locate-/window-/window-controls/minimize-button/ https://core.parts/os-95/programs/locate-/window-/window-controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/ https://core.parts/os-95/programs/locate-/window-/window-controls/exit-button/`',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/?layout" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/window-controls/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/window-controls/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/?layout" => 'https://core.parts/os-95/programs/locate-/window-/layout.css',
- "https://core.parts/os-95/programs/locate-/window-/?manifest" => 'https://core.parts/os-95/programs/locate-/window-/manifest.uri',
- "https://core.parts/os-95/programs/locate-/window-/?onfocus" => 'https://core.parts/os-95/programs/locate-/window-/onfocus.js',
- "https://core.parts/os-95/programs/relate-/app-icon/?layout" => 'https://core.parts/os-95/programs/relate-/app-icon/layout.css',
- "https://core.parts/os-95/programs/relate-/app-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::before {
-   content: "🧬";
-  }',
- "https://core.parts/os-95/programs/relate-/app-label/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/app-label/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/app-label/layout.css?address" => 'https://core.parts/os-95/programs/locate-/window-/address.uri',
- "https://core.parts/os-95/programs/relate-/app-label/layout.css.c.js" => '
-  return `:host {
-   margin: 0;
-   height: 16px;
-   vertical-align: center;
-   text-overflow: ellipsis;
-   overflow: clip;
-  }
-  :host::after {
-   content: "Relate - ${address}";
-   white-space: nowrap;
-  }`',
- "https://core.parts/os-95/programs/relate-/app-label/?layout" => 'https://core.parts/os-95/programs/relate-/app-label/layout.css',
- "https://core.parts/os-95/programs/relate-/task-/datum.txt" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/task-/index.txt" => '3',
- "https://core.parts/os-95/programs/relate-/task-/index.txt?datum" => 'https://core.parts/os-95/programs/relate-/task-/datum.txt',
- "https://core.parts/os-95/programs/relate-/task-/index.txt?fx" => 'https://core.parts/os-95/programs/relate-/task-/index/fx.uri',
- "https://core.parts/os-95/programs/relate-/task-/index.txt?order" => 'https://core.parts/os-95/taskbar-/selected/fx.uri',
- "https://core.parts/os-95/programs/relate-/task-/index.txt?constructor" => 'https://core.parts/os-95/programs/relate-/task-/index.txt.c.js',
- "https://core.parts/os-95/programs/relate-/task-/index.txt.c.js" => 'return ""+(""+order).split(" ").indexOf(""+datum)',
- "https://core.parts/os-95/programs/relate-/task-/index/fx.uri" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/task-/layout.css?open" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/task-/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/task-/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/task-/layout.css.c.js" => '
-  return `
-   :host {
-    position: relative;
-    height: 100%;
-    margin: 0;
-    width: 160px;
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 3px;
-    border: none;${("" + open) === "1" ? `
-    font: bold 11px sans-serif` : ``};
-    box-sizing: border-box;
-    padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
-    text-align: left;
-    box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
-   }
-   :host(:focus)::after {
-    border: 1px dotted black;
-    content: "";
-    position: absolute;
-    margin: 3px;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    pointer-events: none;
-   }
-   ${(""+open) === "1" ? `
-   :host > * {
-    z-index: 3
-   }
-   :host::before {
-    content: "";
-    position: absolute;
-    margin: 2px;
-    border-top: 1px solid white;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px;
-   }` : ``}
-   app-icon {
-    width: 16px;
-    height: 16px
-   }
-  `;',
- "https://core.parts/os-95/programs/relate-/task-/manifest.uri" => 'https://core.parts/os-95/programs/relate-/app-icon/ https://core.parts/os-95/programs/relate-/app-label/',
- "https://core.parts/os-95/programs/relate-/task-/manifest.uri?open" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/task-/onpointerdown.js?minimized" => 'https://core.parts/os-95/programs/relate-/window-/minimized.txt',
- "https://core.parts/os-95/programs/relate-/task-/onpointerdown.js?active" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/task-/onpointerdown.js?window" => 'https://core.parts/os-95/programs/relate-/window-/',
- "https://core.parts/os-95/programs/relate-/task-/onpointerdown.js?constructor" => 'https://core.parts/os-95/programs/relate-/task-/onpointerdown.c.js',
- "https://core.parts/os-95/programs/relate-/task-/onpointerdown.c.js" => '
-  const
-   is_minimized = ("" + minimized) === "1",
-   is_inactive = ("" + active) === "0",
-   minimized_url = minimized.headerOf().href,
-   active_url = active.headerOf().href,
-   window_url = window.headerOf().href,
-   put_in_front = `
-    const
-     windows_uri = "https://core.parts/os-95/windows.uri",
-     windows_string = Ω[windows_uri].toPrimitive(),
-     windows = windows_string ? windows_string.split(" ") : [],
-     own_window = "${window_url}";
-    if (windows.at(-1) !== own_window) {
-     const window_index = windows.indexOf(own_window);
-     if (window_index !== -1) windows.splice(window_index, 1)
-     windows.push(own_window)
-     Ω[windows_uri] = windows.join(" ")
-    }`;
-  return `
-   e => {${ is_minimized ? `
-    Ω["${minimized_url}"] = "0";
-    Ω["${active_url}"] = "1";
-    ${put_in_front}` : is_inactive ? `
-    Ω["${active_url}"] = "1";
-    ${put_in_front}` : `
-    Ω["${active_url}"] = "0";
-    Ω["${minimized_url}"] = "1";`}
-   }
-  `',
- "https://core.parts/os-95/programs/relate-/task-/open/fx.uri" => 'https://core.parts/os-95/programs/relate-/task-/layout.css https://core.parts/os-95/taskbar-/selected.txt https://core.parts/os-95/programs/relate-/window-/layout.css https://core.parts/os-95/programs/relate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/task-/?layout" => 'https://core.parts/os-95/programs/relate-/task-/layout.css',
- "https://core.parts/os-95/programs/relate-/task-/?manifest" => 'https://core.parts/os-95/programs/relate-/task-/manifest.uri',
- "https://core.parts/os-95/programs/relate-/task-/?onpointerdown" => 'https://core.parts/os-95/programs/relate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/start-menu-item/app-label/layout.css" => ':host::after {
-   height: 24px;
-   content: "Relate";
-  }',
- "https://core.parts/os-95/programs/relate-/start-menu-item/app-label/?layout" => 'https://core.parts/os-95/programs/relate-/start-menu-item/app-label/layout.css',
- "https://core.parts/os-95/programs/relate-/start-menu-item/layout.css" => '
-  :host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   padding: 4px 0 }
-  :host(:hover) {
-   background: #00007f;
-   color: white }
-  app-icon {
-   width: 24px;
-   height: 24px;
-   margin: 0 10px;
-   --size: 24px;
-  }',
- "https://core.parts/os-95/programs/relate-/start-menu-item/manifest.uri" => 'https://core.parts/os-95/programs/relate-/app-icon/ https://core.parts/os-95/programs/relate-/start-menu-item/app-label/',
- "https://core.parts/os-95/programs/relate-/start-menu-item/onclick.js" => '
-  e => {
-   // Ω["https://core.parts/os-95/taskbar-/selected.txt"] = "" + Ω["https://core.parts/os-95/programs/relate-/task-/index.txt"]
-   Ω["https://core.parts/os-95/programs/relate-/task-/"].onfocus(e)
-  }',
- "https://core.parts/os-95/programs/relate-/start-menu-item/?layout" => 'https://core.parts/os-95/programs/relate-/start-menu-item/layout.css',
- "https://core.parts/os-95/programs/relate-/start-menu-item/?manifest" => 'https://core.parts/os-95/programs/relate-/start-menu-item/manifest.uri',
- "https://core.parts/os-95/programs/relate-/start-menu-item/?onclick" => 'https://core.parts/os-95/programs/relate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/active.txt" => '0',
- "https://core.parts/os-95/programs/relate-/window-/active.txt?fx" => 'https://core.parts/os-95/programs/relate-/task-/open/fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/active.txt?index" => 'https://core.parts/os-95/programs/relate-/task-/index.txt',
- "https://core.parts/os-95/programs/relate-/window-/active.txt?minimized" => 'https://core.parts/os-95/programs/relate-/window-/minimized.txt',
- "https://core.parts/os-95/programs/relate-/window-/active.txt?selected" => 'https://core.parts/os-95/taskbar-/selected.txt',
- "https://core.parts/os-95/programs/relate-/window-/active.txt?constructor" => 'https://core.parts/os-95/programs/relate-/window-/active.txt.c.js',
- "https://core.parts/os-95/programs/relate-/window-/active.txt.c.js" => 'return ("" + minimized) === \'1\' ? \'0\' : ("" + selected) === ("" + index) ? \'1\' : \'0\'',
- "https://core.parts/os-95/programs/relate-/window-/address.uri" => 'https://core.parts/os-95/programs/relate-/window-/graph-/',
- "https://core.parts/os-95/programs/relate-/window-/address.uri?fx" => 'https://core.parts/os-95/programs/relate-/window-/readdress.uri',
- "https://core.parts/os-95/programs/relate-/window-/readdress.uri" => 'https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri https://core.parts/os-95/programs/relate-/app-label/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/exit-button/layout.css" => '
-  :host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   margin-left: 2px;
-   box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb }
-  :host::before, :host::after {
-   --color: #7f7f7f;
-   content: "";
-   display: block;
-   position: absolute;
-   width: 8px;
-   height: 7px;
-   left: 4px;
-   top: 3px;
-   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%) }
-  :host::before {
-   --color: white;
-   left: 5px;
-   top: 4px
-  }',
- "https://core.parts/os-95/programs/relate-/window-/exit-button/?layout" => 'https://core.parts/os-95/programs/relate-/window-/exit-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/graph-/?manifest" => 'https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri',
- "https://core.parts/os-95/programs/relate-/window-/graph-/?layout" => 'https://core.parts/os-95/programs/relate-/window-/graph-/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/graph-/layout.css?white_grid" => 'https://core.parts/img/white-grid.png',
- "https://core.parts/os-95/programs/relate-/window-/graph-/layout.css?blue_grid" => 'https://core.parts/img/blue-grid.png',
- "https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri?address" => 'https://core.parts/os-95/programs/relate-/window-/address.uri',
- "https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri?transform" => 'https://core.parts/components/transform-/construct.js',
- "https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri?constructor" => 'https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri.c.js',
- "https://core.parts/os-95/programs/relate-/window-/graph-/manifest.uri.c.js" => '
-  const
-   core_url = "https://core.parts/os-95/programs/relate-/core-node/",
-   kireji_urls = new Set(),
-   own_url = "" + address;
-  for (const url in Δ) {
-   if (!url.match(/^[^?]*\?\w*$/)) continue
-   if (!kireji_urls.has(url) && own_url === url.split("?")[0]) kireji_urls.add(Δ[url])
-  }
-  return [own_url, ...kireji_urls].map(address => {
-   const
-    graph_url = "https://core.parts/os-95/programs/relate-/window-/graph-/",
-    node_url = `${graph_url}${hash(own_url + " " + address)}/node-/`,
-    transform_url = node_url + "transform-/",
-    position_url = `${node_url}position.json`;
-   Ω[`${node_url}?core`] = core_url
-   Ω[`${node_url}?layout`] = `${node_url}layout.css`
-   Ω[`${node_url}?onpointerdown`] = `${node_url}onpointerdown.js`
-   Ω[`${node_url}?manifest`] = `${node_url}manifest.uri`
-   Ω[`${node_url}layout.css?core`] = `${core_url}layout.css`
-   Ω[`${node_url}layout.css?position`] = position_url
-   Ω[`${node_url}layout.css?graph_position`] = `${graph_url}position.json`
-   Ω[`${node_url}onpointerdown.js?core`] = `${core_url}onpointerdown.js`
-   Ω[`${node_url}onpointerdown.js?position`] = position_url
-   Ω[`${node_url}manifest.uri?core`] = `${core_url}manifest.uri`
-   Ω[`${node_url}manifest.uri?node`] = node_url
-   Ω[`${node_url}manifest.uri?proxy`] = address
-   Ω[`${node_url}position.json?core`] = `${core_url}position.json`
-   Ω[`${node_url}position.json?fx`] = `${node_url}reposition.uri`
-   Ω[`${node_url}reposition.uri`] = `${node_url}layout.css`
-   transform(transform_url, position_url, "ew")
-   return node_url
-  }).join(" ")',
- "https://core.parts/os-95/programs/relate-/window-/graph-/?onpointerdown" => 'https://core.parts/os-95/programs/relate-/window-/graph-/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/graph-/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/graph-/onpointerdown.js?mode" => 'https://core.parts/behaviors/move.txt',
- "https://core.parts/os-95/programs/relate-/window-/graph-/onpointerdown.js?position" => 'https://core.parts/os-95/programs/relate-/window-/graph-/position.json',
- "https://core.parts/os-95/programs/relate-/window-/graph-/position.json?fx" => 'https://core.parts/os-95/programs/relate-/window-/graph-/reposition.uri',
- "https://core.parts/os-95/programs/relate-/window-/graph-/reposition.uri" => 'https://core.parts/os-95/programs/relate-/window-/graph-/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/graph-/position.json" => '{}',
- "https://core.parts/os-95/programs/relate-/window-/graph-/layout.css?position" => 'https://core.parts/os-95/programs/relate-/window-/graph-/position.json',
- "https://core.parts/os-95/programs/relate-/window-/graph-/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/window-/graph-/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/window-/graph-/layout.css.c.js" => '
-  const { x = 0, y = 0 } = JSON.parse("" + position)
-  return `
-   :host {
-    --size: 18px;
-    --paper-color: #c3c3c3;;
-    --focus-color: rgb(0, 0, 163);
-    --graph-x: ${x}px;
-    --graph-y: ${y}px;
-    --white-grid: url("data:image/png;base64,${white_grid}");
-    --blue-grid: url("data:image/png;base64,${blue_grid}");
-    --halftone-a: black;
-    --halftone-b: transparent;
-    --halftone-size: 2px;
-    --halftone:
-     linear-gradient(
-      45deg,
-      var(--halftone-a) 25%,
-      var(--halftone-b) 25%,
-      var(--halftone-b) 75%,
-      var(--halftone-a) 75%,
-      var(--halftone-a)
-     ) calc(50% + ${x}px) calc(50% + ${y}px) / var(--halftone-size) var(--halftone-size),
-     linear-gradient(
-      45deg,
-      var(--halftone-a) 25%,
-      var(--halftone-b) 25%,
-      var(--halftone-b) 75%,
-      var(--halftone-a) 75%,
-      var(--halftone-a)
-     ) calc(var(--halftone-size) / 2 + 50% + ${x}px) calc(var(--halftone-size) / 2 + 50% + ${y}px) / var(--halftone-size) var(--halftone-size);
-    position: relative;
-    flex: 1 1;
-    box-shadow:
-     -0.5px -0.5px 0 0.5px black,
-     0 0 0 1px #dbdbdb,
-     -0.5px -0.5px 0 1.5px #7a7a7a,
-     0 0 0 2px white;
-    background: var(--paper-color);
-    margin: 2px;
-    display: grid;
-    overflow: clip;
-    height: 100%;
-    /* cursor: all-scroll */;
-    background: var(--halftone);
-    --halftone-size: calc(var(--size) / 8);
-    --halftone-a: #334246ff;
-    --halftone-b: #3342467f;
-    cursor: url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 32px; line-height: 32px"><text y="28">🥢</text></svg>\') 2 30, pointer;
-   }
-   :host > * {
-    --size: inherit;
-    --paper-color: inherit;
-   }
-  `',
- "https://core.parts/os-95/programs/relate-/cathode-/?core" => 'https://core.parts/os-95/programs/relate-/electrode-/',
- "https://core.parts/os-95/programs/relate-/anode-/?core" => 'https://core.parts/os-95/programs/relate-/electrode-/',
- "https://core.parts/os-95/programs/relate-/electrode-/?layout" => 'https://core.parts/os-95/programs/relate-/electrode-/layout.css',
- "https://core.parts/os-95/programs/relate-/electrode-/layout.css" => '
-  :host {
-   --overlay: transparent;
-   display: inline-block;
-   width: var(--size);
-   height: var(--size);
-   background-image:
-    linear-gradient(45deg, var(--overlay) 25%, transparent 25%, transparent 75%, var(--overlay) 75%, var(--overlay)),
-    linear-gradient(45deg, var(--overlay) 25%, transparent 25%, transparent 75%, var(--overlay) 75%, var(--overlay));
-   background-size: 2px 2px;
-   background-position: 0 0, 1px 1px;
-  }
-  :host(:hover) {
-   --overlay: yellow;
-   cursor: url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 32px; line-height: 32px"><text y="32">✍</text></svg>\') 1 30, pointer;
-  }',
- "https://core.parts/os-95/programs/relate-/core-node/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/core-node/onpointerdown.js?mode" => 'https://core.parts/behaviors/move.txt',
- "https://core.parts/os-95/programs/relate-/core-node/onpointerdown.js?stop_propagation" => 'https://core.parts/const/one.txt',
- "https://core.parts/os-95/programs/relate-/core-node/onpointerdown.js?should_focus" => 'https://core.parts/const/one.txt',
- "https://core.parts/os-95/programs/relate-/core-node/manifest.uri?cell" => 'https://core.parts/components/cell-/construct.js',
- "https://core.parts/os-95/programs/relate-/core-node/manifest.uri?label_css" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/label_css.js',
- "https://core.parts/os-95/programs/relate-/core-node/manifest.uri?item_layout" => 'https://core.parts/os-95/programs/locate-/window-/explorer-view/header-/item_layout.css',
- "https://core.parts/os-95/programs/relate-/core-node/manifest.uri?constructor" => 'https://core.parts/os-95/programs/relate-/core-node/manifest.c.js',
- "https://core.parts/os-95/programs/relate-/core-node/manifest.c.js" => '
-  const
-   { href, groups: { type } } = proxy.headerOf(),
-   is_index = href.endsWith("/"),
-   crumbs = href.replace(/^https:\/\//,"").split("/"),
-   path_length = crumbs.length,
-   file_crumb_index = path_length - (1 + is_index),
-   path = crumbs.slice(0, file_crumb_index - 1 + is_index).join("/") + "/",
-   filename = crumbs[file_crumb_index],
-   common_label = `:host {
-    margin: 0 calc(var(--size) / 8);
-    line-height: inherit;
-   }`,
-   common_item = `:host {
-    display: flex;
-    flex-flow: row nowrap;
-    height: var(--size);
-    align-items: center;
-    line-height: var(--size);
-   }`,
-   cathode_url = "https://core.parts/os-95/programs/relate-/cathode-/",
-   anode_url = "https://core.parts/os-95/programs/relate-/anode-/",
-   node_url = node.headerOf().href,
-   title_url = node_url + "title-bar/",
-   icon_url = "https://core.parts/os-95/icons/" + type.replace(/[^a-zA-Z0-9]+/g, "-") + "-icon/",
-   label_url = node_url + "title-bar/label-/",
-   path_url = node_url + "title-bar/path-/",
-   resize_left_url = node_url + "transform-/left-/",
-   resize_right_url = node_url + "transform-/right-/"
-
-  cell(label_url, `
-  ${label_css(filename)}
-  ${common_label}
-  :host {
-   margin-left: 0;
-  }`);
-
-  cell(path_url, `
-  ${label_css(path)}
-  ${common_label}
-  :host {
-   font-weight: normal;
-   flex: 1 1;
-   margin-right: 0;
-  }`);
-
-  cell(title_url, `
-  ${item_layout}
-  ${common_item}
-  :host {
-   text-align: right;
-   position: relative;
-   box-sizing: border-box;
-   justify-content: end;
-   height: calc(1.5 * var(--size));
-   padding: calc(var(--size) / 2);
-   padding-bottom: 0;
-   align-items: stretch;
-   font-weight: bold;
-  }
-  :host > :nth-child(2) {
-   --size: inherit;
-  }`, [path_url, label_url, icon_url].join(" ") );
-  const keys = new Set()
-  for (const url in Δ) {
-   if (!url.match(/^[^?]*\?\w*$/)) continue
-   const [base, π] = url.split("?")
-   if (keys.has(π)) continue;
-   if (href === base) { keys.add(π) }
-  }
-  return [title_url, "https://core.parts/os-95/horizontal-line/", ...[...keys].map(kireji => {
-   const
-    cell_url = node_url + hash(`${href}?${kireji}`) + "/kireji-/",
-    label_url = cell_url + "label-/";
-   cell(label_url, `
-    ${label_css(kireji)}
-    ${common_label}
-    :host {
-     margin-left: 0;
-     box-sizing: border-box;
-     flex: 1 1;
-    }`);
-   cell(cell_url, `
-    ${item_layout}
-    ${common_item}`, cathode_url + " " + label_url);
-   return cell_url
-  }), anode_url, resize_left_url, resize_right_url].join(" ")',
- "https://core.parts/os-95/programs/relate-/core-node/position.json?constructor" => 'https://core.parts/os-95/programs/relate-/core-node/position.json.c.js',
- "https://core.parts/os-95/programs/relate-/core-node/position.json.c.js" => 'return JSON.stringify({ w: 16 * 18, range: { w: [5 * 18] }, snap: { x: 9, y: 9 } })',
- "https://core.parts/os-95/programs/relate-/core-node/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/core-node/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/core-node/layout.css.c.js" => '
-  const { x = 0, y = 0, w = 0 } = JSON.parse("" + position), { x: graphX = 0, y: graphY = 0 } = JSON.parse("" + graph_position)
-  return `
-   :host {
-    position: absolute;
-    top: calc(50% + ${y}px + var(--graph-y));
-    left: calc(50% + ${x}px + var(--graph-x));
-    width: ${w}px;
-    display: flex;
-    flex-flow: column nowrap;
-    background: #c3c3c3;
-    padding-bottom: calc(var(--size) / 2);
-    border-radius: calc(var(--size) / 8);
-    box-shadow:
-     0.5px 0,
-     0 0.5px,
-     0 -0.5px,
-     -0.5px 0,
-     inset 0.5px 0,
-     inset 0 0.5px,
-     inset 0 -0.5px,
-     inset -0.5px 0;
-   }
-   anode- {
-    position: absolute;
-    right: calc(var(--size) / 2);
-    /* top: 0; */
-    top: calc(var(--size) / 2);
-   }
-   horizontal-line {
-    margin: calc((var(--size) / 2) - 1px) 0;
-   }
-   :host(:focus) {
-    outline: none;
-    background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white), linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
-    background-size: 2px 2px;
-    background-position: 0 0, 1px 1px;
-   }
-   :host > title-bar {
-    --bg: #7f7f7f;
-   }
-   :host(:focus) > title-bar {
-    --bg: var(--focus-color);
-   }
-  `',
- "https://core.parts/os-95/programs/relate-/window-/layout.css?active" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/window-/layout.css?maximized" => 'https://core.parts/os-95/programs/relate-/window-/maximized.txt',
- "https://core.parts/os-95/programs/relate-/window-/layout.css?position" => 'https://core.parts/os-95/programs/relate-/window-/position.json',
- "https://core.parts/os-95/programs/relate-/window-/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/window-/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/window-/layout.css.c.js" => '
-  const common = "position: absolute; display: flex; flex-flow: column nowrap; gap: 2px; background: #c3c3c3; box-sizing: border-box", titlebar = ("" + active) === "1" ? `title-bar { background: rgb(0, 0, 163); }` : ``
-  if (("" + maximized) === \'1\') {
-   return `
-    :host {
-     position: absolute;
-     top: 0;
-     left: 0;
-     right: 0;
-     bottom: 28px;
-     padding: 2px;
-     ${common}
-    } ${titlebar}`
-  } else {
-   const { x = 0, y = 0, w = 0, h = 0 } = JSON.parse("" + position);
-   return `
-    :host {
-     width: ${w}px;
-     height: ${h}px;
-     left: ${x}px;
-     top: ${y}px;
-     min-height: fit-content;
-     padding: 4px;
-     background: #c3c3c3;
-     box-shadow:
-      inset -1px -1px black,
-      inset 1px 1px #c3c3c3,
-      inset -2px -2px #7a7a7a,
-      inset 2px 2px white,
-      5px 7px 3px #0002;
-     ${common}
-    }
-    ${titlebar}`
-  }',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri?title" => 'https://core.parts/os-95/programs/relate-/window-/title-bar/',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri?graph" => 'https://core.parts/os-95/programs/relate-/window-/graph-/',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri?transform_path" => 'https://core.parts/os-95/programs/relate-/window-/transform-/',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri?transform" => 'https://core.parts/components/transform-/construct.js',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri?position" => 'https://core.parts/os-95/programs/relate-/window-/position.json',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri?constructor" => 'https://core.parts/os-95/programs/relate-/window-/manifest.uri.c.js',
- "https://core.parts/os-95/programs/relate-/window-/manifest.uri.c.js" => <<<JS
-  const [title_url, graph_url, transform_url, position_url] = [title, graph, transform_path, position].map(x => x.headerOf().href)
-  const transform_urls = transform(transform_url, position_url, "nesw", title_url);
-  return [title_url, graph_url, transform_urls].join(" ")
-  JS,
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/down-fx.uri" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/down.txt" => '0',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/down.txt?fx" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/down-fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/layout.css?down" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/down.txt',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 9px;
-   height: 9px;
-   top: 2px;
-   left: 3px;
-   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color) }
-  :host(:hover)::before {
-   --color: blue }`',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/onclick.js" => '
-  () => {
-   Ω[\'https://core.parts/os-95/programs/relate-/window-/maximized.txt\'] = \'1\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/onpointerdown.js" => '
-  e => {
-   e.stopPropagation(); Ω[\'https://core.parts/os-95/programs/relate-/window-/maximize-button/down.txt\'] = \'1\'
-   Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://core.parts/os-95/programs/relate-/window-/maximize-button/release.js\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/release.js" => '
-  e => {
-   Ω[\'https://core.parts/os-95/programs/relate-/window-/maximize-button/down.txt\'] = \'0\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/?layout" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/?onclick" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/onclick.js',
- "https://core.parts/os-95/programs/relate-/window-/maximize-button/?onpointerdown" => 'https://core.parts/os-95/programs/relate-/window-/maximize-button/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/maximized.txt" => '0',
- "https://core.parts/os-95/programs/relate-/window-/maximized.txt?fx" => 'https://core.parts/os-95/programs/relate-/window-/maximized/fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/maximized/fx.uri" => 'https://core.parts/os-95/programs/relate-/window-/layout.css https://core.parts/os-95/programs/relate-/window-/window-controls/manifest.uri https://core.parts/os-95/programs/relate-/window-/title-bar/ondblclick.js',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/down-fx.uri" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/down.txt" => '0',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/down.txt?fx" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/down-fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/layout.css?down" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/down.txt',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 6px;
-   height: 2px;
-   background: var(--color);
-   top: 9px;
-   left: 4px }
-  :host(:hover)::before {
-   --color: blue }`',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/onclick.js" => '()=>{Ω[\'https://core.parts/os-95/programs/relate-/window-/minimized.txt\'] = \'1\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://core.parts/os-95/programs/relate-/window-/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://core.parts/os-95/programs/relate-/window-/minimize-button/release.js\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/release.js" => 'e => { Ω[\'https://core.parts/os-95/programs/relate-/window-/minimize-button/down.txt\'] = \'0\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/?layout" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/?onclick" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/onclick.js',
- "https://core.parts/os-95/programs/relate-/window-/minimize-button/?onpointerdown" => 'https://core.parts/os-95/programs/relate-/window-/minimize-button/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/minimized.txt" => '0',
- "https://core.parts/os-95/programs/relate-/window-/minimized.txt?fx" => 'https://core.parts/os-95/programs/relate-/window-/minimized/fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/minimized/fx.uri" => 'https://core.parts/os-95/manifest.uri https://core.parts/os-95/programs/relate-/window-/active.txt https://core.parts/os-95/programs/relate-/task-/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/onfocus.js?active" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/window-/onfocus.js?window" => 'https://core.parts/os-95/programs/relate-/window-/',
- "https://core.parts/os-95/programs/relate-/window-/onfocus.js?constructor" => 'https://core.parts/behaviors/window-focus.c.js',
- "https://core.parts/os-95/programs/relate-/window-/position.json" => '
-  {
-   "x": 128,
-   "y": 128,
-   "w": 256,
-   "h": 256,
-   "range": {
-    "x": [-64, 512],
-    "y": [-2, 256],
-    "w": [96, 256],
-    "h": [64, 128]
-   }
-  }',
- "https://core.parts/os-95/programs/relate-/window-/position.json?fx" => 'https://core.parts/os-95/programs/relate-/window-/position/fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/position/fx.uri" => 'https://core.parts/os-95/programs/relate-/window-/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/down-fx.uri" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/down.txt" => '0',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/down.txt?fx" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/down-fx.uri',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/layout.css?down" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/down.txt',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before, :host::after {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 6px;
-   height: 6px;
-   top: 5px;
-   left: 3px;
-   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color);
-   background: #c3c3c3 }
-  :host::before {
-   top: 2px;
-   left: 5px }
-  :host(:hover)::before, :host(:hover)::after {
-   --color: blue }`',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/onclick.js" => '()=>Ω[\'https://core.parts/os-95/programs/relate-/window-/maximized.txt\'] = \'0\'',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://core.parts/os-95/programs/relate-/window-/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://core.parts/os-95/programs/relate-/window-/restore-button/release.js\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/release.js" => 'e => { Ω[\'https://core.parts/os-95/programs/relate-/window-/restore-button/down.txt\'] = \'0\'
-  }',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/?layout" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/?onclick" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/onclick.js',
- "https://core.parts/os-95/programs/relate-/window-/restore-button/?onpointerdown" => 'https://core.parts/os-95/programs/relate-/window-/restore-button/onpointerdown.js',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/layout.css?focus" => 'https://core.parts/os-95/programs/relate-/window-/active.txt',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/layout.css?constructor" => 'https://core.parts/os-95/programs/relate-/window-/title-bar/layout.css.c.js',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/layout.css.c.js" => 'return `:host {
-   background: ${(""+focus) === \'1\' ? \'rgb(0, 0, 163)\' : \'#7f7f7f\'};
-   color: white;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   gap: 3px;
-   height: 18px;
-   padding: 0px 2px;
-   box-sizing: border-box;
-  }
-  app-icon {
-   width: 16px;
-   height: 16px;
-  }`',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/manifest.uri" => 'https://core.parts/os-95/programs/relate-/app-icon/ https://core.parts/os-95/programs/relate-/app-label/ https://core.parts/flex-spacer/ https://core.parts/os-95/programs/relate-/window-/window-controls/',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/ondblclick.js?maximized" => 'https://core.parts/os-95/programs/relate-/window-/maximized.txt',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/ondblclick.js?constructor" => 'https://core.parts/os-95/programs/relate-/window-/title-bar/ondblclick.c.js',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://core.parts/os-95/programs/relate-/window-/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/?layout" => 'https://core.parts/os-95/programs/relate-/window-/title-bar/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/?manifest" => 'https://core.parts/os-95/programs/relate-/window-/title-bar/manifest.uri',
- "https://core.parts/os-95/programs/relate-/window-/title-bar/?ondblclick" => 'https://core.parts/os-95/programs/relate-/window-/title-bar/ondblclick.js',
- "https://core.parts/os-95/programs/relate-/window-/window-controls/layout.css" => '
-  :host {
-   display: flex;
-   flex-flow: row nowrap
-  }',
- "https://core.parts/os-95/programs/relate-/window-/window-controls/manifest.uri?maximized" => 'https://core.parts/os-95/programs/relate-/window-/maximized.txt',
- "https://core.parts/os-95/programs/relate-/window-/window-controls/manifest.uri?constructor" => 'https://core.parts/os-95/programs/relate-/window-/window-controls/manifest.uri.c.js',
- "https://core.parts/os-95/programs/relate-/window-/window-controls/manifest.uri.c.js" => 'return `https://core.parts/os-95/programs/relate-/window-/minimize-button/ https://core.parts/os-95/programs/relate-/window-/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/ https://core.parts/os-95/programs/relate-/window-/exit-button/`',
- "https://core.parts/os-95/programs/relate-/window-/window-controls/?layout" => 'https://core.parts/os-95/programs/relate-/window-/window-controls/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/window-controls/?manifest" => 'https://core.parts/os-95/programs/relate-/window-/window-controls/manifest.uri',
- "https://core.parts/os-95/programs/relate-/window-/?layout" => 'https://core.parts/os-95/programs/relate-/window-/layout.css',
- "https://core.parts/os-95/programs/relate-/window-/?manifest" => 'https://core.parts/os-95/programs/relate-/window-/manifest.uri',
- "https://core.parts/os-95/programs/relate-/window-/?onfocus" => 'https://core.parts/os-95/programs/relate-/window-/onfocus.js',
- "https://core.parts/os-95/taskbar-/css-height.txt" => '28px',
- "https://core.parts/os-95/taskbar-/css-height/fx.uri" => 'https://core.parts/layout.css https://core.parts/os-95/taskbar-/start-menu/layout.css',
- "https://core.parts/os-95/taskbar-/layout.css" => '
-  :host {
-   position: relative;
-   width: 100%;
-   box-sizing: border-box;
-   height: 100%;
-   margin: 0;
-   display: flex;
-   flex-flow: row nowrap;
-   gap: 3px;
-   height: 100%;
-   padding: 4px 2px 2px;
-   background: #c3c3c3;
-   box-shadow: inset 0 1px #c3c3c3, inset 0 2px white;
-  }',
- "https://core.parts/os-95/taskbar-/manifest.uri?running_apps" => 'https://core.parts/os-95/tasks.uri',
- "https://core.parts/os-95/taskbar-/manifest.uri?constructor" => 'https://core.parts/os-95/taskbar-/manifest.uri.c.js',
- "https://core.parts/os-95/taskbar-/manifest.uri.c.js" => 'return `https://core.parts/os-95/taskbar-/start-button/ ${"" + running_apps ? running_apps + " " : ""}https://core.parts/flex-spacer/ https://core.parts/os-95/taskbar-/tray-/`',
- "https://core.parts/os-95/taskbar-/selected.txt" => '-1',
- "https://core.parts/os-95/taskbar-/selected.txt?fx" => 'https://core.parts/os-95/taskbar-/selected/fx.uri',
- "https://core.parts/os-95/taskbar-/selected.txt?constructor" => 'https://core.parts/os-95/taskbar-/selected.txt.c.js',
- "https://core.parts/os-95/taskbar-/selected.txt.c.js" => '
-  let wasOn;
-  const result = ""+(""+fx).split(" ").findIndex(x => {
-   const
-    src = caller,
-    isX = x === src;
-   wasOn = Δ[src] === "1";
-   return (src && wasOn) ? isX : ("" + Ω[x] === "1");
-  });
-  return result;',
- "https://core.parts/os-95/taskbar-/selected/fx.uri" => 'https://core.parts/os-95/start-menu/open.txt https://core.parts/os-95/programs/locate-/window-/active.txt https://core.parts/os-95/programs/locate-/window-/onfocus.js https://core.parts/os-95/programs/relate-/window-/active.txt https://core.parts/os-95/desktop-/onfocus.js',
- "https://core.parts/os-95/taskbar-/start-button/icon-/layout.css?icon" => 'https://core.parts/apple-touch-icon.png',
- "https://core.parts/os-95/taskbar-/start-button/icon-/layout.css?constructor" => 'https://core.parts/os-95/taskbar-/start-button/icon-/layout.css.c.js',
- "https://core.parts/os-95/taskbar-/start-button/icon-/layout.css.c.js" => 'return `:host {
-   position: relative;
-   box-sizing: border-box;
-   height: 100%;
-   margin: 0;
-   background: url(data:image/png;base64,${icon});
-   background-size: 16px;
-   width: 16px;
-   height: 16px }`',
- "https://core.parts/os-95/taskbar-/start-button/icon-/?layout" => 'https://core.parts/os-95/taskbar-/start-button/icon-/layout.css',
- "https://core.parts/os-95/taskbar-/start-button/label-/layout.css" => '
-  :host {
-   position: relative;
-   box-sizing: border-box;
-   margin: 0;
-   height: 16px }
-  :host::before {
-   content: "Start";
-  }',
- "https://core.parts/os-95/taskbar-/start-button/label-/?layout" => 'https://core.parts/os-95/taskbar-/start-button/label-/layout.css',
- "https://core.parts/os-95/taskbar-/start-button/layout.css?open" => 'https://core.parts/os-95/start-menu/open.txt',
- "https://core.parts/os-95/taskbar-/start-button/layout.css?constructor" => 'https://core.parts/os-95/taskbar-/start-button/layout.css.c.js',
- "https://core.parts/os-95/taskbar-/start-button/layout.css.c.js" => '
-  return `
-   :host {
-    flex: 0 0;
-    position: relative;
-    width: 100%;
-    box-sizing: border-box;
-    height: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 3px;
-    border: none;
-    font: bold 11px / 16px sans-serif;
-    box-sizing: border-box;
-    padding: ${("" + open) === "0" ? 3 : 4}px 4px 2px;
-    text-align: left;
-    background: #c3c3c3;
-    box-shadow: ${("" + open) === "0" ? `
-     inset -1px -1px black,
-     inset 1px 1px white,
-     inset -2px -2px #7a7a7a,
-     inset 2px 2px #dbdbdb`
-     : `
-     inset -1px -1px white,
-     inset 1px 1px black,
-     inset -2px -2px #dbdbdb,
-     inset 2px 2px #7a7a7a`};
-   }
-   :host(:focus)::after {
-    border: 1px dotted black;
-    content: "";
-    position: absolute;
-    margin: 3px;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    pointer-events: none;
-   }
-  `',
- "https://core.parts/os-95/taskbar-/start-button/manifest.uri" => 'https://core.parts/os-95/taskbar-/start-button/icon-/ https://core.parts/os-95/taskbar-/start-button/label-/',
- "https://core.parts/os-95/taskbar-/start-button/manifest.uri?open" => 'https://core.parts/os-95/start-menu/open.txt',
- "https://core.parts/os-95/taskbar-/start-button/onclick.js" => '
-  () => {
-   Ω["https://core.parts/os-95/start-menu/open.txt"] = "1";
-  }',
- "https://core.parts/os-95/taskbar-/start-button/?layout" => 'https://core.parts/os-95/taskbar-/start-button/layout.css',
- "https://core.parts/os-95/taskbar-/start-button/?manifest" => 'https://core.parts/os-95/taskbar-/start-button/manifest.uri',
- "https://core.parts/os-95/taskbar-/start-button/?onclick" => 'https://core.parts/os-95/taskbar-/start-button/onclick.js',
- "https://core.parts/os-95/taskbar-/start-menu/click-to-close/layout.css" => '
-  :host {
-   position: fixed;
-   display: block;
-   left: 0;
-   top: 0;
-   bottom: 0;
-   right: 0;
-   content: "";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/click-to-close/onclick.js" => '
-  () => {
-   Ω["https://core.parts/os-95/start-menu/open.txt"] = "0";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/click-to-close/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/click-to-close/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/click-to-close/?onclick" => 'https://core.parts/os-95/taskbar-/start-menu/click-to-close/onclick.js',
- "https://core.parts/os-95/taskbar-/start-menu/layout.css?height" => 'https://core.parts/os-95/taskbar-/css-height.txt',
- "https://core.parts/os-95/taskbar-/start-menu/layout.css?constructor" => 'https://core.parts/os-95/taskbar-/start-menu/layout.css.c.js',
- "https://core.parts/os-95/taskbar-/start-menu/layout.css.c.js" => 'return `:host {
-   position: relative;
-   min-width: 164px;
-   display: flex;
-   flex-flow: column nowrap;
-   position: absolute;
-   left: 2px;
-   bottom: calc(${height}
-  - 4px);
-   user-select: none;
-   line-height: 18px;
-   text-align: left;
-   background: #c3c3c3;
-   box-sizing: border-box;
-   padding: 3px 3px 3px 24px;
-   text-align: left;
-   background: #c3c3c3;
-   box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb }
-  :host::after {
-   pointer-events: none;
-   display: block;
-   content: "";
-   position: absolute;
-   left: 3px;
-   top: 3px;
-   bottom: 3px;
-   background: #7f7f7f;
-   width: 21px }`',
- "https://core.parts/os-95/taskbar-/start-menu/manifest.uri" => 'https://core.parts/os-95/programs/locate-/start-menu-item/ https://core.parts/os-95/programs/relate-/start-menu-item/ https://core.parts/os-95/taskbar-/start-menu/network-folder/ https://core.parts/os-95/horizontal-line/ https://core.parts/os-95/taskbar-/start-menu/save-computer/ https://core.parts/os-95/taskbar-/start-menu/restart-computer/ https://core.parts/os-95/taskbar-/start-menu/restart-server/',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/app-icon/layout.css" => '
-  :host {
-   --size: 16px;
-  }
-  :host::before {
-   content: "🔭";
-   font-size: var(--size);
-   line-height: var(--size);
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/app-icon/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/network-folder/app-icon/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/app-label/layout.css" => ':host::after {
-   height: 24px;
-   content: "Network";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/app-label/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/network-folder/app-label/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/layout.css" => '
-  :host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   padding: 4px 0 }
-  :host(:hover) {
-   background: #00007f;
-   color: white }
-  app-icon {
-   width: 24px;
-   height: 24px;
-   margin: 0 10px;
-   --size: 24px;
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/manifest.uri" => 'https://core.parts/os-95/taskbar-/start-menu/network-folder/app-icon/ https://core.parts/os-95/taskbar-/start-menu/network-folder/app-label/',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/network-folder/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/network-folder/?manifest" => 'https://core.parts/os-95/taskbar-/start-menu/network-folder/manifest.uri',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::after {
-   content: "🖥";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-icon/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-icon/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-label/layout.css" => ':host::after {
-   height: 24px;
-   content: "Load Last Save";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-label/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-label/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/layout.css" => '
-  :host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   padding: 4px 0;
-   padding-right: 6px }
-  :host(:hover) {
-   background: #00007f;
-   color: white }
-  app-icon {
-   width: 24px;
-   height: 24px;
-   margin: 0 10px;
-   --size: 24px;
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/manifest.uri" => 'https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-icon/ https://core.parts/os-95/taskbar-/start-menu/restart-computer/app-label/',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/onclick.js" => '
-  () => {
-   location.reload();
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/restart-computer/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/?manifest" => 'https://core.parts/os-95/taskbar-/start-menu/restart-computer/manifest.uri',
- "https://core.parts/os-95/taskbar-/start-menu/restart-computer/?onclick" => 'https://core.parts/os-95/taskbar-/start-menu/restart-computer/onclick.js',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/app-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::after {
-   content: "🧼";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/app-icon/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/app-icon/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/app-label/layout.css" => ':host::after {
-   height: 24px;
-   content: "Factory Reset";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/app-label/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/app-label/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/layout.css" => '
-  :host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   padding: 4px 0 }
-  :host(:hover) {
-   background: #00007f;
-   color: white }
-  app-icon {
-   width: 24px;
-   height: 24px;
-   margin: 0 10px;
-   --size: 24px;
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/manifest.uri" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/app-icon/ https://core.parts/os-95/taskbar-/start-menu/restart-server/app-label/',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/onclick.js" => '
-  () => {
-   navigator.serviceWorker.controller.postMessage("restart");
-   setTimeout(() => location.reload(), 1000);
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/?manifest" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/manifest.uri',
- "https://core.parts/os-95/taskbar-/start-menu/restart-server/?onclick" => 'https://core.parts/os-95/taskbar-/start-menu/restart-server/onclick.js',
- /*
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/app-icon/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/app-icon/layout.css',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/app-label/layout.css" => ':host::after {
-    height: 24px;
-    content: "Save as ServiceWorker source";
-   }',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/app-label/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer-as/app-label/layout.css',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/layout.css" => '
-   :host {
-    position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    padding: 4px 0;
-    padding-right: 6px }
-   :host(:hover) {
-    background: #00007f;
-    color: white }
-   app-icon {
-    width: 24px;
-    height: 24px;
-    margin: 0 10px;
-    --size: 24px;
-   }',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/manifest.uri" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer-as/app-icon/ https://core.parts/os-95/taskbar-/start-menu/save-computer-as/app-label/',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/onclick.js" => '
-   () => {
-    Ω["https://core.parts/os-95/start-menu/open.txt"] = "0"
-    delete Δ["https://core.parts/os-95/taskbar-/tray-/clock-/date.txt"]
-    delete Δ["https://core.parts/os-95/taskbar-/tray-/clock-/layout.css"]
-    const
-     a = document.createElement("a"),
-     json = JSON.stringify(Object.keys(Δ).sort().reduce((temp_obj, key) => { temp_obj[key] = Δ[key]; return temp_obj }, {})).replace(/","/g,"\",\n  \"").replace(/^{/s, "{\n  ").replace(/}$/s, "\n}"),
-     js = `var causality={},onfetch=(Ω=new Proxy({},new Proxy(${json},{get:(Δ,Υ)=>eval(Δ[V="https://core.parts/proxy/alpha.js"])})))["https://core.parts/file.js"];onmessage=Ω["https://core.parts/client-to-server.js"]`,
-     ourl = URL.createObjectURL(new Blob([js], { type: "text/javascript" }));
-     a.href = ourl
-     a.download = "everything.js"
-     document.body.appendChild(a)
-    a.click();
-     a.remove()
-     URL.revokeObjectURL(ourl);
-   }',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer-as/layout.css',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/?manifest" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer-as/manifest.uri',
-  "https://core.parts/os-95/taskbar-/start-menu/save-computer-as/?onclick" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer-as/onclick.js',
- */
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/app-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::after {
-   content: "💽";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/app-icon/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/app-icon/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/app-label/layout.css" => ':host::after {
-   height: 24px;
-   content: "Quick Save";
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/app-label/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/app-label/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/layout.css" => '
-  :host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   padding: 4px 0;
-   padding-right: 6px }
-  :host(:hover) {
-   background: #00007f;
-   color: white }
-  app-icon {
-   width: 24px;
-   height: 24px;
-   margin: 0 10px;
-   --size: 24px;
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/manifest.uri" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/app-icon/ https://core.parts/os-95/taskbar-/start-menu/save-computer/app-label/',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/onclick.js" => '
-  () => {
-   Ω["https://core.parts/os-95/start-menu/open.txt"] = "0"
-   delete Δ["https://core.parts/os-95/taskbar-/tray-/clock-/date.txt"]
-   delete Δ["https://core.parts/os-95/taskbar-/tray-/clock-/layout.css"]
-   navigator.serviceWorker.controller.postMessage(Δ);
-  }',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/?manifest" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/manifest.uri',
- "https://core.parts/os-95/taskbar-/start-menu/save-computer/?onclick" => 'https://core.parts/os-95/taskbar-/start-menu/save-computer/onclick.js',
- "https://core.parts/os-95/taskbar-/start-menu/?layout" => 'https://core.parts/os-95/taskbar-/start-menu/layout.css',
- "https://core.parts/os-95/taskbar-/start-menu/?manifest" => 'https://core.parts/os-95/taskbar-/start-menu/manifest.uri',
- "https://core.parts/os-95/taskbar-/tray-/clock-/date.txt?fx" => 'https://core.parts/os-95/taskbar-/tray-/clock-/date/fx.uri',
- "https://core.parts/os-95/taskbar-/tray-/clock-/date.txt?constructor" => 'https://core.parts/os-95/taskbar-/tray-/clock-/date.txt.c.js',
- "https://core.parts/os-95/taskbar-/tray-/clock-/date.txt.c.js" => 'return new Date().toLocaleString("en-US", { hour: "numeric", minute: "numeric", hourCycle: "h12" })',
- "https://core.parts/os-95/taskbar-/tray-/clock-/date/fx.uri" => 'https://core.parts/os-95/taskbar-/tray-/clock-/layout.css',
- "https://core.parts/os-95/taskbar-/tray-/clock-/layout.css?date" => 'https://core.parts/os-95/taskbar-/tray-/clock-/date.txt',
- "https://core.parts/os-95/taskbar-/tray-/clock-/layout.css?constructor" => 'https://core.parts/os-95/taskbar-/tray-/clock-/layout.css.c.js',
- "https://core.parts/os-95/taskbar-/tray-/clock-/layout.css.c.js" => '
-  const minute = 1000 * 60, delay = minute - (Date.now() % minute);
-  setTimeout(()=>{
-   Ω[date.headerOf().href] = new Date().toLocaleString("en-US", {
-    hour: "numeric",
-    minute: "numeric",
-    hourCycle: "h12"
-   })
-  }, delay + 5);
-  return `:host::after {
-   content: "${date}";
-   white-space: nowrap;
-  }`',
- "https://core.parts/os-95/taskbar-/tray-/clock-/?layout" => 'https://core.parts/os-95/taskbar-/tray-/clock-/layout.css',
- "https://core.parts/os-95/taskbar-/tray-/layout.css" => ':host {
-   position: relative;
-   display: flex;
-   flex-flow: row nowrap;
-   gap: 3px;
-   box-sizing: border-box;
-   height: 100%;
-   margin: 0;
-   user-select: none;
-   padding: 3px 4px 3px;
-   text-align: left;
-   background: #c3c3c3;
-   box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
-  }',
- "https://core.parts/os-95/taskbar-/tray-/manifest.uri" => 'https://core.parts/os-95/taskbar-/tray-/factory-reset/ https://core.parts/os-95/taskbar-/tray-/fullscreen-/ https://core.parts/os-95/taskbar-/tray-/clock-/',
- "https://core.parts/os-95/taskbar-/tray-/?layout" => 'https://core.parts/os-95/taskbar-/tray-/layout.css',
- "https://core.parts/os-95/taskbar-/tray-/?manifest" => 'https://core.parts/os-95/taskbar-/tray-/manifest.uri',
- "https://core.parts/os-95/taskbar-/?layout" => 'https://core.parts/os-95/taskbar-/layout.css',
- "https://core.parts/os-95/taskbar-/?manifest" => 'https://core.parts/os-95/taskbar-/manifest.uri',
- "https://core.parts/os-95/tasks.uri" => 'https://core.parts/os-95/programs/locate-/task-/ https://core.parts/os-95/programs/relate-/task-/',
- "https://core.parts/os-95/windows.uri" => 'https://core.parts/os-95/programs/locate-/window-/ https://core.parts/os-95/programs/relate-/window-/',
- "https://core.parts/os-95/windows.uri?fx" => 'https://core.parts/os-95/windows-fx.uri',
- "https://core.parts/os-95/windows-fx.uri" => 'https://core.parts/os-95/manifest.uri',
- "https://core.parts/os-95/icons/application-json-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/application-json-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/application-json-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/application-json-icon/layout.css.c.js" => 'return layout([220, 220, 255], \'\u{1F4C4}\', \'json\', [1/7, 1/16, 1/8])',
- "https://core.parts/os-95/icons/application-json-icon/?layout" => 'https://core.parts/os-95/icons/application-json-icon/layout.css',
- "https://core.parts/os-95/icons/application-wasm-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/application-wasm-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/application-wasm-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/application-wasm-icon/layout.css.c.js" => 'return layout([0, 0, 0, 0], \'\u{1F4E6}\')',
- "https://core.parts/os-95/icons/application-wasm-icon/?layout" => 'https://core.parts/os-95/icons/application-wasm-icon/layout.css',
- "https://core.parts/os-95/icons/folder-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::before {
-   content: \'📁\';
-  }',
- "https://core.parts/os-95/icons/folder-icon/?layout" => 'https://core.parts/os-95/icons/folder-icon/layout.css',
- "https://core.parts/os-95/icons/protocol-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::before {
-   content: \'⭄\';
-  }',
- "https://core.parts/os-95/icons/protocol-icon/?layout" => 'https://core.parts/os-95/icons/protocol-icon/layout.css',
- "https://core.parts/os-95/icons/image-png-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/image-png-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/image-png-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/image-png-icon/layout.css.c.js" => 'return layout([255, 127, 0], \'\u{1F4C4}\', \'png\')',
- "https://core.parts/os-95/icons/image-png-icon/?layout" => 'https://core.parts/os-95/icons/image-png-icon/layout.css',
- "https://core.parts/os-95/icons/image-vnd-microsoft-icon-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/image-vnd-microsoft-icon-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/image-vnd-microsoft-icon-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/image-vnd-microsoft-icon-icon/layout.css.c.js" => 'return layout([127, 127, 127, 0.25], \'\u{1F4C4}\', \'ico\', [0.1, 0.1, 0.1])',
- "https://core.parts/os-95/icons/image-vnd-microsoft-icon-icon/?layout" => 'https://core.parts/os-95/icons/image-vnd-microsoft-icon-icon/layout.css',
- "https://core.parts/os-95/icons/kireji-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::before {
-   content: \'🔗\';
-  }',
- "https://core.parts/os-95/icons/kireji-icon/?layout" => 'https://core.parts/os-95/icons/kireji-icon/layout.css',
- "https://core.parts/os-95/icons/layout.js" => '
-  ([bgr, bgg, bgb, bga = 0.8], c, ext, [r = 0, g = 0, b = 0, a = 1] = []) => {
-   return `
-    :host {
-     --rgb-bg: rgba(${bgr}, ${bgg}, ${bgb}, ${bga});
-     --rgb: ${r}, ${g}, ${b};
-     --character: \'${c}\';
-     --size: 16px;
-     --unit: calc(var(--size) / 16);
-     color: rgba(var(--rgb), ${a});
-     position: relative;
-     width: var(--size);
-     height: var(--size);
-    }
-    :host::before,
-    :host::after {
-     border-radius: calc(var(--size) / 6);
-    }
-    :host::before {
-     content: var(--character);
-     font-size: var(--size);
-     line-height: var(--size);
-    }
-    :host::after {
-     box-shadow: 0 0 0 var(--unit) rgba(var(--rgb), ${a/2});
-     background: var(--rgb-bg);
-     position: absolute;
-     bottom: var(--unit);
-     right: 0;${ext ? `
-     content: \'${ext}\';` : ``}
-     font: 400 calc(var(--size) / 3) / calc(var(--size) / 3) monospace;
-     padding: var(--unit);
-    }
-   `
-  }',
- "https://core.parts/os-95/icons/domain-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::before {
-   content: \'🗄\';
-  }',
- "https://core.parts/os-95/icons/domain-icon/?layout" => 'https://core.parts/os-95/icons/domain-icon/layout.css',
- "https://core.parts/os-95/icons/text-css-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/text-css-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/text-css-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/text-css-icon/layout.css.c.js" => 'return layout([0, 255, 255], \'\u{1F4C4}\', \'css\')',
- "https://core.parts/os-95/icons/text-css-icon/?layout" => 'https://core.parts/os-95/icons/text-css-icon/layout.css',
- "https://core.parts/os-95/icons/text-html-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/text-html-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/text-html-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/text-html-icon/layout.css.c.js" => 'return layout([255, 255, 255], \'\u{1F4C4}\', \'html\')',
- "https://core.parts/os-95/icons/text-html-icon/?layout" => 'https://core.parts/os-95/icons/text-html-icon/layout.css',
- "https://core.parts/os-95/icons/text-javascript-icon/layout.css?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/text-javascript-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/text-javascript-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/text-javascript-icon/layout.css.c.js" => 'return layout([255, 127, 127, 0.7], \'\u{1F4C4}\', \'js\', [0.4])',
- "https://core.parts/os-95/icons/text-javascript-icon/?layout" => 'https://core.parts/os-95/icons/text-javascript-icon/layout.css',
- "https://core.parts/os-95/icons/text-plain-icon/layout.css" => '
-  :host {
-   --size: 16px;
-   width: var(--size);
-   height: var(--size) }
-  :host::before {
-   content: \'📄\';
-   font-size: var(--size);
-   line-height: var(--size)
-  }',
- "https://core.parts/os-95/icons/text-plain-icon/?layout" => 'https://core.parts/os-95/icons/text-plain-icon/layout.css',
- "https://core.parts/os-95/icons/text-uri-list-icon/layout.css" => '
-  :host {
-   --rgba: rgba(0, 0, 0, 0.8);
-   --character: \'📄\';
-   --size: 16px;
-   color: #ffff3f;
-   position: relative;
-   width: 16px;
-   height: 16px;
-  }
-  :host::before,
-  :host::after {
-   border-radius: calc(var(--size) / 6);
-  }
-  :host::before {
-   content: var(--character);
-   font-size: var(--size);
-   line-height: var(--size);
-  }
-  :host::after {
-   box-shadow: 0 0 0 calc(var(--size) / 16) #ffff3f;
-   background: var(--rgba);
-   position: absolute;
-   bottom: 0;
-   right: 0;
-   content: \'uri\';
-   font: 400 calc(var(--size) / 3) / calc(var(--size) / 3) monospace;
-   padding: calc(var(--size) / 16);
-  }',
- "https://core.parts/os-95/icons/text-uri-list-icon/layout.cs?layout" => 'https://core.parts/os-95/icons/layout.js',
- "https://core.parts/os-95/icons/text-uri-list-icon/layout.css?constructor" => 'https://core.parts/os-95/icons/text-uri-list-icon/layout.css.c.js',
- "https://core.parts/os-95/icons/text-uri-list-icon/layout.css.c.js" => 'return layout([0, 0, 0], "\u{1F4C4}", "uri", [1, 1, 0.3])',
- "https://core.parts/os-95/icons/text-uri-list-icon/?layout" => 'https://core.parts/os-95/icons/text-uri-list-icon/layout.css',
- "https://core.parts/os-95/letters/capital-f/layout.css" => '
-  :host::before {
-   content: "F"
-  }',
- "https://core.parts/os-95/letters/capital-f/?layout" => 'https://core.parts/os-95/letters/capital-f/layout.css',
- "https://core.parts/os-95/letters/lowercase-e/layout.css" => ':host::before {
-   content: "e"
-  }',
- "https://core.parts/os-95/letters/lowercase-e/?layout" => 'https://core.parts/os-95/letters/lowercase-e/layout.css',
- "https://core.parts/os-95/letters/lowercase-i/layout.css" => ':host::before {
-   content: "i"
-  }',
- "https://core.parts/os-95/letters/lowercase-i/?layout" => 'https://core.parts/os-95/letters/lowercase-i/layout.css',
- "https://core.parts/os-95/letters/lowercase-l/layout.css" => ':host::before {
-   content: "l"
-  }',
- "https://core.parts/os-95/letters/lowercase-l/?layout" => 'https://core.parts/os-95/letters/lowercase-l/layout.css',
- "https://core.parts/os-95/start-menu/open-fx.uri" => 'https://core.parts/os-95/taskbar-/start-button/layout.css https://core.parts/os-95/taskbar-/selected.txt https://core.parts/os-95/manifest.uri',
- "https://core.parts/os-95/start-menu/open.txt" => '0',
- "https://core.parts/os-95/start-menu/open.txt?fx" => 'https://core.parts/os-95/start-menu/open-fx.uri',
- "https://core.parts/os-95/start-menu/open.txt?selected" => 'https://core.parts/os-95/taskbar-/selected.txt',
- "https://core.parts/os-95/start-menu/open.txt?constructor" => 'https://core.parts/os-95/start-menu/open.txt.c.js',
- "https://core.parts/os-95/start-menu/open.txt.c.js" => 'return ("" + selected) ==="0" ? "1" : "0"',
+ "https://core.parts/onpointerup.c.js" => 'return `e => { ${(""+grab) ? `Ω["${grab.headerOf().href}"] = ""; ` : ""}${(""+release) ? `Ω["${release}"](e); Ω["${release.headerOf().href}"] = ""; ` : ""}}`',
+ "https://core.parts/proxy/beta/getEmbedTag.js" => '(part = Ψ.part) => part + (part.includes("-") ? "" : "-")',
  "https://core.parts/proxy/alpha.js" => '
   ({
    get:
     (_, υ) => {
      const
-      regex = /^(?<protocol>[a-z+]+:\/\/?)(?:(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)\/?|(?<filename>[^\s?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.?\/]+))|\/(?<index>(?:[^\s.?\/]+?\/)*))(?:\?(?<kireji>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<rest_kireji>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?)?$/,
+      regex = /^(?<protocol>[a-z+]+:\/\/?)(?:(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9-]*)\/?|(?<filename>[^\s?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.?\/]+))|\/(?<index>(?:[^\s.?\/]+?\/)*))(?:\?(?<kireji>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<rest_kireji>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?)?$/,
       Ψ = υ.match(regex)?.groups;
      if (!Ψ) {
-      throw new TypeError(\'bad request: \' + υ)
+      throw new TypeError("AlphaError: bad request \'" + υ + "\'; previous request: " + globalThis.lastCall)
      }
+     globalThis.lastCall = υ
      const
       extras = {
        size: {
@@ -2669,7 +639,11 @@
        ico: "image/vnd.microsoft.icon",
        html: "text/html",
        wasm: "application/wasm",
-       uri: "text/uri-list"
+       uri: "text/uri-list",
+       hood: "physical/car-part",
+       cork: "physical/drink-stopper",
+       balloon: "physical/toy",
+       zit: "physical/blemish"
       },
       true_extension = Ψ.value ? "js"
                        : (Ψ.index !== undefined || Ψ.part !== undefined) ? "html"
@@ -2747,6 +721,7 @@
      recursive_getprio(υ)
      // TODO: Allow a script to set others?
      order.forEach(url => {
+      // TODO: check that the urls who affect this one - imagined earlier in this for loop - had any actual changes compared to existing. Skip if not. 
       const
        existing = Δ[url],
        generated = Ω[url].toPrimitive("imagine", υ);
@@ -2766,28 +741,19 @@
   }',
  "https://core.parts/proxy/beta/get.js" => '
   (_, π) => {
-   // console.groupCollapsed("get", { υ, π })
-   // console.trace()
-   if ([\'toPrimitive\', Symbol.toPrimitive, \'toString\', \'valueOf\', \'headerOf\', \'rootsOf\', \'query\'].includes(π)) {
-    // console.log("Fetching it from alpha proxy.")
-    // console.groupEnd()
+   if (["toPrimitive", Symbol.toPrimitive, "toString", "valueOf", "headerOf", "rootsOf", "query", "getEmbedTag"].includes(π)) {
     return α[π]
    }
    let p, r = p = υ, url, result, exists, core_url = "https://core.parts/core-part/"
    do {
     exists = (result = Δ[url = `${r}?${π}`]) !== undefined
-    // console.log(`${url} does${exists ? "" : "n\'t"} exist`)
     if (exists) {
-     console.groupEnd()
      return Ω[result]
     }
     if (r === core_url) break
     p = r
     r = Δ[`${r}?core`] ?? core_url
-    // console.log(`${p} takes Δ[${p}?core] to become ${r}`)
    } while (r !== p)
-   // console.log(`${π} isn\'t in ${υ}`)
-   // console.groupEnd()
   }',
  "https://core.parts/proxy/beta/getOwnPropertyDescriptor.js" => '
   (_, π) => ({
@@ -2802,28 +768,22 @@
   }',
  "https://core.parts/proxy/beta/has.js" => '
   (_, π) => {
-   // console.groupCollapsed("has", { υ, π })
-   // console.trace()
-   if ([\'toPrimitive\', Symbol.toPrimitive, \'toString\', \'valueOf\', \'headerOf\', \'rootsOf\', \'query\'].includes(π)) {
-    // console.log("Fetching it from alpha proxy.")
-    // console.groupEnd()
+   // Beta proxy functions - υ (upsilon) refers to subject url in the function body.
+   if (["toPrimitive", Symbol.toPrimitive, "toString", "valueOf", "headerOf", "rootsOf", "query", "getEmbedTag"].includes(π)) {
+    
     return α[π] !== undefined
    }
+   // For other functions, υ will refer to the url of the function itself
    let p, r = p = υ, url, result, exists, core_url = "https://core.parts/core-part/"
    do {
     exists = (result = Δ[url = `${r}?${π}`]) !== undefined
-    // console.log(`${url} does${exists ? "" : "n\'t"} exist`)
     if (exists) {
-     console.groupEnd()
      return true
     }
     if (r === core_url) break
     p = r
     r = Δ[`${r}?core`] ?? core_url
-    // console.log(`${p} takes Δ[${p}?core] to become ${r}`)
    } while (r !== p)
-   // console.log(`${π} isn\'t in ${υ}`)
-   // console.groupEnd()
   }',
  "https://core.parts/proxy/beta/headerOf.js" => '
   () => ({
@@ -2841,8 +801,6 @@
   }',
  "https://core.parts/proxy/beta/ownKeys.js" => '
   () => {
-   //console.groupCollapsed("keys", { υ })
-   //console.trace()
    const core_url = "https://core.parts/core-part/", keys = new Set()
    for (const url in Δ) {
     if (!url.match(/^[^?]*\?\w*$/)) continue
@@ -2857,8 +815,6 @@
     } while (r !== p)
    }
    const result = [...keys]
-   //console.log(result)
-   //console.groupEnd()
    return result;
   }',
  "https://core.parts/proxy/beta/query.js" => '
@@ -2896,17 +852,11 @@
   }',
  "https://core.parts/proxy/beta/toPrimitive.js" => '
   (hint, caller) => {
-   // console.groupCollapsed("toPrimitive", { υ, hint, caller })
    const core_root = "https://core.parts/core-part/", imagine = hint === "imagine"
    let primitive = Δ[υ];
    if (imagine || primitive === undefined) {
     const proxy = Ω[υ], constructor = proxy.constructor?.toPrimitive(), Kireji = new Map(), roots = β.rootsOf()
-    if (!constructor) {
-     const clone = proxy.core.toPrimitive()
-     console.info("Missing constructor. Becoming clone.", { υ, clone })
-     // console.groupEnd()
-     return clone
-    }
+    if (!constructor) return proxy.core.toPrimitive()
     for (const url in Δ) {
      if (!url.match(/^[^?]*\?\w*$/)) continue
      let p, r = p = υ, rank = 0;
@@ -2928,18 +878,13 @@
     primitive = runtime(Ω);
     output_type = typeof primitive;
     if (output_type !== "string") {
-     console.groupEnd()
      throw new TypeError(`output of ${υ} must be a primitive string (got ${output_type})`)
     }
     if (imagine) {
-     // console.log("returning imagined primitive value", primitive)
-     // console.groupEnd()
      return primitive
     }
-    // console.log("storing real primitive value", primitive)
     Ω[υ] = primitive
    }
-   // console.groupEnd()
    return primitive
   }',
  "https://core.parts/proxy/beta/toString.js" => '
@@ -2950,14 +895,3183 @@
   () => {
    return Δ[υ]
   }',
- "https://ejaugust.com/research/wasm/test.js" => 'WebAssembly.instantiateStreaming(onfetch("https://core.parts/wasm/test.wasm")).then(_ => console.info(_.instance.exports))',
- "https://ejaugust.com/research/wasm/test.wasm" => 'AGFzbQEAAAABBwFgA39/fwADAgEABQMBAAEHDgIDbWVtAgAEZmlsbAAACg0BCwAgACABIAL8CwALAAoEbmFtZQIDAQAA',
  "https://core.parts/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
  "https://ejaugust.com/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
+ "https://ejaugust.com/research/wasm/test.js" => 'WebAssembly.instantiateStreaming(onfetch("https://core.parts/wasm/test.wasm")).then(_ => console.trace(_.instance.exports))',
+ "https://ejaugust.com/research/wasm/test.wasm" => 'AGFzbQEAAAABBwFgA39/fwADAgEABQMBAAEHDgIDbWVtAgAEZmlsbAAACg0BCwAgACABIAL8CwALAAoEbmFtZQIDAQAA',
  "https://orenjinari.com/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
  "https://kireji.app/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
+ "https://kireji.app/demo/hello.txt?mood" => 'https://kireji.app/demo/mood.txt',
+ "https://kireji.app/demo/hello.txt?noun" => 'https://kireji.app/demo/noun.txt',
+ "https://kireji.app/demo/hello.txt?past_phrasal_verb" => 'https://kireji.app/demo/past_phrasal_verb.txt',
+ "https://kireji.app/demo/hello.txt?persons_name" => 'https://kireji.app/demo/persons_name.txt',
+ "https://kireji.app/demo/hello.txt?time_interval" => 'https://kireji.app/demo/time_interval.txt',
+ "https://kireji.app/demo/hello.txt?verb_ending_in_ing" => 'https://kireji.app/demo/verb_ending_in_ing.txt',
+ "https://kireji.app/demo/hello.txt?constructor" => 'https://kireji.app/demo/hello.txt.c.js',
+ "https://kireji.app/demo/hello.txt.c.js" => 'return `Welcome to my ${noun}, ${persons_name}! I\'ve been ${verb_ending_in_ing} on it all ${time_interval}. I\'m so ${mood} you ${past_phrasal_verb}.`',
+ "https://kireji.app/demo/mood.txt" => 'glad',
+ "https://kireji.app/demo/noun.txt" => 'website',
+ "https://kireji.app/demo/past_phrasal_verb.txt" => 'stopped by',
+ "https://kireji.app/demo/persons_name.txt" => 'stranger',
+ "https://kireji.app/demo/time_interval.txt" => 'day',
+ "https://kireji.app/demo/verb_ending_in_ing.txt" => 'working',
  "https://kireji.io/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
- "https://68.103.68.155/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
- "https://35.138.226.122/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
+ "https://kireji.io/poppable/party.balloon" => 'ps://core.parts/apple-touch-icon.pnghttps:',
+ "https://kireji.io/poppable/champaign.cork" => 'https://core.parts/appps://core.parts/apple-touch-icon.pnghttps:ps://core.parts/apple-touch-icon.pnghttps:le-touch-icon.pnghttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.png',
+ "https://kireji.io/poppable/car.hood" => 'https://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touhttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.pnghttps://core.parts/apple-touch-icon.png',
+ "https://kireji.io/poppable/forehead.zit" => 'https://core.parts/apple-touch-icon.pnghttps://ps://core.parts/apple-touch-icon.pnghttps:',
+ "https://kheb.online/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
+ "https://stargate.design/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
+ "https://pilot.parts/?onpointermove" => 'https://core.parts/onpointermove.js',
+ "https://pilot.parts/?onpointerup" => 'https://core.parts/onpointerup.js',
+ "https://pilot.parts/?oncontextmenu" => 'https://core.parts/oncontextmenu.js',
+ "https://pilot.parts/layout.css?height" => 'https://pilot.parts/taskbar/css-height.txt',
+ "https://pilot.parts/?layout" => 'https://pilot.parts/layout.css',
+ "https://pilot.parts/?manifest" => 'https://pilot.parts/manifest.uri',
+ "https://pilot.parts/layout.css?constructor" => 'https://pilot.parts/layout.css.c.js',
+ "https://pilot.parts/layout.css.c.js" => '
+  return `
+   :host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr ${height};
+    font: 11px / 16px sans-serif;
+   }
+  `',
+ "https://pilot.parts/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
+ "https://pilot.parts/desktop/layout.css" => '
+  :host {
+   position: relative;
+   width: 100%;
+   box-sizing: border-box;
+   height: 100%;
+   margin: 0;
+   background: #377f7f;
+  }',
+ "https://pilot.parts/desktop/onfocus.js?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/desktop/onfocus.js?constructor" => 'https://pilot.parts/desktop/onfocus.c.js',
+ "https://pilot.parts/desktop/onfocus.c.js" => '
+  const has_active = "" + selected !== "-1", active_url = selected.headerOf().href;
+  return `
+   () => {
+    ${has_active ? `Ω["${active_url}"] = "-1"` : ``}
+   }
+  `',
+ "https://pilot.parts/desktop/?layout" => 'https://pilot.parts/desktop/layout.css',
+ "https://pilot.parts/desktop/?onfocus" => 'https://pilot.parts/desktop/onfocus.js',
+ "https://pilot.parts/horizontal-line/layout.css" => '
+  :host {
+   height: 2px;
+   border-top: 1px solid #7f7f7f;
+   border-bottom: 1px solid white;
+   box-sizing: border-box;
+   margin: 4px 0;
+  }',
+ "https://pilot.parts/horizontal-line/?layout" => 'https://pilot.parts/horizontal-line/layout.css',
+ "https://pilot.parts/manifest.uri?windows" => 'https://pilot.parts/windows.uri',
+ "https://pilot.parts/manifest.uri?context_menu" => 'https://pilot.parts/context-menu/open.txt',
+ "https://pilot.parts/manifest.uri?start_menu" => 'https://pilot.parts/start-menu/open.txt',
+ "https://pilot.parts/manifest.uri?constructor" => 'https://pilot.parts/manifest.uri.c.js',
+ "https://pilot.parts/manifest.uri.c.js" => '
+  const
+   urls = ["https://pilot.parts/desktop/"],
+   windows_string = "" + windows,
+   list = windows_string ? windows_string.split(" ").forEach(url => {
+    if (("" + Ω[url + "minimized.txt"]) === "0") urls.push(url)
+   }) : []
+  urls.push("https://pilot.parts/taskbar/");
+  if (""+start_menu === "1") urls.push(
+   "https://pilot.parts/taskbar/start-menu/"
+  );
+  if (""+context_menu === "1") urls.push(
+   "https://pilot.parts/context-menu/"
+  );
+  return urls.join(" ")',
+ "https://pilot.parts/context-menu/?layout" => 'https://pilot.parts/context-menu/layout.css',
+ "https://pilot.parts/context-menu/?manifest" => 'https://pilot.parts/context-menu/manifest.uri',
+ "https://pilot.parts/context-menu/manifest.uri" => 'https://pilot.parts/context-menu/locate/ https://pilot.parts/context-menu/relate/ https://pilot.parts/context-menu/debate/ https://pilot.parts/horizontal-line/ https://pilot.parts/context-menu/download/ https://pilot.parts/context-menu/properties/',
+ "https://pilot.parts/context-menu/main.uri" => 'https://pilot.parts/context-menu/locate/',
+ "https://pilot.parts/context-menu/core-item/?layout" => 'https://pilot.parts/context-menu/core-item/layout.css',
+ "https://pilot.parts/context-menu/core-item/layout.css?constructor" => 'https://pilot.parts/context-menu/core-item/layout.css.c.js',
+ "https://pilot.parts/context-menu/core-item/layout.css?main" => 'https://pilot.parts/context-menu/main.uri',
+ "https://pilot.parts/context-menu/core-item/layout.css.c.js" => 'return `:host { padding-left: 18px${υ.replace("layout.css", "") === ("" + main) ? `; font-weight: 700` : ``} } :host(:hover) { background: rgb(0, 0, 163); color: white } :host::before { content: "${Ω[υ.replace("layout.css", "label.txt")]}" }`',
+ "https://pilot.parts/context-menu/locate/?layout" => 'https://pilot.parts/context-menu/locate/layout.css',
+ "https://pilot.parts/context-menu/locate/layout.css?core" => 'https://pilot.parts/context-menu/core-item/layout.css',
+ "https://pilot.parts/context-menu/locate/label.txt" => 'Locate',
+ "https://pilot.parts/context-menu/relate/?layout" => 'https://pilot.parts/context-menu/relate/layout.css',
+ "https://pilot.parts/context-menu/relate/layout.css?core" => 'https://pilot.parts/context-menu/core-item/layout.css',
+ "https://pilot.parts/context-menu/relate/label.txt" => 'Relate',
+ "https://pilot.parts/context-menu/debate/?layout" => 'https://pilot.parts/context-menu/debate/layout.css',
+ "https://pilot.parts/context-menu/debate/layout.css?core" => 'https://pilot.parts/context-menu/core-item/layout.css',
+ "https://pilot.parts/context-menu/debate/label.txt" => 'Debate',
+ "https://pilot.parts/context-menu/download/?layout" => 'https://pilot.parts/context-menu/download/layout.css',
+ "https://pilot.parts/context-menu/download/layout.css?core" => 'https://pilot.parts/context-menu/core-item/layout.css',
+ "https://pilot.parts/context-menu/download/label.txt" => 'Download',
+ "https://pilot.parts/context-menu/properties/?layout" => 'https://pilot.parts/context-menu/properties/layout.css',
+ "https://pilot.parts/context-menu/properties/layout.css?core" => 'https://pilot.parts/context-menu/core-item/layout.css',
+ "https://pilot.parts/context-menu/properties/label.txt" => 'Properties',
+ "https://pilot.parts/context-menu/layout.css?constructor" => 'https://pilot.parts/context-menu/layout.css.c.js',
+ "https://pilot.parts/context-menu/position.json" => '{ "x": 120, "y": 70 }',
+ "https://pilot.parts/context-menu/position.json?fx" => 'https://pilot.parts/context-menu/reposition.uri',
+ "https://pilot.parts/context-menu/reposition.uri" => 'https://pilot.parts/context-menu/layout.css',
+ "https://pilot.parts/context-menu/open.txt" => '0',
+ "https://pilot.parts/context-menu/open.txt?fx" => 'https://pilot.parts/context-menu/open-fx.js',
+ "https://pilot.parts/context-menu/open-fx.js" => 'https://pilot.parts/manifest.uri',
+ "https://pilot.parts/context-menu/layout.css?position" => 'https://pilot.parts/context-menu/position.json',
+ "https://pilot.parts/context-menu/layout.css.c.js" => <<<JS
+  const { x, y } = JSON.parse("" + position);
+   return `
+   :host {
+    display: flex;
+    flex-flow: column nowrap;
+    position: absolute;
+    left: \${x}px;
+    top: \${y}px;
+    user-select: none;
+    line-height: 18px;
+    text-align: left;
+    background: #c3c3c3;
+    box-sizing: border-box;
+    padding: 3px 3px 3px 3px;
+    text-align: left;
+    background: #c3c3c3;
+    min-width: 128px;
+    box-shadow:
+     inset -1px -1px black,
+     inset 1px 1px white,
+     inset -2px -2px #7a7a7a,
+     inset 2px 2px #dbdbdb;
+   }`
+  JS,
+
+ "https://pilot.parts/taskbar/css-height.txt" => '28px',
+ "https://pilot.parts/taskbar/css-height/fx.uri" => 'https://core.parts/layout.css https://pilot.parts/taskbar/start-menu/layout.css',
+ "https://pilot.parts/taskbar/layout.css" => '
+  :host {
+   position: relative;
+   width: 100%;
+   box-sizing: border-box;
+   height: 100%;
+   margin: 0;
+   display: flex;
+   flex-flow: row nowrap;
+   gap: 3px;
+   height: 100%;
+   padding: 4px 2px 2px;
+   background: #c3c3c3;
+   box-shadow: inset 0 1px #c3c3c3, inset 0 2px white;
+  }',
+ "https://pilot.parts/taskbar/manifest.uri?running_apps" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/taskbar/manifest.uri?constructor" => 'https://pilot.parts/taskbar/manifest.uri.c.js',
+ "https://pilot.parts/taskbar/manifest.uri.c.js" => 'return `https://pilot.parts/taskbar/start-button/ ${"" + running_apps ? running_apps + " " : ""}https://core.parts/flex-spacer/ https://pilot.parts/taskbar/tray/`',
+ "https://pilot.parts/taskbar/selected.txt" => '-1',
+ "https://pilot.parts/taskbar/selected.txt?fx" => 'https://pilot.parts/taskbar/reselect.uri',
+ "https://pilot.parts/taskbar/selected.txt?constructor" => 'https://pilot.parts/taskbar/selected.txt.c.js',
+ "https://pilot.parts/taskbar/selected.txt.c.js" => '
+  let wasOn;
+  const result = ""+(""+fx).split(" ").findIndex(x => {
+   const
+    src = caller,
+    isX = x === src;
+   wasOn = Δ[src] === "1";
+   return (src && wasOn) ? isX : ("" + Ω[x] === "1");
+  });
+  return result;',
+ "https://pilot.parts/taskbar/reselect.uri" => 'https://pilot.parts/start-menu/open.txt https://pilot.parts/programs/locate/window/active.txt https://pilot.parts/programs/locate/window/onfocus.js https://pilot.parts/programs/relate/window/active.txt https://pilot.parts/programs/debate/window/active.txt https://pilot.parts/programs/welcome/window/active.txt https://pilot.parts/desktop/onfocus.js https://pilot.parts/taskbar/onpointerdown.js',
+ "https://pilot.parts/taskbar/start-button/icon/layout.css?icon" => 'https://core.parts/apple-touch-icon.png',
+ "https://pilot.parts/taskbar/start-button/icon/layout.css?constructor" => 'https://pilot.parts/taskbar/start-button/icon/layout.css.c.js',
+ "https://pilot.parts/taskbar/start-button/icon/layout.css.c.js" => 'return `:host {
+   position: relative;
+   box-sizing: border-box;
+   height: 100%;
+   margin: 0;
+   background: url(data:image/png;base64,${icon});
+   background-size: 16px;
+   width: 16px;
+   height: 16px }`',
+ "https://pilot.parts/taskbar/start-button/icon/?layout" => 'https://pilot.parts/taskbar/start-button/icon/layout.css',
+ "https://pilot.parts/taskbar/start-button/label/layout.css" => '
+  :host {
+   position: relative;
+   box-sizing: border-box;
+   margin: 0;
+   height: 16px }
+  :host::before {
+   content: "Start";
+  }',
+ "https://pilot.parts/taskbar/start-button/label/?layout" => 'https://pilot.parts/taskbar/start-button/label/layout.css',
+ "https://pilot.parts/taskbar/start-button/layout.css?open" => 'https://pilot.parts/start-menu/open.txt',
+ "https://pilot.parts/taskbar/start-button/layout.css?constructor" => 'https://pilot.parts/taskbar/start-button/layout.css.c.js',
+ "https://pilot.parts/taskbar/start-button/layout.css.c.js" => '
+  return `
+   :host {
+    flex: 0 0;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 3px;
+    border: none;
+    font: bold 11px / 16px sans-serif;
+    box-sizing: border-box;
+    padding: ${("" + open) === "0" ? 3 : 4}px 4px 2px;
+    text-align: left;
+    background: #c3c3c3;
+    box-shadow: ${("" + open) === "0" ? `
+     inset -1px -1px black,
+     inset 1px 1px white,
+     inset -2px -2px #7a7a7a,
+     inset 2px 2px #dbdbdb`
+     : `
+     inset -1px -1px white,
+     inset 1px 1px black,
+     inset -2px -2px #dbdbdb,
+     inset 2px 2px #7a7a7a`};
+   }
+   :host(:focus)::after {
+    border: 1px dotted black;
+    content: "";
+    position: absolute;
+    margin: 3px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+   }
+  `',
+ "https://pilot.parts/taskbar/start-button/manifest.uri" => 'https://pilot.parts/taskbar/start-button/icon/ https://pilot.parts/taskbar/start-button/label/',
+ "https://pilot.parts/taskbar/start-button/manifest.uri?open" => 'https://pilot.parts/start-menu/open.txt',
+ "https://pilot.parts/taskbar/start-button/onpointerdown.js?constructor" => 'https://pilot.parts/taskbar/start-button/onpointerdown.c.js',
+ "https://pilot.parts/taskbar/start-button/onpointerdown.js?open" => 'https://pilot.parts/start-menu/open.txt',
+ "https://pilot.parts/taskbar/start-button/onpointerdown.c.js" => '
+  return `e => {
+   e.stopPropagation()
+   Ω["${open.headerOf().href}"] = "${"" + open === "0" ? `1` : `0`}";
+  }`',
+ "https://pilot.parts/taskbar/start-button/?layout" => 'https://pilot.parts/taskbar/start-button/layout.css',
+ "https://pilot.parts/taskbar/start-button/?manifest" => 'https://pilot.parts/taskbar/start-button/manifest.uri',
+ "https://pilot.parts/taskbar/start-button/?onpointerdown" => 'https://pilot.parts/taskbar/start-button/onpointerdown.js',
+ "https://pilot.parts/taskbar/start-menu/layout.css?height" => 'https://pilot.parts/taskbar/css-height.txt',
+ "https://pilot.parts/taskbar/start-menu/layout.css?constructor" => 'https://pilot.parts/taskbar/start-menu/layout.css.c.js',
+ "https://pilot.parts/taskbar/start-menu/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   min-width: 164px;
+   display: flex;
+   flex-flow: column nowrap;
+   position: absolute;
+   left: 2px;
+   bottom: calc(${height} - 4px);
+   user-select: none;
+   line-height: 18px;
+   text-align: left;
+   background: #c3c3c3;
+   box-sizing: border-box;
+   padding: 3px 3px 3px 24px;
+   text-align: left;
+   background: #c3c3c3;
+   box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb
+  }
+  :host::after {
+   pointer-events: none;
+   display: block;
+   content: "Pilot";
+   writing-mode: tb-rl;
+   transform: rotate(-180deg);
+   line-height: 21px;
+   font-size: 18px;
+   font-weight: 900;
+   color: #c3c3c3;
+   padding-top: 4px;
+   box-sizing: border-box;
+   position: absolute;
+   left: 3px;
+   top: 3px;
+   bottom: 3px;
+   background: #7f7f7f;
+   width: 21px
+  }`',
+ "https://pilot.parts/taskbar/start-menu/manifest.uri" => 'https://pilot.parts/programs/locate/start-menu-item/ https://pilot.parts/programs/relate/start-menu-item/ https://pilot.parts/programs/debate/start-menu-item/ https://pilot.parts/horizontal-line/ https://pilot.parts/programs/welcome/start-menu-item/ https://pilot.parts/horizontal-line/ https://pilot.parts/taskbar/start-menu/save-computer/ https://pilot.parts/taskbar/start-menu/restart-computer/ https://pilot.parts/taskbar/start-menu/restart-server/',
+ "https://pilot.parts/taskbar/start-menu/network-folder/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+  }
+  :host::before {
+   content: "🔭";
+   font-size: var(--size);
+   line-height: var(--size);
+  }',
+ "https://pilot.parts/taskbar/start-menu/network-folder/app-icon/?layout" => 'https://pilot.parts/taskbar/start-menu/network-folder/app-icon/layout.css',
+ "https://pilot.parts/taskbar/start-menu/network-folder/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Network";
+  }',
+ "https://pilot.parts/taskbar/start-menu/network-folder/app-label/?layout" => 'https://pilot.parts/taskbar/start-menu/network-folder/app-label/layout.css',
+ "https://pilot.parts/taskbar/start-menu/network-folder/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0 }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/taskbar/start-menu/network-folder/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/network-folder/app-icon/ https://pilot.parts/taskbar/start-menu/network-folder/app-label/',
+ "https://pilot.parts/taskbar/start-menu/network-folder/?layout" => 'https://pilot.parts/taskbar/start-menu/network-folder/layout.css',
+ "https://pilot.parts/taskbar/start-menu/network-folder/?manifest" => 'https://pilot.parts/taskbar/start-menu/network-folder/manifest.uri',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::after {
+   content: "🖥";
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/app-icon/?layout" => 'https://pilot.parts/taskbar/start-menu/restart-computer/app-icon/layout.css',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Load Last Save";
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/app-label/?layout" => 'https://pilot.parts/taskbar/start-menu/restart-computer/app-label/layout.css',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0;
+   padding-right: 6px }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/restart-computer/app-icon/ https://pilot.parts/taskbar/start-menu/restart-computer/app-label/',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/onclick.js" => '
+  () => {
+   location.reload();
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/?layout" => 'https://pilot.parts/taskbar/start-menu/restart-computer/layout.css',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/?manifest" => 'https://pilot.parts/taskbar/start-menu/restart-computer/manifest.uri',
+ "https://pilot.parts/taskbar/start-menu/restart-computer/?onclick" => 'https://pilot.parts/taskbar/start-menu/restart-computer/onclick.js',
+ "https://pilot.parts/taskbar/start-menu/restart-server/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::after {
+   content: "🧼";
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-server/app-icon/?layout" => 'https://pilot.parts/taskbar/start-menu/restart-server/app-icon/layout.css',
+ "https://pilot.parts/taskbar/start-menu/restart-server/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Factory Reset";
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-server/app-label/?layout" => 'https://pilot.parts/taskbar/start-menu/restart-server/app-label/layout.css',
+ "https://pilot.parts/taskbar/start-menu/restart-server/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0 }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-server/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/restart-server/app-icon/ https://pilot.parts/taskbar/start-menu/restart-server/app-label/',
+ "https://pilot.parts/taskbar/start-menu/restart-server/onclick.js" => '
+  () => {
+   navigator.serviceWorker.controller.postMessage({ restart: 1 });
+  }',
+ "https://pilot.parts/taskbar/start-menu/restart-server/?layout" => 'https://pilot.parts/taskbar/start-menu/restart-server/layout.css',
+ "https://pilot.parts/taskbar/start-menu/restart-server/?manifest" => 'https://pilot.parts/taskbar/start-menu/restart-server/manifest.uri',
+ "https://pilot.parts/taskbar/start-menu/restart-server/?onclick" => 'https://pilot.parts/taskbar/start-menu/restart-server/onclick.js',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/app-icon/?layout" => 'https://pilot.parts/taskbar/start-menu/save-computer/app-icon/layout.css',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/app-label/layout.css" => ':host::after {
+    height: 24px;
+    content: "Save as ServiceWorker source";
+   }',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/app-label/?layout" => 'https://pilot.parts/taskbar/start-menu/save-computer-as/app-label/layout.css',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/layout.css" => '
+   :host {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 4px 0;
+    padding-right: 6px }
+   :host(:hover) {
+    background: #00007f;
+    color: white }
+   app-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+    --size: 24px;
+   }',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/save-computer-as/app-icon/ https://pilot.parts/taskbar/start-menu/save-computer-as/app-label/',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/onclick.js" => '
+   () => {
+    Ω["https://pilot.parts/start-menu/open.txt"] = "0"
+    delete Δ["https://pilot.parts/taskbar/tray/clock/date.txt"]
+    delete Δ["https://pilot.parts/taskbar/tray/clock/layout.css"]
+    const
+     a = document.createElement("a"),
+     json = JSON.stringify(Object.keys(Δ).sort().reduce((temp_obj, key) => { temp_obj[key] = Δ[key]; return temp_obj }, {})).replace(/","/g,"\",\n  \"").replace(/^{/s, "{\n  ").replace(/}$/s, "\n}"),
+     js = `var causality={},onfetch=(Ω=new Proxy({},new Proxy(${json},{get:(Δ,Υ)=>eval(Δ[V="https://core.parts/proxy/alpha.js"])})))["https://core.parts/file.js"], onmessage = Ω["https://core.parts/client-to-server.js"]`,
+     ourl = URL.createObjectURL(new Blob([js], { type: "text/javascript" }));
+     a.href = ourl
+     a.download = "everything.js"
+     document.body.appendChild(a)
+    a.click();
+     a.remove()
+     URL.revokeObjectURL(ourl);
+   }',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/?layout" => 'https://pilot.parts/taskbar/start-menu/save-computer-as/layout.css',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/?manifest" => 'https://pilot.parts/taskbar/start-menu/save-computer-as/manifest.uri',
+ "https://pilot.parts/taskbar/start-menu/save-computer-as/?onclick" => 'https://pilot.parts/taskbar/start-menu/save-computer-as/onclick.js',
+ "https://pilot.parts/taskbar/start-menu/save-computer/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::after {
+   content: "💽";
+  }',
+ "https://pilot.parts/taskbar/start-menu/save-computer/app-icon/?layout" => 'https://pilot.parts/taskbar/start-menu/save-computer/app-icon/layout.css',
+ "https://pilot.parts/taskbar/start-menu/save-computer/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Quick Save";
+  }',
+ "https://pilot.parts/taskbar/start-menu/save-computer/app-label/?layout" => 'https://pilot.parts/taskbar/start-menu/save-computer/app-label/layout.css',
+ "https://pilot.parts/taskbar/start-menu/save-computer/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0;
+   padding-right: 6px }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/taskbar/start-menu/save-computer/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/save-computer/app-icon/ https://pilot.parts/taskbar/start-menu/save-computer/app-label/',
+ "https://pilot.parts/taskbar/start-menu/save-computer/onclick.js" => '
+  () => {
+   Ω["https://pilot.parts/start-menu/open.txt"] = "0"
+   delete Δ["https://pilot.parts/taskbar/tray/clock/date.txt"]
+   delete Δ["https://pilot.parts/taskbar/tray/clock/layout.css"]
+   navigator.serviceWorker.controller.postMessage({ save: Δ });
+  }',
+ "https://pilot.parts/taskbar/start-menu/save-computer/?layout" => 'https://pilot.parts/taskbar/start-menu/save-computer/layout.css',
+ "https://pilot.parts/taskbar/start-menu/save-computer/?manifest" => 'https://pilot.parts/taskbar/start-menu/save-computer/manifest.uri',
+ "https://pilot.parts/taskbar/start-menu/save-computer/?onclick" => 'https://pilot.parts/taskbar/start-menu/save-computer/onclick.js',
+ "https://pilot.parts/taskbar/start-menu/?layout" => 'https://pilot.parts/taskbar/start-menu/layout.css',
+ "https://pilot.parts/taskbar/start-menu/?manifest" => 'https://pilot.parts/taskbar/start-menu/manifest.uri',
+ "https://pilot.parts/taskbar/tray/clock/date.txt?fx" => 'https://pilot.parts/taskbar/tray/clock/date/fx.uri',
+ "https://pilot.parts/taskbar/tray/clock/date.txt?constructor" => 'https://pilot.parts/taskbar/tray/clock/date.txt.c.js',
+ "https://pilot.parts/taskbar/tray/clock/date.txt.c.js" => 'return new Date().toLocaleString("en-US", { hour: "numeric", minute: "numeric", hourCycle: "h12" })',
+ "https://pilot.parts/taskbar/tray/clock/date/fx.uri" => 'https://pilot.parts/taskbar/tray/clock/layout.css',
+ "https://pilot.parts/taskbar/tray/clock/layout.css?date" => 'https://pilot.parts/taskbar/tray/clock/date.txt',
+ "https://pilot.parts/taskbar/tray/clock/layout.css?constructor" => 'https://pilot.parts/taskbar/tray/clock/layout.css.c.js',
+ "https://pilot.parts/taskbar/tray/clock/layout.css.c.js" => '
+  const minute = 1000 * 60, delay = minute - (Date.now() % minute);
+  setTimeout(()=>{
+   Ω[date.headerOf().href] = new Date().toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hourCycle: "h12"
+   })
+  }, delay + 5);
+  return `:host::after {
+   content: "${date}";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/taskbar/tray/clock/?layout" => 'https://pilot.parts/taskbar/tray/clock/layout.css',
+ "https://pilot.parts/taskbar/tray/layout.css" => ':host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   gap: 3px;
+   box-sizing: border-box;
+   height: 100%;
+   margin: 0;
+   user-select: none;
+   padding: 3px 4px 3px;
+   text-align: left;
+   background: #c3c3c3;
+   box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
+  }',
+ "https://pilot.parts/taskbar/tray/manifest.uri" => 'https://pilot.parts/taskbar/tray/factory-reset/ https://pilot.parts/taskbar/tray/fullscreen/ https://pilot.parts/taskbar/tray/clock/',
+ "https://pilot.parts/taskbar/tray/?layout" => 'https://pilot.parts/taskbar/tray/layout.css',
+ "https://pilot.parts/taskbar/tray/?manifest" => 'https://pilot.parts/taskbar/tray/manifest.uri',
+ "https://pilot.parts/taskbar/?layout" => 'https://pilot.parts/taskbar/layout.css',
+ "https://pilot.parts/taskbar/?manifest" => 'https://pilot.parts/taskbar/manifest.uri',
+ "https://pilot.parts/taskbar/?onpointerdown" => 'https://pilot.parts/taskbar/onpointerdown.js',
+ "https://pilot.parts/taskbar/onpointerdown.js?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/taskbar/onpointerdown.js?constructor" => 'https://pilot.parts/taskbar/onpointerdown.c.js',
+ "https://pilot.parts/taskbar/onpointerdown.c.js" => '
+  return `e => {
+   ${"" + selected !== "-1" ? `Ω["${selected.headerOf().href}"] = "-1"` : ``}
+  }`',
+ "https://pilot.parts/taskbar/tray/factory-reset/layout.css" => '
+  :host {
+   width: 16px;
+   height: 16px;
+   cursor: pointer;
+  }
+  :host::before {
+   content: "🧼";
+   font-size: 16px;
+   line-height: 16px;
+  }',
+ "https://pilot.parts/taskbar/tray/factory-reset/?layout" => 'https://pilot.parts/taskbar/tray/factory-reset/layout.css',
+ "https://pilot.parts/taskbar/tray/factory-reset/?onclick" => 'https://pilot.parts/taskbar/start-menu/restart-server/onclick.js',
+ "https://pilot.parts/taskbar/tray/fullscreen/layout.css" => '
+  :host {
+   width: 16px;
+   height: 16px;
+   cursor: pointer;
+  }
+  :host::before {
+   content: "⛶";
+   font-size: 16px;
+   line-height: 16px;
+  }',
+ "https://pilot.parts/taskbar/tray/fullscreen/onclick.js" => '()=>document.documentElement.requestFullscreen()',
+ "https://pilot.parts/taskbar/tray/fullscreen/?layout" => 'https://pilot.parts/taskbar/tray/fullscreen/layout.css',
+ "https://pilot.parts/taskbar/tray/fullscreen/?onclick" => 'https://pilot.parts/taskbar/tray/fullscreen/onclick.js',
+ "https://pilot.parts/tasks.uri" => 'https://pilot.parts/programs/welcome/task/',
+ "https://pilot.parts/tasks.uri?fx" => 'https://pilot.parts/tasks.fx.uri',
+ "https://pilot.parts/tasks.fx.uri" => 'https://pilot.parts/taskbar/manifest.uri https://pilot.parts/programs/locate/task/index.txt https://pilot.parts/programs/relate/task/index.txt https://pilot.parts/programs/debate/task/index.txt https://pilot.parts/programs/welcome/task/index.txt',
+ "https://pilot.parts/windows.uri" => 'https://pilot.parts/programs/welcome/window/',
+ "https://pilot.parts/windows.uri?fx" => 'https://pilot.parts/windows-fx.uri',
+ "https://pilot.parts/windows-fx.uri" => 'https://pilot.parts/manifest.uri',
+ "https://pilot.parts/icons/application-json-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/application-json-icon/layout.css?constructor" => 'https://pilot.parts/icons/application-json-icon/layout.css.c.js',
+ "https://pilot.parts/icons/application-json-icon/layout.css.c.js" => 'return layout([220, 220, 255], \'\u{1F4C4}\', \'json\', [1/7, 1/16, 1/8])',
+ "https://pilot.parts/icons/application-json-icon/?layout" => 'https://pilot.parts/icons/application-json-icon/layout.css',
+ "https://pilot.parts/icons/application-wasm-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/application-wasm-icon/layout.css?constructor" => 'https://pilot.parts/icons/application-wasm-icon/layout.css.c.js',
+ "https://pilot.parts/icons/application-wasm-icon/layout.css.c.js" => 'return layout([0, 0, 0, 0], \'\u{1F4E6}\')',
+ "https://pilot.parts/icons/application-wasm-icon/?layout" => 'https://pilot.parts/icons/application-wasm-icon/layout.css',
+ "https://pilot.parts/icons/folder-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: \'📁\';
+  }',
+ "https://pilot.parts/icons/folder-icon/?layout" => 'https://pilot.parts/icons/folder-icon/layout.css',
+ "https://pilot.parts/icons/protocol-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: \'⭄\';
+  }',
+ "https://pilot.parts/icons/protocol-icon/?layout" => 'https://pilot.parts/icons/protocol-icon/layout.css',
+ "https://pilot.parts/icons/image-png-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/image-png-icon/layout.css?constructor" => 'https://pilot.parts/icons/image-png-icon/layout.css.c.js',
+ "https://pilot.parts/icons/image-png-icon/layout.css.c.js" => 'return layout([255, 127, 0], \'\u{1F4C4}\', \'png\')',
+ "https://pilot.parts/icons/image-png-icon/?layout" => 'https://pilot.parts/icons/image-png-icon/layout.css',
+ "https://pilot.parts/icons/image-vnd-microsoft-icon-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/image-vnd-microsoft-icon-icon/layout.css?constructor" => 'https://pilot.parts/icons/image-vnd-microsoft-icon-icon/layout.css.c.js',
+ "https://pilot.parts/icons/image-vnd-microsoft-icon-icon/layout.css.c.js" => 'return layout([127, 127, 127, 0.25], \'\u{1F4C4}\', \'ico\', [0.1, 0.1, 0.1])',
+ "https://pilot.parts/icons/image-vnd-microsoft-icon-icon/?layout" => 'https://pilot.parts/icons/image-vnd-microsoft-icon-icon/layout.css',
+ "https://pilot.parts/icons/physical-drink-stopper-icon/?layout" => "https://pilot.parts/icons/physical-drink-stopper-icon/layout.css",
+ "https://pilot.parts/icons/physical-drink-stopper-icon/layout.css.c.js" => 'return layout([127, 127, 127, 0.25], \'🍾\', undefined, [0.1, 0.1, 0.1])',
+ "https://pilot.parts/icons/physical-drink-stopper-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/physical-drink-stopper-icon/layout.css?constructor" => 'https://pilot.parts/icons/physical-drink-stopper-icon/layout.css.c.js',
+ "https://pilot.parts/icons/physical-toy-icon/?layout" => "https://pilot.parts/icons/physical-toy-icon/layout.css",
+ "https://pilot.parts/icons/physical-toy-icon/layout.css.c.js" => 'return layout([255, 127, 127, 0.25], \'🎈\', undefined, [0.1, 0.1, 0.1])',
+ "https://pilot.parts/icons/physical-toy-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/physical-toy-icon/layout.css?constructor" => 'https://pilot.parts/icons/physical-toy-icon/layout.css.c.js',
+ "https://pilot.parts/icons/physical-car-part-icon/?layout" => "https://pilot.parts/icons/physical-car-part-icon/layout.css",
+ "https://pilot.parts/icons/physical-car-part-icon/layout.css.c.js" => 'return layout([255, 127, 127, 0.25], \'🚘\', undefined, [0.1, 0.1, 0.1])',
+ "https://pilot.parts/icons/physical-car-part-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/physical-car-part-icon/layout.css?constructor" => 'https://pilot.parts/icons/physical-car-part-icon/layout.css.c.js',
+ "https://pilot.parts/icons/physical-blemish-icon/?layout" => "https://pilot.parts/icons/physical-blemish-icon/layout.css",
+ "https://pilot.parts/icons/physical-blemish-icon/layout.css.c.js" => 'return layout([255, 127, 127, 0.25], \'🌋\', undefined, [0.1, 0.1, 0.1])',
+ "https://pilot.parts/icons/physical-blemish-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/physical-blemish-icon/layout.css?constructor" => 'https://pilot.parts/icons/physical-blemish-icon/layout.css.c.js',
+ "https://pilot.parts/icons/kireji-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: \'🔗\';
+  }',
+ "https://pilot.parts/icons/kireji-icon/?layout" => 'https://pilot.parts/icons/kireji-icon/layout.css',
+ "https://pilot.parts/icons/layout.js" => '
+  ([bgr, bgg, bgb, bga = 0.8], c, ext, [r = 0, g = 0, b = 0, a = 1] = []) => {
+   return `
+    :host {
+     --rgb-bg: rgba(${bgr}, ${bgg}, ${bgb}, ${bga});
+     --rgb: ${r}, ${g}, ${b};
+     --character: \'${c}\';
+     --size: 16px;
+     --unit: calc(var(--size) / 16);
+     color: rgba(var(--rgb), ${a});
+     position: relative;
+     width: var(--size);
+     height: var(--size);
+    }
+    :host::before,
+    :host::after {
+     border-radius: calc(var(--size) / 6);
+    }
+    :host::before {
+     content: var(--character);
+     font-size: var(--size);
+     line-height: var(--size);
+    }
+    :host::after {
+     box-shadow: 0 0 0 var(--unit) rgba(var(--rgb), ${a/2});
+     background: var(--rgb-bg);
+     position: absolute;
+     bottom: var(--unit);
+     right: 0;${ext ? `
+     content: \'${ext}\';` : ``}
+     font: 400 calc(var(--size) / 3) / calc(var(--size) / 3) monospace;
+     padding: var(--unit);
+    }
+   `
+  }',
+ "https://pilot.parts/icons/domain-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: \'🗄\';
+  }',
+ "https://pilot.parts/icons/domain-icon/?layout" => 'https://pilot.parts/icons/domain-icon/layout.css',
+ "https://pilot.parts/icons/text-css-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/text-css-icon/layout.css?constructor" => 'https://pilot.parts/icons/text-css-icon/layout.css.c.js',
+ "https://pilot.parts/icons/text-css-icon/layout.css.c.js" => 'return layout([0, 255, 255], \'\u{1F4C4}\', \'css\')',
+ "https://pilot.parts/icons/text-css-icon/?layout" => 'https://pilot.parts/icons/text-css-icon/layout.css',
+ "https://pilot.parts/icons/text-html-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/text-html-icon/layout.css?constructor" => 'https://pilot.parts/icons/text-html-icon/layout.css.c.js',
+ "https://pilot.parts/icons/text-html-icon/layout.css.c.js" => 'return layout([255, 255, 255], \'\u{1F4C4}\', \'html\')',
+ "https://pilot.parts/icons/text-html-icon/?layout" => 'https://pilot.parts/icons/text-html-icon/layout.css',
+ "https://pilot.parts/icons/text-javascript-icon/layout.css?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/text-javascript-icon/layout.css?constructor" => 'https://pilot.parts/icons/text-javascript-icon/layout.css.c.js',
+ "https://pilot.parts/icons/text-javascript-icon/layout.css.c.js" => 'return layout([255, 127, 127, 0.7], \'\u{1F4C4}\', \'js\', [0.4])',
+ "https://pilot.parts/icons/text-javascript-icon/?layout" => 'https://pilot.parts/icons/text-javascript-icon/layout.css',
+ "https://pilot.parts/icons/text-plain-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size) }
+  :host::before {
+   content: \'📄\';
+   font-size: var(--size);
+   line-height: var(--size)
+  }',
+ "https://pilot.parts/icons/text-plain-icon/?layout" => 'https://pilot.parts/icons/text-plain-icon/layout.css',
+ "https://pilot.parts/icons/text-uri-list-icon/layout.css" => '
+  :host {
+   --rgba: rgba(0, 0, 0, 0.8);
+   --character: \'📄\';
+   --size: 16px;
+   color: #ffff3f;
+   position: relative;
+   width: 16px;
+   height: 16px;
+  }
+  :host::before,
+  :host::after {
+   border-radius: calc(var(--size) / 6);
+  }
+  :host::before {
+   content: var(--character);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::after {
+   box-shadow: 0 0 0 calc(var(--size) / 16) #ffff3f;
+   background: var(--rgba);
+   position: absolute;
+   bottom: 0;
+   right: 0;
+   content: \'uri\';
+   font: 400 calc(var(--size) / 3) / calc(var(--size) / 3) monospace;
+   padding: calc(var(--size) / 16);
+  }',
+ "https://pilot.parts/icons/text-uri-list-icon/layout.cs?layout" => 'https://pilot.parts/icons/layout.js',
+ "https://pilot.parts/icons/text-uri-list-icon/layout.css?constructor" => 'https://pilot.parts/icons/text-uri-list-icon/layout.css.c.js',
+ "https://pilot.parts/icons/text-uri-list-icon/layout.css.c.js" => 'return layout([0, 0, 0], "\u{1F4C4}", "uri", [1, 1, 0.3])',
+ "https://pilot.parts/icons/text-uri-list-icon/?layout" => 'https://pilot.parts/icons/text-uri-list-icon/layout.css',
+ "https://pilot.parts/letters/capital-f/layout.css" => '
+  :host::before {
+   content: "F"
+  }',
+ "https://pilot.parts/letters/capital-f/?layout" => 'https://pilot.parts/letters/capital-f/layout.css',
+ "https://pilot.parts/letters/lowercase-e/layout.css" => ':host::before {
+   content: "e"
+  }',
+ "https://pilot.parts/letters/lowercase-e/?layout" => 'https://pilot.parts/letters/lowercase-e/layout.css',
+ "https://pilot.parts/letters/lowercase-i/layout.css" => ':host::before {
+   content: "i"
+  }',
+ "https://pilot.parts/letters/lowercase-i/?layout" => 'https://pilot.parts/letters/lowercase-i/layout.css',
+ "https://pilot.parts/letters/lowercase-l/layout.css" => ':host::before {
+   content: "l"
+  }',
+ "https://pilot.parts/letters/lowercase-l/?layout" => 'https://pilot.parts/letters/lowercase-l/layout.css',
+ "https://pilot.parts/start-menu/open-fx.uri" => 'https://pilot.parts/taskbar/start-button/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/manifest.uri https://pilot.parts/taskbar/start-button/onpointerdown.js',
+ "https://pilot.parts/start-menu/open.txt" => '0',
+ "https://pilot.parts/start-menu/open.txt?fx" => 'https://pilot.parts/start-menu/open-fx.uri',
+ "https://pilot.parts/start-menu/open.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/start-menu/open.txt?constructor" => 'https://pilot.parts/start-menu/open.txt.c.js',
+ "https://pilot.parts/start-menu/open.txt.c.js" => 'return ("" + selected) ==="0" ? "1" : "0"',/*
+Locate */
+ "https://pilot.parts/programs/locate/task/datum.txt" => 'https://pilot.parts/programs/locate/task/',
+ "https://pilot.parts/programs/locate/task/index.txt?datum" => 'https://pilot.parts/programs/locate/task/datum.txt',
+ "https://pilot.parts/programs/locate/task/index.txt?fx" => 'https://pilot.parts/programs/locate/task/index/fx.uri',
+ "https://pilot.parts/programs/locate/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/programs/locate/task/index.txt?constructor" => 'https://pilot.parts/programs/locate/task/index.txt.c.js',
+ "https://pilot.parts/programs/locate/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/locate/task/index/fx.uri" => 'https://pilot.parts/programs/locate/window/active.txt',
+ "https://pilot.parts/programs/locate/task/layout.css?open" => 'https://pilot.parts/programs/locate/window/active.txt',
+ "https://pilot.parts/programs/locate/task/layout.css?constructor" => 'https://pilot.parts/programs/locate/task/layout.css.c.js',
+ "https://pilot.parts/programs/locate/task/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   height: 100%;
+   margin: 0;
+   width: 160px;
+   display: flex;
+   flex-flow: row nowrap;
+   gap: 3px;
+   border: none;${("" + open) === "1" ? `
+   font: bold 11px sans-serif;` : ""}
+   box-sizing: border-box;
+   padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
+   text-align: left;
+   box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
+  }
+  :host(:focus)::after {
+   border: 1px dotted black;
+   content: "";
+   position: absolute;
+   margin: 3px;
+   left: 0;
+   right: 0;
+   top: 0;
+   bottom: 0;
+   pointer-events: none;
+  }${("" + open) === "1" ? `
+  :host > * {
+   z-index: 3
+  }
+  :host::before {
+   content: "";
+   position: absolute;
+   margin: 2px;
+   border-top: 1px solid white;
+   left: 0;
+   right: 0;
+   top: 0;
+   bottom: 0;
+   background-image:
+    linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
+    linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
+   background-size: 2px 2px;background-position: 0 0, 1px 1px;
+  }` : ``}
+  app-icon {
+   width: 16px;
+   height: 16px;
+  }`',
+ "https://pilot.parts/programs/locate/task/manifest.uri" => 'https://pilot.parts/icons/folder-icon/ https://pilot.parts/programs/locate/app-label/',
+ "https://pilot.parts/programs/locate/task/manifest.uri?open" => 'https://pilot.parts/programs/locate/window/active.txt',
+ "https://pilot.parts/programs/locate/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/locate/window/minimized.txt',
+ "https://pilot.parts/programs/locate/task/onpointerdown.js?active" => 'https://pilot.parts/programs/locate/window/active.txt',
+ "https://pilot.parts/programs/locate/task/onpointerdown.js?task" => 'https://pilot.parts/programs/locate/task/',
+ "https://pilot.parts/programs/locate/task/onpointerdown.js?window" => 'https://pilot.parts/programs/locate/window/',
+ "https://pilot.parts/programs/locate/task/onpointerdown.js?core" => 'https://pilot.parts/programs/relate/task/onpointerdown.js',
+ "https://pilot.parts/programs/locate/task/open/fx.uri" => 'https://pilot.parts/programs/locate/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/locate/window/layout.css https://pilot.parts/programs/locate/task/onpointerdown.js',
+ "https://pilot.parts/programs/locate/task/?layout" => 'https://pilot.parts/programs/locate/task/layout.css',
+ "https://pilot.parts/programs/locate/task/?manifest" => 'https://pilot.parts/programs/locate/task/manifest.uri',
+ "https://pilot.parts/programs/locate/task/?onpointerdown" => 'https://pilot.parts/programs/locate/task/onpointerdown.js',
+ "https://pilot.parts/programs/locate/app-label/layout.css?address" => 'https://pilot.parts/programs/locate/window/address.uri',
+ "https://pilot.parts/programs/locate/app-label/layout.css?constructor" => 'https://pilot.parts/programs/locate/app-label/layout.css.c.js',
+ "https://pilot.parts/programs/locate/app-label/layout.css.c.js" => 'return `
+  :host {
+   margin: 0;
+   height: 16px;
+   vertical-align: center;
+   text-overflow: ellipsis;
+   overflow: clip;
+  }
+  :host::after {
+   content: "Locate - ${address}";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/programs/locate/app-label/?layout" => 'https://pilot.parts/programs/locate/app-label/layout.css',
+ "https://pilot.parts/programs/locate/start-menu-item/app-label/layout.css" => ':host::after {
+    height: 24px;
+    content: "Locate";
+   }',
+ "https://pilot.parts/programs/locate/start-menu-item/app-label/?layout" => 'https://pilot.parts/programs/locate/start-menu-item/app-label/layout.css',
+ "https://pilot.parts/programs/locate/start-menu-item/layout.css" => '
+   :host {
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 4px 0 }
+   :host(:hover) {
+    background: #00007f;
+    color: white }
+   folder-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+    --size: 24px;
+   }',
+ "https://pilot.parts/programs/locate/start-menu-item/manifest.uri" => 'https://pilot.parts/icons/folder-icon/ https://pilot.parts/programs/locate/start-menu-item/app-label/',
+ "https://pilot.parts/programs/locate/start-menu-item/?layout" => 'https://pilot.parts/programs/locate/start-menu-item/layout.css',
+ "https://pilot.parts/programs/locate/start-menu-item/?manifest" => 'https://pilot.parts/programs/locate/start-menu-item/manifest.uri',
+ "https://pilot.parts/programs/locate/start-menu-item/?onclick" => 'https://pilot.parts/programs/locate/task/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/active.txt" => '0',
+ "https://pilot.parts/programs/locate/window/active.txt?fx" => 'https://pilot.parts/programs/locate/task/open/fx.uri',
+ "https://pilot.parts/programs/locate/window/active.txt?index" => 'https://pilot.parts/programs/locate/task/index.txt',
+ "https://pilot.parts/programs/locate/window/active.txt?minimized" => 'https://pilot.parts/programs/locate/window/minimized.txt',
+ "https://pilot.parts/programs/locate/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/programs/locate/window/active.txt?constructor" => 'https://pilot.parts/programs/locate/window/active.txt.c.js',
+ "https://pilot.parts/programs/locate/window/active.txt.c.js" => 'return ("" + minimized) === "1" ? "0" : ("" + selected) === ("" + index) ? "1" : "0"',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/locate/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/down.txt" => '0',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/locate/window/controls/exit-button/down-fx.uri',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/controls/exit-button/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/layout.css.c.js" => 'return `
+    :host {
+     position: relative;
+     width: 16px;
+     height: 14px;
+     background: #c3c3c3;
+     margin-left: 2px;
+     box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+    }
+    :host::before, :host::after {
+     --color: black;
+     content: "";
+     display: block;
+     position: absolute;
+     width: 8px;
+     height: 7px;
+     left: 4px;
+     top: 3px;
+     background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%);
+    }
+    :host(:hover)::before {
+     --color: blue
+    }`',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/locate/window/',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/locate/task/',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/exit-button/release.js\'
+    }',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt\'] = \'0\'
+    }',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js',
+ "https://pilot.parts/programs/locate/window/controls/exit-button/?onpointerdown" => 'https://pilot.parts/programs/locate/window/controls/exit-button/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/down-fx.uri" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt" => '0',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt?fx" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/down-fx.uri',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css?down" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css.c.js" => 'return `:host {
+    position: relative;
+    width: 16px;
+    height: 14px;
+    background: #c3c3c3;
+    box-shadow: ${(\'\'+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+   }
+   :host::before {
+    --color: black;
+    display: block;
+    position: absolute;
+    content: \'\';
+    width: 9px;
+    height: 9px;
+    top: 2px;
+    left: 3px;
+    box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color)
+   }
+   :host(:hover)::before {
+    --color: blue }`',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/manifest.uri" => '',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/onclick.js" => '
+   () => {
+    Ω[\'https://pilot.parts/programs/locate/window/maximized.txt\'] = \'1\'
+   }',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/maximize-button/release.js\'
+   }',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt\'] = \'0\'
+   }',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/?manifest" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/manifest.uri',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/onclick.js',
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/?onpointerdown" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/down-fx.uri" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt" => '0',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/down-fx.uri',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 2px;
+   background: var(--color);
+   top: 9px;
+   left: 4px }
+  :host(:hover)::before {
+   --color: blue
+  }`',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/locate/window/minimized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/minimize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/onclick.js',
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/?onpointerdown" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/down-fx.uri" => 'https://pilot.parts/programs/locate/window/controls/restore-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/down.txt" => '0',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/down.txt?fx" => 'https://pilot.parts/programs/locate/window/controls/restore-button/down-fx.uri',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/layout.css?down" => 'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/controls/restore-button/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before, :host::after {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 6px;
+   top: 5px;
+   left: 3px;
+   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color);
+   background: #c3c3c3 }
+  :host::before {
+   top: 2px;
+   left: 5px }
+  :host(:hover)::before, :host(:hover)::after {
+   --color: blue }`',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/onclick.js" => '()=>Ω[\'https://pilot.parts/programs/locate/window/maximized.txt\'] = \'0\'',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/restore-button/release.js\'
+  }',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/restore-button/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/restore-button/onclick.js',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/?onpointerdown" => 'https://pilot.parts/programs/locate/window/controls/restore-button/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/controls/layout.css" => '
+  :host {
+   display: flex;
+   flex-flow: row nowrap
+  }',
+ "https://pilot.parts/programs/locate/window/controls/manifest.uri?maximized" => 'https://pilot.parts/programs/locate/window/maximized.txt',
+ "https://pilot.parts/programs/locate/window/controls/manifest.uri?constructor" => 'https://pilot.parts/programs/locate/window/controls/manifest.uri.c.js',
+ "https://pilot.parts/programs/locate/window/controls/manifest.uri.c.js" => 'return `https://pilot.parts/programs/locate/window/controls/minimize-button/ https://pilot.parts/programs/locate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/ https://pilot.parts/programs/locate/window/controls/exit-button/`',
+ "https://pilot.parts/programs/locate/window/controls/?layout" => 'https://pilot.parts/programs/locate/window/controls/layout.css',
+ "https://pilot.parts/programs/locate/window/controls/?manifest" => 'https://pilot.parts/programs/locate/window/controls/manifest.uri',
+ "https://pilot.parts/programs/locate/window/layout.css?active" => 'https://pilot.parts/programs/locate/window/active.txt',
+ "https://pilot.parts/programs/locate/window/layout.css?maximized" => 'https://pilot.parts/programs/locate/window/maximized.txt',
+ "https://pilot.parts/programs/locate/window/layout.css?position" => 'https://pilot.parts/programs/locate/window/position.json',
+ "https://pilot.parts/programs/locate/window/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/layout.css.c.js" => '
+  const
+   common = `
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2px;
+    background: #c3c3c3;
+    box-sizing: border-box;`,
+   titlebar = ("" + active) === "1" ? `title-bar {
+    background: rgb(0, 0, 163);
+   }` : ``;     
+  if (("" + maximized) === "1") {
+   return `
+    :host {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 28px;
+     padding: 2px;
+     ${common};
+    }
+    ${titlebar}
+   `
+  } else {
+   const { x = 0, y = 0, w = 0, h = 0 } = JSON.parse("" + position);
+   return `
+    :host {
+     width: ${w}px;
+     height: ${h}px;
+     left: ${x}px;
+     top: ${y}px;
+     min-height: fit-content;
+     padding: 4px;
+     background: #c3c3c3;
+     box-shadow:
+      inset -1px -1px black,
+      inset 1px 1px #c3c3c3,
+      inset -2px -2px #7a7a7a,
+      inset 2px 2px white,
+      5px 7px 3px #0002;
+     ${common};
+    }
+    ${titlebar}
+   `
+  }',
+ "https://pilot.parts/programs/locate/window/manifest.uri?title" => 'https://pilot.parts/programs/locate/window/title-bar/',
+ "https://pilot.parts/programs/locate/window/manifest.uri?tools" => 'https://pilot.parts/programs/locate/window/tool-bar/',
+ "https://pilot.parts/programs/locate/window/manifest.uri?explorer" => 'https://pilot.parts/programs/locate/window/explorer-view/',
+ "https://pilot.parts/programs/locate/window/manifest.uri?status" => 'https://pilot.parts/programs/locate/window/status/',
+ "https://pilot.parts/programs/locate/window/manifest.uri?transform_path" => 'https://pilot.parts/programs/locate/window/transform/',
+ "https://pilot.parts/programs/locate/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/locate/window/manifest.uri?position" => 'https://pilot.parts/programs/locate/window/position.json',
+ "https://pilot.parts/programs/locate/window/manifest.uri?constructor" => 'https://pilot.parts/programs/locate/window/manifest.uri.c.js',
+ "https://pilot.parts/programs/locate/window/manifest.uri.c.js" => <<<JS
+  const [title_url, tools_url, explorer_url, status_url, transform_url, position_url] = [title, tools, explorer, status, transform_path, position].map(x => x.headerOf().href)
+  const transform_urls = transform(transform_url, position_url, "nesw", title_url);
+  return [title_url, tools_url, explorer_url, status_url, transform_urls].join(" ")
+  JS,
+ "https://pilot.parts/programs/locate/window/maximized.txt" => '0',
+ "https://pilot.parts/programs/locate/window/maximized.txt?fx" => 'https://pilot.parts/programs/locate/window/maximized/fx.uri',
+ "https://pilot.parts/programs/locate/window/maximized/fx.uri" => 'https://pilot.parts/programs/locate/window/layout.css https://pilot.parts/programs/locate/window/controls/manifest.uri https://pilot.parts/programs/locate/window/title-bar/ondblclick.js',
+ "https://pilot.parts/programs/locate/window/minimized.txt" => '0',
+ "https://pilot.parts/programs/locate/window/minimized.txt?fx" => 'https://pilot.parts/programs/locate/window/minimized/fx.uri',
+ "https://pilot.parts/programs/locate/window/minimized/fx.uri" => 'https://pilot.parts/manifest.uri https://pilot.parts/programs/locate/window/active.txt https://pilot.parts/programs/locate/task/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/onfocus.js?active" => 'https://pilot.parts/programs/locate/window/active.txt',
+ "https://pilot.parts/programs/locate/window/onfocus.js?window" => 'https://pilot.parts/programs/locate/window/',
+ "https://pilot.parts/programs/locate/window/onfocus.js?core" => 'https://pilot.parts/programs/relate/window/onfocus.js',
+ "https://pilot.parts/programs/locate/window/position.json" => '
+  {
+   "x": 136, "y": 118, "w": 412, "h": 245,
+   "range": {
+    "x": [-64, 512],
+    "y": [-2, 256],
+    "w": [96, 256],
+    "h": [64, 128]
+   }
+  }',
+ "https://pilot.parts/programs/locate/window/position.json?fx" => 'https://pilot.parts/programs/locate/window/position/fx.uri',
+ "https://pilot.parts/programs/locate/window/position/fx.uri" => 'https://pilot.parts/programs/locate/window/layout.css',
+ "https://pilot.parts/programs/locate/window/sort-order-fx.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri https://pilot.parts/programs/locate/window/explorer-view/header/manifest-fx.uri',
+ "https://pilot.parts/programs/locate/window/sort_order.json" => '
+  {
+   "size": false,
+   "type": true,
+   "name": false
+  }',
+ "https://pilot.parts/programs/locate/window/sort_order.json?fx" => 'https://pilot.parts/programs/locate/window/sort-order-fx.uri',
+ "https://pilot.parts/programs/locate/window/title-bar/layout.css" => '
+  :host {
+   background: #7f7f7f;
+   color: white;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   gap: 3px;
+   height: 18px;
+   padding: 0px 2px;
+   box-sizing: border-box;
+  }
+  app-icon {
+   width: 16px;
+   height: 16px
+  }',
+ "https://pilot.parts/programs/locate/window/title-bar/manifest.uri" => 'https://pilot.parts/icons/folder-icon/ https://pilot.parts/programs/locate/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/locate/window/controls/',
+ "https://pilot.parts/programs/locate/window/title-bar/ondblclick.js?maximized" => 'https://pilot.parts/programs/locate/window/maximized.txt',
+ "https://pilot.parts/programs/locate/window/title-bar/ondblclick.js?constructor" => 'https://pilot.parts/programs/locate/window/title-bar/ondblclick.c.js',
+ "https://pilot.parts/programs/locate/window/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://pilot.parts/programs/locate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
+ "https://pilot.parts/programs/locate/window/title-bar/?layout" => 'https://pilot.parts/programs/locate/window/title-bar/layout.css',
+ "https://pilot.parts/programs/locate/window/title-bar/?manifest" => 'https://pilot.parts/programs/locate/window/title-bar/manifest.uri',
+ "https://pilot.parts/programs/locate/window/title-bar/?ondblclick" => 'https://pilot.parts/programs/locate/window/title-bar/ondblclick.js',
+ "https://pilot.parts/programs/locate/window/?layout" => 'https://pilot.parts/programs/locate/window/layout.css',
+ "https://pilot.parts/programs/locate/window/?manifest" => 'https://pilot.parts/programs/locate/window/manifest.uri',
+ "https://pilot.parts/programs/locate/window/?onfocus" => 'https://pilot.parts/programs/locate/window/onfocus.js',
+
+ "https://pilot.parts/programs/locate/window/address-fx.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri https://pilot.parts/programs/locate/app-label/layout.css',
+ "https://pilot.parts/programs/locate/window/address.uri" => 'https://kireji.app/demo/',
+ "https://pilot.parts/programs/locate/window/address.uri?fx" => 'https://pilot.parts/programs/locate/window/address-fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/column-fx.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/header/layout.css https://pilot.parts/programs/locate/window/explorer-view/files/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/layout.css?name_width" => 'https://pilot.parts/programs/locate/window/explorer-view/header/name-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/layout.css?type_width" => 'https://pilot.parts/programs/locate/window/explorer-view/header/type-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/layout.css?size_width" => 'https://pilot.parts/programs/locate/window/explorer-view/header/size-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/explorer-view/files/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   display: grid;
+   grid-template-columns: ${JSON.parse(""+name_width).w}px ${JSON.parse("" + type_width).w}px ${JSON.parse("" + size_width).w}px;
+   grid-auto-rows: 18px;
+   flex: 1 1;
+   overflow: auto;
+  }`',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?address" => 'https://pilot.parts/programs/locate/window/address.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?cell" => 'https://core.parts/components/cell/construct.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?click" => 'https://core.parts/components/click/construct.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?fx" => 'https://pilot.parts/programs/locate/window/status/fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?header_json" => 'https://pilot.parts/programs/locate/window/explorer-view/header/list.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?show_kireji" => 'https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?label_css" => 'https://pilot.parts/programs/locate/window/explorer-view/label_css.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/label_css.js" => 'x => `:host { overflow: clip; text-overflow: ellipsis; line-height: 18px } :host::before { content: "${x}" }`',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?item_layout" => 'https://pilot.parts/programs/locate/window/explorer-view/item_layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/item_layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 2px 0;
+   overflow: clip;
+   box-sizing: border-box;
+   padding-right: 6px;
+  }
+  :host>:first-child {
+   --size: 16px;
+   margin-right: 4px
+  }
+  :host(:focus) {
+   background: silver;
+   width: min-content;
+   background: #00007f;
+   color: white;
+   outline: 1px dotted black;
+  }',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?sort_order" => 'https://pilot.parts/programs/locate/window/sort_order.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri?constructor" => 'https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri.c.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri.c.js" => '
+  const
+   browse_url = "" + address, icon_urlbase = "https://pilot.parts/icons/", fileurlbase = υ.replace(/\/manifest.uri$/, "/file"), file_list = [], url_list = [], O = JSON.parse(sort_order), K = Object.keys(O), header = JSON.parse(header_json),
+   file_urls = Object.keys(Δ).filter(url => (url !== browse_url) && url.startsWith(browse_url)).map(x => x.replace(browse_url, "").includes("/") ? x.slice(0, browse_url.length + x.replace(browse_url, "").indexOf("/") + 1) : x);
+  file_urls.push(...file_urls.filter(x => x.includes("?") && x.split("?")[0] !== browse_url).map(x =>x.split("?")[0]));
+  const filenames = [...new Set(file_urls)].map(url => [url, url.replace(browse_url, "")])
+  let kireji_count = 0, folder_count = 0, file_count = 0;
+  for (const [url, name, i] of filenames) {
+   if (name.includes("?") && ("" + show_kireji === "0")) continue;
+   const
+    proxy = Ω[url],
+    groups = proxy.headerOf().groups,
+    row_type = url.match(/\?[\w\d_$]+$/)
+    ? (kireji_count++, "kireji") : url.endsWith("/")
+    ? (folder_count++, url.match(/[^:]\/$/)
+       ? url.match(/^https:\/\/[\w\d]+\.[\w\d]{2,}\/$/)
+       ? "domain" : "folder" :
+         "protocol" )
+    : (file_count++, groups.type),
+    is_index = ["folder", "domain", "protocol"].includes(row_type),
+    row_data = {
+     ...groups,
+     size: groups.size,
+     entry_size: groups.entry_size,
+     name,
+     url,
+     manifest: [],
+     type: row_type,
+     size_label: is_index ? "--" : groups.size + " byte" + (groups.size === 1 ? "" : "s")
+    },
+    item_url = fileurlbase + hash(url) + "-",
+    label_url = item_url + "app-label/",
+    icontag = row_data.type.replace(/[^a-zA-Z0-9]+/g, "-") + "-icon",
+    icon_url = icon_urlbase + icontag + "/",
+    item_manifest = icon_url + " " + label_url,
+    focus_item_url = item_url + "onfocus.js",
+    open_item_url = item_url + "open.js";
+   
+   Ω[focus_item_url] = `() => { [...nodePool["${item_url + "name/"}"]].find(x => x.isConnected).focus() }`
+   Ω[open_item_url] = `() => { ${is_index ? `Ω["https://pilot.parts/programs/locate/window/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}"` : `
+    Ω["https://pilot.parts/programs/relate/window/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}";
+    Ω["https://pilot.parts/programs/relate/task/onpointerdown.js"]();
+    [...nodePool["https://pilot.parts/programs/relate/window/"]].find(x => x.isConnected).focus()
+   `} }`
+   for (const key in header) {
+    const keyurl = item_url + key + "/";
+    Ω[keyurl + "?onfocus"] = focus_item_url
+    row_data.manifest.push(keyurl)
+    if (key === "name") {
+     cell(label_url, label_css(["folder", "domain"].includes(row_data.type) ? name.slice(0, -1) : name))
+     cell(keyurl, ""+item_layout, item_manifest)
+     Ω[keyurl + "?oncontextmenu"] = keyurl + "oncontextmenu.js";
+     Ω[keyurl + "oncontextmenu.js"] = `({ clientX: x, clientY: y }) =>{ Ω["https://pilot.parts/context-menu/position.json"] = JSON.stringify({ x, y }); Ω["https://pilot.parts/context-menu/open.txt"] = "1" }`
+    } else {
+     cell(keyurl, label_css(row_data[key + (key === "size" ? "_label" : "")]))
+    }
+    click(keyurl, undefined, open_item_url)
+   }
+   file_list.push(row_data)
+  }
+  Ω["https://pilot.parts/programs/locate/window/status/file_count.txt"] = file_count
+  Ω["https://pilot.parts/programs/locate/window/status/folder_count.txt"] = folder_count
+  Ω["https://pilot.parts/programs/locate/window/status/kireji_count.txt"] = kireji_count
+  file_list.sort((a, b) => {
+   const c = (((a[K[0]] > b[K[0]]) === O[K[0]]) ? 1 : (a[K[0]] === b[K[0]] ? (((a[K[1]] > b[K[1]]) === O[K[1]]) ? 1 : (a[K[1]] === b[K[1]] ? (((a[K[2]] > b[K[2]]) === O[K[2]]) ? 1 : (a[K[2]] === b[K[2]] ? 0 : -1)) : -1)) : -1))
+   return c;
+  })
+  url_list.push(...file_list.map(({ manifest }) => manifest).flat())
+  return url_list.join(" ")',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/files/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/files/?manifest" => 'https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/layout.css?name_width" => 'https://pilot.parts/programs/locate/window/explorer-view/header/name-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/layout.css?type_width" => 'https://pilot.parts/programs/locate/window/explorer-view/header/type-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/layout.css?size_width" => 'https://pilot.parts/programs/locate/window/explorer-view/header/size-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/explorer-view/header/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/layout.css.c.js" => 'return `:host {
+   display: grid;
+   width: 100%;
+   grid-template-columns: ${JSON.parse(""+name_width).w}px ${JSON.parse("" + type_width).w}px ${JSON.parse("" + size_width).w}px 1fr;
+  }`',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri?fx" => 'https://pilot.parts/programs/locate/window/explorer-view/header/manifest-fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest-fx.uri?sort_order" => 'https://pilot.parts/programs/locate/window/sort_order.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest-fx.uri?constructor" => 'https://pilot.parts/programs/locate/window/explorer-view/header/manifest-fx.uri.c.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest-fx.uri.c.js" => 'return Object.keys(JSON.parse(""+sort_order)).map(key => `https://pilot.parts/programs/locate/window/explorer-view/header/${key}-button/layout.css`).join(" ")',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri?headers" => 'https://pilot.parts/programs/locate/window/explorer-view/header/list.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri?item_layout" => 'https://pilot.parts/programs/locate/window/explorer-view/header/item_layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/item_layout.css" => '
+  :host {
+   position: relative;
+   width: 100%;
+   text-overflow: ellipsis;
+   overflow: clip;
+   white-space: nowrap;
+   line-height: 18px;
+  }
+  :host::before {
+   vertical-align: center;
+   margin-left: 6px;
+   width: calc(100% - 22px);
+  }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri?sort_order" => 'https://pilot.parts/programs/locate/window/sort_order.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri?constructor" => 'https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri.c.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri.c.js" => '
+  const header_obj = JSON.parse("" + headers), urls = []
+  const string_order = "" + sort_order, my_order = JSON.parse(string_order), first_key = Object.keys(my_order)[0], first_dir = my_order[first_key];
+  Object.keys(header_obj).forEach((key, i, arr) => {
+   button(
+    urls[i] = "https://pilot.parts/programs/locate/window/explorer-view/header/" + key + "-button/",
+    `${item_layout}
+    :host::before {
+     content: "${header_obj[key]}";
+    }${first_key === key ? `
+    :host::after {
+     --size: 8px;
+     position: absolute;
+     right: 5px;
+     top: 5px;
+     width: var(--size);
+     height: var(--size);
+     content: "${ first_dir ? "▼" : "▲" }";
+     font-size: var(--size);
+     line-height: var(--size);
+     text-align: center;
+     vertical-align: center;
+    }`: ``}`,
+    `${urls[i]}resize/`,
+    `() => {
+     let order = ${string_order};
+     const
+      keys = Object.keys(order),
+      key = "${key}",
+      keyplace = keys.indexOf(key);
+     if (keyplace !== 0) {
+      keys.splice(keyplace, 1);
+      keys.unshift(key);
+      order = keys.reduce((o, k) => (o[k]=order[k],o), {})
+     }
+     order[key] = (keyplace !== 0) || !order[key];
+     Ω["${sort_order.headerOf().href}"] = JSON.stringify(order)
+    }`
+   )
+  })
+  urls.push("https://pilot.parts/programs/locate/window/explorer-view/header/filler/")
+  return urls.join(" ")',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/name-button/position.json" => '{ "w": 128, "range": { "w": [0] } }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/name-button/position.json?fx" => 'https://pilot.parts/programs/locate/window/explorer-view/column-fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/name-button/resize/?core" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/name-button/resize/?onpointerdown" => 'https://pilot.parts/programs/locate/window/explorer-view/header/name-button/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/name-button/resize/onpointerdown.js?core" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/name-button/resize/onpointerdown.js?position" => 'https://pilot.parts/programs/locate/window/explorer-view/header/name-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/type-button/position.json" => '{ "w": 64, "range": { "w": [0] } }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/type-button/position.json?fx" => 'https://pilot.parts/programs/locate/window/explorer-view/column-fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/type-button/resize/?core" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/type-button/resize/?onpointerdown" => 'https://pilot.parts/programs/locate/window/explorer-view/header/type-button/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/type-button/resize/onpointerdown.js?core" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/type-button/resize/onpointerdown.js?position" => 'https://pilot.parts/programs/locate/window/explorer-view/header/type-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/size-button/position.json" => '{ "w": 96, "range": { "w": [0] } }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/size-button/position.json?fx" => 'https://pilot.parts/programs/locate/window/explorer-view/column-fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/size-button/resize/?core" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/size-button/resize/?onpointerdown" => 'https://pilot.parts/programs/locate/window/explorer-view/header/size-button/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/size-button/resize/onpointerdown.js?core" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/size-button/resize/onpointerdown.js?position" => 'https://pilot.parts/programs/locate/window/explorer-view/header/size-button/position.json',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/filler/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/header/filler/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/filler/layout.css" => ':host { background: #c3c3c3; box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/onpointerdown.js?mode" => 'https://core.parts/behaviors/resize/right-.txt',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/onpointerdown.js?stop_propagation" => 'https://core.parts/const/one.txt',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/onclick.js" => 'e => { e.stopPropagation() }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/?onclick" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/onclick.js',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/header/resize/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/resize/layout.css" => '
+  :host {
+   z-index: 1;
+   position: absolute;
+   right: -4px;
+   width: 8px;
+   cursor: col-resize;
+   top: 0;
+   bottom: 0;
+  }',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/header/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/?manifest" => 'https://pilot.parts/programs/locate/window/explorer-view/header/manifest.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/header/list.json" => '{"name":"Name","type":"Type","size":"Size"}',
+ "https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt" => '0',
+ "https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt?fx" => 'https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt.fx.uri',
+ "https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt.fx.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri https://pilot.parts/programs/locate/window/status/layout.css https://pilot.parts/programs/locate/window/tool-bar/manifest.uri https://pilot.parts/programs/locate/window/tool-bar/toggle-kireji/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/layout.css" => '
+  :host {
+   position: relative;
+   flex: 1 1;
+   box-shadow: -0.5px -0.5px 0 0.5px black, 0 0 0 1px #dbdbdb, -0.5px -0.5px 0 1.5px #7a7a7a, 0 0 0 2px white;
+   background: white;
+   margin: 2px;
+   display: grid;
+   grid-template-rows: 18px 1fr;
+   overflow: clip;
+   height: 100%;
+  }',
+ "https://pilot.parts/programs/locate/window/explorer-view/manifest.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/header/ https://pilot.parts/programs/locate/window/explorer-view/files/',
+ "https://pilot.parts/programs/locate/window/explorer-view/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
+ "https://pilot.parts/programs/locate/window/explorer-view/?manifest" => 'https://pilot.parts/programs/locate/window/explorer-view/manifest.uri',
+
+ "https://pilot.parts/programs/locate/window/tool-bar/layout.css" => '
+  :host {
+   height: 18px;
+   display: flex;
+   flex-flow: row nowrap;
+   gap: 4px;
+   align-items: center;
+   padding: 2px;
+  }
+  :host > * {
+   box-shadow:
+  }',
+ "https://pilot.parts/programs/locate/window/tool-bar/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
+ "https://pilot.parts/programs/locate/window/tool-bar/manifest.uri?show_kireji" => 'https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt',
+ "https://pilot.parts/programs/locate/window/tool-bar/manifest.uri?constructor" => 'https://pilot.parts/programs/locate/window/tool-bar/manifest.uri.c.js',
+ "https://pilot.parts/programs/locate/window/tool-bar/manifest.uri.c.js" => '
+  const
+   common_css = ":host { cursor: pointer; --size: 16px; min-width: calc(var(--size) + 4px); padding: 2px; height: calc(var(--size) + 4px); font-size: var(--size); line-height: var(--size); display: flex; flex-flow: row nowrap } :host::before { content: \'\' } :host::after { padding: 0 2px; font-size: 11px }",
+   common_url = "https://pilot.parts/programs/locate/window/tool-bar/";
+  return [[
+   common_url + "go-up/",
+   common_css + ":host::before { content: \'📁\' } :host::after { content: \'Enclosing Folder\' }",
+   "",
+   `() => { const url = ("" + Ω["https://pilot.parts/programs/locate/window/address.uri"]).match(${/^.*?(?=[^/]*\/*$)/})[0]; Ω["https://pilot.parts/programs/locate/window/address.uri"] = url }`,
+  ],[
+   common_url + "toggle-kireji/",
+   common_css + `:host::before { content: \'🔗\' } :host::after { content: \'${("" + show_kireji) === "0" ? "Show" : "Hide"} Kireji\' }`,
+   "",
+   `() => { Ω["https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt"] = (Ω["https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt"].toPrimitive() === "1") ? "0" : "1" }`,
+  ]].map($ => { button(...$); return $[0] }).join(" ")',
+ "https://pilot.parts/programs/locate/window/tool-bar/?layout" => 'https://pilot.parts/programs/locate/window/tool-bar/layout.css',
+ "https://pilot.parts/programs/locate/window/tool-bar/?manifest" => 'https://pilot.parts/programs/locate/window/tool-bar/manifest.uri',
+ "https://pilot.parts/programs/locate/window/status/layout.css?file_count" => 'https://pilot.parts/programs/locate/window/status/file_count.txt',
+ "https://pilot.parts/programs/locate/window/status/layout.css?folder_count" => 'https://pilot.parts/programs/locate/window/status/folder_count.txt',
+ "https://pilot.parts/programs/locate/window/status/layout.css?kireji_count" => 'https://pilot.parts/programs/locate/window/status/kireji_count.txt',
+ "https://pilot.parts/programs/locate/window/status/layout.css?show_kireji" => 'https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt',
+ "https://pilot.parts/programs/locate/window/status/layout.css?constructor" => 'https://pilot.parts/programs/locate/window/status/layout.css.c.js',
+ "https://pilot.parts/programs/locate/window/status/layout.css.c.js" => '
+   const
+    num_files = parseInt("" + file_count),
+    has_files = !!num_files,
+    num_folders = parseInt("" + folder_count),
+    has_folders = !!num_folders,
+    do_kireji = ("" + show_kireji) === "1",
+    num_kireji = do_kireji ? parseInt("" + kireji_count) : undefined,
+    has_kireji = do_kireji ? !!num_kireji : undefined,
+    status_items = [];
+   if (has_folders) status_items.push(`${folder_count} folder${num_folders === 1 ? "" : "s"}`)
+   if (has_files) status_items.push(`${file_count} file${num_files === 1 ? "" : "s"}`)
+   if (has_kireji) status_items.push(`${kireji_count} kireji`)
+   return `
+    :host {
+     padding: 0 3px;
+     height: 17px;
+     box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
+     display: flex;
+     flex-flow: row nowrap;
+     align-items: center;
+    }
+    :host::after {
+     content: "${status_items.join(", ")}"
+    }
+   `;',
+ "https://pilot.parts/programs/locate/window/status/?layout" => 'https://pilot.parts/programs/locate/window/status/layout.css',
+ "https://pilot.parts/programs/locate/window/status/file_count.txt" => '0',
+ "https://pilot.parts/programs/locate/window/status/file_count.txt?fx" => 'https://pilot.parts/programs/locate/window/status/fx.uri',
+ "https://pilot.parts/programs/locate/window/status/folder_count.txt" => '5',
+ "https://pilot.parts/programs/locate/window/status/folder_count.txt?fx" => 'https://pilot.parts/programs/locate/window/status/fx.uri',
+ "https://pilot.parts/programs/locate/window/status/fx.uri" => 'https://pilot.parts/programs/locate/window/status/layout.css',
+ "https://pilot.parts/programs/locate/window/status/kireji_count.txt" => '0',
+ "https://pilot.parts/programs/locate/window/status/kireji_count.txt?fx" => 'https://pilot.parts/programs/locate/window/status/fx.uri',/*
+Relate */
+ "https://pilot.parts/programs/relate/task/datum.txt" => 'https://pilot.parts/programs/relate/task/',
+ "https://pilot.parts/programs/relate/task/index.txt?datum" => 'https://pilot.parts/programs/relate/task/datum.txt',
+ "https://pilot.parts/programs/relate/task/index.txt?fx" => 'https://pilot.parts/programs/relate/task/index/fx.uri',
+ "https://pilot.parts/programs/relate/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/programs/relate/task/index.txt?constructor" => 'https://pilot.parts/programs/relate/task/index.txt.c.js',
+ "https://pilot.parts/programs/relate/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/relate/task/index/fx.uri" => 'https://pilot.parts/programs/relate/window/active.txt',
+ "https://pilot.parts/programs/relate/task/layout.css?open" => 'https://pilot.parts/programs/relate/window/active.txt',
+ "https://pilot.parts/programs/relate/task/layout.css?constructor" => 'https://pilot.parts/programs/relate/task/layout.css.c.js',
+ "https://pilot.parts/programs/relate/task/layout.css.c.js" => '
+  return `
+   :host {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    width: 160px;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 3px;
+    border: none;${("" + open) === "1" ? `
+    font: bold 11px sans-serif` : ``};
+    box-sizing: border-box;
+    padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
+    text-align: left;
+    box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
+   }
+   :host(:focus)::after {
+    border: 1px dotted black;
+    content: "";
+    position: absolute;
+    margin: 3px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+   }
+   ${(""+open) === "1" ? `
+   :host > * {
+    z-index: 3
+   }
+   :host::before {
+    content: "";
+    position: absolute;
+    margin: 2px;
+    border-top: 1px solid white;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px;
+   }` : ``}
+   app-icon {
+    width: 16px;
+    height: 16px
+   }
+  `;',
+ "https://pilot.parts/programs/relate/task/manifest.uri" => 'https://pilot.parts/programs/relate/app-icon/ https://pilot.parts/programs/relate/app-label/',
+ "https://pilot.parts/programs/relate/task/manifest.uri?open" => 'https://pilot.parts/programs/relate/window/active.txt',
+ "https://pilot.parts/programs/relate/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/relate/window/minimized.txt',
+ "https://pilot.parts/programs/relate/task/onpointerdown.js?active" => 'https://pilot.parts/programs/relate/window/active.txt',
+ "https://pilot.parts/programs/relate/task/onpointerdown.js?window" => 'https://pilot.parts/programs/relate/window/',
+ "https://pilot.parts/programs/relate/task/onpointerdown.js?task" => 'https://pilot.parts/programs/relate/task/',
+ "https://pilot.parts/programs/relate/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/relate/task/onpointerdown.c.js',
+ "https://pilot.parts/programs/relate/task/onpointerdown.c.js" => '
+  const
+   is_minimized = ("" + minimized) === "1",
+   is_inactive = ("" + active) === "0",
+   minimized_url = minimized.headerOf().href,
+   active_url = active.headerOf().href,
+   window_url = window.headerOf().href,
+   task_url = task.headerOf().href,
+   put_task = `
+    const
+     tasks_uri = "https://pilot.parts/tasks.uri",
+     tasks_string = Ω[tasks_uri].toPrimitive(),
+     tasks = tasks_string ? tasks_string.split(" ") : [],
+     own_task = "${task_url}";
+    if (!tasks.includes(own_task)) {
+     tasks.push(own_task)
+     Ω[tasks_uri] = tasks.join(" ")
+    }`,
+   put_in_front = `
+    const
+     windows_uri = "https://pilot.parts/windows.uri",
+     windows_string = Ω[windows_uri].toPrimitive(),
+     windows = windows_string ? windows_string.split(" ") : [],
+     own_window = "${window_url}";
+    if (windows.at(-1) !== own_window) {
+     const window_index = windows.indexOf(own_window);
+     if (window_index !== -1) windows.splice(window_index, 1)
+     windows.push(own_window)
+     Ω[windows_uri] = windows.join(" ")
+    }`;
+  return `
+   e => {
+    e?.stopPropagation();
+    ${put_task}
+    ${ is_minimized ? `
+    Ω["${minimized_url}"] = "0";
+    Ω["${active_url}"] = "1";
+    ${put_in_front}` : is_inactive ? `
+    Ω["${active_url}"] = "1";
+    ${put_in_front}` : `
+    Ω["${active_url}"] = "0";
+    Ω["${minimized_url}"] = "1";`}
+   }
+  `',
+ "https://pilot.parts/programs/relate/task/open/fx.uri" => 'https://pilot.parts/programs/relate/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/relate/window/layout.css https://pilot.parts/programs/relate/task/onpointerdown.js',
+ "https://pilot.parts/programs/relate/task/?layout" => 'https://pilot.parts/programs/relate/task/layout.css',
+ "https://pilot.parts/programs/relate/task/?manifest" => 'https://pilot.parts/programs/relate/task/manifest.uri',
+ "https://pilot.parts/programs/relate/task/?onpointerdown" => 'https://pilot.parts/programs/relate/task/onpointerdown.js',
+ "https://pilot.parts/programs/relate/app-icon/?layout" => 'https://pilot.parts/programs/relate/app-icon/layout.css',
+ "https://pilot.parts/programs/relate/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: "🧬";
+  }',
+ "https://pilot.parts/programs/relate/app-label/layout.css?constructor" => 'https://pilot.parts/programs/relate/app-label/layout.css.c.js',
+ "https://pilot.parts/programs/relate/app-label/layout.css?address" => 'https://pilot.parts/programs/relate/window/address.uri',
+ "https://pilot.parts/programs/relate/app-label/layout.css.c.js" => '
+  return `:host {
+   margin: 0;
+   height: 16px;
+   vertical-align: center;
+   text-overflow: ellipsis;
+   overflow: clip;
+  }
+  :host::after {
+   content: "Relate - ${address}";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/programs/relate/app-label/?layout" => 'https://pilot.parts/programs/relate/app-label/layout.css',
+ "https://pilot.parts/programs/relate/start-menu-item/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Relate";
+  }',
+ "https://pilot.parts/programs/relate/start-menu-item/app-label/?layout" => 'https://pilot.parts/programs/relate/start-menu-item/app-label/layout.css',
+ "https://pilot.parts/programs/relate/start-menu-item/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0 }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/programs/relate/start-menu-item/manifest.uri" => 'https://pilot.parts/programs/relate/app-icon/ https://pilot.parts/programs/relate/start-menu-item/app-label/',
+ "https://pilot.parts/programs/relate/start-menu-item/?layout" => 'https://pilot.parts/programs/relate/start-menu-item/layout.css',
+ "https://pilot.parts/programs/relate/start-menu-item/?manifest" => 'https://pilot.parts/programs/relate/start-menu-item/manifest.uri',
+ "https://pilot.parts/programs/relate/start-menu-item/?onclick" => 'https://pilot.parts/programs/relate/task/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/active.txt" => '0',
+ "https://pilot.parts/programs/relate/window/active.txt?fx" => 'https://pilot.parts/programs/relate/task/open/fx.uri',
+ "https://pilot.parts/programs/relate/window/active.txt?index" => 'https://pilot.parts/programs/relate/task/index.txt',
+ "https://pilot.parts/programs/relate/window/active.txt?minimized" => 'https://pilot.parts/programs/relate/window/minimized.txt',
+ "https://pilot.parts/programs/relate/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/programs/relate/window/active.txt?constructor" => 'https://pilot.parts/programs/relate/window/active.txt.c.js',
+ "https://pilot.parts/programs/relate/window/active.txt.c.js" => 'const active = ("" + minimized) === \'1\' ? \'0\' : ("" + selected) === ("" + index) ? \'1\' : \'0\'; return active;',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/down.txt" => '0',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/relate/window/controls/exit-button/down-fx.uri',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   margin-left: 2px;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before, :host::after {
+   --color: black;
+   content: "";
+   display: block;
+   position: absolute;
+   width: 8px;
+   height: 7px;
+   left: 4px;
+   top: 3px;
+   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%);
+  }
+  :host(:hover)::before {
+   --color: blue
+  }`',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/relate/window/',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/relate/task/',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/exit-button/release.js\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js',
+ "https://pilot.parts/programs/relate/window/controls/exit-button/?onpointerdown" => 'https://pilot.parts/programs/relate/window/controls/exit-button/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/down-fx.uri" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt" => '0',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt?fx" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/down-fx.uri',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css?down" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 9px;
+   height: 9px;
+   top: 2px;
+   left: 3px;
+   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color) }
+  :host(:hover)::before {
+   --color: blue }`',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/onclick.js" => '
+  () => {
+   Ω[\'https://pilot.parts/programs/relate/window/maximized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/onpointerdown.js" => '
+  e => {
+   e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt\'] = \'1\'
+   Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/maximize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/release.js" => '
+  e => {
+   Ω[\'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/onclick.js',
+ "https://pilot.parts/programs/relate/window/controls/maximize-button/?onpointerdown" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/down-fx.uri" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt" => '0',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/down-fx.uri',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 2px;
+   background: var(--color);
+   top: 9px;
+   left: 4px }
+  :host(:hover)::before {
+   --color: blue }`',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/relate/window/minimized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/minimize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/onclick.js',
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/?onpointerdown" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/down-fx.uri" => 'https://pilot.parts/programs/relate/window/controls/restore-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/down.txt" => '0',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/down.txt?fx" => 'https://pilot.parts/programs/relate/window/controls/restore-button/down-fx.uri',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/layout.css?down" => 'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/restore-button/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before, :host::after {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 6px;
+   top: 5px;
+   left: 3px;
+   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color);
+   background: #c3c3c3 }
+  :host::before {
+   top: 2px;
+   left: 5px }
+  :host(:hover)::before, :host(:hover)::after {
+   --color: blue }`',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/onclick.js" => '()=>Ω[\'https://pilot.parts/programs/relate/window/maximized.txt\'] = \'0\'',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/restore-button/release.js\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/restore-button/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/restore-button/onclick.js',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/?onpointerdown" => 'https://pilot.parts/programs/relate/window/controls/restore-button/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/controls/layout.css" => '
+  :host {
+   display: flex;
+   flex-flow: row nowrap
+  }',
+ "https://pilot.parts/programs/relate/window/controls/manifest.uri?maximized" => 'https://pilot.parts/programs/relate/window/maximized.txt',
+ "https://pilot.parts/programs/relate/window/controls/manifest.uri?constructor" => 'https://pilot.parts/programs/relate/window/controls/manifest.uri.c.js',
+ "https://pilot.parts/programs/relate/window/controls/manifest.uri.c.js" => 'return `https://pilot.parts/programs/relate/window/controls/minimize-button/ https://pilot.parts/programs/relate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/ https://pilot.parts/programs/relate/window/controls/exit-button/`',
+ "https://pilot.parts/programs/relate/window/controls/?layout" => 'https://pilot.parts/programs/relate/window/controls/layout.css',
+ "https://pilot.parts/programs/relate/window/controls/?manifest" => 'https://pilot.parts/programs/relate/window/controls/manifest.uri',
+ "https://pilot.parts/programs/relate/window/layout.css?active" => 'https://pilot.parts/programs/relate/window/active.txt',
+ "https://pilot.parts/programs/relate/window/layout.css?maximized" => 'https://pilot.parts/programs/relate/window/maximized.txt',
+ "https://pilot.parts/programs/relate/window/layout.css?position" => 'https://pilot.parts/programs/relate/window/position.json',
+ "https://pilot.parts/programs/relate/window/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/layout.css.c.js" => '
+  const
+   common = `
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2px;
+    background: #c3c3c3;
+    box-sizing: border-box;`,
+   titlebar = ("" + active) === "1" ? `title-bar {
+    background: rgb(0, 0, 163);
+   }` : ``;
+  if (("" + maximized) === \'1\') {
+   return `
+    :host {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 28px;
+     padding: 2px;
+     ${common}
+    }
+    ${titlebar}`
+  } else {
+   const { x = 0, y = 0, w = 0, h = 0 } = JSON.parse("" + position);
+   return `
+    :host {
+     width: ${w}px;
+     height: ${h}px;
+     left: ${x}px;
+     top: ${y}px;
+     min-height: fit-content;
+     padding: 4px;
+     background: #c3c3c3;
+     box-shadow:
+      inset -1px -1px black,
+      inset 1px 1px #c3c3c3,
+      inset -2px -2px #7a7a7a,
+      inset 2px 2px white,
+      5px 7px 3px #0002;
+     ${common}
+    }
+    ${titlebar}`
+  }',
+ "https://pilot.parts/programs/relate/window/manifest.uri?title" => 'https://pilot.parts/programs/relate/window/title-bar/',
+ "https://pilot.parts/programs/relate/window/manifest.uri?graph" => 'https://pilot.parts/programs/relate/window/graph/',
+ "https://pilot.parts/programs/relate/window/manifest.uri?transform_path" => 'https://pilot.parts/programs/relate/window/transform/',
+ "https://pilot.parts/programs/relate/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/relate/window/manifest.uri?position" => 'https://pilot.parts/programs/relate/window/position.json',
+ "https://pilot.parts/programs/relate/window/manifest.uri?constructor" => 'https://pilot.parts/programs/relate/window/manifest.uri.c.js',
+ "https://pilot.parts/programs/relate/window/manifest.uri.c.js" => <<<JS
+  const [title_url, graph_url, transform_url, position_url] = [title, graph, transform_path, position].map(x => x.headerOf().href)
+  const transform_urls = transform(transform_url, position_url, "nesw", title_url);
+  return [title_url, graph_url, transform_urls].join(" ")
+  JS,
+ "https://pilot.parts/programs/relate/window/maximized.txt" => '0',
+ "https://pilot.parts/programs/relate/window/maximized.txt?fx" => 'https://pilot.parts/programs/relate/window/maximized/fx.uri',
+ "https://pilot.parts/programs/relate/window/maximized/fx.uri" => 'https://pilot.parts/programs/relate/window/layout.css https://pilot.parts/programs/relate/window/controls/manifest.uri https://pilot.parts/programs/relate/window/title-bar/ondblclick.js',
+ "https://pilot.parts/programs/relate/window/minimized.txt" => '0',
+ "https://pilot.parts/programs/relate/window/minimized.txt?fx" => 'https://pilot.parts/programs/relate/window/minimized/fx.uri',
+ "https://pilot.parts/programs/relate/window/minimized/fx.uri" => 'https://pilot.parts/manifest.uri https://pilot.parts/programs/relate/window/active.txt https://pilot.parts/programs/relate/task/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/onfocus.js?active" => 'https://pilot.parts/programs/relate/window/active.txt',
+ "https://pilot.parts/programs/relate/window/onfocus.js?window" => 'https://pilot.parts/programs/relate/window/',
+ "https://pilot.parts/programs/relate/window/onfocus.js?constructor" => 'https://core.parts/behaviors/window-focus.c.js',
+ "https://pilot.parts/programs/relate/window/position.json" => '
+  {
+   "x": 128,
+   "y": 128,
+   "w": 256,
+   "h": 256,
+   "range": {
+    "x": [-64, 512],
+    "y": [-2, 256],
+    "w": [96, 256],
+    "h": [64, 128]
+   }
+  }',
+ "https://pilot.parts/programs/relate/window/position.json?fx" => 'https://pilot.parts/programs/relate/window/position/fx.uri',
+ "https://pilot.parts/programs/relate/window/position/fx.uri" => 'https://pilot.parts/programs/relate/window/layout.css',
+ "https://pilot.parts/programs/relate/window/title-bar/layout.css" => '
+  :host {
+   background: #7f7f7f;
+   color: white;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   gap: 3px;
+   height: 18px;
+   padding: 0px 2px;
+   box-sizing: border-box;
+  }
+  app-icon {
+   width: 16px;
+   height: 16px;
+  }',
+ "https://pilot.parts/programs/relate/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/relate/app-icon/ https://pilot.parts/programs/relate/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/relate/window/controls/',
+ "https://pilot.parts/programs/relate/window/title-bar/ondblclick.js?maximized" => 'https://pilot.parts/programs/relate/window/maximized.txt',
+ "https://pilot.parts/programs/relate/window/title-bar/ondblclick.js?constructor" => 'https://pilot.parts/programs/relate/window/title-bar/ondblclick.c.js',
+ "https://pilot.parts/programs/relate/window/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://pilot.parts/programs/relate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
+ "https://pilot.parts/programs/relate/window/title-bar/?layout" => 'https://pilot.parts/programs/relate/window/title-bar/layout.css',
+ "https://pilot.parts/programs/relate/window/title-bar/?manifest" => 'https://pilot.parts/programs/relate/window/title-bar/manifest.uri',
+ "https://pilot.parts/programs/relate/window/title-bar/?ondblclick" => 'https://pilot.parts/programs/relate/window/title-bar/ondblclick.js',
+ "https://pilot.parts/programs/relate/window/?layout" => 'https://pilot.parts/programs/relate/window/layout.css',
+ "https://pilot.parts/programs/relate/window/?manifest" => 'https://pilot.parts/programs/relate/window/manifest.uri',
+ "https://pilot.parts/programs/relate/window/?onfocus" => 'https://pilot.parts/programs/relate/window/onfocus.js',
+
+ "https://pilot.parts/programs/relate/window/address.uri" => 'https://kireji.app/demo/hello.txt',
+ "https://pilot.parts/programs/relate/window/address.uri?fx" => 'https://pilot.parts/programs/relate/window/readdress.uri',
+ "https://pilot.parts/programs/relate/window/readdress.uri" => 'https://pilot.parts/programs/relate/window/graph/manifest.uri https://pilot.parts/programs/relate/app-label/layout.css',
+ "https://pilot.parts/programs/relate/window/graph/?manifest" => 'https://pilot.parts/programs/relate/window/graph/manifest.uri',
+ "https://pilot.parts/programs/relate/window/graph/?layout" => 'https://pilot.parts/programs/relate/window/graph/layout.css',
+ "https://pilot.parts/programs/relate/window/graph/layout.css?white_grid" => 'https://core.parts/img/white-grid.png',
+ "https://pilot.parts/programs/relate/window/graph/layout.css?blue_grid" => 'https://core.parts/img/blue-grid.png',
+ "https://pilot.parts/programs/relate/window/graph/manifest.uri?address" => 'https://pilot.parts/programs/relate/window/address.uri',
+ "https://pilot.parts/programs/relate/window/graph/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/relate/window/graph/manifest.uri?constructor" => 'https://pilot.parts/programs/relate/window/graph/manifest.uri.c.js',
+ "https://pilot.parts/programs/relate/window/graph/manifest.uri.c.js" => '
+   const
+    node_core_url = "https://pilot.parts/programs/relate/window/core-node/",
+    wire_core_url = "https://pilot.parts/programs/relate/core-wire/",
+    kireji_urls = new Set(),
+    kireji_node_urls = new Set(),
+    own_url = "" + address,
+    graph_url = "https://pilot.parts/programs/relate/window/graph/";
+   for (const url in Δ) {
+    if (!url.match(/^[^?]*\?\w*$/)) continue
+    if (!kireji_urls.has(url) && own_url === url.split("?")[0]) kireji_urls.add(Δ[url])
+   }
+   let own_node_url;
+   const result_urls = [own_url /*, ...kireji_urls*/].map((address, index) => {
+    const
+     node_url = `${graph_url}${hash(own_url + " " + address + " node")}/node/`,
+     transform_url = node_url + "transform/",
+     position_url = `${node_url}position.json`;
+    if (index) kireji_node_urls.add(node_url)
+    else own_node_url = node_url
+    Ω[`${node_url}?core`] = node_core_url
+    Ω[`${node_url}?layout`] = `${node_url}layout.css`
+    Ω[`${node_url}?onpointerdown`] = `${node_url}onpointerdown.js`
+    Ω[`${node_url}?manifest`] = `${node_url}manifest.uri`
+    Ω[`${node_url}layout.css?core`] = `${node_core_url}layout.css`
+    Ω[`${node_url}layout.css?position`] = position_url
+    Ω[`${node_url}layout.css?graph_position`] = `${graph_url}position.json`
+    Ω[`${node_url}onpointerdown.js?core`] = `${node_core_url}onpointerdown.js`
+    Ω[`${node_url}onpointerdown.js?position`] = position_url
+    Ω[`${node_url}manifest.uri?core`] = `${node_core_url}manifest.uri`
+    Ω[`${node_url}manifest.uri?node`] = node_url
+    Ω[`${node_url}manifest.uri?proxy`] = address
+    Ω[`${node_url}manifest.uri?word`] = address
+    Ω[`${node_url}position.json?core`] = `${node_core_url}position.json`
+    Ω[`${node_url}reposition.uri`] = `${node_url}layout.css`
+    Ω[`${node_url}position.json?fx`] = `${node_url}reposition.uri`
+    transform(transform_url, position_url, "ew")
+    return node_url
+   })/*.concat([...kireji_node_urls].map(node_url=>{
+    const wire_url = `${graph_url}${hash(own_node_url + " " + node_url + " wire")}/wire/`;
+    Ω[`${node_url}reposition.uri`] = `${node_url}layout.css ${wire_url}layout.css`
+    Ω[`${wire_url}?core`] = wire_core_url
+    Ω[`${wire_url}?layout`] = `${wire_url}layout.css`
+    return wire_core_url;
+   }))*/.join(" ")
+    // Ω[`${own_node_url}reposition.uri`] = [`${own_node_url}layout.css`, ...[].map(wire_url => `${wire_url}layout.css`)]
+   return result_urls',
+ "https://pilot.parts/programs/relate/window/graph/?onpointerdown" => 'https://pilot.parts/programs/relate/window/graph/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/graph/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/graph/onpointerdown.js?mode" => 'https://core.parts/behaviors/move.txt',
+ "https://pilot.parts/programs/relate/window/graph/onpointerdown.js?position" => 'https://pilot.parts/programs/relate/window/graph/position.json',
+ "https://pilot.parts/programs/relate/window/graph/position.json?fx" => 'https://pilot.parts/programs/relate/window/graph/reposition.uri',
+ "https://pilot.parts/programs/relate/window/graph/reposition.uri" => 'https://pilot.parts/programs/relate/window/graph/layout.css',
+ "https://pilot.parts/programs/relate/window/graph/position.json" => '{ "x": -82, "y": -91 }',
+ "https://pilot.parts/programs/relate/window/graph/layout.css?position" => 'https://pilot.parts/programs/relate/window/graph/position.json',
+ "https://pilot.parts/programs/relate/window/graph/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/graph/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/graph/layout.css.c.js" => '
+   const { x = 0, y = 0 } = JSON.parse("" + position)
+   return `
+    :host {
+     --size: 18px;
+     --paper-color: #c3c3c3;;
+     --focus-color: rgb(0, 0, 163);
+     --graph-x: ${x}px;
+     --graph-y: ${y}px;
+     --white-grid: url("data:image/png;base64,${white_grid}");
+     --blue-grid: url("data:image/png;base64,${blue_grid}");
+     --halftone-a: black;
+     --halftone-b: transparent;
+     --halftone-size: 2px;
+     --halftone:
+      linear-gradient(
+       45deg,
+       var(--halftone-a) 25%,
+       var(--halftone-b) 25%,
+       var(--halftone-b) 75%,
+       var(--halftone-a) 75%,
+       var(--halftone-a)
+      ) calc(50% + ${x}px) calc(50% + ${y}px) / var(--halftone-size) var(--halftone-size),
+      linear-gradient(
+       45deg,
+       var(--halftone-a) 25%,
+       var(--halftone-b) 25%,
+       var(--halftone-b) 75%,
+       var(--halftone-a) 75%,
+       var(--halftone-a)
+      ) calc(var(--halftone-size) / 2 + 50% + ${x}px) calc(var(--halftone-size) / 2 + 50% + ${y}px) / var(--halftone-size) var(--halftone-size);
+     position: relative;
+     flex: 1 1;
+     box-shadow:
+      -0.5px -0.5px 0 0.5px black,
+      0 0 0 1px #dbdbdb,
+      -0.5px -0.5px 0 1.5px #7a7a7a,
+      0 0 0 2px white;
+     background: var(--paper-color);
+     margin: 2px;
+     display: grid;
+     overflow: clip;
+     height: 100%;
+     /* cursor: all-scroll */;
+     background: var(--halftone);
+     --halftone-size: calc(var(--size) / 8);
+     --halftone-a: #334246ff;
+     --halftone-b: #3342467f;
+     cursor: url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 32px; line-height: 32px"><text y="28">🥢</text></svg>\') 2 30, pointer;
+    }
+    :host > * {
+     --size: inherit;
+     --paper-color: inherit;
+    }
+   `',
+ "https://pilot.parts/programs/relate/window/cathode/?core" => 'https://pilot.parts/programs/relate/window/electrode/',
+ "https://pilot.parts/programs/relate/window/anode?core" => 'https://pilot.parts/programs/relate/window/electrode/',
+ "https://pilot.parts/programs/relate/window/electrode/?layout" => 'https://pilot.parts/programs/relate/window/electrode/layout.css',
+ "https://pilot.parts/programs/relate/window/electrode/layout.css" => '
+   :host {
+    --overlay: transparent;
+    display: inline-block;
+    width: var(--size);
+    height: var(--size);
+    background-image:
+     linear-gradient(45deg, var(--overlay) 25%, transparent 25%, transparent 75%, var(--overlay) 75%, var(--overlay)),
+     linear-gradient(45deg, var(--overlay) 25%, transparent 25%, transparent 75%, var(--overlay) 75%, var(--overlay));
+    background-size: 2px 2px;
+    background-position: 0 0, 1px 1px;
+   }
+   :host(:hover) {
+    --overlay: yellow;
+    cursor: url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="font-size: 32px; line-height: 32px"><text y="32">✍</text></svg>\') 1 30, pointer;
+   }',
+ "https://pilot.parts/programs/relate/window/core-node/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
+ "https://pilot.parts/programs/relate/window/core-node/onpointerdown.js?mode" => 'https://core.parts/behaviors/move.txt',
+ "https://pilot.parts/programs/relate/window/core-node/onpointerdown.js?stop_propagation" => 'https://core.parts/const/one.txt',
+ "https://pilot.parts/programs/relate/window/core-node/onpointerdown.js?should_focus" => 'https://core.parts/const/one.txt',
+ "https://pilot.parts/programs/relate/window/core-node/manifest.uri?cell" => 'https://core.parts/components/cell/construct.js',
+ "https://pilot.parts/programs/relate/window/core-node/manifest.uri?label_css" => 'https://pilot.parts/programs/locate/window/explorer-view/label_css.js',
+ "https://pilot.parts/programs/relate/window/core-node/manifest.uri?item_layout" => 'https://pilot.parts/programs/locate/window/explorer-view/header/item_layout.css',
+ "https://pilot.parts/programs/relate/window/core-node/manifest.uri?constructor" => 'https://pilot.parts/programs/relate/window/core-node/manifest.c.js',
+ "https://pilot.parts/programs/relate/window/core-node/manifest.c.js" => '
+   const
+    { href, groups: { type } } = proxy.headerOf(),
+    is_index = href.endsWith("/"),
+    crumbs = href.replace(/^https:\/\//,"").split("/"),
+    path_length = crumbs.length,
+    file_crumb_index = path_length - (1 + is_index),
+    path = crumbs.slice(0, file_crumb_index + is_index).join("/") + "/",
+    filename = crumbs[file_crumb_index],
+    common_label = `:host {
+     margin: 0 calc(var(--size) / 8);
+     line-height: inherit;
+    }`,
+    common_item = `:host {
+     display: flex;
+     flex-flow: row nowrap;
+     height: var(--size);
+     align-items: center;
+     line-height: var(--size);
+    }`,
+    cathode_url = "https://pilot.parts/programs/relate/window/cathode/",
+    anode_url = "https://pilot.parts/programs/relate/window/anode",
+    node_url = node.headerOf().href,
+    title_url = node_url + "title-bar/",
+    icon_url = "https://pilot.parts/icons/" + type.replace(/[^a-zA-Z0-9]+/g, "-") + "-icon/",
+    label_url = node_url + "title-bar/label/",
+    path_url = node_url + "title-bar/path/",
+    resize_left_url = node_url + "transform/left-/",
+    resize_right_url = node_url + "transform/right-/",
+    toggle_url = node_url + "collapse-button/",
+    toggle_open_url = toggle_url + "open.txt",
+    toggle_css_url = toggle_url + "layout.css",
+    toggle_css_constructor_url = toggle_css_url + ".c.js";
+   cell(label_url, `
+   ${label_css(filename)}
+   ${common_label}
+   :host {
+    margin-left: 0;
+   }`);
+   cell(toggle_url, toggle_css_url, undefined, true)
+   Ω[toggle_css_url + "?is_open"] = toggle_open_url
+   Ω[toggle_open_url] = "1"
+   Ω[toggle_css_url + "?constructor"] = toggle_css_constructor_url
+   Ω[toggle_css_constructor_url] = `return \`:host::before {
+    content: "\${(""+is_open === "1") ? "▼" : "▲"}";
+    cursor: pointer;
+    width: var(--size);
+    height: var(--size);
+   }\``
+   // click(toggle_url, undefined, open_item_url)
+   cell(path_url, `
+   ${label_css(path)}
+   ${common_label}
+   :host {
+    font-weight: normal;
+    flex: 1 1;
+    margin-right: 0;
+   }`);
+   cell(title_url, `
+   ${item_layout}
+   ${common_item}
+   :host {
+    text-align: right;
+    position: relative;
+    box-sizing: border-box;
+    justify-content: end;
+    height: calc(1.5 * var(--size));
+    padding: calc(var(--size) / 2);
+    padding-bottom: 0;
+    align-items: stretch;
+    font-weight: bold;
+   }
+   :host > :nth-child(2) {
+    --size: inherit;
+   }`, [toggle_url, path_url, label_url, icon_url].join(" ") );
+   const keys = new Set()
+   for (const url in Δ) {
+    if (!url.match(/^[^?]*\?\w*$/)) continue
+    const [base, π] = url.split("?")
+    if (keys.has(π)) continue;
+    if (href === base) { keys.add(π) }
+   }
+   // Ω[]
+   return [title_url, "https://pilot.parts/horizontal-line/", ...[...keys].map(kireji => {
+    const
+     cell_url = node_url + hash(`${href}?${kireji}`) + "/kireji/",
+     label_url = cell_url + "label/";
+    cell(label_url, `
+     ${label_css(kireji)}
+     ${common_label}
+     :host {
+      margin-left: 0;
+      box-sizing: border-box;
+      flex: 1 1;
+     }`);
+    cell(cell_url, `
+     ${item_layout}
+     ${common_item}`, cathode_url + " " + label_url);
+    return cell_url
+   }), anode_url, resize_left_url, resize_right_url].join(" ")',
+ "https://pilot.parts/programs/relate/window/core-node/position.json?constructor" => 'https://pilot.parts/programs/relate/window/core-node/position.json.c.js',
+ "https://pilot.parts/programs/relate/window/core-node/position.json.c.js" => 'return JSON.stringify({ w: 9 * 18, range: { w: [5 * 18] }, snap: { x: 9, y: 9 } })',
+ "https://pilot.parts/programs/relate/window/core-node/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/core-node/layout.css.c.js',
+ "https://pilot.parts/programs/relate/window/core-node/layout.css.c.js" => '
+   const { x = 0, y = 0, w = 0 } = JSON.parse("" + position), { x: graphX = 0, y: graphY = 0 } = JSON.parse("" + graph_position)
+   return `
+    :host {
+     position: absolute;
+     top: calc(50% + ${y}px + var(--graph-y));
+     left: calc(50% + ${x}px + var(--graph-x));
+     width: ${w}px;
+     display: flex;
+     flex-flow: column nowrap;
+     background: #c3c3c3;
+     padding-bottom: calc(var(--size) / 2);
+     border-radius: calc(var(--size) / 8);
+     box-shadow:
+      0.5px 0,
+      0 0.5px,
+      0 -0.5px,
+      -0.5px 0,
+      inset 0.5px 0,
+      inset 0 0.5px,
+      inset 0 -0.5px,
+      inset -0.5px 0;
+    }
+    anode- {
+     position: absolute;
+     right: calc(var(--size) / 2);
+     /* top: 0; */
+     top: calc(var(--size) / 2);
+    }
+    horizontal-line {
+     margin: calc((var(--size) / 2) - 1px) 0;
+    }
+    :host(:focus) {
+     outline: none;
+     background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white), linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
+     background-size: 2px 2px;
+     background-position: 0 0, 1px 1px;
+    }
+    :host > title-bar {
+     --bg: #7f7f7f;
+    }
+    :host(:focus) > title-bar {
+     --bg: var(--focus-color);
+    }
+   `',/*
+Debate */
+ "https://pilot.parts/programs/debate/task/datum.txt" => 'https://pilot.parts/programs/debate/task/',
+ "https://pilot.parts/programs/debate/task/index.txt?datum" => 'https://pilot.parts/programs/debate/task/datum.txt',
+ "https://pilot.parts/programs/debate/task/index.txt?fx" => 'https://pilot.parts/programs/debate/task/index/fx.uri',
+ "https://pilot.parts/programs/debate/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/programs/debate/task/index.txt?constructor" => 'https://pilot.parts/programs/debate/task/index.txt.c.js',
+ "https://pilot.parts/programs/debate/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/debate/task/index/fx.uri" => 'https://pilot.parts/programs/debate/window/active.txt',
+ "https://pilot.parts/programs/debate/task/layout.css?open" => 'https://pilot.parts/programs/debate/window/active.txt',
+ "https://pilot.parts/programs/debate/task/layout.css?constructor" => 'https://pilot.parts/programs/debate/task/layout.css.c.js',
+ "https://pilot.parts/programs/debate/task/layout.css.c.js" => '
+  return `
+   :host {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    width: 160px;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 3px;
+    border: none;${("" + open) === "1" ? `
+    font: bold 11px sans-serif` : ``};
+    box-sizing: border-box;
+    padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
+    text-align: left;
+    box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
+   }
+   :host(:focus)::after {
+    border: 1px dotted black;
+    content: "";
+    position: absolute;
+    margin: 3px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+   }
+   ${(""+open) === "1" ? `
+   :host > * {
+    z-index: 3
+   }
+   :host::before {
+    content: "";
+    position: absolute;
+    margin: 2px;
+    border-top: 1px solid white;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px;
+   }` : ``}
+   app-icon {
+    width: 16px;
+    height: 16px
+   }
+  `;',
+ "https://pilot.parts/programs/debate/task/manifest.uri" => 'https://pilot.parts/programs/debate/app-icon/ https://pilot.parts/programs/debate/app-label/',
+ "https://pilot.parts/programs/debate/task/manifest.uri?open" => 'https://pilot.parts/programs/debate/window/active.txt',
+ "https://pilot.parts/programs/debate/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/debate/window/minimized.txt',
+ "https://pilot.parts/programs/debate/task/onpointerdown.js?active" => 'https://pilot.parts/programs/debate/window/active.txt',
+ "https://pilot.parts/programs/debate/task/onpointerdown.js?window" => 'https://pilot.parts/programs/debate/window/',
+ "https://pilot.parts/programs/debate/task/onpointerdown.js?task" => 'https://pilot.parts/programs/debate/task/',
+ "https://pilot.parts/programs/debate/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/debate/task/onpointerdown.c.js',
+ "https://pilot.parts/programs/debate/task/onpointerdown.c.js" => '
+  const
+   is_minimized = ("" + minimized) === "1",
+   is_inactive = ("" + active) === "0",
+   minimized_url = minimized.headerOf().href,
+   active_url = active.headerOf().href,
+   window_url = window.headerOf().href,
+   task_url = task.headerOf().href,
+   put_task = `
+    const
+     tasks_uri = "https://pilot.parts/tasks.uri",
+     tasks_string = Ω[tasks_uri].toPrimitive(),
+     tasks = tasks_string ? tasks_string.split(" ") : [],
+     own_task = "${task_url}";
+    if (!tasks.includes(own_task)) {
+     tasks.push(own_task)
+     Ω[tasks_uri] = tasks.join(" ")
+    }`,
+   put_in_front = `
+    const
+     windows_uri = "https://pilot.parts/windows.uri",
+     windows_string = Ω[windows_uri].toPrimitive(),
+     windows = windows_string ? windows_string.split(" ") : [],
+     own_window = "${window_url}";
+    if (windows.at(-1) !== own_window) {
+     const window_index = windows.indexOf(own_window);
+     if (window_index !== -1) windows.splice(window_index, 1)
+     windows.push(own_window)
+     Ω[windows_uri] = windows.join(" ")
+    }`;
+  return `
+   e => {
+    e?.stopPropagation();
+    ${put_task}
+    ${ is_minimized ? `
+    Ω["${minimized_url}"] = "0";
+    Ω["${active_url}"] = "1";
+    ${put_in_front}` : is_inactive ? `
+    Ω["${active_url}"] = "1";
+    ${put_in_front}` : `
+    Ω["${active_url}"] = "0";
+    Ω["${minimized_url}"] = "1";`}
+   }
+  `',
+ "https://pilot.parts/programs/debate/task/open/fx.uri" => 'https://pilot.parts/programs/debate/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/debate/window/layout.css https://pilot.parts/programs/debate/task/onpointerdown.js',
+ "https://pilot.parts/programs/debate/task/?layout" => 'https://pilot.parts/programs/debate/task/layout.css',
+ "https://pilot.parts/programs/debate/task/?manifest" => 'https://pilot.parts/programs/debate/task/manifest.uri',
+ "https://pilot.parts/programs/debate/task/?onpointerdown" => 'https://pilot.parts/programs/debate/task/onpointerdown.js',
+ "https://pilot.parts/programs/debate/app-icon/?layout" => 'https://pilot.parts/programs/debate/app-icon/layout.css',
+ "https://pilot.parts/programs/debate/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: "💬";
+  }',
+ "https://pilot.parts/programs/debate/app-label/layout.css" => '
+  return `:host {
+   margin: 0;
+   height: 16px;
+   vertical-align: center;
+   text-overflow: ellipsis;
+   overflow: clip;
+  }
+  :host::after {
+   content: "Debate";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/programs/debate/app-label/?layout" => 'https://pilot.parts/programs/debate/app-label/layout.css',
+ "https://pilot.parts/programs/debate/start-menu-item/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Debate";
+  }',
+ "https://pilot.parts/programs/debate/start-menu-item/app-label/?layout" => 'https://pilot.parts/programs/debate/start-menu-item/app-label/layout.css',
+ "https://pilot.parts/programs/debate/start-menu-item/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0 }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/programs/debate/start-menu-item/manifest.uri" => 'https://pilot.parts/programs/debate/app-icon/ https://pilot.parts/programs/debate/start-menu-item/app-label/',
+ "https://pilot.parts/programs/debate/start-menu-item/?layout" => 'https://pilot.parts/programs/debate/start-menu-item/layout.css',
+ "https://pilot.parts/programs/debate/start-menu-item/?manifest" => 'https://pilot.parts/programs/debate/start-menu-item/manifest.uri',
+ "https://pilot.parts/programs/debate/start-menu-item/?onclick" => 'https://pilot.parts/programs/debate/task/onpointerdown.js',
+ "https://pilot.parts/programs/debate/window/active.txt" => '0',
+ "https://pilot.parts/programs/debate/window/active.txt?fx" => 'https://pilot.parts/programs/debate/task/open/fx.uri',
+ "https://pilot.parts/programs/debate/window/active.txt?index" => 'https://pilot.parts/programs/debate/task/index.txt',
+ "https://pilot.parts/programs/debate/window/active.txt?minimized" => 'https://pilot.parts/programs/debate/window/minimized.txt',
+ "https://pilot.parts/programs/debate/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/programs/debate/window/active.txt?constructor" => 'https://pilot.parts/programs/debate/window/active.txt.c.js',
+ "https://pilot.parts/programs/debate/window/active.txt.c.js" => 'const active = ("" + minimized) === \'1\' ? \'0\' : ("" + selected) === ("" + index) ? \'1\' : \'0\'; return active;',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/debate/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/down.txt" => '0',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/debate/window/controls/exit-button/down-fx.uri',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/controls/exit-button/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   margin-left: 2px;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before, :host::after {
+   --color: black;
+   content: "";
+   display: block;
+   position: absolute;
+   width: 8px;
+   height: 7px;
+   left: 4px;
+   top: 3px;
+   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%);
+  }
+  :host(:hover)::before {
+   --color: blue
+  }`',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/debate/window/',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/debate/task/',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/exit-button/release.js\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/?onpointerdown" => 'https://pilot.parts/programs/debate/window/controls/exit-button/onpointerdown.js',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/down-fx.uri" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt" => '0',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt?fx" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/down-fx.uri',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css?down" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 9px;
+   height: 9px;
+   top: 2px;
+   left: 3px;
+   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color) }
+  :host(:hover)::before {
+   --color: blue }`',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/onclick.js" => '
+  () => {
+   Ω[\'https://pilot.parts/programs/debate/window/maximized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/onpointerdown.js" => '
+  e => {
+   e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt\'] = \'1\'
+   Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/maximize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/release.js" => '
+  e => {
+   Ω[\'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/onclick.js',
+ "https://pilot.parts/programs/debate/window/controls/maximize-button/?onpointerdown" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/onpointerdown.js',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/down-fx.uri" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt" => '0',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/down-fx.uri',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 2px;
+   background: var(--color);
+   top: 9px;
+   left: 4px }
+  :host(:hover)::before {
+   --color: blue }`',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/debate/window/minimized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/minimize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/onclick.js',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/?onpointerdown" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/onpointerdown.js',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/down-fx.uri" => 'https://pilot.parts/programs/debate/window/controls/restore-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/down.txt" => '0',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/down.txt?fx" => 'https://pilot.parts/programs/debate/window/controls/restore-button/down-fx.uri',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/layout.css?down" => 'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/controls/restore-button/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before, :host::after {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 6px;
+   top: 5px;
+   left: 3px;
+   box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color);
+   background: #c3c3c3 }
+  :host::before {
+   top: 2px;
+   left: 5px }
+  :host(:hover)::before, :host(:hover)::after {
+   --color: blue }`',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/onclick.js" => '()=>Ω[\'https://pilot.parts/programs/debate/window/maximized.txt\'] = \'0\'',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/restore-button/release.js\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/restore-button/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/restore-button/onclick.js',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/?onpointerdown" => 'https://pilot.parts/programs/debate/window/controls/restore-button/onpointerdown.js',
+ "https://pilot.parts/programs/debate/window/controls/layout.css" => '
+  :host {
+   display: flex;
+   flex-flow: row nowrap
+  }',
+ "https://pilot.parts/programs/debate/window/controls/manifest.uri?maximized" => 'https://pilot.parts/programs/debate/window/maximized.txt',
+ "https://pilot.parts/programs/debate/window/controls/manifest.uri?constructor" => 'https://pilot.parts/programs/debate/window/controls/manifest.uri.c.js',
+ "https://pilot.parts/programs/debate/window/controls/manifest.uri.c.js" => 'return `https://pilot.parts/programs/debate/window/controls/minimize-button/ https://pilot.parts/programs/debate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/ https://pilot.parts/programs/debate/window/controls/exit-button/`',
+ "https://pilot.parts/programs/debate/window/controls/?layout" => 'https://pilot.parts/programs/debate/window/controls/layout.css',
+ "https://pilot.parts/programs/debate/window/controls/?manifest" => 'https://pilot.parts/programs/debate/window/controls/manifest.uri',
+ "https://pilot.parts/programs/debate/window/layout.css?active" => 'https://pilot.parts/programs/debate/window/active.txt',
+ "https://pilot.parts/programs/debate/window/layout.css?maximized" => 'https://pilot.parts/programs/debate/window/maximized.txt',
+ "https://pilot.parts/programs/debate/window/layout.css?position" => 'https://pilot.parts/programs/debate/window/position.json',
+ "https://pilot.parts/programs/debate/window/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/layout.css.c.js" => '
+  const
+   common = `
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2px;
+    background: #c3c3c3;
+    box-sizing: border-box;`,
+   titlebar = ("" + active) === "1" ? `title-bar {
+    background: rgb(0, 0, 163);
+   }` : ``;
+  if (("" + maximized) === \'1\') {
+   return `
+    :host {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 28px;
+     padding: 2px;
+     ${common}
+    }
+    ${titlebar}`
+  } else {
+   const { x = 0, y = 0, w = 0, h = 0 } = JSON.parse("" + position);
+   return `
+    :host {
+     width: ${w}px;
+     height: ${h}px;
+     left: ${x}px;
+     top: ${y}px;
+     min-height: fit-content;
+     padding: 4px;
+     background: #c3c3c3;
+     box-shadow:
+      inset -1px -1px black,
+      inset 1px 1px #c3c3c3,
+      inset -2px -2px #7a7a7a,
+      inset 2px 2px white,
+      5px 7px 3px #0002;
+     ${common}
+    }
+    ${titlebar}`
+  }',
+ "https://pilot.parts/programs/debate/window/manifest.uri?title" => 'https://pilot.parts/programs/debate/window/title-bar/',
+ "https://pilot.parts/programs/debate/window/manifest.uri?panel" => 'https://pilot.parts/programs/debate/window/panel/',
+ "https://pilot.parts/programs/debate/window/manifest.uri?transform_path" => 'https://pilot.parts/programs/debate/window/transform/',
+ "https://pilot.parts/programs/debate/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/debate/window/manifest.uri?position" => 'https://pilot.parts/programs/debate/window/position.json',
+ "https://pilot.parts/programs/debate/window/manifest.uri?constructor" => 'https://pilot.parts/programs/debate/window/manifest.uri.c.js',
+ "https://pilot.parts/programs/debate/window/manifest.uri?ice_json" => 'https://pilot.parts/programs/debate/connection/icecandidate.json',
+ "https://pilot.parts/programs/debate/window/manifest.uri.c.js" => <<<JS
+  const [title_url, panel_url, transform_url, position_url] = [title, panel, transform_path, position].map(x => x.headerOf().href)
+  const transform_urls = transform(transform_url, position_url, "nesw", title_url);
+  const lc = new RTCPeerConnection();
+  const dc = lc.createDataChannel(location.hostname)
+  dc.onmessage = e => console.log("message says: " + e.data, e)
+  dc.onopen = e => console.log("opened")
+  lc.onicecandidate = e => { const url = ice_json.headerOf().href; Ω[url] = JSON.stringify(lc.localDescription) }
+  lc.createOffer().then(o => lc.setLocalDescription(o))
+  return [title_url, panel_url, transform_urls].join(" ")
+  JS,
+ "https://pilot.parts/programs/debate/connection/icecandidate.json" => '',
+ "https://pilot.parts/programs/debate/connection/icecandidate.json?fx" => 'https://pilot.parts/programs/debate/connection/oncandidate.uri',
+ "https://pilot.parts/programs/debate/connection/oncandidate.uri" => 'https://pilot.parts/programs/debate/connection/status.txt https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css',
+ "https://pilot.parts/programs/debate/connection/status.txt.c.js" => 'return "" + (Δ["https://pilot.parts/programs/debate/connection/icecandidate.json"] ? 1 : 0)',
+ "https://pilot.parts/programs/debate/connection/status.txt?constructor" => 'https://pilot.parts/programs/debate/connection/status.txt.c.js',
+ "https://pilot.parts/programs/debate/connection/status.txt?fx" => 'https://pilot.parts/programs/debate/connection/onstatus.uri',
+ "https://pilot.parts/programs/debate/connection/onstatus.uri" => 'https://pilot.parts/programs/debate/window/panel/status/layout.css',
+ "https://pilot.parts/programs/debate/window/maximized.txt" => '0',
+ "https://pilot.parts/programs/debate/window/maximized.txt?fx" => 'https://pilot.parts/programs/debate/window/maximized/fx.uri',
+ "https://pilot.parts/programs/debate/window/maximized/fx.uri" => 'https://pilot.parts/programs/debate/window/layout.css https://pilot.parts/programs/debate/window/controls/manifest.uri https://pilot.parts/programs/debate/window/title-bar/ondblclick.js',
+ "https://pilot.parts/programs/debate/window/minimized.txt" => '0',
+ "https://pilot.parts/programs/debate/window/minimized.txt?fx" => 'https://pilot.parts/programs/debate/window/minimized/fx.uri',
+ "https://pilot.parts/programs/debate/window/minimized/fx.uri" => 'https://pilot.parts/manifest.uri https://pilot.parts/programs/debate/window/active.txt https://pilot.parts/programs/debate/task/onpointerdown.js',
+ "https://pilot.parts/programs/debate/window/onfocus.js?active" => 'https://pilot.parts/programs/debate/window/active.txt',
+ "https://pilot.parts/programs/debate/window/onfocus.js?window" => 'https://pilot.parts/programs/debate/window/',
+ "https://pilot.parts/programs/debate/window/onfocus.js?constructor" => 'https://core.parts/behaviors/window-focus.c.js',
+ "https://pilot.parts/programs/debate/window/position.json" => '
+  {
+   "x": 64,
+   "y": 128,
+   "w": 300,
+   "h": 450,
+   "range": {
+    "x": [-64, 512],
+    "y": [-2, 256],
+    "w": [96, 256],
+    "h": [64, 128]
+   }
+  }',
+ "https://pilot.parts/programs/debate/window/position.json?fx" => 'https://pilot.parts/programs/debate/window/position/fx.uri',
+ "https://pilot.parts/programs/debate/window/position/fx.uri" => 'https://pilot.parts/programs/debate/window/layout.css',
+ "https://pilot.parts/programs/debate/window/title-bar/layout.css" => '
+  :host {
+   background: #7f7f7f;
+   color: white;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   gap: 3px;
+   height: 18px;
+   padding: 0px 2px;
+   box-sizing: border-box;
+  }
+  app-icon {
+   width: 16px;
+   height: 16px;
+  }',
+ "https://pilot.parts/programs/debate/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/debate/app-icon/ https://pilot.parts/programs/debate/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/debate/window/controls/',
+ "https://pilot.parts/programs/debate/window/title-bar/ondblclick.js?maximized" => 'https://pilot.parts/programs/debate/window/maximized.txt',
+ "https://pilot.parts/programs/debate/window/title-bar/ondblclick.js?constructor" => 'https://pilot.parts/programs/debate/window/title-bar/ondblclick.c.js',
+ "https://pilot.parts/programs/debate/window/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://pilot.parts/programs/debate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
+ "https://pilot.parts/programs/debate/window/title-bar/?layout" => 'https://pilot.parts/programs/debate/window/title-bar/layout.css',
+ "https://pilot.parts/programs/debate/window/title-bar/?manifest" => 'https://pilot.parts/programs/debate/window/title-bar/manifest.uri',
+ "https://pilot.parts/programs/debate/window/title-bar/?ondblclick" => 'https://pilot.parts/programs/debate/window/title-bar/ondblclick.js',
+ "https://pilot.parts/programs/debate/window/?layout" => 'https://pilot.parts/programs/debate/window/layout.css',
+ "https://pilot.parts/programs/debate/window/?manifest" => 'https://pilot.parts/programs/debate/window/manifest.uri',
+ "https://pilot.parts/programs/debate/window/?onfocus" => 'https://pilot.parts/programs/debate/window/onfocus.js',
+ "https://pilot.parts/programs/debate/window/panel/?manifest" => 'https://pilot.parts/programs/debate/window/panel/manifest.uri',
+ "https://pilot.parts/programs/debate/window/panel/manifest.uri" => 'https://pilot.parts/programs/debate/window/panel/toolbar/ https://pilot.parts/programs/debate/window/panel/contacts/ https://pilot.parts/programs/debate/window/panel/rtc-request/ https://pilot.parts/programs/debate/window/panel/status/',
+ "https://pilot.parts/programs/debate/window/panel/?layout" => 'https://pilot.parts/programs/debate/window/panel/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/layout.css" => ':host { display: flex; flex-flow: column nowrap; flex: 1 1; gap: 2px; }',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/?manifest" => 'https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?constructor" => 'https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri.c.js',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?button_url" => 'https://pilot.parts/programs/debate/window/panel/toolbar/add-contact/',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri.c.js" => <<<JS
+  return [[
+   button_url.headerOf().href,
+   `:host { text-align: center; display: flex; flex-flow: column nowrap; width: 40px; box-sizing: border-box } :host::before { content: "👥"; font-size: 24px; line-height: 24px; } :host::after { content: "Add" }`,
+   "",
+   `() => { console.log("this is where you would add a contact") }`,
+  ]].map(config => { button(...config); return config[0] }).join(" ")
+  JS,
+ "https://pilot.parts/programs/debate/window/panel/toolbar/?layout" => 'https://pilot.parts/programs/debate/window/panel/toolbar/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/layout.css" => ':host { display: flex; flex-flow: row nowrap; gap: 12px; height: 51px; padding: 6px; box-sizing: border-box; }',
+ "https://pilot.parts/programs/debate/window/panel/contacts/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/manifest.uri',
+ "https://pilot.parts/programs/debate/window/panel/contacts/manifest.uri" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/ https://pilot.parts/programs/debate/window/panel/contacts/offline/',
+ "https://pilot.parts/programs/debate/window/panel/contacts/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/rtc-request/?layout" => 'https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css.c.js" => 'return inset_layout + ` :host::before { content: \'${ice_json}\' }`',
+ "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css?inset_layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css?ice_json" => 'https://pilot.parts/programs/debate/connection/icecandidate.json',
+ "https://pilot.parts/programs/debate/window/panel/status/?manifest" => 'https://pilot.parts/programs/debate/window/panel/status/manifest.uri',
+ "https://pilot.parts/programs/debate/window/panel/status/manifest.uri" => '',
+ "https://pilot.parts/programs/debate/window/panel/status/?layout" => 'https://pilot.parts/programs/debate/window/panel/status/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/status/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/panel/status/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/panel/status/layout.css?status" => 'https://pilot.parts/programs/debate/connection/status.txt',
+ "https://pilot.parts/programs/debate/window/panel/status/layout.css.c.js" => '
+  return `:host {
+   padding: 0 3px;
+   height: 17px;
+   box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+  }
+  :host::after {
+   content: "👤 ${"" + status === "1" ? "Online" : "Offline"}"
+  }`',
+  "https://pilot.parts/programs/debate/window/panel/contacts/online/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/manifest.uri',
+   "https://pilot.parts/programs/debate/window/panel/contacts/online/manifest.uri" => '',
+  "https://pilot.parts/programs/debate/window/panel/contacts/online/?layout" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/layout.css',
+  "https://pilot.parts/programs/debate/window/panel/contacts/online/layout.css" => ':host { display: flex; flex-flow: column nowrap } :host::before { content: "Online"; font-weight: 700 }',
+  "https://pilot.parts/programs/debate/window/panel/contacts/offline/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/offline/manifest.uri',
+   "https://pilot.parts/programs/debate/window/panel/contacts/offline/manifest.uri" => '',
+  "https://pilot.parts/programs/debate/window/panel/contacts/offline/?layout" => 'https://pilot.parts/programs/debate/window/panel/contacts/offline/layout.css',
+  "https://pilot.parts/programs/debate/window/panel/contacts/offline/layout.css" => ':host { display: flex; flex-flow: column nowrap } :host::before { content: "Offline"; font-weight: 700 }',
+  
+  /*
+Welcome */
+ "https://pilot.parts/programs/welcome/task/datum.txt" => 'https://pilot.parts/programs/welcome/task/',
+ "https://pilot.parts/programs/welcome/task/index.txt" => '1',
+ "https://pilot.parts/programs/welcome/task/index.txt?datum" => 'https://pilot.parts/programs/welcome/task/datum.txt',
+ "https://pilot.parts/programs/welcome/task/index.txt?fx" => 'https://pilot.parts/programs/welcome/task/index/fx.uri',
+ "https://pilot.parts/programs/welcome/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/programs/welcome/task/index.txt?constructor" => 'https://pilot.parts/programs/welcome/task/index.txt.c.js',
+ "https://pilot.parts/programs/welcome/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/welcome/task/index/fx.uri" => 'https://pilot.parts/programs/welcome/window/active.txt',
+ "https://pilot.parts/programs/welcome/task/layout.css?open" => 'https://pilot.parts/programs/welcome/window/active.txt',
+ "https://pilot.parts/programs/welcome/task/layout.css?constructor" => 'https://pilot.parts/programs/welcome/task/layout.css.c.js',
+ "https://pilot.parts/programs/welcome/task/layout.css.c.js" => '
+  return `
+   :host {
+    position: relative;
+    height: 100%;
+    margin: 0;
+    width: 160px;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 3px;
+    border: none;${("" + open) === "1" ? `
+    font: bold 11px sans-serif` : ``};
+    box-sizing: border-box;
+    padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
+    text-align: left;
+    box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
+   }
+   :host(:focus)::after {
+    border: 1px dotted black;
+    content: "";
+    position: absolute;
+    margin: 3px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+   }
+   ${(""+open) === "1" ? `
+   :host > * {
+    z-index: 3
+   }
+   :host::before {
+    content: "";
+    position: absolute;
+    margin: 2px;
+    border-top: 1px solid white;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px;
+   }` : ``}
+   app-icon {
+    width: 16px;
+    height: 16px
+   }
+  `;',
+ "https://pilot.parts/programs/welcome/task/manifest.uri" => 'https://pilot.parts/programs/welcome/app-icon/ https://pilot.parts/programs/welcome/app-label/',
+ "https://pilot.parts/programs/welcome/task/manifest.uri?open" => 'https://pilot.parts/programs/welcome/window/active.txt',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/welcome/window/minimized.txt',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.js?active" => 'https://pilot.parts/programs/welcome/window/active.txt',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.js?window" => 'https://pilot.parts/programs/welcome/window/',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.js?task" => 'https://pilot.parts/programs/welcome/task/',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/welcome/task/onpointerdown.c.js',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.c.js" => '
+  const
+   is_minimized = ("" + minimized) === "1",
+   is_inactive = ("" + active) === "0",
+   minimized_url = minimized.headerOf().href,
+   active_url = active.headerOf().href,
+   window_url = window.headerOf().href,
+   task_url = task.headerOf().href,
+   put_task = `
+    const
+     tasks_uri = "https://pilot.parts/tasks.uri",
+     tasks_string = Ω[tasks_uri].toPrimitive(),
+     tasks = tasks_string ? tasks_string.split(" ") : [],
+     own_task = "${task_url}";
+    if (!tasks.includes(own_task)) {
+     tasks.push(own_task)
+     Ω[tasks_uri] = tasks.join(" ")
+    }`,
+   put_in_front = `
+    const
+     windows_uri = "https://pilot.parts/windows.uri",
+     windows_string = Ω[windows_uri].toPrimitive(),
+     windows = windows_string ? windows_string.split(" ") : [],
+     own_window = "${window_url}";
+    if (windows.at(-1) !== own_window) {
+     const window_index = windows.indexOf(own_window);
+     if (window_index !== -1) windows.splice(window_index, 1)
+     windows.push(own_window)
+     Ω[windows_uri] = windows.join(" ")
+    }`;
+  return `
+   e => {
+    e?.stopPropagation();
+    ${put_task}
+    ${ is_minimized ? `
+    Ω["${minimized_url}"] = "0";
+    Ω["${active_url}"] = "1";
+    ${put_in_front}` : is_inactive ? `
+    Ω["${active_url}"] = "1";
+    ${put_in_front}` : `
+    Ω["${active_url}"] = "0";
+    Ω["${minimized_url}"] = "1";`}
+   }
+  `',
+ "https://pilot.parts/programs/welcome/task/open/fx.uri" => 'https://pilot.parts/programs/welcome/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/welcome/window/layout.css https://pilot.parts/programs/welcome/task/onpointerdown.js',
+ "https://pilot.parts/programs/welcome/task/?layout" => 'https://pilot.parts/programs/welcome/task/layout.css',
+ "https://pilot.parts/programs/welcome/task/?manifest" => 'https://pilot.parts/programs/welcome/task/manifest.uri',
+ "https://pilot.parts/programs/welcome/task/?onpointerdown" => 'https://pilot.parts/programs/welcome/task/onpointerdown.js',
+ "https://pilot.parts/programs/welcome/app-icon/?layout" => 'https://pilot.parts/programs/welcome/app-icon/layout.css',
+ "https://pilot.parts/programs/welcome/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: "👋";
+  }',
+ "https://pilot.parts/programs/welcome/app-label/layout.css" => '
+  return `:host {
+   margin: 0;
+   height: 16px;
+   vertical-align: center;
+   text-overflow: ellipsis;
+   overflow: clip;
+  }
+  :host::after {
+   content: "Welcome";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/programs/welcome/app-label/?layout" => 'https://pilot.parts/programs/welcome/app-label/layout.css',
+ "https://pilot.parts/programs/welcome/start-menu-item/app-label/layout.css" => ':host::after {
+   height: 24px;
+   content: "Welcome";
+  }',
+ "https://pilot.parts/programs/welcome/start-menu-item/app-label/?layout" => 'https://pilot.parts/programs/welcome/start-menu-item/app-label/layout.css',
+ "https://pilot.parts/programs/welcome/start-menu-item/layout.css" => '
+  :host {
+   position: relative;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   padding: 4px 0 }
+  :host(:hover) {
+   background: #00007f;
+   color: white }
+  app-icon {
+   width: 24px;
+   height: 24px;
+   margin: 0 10px;
+   --size: 24px;
+  }',
+ "https://pilot.parts/programs/welcome/start-menu-item/manifest.uri" => 'https://pilot.parts/programs/welcome/app-icon/ https://pilot.parts/programs/welcome/start-menu-item/app-label/',
+ "https://pilot.parts/programs/welcome/start-menu-item/?layout" => 'https://pilot.parts/programs/welcome/start-menu-item/layout.css',
+ "https://pilot.parts/programs/welcome/start-menu-item/?manifest" => 'https://pilot.parts/programs/welcome/start-menu-item/manifest.uri',
+ "https://pilot.parts/programs/welcome/start-menu-item/?onclick" => 'https://pilot.parts/programs/welcome/task/onpointerdown.js',
+ "https://pilot.parts/programs/welcome/window/active.txt" => '1',
+ "https://pilot.parts/programs/welcome/window/active.txt?fx" => 'https://pilot.parts/programs/welcome/task/open/fx.uri',
+ "https://pilot.parts/programs/welcome/window/active.txt?index" => 'https://pilot.parts/programs/welcome/task/index.txt',
+ "https://pilot.parts/programs/welcome/window/active.txt?minimized" => 'https://pilot.parts/programs/welcome/window/minimized.txt',
+ "https://pilot.parts/programs/welcome/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/programs/welcome/window/active.txt?constructor" => 'https://pilot.parts/programs/welcome/window/active.txt.c.js',
+ "https://pilot.parts/programs/welcome/window/active.txt.c.js" => 'const active = ("" + minimized) === \'1\' ? \'0\' : ("" + selected) === ("" + index) ? \'1\' : \'0\'; return active;',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt" => '0',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/down-fx.uri',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css.c.js',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css.c.js" => 'return `
+  :host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   margin-left: 2px;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before, :host::after {
+   --color: black;
+   content: "";
+   display: block;
+   position: absolute;
+   width: 8px;
+   height: 7px;
+   left: 4px;
+   top: 3px;
+   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%);
+  }
+  :host(:hover)::before {
+   --color: blue
+  }`',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/welcome/window/',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/welcome/task/',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/welcome/window/controls/exit-button/release.js\'
+  }',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/?onpointerdown" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/onpointerdown.js',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/down-fx.uri" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt" => '0',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/down-fx.uri',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css.c.js" => 'return `:host {
+   position: relative;
+   width: 16px;
+   height: 14px;
+   background: #c3c3c3;
+   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
+  }
+  :host::before {
+   --color: black;
+   display: block;
+   position: absolute;
+   content: "";
+   width: 6px;
+   height: 2px;
+   background: var(--color);
+   top: 9px;
+   left: 4px }
+  :host(:hover)::before {
+   --color: blue }`',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/welcome/window/minimized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/welcome/window/controls/minimize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/onclick.js',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/?onpointerdown" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/onpointerdown.js',
+ "https://pilot.parts/programs/welcome/window/controls/layout.css" => '
+  :host {
+   display: flex;
+   flex-flow: row nowrap
+  }',
+ "https://pilot.parts/programs/welcome/window/controls/manifest.uri" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/ https://pilot.parts/programs/welcome/window/controls/exit-button/',
+ "https://pilot.parts/programs/welcome/window/controls/?layout" => 'https://pilot.parts/programs/welcome/window/controls/layout.css',
+ "https://pilot.parts/programs/welcome/window/controls/?manifest" => 'https://pilot.parts/programs/welcome/window/controls/manifest.uri',
+ "https://pilot.parts/programs/welcome/window/layout.css?active" => 'https://pilot.parts/programs/welcome/window/active.txt',
+ "https://pilot.parts/programs/welcome/window/layout.css?position" => 'https://pilot.parts/programs/welcome/window/position.json',
+ "https://pilot.parts/programs/welcome/window/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/layout.css.c.js',
+ "https://pilot.parts/programs/welcome/window/layout.css.c.js" => '
+  const
+   common = `
+    position: absolute;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2px;
+    background: #c3c3c3;
+    box-sizing: border-box;`,
+   titlebar = ("" + active) === "1" ? `title-bar {
+    background: rgb(0, 0, 163);
+   }` : ``;
+  const { x = 0, y = 0, w = 0, h = 0 } = JSON.parse("" + position);
+  return `
+   :host {
+    width: ${w}px;
+    height: ${h}px;
+    left: ${x}px;
+    top: ${y}px;
+    min-height: fit-content;
+    padding: 4px;
+    background: #c3c3c3;
+    box-shadow:
+     inset -1px -1px black,
+     inset 1px 1px #c3c3c3,
+     inset -2px -2px #7a7a7a,
+     inset 2px 2px white,
+     5px 7px 3px #0002;
+    ${common}
+   }
+   ${titlebar}`',
+ "https://pilot.parts/programs/welcome/window/manifest.uri?title" => 'https://pilot.parts/programs/welcome/window/title-bar/',
+ "https://pilot.parts/programs/welcome/window/manifest.uri?panel" => 'https://pilot.parts/programs/welcome/window/panel/',
+ "https://pilot.parts/programs/welcome/window/manifest.uri?transform_path" => 'https://pilot.parts/programs/welcome/window/transform/',
+ "https://pilot.parts/programs/welcome/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/welcome/window/manifest.uri?position" => 'https://pilot.parts/programs/welcome/window/position.json',
+ "https://pilot.parts/programs/welcome/window/manifest.uri?constructor" => 'https://pilot.parts/programs/welcome/window/manifest.uri.c.js',
+ "https://pilot.parts/programs/welcome/window/manifest.uri.c.js" => <<<JS
+  const [title_url, panel_url, transform_url, position_url] = [title, panel, transform_path, position].map(x => x.headerOf().href)
+  const transform_urls = transform(transform_url, position_url, "", title_url);
+  const urlSet = [title_url, panel_url]
+  if (transform_urls) urlSet.push(transform_urls)
+  return urlSet.join(" ")
+  JS,
+ "https://pilot.parts/programs/welcome/window/minimized.txt" => '0',
+ "https://pilot.parts/programs/welcome/window/minimized.txt?fx" => 'https://pilot.parts/programs/welcome/window/minimized/fx.uri',
+ "https://pilot.parts/programs/welcome/window/minimized/fx.uri" => 'https://pilot.parts/manifest.uri https://pilot.parts/programs/welcome/window/active.txt https://pilot.parts/programs/welcome/task/onpointerdown.js',
+ "https://pilot.parts/programs/welcome/window/onfocus.js?active" => 'https://pilot.parts/programs/welcome/window/active.txt',
+ "https://pilot.parts/programs/welcome/window/onfocus.js?window" => 'https://pilot.parts/programs/welcome/window/',
+ "https://pilot.parts/programs/welcome/window/onfocus.js?constructor" => 'https://core.parts/behaviors/window-focus.c.js',
+ "https://pilot.parts/programs/welcome/window/position.json" => '
+  {
+   "x": 32,
+   "y": 24,
+   "w": 492,
+   "h": 229,
+   "range": {
+    "x": [-64, 512],
+    "y": [-2, 256],
+    "w": [96, 256],
+    "h": [64, 128]
+   }
+  }',
+ "https://pilot.parts/programs/welcome/window/position.json?fx" => 'https://pilot.parts/programs/welcome/window/position/fx.uri',
+ "https://pilot.parts/programs/welcome/window/position/fx.uri" => 'https://pilot.parts/programs/welcome/window/layout.css',
+ "https://pilot.parts/programs/welcome/window/title-bar/layout.css" => '
+  :host {
+   background: #7f7f7f;
+   color: white;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   gap: 3px;
+   height: 18px;
+   flex: 0 0 18px;
+   padding: 0px 2px;
+   box-sizing: border-box;
+  }
+  app-icon {
+   width: 16px;
+   height: 16px;
+  }',
+ "https://pilot.parts/programs/welcome/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/welcome/app-icon/ https://pilot.parts/programs/welcome/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/welcome/window/controls/',
+ "https://pilot.parts/programs/welcome/window/title-bar/?layout" => 'https://pilot.parts/programs/welcome/window/title-bar/layout.css',
+ "https://pilot.parts/programs/welcome/window/title-bar/?manifest" => 'https://pilot.parts/programs/welcome/window/title-bar/manifest.uri',
+ "https://pilot.parts/programs/welcome/window/?layout" => 'https://pilot.parts/programs/welcome/window/layout.css',
+ "https://pilot.parts/programs/welcome/window/?manifest" => 'https://pilot.parts/programs/welcome/window/manifest.uri',
+ "https://pilot.parts/programs/welcome/window/?onfocus" => 'https://pilot.parts/programs/welcome/window/onfocus.js',
+ "https://pilot.parts/programs/welcome/window/panel/?layout" => 'https://pilot.parts/programs/welcome/window/panel/layout.css',
+ "https://pilot.parts/programs/welcome/window/panel/layout.css" => '
+  :host {
+   height: 100%;
+   display: grid;
+   padding: 12px;
+   gap: 12px;
+   grid-template-columns: 1fr 100px;
+   grid-template-rows: 24px 1fr;
+   grid-template-areas:
+    "head head"
+    "tips btns";
+  }
+  heading- {
+   grid-area: head;
+  }',
+
+ "https://pilot.parts/programs/welcome/window/panel/?manifest" => 'https://pilot.parts/programs/welcome/window/panel/manifest.uri',
+ "https://pilot.parts/programs/welcome/window/panel/manifest.uri" => 'https://pilot.parts/programs/welcome/window/panel/heading/ https://pilot.parts/programs/welcome/window/panel/tip/ https://pilot.parts/programs/welcome/window/panel/menu/',
+ "https://pilot.parts/programs/welcome/window/panel/heading/?layout" => 'https://pilot.parts/programs/welcome/window/panel/heading/layout.css',
+ "https://pilot.parts/programs/welcome/window/panel/heading/layout.css" => ':host { display: flex; flex-flow: row nowrap; font-size: 24px; line-height: 24px; } :host::before { content: "Welcome to\00a0"; font-weight: 300; } :host::after { content: "Pilot"; font-weight: 700; }',
+ "https://pilot.parts/programs/welcome/window/panel/tip/?layout" => 'https://pilot.parts/programs/welcome/window/panel/tip/layout.css',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-0.txt" => 'No matter how much space a file takes up, an exact copy of that file takes up almost no space.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-1.txt" => '🔗 Kireji are files that describe other files.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-2.txt" => 'To change which programs open on start up, set everything how you want it and save. Pilot always boots into the last saved state.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-3.txt" => '🧬 Relate is a program that lets you modify any Pilot file using a node editor interface.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-4.txt" => 'Use 📁 Locate to browse all files on this virtual computer.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-5.txt" => 'Underneath everything, Pilot is a website. 📁 Locate is the complete site map.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-6.txt" => 'This computer is a client. You can open as many different clients as you want.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-7.txt" => 'When the mind is enlightened, the spirit is freed and the body matters not.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-8.txt" => 'There is always a virtual computer running in the background called the server.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-9.txt" => 'On your device, there is one virtual computer running per website in the network.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-10.txt" => 'If you immediately know the candle light is fire, the meal was cooked long ago.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-11.txt" => 'To discard a client without saving, simply close the tab it is running in.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-12.txt" => 'When you perform a factory reset, it completely erases everything you\'ve done and re-downloads Pilot from the server.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-13.txt" => 'This website doesn\'t have a privacy policy, because it doesn\'t collect any information.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-14.txt" => 'You can establish your own peer-to-peer connections to socialize, stream multimedia, play multiplayer games, and keep files in sync across tabs, browsers, and devices.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-15.txt" => 'All in-network websites work offline after you visit any one of them just once.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-16.txt" => 'Pilot is bigger on the inside than it is on the outside. You downloaded about 200kb of code from the server.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-17.txt" => 'Lightning flashes, sparks shower, in one blink of your eyes you have missed seeing.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-18.txt" => 'You must complete the journey you began at Kheb. Only then will you be able to find your way to the Great Path.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-19.txt" => '🔗 Kireji are used to link files to constructors.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-20.txt" => 'In 📁 Locate, right click any file to download it.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-21.txt" => 'A \'constructor\' is a file used to generate another file.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/count.txt" => '22',
+ "https://pilot.parts/programs/welcome/window/panel/tip/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/panel/tip/layout.css.c.js',
+ "https://pilot.parts/programs/welcome/window/panel/tip/layout.css?tip_index" => 'https://pilot.parts/programs/welcome/window/panel/tip/index.txt',
+ "https://pilot.parts/programs/welcome/window/panel/tip/index.txt" => '13',
+ "https://pilot.parts/programs/welcome/window/panel/tip/index.txt?fx" => 'https://pilot.parts/programs/welcome/window/panel/tip/change.uri',
+ "https://pilot.parts/programs/welcome/window/panel/tip/change.uri" => 'https://pilot.parts/programs/welcome/window/panel/tip/layout.css',
+ "https://pilot.parts/programs/welcome/window/panel/tip/layout.css.c.js" => '
+  return `:host {
+   display: grid;
+   grid-template-rows: 32px 1fr;
+   grid-template-columns: 1fr;
+   overflow: hidden;
+   box-sizing: border-box;
+   padding: 12px;
+   background:
+    radial-gradient(circle at center, rgb(255, 255, 65) 1px, transparent 0),
+    radial-gradient(circle at center, rgb(255, 255, 65) 1px, transparent 0),
+    white;
+   background-size: 6px 6px;
+   background-position: 0 0, 3px 3px;
+   box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
+  }
+  :host::before {
+   display: grid;
+   content: "Did you know?";
+   font-weight: 700;
+  }
+  :host::after {
+   display: grid;
+   content: "${Ω[`https://pilot.parts/programs/welcome/window/panel/tip/tip-${tip_index}.txt`]}";
+   min-width: 0;
+   white-space: wrap;
+   overflow-y: auto;
+  }`',
+ "https://pilot.parts/programs/welcome/window/panel/menu/?layout" => 'https://pilot.parts/programs/welcome/window/panel/menu/layout.css',
+ "https://pilot.parts/programs/welcome/window/panel/menu/?manifest" => 'https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri',
+ "https://pilot.parts/programs/welcome/window/panel/menu/?core" => '',
+ "https://pilot.parts/programs/welcome/window/panel/menu/layout.css" => ':host { display: flex; flex-flow: column nowrap; gap: 7px; } :host > * { height: 23px; padding: 3px; display: flex; flex-flow: row nowrap; text-align: center; }',
+ "https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri?constructor" => 'https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri.c.js',
+ "https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
+ "https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri.c.js" => <<<JS
+  const common_url = "https://pilot.parts/programs/locate/window/panel/menu/";
+  return [[
+   common_url + "next-tip/",
+   ":host::before { content: \'Next Tip\'; width: 100%; }",
+   "",
+   `() => { Ω["https://pilot.parts/programs/welcome/window/panel/tip/index.txt"] = (parseInt("" + Ω["https://pilot.parts/programs/welcome/window/panel/tip/index.txt"]) + 1) % parseInt("" + Ω["https://pilot.parts/programs/welcome/window/panel/tip/count.txt"]) }`,
+  ]].map(config => { button(...config); return config[0] }).join(" ")
+ JS
 ];
-eval('?>' . $Δ["https://core.parts/php/index.php"] . "<?php ");
+eval('?>' . $Δ["https://core.parts/index.php"] . "<?php ");
