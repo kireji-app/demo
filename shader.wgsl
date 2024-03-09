@@ -1,10 +1,6 @@
 struct UBO {
  proj: mat4x4<f32>,
  view: mat4x4<f32>,
- guiView: mat4x4<f32>,
- aspect: f32,
- mx: f32,
- my: f32,
  t: f32,
  s: f32,
  w: f32,
@@ -37,11 +33,9 @@ struct VSOut {
  var vsOut: VSOut;
  vsOut.color = vec4<f32>(inColor.xyz,inColor.a);
  var factor = uniforms.t * f32(layer);
- var m = vec2<f32>(uniforms.mx, uniforms.my);
  var pos = vec4<f32>(inPos, 1.0);
 
  if (layer < 100) {
-  pos = vec4<f32>(pos.x+sin(factor),pos.y+cos(factor/2),pos.z+cos(factor), 1);
   pos = uniforms.proj * uniforms.view * pos;
  } else if (layer < 200) {
    pos = vec4<f32>(pos.x*2/uniforms.w, pos.y*-2/uniforms.h, pos.z/uniforms.d, pos.w);

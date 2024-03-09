@@ -1,55 +1,148 @@
 <style>
  :root {
-  position: relative;
-  margin-bottom: 100vh;
+  background-color: silver;
+ }
+
+ * {
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+ }
+
+ input {
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: left;
+ }
+
+ output {
+  white-space: pre;
+  font-family: monospace;
+ }
+
+ #info>* {
+  min-height: 10px;
+  background: magenta;
+ }
+
+ #info>.surround {
+  padding: 8px 12px 8px 12px;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
+  overflow-y: auto;
  }
 
- body,
- :root::after {
-  flex: 0 0 100vw;
-  height: 100vh;
-  width: 100vw;
+ #info>.surround,
+ #panel,
+ #debug {
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px black;
+  background-color: #eee;
  }
 
- body {
-  position: relative;
-  overflow: scroll;
+ h1 {
   margin: 0;
+  padding: 0;
+  font-size: 1.3em;
  }
 
- :root::after {
-  content: '';
-  display: block;
+ #info {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-items: stretch;
+  overflow-y: auto;
+  padding: 8px;
+  padding-left: 10px;
+  gap: 8px;
+ }
+
+ #core {
+  --sidebar-width: 31vw;
+  --canvas-color: #eee;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
  }
 
  #debug {
-  position: fixed;
-  top: 8px;
-  left: 8px;
+  position: absolute;
+  left: calc(var(--sidebar-width) + 18px);
+  top: 18px;
   display: flex;
   flex-flow: column nowrap;
-  padding: 8px;
-  border-radius: 8px;
-  gap: 8px;
-  background: #eee
+  background: #1235;
+  max-width: 100px;
+  width: min-content;
+  min-height: min-content;
+  padding: 3px;
  }
 
- #debug>output {
-  background: #123;
-  border-radius: 4px;
-  padding: 8px;
+ .key-value {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+  padding: 3px;
+  background: white;
+  border: 1px solid black;
+  border-top: none;
+  box-shadow: 6px 5px 3px #0005;
+  margin-left: 3px;
+  margin-right: 7px;
+ }
+
+ div.key-value:hover {
+  background: #7be;
+ }
+
+ h2.key-value {
+  border-radius: 4px 4px 0 0;
+  border-top: 1px solid black;
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding: 6px;
+  font-size: 1.2em;
+  background-color: #17a;
   color: white;
+ }
+
+ div.key-value:last-of-type {
+  margin-bottom: 8px;
+  border-radius: 0 0 4px 4px;
+ }
+
+ .key-value>* {
+  width: 50%;
+  overflow: hidden;
+ }
+
+ #debug[open] {
+  width: 100px;
+ }
+
+ #debug>* {
+  display: block;
+  font-family: monospace;
+  color: white;
+ }
+
+ #debug:not([open])>:not(#menua) {
+  display: none;
+ }
+
+ #info {
+  width: var(--sidebar-width);
+  height: 100vh;
  }
 
  canvas {
   cursor: none;
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
+  right: 0;
+  height: calc(100vh - 16px);
+  width: calc(100vw - var(--sidebar-width) - 8px);
+  margin: 8px;
  }
 </style>
 <script>
@@ -141,41 +234,67 @@
   static get companyId() {
    return 'lens'
   }
+  static createFoundation() {
+   const foundation = Utils.foundation(Camera);
+   const toggleView = foundation.addToggle({
+    id: 'menub',
+    value: '📷'
+   });
+   return foundation
+  }
   #core = undefined
+  #focusId = 'none'
   x = 99
   y = 99
   z = 1000
-  mx = 0
-  my = 0
   eyedrop = [0, 0, 0, 0]
   mouseX = 0
   mouseY = 0
   fov = 35
-  near = 1
-  far = 100000
+  near = 0.1
+  far = 10000
   set pos({
    x,
    y,
    z
   }) {
-   if (x > this.x) x = this.x;
-   if (x < 0) x = 0;
-   if (y > this.y) y = this.y;
-   if (y < 0) y = 0;
+   /*
+     const maxX = C.getBoundingClientRect().width;
+     if (x > maxX) x = maxX;
+     if (x < 0) x = 0;
+     if (y < -this.y) y = -this.y;
+     if (y > 0) y = 0;*/
+   if (z < 0) z = 0;
    this.cache.push('pos x', x)
    this.cache.push('pos y', y)
    this.cache.push('pos z', z)
-   this.core.root.parentElement.scroll(x, y)
   }
   get pos() {
    return {
-    x: this.cache.pull('pos x', 150),
-    y: this.cache.pull('pos y', 60),
-    z: this.cache.pull('pos z', 50)
+    x: this.cache.pull('pos x', 0),
+    y: this.cache.pull('pos y', 0),
+    z: this.cache.pull('pos z', 0)
    };
+  }
+  get hoverId() {
+   const id = Utils.getKeyFromColor(this.eyedrop) || 'none'
+   this.tapHover.innerText = id;
+   return id;
+  }
+  get focusId() {
+   return this.#focusId
+  }
+  setFocus() {
+   this.#focusId = this.hoverId
+   Utils.updateCache('core focus', this.#focusId)
+   this.tapFocus.innerText = this.#focusId;
   }
   constructor(core) {
    this.#core = core
+   this.tapHover = Debug.watch('hover');
+   this.tapFocus = Debug.watch('focus');
+   this.#focusId = Utils.cache('core focus', 'none')
+   this.tapFocus.innerText = this.#focusId;
   }
   get pixelRatio() {
    return this.#core.pixelRatio
@@ -242,12 +361,6 @@
     MDN.rotateYMatrix(this.ry * Math.PI / 180),
    ])
   }
-  get rootView() {
-   return MDN.multiplyArrayOfMatrices([
-    MDN.translateMatrix(0, 0, this.y * -Math.SQRT1_2),
-    MDN.rotateYMatrix(Math.PI),
-   ])
-  }
   get proj() {
    let
     out = [],
@@ -281,7 +394,7 @@
    return out
   }
   get buffer() {
-   return new Float32Array([...this.proj, ...this.view, ...this.rootView, this.aspect, this.mx, this.my, this.t, this.s, this.x * this.pixelRatio, this.y * this.pixelRatio, this.z])
+   return new Float32Array([...this.proj, ...this.view, this.t, this.s, this.x * this.pixelRatio, this.y * this.pixelRatio, this.z])
   }
  }
  class Model {
@@ -338,11 +451,15 @@
    this.#mode = mode
   }
   hoverOnly(geometry) {
-   if (this.core.name != OVER_NAME || this.#mode == 'id' && !this.subject) return [];
+   if (Core.companyId != OVER_NAME || this.#mode == 'id' && !this.subject) return [];
    return geometry;
   }
   get xyz() {
-   this.mesh.transform = [this.core.camera.mouseX - (this.subject ? 0 : this.core.camera.x / 2), this.core.camera.mouseY - (this.subject ? 0 : this.core.camera.y / 2), 0, 200]
+   this.mesh.transform = this.subject ? [
+    this.core.camera.x / 2 - this.core.camera.mouseX, 0, this.core.camera.y / 2 + this.core.camera.mouseY, 200
+   ] : [
+    this.core.camera.mouseX - this.core.camera.x / 2, this.core.camera.mouseY - this.core.camera.y / 2, 0, 200
+   ]
    return this.hoverOnly(this.mesh.xyz);
   }
   get rgba() {
@@ -357,11 +474,10 @@
  }
  class DocMesh {
   static get companyId() {
-   return 'form'
+   return 'plan'
   }
   #mode = 'shade'
   constructor(core, subject = false) {
-   this.root = core.root
    this.core = core
    this.subject = subject
   }
@@ -370,29 +486,26 @@
   }
   get group() {
    if (!this._group) {
-    const {
-     width: width,
-     height: height
-    } = this.root.getBoundingClientRect(),
-     getPlane = (node, thickness = 2) => {
-      if (!node.hasAttribute('id')) return; // need id for docmesh hit detection
-      const rect = node.getBoundingClientRect();
-      return new Mesh(CUBE, [-(rect.width / 2 + rect.x), this.subject ? (depth -= thickness) + thickness / 2 : 0.99999, rect.height / 2 + rect.y, rect.width, thickness, rect.height], node.getAttribute('id'));
+    const
+     getPlane = (node, depth) => {
+      let id = node.getAttribute('id');
+      if (!node.hasAttribute('id')) id = 'none';
+      const {
+       height,
+       width,
+       x,
+       y
+      } = node.getBoundingClientRect();
+      if (!this.subject) return new Mesh(CUBE, [(width / 2 + x) - this.core.camera.x / 2, (height / 2 + y) - this.core.camera.y / 2, depth + this.core.camera.pos.z, width, height, 2], id)
+      return new Mesh(CUBE, [-(width / 2 + x) + this.core.camera.pos.x, depth + this.core.camera.pos.z, (height / 2 + y) + this.core.camera.pos.y, width, 2, height], id);
      },
-     getPlaneRecursive = (node, skipSelf, root) => {
-      let plane = undefined;
-      if (!skipSelf) {
-       if (root) {
-        plane = getPlane(node, 50)
-       } else plane = getPlane(node)
-      };
-      if (node.children.length) {
-       return new Group([...[...node.children].map(node => getPlaneRecursive(node)), plane]);
-      }
-      return plane
+     getPlaneRecursive = (node, depth, core) => {
+      let plane;
+      if (!core || this.subject) plane = getPlane(node, depth + 1)
+      if (!node.children.length) return plane
+      return new Group([...[...node.children].map(node => getPlaneRecursive(node, depth - 2)), plane]);
      };
-    let depth = 50;
-    this._group = getPlaneRecursive(this.root, false, true)
+    this._group = getPlaneRecursive(C, 2, 1)
     this._group.mode = this.#mode
    }
    return this._group;
@@ -417,21 +530,21 @@
    return 'core'
   }
   static #device = undefined
-  static #initialized = false
+  static #instance = false
 
   static async initialize(...names) {
-   if (!this.#initialized) {
-    Utils.checkSupport();
+   if (this.#instance) throw "Duplicate initialization on singleton Core.";
+   Utils.checkSupport();
 
-    return await Promise.all([
-     navigator.gpu.requestAdapter().then(adapter => adapter.requestDevice()),
-     navigator.serviceWorker.register('serviceWorker.js'),
-     new Promise(resolve => onload = () => resolve())
-    ]).then(([device]) => {
-     this.#device = device;
-     this.#initialized = true;
-    });
-   }
+   await Promise.all([
+    navigator.gpu.requestAdapter().then(adapter => adapter.requestDevice()),
+    navigator.serviceWorker.register('serviceWorker.js'),
+    new Promise(resolve => onload = () => resolve())
+   ]).then(([device]) => {
+    this.#device = device;
+    C = document.body;;
+    this.#instance = new Core();
+   });
   }
 
   static get device() {
@@ -452,75 +565,49 @@
    return new Core(parsed);
   }
 
+  static createFoundation() {
+   Root.scroll(1, 1);
+   C.setAttribute('id', 'core');
+   return C
+  }
+
   #ui3D = true
-  #name = undefined
-  #city = undefined
+  #manifest = {}
+  #pixelRatio = 1
+  #attributes = {}
+  #info = undefined
   #cache = undefined
   #camera = undefined
+  #onstatechanged = []
   #context = undefined
   #startTime = undefined
-  #bitmapContext = undefined
-  #pixelRatio = undefined
-  #attachments = undefined
-  #uniformBuffer = undefined
   #onmanifestchanged = []
-  #onstatechanged = []
-  #manifest = {}
-
-  #root = document.body
-  #canvas = this.#root.appendChild(document.createElement('canvas'))
-  #attributes = {}
+  #attachments = undefined
+  #bitmapContext = undefined
+  #uniformBuffer = undefined
   #offscreen = new OffscreenCanvas(64, 64)
+  #canvas = C.appendChild(document.createElement('canvas'))
 
-  constructor({
-   name = 'desktop',
-   width,
-   height,
-   pixelRatio = 1,
-   points,
-   html = 1,
-   classes = []
-  } = {}) {
-   this.#manifest = {
-    name,
-    width,
-    height,
-    pixelRatio,
-    points,
-    html,
-    classes
-   }
-   this.#city = new City(this);
-   this.#name = name;
-   this.#root.setAttribute('name', name);
-   this.#root.setAttribute('class', classes.join(' '));
-   this.#root.setAttribute('id', 'root');
-   this.#root.ontabbed = event => this.onresize();
+  constructor() {
+   if (Core.#instance) throw "Only one core allowed right now.";
+   this.#info = new Info(this);
+   this.#canvas.setAttribute('id', 'panel');
    this.#cache = Utils.linkCache(this);
    this.#startTime = this.cache.pull('start-time', () => Date.now());
    const camera = this.#camera = new Camera(this),
     canvas = this.canvas;
-   if (width && height) {
-    canvas.width = camera.x = this.#offscreen.width = width;
-    canvas.height = camera.y = this.#offscreen.height = height;
-   } else {
-    this.#pixelRatio = pixelRatio ?? 1;
-    canvas.setAttribute('class', canvas.getAttribute('class') + ' pixelRatio')
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = camera.x = this.#offscreen.width = Math.round(rect.width / pixelRatio);
-    canvas.height = camera.y = this.#offscreen.height = Math.round(rect.height / pixelRatio);
-   }
-   this.#root.setAttribute('style', `--aspect:${camera.aspect}`);
+   const rect = canvas.getBoundingClientRect();
+   canvas.width = camera.x = this.#offscreen.width = Math.round(rect.width / this.#pixelRatio);
+   canvas.height = camera.y = this.#offscreen.height = Math.round(rect.height / this.#pixelRatio);
+   C.setAttribute('style', `--aspect:${camera.aspect}`);
    const uniformBuffer = this.#uniformBuffer = Core.createBuffer(camera.buffer, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
-   const rootNodes = [
-    //new DocMesh(this),
+   const PAD_SAMPLE = 5;
+   const model = new Model(new Group([
+    // new DocMesh(this),
     new Cursor(this),
     new DocMesh(this, true),
-    new Cursor(this, true),
-    new Mesh(CUBE, [0, 0, 0, 5], 'you'),
-   ];
-   const PAD_SAMPLE = 5;
-   const model = new Model(new Group(rootNodes));
+    new Mesh(CUBE, [0, -0.5, 0, 1], 'you'),
+   ]));
    const context = this.#context = this.#offscreen.getContext('webgpu');
    const bitmapContext = this.#bitmapContext = this.#canvas.getContext("2d", {
     willReadFrequently: true
@@ -534,17 +621,9 @@
     if (factor > 0) camera.tz *= 3 / 3.2;
     else camera.tz *= 3.1 / 3;
    }
-   canvas.onkeydown = event => {
-    if (event.key == 'ArrowRight') {
-     event.preventDefault()
-     camera.s++
-    } else if (event.key == 'ArrowLeft') {
-     event.preventDefault()
-     camera.s--
-    }
-   }
    canvas.onmousedown = event => {
     canvas.click();
+    camera.setFocus();
     pointerState = 1
     event.preventDefault()
     globalThis.onmouseup = event => {
@@ -557,8 +636,6 @@
      rect = canvas.getBoundingClientRect(),
      w = rect.width,
      h = rect.height;
-    camera.mx = 2 * event.offsetX / w - 1
-    camera.my = -2 * event.offsetY / h + 1
     camera.mouseX = event.offsetX;
     camera.mouseY = event.offsetY;
     if (pointerState) {
@@ -567,40 +644,52 @@
     }
    }
    let _W, _A, _S, _D, _SPACE;
-   this.#root.onkeydown = event => {
+   C.onkeydown = event => {
     event.preventDefault();
     switch (event.code) {
      case 'KeyW':
       if (event.repeat) return;
-      console.log('start moving forward')
       _W = true;
       break;
      case 'KeyA':
       if (event.repeat) return;
-      console.log('start moving left')
       _A = true;
       break;
      case 'KeyS':
       if (event.repeat) return;
-      console.log('start moving backward')
       _S = true;
       break;
      case 'KeyD':
       if (event.repeat) return;
-      console.log('start moving right')
       _D = true;
       break;
      case 'Space':
       if (event.repeat) return;
-      console.log('start jumping')
       _SPACE = true;
       break;
      case 'Enter':
       console.log('use')
       break;
+     case 'KeyF':
+      let id = camera.focusId;
+      if (id == 'you') {
+       camera.tz = -3;
+       break;
+      }
+      if (id == 'none') id = 'core';
+      const {
+       width, height, x, y
+      } = document.getElementById(id).getBoundingClientRect();
+      camera.pos = {
+       x: x + width / 2,
+       y: -(height / 2 + y),
+       z: 1
+      }
+      camera.tz = -Math.max(width, height);
+      break;
     }
    }
-   this.#root.onkeyup = event => {
+   C.onkeyup = event => {
     event.preventDefault();
     switch (event.code) {
      case 'KeyW':
@@ -731,9 +820,7 @@
      }]
     });
    const resizeObserver = new ResizeObserver(resize => this.onresize())
-   this.#root.parentElement.scroll(camera.pos.x, camera.pos.y);
    resizeObserver.observe(this.#canvas);
-   const tapHover = Debug.watch('hover');
 
    // =============================================
 
@@ -746,20 +833,20 @@
     let commandEncoder, passEncoder, pipeline;
     let oldPos = camera.pos;
     const yAngle = ((camera.ry % 360) * Math.PI) / 180;
-    let speed = 1;
+    let speed = 10;
     let velocity = (_S && _W ? 0 : _S ? speed : _W ? -speed : 0);
     let direction = [velocity * Math.sin(yAngle), velocity * Math.cos(yAngle)]
     oldPos = camera.pos = {
      x: oldPos.x + -direction[0],
-     y: oldPos.y + direction[1],
-     z: oldPos.z + (_SPACE ? -10 : -10),
+     y: oldPos.y + -direction[1],
+     z: oldPos.z + (_SPACE ? 10 : -10),
     }
-    velocity = (_D && _A ? 0 : _D ? speed : _A ? -speed : 0);
+    velocity = (_A && _D ? 0 : _A ? speed : _D ? -speed : 0);
     direction = [velocity * Math.sin(yAngle), velocity * Math.cos(yAngle)]
     camera.pos = {
-     x: oldPos.x + direction[1],
+     x: oldPos.x + -direction[1],
      y: oldPos.y + direction[0],
-     z: oldPos.z + (_SPACE ? -10 : -10),
+     z: oldPos.z
     }
 
     await this.changeBuffer(uniformBuffer, camera.buffer);
@@ -785,8 +872,8 @@
     this.#bitmapContext.clearRect(0, 0, camera.x, camera.y);
     this.#bitmapContext.drawImage(this.#offscreen, 0, 0);
     camera.eyedrop = [...this.#bitmapContext.getImageData(camera.mouseX, camera.mouseY, 1, 1).data];
-
-    tapHover.innerText = Utils.getKeyFromColor(camera.eyedrop);
+    camera.hoverId
+    camera.focusId
     // document.body.style.setProperty('background-color', '#' + camera.eyedrop.map(n => n.toString(16).padStart(2, 0)).join(''))
 
     await this.changeBuffer(uniformBuffer, camera.buffer);
@@ -827,9 +914,6 @@
   get startTime() {
    return this.#startTime;
   }
-  get name() {
-   return this.#name;
-  }
   get pixelRatio() {
    return this.#pixelRatio
   }
@@ -848,9 +932,6 @@
   get canvas() {
    return this.#canvas
   }
-  get root() {
-   return this.#root;
-  }
   get manifest() {
    return JSON.stringify(this.#manifest);
   }
@@ -868,11 +949,11 @@
    return this.#attributes;
   }
   get showing() {
-   return !!(this.root.offsetWidth || this.root.offsetHeight || this.root.getClientRects().length)
+   return SHOWING(C)
   }
   onresize() {
    setTimeout(() => {
-    if (!this.#pixelRatio || !this.showing) return;
+    if (!this.showing) return;
     const rect = this.canvas.getBoundingClientRect();
     this.canvas.width = this.camera.x = this.#offscreen.width = Math.round(rect.width / this.#pixelRatio);
     this.canvas.height = this.camera.y = this.#offscreen.height = Math.round(rect.height / this.#pixelRatio);
@@ -927,12 +1008,14 @@
    this.contextMenu.removeAttribute('open');
   }
  }
- class City {
+ class Info {
   static get companyId() {
-   return 'city'
+   return 'info'
   }
-  constructor(core) {
+  constructor() {
+   const infoFoundation = C.appendChild(Utils.foundation(Info));
    this.companies = [
+    Font,
     Debug,
     Utils,
     Shape,
@@ -942,21 +1025,16 @@
     Model,
     Cursor,
     DocMesh,
-    Core,
-    City
+    Core
    ].map(Company => {
-    if ('createFoundation' in Company) {
-     return core.root.appendChild(Company.createFoundation());
-    }
-    const foundation = core.root.appendChild(document.createElement('div'));
-    foundation.setAttribute('id', Company.companyId);
-    foundation.innerText = Company.companyId
+    const foundation = Company.createFoundation?.() ?? Utils.foundation(Company);
+    if (Company != Core) infoFoundation.appendChild(foundation);
     return foundation;
    })
   }
  }
  const SHADER = `<? readfile('shader.wgsl') ?>`;
  var OVER, OVER_NAME;
- onmousemove = e => (OVER = e.target, OVER_NAME = e.target.tagName == 'CANVAS' ? e.target.parentElement.getAttribute('name') : null);
+ onmousemove = e => (OVER = e.target, OVER_NAME = e.target.tagName == 'CANVAS' ? e.target.parentElement.getAttribute('id') : null);
  Root.onmouseleave = e => OVER_NAME = undefined;
 </script>

@@ -4,7 +4,7 @@
    return 'debug'
   }
 
-  static debugRoot = undefined
+  static #foundation = undefined
   static previousFrameRate = 60
   static previousTime = undefined
   static frameRateElement = undefined
@@ -18,16 +18,19 @@
   }
 
   static createFoundation(core) {
-   this.debugRoot = document.createElement('div');
-   this.debugRoot.setAttribute('id',this.companyId);
-   this.frameRateElement = this.debugRoot.appendChild(document.createElement('output'));
+   this.#foundation = C.appendChild(Utils.foundation(this));
+   const toggleView = this.#foundation.addToggle({
+    value: '☰',
+    id: 'menua'
+   })
+   this.frameRateElement = this.#foundation.appendChild(document.createElement('output'));
    this.frameRateElement.setAttribute('id', 'fps');
-   return this.debugRoot
+   return this.#foundation
   }
 
-  static watch(id='debug') {
-   if (!this.debugRoot) return;
-   const watchElement = this.debugRoot.appendChild(document.createElement('output'));
+  static watch(id = 'debug') {
+   if (!this.#foundation) throw "Cannot watch without foundation";
+   const watchElement = this.#foundation.appendChild(document.createElement('output'));
    watchElement.setAttribute('id', id);
    return watchElement;
   }

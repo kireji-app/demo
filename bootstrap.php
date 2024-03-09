@@ -7,6 +7,10 @@ const MODULES = [
  'shape',
  'primatives',
  'debug',
+ 'type',
+ 'struct',
+ 'woff2',
+ 'font',
  'core'
 ];
 
@@ -14,7 +18,5 @@ foreach (MODULES as $filename) {
  include $filename . '.php';
 }
 ?><script>
- Core.initialize().then(_ => {
-  new Core({});
- })
+ Core.initialize()
 </script>

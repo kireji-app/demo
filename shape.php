@@ -1,6 +1,6 @@
 <script>
  class Shape {
-  get companyId() {
+  static get companyId() {
    return 'shape'
   }
   #cache = {}
