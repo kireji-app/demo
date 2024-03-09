@@ -1,0 +1,22 @@
+:host {
+ display: grid;
+ grid-template-rows: 1fr;
+ grid-template-columns: 1fr;
+ background-color: var(--ui-fill);
+}
+
+textarea {
+ padding: var(--hu-hw);
+ box-sizing: border-box;
+ font-family: monospace;
+ white-space: pre-wrap;
+ background-color: #0007;
+ color: var(--vellum-white);
+ outline: none;
+ border: none;
+ resize: none;
+}
+
+textarea:focus {
+ box-shadow: inset 0 0 0 2px var(--approval-green);
+}

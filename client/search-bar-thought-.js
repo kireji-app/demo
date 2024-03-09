@@ -9,10 +9,10 @@ const
  },
  items = say([...backlinks.get('thoughts-')].map(w => `<search-bar-item word="${w}" ${w === word ? 'selected' : ''}></search-bar-item>`).join('')),
  restyle = () => {
-  if (field.value === '') sheet.replaceSync(`:host{--results:${query(`search-bar-item`, true).length}}`)
+  if (field.value === '') sheet.replaceSync(`:host{--results:${K(`search-bar-item`)}}`)
   else {
-   const results = query(`search-bar-item[word*="${field.value}"]`, true), count = results.length;
-   sheet.replaceSync(`search-bar-item:not([word*="${field.value}"]){display:none !important}:host{--results:${count}}`)
+   const k = K(`search-bar-item[word*="${field.value}"]`);
+   sheet.replaceSync(`search-bar-item:not([word*="${field.value}"]){display:none !important}:host{--results:${k}}`)
   };
  };
 
@@ -20,7 +20,7 @@ items.forEach(_ => {
  _.onpointerdown = e => { e.preventDefault(); cover(_.get('word')) }
 })
 this.shadowRoot.adoptedStyleSheets.push(sheet);
-let selected = query('[selected]');
+let selected = Q('[selected]');
 field.placeholder = word
 
 field.oninput = () => {
@@ -57,7 +57,7 @@ field.onsubmit = () => {
  $word(field.value)
  selected?.removeAttribute('selected');
  field.placeholder = word
- selected = query(`[word="${field.value}"]`);
+ selected = Q(`[word="${field.value}"]`);
  selected?.setAttribute('selected', '');
  icon.cover(field.value);
  this.onsetword?.(word)
@@ -66,3 +66,7 @@ field.onsubmit = () => {
 field.value = filter;
 if (focus === 'true') field.focus();
 restyle();
+
+Object.defineProperties(this, {
+ value: { get: () => word }
+})

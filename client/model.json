@@ -1,45 +1,75 @@
 {
  "birthday-theta": {
-  "desktop-": "[min=711633600 max=711640800]('birthday-theta.css')(\"birthday-theta.js\")"
+  "desktop-": "[min=711633600 max=711640800]sun-('birthday-theta.css')(~birthday-theta.js~)"
+ },
+ "sub-part": {
+  "sub-model": "part-menu(~part-.js~)('part-.css')"
+ },
+ "javascript-part": {
+  "desktop-": "~this.label = 'JS Snippet'; const editor = say(`<code-editor word=${this.a} rootword=${this.b} index=${this.c}>`)[0];~"
+ },
+ "proto-model": {
+  "desktop-": "`<h1>Proto View</h1><div>${innerHTML}</div>`"
  },
  "folder-explorer": {
-  "desktop-": "[selection]('explore.css')(\"explore.js\")(\"folder.js\")"
+  "desktop-": "('explore.css')(~folder.js~)"
+ },
+ "code-explorer": {
+  "desktop-": "[files='birthday-theta.css birthday-theta.js' file=1]('code-.css')(~code-.js~)"
  },
  "explore-": {
-  "desktop-": "[tabs='desktop-explorer folder-explorer model-explorer moment-explorer'](\"explore-.js\")('explore-.css')"
+  "desktop-": "(~explore-.js~)('explore-.css')"
+ },
+ "code-editor": {
+  "desktop-": "('code-editor.css')(~code-editor.js~)"
  },
  "title-bar": {
-  "desktop-": "[tabs tab](\"title-bar.js\")('title-bar.css')"
+  "desktop-": "[tab='model-explorer'](~title-bar.js~)('title-bar.css')"
  },
  "desktop-explorer": {
-  "desktop-": "[selection]('explore.css')(\"explore.js\")(\"desktop.js\")"
+  "explore-": "[word=birthday-theta scroll=0]('explore.css')(~desktop.js~)(~static-selector.js~)",
+  "title-bar": "{display:grid}my-glyph"
+ },
+ "model-explorer": {
+  "task-item": "`We need a custom scrollbar for windows with visible overflow along one axis but scroll/auto in the other`",
+  "explore-": "[word=blank-]('model-explorer.css')(~model-explorer.js~)",
+  "title-bar": "{display:grid}my-glyph"
+ },
+ "history-": {
+  "desktop-": "[history](~history-.js~)"
  },
  "moment-explorer": {
-  "desktop-": "[selection]('explore.css')(\"explore.js\")(\"time-index.js\")"
+  "desktop-": "('explore.css')(~time-index.js~)"
  },
  "desktop-": {
-  "desktop-": "\"incoming(word => { say(`<model-item word=${word}>`) })\""
+  "desktop-": "~incoming(word => { say(`<model-item word=${word}>`) })~"
  },
  "file-item": {
-  "desktop-": "[buffername]('file.css')(\"file.js\")"
+  "desktop-": "[buffername]('file.css')(~file.js~)"
  },
  "model-item": {
-  "desktop-": "[word]('model.css')(\"model.js\")"
+  "desktop-": "('model.css')(~model.js~)"
  },
- "sort-rule": {
-  "thoughts-": "+The parts in this model have a specific order: how often the item is mentioned, descending. The first will be the most mentioned word, which is mentioned with frequency. Descending, words with decreasing connectedness, culminating in the list of words with only one mention.+"
+ "example-item": {
+  "desktop-": "{padding: var(--huh)}`${this.get('value')}`"
  },
  "tooltip-": {
-  "desktop-": "[depth=-1 display=gone]('tooltip-.css')my-glyph(\"tooltip-.js\")"
+  "desktop-": "('tooltip-.css')my-glyph(~tooltip-.js~)"
+ },
+ "part-tool": {
+  "desktop-": "('part-tool.css')my-glyph(~part-tool.js~)"
+ },
+ "sun-": {
+  "desktop-": "~success('Let there be light!')~"
  },
  "core-parts": {
-  "desktop-": "[word=birthday-theta]('core-parts.css')^Kireji Word Maker^\"on.clear(word=>{$word(word)})\"title-bar explore- +<v-rule offset=17>+ +<h-rule edge=1 offset=3>+ console- (\"core-parts-old.js\")"
+  "desktop-": "('core-parts.css')^Kireji Word Maker^ title-bar explore- +<v-rule offset=27>+ +<v-rule edge=1 offset=27 key=r-split>+ +<h-rule edge=1 offset=21>+ code-explorer console- (~core-parts.js~)"
  },
  "part-menu": {
-  "desktop-": "{display:grid;grid-template-columns:var(--u2w) var(--u2w) 1fr var(--u2w);line-height:var(--u2h)}+<reorder-handle parent=1>++<collapse-handle parent=1>+`<label>${this.get('label')}</label>` delete-btn"
+  "desktop-": "{display:grid;grid-template-columns:var(--u2w) var(--u2w) 1fr var(--u2w);line-height:var(--u2h)}+<reorder-handle parent=1>++<collapse-handle parent=1>++<label>loading...+(~part-menu.js~)delete-btn"
  },
  "delete-btn": {
-  "desktop-": "'my-glyph{line-height:var(--u2h)}'{text-align:center}+<my-glyph show-tip=false>+"
+  "desktop-": "'my-glyph{line-height:var(--u2h)}'{text-align:center} my-glyph"
  },
  "ejaugust-com": {
   "desktop-": "^Eric Augustinowicz | ^('portfolio.css')"
@@ -47,68 +77,47 @@
  "blank-": {
   "desktop-": ""
  },
- "model-explorer": {
-  "desktop-": "[word=blank-]('model-explorer.css')(\"model-explorer.js\")"
- },
  "buffername-": {
-  "desktop-": "[content]{width:100%}\"tip('Buffer');\"`<file-item buffername=${atob(content).websafe()}>`"
- },
- "buffername-part": {
-  "desktop-": "[content]{width:100%}('part-.css')(\"buffername-part.js\")"
+  "desktop-": "[content]{width:100%}~tip('Buffer')~`<file-item buffername=${atob(content).websafe()}>`"
  },
  "template-": {
-  "desktop-": "[content alt='Template'](\"expression.js\")('expression.css'){--mark:'`'}"
- },
- "template-part": {
-  "desktop-": "[content alt='Template'](\"part-.js\")('part-.css'){--mark:'`'}"
+  "desktop-": "[content alt='Template'](~expression.js~)('expression.css'){--mark:'`'}"
  },
  "css-": {
-  "desktop-": "[content alt='CSS'](\"expression.js\")('expression.css'){--mark:'\\''}"
- },
- "css-part": {
-  "desktop-": "[content alt='CSS'](\"part-.js\")('part-.css'){--mark:'\\''}"
+  "desktop-": "[content alt='CSS'](~expression.js~)('expression.css'){--mark:'\\''}"
  },
  "custom-": {
-  "desktop-": "[content]('custom-.css')(\"custom-.js\")"
- },
- "custom-part": {
-  "desktop-": "[content]('part-.css')('custom-part.css')(\"custom-part.js\")"
+  "desktop-": "[content]('custom-.css')(~custom-.js~)"
  },
  "html-": {
-  "desktop-": "[content alt=HTML](\"expression.js\")('expression.css'){--mark:'+'}"
- },
- "html-part": {
-  "desktop-": "[content alt=HTML](\"part-.js\")('part-.css'){--mark:'+'}"
+  "desktop-": "[content alt=HTML](~expression.js~)('expression.css'){--mark:'+'}"
  },
  "hostcss-": {
-  "desktop-": "[content alt=Style](\"expression.js\")('expression.css'){--mark:'{';--unmark:'\\7D'}"
- },
- "hostcss-part": {
-  "desktop-": "[content alt=Style](\"part-.js\")('part-.css'){--mark:'{';--unmark:'\\7D'}"
+  "desktop-": "[content alt=Style](~expression.js~)('expression.css'){--mark:'{';--unmark:'\\7D'}"
  },
  "title-": {
-  "desktop-": "[content alt=Title](\"expression.js\")('expression.css'){--mark:'^'}"
- },
- "title-part": {
-  "desktop-": "[content alt=Title](\"part-.js\")('part-.css'){--mark:'^'}"
+  "desktop-": "[content alt=Title](~expression.js~)('expression.css'){--mark:'^'}"
  },
  "javascript-": {
-  "desktop-": "[content alt=JS](\"expression.js\")('expression.css'){--mark:'\"'}"
+  "desktop-": "[content alt=JS](~expression.js~)('expression.css'){--mark:'~'}"
  },
- "javascript-part": {
-  "desktop-": "[content alt=JS](\"part-.js\")('part-.css'){--mark:'\"'}"
+ "code-welcome": {
+  "desktop-": "+<watermark- word=code-editor>+"
+ },
+ "watermark-":{
+  "desktop-":"('watermark-.css')(~watermark-.js~)"
  },
  "reorder-handle": {
-  "desktop-": "'my-glyph{line-height:var(--u2h)}'{text-align:center}+<my-glyph show-tip=false>+(\"reorder-handle.js\")('reorder-handle.css')"
+  "desktop-": "'my-glyph{line-height:var(--u2h)}'{text-align:center} my-glyph (~reorder-handle.js~)('reorder-handle.css')"
  },
  "collapse-handle": {
-  "desktop-": "'my-glyph, glyph-{line-height:var(--u2h)}:host(:not([open]))>glyph-,:host([open])>my-glyph{display:none}'{text-align:center;cursor:pointer}+<my-glyph show-tip=false>++<glyph- show-tip=false word=expand-handle>+(\"collapse-handle.js\")"
+  "desktop-": "'my-glyph, glyph-{line-height:var(--u2h)}:host(:not([open]))>glyph-,:host([open])>my-glyph{display:none}'{text-align:center;cursor:pointer} my-glyph +<glyph- word=expand-handle>+(~collapse-handle.js~)"
  },
  "v-rule": {
-  "desktop-": "[offset=23 key=v-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
+  "desktop-": "[offset=23 key=v-split edge=0 dragging=false]('split-bar.css')(~split-bar.js~)"
  },
  "h-rule": {
-  "desktop-": "[offset=3 key=h-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
+  "desktop-": "[offset=3 key=h-split edge=0 dragging=false]('split-bar.css')(~split-bar.js~)"
  },
  "kireji-app": {
   "desktop-": "^kireji infix^{display:grid}+<infix- focus=true>+"
@@ -120,31 +129,31 @@
   "desktop-": "[index=0]('stack-.css'){--scale:2}`${moments[index].stack.node.map(node => '<glyph- word='+node.word+'></glyph->').join('')}` my-glyph"
  },
  "version-pill": {
-  "desktop-": "\"tip('Kireji Version')\"{border-radius: var(--huh); padding: 0 var(--huw); box-shadow: 0 0 0 2px goldenrod; line-height: var(--u2h); color: goldenrod;}`α${version}`"
+  "desktop-": "~tip('Kireji Version')~'refetch-btn{height: var(--u2h); width: var(--u2w);}'{display:flex;flex-flow:row nowrap;border-radius:var(--huh);padding: 0 var(--huw); box-shadow: 0 0 0 2px goldenrod; line-height: var(--u2h); color: goldenrod}`α${version}`~incoming(echo)~"
  },
  "my-glyph": {
-  "desktop-": "[word=one- show-tip=true]('glyph-.css')(\"marks.js\")\"$word(host.word)\"(\"glyph-.js\")"
+  "desktop-": "('glyph-.css')(~marks.js~)~this.set(`word`,host.word)~(~glyph-.js~)"
  },
  "glyph-": {
-  "desktop-": "[word=one- show-tip=true]('glyph-.css')(\"marks.js\")(\"glyph-.js\")"
+  "desktop-": "('glyph-.css')(~marks.js~)(~glyph-.js~)"
  },
  "chat-header": {
   "kireji-io": "{ flex: 0 0 calc(4 * var(--uh)); }"
  },
  "chat-keyboard": {
-  "kireji-io": "('chat-keyboard.css') \"this.onclick = ()=> this.setAttribute('raised','')\" chat-input keyboard-panel"
+  "kireji-io": "('chat-keyboard.css') ~this.onclick = ()=> this.setAttribute('raised','')~ chat-input keyboard-panel"
  },
  "chat-input": {
-  "desktop-": "(\"p2p.js\"){ background: var(--white-fill-grid); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
+  "desktop-": "(~p2p.js~){ background: var(--white-fill-grid); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
  },
  "text-input": {
-  "chat-input": "{color: var(--ui-fill); }\"const nodesToWipe = []; on.clearChatInput(i => {nodesToWipe.forEach(node=>node.remove()); nodesToWipe.push(...say(i.websafe())) })\""
+  "chat-input": "{color: var(--ui-fill); }~const nodesToWipe = []; ON['clear chat input'](i => {nodesToWipe.forEach(node=>node.remove()); nodesToWipe.push(...say(i.websafe())) })~"
  },
  "send-btn": {
   "chat-input": "{ height: var(--u2h); display: block; width: var(--u3w); cursor:pointer; background: var(--approval-green); }"
  },
  "chat-box": {
-  "kireji-io": "('chat-box.css')(\"chat-box.js\")"
+  "kireji-io": "('chat-box.css')(~chat-box.js~)"
  },
  "hungry-orbs": {
   "thoughts-": "(+hungry-orbs.html+)"
@@ -153,10 +162,7 @@
   "desktop-": "+Hi+"
  },
  "cursor-trap": {
-  "desktop-": "{ background: var(--white-fill-dots) !important }'legend-{ margin: var(--u2h) var(--u2w); color: var(--ui-fill) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'\"const [dot,arrow,cursor] = echo('+<dot- center>++<vector- label arrow center>+ cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })\"legend-"
- },
- "sub-part": {
-  "desktop-": "('part-.css')+<part-menu label=Part>+`<model-item word=${this.get('word')}>`"
+  "desktop-": "{ background: var(--white-fill-dots) !important }'legend-{ margin: var(--u2h) var(--u2w); color: var(--ui-fill) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'~const [dot,arrow,cursor] = echo('+<dot- center>++<vector- label arrow center>+ cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })~legend-"
  },
  "complex-input": {
   "desktop-": "'cursor-trap { position: relative; width: calc(15 * var(--uw)); height: var(--u2h) }' cursor-trap"
@@ -168,40 +174,37 @@
   "desktop-": "{background-color: var(--ui-fill); padding: var(--hu-hw); color:var(--vellum-white); border-radius: var(--huh); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 0 0 rgba(255, 255, 255, 0.7) inset; display: inline-block; font-weight: 700; white-space: nowrap}`${innerHTML}`"
  },
  "dot-": {
-  "desktop-": "[x=0 y=0 color]('dot.css')\"this.to=(x,y,color)=>{tip(`Point (${x},${y})`); this.set({x,y,color,'style':`--x:${x};--y:${y};--color:${color}`})}; this.to(x,y,color);\""
+  "desktop-": "[x=0 y=0 color]('dot.css')~this.to=(x,y,color)=>{tip(`Point (${x},${y})`); this.set({x,y,color,'style':`--x:${x};--y:${y};--color:${color}`})}; this.to(x,y,color);~"
  },
  "symbol-": {
-  "desktop-": "[x=0 y=0 word=zero-]('glyph-.css')('symbol.css')(\"marks.js\")(\"glyph-.js\")\"this.to=(x,y,w=word)=>{ this.cover(w); tip(`${w} (${x},${y})`); this.set({x,y,'style':`--x:${x};--y:${y}`})}; this.to(x,y,word);\""
+  "desktop-": "[x=0 y=0 word=zero-]('glyph-.css')('symbol.css')(~marks.js~)(~glyph-.js~)~this.to=(x,y,w=word)=>{ this.cover(w); tip(`${w} (${x},${y})`); this.set({x,y,'style':`--x:${x};--y:${y}`})}; this.to(x,y,word);~"
  },
  "vector-": {
-  "desktop-": "[ax=0 ay=0 bx=3 by=3]('arrow-.css')(\"arrow-.js\")"
+  "desktop-": "[ax=0 ay=0 bx=3 by=3]('arrow-.css')(~arrow-.js~)"
  },
  "cursor-": {
-  "desktop-": "[x=0 y=0]{position:absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px); width: var(--uw); height: var(--u2h); background: var(--ui-fill); box-shadow: 0 0 0 1.5 px var(--vellum-white), 0 0 5px var(--ui-fill)}\"this.to=(x,y)=>this.set({x,y,style:`--x:${x};--y:${y};`}); this.to(x,y)\""
+  "desktop-": "[x=0 y=0]{position:absolute; left: calc(var(--x) * 1px); top: calc(var(--y) * 1px); width: var(--uw); height: var(--u2h); background: var(--ui-fill); box-shadow: 0 0 0 1.5 px var(--vellum-white), 0 0 5px var(--ui-fill)}~this.to=(x,y)=>this.set({x,y,style:`--x:${x};--y:${y};`}); this.to(x,y)~"
  },
  "success-": {
-  "desktop-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "(log.json)"
  },
  "log-": {
-  "desktop-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "(log.json)"
  },
  "warning-": {
-  "desktop-": "[index json]('console-message.css')`<stack- index=${index}></stack-><json->${atob(json)}`"
+  "desktop-": "(log.json)"
  },
  "error-": {
-  "desktop-": "('console-message.css')`${innerHTML}`"
+  "desktop-": "(log.json)"
  },
  "console-": {
-  "desktop-": "[success-=1 log-=1 warning-=1 error-=1]('console-.css')(\"console-.js\")"
+  "desktop-": "[success-=1 log-=1 warning-=1 error-=1]('console-.css')(~console-.js~)"
  },
  "stat-pill": {
-  "desktop-": "[type]{ text-align: center; background-color: var(--color); display: inline-block; box-sizing: border-box; height: var(--u3h); line-height: var(--u3h); width: var(--u2w); }':host(:hover){ cursor: pointer; } :host(:not([active])) { background-color: dimgrey; } :host::before{ width: 100%; display: block; content: \\'\\00A0\\'var(--content); color: var(--vellum-white); }'\"this.driveBool('active',type,'1',x=>host.setType(type, x));tip('Show '+type.replace('-',''))\""
+  "desktop-": "[type]('stat-pill.css')~this.driveBool('active',type,'1',x=>host.setType(type, x));tip('Show '+type.replace('-',''))~"
  },
  "stack-": {
-  "desktop-": "[index=0]('stack-.css')(\"stack-.js\")"
- },
- "collapse-btn": {
-  "desktop-": ""
+  "desktop-": "('stack-.css')(~stack-.js~)"
  },
  "multi-word": {
   "desktop-": "+<i>Some kinda multi word.+",
@@ -221,14 +224,20 @@
   "desktop-": "+There is no proof that \"+crock-model+\"+"
  },
  "crock-a": {
-  "crock-b": "+me to +"
+  "crock-b": "+send you to +~incoming(echo)~",
+  "desktop-": "+I'm sending you to +~incoming(echo)~"
  },
  "crock-b": {
-  "crock-a": "+you to +"
+  "crock-a": "+send me to +~incoming(echo)~",
+  "desktop-": "+He sent me to +~incoming(echo)~"
  },
  "bug-0001": {
   "bug-list": "bug-item",
   "desktop-": "+The bug list lacks features.+"
+ },
+ "zeno-stick": {
+  "zeno-stick": "{width:50%;position:relative;display:block;height:var(--u3h);opacity:90%;background:tomato;}",
+  "desktop-": "{width:100%}zeno-stick"
  },
  "bug-item": {
   "desktop-": "`${inside('bug-list') ? '<b>BUG:</b> All bugs look the same.': 'Bug outside buglist.'}`"
@@ -244,25 +253,25 @@
   "desktop-": "+Understand Tasks+"
  },
  "old-toolbar": {
-  "desktop-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); align-items: flex-end; }\"incoming(echo)\""
+  "desktop-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); align-items: flex-end; }~incoming(echo)~"
  },
  "clear-btn": {
-  "console-": "[action='uncache()' info='Reset']('shelf-btn.css')(\"shelf-btn.js\")"
+  "version-pill": "[action='uncache()' info='Factory Reset']('shelf-btn.css')(~shelf-btn.js~)"
  },
  "refresh-btn": {
-  "console-": "[action='refresh()' info='Reload']('shelf-btn.css')(\"shelf-btn.js\")"
+  "version-pill": "[action='refresh()' info='Browser Refresh']('shelf-btn.css')(~shelf-btn.js~)"
  },
  "save-btn": {
-  "console-": "[action='save()' info='Save']('shelf-btn.css')(\"shelf-btn.js\")"
+  "desktop-": "[action='save()' info='Save']('shelf-btn.css')(~shelf-btn.js~)"
  },
  "refetch-btn": {
-  "console-": "[action='refetch()' info='Fetch']('shelf-btn.css')(\"shelf-btn.js\")"
+  "version-pill": "[action='refetch()' info='Fetch']('shelf-btn.css')(~shelf-btn.js~)"
  },
  "error-btn": {
-  "console-": "[action='error(\"Test Error #\"+Math.random())' info='Error']('shelf-btn.css')(\"shelf-btn.js\")"
+  "console-": "[action='error(\"Test Error #\"+Math.random())' info='Error']('shelf-btn.css')(~shelf-btn.js~)"
  },
  "search-bar": {
-  "thought-": "([search-bar.ini])('search-bar.css')(\"search-bar.js\")(\"search-bar-thought-.js\")"
+  "thought-": "([search-bar.ini])('search-bar.css')(~search-bar.js~)(~search-bar-thought-.js~)"
  },
  "search-bar-item": {
   "desktop-": "[word]':host,*{vertical-align:middle; line-height:var(--u2h);}glyph-{width: var(--u2w); margin-right: var(--huw); font-size: calc(var(--huw) + var(--uw)); line-height: var(--u2h); pointer-events: none; }'`<glyph- word=${word}></glyph-><label>${word}</label>`"
@@ -271,10 +280,10 @@
   "desktop-": "+<h1><pre>Hello World</pre></h1><p>Welcome!</p>+"
  },
  "json-": {
-  "desktop-": "('json-.css')(\"json-.js\")"
+  "desktop-": "('json-.css')(~json-.js~)"
  },
  "sets-": {
-  "desktop-": "':host>*{position:fixed;top:0;left:0;bottom:0;right:0;}'\"[...backlinks.keys()].map(word=>echo(word)[0])\""
+  "desktop-": "':host>*{position:fixed;top:0;left:0;bottom:0;right:0;}'~[...backlinks.keys()].map(word=>echo(word)[0])~"
  },
  "meditation-": {
   "thoughts-": ""
@@ -283,7 +292,7 @@
   "thoughts-": "+<svg viewBox=\"-180 -240 360 360\"><path stroke=black stroke-width=4 stroke-dasharray=\"12 12\" id=\"curve\" d=\"M -140 -60 C 30 -100 110 -10 40 50 C -50 120 -120 -100 160 -140\" fill=none /><text font-size=\"51\" width=\"500\"><textPath alignment-baseline=\"text-after-edge\" xlink:href=\"#curve\">&nbsp;&nbsp;I'm&nbsp;&nbsp;&nbsp;&nbsp;expressing myself</textPath></text></svg>+"
  },
  "one-platform": {
-  "desktop-": "[top=00100.001 bottom=000010001001.0000100100110111001111000110100 x=0 t=0]('one.css')(\"one.js\")"
+  "desktop-": "[top=00100.001 bottom=000010001001.0000100100110111001111000110100 x=0 t=0]('one.css')(~one.js~)"
  },
  "space-guy": {
   "thoughts-": "(+space-guy.html+)"
@@ -304,19 +313,19 @@
   "thoughts-": "+<p>sweet smell of nectar++<p>when you don't drown and consume++<p>you fill and set free+"
  },
  "thoughts-": {
-  "desktop-": "('thoughts-.css')+<h1>Thoughts</h1><h5>Like notes, only less coherent.</h5>+\"incoming(word => { say(`<thought- word=${word}>`) })\""
+  "desktop-": "('thoughts-.css')+<h1>Thoughts</h1><h5>Like notes, only less coherent.</h5>+(~thoughts-.js~)"
  },
  "thought-": {
-  "desktop-": "[word]('thought-.css')(\"thought-.js\")"
+  "desktop-": "('thought-.css')(~thought-.js~)"
  },
  "spec-": {
   "desktop-": "('spec-.css')(+spec-.html+)"
  },
  "infix-": {
-  "desktop-": "[expressions focus=false]('infix-.css')(\"infix-.js\")"
+  "desktop-": "[input-64 focus=false]('part-.css')('infix-.css')(~infix-.js~)"
  },
  "sub-model": {
-  "desktop-": "[word rootword focus=false]('part-.css')('sub-model.css')(\"sub-model.js\")"
+  "desktop-": "[word rootword focus=false]('part-.css')('sub-model.css')(~sub-model.js~)"
  },
  "text-cursor": {
   "desktop-": "('cursor-.css')"
@@ -340,12 +349,12 @@
   "constant-": "[decimal=0.41468250985111166024810962215430770836577423813791697786824541448864096061935733419629004842847577793961615935208298595783574997845302200990412081465003395899370197411918628561557923719163725148816107107342843248021801697985681513424679474]"
  },
  "d-structure": {
-  "desktop-": "(\"d-structure.js\")"
+  "desktop-": "(~d-structure.js~)"
  },
  "unicode-list": {
-  "desktop-": "('unicode-list.css')(\"unicode-list.js\")"
+  "desktop-": "('unicode-list.css')(~unicode-list.js~)"
  },
  "scroll-bar": {
-  "desktop-": "('scroll-bar.css')(\"scroll-bar.js\")"
+  "desktop-": "('scroll-bar.css')(~scroll-bar.js~)"
  }
 }

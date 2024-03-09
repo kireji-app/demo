@@ -67,6 +67,7 @@ label {
  line-height: var(--height);
  overflow: hidden;
  text-overflow: ellipsis;
+ cursor: unset;
 }
 
 :host([extension="css"]) {

@@ -2,8 +2,8 @@
  "short_name": "Kireji Editor",
  "description": "Standalone viewer and editor. Alpha release - do not use.",
  "display": "standalone",
- "background_color": "#19517f",
- "theme_color": "#19517f",
+ "background_color": "#1e2428",
+ "theme_color": "#1e2428",
  "display_override": [
   "window-controls-overlay"
  ],

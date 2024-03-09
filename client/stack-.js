@@ -1,5 +1,3 @@
 const
- html = moments[index].stack.node.map(node=>{
- return `<glyph- word=${node.word}></glyph->`
-}).join(''),
- glyphs = say(html);
+ html = moments[index].stack.node.map(node=>node.isPart ? `<glyph- word=${node.word} show-tip></glyph->` : '').join(''),
+ glyphs = html && html !== '' ? say(html) : [];

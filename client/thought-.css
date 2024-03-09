@@ -1,10 +1,20 @@
 :host {
  display: grid;
- grid-template-rows: var(--u3h) calc(100% - var(--u3h));
+ overflow-y: auto;
+ box-sizing: border-box;
+ background: var(--ui-fill);
+}
+
+
+:host([item]) {
+ grid-template-rows: var(--u3h) 1fr;
+ border-radius: var(--huh);
+ padding: var(--u-hw);
+ flex-shrink: 0;
 }
 
 :host([variable]) {
- overflow: hidden !important;
+ padding: 0;
 }
 
 :host([variable])>:not(:first-child) {

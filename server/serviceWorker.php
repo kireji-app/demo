@@ -1,8 +1,9 @@
-<?= <<<JS
+const ungroup = exps => [...exps.matchAll(/((?:(?:'(?:\\'|[^'])*')|(?:~(?:\\~|[^~])*~)|(?:<(?:\\>|[^>]])*>])|(?:\[(?:\\\]|[^\]])*\])|(?:\^(?:(?:\\\^)|[^^])*\^)|(?:\+(?:\\\+|[^+])*\+)|(?:`(?:\\`|[^`])*`)|(?:\w*\s*\*(?:\\\*|[^*])*\*(?:\\\*|[^*])*\*)|(?:\w*\s*!(?:\\!|[^!])*!)|[-\w_]+|(?:\([^\)]*\))|(?:{[^}]*})))/g)].map($ => $[1]);
+<?=<<<JS
  const controller = {
   async refetch() {
    getFile = undefined;
-   const json = await (await fetch('.json')).json();
+   const json = await (await fetch('.json')).json(), preview = { };
    for (const uri in json) {
     const file = json[uri];
     if (!('body' in file)) {
@@ -12,10 +13,33 @@
      for (var index = 0; index < bytes.length; index++) intArray[index] = bytes.charCodeAt(index);
      file.body = new Blob([intArray], { type: file.options['content-type'] });
     }
+    preview[uri] = {...file}
    }
+
+   const
+    modelFile = json['model.json'],
+    database = JSON.parse(modelFile.body),
+    options = modelFile.options;
+   Object.keys(database).forEach(word => {
+    const
+     model = database[word],
+     roots = Object.keys(model);
+    roots.forEach(rootword => {
+     const expressions = ungroup(model[rootword]);
+     model[rootword] = expressions;
+    })
+   })
+   const body = JSON.stringify(database);
+
+   json['model.json'] = { body, options };
+   preview['model.json'] = { body, options };
+
    getFile = uri => {
-    if (uri === ''||uri.endsWith('.word')) uri = 'index.html';
-    return json[uri in json ? uri : 'icon.png']
+    let source = json;
+    if (uri === ''||uri.endsWith('?')) uri = 'index.html';
+    if (uri.startsWith('preview/')) { uri = uri.slice(8); source = preview; }
+    if (!(uri in source)) console.warn('404 '+uri)
+    return source[uri in source ? uri : 'icon.png']
    }
   }
  };

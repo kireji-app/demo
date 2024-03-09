@@ -1,36 +1,32 @@
-const buttons = { }, partName = say('<h1 id=partname>')[0], appName = say('<h1 id=appname>core.parts</h1>'), version = say('<version-pill>')[0]
-
-let active = undefined;
-
-on.tabs(tabs => {
- Object.values(buttons).forEach(button => button.remove());
- const words = tabs.split(' ');
- words.forEach(word => {
-  const glyph = buttons[word] = say(`<glyph- word=${word}>`)[0];
-  glyph.onclick = () => {
-   $tab(word)
-   state('tab')
-   active?.unset('selected')
-   active = glyph
-   active.set('selected','true')
+// create the views
+const
+ // views asking to be here become tab buttons
+ buttons = incoming(
+  word => {
+   const node = say(`<${word} class=tab>`)[0]
+   node.on('click', () => mutate(word))
+   return node
   }
- })
- if (tab in buttons) {
-  state('tab')
-  active?.unset('selected')
-  active = buttons[tab]
-  active.set('selected','true')
- } else if (words.length > 0) {
-  $tab(words[0])
-  state('tab')
-  active?.unset('selected')
-  active = buttons[tab]
-  active.set('selected','true')
- } else {
-  error('No tabs.')
- }
-})
-
-on.clear(word => {
+ ),
+ history = echo('history-')[0],
+ partGlyph = echo('glyph-')[0],
+ partName = say('<h1 id=partname>')[0],
+ version = say('<version-pill>')[0];
+// variable 'tab' is view model
+const
+ unmark = () => marked?.unset('selected'),
+ mutate = $ => { unmark(); $tab($); marked = mark() },
+ mark = () => {
+  buttons[tab].set('selected')
+  DO['goto tab'](tab)
+  return buttons[tab]
+ };
+let marked = mark()
+// handle variables with initial values
+// respond to external runtime events
+ON['open model'](word => {
+ warning(word)
  partName.innerText = word
+ partGlyph.set('word', word)
+ mutate('model-explorer')
 })

@@ -16,13 +16,17 @@
 
 menu {
  margin: 0;
- padding: 0;
- white-space: nowrap;
- position: relative;
- z-index: 1;
- box-sizing: border-box;
  display: flex;
  flex-flow: row nowrap;
+ padding: var(--hhu-hw);
+ box-sizing: border-box;
+ --shade: rgba(var(--ui-fill-rgb), 0.5);
+ position: relative;
+ background:
+  linear-gradient(var(--shade), var(--shade)),
+  black;
+ z-index: 1;
+ white-space: nowrap;
 }
 
 div {
@@ -95,6 +99,6 @@ div>*[times] {
  --times: '(' attr(times)')';
 }
 
-div > * {
+div>* {
  width: 100%;
 }

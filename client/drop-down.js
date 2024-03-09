@@ -1,7 +1,7 @@
 if (inside(this.word)) {
  this.onclick = () => {
   const
-   prev = host.query('[selected]');
+   prev = host.Q('[selected]');
   if (this.hasAttribute('selected')) return;
   prev.removeAttribute('selected');
   host.setAttribute('value', value);
@@ -11,7 +11,7 @@ if (inside(this.word)) {
 } else {
  if (this.hasAttribute('label')) say(`<label>${label}</label>`);
  this.onclick = () => {
-  if (this.flip('open')) query('[selected]').frameUp()
+  if (this.flip('open')) Q('[selected]').frameUp()
  }
  const list = this.hasAttribute('items') ? eval(items) : ['Drop Item 1', 'Drop Item 2'];
  let finalValue = list[0];

@@ -2,9 +2,9 @@ const
  html = Object.keys(buffers).reduce((html, buffername) => html + `<file-item buffername=${buffername}></file-item>`, ''),
  files = new Set(say(html)),
  dblClickTime = 250,
- selected = new Set(selection.split(' ')),
+ selected = new Set((this.get('selection') ?? '').split(' ')),
  selectedNodes = new Set(),
- saveSelection = () => $selection([...selected].join(' '));
+ saveSelection = () => this.set('selection',[...selected].join(' '));
 
 let doubleClickTarget = undefined, shift = false
 
@@ -21,8 +21,9 @@ files.forEach(file => {
   else if (shift) { selected.add(name); saveSelection(); file.set('selected'); selectedNodes.add(file) }
   else if (!amongSelected) { selected.clear(); selected.add(name); saveSelection(); file.set('selected'); selectedNodes.forEach(node => node.unset('selected')); selectedNodes.clear(); selectedNodes.add(file) }
   if (file === doubleClickTarget) {
-   log(location.href)
-   window.open(`https://${location.hostname}/${name}`);
+   //log(location.href)
+   //window.open(`https://${location.hostname}/${name}`);
+   DO['open file'](name);
   }
   else {
    doubleClickTarget = file
@@ -33,5 +34,5 @@ files.forEach(file => {
  }
 })
 
-document.addEventListener('keydown', event => { if (event.key === 'Shift') shift = true })
-document.addEventListener('keyup', event => { if (event.key === 'Shift') shift = false })
+document.on('keydown', event => { if (event.key === 'Shift') shift = true })
+document.on('keyup', event => { if (event.key === 'Shift') shift = false })

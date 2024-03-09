@@ -42,7 +42,7 @@ html[data-word]>body::before {
  background: transparent;
 }
 
-body>:not(tooltip-) {
+body>:not(tooltip-):not(part-tool) {
  position: fixed;
  top: 0;
  left: 0;
@@ -53,7 +53,8 @@ body>:not(tooltip-) {
  background-attachment: local;
 }
 
-body:not(:hover)>tooltip- {
+body:not(:hover)>tooltip-,
+body:not(:hover)>part-tool {
  display: none;
 }
 

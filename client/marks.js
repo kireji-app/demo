@@ -1,7 +1,28 @@
+let t = 0
+ON['shorts'](() => t++)
+if (t === 0) {
+ const buffer = buffers['shorts.ini'];
+ dictionary.forEach(definition => {
+  const
+   w = definition.word,
+   { index, 0: result } = buffer.match(new RegExp(`^${w}=.*(?![\s\S]*${w})`, 'm')) ?? {};
+  if (result) {
+   const start = index + w.length + 1, end = index + result.length;
+   Object.defineProperties(definition, {
+    short: {
+     get() {
+      return buffer.slice(start, end)
+     }
+    }
+   })
+  }
+ })
+ DO['shorts']()
+}
 if (!statics.cssMarks) {
  const
   chars = statics.characters = new Map,
-  unmarked = new Set(glossary);
+  unmarked = new Set(dictionary.glossary);
  let fallback;
  statics.cssMarks = buffers['glyphs.ini'].split('\n').map(_ => {
   const result = _.match(/([\w-]+)=(\w+)/);

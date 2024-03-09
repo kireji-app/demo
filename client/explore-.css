@@ -1,13 +1,18 @@
 :host {
- display: flex;
- flex-flow: column nowrap;
- overflow-x: visible;
+ display: grid;
+ grid-template-rows: 1fr;
+ grid-template-columns: 1fr;
+ grid-template-areas: 'panel';
+ position: relative;
+ overflow: auto;
 }
 
 :not([selected]) {
- display: none;
+ opacity: 0;
+ pointer-events: none;
 }
 
-[selected] {
- height: 100%;
+:host>* {
+ grid-area: panel;
+ max-width: 100%;
 }

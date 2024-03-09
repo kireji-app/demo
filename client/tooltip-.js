@@ -1,15 +1,23 @@
 const
- span = echo('+<span>tooltip</span>+')[0],
- update = ({ x, y, depth, node }) => {
-  $depth(depth);
-  if (display === 'gone' || depth > 0) return;
-  this.style.setProperty('--x', x + 'px');
-  this.style.setProperty('--y', y + 'px');
-  this.style.setProperty('--depth', depth);
- };
-followMouse(update, { x: 0, y: 0, depth: 0, node: this });
+ span = echo('+<span>TipError1</span>+')[0],
+ attr = 'show';
 
-on.tip = msg => {
- if ((msg === null) !== (display === 'gone')) $display(msg === null ? 'gone' : 'here')
- span.textContent = msg;
+
+ON['tooltip'] = tip => {
+ if (tip === null) {
+  this.unset(attr)
+  span.textContent = ''
+ }
+ else {
+  this.set(attr)
+  span.textContent = tip
+ }
 }
+
+followMouse(({ x, y, depth }) => {
+ this.set('depth', depth);
+ //if (!this.has(attr) || depth > 0) return;
+ this.style.setProperty('--x', x + 'px');
+ this.style.setProperty('--y', y + 'px');
+ this.style.setProperty('--depth', depth);
+}, { x: 0, y: 0, depth: 0, node: this });

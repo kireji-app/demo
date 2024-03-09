@@ -19,7 +19,7 @@
  --white-fill-dots: url(blue-dots.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--vellum-white);
  --ui-fill-grid: url(white-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--ui-fill);
  --ui-fill-dots: url(white-dots.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--ui-fill);
- --vellum-white-rgb: 235, 228, 205;
+ --vellum-white-rgb: 235, 231, 229;
  --approval-green-rgb: 36, 180, 95;
  --vellum-white: rgb(var(--vellum-white-rgb));
  --ui-fill: rgb(var(--ui-fill-rgb));
@@ -50,6 +50,7 @@ iframe {
 /* width */
 ::-webkit-scrollbar {
  width: 0 !important;
+ height: 0 !important;
  overflow: hidden;
  border-radius: inherit;
  border-top-left-radius: 0;
@@ -58,7 +59,7 @@ iframe {
 
 /* Track */
 ::-webkit-scrollbar-track {
- background: var(--ui-fill) !important;
+ background: var(--ui-fill);
  border-radius: inherit;
  border-top-left-radius: 0;
  border-bottom-left-radius: 0;
@@ -66,7 +67,7 @@ iframe {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
- background: var(--vellum-white) !important;
+ background: var(--vellum-white);
  border-radius: inherit;
  border-top-left-radius: 0;
  border-bottom-left-radius: 0;

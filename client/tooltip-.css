@@ -19,10 +19,10 @@
 }
 
 :host(:not([depth='0'])) {
- display: none;
+ opacity: calc(100% /(1 + var(--depth)));
 }
 
-:host([display="gone"]) {
+:host(:not([show])) {
  display: none;
 }
 

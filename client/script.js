@@ -1,294 +1,233 @@
 document.reroot = (context, callback) => {
- document.parentContext = context;
- document.provideEvents = callback;
+ document.parentContext = context
+ document.provideEvents = callback
 }
 addEventListener('load', () => {
  const
   BODY = document.body,
-  OFFSCREEN_NODE = document.createElement('div');
- {
-  [
-   [Node, {
-    on: {
-     get() {
-      return args => {
-       this.addEventListener(...args)
-      }
+  DICTIONARY_LISTENERS = new Set(),
+  DICTIONARY = new Proxy(new Set(), {
+   get(glossary, word, dictionary) {
+    if (word.includes('-')) {
+     let definition = undefined;
+     if (!glossary.has(word)) {
+      customElements.define(word, PROTODEFINITION(word))
+      glossary.add(word)
+      definition = customElements.get(word)
+      DICTIONARY_LISTENERS.forEach(callback => {
+       callback(definition)
+      })
+     } else {
+      definition = customElements.get(word)
      }
-    },
-    off: {
-     get() {
-      return args => {
-       this.removeEventListener(...args)
-      }
+     return definition
+    }
+    return {
+     glossary,
+     has: word => {
+      return !!(word.includes('-') && dictionary[word])
+     },
+     length: glossary.size,
+     forEach: (callback = definition => { }, applyToFutureWords = true) => {
+      glossary.forEach(word => {
+       callback(dictionary[word])
+      })
+      if (applyToFutureWords)
+       DICTIONARY_LISTENERS.add(callback)
      }
-    },
-    has: {
-     get() {
-      return attr => {
-       return this.hasAttribute(attr)
-      }
+    }[word]
+   }
+  }),
+  PROTODEFINITION = WORD => class extends HTMLElement {
+   constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    this.on('mouseover mouseout', event => DO['hover'](event.x, event.y))
+   }
+   css({ argument }) {
+    const sheet = new CSSStyleSheet();
+    sheet.replaceSync(argument);
+    this.shadowRoot.adoptedStyleSheets.push(sheet);
+    return [sheet]
+   }
+   html({ append, argument }) {
+    const returnable = [];
+    for (const node of argument.toNodes()) returnable.push(...append('node', node, this));
+    return returnable;
+   }
+   node({ append, argument, fork }) {
+    if (argument === this) BODY.appendChild(argument)
+    else if (this.shadowRoot) this.shadowRoot.appendChild(argument);
+    else this.appendChild(argument);
+    function recursive_model(subject, { append, fork }) {
+     const word = subject.word
+     if (!word) return;
+     if (subject.isPart) {
+      append('model', DICTIONARY[word].model, subject);
+     } else {
+      for (const child of subject.children)
+       recursive_model(child, fork('node', child));
      }
-    },
-    get: {
-     get() {
-      return attr => {
-       if (Array.isArray(attr)) return attr.map(a => this.getAttribute(a))
-       return this.getAttribute(attr)
-      }
-     }
-    },
-    set: {
-     get() {
-      return (attr, value = '') => {
-       if (typeof attr === 'object') {
-        Object.entries(attr).forEach(([attr, value]) => this.set(attr, value))
-        return;
-       }
-       if (value === null) this.removeAttribute(attr)
-       else this.setAttribute(attr, value)
-      }
-     }
-    },
-    word: {
-     get() {
-      return this.tagName?.toLowerCase();
-     }
-    },
-    flip: {
-     get() {
-      return attr => {
-       if (!this.has(attr)) { this.set(attr, ''); return true }
-       this.unset(attr);
-       return false;
-      }
-     }
-    },
-    query: {
-     get() {
-      return (q, group = false) => {
-       return this.shadowRoot?.['querySelector' + (group ? 'All' : '')](q)
-      }
-     }
-    },
-    count: {
-     get() {
-      return q => {
-       return this.query(q, true).length
-      }
-     }
-    },
-    unset: {
-     get() {
-      return attr => { if (this.has(attr)) this.set(attr, null) }
-     }
-    },
-    drive: {
-     get() {
-      return attr => {
-       const host = this.hostNode;
-       if (this.has(attr)) {
-        const value = this.get(attr);
-        if (!host.has(attr) || host.get(attr) !== value) {
-         host.set(attr, value);
-        }
-       } else {
-        if (host.has(attr)) host.unset(attr)
-       }
-      }
-     }
-    },
-    getHost: {
-     get() {
-      return (attr, value) => {
-       if (value === undefined) return this.hostNode.has(attr) && this.hostNode.get(attr) !== '0';
-       return value === this.hostNode.get(attr)
-      }
-     }
-    },
-    frameUp: {
-     get() {
-      return () => {
-       setTimeout(() => this.scrollIntoView({ behavior: 'smooth', block: 'center' }), 125);
-      }
-     }
-    },
-    isCustom: {
-     get() {
-      return this.tagName?.includes('-')
-     }
-    },
-    hostNode: {
-     get() {
-      return this === document.body ? this : this.host ?? this.parentNode?.hostNode ?? console.warn('no host on this', this)
-     }
-    },
-    driveBool: {
-     get() {
-      return (localAttr, hostAttr, value, save) => {
-       this.enableSelf(localAttr, this.getHost(hostAttr, value));
-       this.addEventListener('click', () => {
-        const newValue = this.flip(localAttr);
-        //this.enableHost(hostAttr, newValue)
-        save?.(newValue)
+    }
+    recursive_model(argument, { append, fork });
+    return [argument];
+   }
+   model({ append, argument, pickOne }) {
+    const returnable = [];
+    this.shadowRoot.adoptedStyleSheets = [GLOBAL_SHEET]
+    const [word, expressions] = pickOne(argument);
+    if (word in argument) returnable.push(...append('expressions', expressions, this));
+    return returnable;
+   }
+   buffername({ append, argument }) {
+    const e = argument[0];
+
+    if (!['~', '+', `^`, '\'', '['].includes(e))
+     return append('expressions', buffers[argument], this)
+
+    const buffername = argument.unwrap();
+    if (!(buffername in buffers)) throw `${buffername} is not in buffers`
+    const file = buffers[buffername];
+    if (typeof file !== 'string') throw `${buffername} is a binary file`
+
+    return append('expression', buffers[buffername].wrap(e), this)
+   }
+   javascript(context) {
+    const
+     { argument, append, inside, stack, fork, index } = context,
+     depth = inside(this.word),
+     KEYWORDS = ['abstract', 'arguments', 'await', 'boolean', 'break', 'byte', 'case', 'catch', 'char', 'class', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'double', 'else', 'enum', 'eval', 'export', 'extends', 'false', 'final', 'finally', 'float', 'for', 'function', 'goto', 'if', 'implements', 'import', 'in', 'instanceof', 'int', 'interface', 'let', 'long', 'native', 'new', 'null', 'package', 'private', 'protected', 'public', 'return', 'short', 'static', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient', 'true', 'try', 'typeof', 'var', 'void', 'volatile', 'while', 'with', 'yield'],
+     console = (msg, type) => {
+      DO['console ' + type](msg, this, depth, index)
+     },
+     echo = (...expressions) => {
+      const results = append('expressions', expressions, this);
+      if (!returned) returnable.push(results)
+      return results.flat(2);
+     },
+     { Q, K, flip, enableHost } = this,
+     $ = (rootword = 'desktop-', word = this.word) => echo(...archive[word][rootword]),
+     attributes = this.customizations && Object.keys(this.customizations),
+     identifiers = attributes && attributes.map(key => key.replace('-', '_')),
+     hasCustom = attributes && attributes.length,
+     scopeGlobals = {
+      depth,
+      context,
+      script: argument,
+      innerHTML: this.innerHTML,
+      echo, $,
+      say: html => echo(html.wrap('+')),
+      incoming: (callback = word => { }) => {
+       const obj = {}, myLinks = backlinks.get(this.word);
+       myLinks?.forEach(word => {
+        obj[word] = callback?.(word)
        })
-      }
-     }
-    },
-    enableHost: {
-     get() {
-      return (attr, enable) => this.hostNode.enableSelf(attr, enable);
-     }
-    },
-    enableSelf: {
-     get() {
-      return (attr, enable) => {
-       if (enable) {
-        if (!this.has(attr)) {
-         this.set(attr, '');
-        }
-       } else {
-        if (this.has(attr)) {
-         this.unset(attr);
-        }
-       }
-      }
-     }
-    },
-    cursorField: {
-     get() {
-      return ondelta => {
-       const
-        LOCKED = 'cursor-field',
-        WAITING = 'cursor-field-waiting',
-        onclick = () => {
-         if (this.has(WAITING)) return;
-         document.on(lock);
-         this.requestPointerLock({ unadjustedMovement: true });
-        },
-        onmove = event => {
-         if (document.pointerLockElement !== this) onlock();
-         ondelta(event);
-        },
-        onlock = () => {
-         if (document.pointerLockElement !== this) {
-          document.off(lock);
-          this.on(click);
-          this.unset(LOCKED);
-          this.off(move);
-          this.set(WAITING);
-          setTimeout(() => this.unset(WAITING), 1500);
-          return;
+       return obj;
+      },
+      debounce: (event, callback, delay = 20) => {
+       let timeout = 0
+       ON[event]((...args) => {
+        if (timeout !== 0) clearTimeout(timeout);
+        timeout = setTimeout(() => callback(...args), delay)
+       })
+      },
+      inside, stack, fork, index,
+      Q, K, flip, enableHost,
+      log: msg => console(msg, 'log'),
+      error: msg => console(msg, 'error'),
+      success: msg => console(msg, 'success'),
+      warning: msg => console(msg, 'warning'),
+      enableDrag: (update, startPos, ontoggle = x => { }) => {
+       update(startPos);
+       this.onmousedown = () => {
+        window.telecursor.trackDrag(
+         pos => {
+          ontoggle(true, pos);
+          update(pos, width, height)
+         },
+         update,
+         pos => {
+          update(pos);
+          ontoggle(false, pos);
          }
-         document.on(lock);
-         this.off(click);
-         this.set(LOCKED);
-         this.on(move);
-        },
-        click = ["click", onclick, true],
-        move = ['mousemove', onmove, false],
-        lock = ["pointerlockchange", onlock, true];
-       this.on(click);
-      }
-     }
-    },
-   }],
-   [String, {
-    wrap: {
-     get() {
-      return e => {
-       const
-        pairs = { '{': '}', "(": ")", "[": "]", "<": ">" },
-        endT = e in pairs ? pairs[e] : e,
-        naked = this.replace(new RegExp('\\' + endT, 'g'), '\\' + endT);
-       return e + naked + endT;
-      }
-     }
-    },
-    inset: {
-     get() {
-      return (left, right = left) => this.slice(left, this.length - right)
-     }
-    },
-    unwrap: {
-     get() {
-      return () => {
-       const
-        endT = this.at(-1),
-        escaped = this.slice(1, this.length - 1);
-       return escaped.replace(new RegExp('\\\\\\' + endT, 'g'), endT);
-      }
-     }
-    },
-    toNodes: {
-     get() {
-      return () => {
-       OFFSCREEN_NODE.innerHTML = this
-       const nodes = [...OFFSCREEN_NODE.childNodes]
-       OFFSCREEN_NODE.innerHTML = ''
-       return nodes
-      }
-     }
-    },
-    websafe: {
-     get() {
-      return () => {
-       OFFSCREEN_NODE.textContent = this;
-       let result = OFFSCREEN_NODE.innerHTML;
-       OFFSCREEN_NODE.innerHTML = ''
-       result = result.replace(/"/g,'&quot;')
-       result = result.replace(/'/g,'&apos;')
-       return result;
-      }
-     }
-    },
-    ungroup: {
-     get() {
-      return r => [...this.matchAll(/((?:(?:'(?:\\'|[^'])*')|(?:"(?:\\"|[^"])*")|(?:<(?:\\>|[^>]])*>])|(?:\[(?:\\\]|[^\]])*\])|(?:\^(?:(?:\\\^)|[^^])*\^)|(?:\+(?:\\\+|[^+])*\+)|(?:`(?:\\`|[^`])*`)|(?:\w*\s*\*(?:\\\*|[^*])*\*(?:\\\*|[^*])*\*)|(?:\w*\s*!(?:\\!|[^!])*!)|[-\w_]+|(?:\([^\)]*\))|(?:{[^}]*})))/g)].map($ => $[1])
-     }
-    },
-    parseINI: {
-     get() {
-      return (fn = (k, v) => { }) => [...this.matchAll(/([a-z][a-z-0-9]*)(?:\s*=\s*(?:([^\s'"`\]]+)|"([^"]+)"|'([^']+)'|`([^`]+)`))?/g)].map(match => match.slice(1).filter(x => x !== undefined)).map(fn)
-     }
-    },
-    isLetter: {
-     get() {
-      return () => this.length === 1 && this.toLowerCase() !== this.toUpperCase()
-     }
-    },
-    parseExpression: {
-     get() {
-      return handler => {
-       const
-        e = this[0],
-        letter = e.isLetter(),
-        key = letter ? 'word' : { '^': 'title', '`': 'template', '{': 'hostcss', '<': 'comment', '=': 'infix', '[': 'custom', "'": 'css', '"': 'javascript', '+': 'html', '(': 'buffername' }[e],
-        handle = handler[key] ?? handler.fallback ?? (_ => console.warn({ unhandled: _ }));
-       handle(letter ? this : this.unwrap(), key)
-      }
-     }
-    }
-   }],
-   [Array, {
-    removeValue: {
-     get() {
-      return value => {
-       for (let index = 0; index < this.length; index++) {
-        if (this[index] === value) {
-         this.splice(index, 1)
-         return true;
-        }
+        );
        }
-       return false;
-      }
+      },
+      followMouse: (update, startPos) => {
+       update(startPos);
+       window.telecursor.link(
+        cursor_info => {
+         update(cursor_info, width, height)
+        }
+       )
+      },
+      change: (key, value) => localStorage[key] = value,
+      tip: (msg, node = this) => {
+       node.on('mouseover', () => {
+        DO['tooltip'](msg)
+        const args = ['mouseout', () => {
+         DO['tooltip'](null)
+         node.removeEventListener(...args);
+        }];
+        node.on(...args);
+       })
+      },
+      identifiers, attributes
+     },
+     returnable = [];
+    [...this.attributes].filter(_ => !KEYWORDS.includes(_.name)).forEach(({ name, value }) => {
+     let finalValue = value;
+     scopeGlobals[name.replace('-', '_')] = finalValue
+    });
+    let returned = false;
+    new Function(`var[{${Object.keys(scopeGlobals)}}]=arguments;${hasCustom ? '\nconst\n' + identifiers.map((ident, index) => ` $${ident} = value => {\n  if (value===${ident}) return;\n  ${ident} = value;\n  this.set('${attributes[index]}', value);\n  change('${this.customizations[attributes[index]]}',value);\n }`).join(',\n ') + `,\n $_set={\n  ${identifiers.map((ident, index) => `\"${attributes[index]}\":$${ident}`).join(',\n  ')}\n };` : ''}\nconst host = this.hostNode;\n${argument}`).call(this, scopeGlobals);
+    returned = true;
+    return returnable;
+   }
+   expression({ append, argument, index, create }) {
+    let returnable = [];
+    const e = argument[0];
+    argument.parseExpression(
+     {
+      title: _ => { if (!IN_FRAME) document.title += _ },
+      template: _ => returnable.push(...append('javascript', "say(`" + _ + "`)", this)),
+      hostcss: _ => returnable.push(...append('css', `:host{${_}}`, this)),
+      comment: _ => console.warn(_),
+      custom: _ => {
+       // TODO: No more cache. Work using changes in the model.
+       if (!this.customizations) this.customizations = {};
+       _.parseINI(([attr, value]) => {
+        const key = this.customizations[attr] = version + '|' + index + '|' + attr;
+        let finalValue = value;
+        if (key in localStorage) finalValue = localStorage[key]
+        else if (this.has(attr)) finalValue = this.get(attr);
+        this.set(attr, finalValue);
+       })
+      },
+      word: () => returnable.push(...append('node', create(argument, document, DICTIONARY), this)),
+      fallback: _ => returnable.push(...append({ "'": 'css', '+': 'html', '~': 'javascript', '(': 'buffername' }[e], _, this))
      }
-    }
-   }]
-  ].forEach(([T, map]) => Object.defineProperties(T.prototype, map));
- }
- const
-  [_, DATA_WORD] = location.pathname.endsWith('.word') && location.pathname.split('.') || ['/0'],
+    );
+    return returnable;
+   }
+   expressions({ append, argument }) {
+    const returnable = [];
+    if (!Array.isArray(argument)) throw { msg: "wrong argument format. Need array. ", argument }
+    argument.forEach(expression => returnable.push(...append('expression', expression, this)))
+    return returnable;
+   }
+   static get word() {
+    return WORD
+   }
+   static get model() {
+    return archive[this.hasModel ? this.word : 'proto-model']
+   }
+   static get hasModel() {
+    return this.word in archive
+   }
+  },
+  OFFSCREEN_NODE = document.createElement('div'),
+  [_, DATA_WORD] = location.href.endsWith('?') && location.pathname.split('.') || ['/0'],
   HOST_WORD = DATA_WORD ? DATA_WORD : location.hostname.replace('.', '-'),
   GLOBAL_SHEET = new CSSStyleSheet(),
   IN_FRAME = (() => {
@@ -298,184 +237,6 @@ addEventListener('load', () => {
     return true;
    }
   })(),
-  DEFINE_NODE = word => {
-   if (customElements.get(word)) return;
-   customElements.define(word, class extends HTMLElement {
-    constructor() {
-     super();
-     this.attachShadow({ mode: 'open' });
-    }
-    css({ argument }) {
-     const sheet = new CSSStyleSheet();
-     sheet.replaceSync(argument);
-     this.shadowRoot.adoptedStyleSheets.push(sheet);
-     return [sheet]
-    }
-    html({ append, argument }) {
-     const returnable = [];
-     for (const node of argument.toNodes()) returnable.push(...append('node', node, this));
-     return returnable;
-    }
-    node({ append, argument, fork }) {
-     if (argument === this) BODY.appendChild(argument)
-     else if (this.shadowRoot) this.shadowRoot.appendChild(argument);
-     else this.appendChild(argument);
-     function recursive_model(subject, { append, fork }) {
-      const word = subject.word;
-      if (!word) return;
-      if (!word.includes('-')) {
-       for (const child of subject.children) recursive_model(child, fork('node', child));
-      } else {
-       DEFINE_NODE(word);
-       const model = word in archive ? archive[word] : { "desktop-": "`${innerHTML}`" };
-       append('model', model, subject);
-      }
-     }
-     recursive_model(argument, { append, fork });
-     return [argument];
-    }
-    model({ append, argument, pickOne, create }) {
-     const returnable = [];
-     this.shadowRoot.adoptedStyleSheets = [GLOBAL_SHEET]
-     const [word, expressions] = pickOne(argument);
-     if (word in argument) returnable.push(...append('expressions', expressions, this));
-     /*backlinks.get(this.word)?.forEach(word => {
-      returnable.push(...append('node', create(word, document, _ => _.toNodes()[0]), this))
-     });*/
-     return returnable;
-    }
-    buffername({ append, argument }) {
-     const e = argument[0];
-
-     if (!['"', '+', `^`, '\'', '['].includes(e))
-      return append('expressions', buffers[argument], this)
-
-     const buffername = argument.unwrap();
-     if (!(buffername in buffers)) throw `${buffername} is not in buffers`
-     const file = buffers[buffername];
-     if (typeof file !== 'string') throw `${buffername} is a binary file`
-
-     return append('expression', buffers[buffername].wrap(e), this)
-    }
-    javascript(context) {
-     const
-      { argument, append, inside, stack, fork, index } = context,
-      depth = inside(this.word),
-      JS_WORDS = ['abstract', 'arguments', 'await', 'boolean', 'break', 'byte', 'case', 'catch', 'char', 'class', 'const', 'continue', 'debugger', 'default', 'delete', 'do', 'double', 'else', 'enum', 'eval', 'export', 'extends', 'false', 'final', 'finally', 'float', 'for', 'function', 'goto', 'if', 'implements', 'import', 'in', 'instanceof', 'int', 'interface', 'let', 'long', 'native', 'new', 'null', 'package', 'private', 'protected', 'public', 'return', 'short', 'static', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient', 'true', 'try', 'typeof', 'var', 'void', 'volatile', 'while', 'with', 'yield'],
-      send = (msg, channel) => {
-       e[channel](msg, this, depth, index)
-      },
-      echo = (...expressions) => {
-       const results = append('expressions', expressions, this);
-       if (!returned) returnable.push(results)
-       return results.flat(2);
-      },
-      { query, flip, enableHost } = this,
-      $ = (childWord = 'desktop-', parentWord = this.word) => echo(archive[parentWord][childWord]),
-      attributes = this.customizations && Object.keys(this.customizations),
-      identifiers = attributes && attributes.map(key => key.replace('-', '_')),
-      hasCustom = attributes && attributes.length,
-      scopeGlobals = {
-       depth,
-       context,
-       script: argument,
-       innerHTML: this.innerHTML,
-       echo, send, $,
-       say: html => echo(html.wrap('+')),
-       incoming: (callback = word => { }) => {
-        const myLinks = backlinks.get(this.word);
-        myLinks?.forEach(word => {
-         callback?.(word)
-        })
-       },
-       state: attr => e[attr](this.get(attr)),
-       inside, stack, fork, index,
-       query, flip, enableHost,
-       log: msg => send(msg, 'log'),
-       error: msg => send(msg, 'error'),
-       success: msg => send(msg, 'success'),
-       warning: msg => send(msg, 'warning'),
-       enableDrag: (update, startPos, ontoggle = x => { }) => {
-        update(startPos);
-        this.onmousedown = () => {
-         window.telecursor.trackDrag(
-          pos => {
-           ontoggle(true, pos);
-           update(pos, width, height)
-          },
-          update,
-          pos => {
-           update(pos);
-           ontoggle(false, pos);
-          }
-         );
-        }
-       },
-       followMouse: (update, startPos) => {
-        update(startPos);
-        window.telecursor.link(
-         pos => {
-          update(pos, width, height)
-         }
-        );
-       },
-       change: (key, value) => localStorage[key] = value,
-       tip: (msg, node = this) => {
-        node.addEventListener('mouseover', () => {
-         send(msg, 'tip')
-         const args = ['mouseout', () => {
-          send(null, 'tip')
-          node.removeEventListener(...args);
-         }];
-         node.addEventListener(...args);
-        })
-       },
-       identifiers, attributes
-      },
-      returnable = [];
-     [...this.attributes].filter(_ => !JS_WORDS.includes(_.name)).forEach(({ name, value }) => {
-      let finalValue = value;
-      scopeGlobals[name.replace('-', '_')] = finalValue
-     });
-     let returned = false;
-     new Function(`var[{${Object.keys(scopeGlobals)}}]=arguments;${hasCustom ? '\nconst\n' + identifiers.map((ident, index) => ` $${ident} = value => {\n  if (value===${ident}) return;\n  ${ident} = value;\n  this.set('${attributes[index]}', value);\n  change('${this.customizations[attributes[index]]}',value);\n }`).join(',\n ') + `,\n $_set={\n  ${identifiers.map((ident, index) => `\"${attributes[index]}\":$${ident}`).join(',\n  ')}\n };` : ''}\nconst host = this.hostNode;\n${argument}`).call(this, scopeGlobals);
-     returned = true;
-     return returnable;
-    }
-    expression({ append, argument, index, create }) {
-     let returnable = [];
-     const e = argument[0];
-     argument.parseExpression(
-      {
-       title: _ => { if (!IN_FRAME) document.title += _ },
-       template: _ => returnable.push(...append('javascript', "say(`" + _ + "`)", this)),
-       hostcss: _ => returnable.push(...append('css', `:host{${_}}`, this)),
-       comment: _ => console.warn(_),
-       custom: _ => {
-        // TODO: No more cache. Work using changes in the model.
-        if (!this.customizations) this.customizations = {};
-        _.parseINI(([attr, value]) => {
-         const key = this.customizations[attr] = version + '|' + index + '|' + attr;
-         let finalValue = value;
-         if (key in localStorage) finalValue = localStorage[key]
-         else if (this.has(attr)) finalValue = this.get(attr);
-         this.set(attr, finalValue);
-        })
-       },
-       word: () => returnable.push(...append('node', create(argument, document, str => str.toNodes()[0]), this)),
-       fallback: _ => returnable.push(...append({ "'": 'css', '+': 'html', '"': 'javascript', '(': 'buffername' }[e], _, this))
-      }
-     );
-     return returnable;
-    }
-    expressions({ append, argument }) {
-     const returnable = [];
-     if (Array.isArray(argument)) argument = argument.join(' ')
-     argument.ungroup().forEach(expression => returnable.push(...append('expression', expression, this)))
-     return returnable;
-    }
-   })
-  },
   INPUT = new class {
    #uw; #uh
    constructor() {
@@ -583,11 +344,11 @@ addEventListener('load', () => {
   }),
   RECENTER = () => {
    if (INPUT.touches) {
-    clearTimeout(INPUT.waiter);
+    clearTimeout(INPUT.waiter)
     INPUT.waiter = setTimeout(RECENTER(), 100)
-    return;
+    return
    }
-   window.scrollTo(INPUT.width / 2, INPUT.height / 2);
+   window.scrollTo(INPUT.width / 2, INPUT.height / 2)
   },
   RENDER = ({ append, globals, create }) => {
    [
@@ -608,19 +369,346 @@ addEventListener('load', () => {
    });
    document.adoptedStyleSheets = [GLOBAL_SHEET]
    Object.defineProperties(globalThis, globals)
-   for (const word of [...glossary]) DEFINE_NODE(word)
-   append('node', create(HOST_WORD, document, _ => _.toNodes()[0]))
-   append('node', create('tooltip-', document, _ => _.toNodes()[0]))
+   append('node', create(HOST_WORD, document, dictionary))
+   append('node', create('tooltip-', document, dictionary))
+   append('node', create('part-tool', document, dictionary))
   };
+ {
+  [
+   [Node, {
+    on: {
+     get() {
+      return (...args) => {
+       console.assert(typeof args[0] === 'string')
+       if (args[0].includes(' ')) {
+        const args0 = args.shift();
+        args0.split(' ').forEach(arg0 => this.addEventListener(arg0, ...args))
+       }
+       else this.addEventListener(...args)
+      }
+     }
+    },
+    off: {
+     get() {
+      return (...args) => {
+       this.removeEventListener(...args)
+      }
+     }
+    },
+    has: {
+     get() {
+      return attr => {
+       return this.hasAttribute(attr)
+      }
+     }
+    },
+    get: {
+     get() {
+      return attr => {
+       if (Array.isArray(attr)) return attr.map(a => this.getAttribute(a))
+       return this.getAttribute(attr)
+      }
+     }
+    },
+    set: {
+     get() {
+      return (attr, value = '') => {
+       if (typeof attr === 'object')
+        return Object.entries(attr).map(([attr, value]) => this.set(attr, value))
+       if (value === null || value === undefined) {
+        if (this.has(attr)) {
+         this.removeAttribute(attr)
+         return true
+        }
+        return false
+       }
+       if (this.get(attr) === value.toString()) return false
+       this.setAttribute(attr, value)
+       return true
+      }
+     }
+    },
+    word: {
+     get() {
+      return this.tagName?.toLowerCase();
+     }
+    },
+    flip: {
+     get() {
+      return attr => {
+       if (!this.has(attr)) { this.set(attr, ''); return true }
+       this.unset(attr);
+       return false;
+      }
+     }
+    },
+    Q: {
+     get() {
+      return (query, group = false, parts = false, nothing = group ? [] : undefined) => {
+       const root = this.isPart ? this.shadowRoot : this;
+       let result = root[`querySelector${group ? 'All' : ''}`](query);
+       if (!group) return result ? result : nothing
+       if (!parts) return result.length ? [...result] : nothing;
+       result = [...result].filter(node => node.isPart);
+       return result.length ? result : nothing
+      }
+     }
+    },
+    K: {
+     get() {
+      return (query, group = true, parts = false, nothing = 0) => {
+       const root = this.isPart ? this.shadowRoot : this;
+       let result = root[`querySelector${group ? 'All' : ''}`](query);
+       if (!group) {
+        if (parts) return result?.isPart ? 1 : nothing
+        return result ? 1 : nothing
+       }
+       if (!parts) return result.length ? result.length : nothing;
+       result = [...result].filter(node => node.isPart);
+       return result.length ? result.length : nothing;
+      }
+     }
+    },
+    P: {
+     get() {
+      return ({ x, y }, group = false, parts = false, nothing = group ? [] : undefined) => {
+       const root = this.isPart ? this.shadowRoot : this;
+       let result = root[`element${group ? 's' : ''}FromPoint`](x, y);
+       if (!group) {
+        if (parts) return (result?.isPart && result !== this) ? result : nothing
+        return (result && (result !== this)) ? result : nothing
+       }
+       if (!parts) return result.length ? [...result] : nothing;
+       result = [...result].filter(node => node.isPart);
+       return result.length ? result : nothing
+      }
+     }
+    },
+    unset: {
+     get() {
+      return attr => { if (this.has(attr)) this.set(attr, null) }
+     }
+    },
+    drive: {
+     get() {
+      return attr => {
+       const host = this.hostNode;
+       if (this.has(attr)) {
+        const value = this.get(attr);
+        if (!host.has(attr) || host.get(attr) !== value) {
+         host.set(attr, value);
+        }
+       } else {
+        if (host.has(attr)) host.unset(attr)
+       }
+      }
+     }
+    },
+    getHost: {
+     get() {
+      return (attr, value) => {
+       if (value === undefined) return this.hostNode.has(attr) && this.hostNode.get(attr) !== '0';
+       return value === this.hostNode.get(attr)
+      }
+     }
+    },
+    frameUp: {
+     get() {
+      return () => {
+       setTimeout(() => this.scrollIntoView({ behavior: 'smooth', block: 'center' }), 125);
+      }
+     }
+    },
+    isPart: {
+     get() {
+      return this.tagName?.includes('-')
+     }
+    },
+    hostNode: {
+     get() {
+      return this === document.body ? this : this.host ?? this.parentNode?.hostNode ?? console.warn('no host on this', this)
+     }
+    },
+    driveBool: {
+     get() {
+      return (localAttr, hostAttr, value, save) => {
+       this.enableSelf(localAttr, this.getHost(hostAttr, value));
+       this.on('click', () => {
+        const newValue = this.flip(localAttr);
+        //this.enableHost(hostAttr, newValue)
+        save?.(newValue)
+       })
+      }
+     }
+    },
+    enableHost: {
+     get() {
+      return (attr, enable) => this.hostNode.enableSelf(attr, enable);
+     }
+    },
+    enableSelf: {
+     get() {
+      return (attr, enable) => {
+       if (enable) {
+        if (!this.has(attr)) {
+         this.set(attr, '');
+        }
+       } else {
+        if (this.has(attr)) {
+         this.unset(attr);
+        }
+       }
+      }
+     }
+    },
+    cursorField: {
+     get() {
+      return ondelta => {
+       const
+        LOCKED = 'cursor-field',
+        WAITING = 'cursor-field-waiting',
+        onclick = () => {
+         if (this.has(WAITING)) return;
+         document.on(...lock);
+         this.requestPointerLock({ unadjustedMovement: true });
+        },
+        onmove = event => {
+         if (document.pointerLockElement !== this) onlock();
+         ondelta(event);
+        },
+        onlock = () => {
+         if (document.pointerLockElement !== this) {
+          document.off(lock);
+          this.on(...click);
+          this.unset(LOCKED);
+          this.off(move);
+          this.set(WAITING);
+          setTimeout(() => this.unset(WAITING), 1500);
+          return;
+         }
+         document.on(...lock);
+         this.off(click);
+         this.set(LOCKED);
+         this.on(...move);
+        },
+        click = ["click", onclick, true],
+        move = ['mousemove', onmove, false],
+        lock = ["pointerlockchange", onlock, true];
+       this.on(...click);
+      }
+     }
+    },
+   }],
+   [String, {
+    wrap: {
+     get() {
+      return e => {
+       const
+        pairs = { '{': '}', "(": ")", "[": "]", "<": ">" },
+        endT = e in pairs ? pairs[e] : e,
+        naked = this.replace(new RegExp('\\' + endT, 'g'), '\\' + endT);
+       return e + naked + endT;
+      }
+     }
+    },
+    inset: {
+     get() {
+      return (left, right = left) => this.slice(left, this.length - right)
+     }
+    },
+    unwrap: {
+     get() {
+      return () => {
+       const
+        endT = this.at(-1),
+        escaped = this.slice(1, this.length - 1);
+       return escaped.replace(new RegExp('\\\\\\' + endT, 'g'), endT);
+      }
+     }
+    },
+    toNodes: {
+     get() {
+      return () => {
+       OFFSCREEN_NODE.innerHTML = this
+       const nodes = [...OFFSCREEN_NODE.childNodes]
+       OFFSCREEN_NODE.innerHTML = ''
+       return nodes
+      }
+     }
+    },
+    websafe: {
+     get() {
+      return () => {
+       OFFSCREEN_NODE.textContent = this;
+       let result = OFFSCREEN_NODE.innerHTML;
+       OFFSCREEN_NODE.innerHTML = ''
+       result = result.replace(/"/g, '&quot;')
+       result = result.replace(/'/g, '&apos;')
+       return result;
+      }
+     }
+    },
+    parseINI: {
+     get() {
+      return (fn = (k, v) => { }) => [...this.matchAll(/([a-z][a-z-0-9]*)(?:\s*=\s*(?:([^\s'"`\]]+)|"([^"]+)"|'([^']+)'|`([^`]+)`))?/g)].map(match => match.slice(1).filter(x => x !== undefined)).map(fn)
+     }
+    },
+    isLetter: {
+     get() {
+      return () => this.length === 1 && this.toLowerCase() !== this.toUpperCase()
+     }
+    },
+    parseExpression: {
+     get() {
+      return handler => {
+       const
+        e = this[0],
+        letter = e.isLetter(),
+        key = letter ? 'word' : {
+         '^': 'title',
+         '`': 'template',
+         '{': 'hostcss',
+         '<': 'comment',
+         '=': 'infix',
+         '[': 'custom',
+         "'": 'css',
+         '~': 'javascript',
+         '+': 'html',
+         '(': 'buffername'
+        }[e],
+        handle = handler[key] ?? handler.fallback ?? (_ => console.warn({ unhandled: _ }));
+       handle(letter ? this : this.unwrap(), key)
+      }
+     }
+    }
+   }],
+   [Array, {
+    removeValue: {
+     get() {
+      return value => {
+       for (let index = 0; index < this.length; index++) {
+        if (this[index] === value) {
+         this.splice(index, 1)
+         return true;
+        }
+       }
+       return false;
+      }
+     }
+    }
+   }],
+  ].forEach(([T, map]) => Object.defineProperties(T.prototype, map));
+ }
  Object.defineProperties(globalThis, {
-  e: { get: () => EVENTS },
-  on: { get: () => ON },
+  DO: { get: () => EVENTS },
+  ON: { get: () => ON },
   uw: { get: () => INPUT.unitWidth },
   uh: { get: () => INPUT.unitHeight },
   width: { get: () => INPUT.gridWidth },
   height: { get: () => INPUT.gridHeight },
   refresh: { get: () => () => location.reload() },
   unitRatio: { get: () => INPUT.unitRatio },
+  dictionary: { get: () => DICTIONARY }
  })
  class Telecursor {
   #events = { up: undefined, down: undefined, move: undefined }
@@ -692,7 +780,7 @@ addEventListener('load', () => {
    });
    this.#links.push(({ pos, offset: offsetIn, depth }) => {
     offset = offsetIn;
-    onmove({ ...getPos(pos), depth: depth });
+    onmove({ ...getPos(pos), depth: depth, offset });
    });
   }
  }
@@ -739,17 +827,12 @@ addEventListener('load', () => {
      BUFFERS
     ] = $,
      ii2I = new Map(),
-     GLOSSARY = new Set(),
-     CONTEXT_INDEX = [],
-     ARCHIVE = BUFFERS['model.json'],
      CLIENT = BUFFERS['client.json'],
+     ARCHIVE = BUFFERS['model.json'],
+     PREVIEW = BUFFERS['preview/model.json'],
+     CONTEXT_INDEX = [],
      POST = msg => {
       SERVICE_WORKER.postMessage(msg);
-     },
-     ADD_WORD = word => {
-      if (GLOSSARY.has(word)) return false;
-      GLOSSARY.add(word);
-      return true
      },
      CREATE_CONTEXT = (parentContext, routine, argument) => {
       const
@@ -761,18 +844,20 @@ addEventListener('load', () => {
        stack = { node: [] },
        newContext = {
         stack, argument, date, index,
-        create: (word, doc, toNodes) => {
+        create: (word, document, dictionary) => {
          if (newContext.inside(word) >= PRECISION - 1)
-          return toNodes(`<real-recurring index=${index}>`);
-         return doc.createElement(word);
+          return document.createElement('stack-recurring')
+         const Word = word.includes('-') ? dictionary[word] : undefined
+         // TODO: model here?
+         return document.createElement(word);
         },
         append: (routine, argument, node) => {
          const child = CREATE_CONTEXT(newContext, routine, argument);
-         // try {
+         //try {
          return (node ? node : argument)[routine](child);
-         // } catch (e) {
-         // throw { e, routine, argument, node, resolvedNode: node ? node : argument }
-         // }
+         //} catch (e) {
+         //throw { e, routine, argument, node, resolvedNode: node ? node : argument }
+         //}
         },
         inside: word => stack.node.filter(node => node.word === word).length - (word === stack.node.at(-1)?.word ? 1 : 0),
         pickOne: model => {
@@ -806,18 +891,15 @@ addEventListener('load', () => {
       globals: { get: () => GLOBALS },
       buffers: { get: () => BUFFERS },
       refetch: { get: () => () => POST('refetch') },
-      uncache: { get: () => () => { localStorage.clear(); location.reload(); } },
-      glossary: { get: () => GLOSSARY },
-      globalcss: { get: () => BUFFERS['global.css'] },
-      backlinks: { get: () => ii2I },
       moments: { get: () => CONTEXT_INDEX },
       statics: { get: () => STATICS },
+      uncache: { get: () => () => { localStorage.clear(); location.reload(); } },
+      globalcss: { get: () => BUFFERS['global.css'] },
+      backlinks: { get: () => ii2I },
      },
      ORIGIN_CONTEXT = CREATE_CONTEXT(null, 'word', "desktop-");
     Object.entries(ARCHIVE).forEach(([localTagname, model]) => {
-     ADD_WORD(localTagname);
      Object.keys(model).forEach(remoteTagname => {
-      ADD_WORD(remoteTagname);
       if (!ii2I.has(remoteTagname)) ii2I.set(remoteTagname, new Set());
       ii2I.get(remoteTagname).add(localTagname);
      })
@@ -827,7 +909,7 @@ addEventListener('load', () => {
      let [version, index, name] = key.split('|');
      version = parseFloat(version);
      index = parseInt(index);
-     console.log({ version, index, name, value });
+     console.info({ version, index, name, value });
     }
     console.groupEnd();
     navigator.serviceWorker.onmessage = ({ data }) => {
@@ -845,5 +927,5 @@ addEventListener('load', () => {
 
 /*
 
-TODO: render-order-based indexing means that caches for object called 'bob' at some large index i, aren't valid anymore if even one more object is rendered before i. Render-order-based indexing has plenty of unresolved edge cases. 
+TODO: render-order-based indexing means that caches for object called 'bob' at some large index i, aren't valid anymore if even one more object is rendered before i. Render-order-based indexing has too many unresolved edge cases. 
 */

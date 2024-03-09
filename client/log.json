@@ -1,0 +1,5 @@
+[
+ "[index json]",
+ "('console-message.css')",
+ "`<stack- index=${index}></stack-><json->${atob(json)}`"
+]

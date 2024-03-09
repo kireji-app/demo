@@ -8,7 +8,7 @@ sendChannel.onopen = sendChannel.onclose = () => {
  input.setAttribute('state', sendChannel?.readyState);
 }
 remoteRTC.ondatachannel = ({ channel }) => {
- channel.onmessage = ({ data }) => e.chat(JSON.parse(data));
+ channel.onmessage = ({ data }) => DO['chat message'](JSON.parse(data));
  channel.onopen = channel.onclose = () => warning("channel state now" + channel?.readyState);
 }
 localRTC.onicecandidate = e => !e.candidate

@@ -10,6 +10,6 @@ this.cover = w => {
  })
 }
 
-on.clear(word => {
+ON['open model'](word => {
  this.cover(word)
 })

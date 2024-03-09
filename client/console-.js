@@ -38,13 +38,13 @@ const
    node.set('times', parseInt(node.get('times') ?? 1) + 1)
    return;
   }
-  const node = say(`<${word} index=${index} json=${btoa(JSON.stringify(msg.websafe(), serializer))}>`)[0];
+  const node = say(`<${word} index=${index} json=${btoa(JSON.stringify(msg===undefined?'undefined':typeof msg === 'string' ? msg.websafe() : typeof msg === 'object' ? msg : console.error('Unhandled message type',{msg}), serializer))}>`)[0];
   container.appendChild(node);
   messages.set(payload, node);
  }
 this.style = Object.entries(counters).map(([key, count]) => `--${key}count:\"${count}\"`).join(';');
 attributes.forEach(attr => {
- on[attr.inset(0, 1)]((msg, sender, depth, index) => {
+ ON['console '+attr.inset(0, 1)]((msg, sender, depth, index) => {
   message(attr, msg, sender, depth, index)
  })
 })

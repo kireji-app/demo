@@ -2,6 +2,7 @@
  --scale: inherit;
  --w-size: calc(var(--scale) * var(--uw));
  --h-size: calc(var(--scale) * var(--uh));
+ --color: var(--vellum-white);
  width: var(--w-size);
  height: var(--h-size);
  font-size: calc(var(--w-size) - var(--huw));
@@ -39,7 +40,11 @@ var {
  overflow: hidden;
  text-overflow: ellipsis;
  box-sizing: border-box;
- color: var(--vellum-white);
+ font-style: normal;
+}
+
+var:empty {
+ display: none;
 }
 
 var::before {
@@ -74,21 +79,26 @@ var,
  bottom: var(--hhuh);
 }
 
+
 :host([word="css-"]) {
  --bg: darkblue;
 }
 
-:host([word="js-"]) {
+:host([word="js-"]),
+:host([word="javascript-"]),
+:host([word="birthday-theta"]) {
  --bg: gold;
  --color: black;
 }
 
-:host([word="txt-"]) {
+:host([word="txt-"]),
+:host([word="model-explorer"]) {
  --bg: black;
 }
 
 :host([word="ini-"]),
-:host([word="json-"]) {
+:host([word="json-"]),
+:host([word="desktop-explorer"]) {
  --bg: var(--vellum-white);
  --color: black;
 }

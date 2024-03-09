@@ -4,6 +4,7 @@
  display: flex;
  flex-flow: column nowrap;
  overflow-y: auto;
+ gap: var(--uh);
 }
 
 h1 {
@@ -22,13 +23,19 @@ h5 {
  color: var(--ui-fill);
 }
 
-thought- {
- margin: var(--hu-hw);
- padding: var(--u-hw);
- overflow: hidden;
- box-sizing: border-box;
- border-radius: var(--huh);
+:host([variable])>h1,
+:host([variable])>h5 {
+ display: none;
+}
+
+:host([variable]) {
  background: var(--ui-fill);
- flex-shrink: 0;
- box-shadow: var(--paper-shadow);
+ padding: 0;
+ display: grid;
+}
+
+:host([variable])>thought- {
+ margin: 0;
+ border-radius: 0;
+ flex: 1 0;
 }

@@ -6,19 +6,14 @@ const
  },
  update = () => {
   group.forEach(e => e.remove());
-  group.add(say(`<part-menu label="${rootword}">`))
-  expressions.ungroup().forEach(e => {
-   e.parseExpression({
-    word: _ => make(`<sub-part word=${_}>`),
-    fallback: (_, key) => {
-     make(`<${key}-part content="${btoa(_)}">`)
-    }
-   })
+  group.add(say(`<part-menu label="${rootword}">`)[0])
+  expressions.forEach((e,i) => {
+   make(`<sub-part open word="${word}" rootword="${rootword}" index=${i}>`)
   })
+  group.add(echo(`infix-`)[0])
  };
 
 this.onpointerdown = e => {
- if (focus === 'true') return
  $focus('true')
 }
 

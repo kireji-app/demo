@@ -1,0 +1,86 @@
+:host {
+ display: grid;
+ max-width: 100%;
+ grid-template-rows: var(--u2h) 1fr;
+ grid-template-columns: 1fr;
+ grid-template-areas:
+  "tabs"
+  "code";
+}
+
+:host([file="-1"]) {
+ grid-template-rows: 1fr;
+ grid-template-columns: 1fr;
+ grid-template-areas: "code";
+}
+
+:host([file="-1"])>code-editor,
+:host(:not([file="-1"]))>code-welcome {
+ display: none;
+}
+
+code-editor,
+code-welcome {
+ grid-area: code;
+}
+
+#tabs {
+ grid-area: tabs;
+ display: flex;
+ flex-flow: row nowrap;
+ overflow: hidden;
+ overflow-x: auto;
+ background-color: #000A;
+}
+
+.tab {
+ height: 100%;
+ line-height: var(--u2h);
+ font-size: calc(var(--uw) + var(--hhhuw));
+ padding-left: var(--huw);
+ background-color: var(--ui-fill);
+ display: grid;
+ grid-template-columns: 1fr var(--u2w);
+ box-shadow:
+  inset 0 0 0 0.5px #0004,
+  0 0 0 0.5px #0004;
+ white-space: nowrap;
+}
+
+
+
+/* Track */
+#tabs::-webkit-scrollbar-track {
+ background: rgba(var(--ui-fill-rgb), 0.2) !important;
+}
+
+/* Handle */
+#tabs::-webkit-scrollbar-thumb {
+ background: rgba(var(--vellum-white-rgb), 0.2) !important;
+}
+
+.tab,
+.tab>button {
+ cursor: pointer;
+}
+
+.tab>button {
+ margin: var(--hhu-hw);
+ font-size: var(--uw);
+ line-height: calc(var(--uh) + var(--huh));
+}
+
+.tab:not([open]):hover {
+ background:
+  linear-gradient(rgba(var(--vellum-white-rgb), 0.3), rgba(var(--vellum-white-rgb), 0.3)),
+  var(--ui-fill);
+}
+
+.tab>button:hover {
+ color: tomato;
+ background-color: rgba(var(--vellum-white-rgb), 0.5);
+}
+
+.tab[open] {
+ background-color: var(--approval-green);
+}

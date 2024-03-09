@@ -7,9 +7,24 @@
  position: relative;
  color: var(--ui-fill);
  overflow: visible;
+ padding: 0;
+ box-sizing: border-box;
+ border-radius: var(--huw);
 }
 
-:host>part-menu {
+part-menu {
+ padding: var(--hhu-hw);
  background-color: var(--ui-fill);
  color: var(--vellum-white);
+ border-radius: var(--huw);
+}
+
+:host([open])>part-menu {
+ border-bottom-left-radius: 0;
+ border-bottom-right-radius: 0;
+}
+
+infix- {
+ border-bottom-left-radius: var(--huw);
+ border-bottom-right-radius: var(--huw);
 }

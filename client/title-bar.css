@@ -10,24 +10,25 @@
   black;
 }
 
-glyph- {
+.tab {
+ border-radius: var(--uh) 0 0 var(--uh);
+}
+
+.tab[selected] {
+ display: none;
+}
+
+glyph-,
+.tab {
+ cursor: pointer;
+ background-color: var(--ui-fill);
  line-height: calc(var(--u2h) + var(--huh));
  font-size: calc(var(--uw) + var(--huw));
  height: calc(var(--u2h) + var(--huh));
  width: calc(var(--u2w) + var(--huw));
- background-color: var(--ui-fill);
- cursor: pointer;
 }
 
-glyph-[selected] {
- background-color: var(--approval-green);
-}
-
-glyph-:first-of-type {
- border-radius: var(--uh) 0 0 var(--uh);
-}
-
-glyph-:last-of-type {
+glyph- {
  border-radius: 0 var(--uh) var(--uh) 0;
 }
 
@@ -40,15 +41,7 @@ h1 {
 }
 
 #partname {
- order: 100;
  padding-left: var(--huw);
-}
-
-#appname {
- position: absolute;
- left: 0;
- right: 0;
- text-align: center;
 }
 
 version-pill {

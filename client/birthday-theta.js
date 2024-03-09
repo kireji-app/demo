@@ -1,1 +1,1 @@
-const sun = echo('sun-');
+const sun = Q('sun-');

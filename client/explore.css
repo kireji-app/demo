@@ -2,6 +2,8 @@
  color: var(--ui-fill);
  background: var(--vellum-white);
  padding: var(--hu-hw);
+ display: flex;
+ flex-flow: column nowrap;
  --even: 0.0625;
  --hover: 0.125;
  --selected: 0.25;
