@@ -9,7 +9,7 @@ if (inside(this.word)) {
   host.dispatchEvent(new InputEvent('change'));
  }
 } else {
- if (this.hasAttribute('label')) echo(`<label>${label}</label>`.wrap('+'));
+ if (this.hasAttribute('label')) say(`<label>${label}</label>`);
  this.onclick = () => {
   if (this.flip('open')) query('[selected]').frameUp()
  }
@@ -18,5 +18,5 @@ if (inside(this.word)) {
  if (!this.hasAttribute('value')) this.setAttribute('value', finalValue);
  else finalValue = value;
 
- echo(`<div>${list.map(item => `<drop-down value="${item}" ${item === finalValue ? 'selected' : ''}></drop-down>`).join('')}</div>`.wrap('+'));
+ say(`<div>${list.map(item => `<drop-down value="${item}" ${item === finalValue ? 'selected' : ''}></drop-down>`).join('')}</div>`);
 }

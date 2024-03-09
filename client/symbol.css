@@ -1,0 +1,16 @@
+:host {
+ left: calc(var(--uw) * (var(--x)));
+ top: calc(var(--uh) * (var(--y)));
+ width: var(--uw);
+ height: var(--u2h);
+ margin: calc(-1 * var(--u2h)) calc(-1 * var(--huw));
+ display: block;
+ position: absolute;
+ font-size: calc(var(--huw) + var(--uw));
+ line-height: var(--u2h);
+}
+
+:host([center]) {
+ left: calc(var(--uw) * (var(--x) + var(--hw)));
+ top: calc(var(--uh) * (var(--y) + var(--hh)));
+}

@@ -1,18 +1,22 @@
 :host {
  --stroke: calc(1 / 4);
- left: calc(var(--uw) * (var(--ax) / 5 + var(--hw)));
- top: calc(var(--uh) * (var(--ay) / 5 + var(--hh)) + (var(--stroke) * var(--uh)) * -0.5);
+ left: calc(var(--uw) * var(--ax));
+ top: calc(var(--uh) * var(--ay) + (var(--stroke) * var(--uh)) * -0.5);
  background-color: var(--ui-fill);
- width: calc(var(--uw) * var(--magnitude) - var(--huw));
+ width: calc(var(--uw) * var(--magnitude));
  height: calc(var(--stroke) * var(--uh));
- box-shadow: 1px 2px 5px var(--ui-fill);
  display: block;
  position: absolute;
  transform: rotate(var(--angle));
  transform-origin: 0 0;
 }
 
-:host::before {
+:host([center]) {
+ left: calc(var(--uw) * (var(--ax) / 5 + var(--hw)));
+ top: calc(var(--uh) * (var(--ay) / 5 + var(--hh)) + (var(--stroke) * var(--uh)) * -0.5);
+}
+
+:host([label])::before {
  position: absolute;
  bottom: var(--huh);
  left: var(--huw);
@@ -21,7 +25,7 @@
  display: block;
 }
 
-:host::after {
+:host([arrow])::after {
  content: '';
  display: block;
  transform: rotate(45deg);
@@ -33,4 +37,8 @@
  position: absolute;
  right: calc(-1 * var(--huw));
  top: calc(var(--stroke) * var(--uh) * 0.5);
+}
+
+:host([arrow]) {
+ width: calc(var(--uw) * var(--magnitude) - var(--huw));
 }

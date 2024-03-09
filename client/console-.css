@@ -26,12 +26,10 @@ menu {
 }
 
 div {
- display: flex;
- flex-flow: column nowrap;
  height: 100%;
  min-height: none;
- overflow-y: auto;
  overflow-x: hidden;
+ overflow-y: auto;
 }
 
 menu::after {
@@ -102,4 +100,8 @@ error- {
 
 div>*[times] {
  --times: '(' attr(times)')';
+}
+
+div > * {
+ width: 100%;
 }

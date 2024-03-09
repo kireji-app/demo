@@ -1,0 +1,18 @@
+:host {
+ --mark: "#";
+ --unmark: var(--mark);
+ width: 100%;
+}
+
+:host::before,
+:host::after {
+ content: var(--mark);
+ line-height: var(--u2h);
+ height: var(--u2h);
+ width: var(--u2h);
+ display: inline-block;
+}
+
+:host::after {
+ content: var(--unmark);
+}

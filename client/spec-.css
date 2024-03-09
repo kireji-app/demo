@@ -1,0 +1,73 @@
+:host {
+ padding: calc(2 * var(--uh)) calc(4 * var(--uw));
+ background: var(--white-fill-dots);
+ color: var(--ui-fill);
+ margin: var(--hu-hw) !important;
+ box-sizing: border-box;
+ width: calc(100% - (1 * var(--uw))) !important;
+ height: calc(100% - (1 * var(--uh))) !important;
+ box-shadow: var(--paper-shadow);
+ border-radius: var(--huh);
+ line-height: var(--uh);
+}
+
+button {
+ cursor: pointer;
+ position: relative;
+ width: calc(25 * var(--uw));
+ height: calc(25 * var(--uh));
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ padding-bottom: var(--uh);
+ overflow: hidden;
+}
+
+button>img {
+ width: 130%;
+ height: 130%;
+ position: absolute;
+ top: -15%;
+ left: -15%;
+}
+
+button::after {
+ font-size: calc(3 * var(--uw));
+ line-height: calc(3 * var(--uh));
+ content: "Delete";
+ color: white;
+ z-index: 10;
+}
+
+button:hover::after {
+ font-size: calc(4 * var(--uw));
+ line-height: calc(4 * var(--uh));
+}
+
+button:hover::after {
+ font-size: calc(4 * var(--uw));
+ line-height: calc(4 * var(--uh));
+}
+
+section {
+ margin-bottom: var(--u3h);
+}
+
+dd {
+ margin-bottom: var(--uh);
+}
+
+@media screen and (min-width: 1200) {
+ :host {
+  padding: calc(2 * var(--uh)) calc(4 * var(--uw));
+  background: var(--white-fill-dots);
+  color: var(--ui-fill);
+  margin: var(--hu-hw) !important;
+  box-sizing: border-box;
+  width: calc(100% - (1 * var(--uw))) !important;
+  height: calc(100% - (1 * var(--uh))) !important;
+  box-shadow: var(--paper-shadow);
+  border-radius: var(--huh);
+  line-height: var(--uh);
+ }
+}

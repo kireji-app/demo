@@ -49,7 +49,7 @@ search-bar-item {
  height: var(--u2h);
  vertical-align: middle;
  white-space: nowrap;
-}hell
+}
 
 search-bar-item:hover {
  background-color: var(--ui-fill);

@@ -1,0 +1,95 @@
+:host {
+ --height: calc(3 * var(--uh));
+ --bg: dimgrey;
+ --color: var(--vellum-white);
+ display: flex;
+ flex-flow: row nowrap;
+ width: 100%;
+ height: var(--height);
+ box-sizing: border-box;
+ position: relative;
+}
+
+numeral- {
+ pointer-events: none;
+ width: calc(3 * var(--uw));
+ font-size: var(--u2w);
+ line-height: var(--height);
+ vertical-align: middle;
+ flex: 0 0 auto;
+}
+
+var {
+ line-height: calc(var(--huh) + var(--hhhuh));
+ text-align: center;
+ font-size: calc(var(--huh) + var(--hhuh));
+ padding: var(--hhu-hw);
+ color: var(--color);
+ position: relative;
+ z-index: 2;
+}
+
+var::before {
+ content: '';
+ top: 0;
+ left: 0;
+ position: absolute;
+ background-color: var(--bg);
+ width: 100%;
+ height: 100%;
+ z-index: -1;
+ opacity: 55%;
+}
+
+:host::before {
+ content: '';
+ background: linear-gradient(45deg, var(--bg), transparent 75%);
+ display: block;
+ width: calc(var(--u2w) + var(--huw));
+ height: calc(var(--u2h) + var(--huh));
+ z-index: -10;
+}
+
+var::before,
+:host::before {
+ border-radius: var(--hhuw);
+}
+
+var,
+:host::before {
+ position: absolute;
+ left: var(--hhuw);
+ bottom: var(--hhuh);
+}
+
+label {
+ font-size: var(--uw);
+ line-height: var(--height);
+ overflow: hidden;
+ text-overflow: ellipsis;
+ color: var(--vellum-white);
+}
+
+:host([extension="css"]) {
+ --bg: darkblue;
+}
+
+:host([extension="js"]) {
+ --bg: gold;
+ --color: black;
+}
+
+:host([extension="txt"]) {
+ --bg: black;
+}
+
+:host([extension="ini"]),
+:host([extension="json"]) {
+ --bg: var(--vellum-white);
+ --color: black;
+}
+
+:host([extension="html"]),
+:host([extension="png"]) {
+ --bg: darkred;
+}

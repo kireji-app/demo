@@ -5,7 +5,7 @@ const
  messages = new Map(),
  counters = attributes.reduce((obj, attr) => (obj[attr] = 0, obj), {});
 const
- container = echo(`<menu>${attributes.map(attr => `<stat-pill type=${attr}></stat-pill>`).join('')}<error-btn></menu><div></div>`.wrap('+')).at(-1),
+ container = say(`<menu>${attributes.map(attr => `<stat-pill type=${attr}></stat-pill>`).join('')}<error-btn></menu><div></div>`).at(-1),
  message = (word, msg, sender, depth, index) => {
   switch (word) {
    case 'log-':
@@ -21,7 +21,12 @@ const
     console.info(msg);
     break;
   }
-  const payload = JSON.stringify([msg, sender, depth, index]);
+  const serializer = (key, value) =>
+   typeof value === 'bigint'
+    ? value.toString()
+    : value // return everything else unchanged;
+  const payload = JSON.stringify([msg, sender, depth, index], serializer);
+
   counters[word]++;
   this.style = Object.entries(counters).map(([attr, count]) => `--${attr}count:\"${count}\"`).join(';');
   if (messages.has(payload)) {
@@ -29,7 +34,7 @@ const
    node.set('times', parseInt(node.get('times') ?? 1) + 1)
    return;
   }
-  const node = echo(`<${word}><stack- index=${index}></stack-><json->${JSON.stringify(msg)}`.wrap('+'))[0];
+  const node = say(`<${word}><stack- index=${index}></stack-><json->${JSON.stringify(msg, serializer)}`)[0];
   container.appendChild(node);
   messages.set(payload, node);
  }

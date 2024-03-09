@@ -2,19 +2,19 @@ e.setWord(index + '.' + word + '.word')
 
 const
  sheet = new CSSStyleSheet(),
- icon = echo(`<numeral- word=${word}>`.wrap('+'))[0],
- field = echo(`<input value=${word}>`.wrap('+'))[0],
+ icon = say(`<numeral- word=${word}>`)[0],
+ field = say(`<input value=${word}>`)[0],
  cover = word => {
   field.value = word
   field.onchange()
   field.onsubmit()
  },
- items = echo(`${[...glossary].map(w => `<search-bar-item word="${w}" ${w === word ? 'selected' : ''}></search-bar-item>`).join('')}`.wrap('+')),
+ items = say(`${[...glossary].map(w => `<search-bar-item word="${w}" ${w === word ? 'selected' : ''}></search-bar-item>`).join('')}`),
  restyle = () => {
   if (field.value === '') sheet.replaceSync(`:host{--results:${query(`search-bar-item`, true).length}}`)
   else {
    const results = query(`search-bar-item[word*="${field.value}"]`, true), count = results.length;
-   sheet.replaceSync(`search-bar-item:not([word*="${field.value}"]) { display: none !important }:host{--results:${count}}`)
+   sheet.replaceSync(`search-bar-item:not([word*="${field.value}"]){display:none !important}:host{--results:${count}}`)
   };
  };
 

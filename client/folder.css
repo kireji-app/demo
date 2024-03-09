@@ -1,0 +1,39 @@
+:host {
+ background: var(--ui-fill);
+ padding: var(--hu-hw);
+ --even: 0.0625;
+ --hover: 0.125;
+ --selected: 0.25;
+}
+
+* {
+ border-radius: var(--huw);
+}
+
+:hover {
+ background-color: rgba(var(--vellum-white-rgb), var(--hover)) !important;
+}
+
+[selected] {
+ background-color: rgba(var(--vellum-white-rgb), var(--selected)) !important;
+}
+
+:nth-child(even) {
+ background-color: rgba(var(--vellum-white-rgb), var(--even)) !important;
+}
+
+[selected]:hover {
+ background-color: rgba(var(--vellum-white-rgb), calc(var(--selected) + var(--hover))) !important;
+}
+
+[selected]:nth-child(even) {
+ background-color: rgba(var(--vellum-white-rgb), calc(var(--selected) + var(--even))) !important;
+}
+
+:nth-child(even):hover {
+ background-color: rgba(var(--vellum-white-rgb), calc(var(--even) + var(--hover))) !important;
+}
+
+[selected]:nth-child(even):hover {
+ background-color: rgba(var(--vellum-white-rgb), calc(var(--even) + var(--hover) + var(--selected))) !important;
+}

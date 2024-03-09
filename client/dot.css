@@ -1,11 +1,35 @@
 :host {
- left: calc(var(--uw) * (var(--x) + var(--hw)));
- top: calc(var(--uh) * (var(--y) + var(--hh)));
+ left: calc(var(--uw) * (var(--x)));
+ top: calc(var(--uh) * (var(--y)));
  background-color: var(--ui-fill);
  border-radius: 50%;
+ width: var(--huw);
+ height: var(--huh);
+ margin: calc(-1 * var(--hhuh)) calc(-1 * var(--hhuw));
+ display: block;
+ position: absolute;
+}
+
+:host([center]) {
+ left: calc(var(--uw) * (var(--x) + var(--hw)));
+ top: calc(var(--uh) * (var(--y) + var(--hh)));
+}
+
+:host::after {
+ content: '';
+ position: absolute;
+ left: calc(-1 * var(--hhuw));
+ top: calc(-1 * var(--hhuh));
+ display: block;
  width: var(--uw);
  height: var(--uh);
- margin: calc(-1 * var(--huh)) calc(-1 * var(--huw));
- display: block;
- position: absolute
+}
+
+:host(:hover) {
+ background-color: var(--vellum-white);
+ box-shadow: 0 0 0 var(--hhuh) var(--ui-fill);
+}
+
+:host([color]) {
+ color: var(--color);
 }

@@ -1,0 +1,4 @@
+:host {
+ background: var(--white-fill-dots);
+ color: var(--ui-fill);
+}

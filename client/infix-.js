@@ -1,15 +1,22 @@
 const
  field = echo('+<input>+')[0],
- symbols = [echo('text-cursor')[0]],
+ group = new Set([echo('text-cursor')[0]]),
+ make = html => {
+  group.add(say(html)[0])
+ },
  update = () => {
-  symbols.forEach(_ => _.remove());
-  expressions.ungroup().forEach(_ => {
-   symbols.push(echo(`+<character- code=${_.charCodeAt()}>+`)[0]);
+  group.forEach(e => e.remove());
+
+  atob(expressions).ungroup().forEach(e => {
+   e.parseExpression({
+    word: _ => make(`<numeral- word=${_}>`),
+    fallback: (_, key) => make(`<${key}- content=${btoa(_)}>`)
+   })
   })
-  symbols.push(echo('text-cursor')[0]);
+  make('<text-cursor>');
  };
 
-field.value = expressions
+field.value = atob(expressions)
 if (focus === 'true') field.focus()
 
 this.onpointerdown = e => {
@@ -24,7 +31,7 @@ field.onblur = () => {
 }
 
 field.oninput = () => {
- $expressions(field.value);
+ $expressions(btoa(field.value));
  update();
 }
 

@@ -1,4 +1,10 @@
 {
+ "folder-explorer": {
+  "origin-": "[selection]('folder.css')(\"folder.js\")"
+ },
+ "file-": {
+  "origin-": "[buffername]('file.css')(\"file.js\")"
+ },
  "sort-rule": {
   "thoughts-": "+The parts in this model have a specific order: how often the item is mentioned, descending. The first will be the most mentioned word, which is mentioned with frequency. Descending, words with decreasing connectedness, culminating in the list of words with only one mention.+"
  },
@@ -6,7 +12,7 @@
   "origin-": "[depth=-1 state=gone]('tooltip-.css')my-numeral(\"tooltip-.js\")"
  },
  "core-parts": {
-  "origin-": "[address=0.blank-.word]\"log('build core.parts');on.setWord(msg=>{$address(msg)})\"('core-parts.css')(\"core-parts.js\")^Kireji Word Maker^ my-toolbar  word-inspector +<v-rule key=v-left edge=0>+ h-rule +<v-rule key=v-right edge=1>+ console-"
+  "origin-": "[address=0.blank-.word]\"log('build core.parts');on.setWord(msg=>{$address(msg)})\"my-toolbar('core-parts.css')(\"core-parts.js\")^Kireji Word Maker^ +<v-rule key=v-left edge=0>+ h-rule +<v-rule key=v-right edge=1>+ console-"
  },
  "ejaugust-com": {
   "origin-": "^Eric Augustinowicz | ^('portfolio.css')"
@@ -14,11 +20,38 @@
  "blank-": {
   "origin-": ""
  },
+ "root-table": {
+  "origin-": "[word=blank-]('root-table.css')(\"root-table.js\")"
+ },
+ "buffername-": {
+  "origin-":"[content alt='File'](\"expression.js\")('expression.css'){--mark:'(';--unmark:')'}\"\""
+ },
+ "template-": {
+  "origin-":"[content alt='Template'](\"expression.js\")('expression.css'){--mark:'`'}"
+ },
+ "css-": {
+  "origin-":"[content alt='CSS'](\"expression.js\")('expression.css'){--mark:'\\''}"
+ },
+ "custom-": {
+  "origin-":"[content alt='Customization'](\"expression.js\")('expression.css'){--mark:'[';--unmark:']'}"
+ },
+ "html-": {
+  "origin-": "[content alt='HTML'](\"expression.js\")('expression.css'){--mark:'+'}"
+ },
+ "hostcss-": {
+  "origin-": "[content alt='Style'](\"expression.js\")('expression.css'){--mark:'{';--unmark:'\\7D'}"
+ },
+ "title-": {
+  "origin-": "[content alt='Title'](\"expression.js\")('expression.css'){--mark:'^'}"
+ },
+ "javascript-": {
+  "origin-": "[content alt='JS'](\"expression.js\")('expression.css'){--mark:'\"'}"
+ },
  "word-inspector": {
   "origin-": "('word-inspector.css')(\"word-inspector.js\")"
  },
  "v-rule": {
-  "origin-": "[offset=12 key=v-split edge=1 dragging=false]('split-bar.css')(\"split-bar.js\")"
+  "origin-": "[offset=23 key=v-split edge=1 dragging=false]('split-bar.css')(\"split-bar.js\")"
  },
  "h-rule": {
   "origin-": "[offset=3 key=h-split edge=0 dragging=false]('split-bar.css')(\"split-bar.js\")"
@@ -45,10 +78,10 @@
   "kireji-io": "('chat-keyboard.css') \"this.onclick = ()=> this.setAttribute('raised','')\" chat-input keyboard-panel"
  },
  "chat-input": {
-  "origin-": "(\"p2p.js\"){ background: var(--white-paper); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
+  "origin-": "(\"p2p.js\"){ background: var(--white-fill-grid); display: flex; flex-flow: row nowrap; height: var(--u2h); }'text-input{flex: 1 1 0; border-radius: var(--huh);}'"
  },
  "text-input": {
-  "chat-input": "{color: var(--ui-fill); }\"const nodesToWipe = []; on.clearChatInput(i => {nodesToWipe.forEach(node=>node.remove()); nodesToWipe.push(...echo(i.websafe().wrap('+'))) })\""
+  "chat-input": "{color: var(--ui-fill); }\"const nodesToWipe = []; on.clearChatInput(i => {nodesToWipe.forEach(node=>node.remove()); nodesToWipe.push(...say(i.websafe())) })\""
  },
  "send-btn": {
   "chat-input": "{ height: var(--u2h); display: block; width: var(--u3w); cursor:pointer; background: var(--approval-green); }"
@@ -60,7 +93,7 @@
   "origin-": "+Hi+"
  },
  "cursor-trap": {
-  "origin-": "{ background: var(--white-paper) !important }'legend-{ margin: var(--u2h) var(--u2w) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'\"const [dot,arrow,cursor] = echo('dot- arrow- cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })\"legend-"
+  "origin-": "{ background: var(--white-fill-dots) !important }'legend-{ margin: var(--u2h) var(--u2w) }:host(:not([cursor-field]))>legend-{opacity:0;pointer-events:none}'\"const [dot,arrow,cursor] = echo('+<dot- center><vector- label arrow center>+ cursor-'); let mx = 0, my = 0; this.cursorField(event=>{ const {movementX:x,movementY:y} = event; mx+=x; my+=y; dot.to(x,y); arrow.at(x,y); let mw = mx%(width*uw), mh = my%(height*uh); if (mw<0) mw = (width*uw)-Math.abs(mw); if(mh<0) mh = (height*uh)-Math.abs(mh); cursor.to(mw,mh) })\"legend-"
  },
  "legend-": {
   "origin-": "+<keyboard-key>Esc</keyboard-key> to return+"
@@ -69,9 +102,12 @@
   "origin-": "{background-color: var(--ui-fill); padding: var(--hu-hw); color:var(--vellum-white); border-radius: var(--huh); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 2px 0 0 rgba(255, 255, 255, 0.7) inset; display: inline-block; font-weight: 700; white-space: nowrap}`${innerHTML}`"
  },
  "dot-": {
-  "origin-": "[x=0 y=0]('dot.css')\"this.to=(x,y)=>this.set({x,y,'style':`--x:${x};--y:${y}`}); this.to(x,y);\""
+  "origin-": "[x=0 y=0 color]('dot.css')\"this.to=(x,y,color)=>{tip(`Point (${x},${y})`); this.set({x,y,color,'style':`--x:${x};--y:${y};--color:${color}`})}; this.to(x,y,color);\""
  },
- "arrow-": {
+ "symbol-": {
+  "origin-": "[x=0 y=0 word=zero-]('numeral-.css')('symbol.css')(\"marks.js\")(\"numeral-.js\")\"this.to=(x,y,w=word)=>{ this.cover(w); tip(`${w} (${x},${y})`); this.set({x,y,'style':`--x:${x};--y:${y}`})}; this.to(x,y,word);\""
+ },
+ "vector-": {
   "origin-": "[ax=0 ay=0 bx=3 by=3]('arrow-.css')(\"arrow-.js\")"
  },
  "cursor-": {
@@ -142,7 +178,7 @@
   "origin-": "+Understand Tasks+"
  },
  "my-toolbar": {
-  "origin-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); }"
+  "origin-": "{ display: flex; flex-flow: row nowrap; flex-basis: var(--u3h) !important; background: var(--ui-fill); align-items: flex-end; }"
  },
  "clear-btn": {
   "my-toolbar": "[action='uncache()' info='Reset']('shelf-btn.css') (\"shelf-btn.js\")"
@@ -163,7 +199,7 @@
   "origin-": "[word]':host,*{vertical-align:middle; line-height:var(--u2h);}numeral-{width: var(--u2w); margin-right: var(--huw); font-size: calc(var(--huw) + var(--uw)); line-height: var(--u2h); pointer-events: none; }'`<numeral- word=${word}></numeral-><label>${word}</label>`"
  },
  "hello-world": {
-  "origin-": "+<h1><pre>Hello World</pre></h1><p>Welcome to me.</p>+"
+  "origin-": "+<h1><pre>Hello World</pre></h1><p>Welcome!</p>+"
  },
  "json-": {
   "origin-": "('json-.css')(\"json-.js\")"
@@ -171,8 +207,23 @@
  "sets-": {
   "origin-": "':host>*{position:fixed;top:0;left:0;bottom:0;right:0;}'\"[...backlinks.keys()].map(word=>echo(word)[0])\""
  },
+ "meditation-": {
+  "thoughts-": ""
+ },
+ "self-expression": {
+  "thoughts-": "+<svg viewBox=\"-180 -240 360 360\"><path stroke=black stroke-width=4 stroke-dasharray=\"12 12\" id=\"curve\" d=\"M -140 -60 C 30 -100 110 -10 40 50 C -50 120 -120 -100 160 -140\" fill=none /><text font-size=\"51\" width=\"500\"><textPath alignment-baseline=\"text-after-edge\" xlink:href=\"#curve\">&nbsp;&nbsp;I'm&nbsp;&nbsp;&nbsp;&nbsp;expressing myself</textPath></text></svg>+"
+ },
+ "one-platform": {
+  "origin-":"[top=00100.001 bottom=000010001001.0000100100110111001111000110100 x=0 t=0]('one.css')(\"one.js\")"
+ },
+ "space-guy": {
+  "thoughts-": "(+space-guy.html+)"
+ },
  "about-lake-mead": {
   "thoughts-": "+I wish Lake Mead was a lake of mead.+"
+ },
+ "storm-surge": {
+  "thoughts-": "+Wind isn't asked for. Many particles share a heading. A matchstick is weaker than a bundle. The paths air molecules take are matchsticks, the wind a bundle. This is different from the view that vaccuum is 'asking for' occupation. Storm surges are not a collective asking of humanity for a storm. Such asking will never yield a storm surge. +"
  },
  "change-membrane": {
   "thoughts-": "+<p>Membrane-based memory storage. The membrane doesn't necessarily differentiate between inside and outside. Instead, the membrane is either incredibly easy to cross (no updates needed to components) or it provides update instructions. The membrane can be crossed by electricity with regularity (i.e. 60 fps or higher) and even if there is an update we should aim not to drop below that rate so as not to provide an unpleasant experience.+"
@@ -184,13 +235,14 @@
   "thoughts-": "+<p>sweet smell of nectar++<p>when you don't drown and consume++<p>you fill and set free+"
  },
  "thoughts-": {
-  "origin-": "{display: grid;}':host>* { padding: var(--hu-hw); box-sizing: border-box; }'"
+  "origin-": "{display:grid}+<h1>Thoughts</h1><subtitle>Like <a href=//0.nodes-.word>Notes</a>, only less coherent.</subtitle>+",
+  "object-": "{padding:var(--hu-hw);box-sizing:border-box}`${innerHTML}`"
  },
  "spec-": {
-  "origin-": ""
+  "origin-": "('spec-.css')(+spec-.html+)"
  },
  "infix-": {
-  "origin-": "[expressions='hello-world' focus=false]('infix-.css')(\"infix-.js\")"
+  "origin-": "[expressions focus=false]('infix-.css')(\"infix-.js\")"
  },
  "text-cursor": {
   "origin-": "('cursor-.css')"
@@ -215,5 +267,8 @@
  },
  "prime-rho": {
   "constant-": "[decimal=0.41468250985111166024810962215430770836577423813791697786824541448864096061935733419629004842847577793961615935208298595783574997845302200990412081465003395899370197411918628561557923719163725148816107107342843248021801697985681513424679474]"
+ },
+ "d-structure": {
+  "origin-": "(\"d-structure.js\")"
  }
 }

@@ -18,4 +18,4 @@ switch (typeof object) {
 
 }
 
-echo(html.wrap('+'));
+say(html);

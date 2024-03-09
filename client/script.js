@@ -249,6 +249,18 @@ addEventListener('load', () => {
      get() {
       return () => this.length === 1 && this.toLowerCase() !== this.toUpperCase()
      }
+    },
+    parseExpression: {
+     get() {
+      return handler => {
+       const
+        e = this[0],
+        letter = e.isLetter(),
+        key = letter ? 'word' : { '^': 'title', '`': 'template', '{': 'hostcss', '<': 'comment', '=': 'infix', '[': 'custom', "'": 'css', '"': 'javascript', '+': 'html', '(': 'buffername' }[e],
+        handle = handler[key] ?? handler.fallback ?? (_ => console.warn({ unhandled: _ }));
+       handle(letter ? this : this.unwrap(), key)
+      }
+     }
     }
    }],
    [Array, {
@@ -326,7 +338,7 @@ addEventListener('load', () => {
     buffername({ append, argument }) {
      const e = argument[0];
 
-     if (!['"', '+', `^`, '\'','['].includes(e))
+     if (!['"', '+', `^`, '\'', '['].includes(e))
       return append('expressions', buffers[argument], this)
 
      const buffername = argument.unwrap();
@@ -360,6 +372,7 @@ addEventListener('load', () => {
        script: argument,
        innerHTML: this.innerHTML,
        echo, send, $,
+       say: html => echo(html.wrap('+')),
        inside, stack, fork, index,
        query, flip, enableHost,
        log: msg => send(msg, 'log'),
@@ -414,25 +427,31 @@ addEventListener('load', () => {
      return returnable;
     }
     expression({ append, argument, index, create }) {
-     const e = argument[0], returnable = [];
-     if (e === '^') { if (!IN_FRAME) document.title += argument.unwrap() }
-     else if (e === '`') { returnable.push(...append('javascript', "echo(`" + argument.unwrap() + "`.wrap('+'))", this)); }
-     else if (e === '{') { returnable.push(...append('css', `:host{${argument.unwrap()}}`, this)) }
-     else if (e === '[') {
-      if (!this.customizations) this.customizations = {};
-      [...argument.unwrap().matchAll(/([a-z][a-z-0-9]*)(?:\s*=\s*(?:([^\s'"`\]]+)|"([^"]+)"|'([^']+)'|`([^`]+)`))?/g)].map(match => match.slice(1).filter(x => x !== undefined)).map(([attr, value]) => {
-       const key = this.customizations[attr] = version + '|' + index + '|' + attr;
-       let finalValue = value;
-       if (this.has(attr)) finalValue = this.get(attr);
-       else {
-        if (key in localStorage) finalValue = localStorage[key];
-       }
-       this.set(attr, finalValue);
-      })
-     }
-     else if (e === '<') { console.warn(argument.unwrap()) }
-     else if (e.isLetter()) returnable.push(...append('node', create(argument, document, _ => _.toNodes()[0]), this));
-     else returnable.push(...append({ "'": 'css', '+': 'html', '"': 'javascript', '(': 'buffername' }[e], argument.unwrap(), this));
+     let returnable = [];
+     const e = argument[0];
+     argument.parseExpression(
+      {
+       title: _ => { if (!IN_FRAME) document.title += _ },
+       template: _ => returnable.push(...append('javascript', "say(`" + _ + "`)", this)),
+       hostcss: _ => returnable.push(...append('css', `:host{${_}}`, this)),
+       comment: _ => console.warn(_),
+       custom: _ => {
+        // TODO: No more cache. Work using changes in the model.
+        if (!this.customizations) this.customizations = {};
+        [..._.matchAll(/([a-z][a-z-0-9]*)(?:\s*=\s*(?:([^\s'"`\]]+)|"([^"]+)"|'([^']+)'|`([^`]+)`))?/g)].map(match => match.slice(1).filter(x => x !== undefined)).map(([attr, value]) => {
+         const key = this.customizations[attr] = version + '|' + index + '|' + attr;
+         let finalValue = value;
+         if (this.has(attr)) finalValue = this.get(attr);
+         else {
+          if (key in localStorage) finalValue = localStorage[key];
+         }
+         this.set(attr, finalValue);
+        })
+       },
+       word: () => returnable.push(...append('node', create(argument, document, str => str.toNodes()[0]), this)),
+       fallback: _ => returnable.push(...append({ "'": 'css', '+': 'html', '"': 'javascript', '(': 'buffername' }[e], _, this))
+      }
+     );
      return returnable;
     }
     expressions({ append, argument }) {
@@ -720,6 +739,7 @@ addEventListener('load', () => {
      CREATE_CONTEXT = (parentContext, routine, argument) => {
       const
        date = Date.now(),
+       // TODO: this array length is not a good address for caching nodes. It changes often.
        index = CONTEXT_INDEX.length,
        DEPTH = parentContext?.stack[routine]?.filter(oldArgument => oldArgument === argument).length ?? 0,
        PRECISION = 3,
@@ -733,11 +753,22 @@ addEventListener('load', () => {
         },
         append: (routine, argument, node) => {
          const child = CREATE_CONTEXT(newContext, routine, argument);
+         // try {
          return (node ? node : argument)[routine](child);
+         // } catch (e) {
+         // throw { e, routine, argument, node, resolvedNode: node ? node : argument }
+         // }
         },
         inside: word => stack.node.filter(node => node.word === word).length - (word === stack.node.at(-1)?.word ? 1 : 0),
         pickOne: model => {
          const word = stack.node.filter(node => node.word in model).at(-1)?.word ?? 'origin-';
+         if (word !== 'origin-') {
+          const setModel = archive[word];
+          if (!setModel) console.warn('element is in unknown set', word)
+          else if ('object-' in setModel){
+           console.warn(setModel['object-'])
+          }
+         }
          return [word, model[word]];
         },
         fork: (routine, argument) => CREATE_CONTEXT(newContext, routine, argument),
@@ -798,3 +829,8 @@ addEventListener('load', () => {
   }
  }, 10);
 })
+
+/*
+
+TODO: render-order-based indexing means that caches for object called 'bob' at some large index i, aren't valid anymore if even one more object is rendered before i. Render-order-based indexing has plenty of unresolved edge cases. 
+*/

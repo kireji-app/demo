@@ -8,11 +8,16 @@
  --huh: calc(var(--uh) / 2);
  --hhuw: calc(var(--uw) / 4);
  --hhuh: calc(var(--uh) / 4);
+ --hhhuw: calc(var(--uw) / 8);
+ --hhhuh: calc(var(--uh) / 8);
  --u-hw: var(--uh) var(--uw);
  --hu-hw: var(--huh) var(--huw);
  --hhu-hw: var(--hhuh) var(--hhuw);
- --white-paper: url(blue-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--vellum-white);
- --blue-paper: url(white-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--ui-fill);
+ --hhhu-hw: var(--hhhuh) var(--hhhuw);
+ --white-fill-grid: url(blue-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--vellum-white);
+ --white-fill-dots: url(blue-dots.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--vellum-white);
+ --ui-fill-grid: url(white-grid.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--ui-fill);
+ --ui-fill-dots: url(white-dots.png) 0 0 / calc(var(--uw) * 10) calc(var(--uh) * 10), var(--ui-fill);
  --vellum-white-rgb: 235, 228, 205;
  --approval-green-rgb: 36, 180, 95;
  --vellum-white: rgb(var(--vellum-white-rgb));
@@ -64,4 +69,9 @@ iframe {
  border-radius: inherit;
  border-top-left-radius: 0;
  border-bottom-left-radius: 0;
+}
+
+a {
+ color: var(--approval-green);
+ text-decoration: inherit;
 }

@@ -8,9 +8,12 @@
  box-sizing: border-box;
  position: relative;
  color: var(--vellum-white);
+ text-overflow: ellipsis;
+ overflow: hidden;
+ min-width: 0;
 }
 
-:host(:hover)::after {
+:host::after {
  content: '';
  width: 100%;
  height: 100%;
@@ -18,8 +21,11 @@
  left: 0;
  display: block;
  position: absolute;
- background-color: rgba(var(--vellum-white-rgb), 0.1) !important;
  pointer-events: none;
+}
+
+:host(:hover)::after {
+ background-color: rgba(var(--vellum-white-rgb), 0.1) !important;
 }
 
 :host::before {

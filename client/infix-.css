@@ -1,18 +1,50 @@
 :host {
- background: var(--white-paper);
+ background: var(--white-fill-dots);
  cursor: text;
  padding: var(--uh);
+ padding-top: var(--u3h);
  display: flex;
  flex-flow: row wrap;
  align-content: start;
  height: 100%;
+ position: relative;
+ color: var(--ui-fill);
 }
 
 input {
- position: fixed;
+ position: absolute;
  left: 0;
  top: 0;
  right: 0;
- line-height: var(--uh);
- height: var(--uh);
+ line-height: var(--u2h);
+ height: var(--u2h);
+ background: var(--ui-fill-grid);
+ outline: none;
+ color: var(--vellum-white);
+ opacity: 80%;
+}
+
+input:focus {
+ opacity: 100%;
+}
+
+numeral-,
+[content] {
+ display: block;
+ font-size: calc(var(--hhuw) + var(--uw));
+ line-height: var(--u2h);
+ background-color: rgba(var(--vellum-white-rgb), 0.5);
+ font-family: monospace;
+ min-width: var(--u2w);
+ min-height: var(--u2h);
+}
+
+numeral- {
+ color: var(--ui-fill);
+ width: calc(var(--uw) * 5);
+ text-align: center;
+}
+
+:host(:not([focus="true"]))>text-cursor {
+ display: none;
 }

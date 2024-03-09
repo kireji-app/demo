@@ -5,21 +5,23 @@
  --left-w: calc(var(--v-left) * var(--uw));
  --right-w: calc(var(--v-right) * var(--uw));
  grid-template-columns: var(--left-w) 0 1fr 0 var(--right-w);
- grid-template-rows: var(--toolbar-h) 0 1fr;
+ grid-template-rows: 1fr 0 var(--toolbar-h);
  grid-template-areas:
-  "menu menu menu menu menu"
+  "left lbar body rbar right"
   "hbar hbar hbar hbar hbar"
-  "left lbar body rbar right";
+  "status status status status status";
 }
 
 my-toolbar {
- grid-area: menu;
+ grid-area: status;
  border-top-right-radius: inherit;
  border-top-left-radius: inherit;
 }
 
-word-inspector {
+folder-explorer {
  grid-area: left;
+ overflow: hidden;
+ overflow-y: auto;
 }
 
 iframe {
@@ -30,6 +32,7 @@ iframe {
 console- {
  grid-area: right;
  border-bottom-right-radius: inherit;
+ overflow: hidden;
 }
 
 v-rule:first-of-type {

@@ -14,15 +14,15 @@ const
     e2.down = e.down;
    })
  },
- iframe = echo(`iframe`)[0];
+ [explorer, iframe] = echo(`folder-explorer iframe`);
 
 iframe.onload = onload;
-iframe.src = address;
-tip(address, iframe);
 
 on.setWord(
  address => {
-  iframe.src = address;
-  tip(address, iframe);
+  iframe.src = address
+  tip(address, iframe)
+  //const word = address.split('.')[1]
+  //rootTable.cover(word)
  }
 )
