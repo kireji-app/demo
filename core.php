@@ -242,6 +242,7 @@
   #cache = undefined
   #camera = undefined
   #startTime = undefined
+  #pixelRatio = undefined
   #attachments = undefined
   #uniformBuffer = undefined
   #onmanifestchanged = [ ]
@@ -253,18 +254,29 @@
 
   constructor({
    name = 'base',
-   width = '640',
-   height = '480'
+   width,
+   height,
+   pixelRatio
   } = {}) {
    Debug.createGUI(this.#root);
    this.#name = name;
    this.#root.setAttribute('name', name);
    this.#root.setAttribute('class', 'tab');
+   this.#root.ontabbed = event => this.onresize();
    this.#cache = Utils.linkCache(this);
    this.#startTime = this.cache.pull('start-time', () => Date.now());
-   const camera = this.#camera = new Camera(this);
-   this.canvas.width = camera.x = width;
-   this.canvas.height = camera.y = height;
+   const camera = this.#camera = new Camera(this),
+   canvas = this.canvas;
+   if (width && height) {
+    canvas.width = camera.x = width;
+    canvas.height = camera.y = height;
+   } else {
+    this.#pixelRatio = pixelRatio ?? 1;
+    canvas.setAttribute('class',canvas.getAttribute('class') + ' pixelRatio')
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = camera.x = Math.round(rect.width / pixelRatio);
+    canvas.height = camera.y = Math.round(rect.height / pixelRatio);
+   }
    this.#root.setAttribute('style', `--aspect:${camera.aspect}`);
    const uniformBuffer = this.#uniformBuffer = Core.createBuffer(camera.buffer, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
    const model = new Model(new Group([
@@ -273,23 +285,17 @@
     TEST_MESH_POINTS
    ]));
    const
-    context = this.canvas.getContext('webgpu'),
-    stencil = this.device.createTexture({
-     size: [this.canvas.width, this.canvas.height, 1],
-     dimension: '2d',
-     format: 'depth24plus-stencil8',
-     usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC
-    });
+    context = canvas.getContext('webgpu');
 
    let
     pointerState = 0,
     camSpeed = 0.2;
-   this.canvas.onwheel = event => {
+   canvas.onwheel = event => {
     const factor = Math.sign(event.deltaY);
     if (factor > 0) camera.tz *= 3 / 3.2;
     else camera.tz *= 3.1 / 3;
    }
-   this.canvas.onkeydown = event => {
+   canvas.onkeydown = event => {
     if (event.key == 'ArrowRight') {
      event.preventDefault()
      camera.s++
@@ -298,7 +304,7 @@
      camera.s--
     }
    }
-   this.canvas.onmousedown = event => {
+   canvas.onmousedown = event => {
     pointerState = 1
     event.preventDefault()
     globalThis.onmouseup = event => {
@@ -306,9 +312,9 @@
      globalThis.onmouseup = undefined
     }
    }
-   this.canvas.onmousemove = event => {
+   canvas.onmousemove = event => {
     const
-     rect = this.canvas.getBoundingClientRect(),
+     rect = canvas.getBoundingClientRect(),
      w = rect.width,
      h = rect.height;
     camera.mx = 2 * event.offsetX / w - 1
@@ -318,7 +324,7 @@
      camera.ry += event.movementX * camSpeed;
     }
    }
-   this.canvas.ondblclick = () => Utils.toggleFullscreen();
+   canvas.ondblclick = () => Utils.toggleFullscreen();
    context.configure({
     device: Core.device,
     format: 'bgra8unorm',
@@ -341,7 +347,12 @@
     }],
     depthStencilAttachment: {
      get view() {
-      return stencil.createView()
+      return Core.device.createTexture({
+       size: [canvas.width, canvas.height, 1],
+       dimension: '2d',
+       format: 'depth24plus-stencil8',
+       usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC
+      }).createView()
      },
      depthClearValue: 1,
      depthLoadOp: 'clear',
@@ -425,6 +436,10 @@
      }]
     });
    const render = async time => {
+    if (!camera.x || !camera.y || !this.showing) {
+     requestAnimationFrame(render)
+     return;
+    };
     Debug.updateFrameRate(time);
     await this.changeBuffer(uniformBuffer, camera.buffer);
     let commandEncoder = this.device.createCommandEncoder();
@@ -473,10 +488,15 @@
    return this.#root;
   }
   get manifest() {
-   return JSON.stringify({
-    name: this.name,
+   const size = this.#pixelRatio ? {
+    pixelRatio: this.#pixelRatio
+   } : {
     width: this.camera.x,
     height: this.camera.y
+   }
+   return JSON.stringify({
+    name: this.name,
+    ...size
    });
   }
   get onstatechanged() {
@@ -487,6 +507,15 @@
   }
   get attributes() {
    return this.#attributes;
+  }
+  get showing() {
+   return !!( this.root.offsetWidth || this.root.offsetHeight || this.root.getClientRects().length )
+  }
+  onresize() {
+   if (!this.#pixelRatio || !this.showing) return;
+   const rect = this.canvas.parentNode.getBoundingClientRect();
+   this.canvas.width = this.camera.x = Math.round(rect.width / this.#pixelRatio);
+   this.canvas.height = this.camera.y = Math.round((rect.height-34) / this.#pixelRatio);
   }
   getCursor() {
    const NAME = this.name,

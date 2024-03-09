@@ -6,7 +6,10 @@
   },
   tab(node, name) {
    [...document.querySelectorAll('.tab[open]')].forEach(el => el.removeAttribute('open'));
-   [...this.getNodes(name), node].forEach(el => el.setAttribute('open', ''))
+   [...this.getNodes(name), node].forEach(el => {
+    el.setAttribute('open', '');
+    el.ontabbed?.();
+   })
    if (name == this.start) localStorage.removeItem('tab')
    else localStorage.setItem('tab', name);
   },
@@ -15,13 +18,11 @@
     node = document.querySelector(`menu>.tab[name=${name}]`);
    this.tab(node, name);
   },
-  getButton(coreRoot) {
-   const
-    button = document.createElement('button'),
-    name = coreRoot.getAttribute('name');
-   button.innerText = name;
+  getButton(core) {
+   const button = document.createElement('button');
+   button.innerText = core.name;
    button.onclick = event => Tabs.tab(event.target, event.target.name);
-   button.setAttribute('name', name);
+   button.setAttribute('name', core.name);
    button.setAttribute('class', 'tab btn');
    return button;
   },
@@ -30,7 +31,7 @@
    code.setAttribute('class', 'tab code');
    code.setAttribute('name', core.name);
    code.innerText = core.manifest;
-   core.onmanifestchanged.push( core => {
+   core.onmanifestchanged.push(core => {
     code.innerText = core.manifest;
    })
    return code;
@@ -42,7 +43,7 @@
    p.innerText = JSON.stringify(core.attributes);
    state.setAttribute('class', 'tab state');
    state.setAttribute('name', core.name);
-   core.onstatechanged.push( core => {
+   core.onstatechanged.push(core => {
     p.innerText = JSON.stringify(core.attributes);
    })
    return state;

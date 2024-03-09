@@ -20,6 +20,7 @@ if ($uri != '') {
    "display": "standalone",
    "background_color": "#e1e6e9",
    "theme_color": "#e1e6e9",
+   "display_override": ["window-controls-overlay"],
    "icons": [{
     "src": "apple-touch-icon.png",
     "type": "image/png",

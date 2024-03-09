@@ -29,15 +29,18 @@ foreach (MODULES as $filename) {
     ...JSON.parse(Utils.cache('core ' + name, '{"name":"' + name + '","width":64,"height":64}'))
    })
   )];
-  document.body.append(...instances.map( i => i.root ));
+  const observer = new ResizeObserver( resize => {
+   instances.forEach( i => i.onresize() )
+  });
+  observer.observe(Root);
   projectsMenu.innerHTML = `<h1>Projects</h1>`;
-  manifestSection.innerHTML = `<h1>Manifest</h1>`;
+  manifestSection.innerHTML = `<h1>Project</h1>`;
   manifestSection.append(...instances.map(Tabs.getCode));
   const stateHead = manifestSection.appendChild(document.createElement('h1'));
   stateHead.innerText = `State`;
   manifestSection.append(...instances.map(Tabs.getState));
   projectsMenu.append(
-   ...[...document.body.childNodes].map(Tabs.getButton),
+   ...instances.map(Tabs.getButton),
    (addBtn => {
     addBtn.innerText = 'New Project';
     addBtn.setAttribute('class','tab btn')
@@ -60,7 +63,7 @@ foreach (MODULES as $filename) {
     return addBtn;
    })(document.createElement('button'))
   );
-  document.body.append(manifestSection,projectsMenu);
+  document.body.append(manifestSection,...instances.map( i => i.root ),projectsMenu);
   Tabs.startTab();
  })
 </script>
