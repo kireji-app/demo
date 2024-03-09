@@ -1,1040 +1,903 @@
-onfetch = (Ω = new Proxy({}, new Proxy({
- "https://core.parts/os/letters/capital-f.css": ":host::before { content: 'F' }",
- "https://core.parts/os/letters/capital-f.fx.uri": "https://core.parts/os/letters/capital-f",
- "https://core.parts/os/letters/capital-f?css": "https://core.parts/os/letters/capital-f.css",
- "https://core.parts/os/letters/capital-f?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/letters/capital-f~?core": "https://core.parts/~",
- "https://core.parts/os/letters/capital-f?core": "https://core.parts/",
- "https://core.parts/os/letters/capital-f~?fx": "https://core.parts/os/letters/capital-f.fx.uri",
- "https://core.parts/os/letters/capital-f~~": "part()",
-
- "https://core.parts/os/letters/lowercase-i.css": ":host::before { content: 'i' }",
- "https://core.parts/os/letters/lowercase-i.fx.uri": "https://core.parts/os/letters/lowercase-i",
- "https://core.parts/os/letters/lowercase-i?css": "https://core.parts/os/letters/lowercase-i.css",
- "https://core.parts/os/letters/lowercase-i?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/letters/lowercase-i~?core": "https://core.parts/~",
- "https://core.parts/os/letters/lowercase-i?core": "https://core.parts/",
- "https://core.parts/os/letters/lowercase-i~?fx": "https://core.parts/os/letters/lowercase-i.fx.uri",
- "https://core.parts/os/letters/lowercase-i~~": "part()",
-
- "https://core.parts/os/letters/lowercase-l.css": ":host::before { content: 'l' }",
- "https://core.parts/os/letters/lowercase-l.fx.uri": "https://core.parts/os/letters/lowercase-l",
- "https://core.parts/os/letters/lowercase-l?css": "https://core.parts/os/letters/lowercase-l.css",
- "https://core.parts/os/letters/lowercase-l?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/letters/lowercase-l~?core": "https://core.parts/~",
- "https://core.parts/os/letters/lowercase-l?core": "https://core.parts/",
- "https://core.parts/os/letters/lowercase-l~?fx": "https://core.parts/os/letters/lowercase-l.fx.uri",
- "https://core.parts/os/letters/lowercase-l~~": "part()",
-
- "https://core.parts/os/letters/lowercase-e.css": ":host::before { content: 'e' }",
- "https://core.parts/os/letters/lowercase-e.fx.uri": "https://core.parts/os/letters/lowercase-e",
- "https://core.parts/os/letters/lowercase-e?css": "https://core.parts/os/letters/lowercase-e.css",
- "https://core.parts/os/letters/lowercase-e?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/letters/lowercase-e~?core": "https://core.parts/~",
- "https://core.parts/os/letters/lowercase-e?core": "https://core.parts/",
- "https://core.parts/os/letters/lowercase-e~?fx": "https://core.parts/os/letters/lowercase-e.fx.uri",
- "https://core.parts/os/letters/lowercase-e~~": "part()",
-
- "https://core.parts/.fx.uri": "https://core.parts/",
- "https://core.parts/?css": "https://core.parts/os-95.css",
- "https://core.parts/?manifest": "https://core.parts/os-95.manifest.uri",
- "https://core.parts/apple-touch-icon.png": "<?=b64('icon.png')?>",
- "https://core.parts/core.js": "({ get: " + ((_, υ) => {
-  const Ψ = υ.match(/^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<properties>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?(?<rank>~{0,7})$/)?.groups;
-  if (!Ψ) throw new TypeError('bad request: ' + υ)
-  if (Ψ.value) Ψ.target = υ.slice(0, - Ψ.property.length - (2 + Ψ.value.length))
-  Ψ.type = { 'js': "text/javascript", 'css': "text/css", 'json': 'application/json', 'png': 'image/png', 'woff2': 'font/woff2', 'ico': 'image/vnd.microsoft.icon', 'html': 'text/html', 'wasm': 'application/wasm' }[Ψ.value ? 'js' : (Ψ.index !== undefined || Ψ.part !== undefined) ? 'html' : (Ψ.rank.length ? 'js' : (Ψ.property === undefined && Ψ.extension || 'txt'))] ?? 'text/plain'
-  let α, β;
-  α = new Proxy(Proxy, {
-   get: (_, π) => {
-    // context { Ω, Δ, V, Υ, υ, α, β, Ψ, π }
-    if (π === Symbol.toPrimitive) π = 'toPrimitive';
-    return eval(`(${Δ[Δ[`${υ}?${π}`] ?? Δ[`${Δ[`${υ}?core`]}?${π}`] ?? Δ[`${`https://core.parts/core.js`}?${π}`]]})`)
-   }
-  })
-  return β = new Proxy(α, α);
- }) + ", set: " + ((_, υ, δ) => {
-  if (Δ[υ] === δ) return;
-  const
-   payload = { [υ]: δ },
-   onset = data => {
-    if (!('inbox' in globalThis)) return;
-    for (const url in data) if (url in inbox) inbox[url](data[url])
-   };
-  Δ[υ] = δ
-  if (globalThis.coresetlock) return onset(payload)
-  globalThis.coresetlock = true
-  const
-   fxdom = {},
-   fxneg = {},
-   fxall = new Set(),
-   recursive_getfx = (cause, affected, level) => {
-    fxneg[cause] = affected
-    for (const url of affected) {
-     if (!(url in fxdom)) {
-      fxdom[url] = new Set()
-      if (cause) fxdom[url].add(level + '|' + cause)
-      if (url === 'undefined') continue;
-      fxall.add(url)
-      recursive_getfx(url, ('' + Ω[url].fx).split(' '), level + 1)
-     } else fxdom[url].add(level + '|' + cause)
+var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy(
+ {
+  "https://core.parts/fx.uri": "https://core.parts/",
+  "https://core.parts/?layout": "https://core.parts/os-95.css",
+  "https://core.parts/?manifest": "https://core.parts/os-95/manifest.uri",
+  "https://core.parts/?onpointermove": "https://core.parts/onpointermove.js",
+  "https://core.parts/?onpointerup": "https://core.parts/onpointerup.js",
+  "https://core.parts/?toTags": "https://core.parts/utils/urlsToTags.js",
+  "https://core.parts/apple-touch-icon.png": "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",
+  "https://core.parts/client-to-server.js": "({ data }) => {\n  if (data === 'restart') registration.unregister()\n  else { Object.assign(Δ, data) }  }",
+  "https://core.parts/core.js": "({ get: " + ((_, υ) => {
+   const Ψ = υ.match(/^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<properties>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?(?<rank>~{0,7})$/)?.groups;
+   if (!Ψ) throw new TypeError('bad request: ' + υ)
+   if (Ψ.value) Ψ.target = υ.slice(0, - Ψ.property.length - (2 + Ψ.value.length))
+   Ψ.type = { 'js': "text/javascript", 'css': "text/css", 'json': 'application/json', 'png': 'image/png', 'woff2': 'font/woff2', 'ico': 'image/vnd.microsoft.icon', 'html': 'text/html', 'wasm': 'application/wasm' }[Ψ.value ? 'js' : (Ψ.index !== undefined || Ψ.part !== undefined) ? 'html' : (Ψ.rank.length ? 'js' : (Ψ.property === undefined && Ψ.extension || 'txt'))] ?? 'text/plain'
+   Object.defineProperties(Ψ, { size: { get() { return Δ[υ]?.length ?? 0 } }, entrySize: { get() { return this.size + υ.length } }, /* TODO: also add size of exported constructors */ })
+   let α, β;
+   α = new Proxy(Proxy, {
+    get: (_, π) => {
+     if (π === Symbol.toPrimitive) π = 'toPrimitive';
+     return eval(`(${Δ[Δ[`${υ}?${π}`] ?? Δ[`${Δ[`${υ}?core`]}?${π}`] ?? Δ[`${`https://core.parts/core.js`}?${π}`]]})`)
     }
-   }
-  recursive_getfx(undefined, [υ], 0)
-  const
-   seen = new Set(),
-   order = [...fxall],
-   extract = item => {
-    if (!order.includes(item)) return;
-    order.splice(order.indexOf(item), 1)
-   },
-   moveToStart = item => {
-    if (!order.includes(item)) return;
-    order.unshift(extract(item)[0])
-   },
-   recursive_getprio = item => {
-    if (seen.has(item) || !order.includes(item)) return;
-    fxdom[item].forEach(moveToStart)
-    fxdom[item].forEach(recursive_getprio)
-   }
-  extract(υ)
-  extract('undefined')
-  recursive_getprio(υ)
-  order.forEach(url => {
+   })
+   return β = new Proxy(α, α);
+  }) + ", set: " + ((_, υ, δ) => {
+   if (Δ[υ] === δ) return;
    const
-    existing = Δ[url],
-    imagination = Ω[url][Symbol.toPrimitive]('imaginary', υ);
-   if (existing !== imagination) {
-    payload[url] = Δ[url] = imagination
-    // TODO: verify. For all fx of current url whose own url already passed through this callback,
-    // imagine the fx's value again. maybe it changed? That would be a consistency issue. 
-   }
-  })
-  onset(payload)
-  globalThis.coresetlock = false
- }) + " }[Υ] ?? console.error('unexpected omega request', Υ))",
- "https://core.parts/core.js?apply": "https://core.parts/core/apply.js",
- "https://core.parts/core.js?construct": "https://core.parts/core/throw/unused-native.js",
- "https://core.parts/core.js?defineProperty": "https://core.parts/core/throw/unused-native.js",
- "https://core.parts/core.js?deleteProperty": "https://core.parts/core/throw/unused-native.js",
- "https://core.parts/core.js?get": "https://core.parts/core/get.js",
- "https://core.parts/core.js?getOwnPropertyDescriptor": "https://core.parts/core/getOwnPropertyDescriptor.js",
- "https://core.parts/core.js?getPrototypeOf": "https://core.parts/core/getPrototypeOf.js",
- "https://core.parts/core.js?has": "https://core.parts/core/has.js",
- "https://core.parts/core.js?headerOf": "https://core.parts/core/headerOf.js",
- "https://core.parts/core.js?isExtensible": "https://core.parts/core/isExtensible.js",
- "https://core.parts/core.js?ownKeys": "https://core.parts/core/ownKeys.js",
- "https://core.parts/core.js?preventExtensions": "https://core.parts/core/throw/unused-native.js",
- "https://core.parts/core.js?query": "https://core.parts/core/query.js",
- "https://core.parts/core.js?rootsOf": "https://core.parts/core/rootsOf.js",
- "https://core.parts/core.js?set": "https://core.parts/core/set.js",
- "https://core.parts/core.js?setPrototypeOf": "https://core.parts/core/throw/unused-native.js",
- "https://core.parts/core.js?toPrimitive": "https://core.parts/core/toPrimitive.js",
- "https://core.parts/core.js?toString": "https://core.parts/core/toString.js",
- "https://core.parts/core.js?valueOf": "https://core.parts/core/valueOf.js",
- "https://core.parts/core/apply.js": "" + ((_, __, A) => eval("" + α)(...A)),
- "https://core.parts/core/get.js": "" + ((_, π) => {
-  if (['toPrimitive', Symbol.toPrimitive, 'toString', 'valueOf', 'headerOf', 'rootsOf', 'query'].includes(π)) return α[π]
-  if (!(π in β)) return undefined
-  return Ω[Ω[`${υ}?${π}`]]
- }),
- "https://core.parts/core/getOwnPropertyDescriptor.js": "(_, π) => ({ configurable: true, enumerable: true, writable: true, value: α })",
- "https://core.parts/core/getPrototypeOf.js": "() => Object.prototype",
- "https://core.parts/core/has.js": "(_, π) => Δ[`${υ}?${π}`] !== undefined",
- "https://core.parts/core/headerOf.js": "" + (() => ({ kernelActionLocation: V, kernelActionKey: Υ, href: υ, metaKernel: α, self: β, groups: Ψ, metaKernelKey: π })),
- "https://core.parts/core/isExtensible.js": "() => true", "https://core.parts/core/ownKeys.js": "" + (() => {
-  const keys = new Set()
-  α.query(l => keys.add(l.property))
-  return [...keys]
- }),
- "https://core.parts/core/query.js": "" + ((ƒ = x => x) => {
-  const roots = β.rootsOf()
-  return Object.keys(Δ).reduce((o, url) => {
-   const rootIndex = roots.findIndex(root => url.startsWith(root + '?'));
-   if (rootIndex !== -1) {
-    const root = roots[rootIndex],
-     property = url.slice(root.length + 1)
-    const item = { url, root, property, rootIndex }
-    const result = ƒ(item)
-    if (result) o.push(result)
-   }
-   return o
-  }, [])
- }),
- "https://core.parts/core/rootsOf.js": "" + (() => {
-  const roots = [υ]
-  let root = υ, key;
-  while (root = Δ[key = root + '?core']) {
-   if (roots.includes(root)) throw 'core loop'
-   roots.push(root);
-   if (root === Υ) break;
-  }
-  if (!roots.includes(Υ)) roots.push(Υ)
-  return roots;
- }),
- "https://core.parts/core/set.js": "" + ((_, property, value) => Ω[Ω[Ω[υ].query(l => l.property === property ? l.url : undefined)[0]]] = value),
- "https://core.parts/core/throw/unused-native.js": "() => { throw new TypeError(`unused native trap '${π}' called on ${υ}`) }",
- "https://core.parts/core/toPrimitive.js": "" + ((hint, caller) => {
-  let url = υ, rank = Ψ.rank
-  const imaginary = hint === 'imaginary';
-  if (Δ[url] === undefined || imaginary) {
-   while ((imaginary && url === υ) || Δ[url] === undefined && rank.length < 7) {
-    rank += '~'
-    url += '~';
-   }
-   if (Δ[url] === undefined) return (url.includes('?onclick') ? undefined : console.warn(new TypeError('possible fx with no constructor ' + url)), '')
-   rank = rank.slice(0, -1)
-   url = url.slice(0, -1)
-   const properties = {}
-   Ω[url].query(l => {
-    if (l.property in properties && properties[l.property].rootIndex <= l.rootIndex) return;
-    properties[l.property] = l
-   })
-   const primitive = eval(`({${Object.entries(properties).map(([property, { url }]) => `"${Ω[url]}":${property}`).join(',')}})=>${Ω[`${url}~`]}`)(Ω)
-   if (typeof primitive !== 'string') throw new TypeError(`output of ${url} must be a string (got ${typeof primitive})`)
-   if (imaginary) return primitive
-   Ω[url] = primitive
-  }
-  return Δ[υ]
- }),
-
- "https://core.parts/core/templates/part.json": JSON.stringify({
-  "$1.css": "$2",
-  "$1.manifest.uri": "$3",
-  "$1.fx.uri": "$1",
-  "$1?css": "$1.css",
-  "$1?manifest": "$1.manifest.uri",
-  "$1~?core": "https://core.parts/~",
-  "$1?core": "https://core.parts/",
-  "$1~?fx": "$1.fx.uri",
-  "$1~~": "part()"
- }),
- "https://core.parts/core/templates/part.js": "" + ((url, css = '', manifest = '', ...components) => {
-  let parts = ('' + Ω['https://core.parts/core/templates/part.json']).replace(/\$1/g, url).replace(/\$2/, css).replace(/\$3/, manifest)
-  for (const component in components) throw new RangeError('unhandled component', { url, component, components })
-  Object.assign(Δ, JSON.parse(parts))
- }),
-
- "https://core.parts/core/templates/button.json": JSON.stringify({
-  "$1.css~": "`:host { background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } $2`",
-  "$1.manifest.uri": "$3",
-  "$1.fx.uri": "$1",
-  "$1/onclick.js": "$4",
-  "$1?css": "$1.css",
-  "$1?manifest": "$1.manifest.uri",
-  "$1?onclick": "$1/onclick.js",
-  "$1~?core": "https://core.parts/~",
-  "$1?core": "https://core.parts/",
-  "$1~?fx": "$1.fx.uri",
-  "$1~~": "part()",
-  "$1.css?down": "$1/down.txt",
-  "$1?onpointerdown": "$1/onpointerdown.js",
-  "$1/onpointerdown.js": "e => { e.stopPropagation(); Ω['$1/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = '$1/release.js' }",
-  "$1/release.js": "e => { Ω['$1/down.txt'] = '0' }",
-  "$1/down.txt": "0",
-  "$1/down.txt?fx": "$1/down.txt.fx.uri",
-  "$1/down.txt.fx.uri": "$1.css"
- }),
- "https://core.parts/core/templates/button.js": "" + ((url, css = '', manifest = '', onclickjs = `()=>{ console.log('${url}') }`) => {
-  let parts = ('' + Ω['https://core.parts/core/templates/button.json']).replace(/\$1/g, url).replace(/\$2/, css).replace(/\$3/, manifest).replace(/\$4/, onclickjs)
-  Object.assign(Δ, JSON.parse(parts))
- }),
-
- "https://core.parts/core/toString.js": "() => Δ[υ]",
- "https://core.parts/core/valueOf.js": "() => Δ[υ]",
- "https://core.parts/desktop-95.css": ":host { position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; background: #377f7f }",
- "https://core.parts/desktop-95.fx.uri": "https://core.parts/desktop-95",
- "https://core.parts/desktop-95?css": "https://core.parts/desktop-95.css",
- "https://core.parts/desktop-95?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/desktop-95~?core": "https://core.parts/~",
- "https://core.parts/desktop-95?core": "https://core.parts/",
- "https://core.parts/desktop-95~?fx": "https://core.parts/desktop-95.fx.uri",
- "https://core.parts/desktop-95~~": "part()",
- "https://core.parts/desktop-95/onclick.js~": "`()=>{${(''+selected) === '-1' ? '' : `Ω['${selected.headerOf().href}'] = '-1'`}}`",
- "https://core.parts/desktop-95/onclick.js?selected": "https://core.parts/os/task-bar/selected.txt",
- "https://core.parts/desktop-95?onclick": "https://core.parts/desktop-95/onclick.js",
- "https://core.parts/empty.manifest.uri": "",
- "https://core.parts/empty.css": "",
- "https://core.parts/error-404.css": ":host { position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; background: magenta }",
- "https://core.parts/error-404.fx.uri": "https://core.parts/error-404",
- "https://core.parts/error-404?css": "https://core.parts/error-404.css",
- "https://core.parts/error-404?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/error-404~?core": "https://core.parts/~",
- "https://core.parts/error-404?core": "https://core.parts/",
- "https://core.parts/error-404~?fx": "https://core.parts/error-404.fx.uri",
- "https://core.parts/favicon.ico?src": "https://core.parts/apple-touch-icon.png",
- "https://core.parts/favicon.ico~": "src[Symbol.toPrimitive]()",
- "https://core.parts/file.js": "" + (event => {
-  const
-   direct = typeof event === 'string',
-   url = direct ? event : event.request.url;
-  if (url === 'https://core.parts/everything.js') return event.respondWith(new Response("onfetch = (Ω = new Proxy({}, new Proxy(" + JSON.stringify(Δ) + ', { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/core.js"]) })))["https://core.parts/file.js"]', { headers: { 'content-type': 'application/json' } }))
-  if (url.includes('&')) {
-   if (!url.includes('?')) throw new TypeError(`bad format (ampersand with no query string) ${url}`)
-   const [base, query] = url.split('?')
-   query.split('&').forEach(subquery => {
-    const
-     url = base + '?' + subquery,
-     proxy = Ω[url],
-     { value, property, target } = proxy.headerOf().groups;
-    Ω[target][property] = value
-   })
-   const response = new Response(new Int8Array([1]))
-   return direct ? response : event.respondWith(response)
-  }
-  const proxy = Ω[url],
-   { binary, type, value, property, target } = proxy.headerOf().groups;
-  let string = '';
-  if (value) {
-   Ω[target][property] = value
-   const response = new Response(new Int8Array([1]))
-   return direct ? response : event.respondWith(response)
-  }
-  else {
-   string = proxy.toPrimitive()
-   if (property) {
-    if (property === 'onclick') {
-     const fnurl = '' + Ω[url];
-     if (fnurl) {
-      const proxy = Ω[Ω[fnurl]],
-       { value, property, target } = proxy.headerOf().groups
-      if (!(value && property && target)) throw new TypeError(`bad format event handler chain (${url} => ${fnurl})`)
-      Ω[target][property] = value
+    payload = { [υ]: δ },
+    onset = data => {
+     for (const url in data) if (url in causality) Object.entries(causality[url]).forEach(([property, nodeset]) => { nodeset.forEach(node => node[property] = data[url]) })
+    };
+   Δ[υ] = δ
+   if (globalThis.coresetlock) return onset(payload)
+   globalThis.coresetlock = true
+   const
+    fxdom = {},
+    fxneg = {},
+    fxall = new Set(),
+    recursive_getfx = (cause, affected, level) => {
+     fxneg[cause] = affected
+     for (const url of affected) {
+      if (!(url in fxdom)) {
+       fxdom[url] = new Set()
+       if (cause) fxdom[url].add(level + '|' + cause)
+       if (url === 'undefined') continue;
+       fxall.add(url)
+       recursive_getfx(url, ('' + Ω[url].fx).split(' '), level + 1)
+      } else fxdom[url].add(level + '|' + cause)
      }
-     const response = new Response(new Int8Array([1]))
-     return direct ? response : event.respondWith(response)
-    } else {
-     const response = Response.redirect(string, 307);
-     return direct ? response : event.respondWith(response)
+    }
+   recursive_getfx(undefined, [υ], 0)
+   const
+    seen = new Set(),
+    order = [...fxall],
+    extract = item => {
+     if (!order.includes(item)) return;
+     order.splice(order.indexOf(item), 1)
+    },
+    moveToStart = item => {
+     if (!order.includes(item)) return;
+     order.unshift(extract(item)[0])
+    },
+    recursive_getprio = item => {
+     if (seen.has(item) || !order.includes(item)) return;
+     fxdom[item].forEach(moveToStart)
+     fxdom[item].forEach(recursive_getprio)
+    }
+   extract(υ)
+   extract('undefined')
+   recursive_getprio(υ)
+   order.forEach(url => {
+    const
+     existing = Δ[url],
+     imagination = Ω[url][Symbol.toPrimitive]('imaginary', υ);
+    if (existing !== imagination) {
+     payload[url] = Δ[url] = imagination
+     // TODO: verify. For all fx of current url whose own url already passed through this callback,
+     // imagine the fx's value again. maybe it changed? That would be a consistency issue. 
+    }
+   })
+   onset(payload)
+   globalThis.coresetlock = false
+  }) + " }[Υ] ?? console.error('unexpected omega request', Υ))",
+  "https://core.parts/core.js?apply": "https://core.parts/core/apply.js",
+  "https://core.parts/core.js?construct": "https://core.parts/core/throw/unused-native.js",
+  "https://core.parts/core.js?defineProperty": "https://core.parts/core/throw/unused-native.js",
+  "https://core.parts/core.js?deleteProperty": "https://core.parts/core/throw/unused-native.js",
+  "https://core.parts/core.js?get": "https://core.parts/core/get.js",
+  "https://core.parts/core.js?getOwnPropertyDescriptor": "https://core.parts/core/getOwnPropertyDescriptor.js",
+  "https://core.parts/core.js?getPrototypeOf": "https://core.parts/core/getPrototypeOf.js",
+  "https://core.parts/core.js?has": "https://core.parts/core/has.js",
+  "https://core.parts/core.js?headerOf": "https://core.parts/core/headerOf.js",
+  "https://core.parts/core.js?isExtensible": "https://core.parts/core/isExtensible.js",
+  "https://core.parts/core.js?ownKeys": "https://core.parts/core/ownKeys.js",
+  "https://core.parts/core.js?preventExtensions": "https://core.parts/core/throw/unused-native.js",
+  "https://core.parts/core.js?query": "https://core.parts/core/query.js",
+  "https://core.parts/core.js?rootsOf": "https://core.parts/core/rootsOf.js",
+  "https://core.parts/core.js?set": "https://core.parts/core/set.js",
+  "https://core.parts/core.js?setPrototypeOf": "https://core.parts/core/throw/unused-native.js",
+  "https://core.parts/core.js?toPrimitive": "https://core.parts/core/toPrimitive.js",
+  "https://core.parts/core.js?toString": "https://core.parts/core/toString.js",
+  "https://core.parts/core.js?valueOf": "https://core.parts/core/valueOf.js",
+  "https://core.parts/core/apply.js": "(_, __, A) => eval(\"\" + α)(...A)",
+  "https://core.parts/core/get.js": "(_, π) => {\n  if (['toPrimitive', Symbol.toPrimitive, 'toString', 'valueOf', 'headerOf', 'rootsOf', 'query'].includes(π)) return α[π]\n  if (!(π in β)) return undefined\n  return Ω[Ω[`${υ}?${π}`]]\n }",
+  "https://core.parts/core/getOwnPropertyDescriptor.js": "(_, π) => ({ configurable: true, enumerable: true, writable: true, value: α })",
+  "https://core.parts/core/getPrototypeOf.js": "() => Object.prototype",
+  "https://core.parts/core/has.js": "(_, π) => Δ[`${υ}?${π}`] !== undefined",
+  "https://core.parts/core/headerOf.js": "() => ({ kernelActionLocation: V, kernelActionKey: Υ, href: υ, metaKernel: α, self: β, groups: Ψ, metaKernelKey: π })",
+  "https://core.parts/core/isExtensible.js": "() => true",
+  "https://core.parts/core/ownKeys.js": "() => {\n  const keys = new Set()\n  α.query(l => keys.add(l.property))\n  return [...keys]\n }",
+  "https://core.parts/core/query.js": "(ƒ = x => x) => {\n  const roots = β.rootsOf()\n  return Object.keys(Δ).reduce((o, url) => {\n   const rootIndex = roots.findIndex(root => url.startsWith(root + '?'));\n   if (rootIndex !== -1) {\n    const root = roots[rootIndex],\n     property = url.slice(root.length + 1)\n    const item = { url, root, property, rootIndex }\n    const result = ƒ(item)\n    if (result) o.push(result)\n   }\n   return o\n  }, [])\n }",
+  "https://core.parts/core/rootsOf.js": "() => {\n  const roots = [υ]\n  let root = υ, key;\n  while (root = Δ[key = root + '?core']) {\n   if (roots.includes(root)) throw 'core loop'\n   roots.push(root);\n   if (root === Υ) break;\n  }\n  if (!roots.includes(Υ)) roots.push(Υ)\n  return roots;\n }",
+  "https://core.parts/core/set.js": "(_, property, value) => Ω[Ω[Ω[υ].query(l => l.property === property ? l.url : undefined)[0]]] = value",
+  "https://core.parts/core/templates/button.js": "(url, layout = '', manifest = '', onclickjs = `()=>{ console.log('${url}') }`) => {\n  let parts = ('' + Ω['https://core.parts/core/templates/button.json']).replace(/\\$1/g, url).replace(/\\$2/, layout).replace(/\\$3/, manifest).replace(/\\$4/, onclickjs)\n  Object.assign(Δ, JSON.parse(parts))\n }",
+  "https://core.parts/core/templates/button.json": "{\"$1.css~\":\"`:host { background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } $2`\",\"$1/manifest.uri\":\"$3\",\"$1/fx.uri\":\"$1\",\"$1/onclick.js\":\"$4\",\"$1?layout\":\"$1.css\",\"$1?manifest\":\"$1/manifest.uri\",\"$1?onclick\":\"$1/onclick.js\",\"$1~?core\":\"https://core.parts/~\",\"$1?core\":\"https://core.parts/\",\"$1~?fx\":\"$1/fx.uri\",\"$1~~\":\"part()\",\"$1.css?down\":\"$1/down.txt\",\"$1?onpointerdown\":\"$1/onpointerdown.js\",\"$1/onpointerdown.js\":\"e => { e.stopPropagation(); Ω['$1/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = '$1/release.js' }\",\"$1/release.js\":\"e => { Ω['$1/down.txt'] = '0' }\",\"$1/down.txt\":\"0\",\"$1/down.txt?fx\":\"$1/down.txt/fx.uri\",\"$1/down.txt/fx.uri\":\"$1.css\"}",
+  "https://core.parts/core/templates/part.js": "(url, layout = '', manifest = '', ...components) => {\n  let parts = ('' + Ω['https://core.parts/core/templates/part.json']).replace(/\\$1/g, url).replace(/\\$2/, layout).replace(/\\$3/, manifest)\n  for (const component in components) throw new RangeError('unhandled component', { url, component, components })\n  Object.assign(Δ, JSON.parse(parts))\n }",
+  "https://core.parts/core/templates/part.json": "{\"$1.css\":\"$2\",\"$1/manifest.uri\":\"$3\",\"$1/fx.uri\":\"$1\",\"$1?layout\":\"$1.css\",\"$1?manifest\":\"$1/manifest.uri\",\"$1~?core\":\"https://core.parts/~\",\"$1?core\":\"https://core.parts/\",\"$1~?fx\":\"$1/fx.uri\",\"$1~~\":\"part()\"}",
+  "https://core.parts/core/throw/unused-native.js": "() => { throw new TypeError(`unused native trap '${π}' called on ${υ}`) }",
+  "https://core.parts/core/toPrimitive.js": "(hint, caller) => {\n  let url = υ, rank = Ψ.rank\n  const imaginary = hint === 'imaginary';\n  if (Δ[url] === undefined || imaginary) {\n   while ((imaginary && url === υ) || Δ[url] === undefined && rank.length < 7) {\n    rank += '~'\n    url += '~';\n   }\n   if (Δ[url] === undefined) return (url.includes('?onclick') ? undefined : console.warn(new TypeError('possible fx with no constructor ' + url)), '')\n   rank = rank.slice(0, -1)\n   url = url.slice(0, -1)\n   const properties = {}\n   Ω[url].query(l => {\n    if (l.property in properties && properties[l.property].rootIndex <= l.rootIndex) return;\n    properties[l.property] = l\n   })\n   const primitive = eval(`({${Object.entries(properties).map(([property, { url }]) => `\"${Ω[url]}\":${property}`).join(',')}})=>${Ω[`${url}~`]}`)(Ω)\n   if (typeof primitive !== 'string') throw new TypeError(`output of ${url} must be a string (got ${typeof primitive})`)\n   if (imaginary) return primitive\n   Ω[url] = primitive\n  }\n  return Δ[υ]\n }",
+  "https://core.parts/core/toString.js": "() => Δ[υ]",
+  "https://core.parts/core/valueOf.js": "() => Δ[υ]",
+  "https://core.parts/demo/hello.txt?noun": "https://core.parts/demo/noun.txt",
+  "https://core.parts/demo/hello.txt~": "`Welcome to my ${noun}.`",
+  "https://core.parts/demo/noun.txt": "bird",
+  "https://core.parts/desktop-95.css": ":host { position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; background: #377f7f }",
+  "https://core.parts/desktop-95/fx.uri": "https://core.parts/desktop-95",
+  "https://core.parts/desktop-95/onclick.js?selected": "https://core.parts/os/task-bar/selected.txt",
+  "https://core.parts/desktop-95/onclick.js~": "`()=>{${(''+selected) === '-1' ? '' : `Ω['${selected.headerOf().href}'] = '-1'`}}`",
+  "https://core.parts/desktop-95?core": "https://core.parts/",
+  "https://core.parts/desktop-95?layout": "https://core.parts/desktop-95.css",
+  "https://core.parts/desktop-95?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/desktop-95?onclick": "https://core.parts/desktop-95/onclick.js",
+  "https://core.parts/desktop-95~?core": "https://core.parts/~",
+  "https://core.parts/desktop-95~?fx": "https://core.parts/desktop-95/fx.uri",
+  "https://core.parts/desktop-95~~": "part()",
+  "https://core.parts/empty.css": "",
+  "https://core.parts/empty/manifest.uri": "",
+  "https://core.parts/error-404.css": ":host { position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; background: magenta }",
+  "https://core.parts/error-404/fx.uri": "https://core.parts/error-404",
+  "https://core.parts/error-404?core": "https://core.parts/",
+  "https://core.parts/error-404?layout": "https://core.parts/error-404.css",
+  "https://core.parts/error-404?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/error-404~?core": "https://core.parts/~",
+  "https://core.parts/error-404~?fx": "https://core.parts/error-404/fx.uri",
+  "https://core.parts/error-404~~": "part()",
+  "https://core.parts/favicon.ico?src": "https://core.parts/apple-touch-icon.png",
+  "https://core.parts/favicon.ico~": "src[Symbol.toPrimitive]()",
+  "https://core.parts/file.js": "event => {\n  const\n   direct = typeof event === 'string',\n   url = direct ? event : event.request.url;\n  if (url === 'https://core.parts/everything.js') return event.respondWith(new Response(\"var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy(\" + JSON.stringify(Δ) + ', { get: (Δ, Υ) => eval(Δ[V = \"https://core.parts/core.js\"]) })))[\"https://core.parts/file.js\"]', { headers: { 'content-type': 'application/json' } }))\n  if (url.includes('&')) {\n   if (!url.includes('?')) throw new TypeError(`bad format (ampersand with no query string) ${url}`)\n   const [base, query] = url.split('?')\n   query.split('&').forEach(subquery => {\n    const\n     url = base + '?' + subquery,\n     proxy = Ω[url],\n     { value, property, target } = proxy.headerOf().groups;\n    Ω[target][property] = value\n   })\n   const response = new Response(new Int8Array([1]))\n   return direct ? response : event.respondWith(response)\n  }\n  const proxy = Ω[url],\n   { binary, type, value, property, target } = proxy.headerOf().groups;\n  let string = '';\n  if (value) {\n   Ω[target][property] = value\n   const response = new Response(new Int8Array([1]))\n   return direct ? response : event.respondWith(response)\n  }\n  else {\n   string = proxy.toPrimitive()\n   if (property) {\n    if (property === 'onclick') {\n     const fnurl = '' + Ω[url];\n     if (fnurl) {\n      const proxy = Ω[Ω[fnurl]],\n       { value, property, target } = proxy.headerOf().groups\n      if (!(value && property && target)) throw new TypeError(`bad format event handler chain (${url} => ${fnurl})`)\n      Ω[target][property] = value\n     }\n     const response = new Response(new Int8Array([1]))\n     return direct ? response : event.respondWith(response)\n    } else {\n     const response = Response.redirect(string, 307);\n     return direct ? response : event.respondWith(response)\n    }\n   }\n  }\n  var body = new TextEncoder().encode(string);\n  if (binary) {\n   const B = atob(string), k = B.length, A = new ArrayBuffer(k), I = new Uint8Array(A);\n   for (var i = 0; i < k; i++) I[i] = B.charCodeAt(i);\n   body = new Blob([I], { type });\n  }\n  const response = new Response(body, { headers: { \"content-type\": `${type}${binary ? '' : '; charset=UTF-8'}`, \"expires\": \"Sun, 20 Jul 1969 20:17:00 UTC\", \"server\": \"kireji\" } })\n  return direct ? response : event.respondWith(response)\n }",
+  "https://core.parts/flex-spacer.css": ":host { flex: 1 1 }",
+  "https://core.parts/flex-spacer/fx.uri": "https://core.parts/flex-spacer",
+  "https://core.parts/flex-spacer?core": "https://core.parts/",
+  "https://core.parts/flex-spacer?layout": "https://core.parts/flex-spacer.css",
+  "https://core.parts/flex-spacer?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/flex-spacer~?core": "https://core.parts/~",
+  "https://core.parts/flex-spacer~?fx": "https://core.parts/flex-spacer/fx.uri",
+  "https://core.parts/flex-spacer~~": "part()",
+  "https://core.parts/fullscreen-button.css": ":host { width: 16px; height: 16px; cursor: pointer } :host::before { content: '\u{26F6}'; font-size: 16px; line-height: 16px }",
+  "https://core.parts/fullscreen-button/fx.uri": "https://core.parts/fullscreen-button",
+  "https://core.parts/fullscreen-button/manifest.uri": "",
+  "https://core.parts/fullscreen-button/onclick.js": "()=>document.documentElement.requestFullscreen()",
+  "https://core.parts/fullscreen-button?core": "https://core.parts/",
+  "https://core.parts/fullscreen-button?layout": "https://core.parts/fullscreen-button.css",
+  "https://core.parts/fullscreen-button?manifest": "https://core.parts/fullscreen-button/manifest.uri",
+  "https://core.parts/fullscreen-button?onclick": "https://core.parts/fullscreen-button/onclick.js",
+  "https://core.parts/fullscreen-button~?core": "https://core.parts/~",
+  "https://core.parts/fullscreen-button~?fx": "https://core.parts/fullscreen-button/fx.uri",
+  "https://core.parts/fullscreen-button~~": "part()",
+  "https://core.parts/grab-behavior/src.uri": "",
+  "https://core.parts/grab-behavior/fx.uri": "https://core.parts/onpointermove.js https://core.parts/onpointerup.js",
+  "https://core.parts/grab-behavior/src.uri?fx": "https://core.parts/grab-behavior/fx.uri",
+  "https://core.parts/element.js": "" + (() => {
+   const commonProperties = { onclick: 0, onpointerdown: 0, onpointerup: 0, onpointermove: 0, ondblclick: 0, layout: 1, manifest: 1, ondragstart: -1, oncontextmenu: -1 }, nodePool = {};
+   Object.defineProperties(HTMLElement.prototype, {
+    shadow: {
+     get() { if (!this._shadow) { console.log(this._url, this); this._shadow = this.attachShadow({ mode: 'closed' }); } return this._shadow }
+    },
+    layout: {
+     get() { if (!this._layout) { this._layout = new CSSStyleSheet(); this.shadow.adoptedStyleSheets.push(this._layout) } return this._layout },
+     set(v) { this.layout.replaceSync(v) }
+    },
+    manifest: {
+     get() { return [...this.shadow.children].map(x => x.url) },
+     set(v) {
+      if (typeof v !== 'string') v = '' + v
+      const O = this.manifest, N = v.split(' ').filter(x => x), C = this.shadow
+      let o, n, i = -1;
+      while (O.length && N.length) {
+       i++
+       if ((o = O.shift()) === (n = N.shift())) {
+        // console.log(this.url, i, { o, n }, 'match')
+        continue
+       }
+       const u = O.findIndex(x => x === n)
+       if (u === -1) {
+        // /console.log(this.url, i, { o, n }, 'insert new')
+        this.install(n, i)
+       }
+       else {
+        // console.log(this.url, i, { o, n }, 'from future')
+        C.insertBefore(C.children[i + u + 1], C.children[i])
+        O.splice(u, 1)
+       }
+       if (N.some(x => x === o)) {
+        // console.log(this.url, i, { o, n }, 'to future')
+        O.unshift(o)
+       }
+       else {
+        // console.log(this.url, i, { o, n }, 'remove old')
+        C.children[i + 1].remove()
+       }
+      }
+      if (O.length) O.forEach(() => C.children[i + 1].remove())
+      else if (N.length) {
+       N.forEach(x => this.install(x))
+      }
+      // console.log(this.url, this.manifest)
+     }
+    },
+    install: {
+     get() {
+      return (url, index) => {
+       if (!url) throw 'empty url'
+       const node = (url in nodePool ? [...nodePool[url]].find(n => !n.isConnected) : undefined) ?? document.createElement(Ω[url].headerOf().groups.part);
+       if (index === undefined || index >= this.shadow.children.length) this.shadow.appendChild(node); else this.shadow.insertBefore(node, this.shadow.children[index])
+       if (node._url !== url) console.log(node.url = url)
+      }
+     }
+    },
+    proxy: {
+     get() { if (!this._proxy) this._proxy = Ω[this.url]; return this._proxy }
+    },
+    url: {
+     get() { if (!this._url) throw new ReferenceError('attempted to get url before it was defined.'); return this._url },
+     set(v) {
+      if (this._url) throw new TypeError(`cannot change HTMLElement's url (is ${this._url}, tried to set to ${v})`);
+      this._url = v
+      if (!(v in nodePool)) nodePool[v] = new Set()
+      nodePool[v].add(this)
+      for (const property in commonProperties) {
+       if (commonProperties[property] === -1) {
+        this[property] = e => e.preventDefault()
+       } else if (property in this.proxy) {
+        this[property] = this.proxy[property]
+        if (commonProperties[property]) {
+         const url = this.proxy[property].headerOf().href;
+         if (!(url in causality)) causality[url] = {}
+         if (!(property in causality[url])) causality[url][property] = new Set()
+         causality[url][property].add(this)
+        }
+       }
+      }
+     }
+    }
+   })
+   onload = () => document.body.url = location.href
+  }),
+  "https://core.parts/onpointermove.js?behavior": "https://core.parts/grab-behavior/src.uri",
+  "https://core.parts/onpointermove.js~": "(''+behavior) ? (''+Ω[behavior]) : '()=>{}'",
+  "https://core.parts/onpointerup.js?grab": "https://core.parts/grab-behavior/src.uri",
+  "https://core.parts/onpointerup.js?release": "https://core.parts/release-behavior.uri",
+  "https://core.parts/onpointerup.js~": "`e => { ${(''+grab) ? `Ω['https://core.parts/grab-behavior/src.uri'] = ''` : ''}; ${(''+release) ? `Ω['${release}'](e); Ω['https://core.parts/release-behavior.uri'] = ''` : ''} }`",
+  "https://core.parts/os-95.css?fx": "https://core.parts/fx.uri",
+  "https://core.parts/os-95.css?height": "https://core.parts/os/task-bar/css-height.txt",
+  "https://core.parts/os-95.css~": "`:host { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: grid; grid-template-rows: 1fr ${height}; font: 11px / 16px sans-serif }`",
+  "https://core.parts/os-95/manifest.uri?fx": "https://core.parts/fx.uri",
+  "https://core.parts/os-95/manifest.uri?hide_demo_folder": "https://core.parts/os/running/window/demo-folder/minimized.txt",
+  "https://core.parts/os-95/manifest.uri?start_menu": "https://core.parts/os/start-menu/open.txt",
+  "https://core.parts/os-95/manifest.uri~": "`https://core.parts/desktop-95${''+hide_demo_folder === '0' ? ' https://core.parts/os/running/window/demo-folder' : ''} https://core.parts/taskbar-95${''+start_menu === '1' ? ' https://core.parts/start-menu/click-to-close https://core.parts/start-menu': ''}`",
+
+  "https://core.parts/os/icons/text-plain-icon.css": ":host { --size: 16px; width: 16px; height: 16px } :host::before { content: '\u{1F4C4}'; font-size: var(--size); line-height: var(--size) }",
+  "https://core.parts/os/icons/text-plain-icon/fx.uri": "https://core.parts/os/icons/text-plain-icon",
+  "https://core.parts/os/icons/text-plain-icon?core": "https://core.parts/",
+  "https://core.parts/os/icons/text-plain-icon?layout": "https://core.parts/os/icons/text-plain-icon.css",
+  "https://core.parts/os/icons/text-plain-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/icons/text-plain-icon~?core": "https://core.parts/~",
+  "https://core.parts/os/icons/text-plain-icon~?fx": "https://core.parts/os/icons/text-plain-icon/fx.uri",
+  "https://core.parts/os/icons/text-plain-icon~~": "part()",
+
+  "https://core.parts/os/icons/text-css-icon.css": ":host { --size: 16px; width: 16px; height: 16px } :host::before { content: '\u{1F4C4}'; font-size: var(--size); line-height: var(--size) }",
+  "https://core.parts/os/icons/text-css-icon/fx.uri": "https://core.parts/os/icons/text-css-icon",
+  "https://core.parts/os/icons/text-css-icon?core": "https://core.parts/",
+  "https://core.parts/os/icons/text-css-icon?layout": "https://core.parts/os/icons/text-css-icon.css",
+  "https://core.parts/os/icons/text-css-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/icons/text-css-icon~?core": "https://core.parts/~",
+  "https://core.parts/os/icons/text-css-icon~?fx": "https://core.parts/os/icons/text-css-icon/fx.uri",
+  "https://core.parts/os/icons/text-css-icon~~": "part()",
+
+  "https://core.parts/os/horizontal-line.css": ":host { height: 2px; border-top: 1px solid #7f7f7f; border-bottom: 1px solid white; box-sizing: border-box; margin: 4px 0 }",
+  "https://core.parts/os/horizontal-line/fx.uri": "https://core.parts/os/horizontal-line",
+  "https://core.parts/os/horizontal-line?core": "https://core.parts/",
+  "https://core.parts/os/horizontal-line?layout": "https://core.parts/os/horizontal-line.css",
+  "https://core.parts/os/horizontal-line?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/horizontal-line~?core": "https://core.parts/~",
+  "https://core.parts/os/horizontal-line~?fx": "https://core.parts/os/horizontal-line/fx.uri",
+  "https://core.parts/os/horizontal-line~~": "part()",
+  "https://core.parts/os/letters/capital-f.css": ":host::before { content: 'F' }",
+  "https://core.parts/os/letters/capital-f/fx.uri": "https://core.parts/os/letters/capital-f",
+  "https://core.parts/os/letters/capital-f?core": "https://core.parts/",
+  "https://core.parts/os/letters/capital-f?layout": "https://core.parts/os/letters/capital-f.css",
+  "https://core.parts/os/letters/capital-f?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/letters/capital-f~?core": "https://core.parts/~",
+  "https://core.parts/os/letters/capital-f~?fx": "https://core.parts/os/letters/capital-f/fx.uri",
+  "https://core.parts/os/letters/capital-f~~": "part()",
+  "https://core.parts/os/letters/lowercase-e.css": ":host::before { content: 'e' }",
+  "https://core.parts/os/letters/lowercase-e/fx.uri": "https://core.parts/os/letters/lowercase-e",
+  "https://core.parts/os/letters/lowercase-e?core": "https://core.parts/",
+  "https://core.parts/os/letters/lowercase-e?layout": "https://core.parts/os/letters/lowercase-e.css",
+  "https://core.parts/os/letters/lowercase-e?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/letters/lowercase-e~?core": "https://core.parts/~",
+  "https://core.parts/os/letters/lowercase-e~?fx": "https://core.parts/os/letters/lowercase-e/fx.uri",
+  "https://core.parts/os/letters/lowercase-e~~": "part()",
+  "https://core.parts/os/letters/lowercase-i.css": ":host::before { content: 'i' }",
+  "https://core.parts/os/letters/lowercase-i/fx.uri": "https://core.parts/os/letters/lowercase-i",
+  "https://core.parts/os/letters/lowercase-i?core": "https://core.parts/",
+  "https://core.parts/os/letters/lowercase-i?layout": "https://core.parts/os/letters/lowercase-i.css",
+  "https://core.parts/os/letters/lowercase-i?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/letters/lowercase-i~?core": "https://core.parts/~",
+  "https://core.parts/os/letters/lowercase-i~?fx": "https://core.parts/os/letters/lowercase-i/fx.uri",
+  "https://core.parts/os/letters/lowercase-i~~": "part()",
+  "https://core.parts/os/letters/lowercase-l.css": ":host::before { content: 'l' }",
+  "https://core.parts/os/letters/lowercase-l/fx.uri": "https://core.parts/os/letters/lowercase-l",
+  "https://core.parts/os/letters/lowercase-l?core": "https://core.parts/",
+  "https://core.parts/os/letters/lowercase-l?layout": "https://core.parts/os/letters/lowercase-l.css",
+  "https://core.parts/os/letters/lowercase-l?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/letters/lowercase-l~?core": "https://core.parts/~",
+  "https://core.parts/os/letters/lowercase-l~?fx": "https://core.parts/os/letters/lowercase-l/fx.uri",
+  "https://core.parts/os/letters/lowercase-l~~": "part()",
+  "https://core.parts/os/running/demo-folder/app-label.css": ":host { margin: 0; height: 16px; vertical-align: center } :host::after { content: 'File Browser - demo' }",
+  "https://core.parts/os/running/demo-folder/app-label/fx.uri": "https://core.parts/os/running/demo-folder/app-label",
+  "https://core.parts/os/running/demo-folder/app-label?core": "https://core.parts/",
+  "https://core.parts/os/running/demo-folder/app-label?layout": "https://core.parts/os/running/demo-folder/app-label.css",
+  "https://core.parts/os/running/demo-folder/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/demo-folder/app-label~?core": "https://core.parts/~",
+  "https://core.parts/os/running/demo-folder/app-label~?fx": "https://core.parts/os/running/demo-folder/app-label/fx.uri",
+  "https://core.parts/os/running/demo-folder/app-label~~": "part()",
+  "https://core.parts/os/running/taskbar/demo-folder.css?fx": "https://core.parts/os/running/taskbar/demo-folder/fx.uri",
+  "https://core.parts/os/running/taskbar/demo-folder.css?open": "https://core.parts/os/running/window/demo-folder/active.txt",
+  "https://core.parts/os/running/taskbar/demo-folder.css~": "`:host { position: relative; height: 100%; margin: 0; width: 160px; display: flex; flex-flow: row nowrap; gap: 3px; border: none ${('' + open) === '1' ? '; font: bold 11px sans-serif' : ''}; box-sizing: border-box; padding: ${('' + open) === '0' ? 3 : 4}px 2px 2px; text-align: left; box-shadow: ${('' + open) === '0' ? 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb' : 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a'} } ${('' + open) === '1' ? ':host::after { content: \"\"; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; border: 1px dotted black; pointer-events: none; }' : ''} ${(''+open) === '1' ? ' :host > * { z-index: 3 } :host::before { content: \"\"; position: absolute; margin: 2px; border-top: 1px solid white; left: 0; right: 0; top: 0; bottom: 0; background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px; }' : ''} app-icon { width: 16px; height: 16px }`",
+  "https://core.parts/os/running/taskbar/demo-folder/fx.uri": "https://core.parts/os/running/taskbar/demo-folder",
+  "https://core.parts/os/running/taskbar/demo-folder/manifest.uri": "https://core.parts/start-menu/demo-folder/app-icon https://core.parts/os/running/demo-folder/app-label",
+  "https://core.parts/os/running/taskbar/demo-folder/manifest.uri?open": "https://core.parts/os/running/window/demo-folder/active.txt",
+  "https://core.parts/os/running/taskbar/demo-folder/datum.txt": "https://core.parts/os/running/window/demo-folder/active.txt",
+  "https://core.parts/os/running/taskbar/demo-folder/index/fx.uri": "https://core.parts/os/running/window/demo-folder/active.txt",
+  "https://core.parts/os/running/taskbar/demo-folder/index.txt?datum": "https://core.parts/os/running/taskbar/demo-folder/datum.txt",
+  "https://core.parts/os/running/taskbar/demo-folder/index.txt?fx": "https://core.parts/os/running/taskbar/demo-folder/index/fx.uri",
+  "https://core.parts/os/running/taskbar/demo-folder/index.txt?order": "https://core.parts/os/task-bar/selected/fx.uri",
+  "https://core.parts/os/running/taskbar/demo-folder/index.txt~": "''+(''+order).split(' ').indexOf(''+datum)",
+  "https://core.parts/os/running/taskbar/demo-folder/onclick.js?minimized": "https://core.parts/os/running/window/demo-folder/minimized.txt",
+  "https://core.parts/os/running/taskbar/demo-folder/onclick.js?open": "https://core.parts/os/running/window/demo-folder/active.txt",
+  "https://core.parts/os/running/taskbar/demo-folder/onclick.js~": "`() => { ${''+minimized === '1' ? `Ω['${minimized.headerOf().href}'] = '0'; ` : `` }Ω['https://core.parts/os/running/window/demo-folder/active.txt'] = '${(''+open) === '1' ? '0' : '1'}' }`",
+  "https://core.parts/os/running/taskbar/demo-folder/open/fx.uri": "https://core.parts/os/running/taskbar/demo-folder.css https://core.parts/os/task-bar/selected.txt https://core.parts/os/running/taskbar/demo-folder/onclick.js https://core.parts/os/running/window/demo-folder/title-bar.css",
+  "https://core.parts/os/running/taskbar/demo-folder?core": "https://core.parts/",
+  "https://core.parts/os/running/taskbar/demo-folder?layout": "https://core.parts/os/running/taskbar/demo-folder.css",
+  "https://core.parts/os/running/taskbar/demo-folder?manifest": "https://core.parts/os/running/taskbar/demo-folder/manifest.uri",
+  "https://core.parts/os/running/taskbar/demo-folder?onclick": "https://core.parts/os/running/taskbar/demo-folder/onclick.js",
+  "https://core.parts/os/running/taskbar/demo-folder~?core": "https://core.parts/~",
+  "https://core.parts/os/running/taskbar/demo-folder~?fx": "https://core.parts/os/running/taskbar/demo-folder/fx.uri",
+  "https://core.parts/os/running/taskbar/demo-folder~~": "part()",
+  "https://core.parts/os/running/window/demo-folder.css?fx": "https://core.parts/os/running/window/demo-folder/fx.uri",
+  "https://core.parts/os/running/window/demo-folder.css?maximized": "https://core.parts/os/running/window/demo-folder/maximized.txt",
+  "https://core.parts/os/running/window/demo-folder.css?position": "https://core.parts/os/running/window/demo-folder/position.json",
+  "https://core.parts/os/running/window/demo-folder.css~": "{\n  const common = \"position: absolute; display: flex; flex-flow: column nowrap; gap: 2px; background: #c3c3c3; box-sizing: border-box\"\n  if (('' + maximized) === '1') {\n   return `:host { position: absolute; top: 0; left: 0; right: 0; bottom: 28px; padding: 2px; ${common} }`\n  } else {\n   const { x, y, w, h } = JSON.parse('' + position);\n   return `:host { width: ${w}px; height: ${h}px; left: ${x}px; top: ${y}px; min-height: fit-content; padding: 4px; background: #c3c3c3; box-shadow: inset -1px -1px black, inset 1px 1px #c3c3c3, inset -2px -2px #7a7a7a, inset 2px 2px white; ${common} }`\n  }\n }",
+  "https://core.parts/os/running/window/demo-folder/fx.uri": "https://core.parts/os/running/window/demo-folder",
+  "https://core.parts/os/running/window/demo-folder/manifest.uri": "https://core.parts/os/running/window/demo-folder/title-bar https://core.parts/os/running/window/demo-folder/menu-bar https://core.parts/os/running/window/demo-folder/explorer-view https://core.parts/os/running/window/demo-folder/status-bar https://core.parts/os/running/window/demo-folder/resize-top https://core.parts/os/running/window/demo-folder/resize-bottom https://core.parts/os/running/window/demo-folder/resize-left https://core.parts/os/running/window/demo-folder/resize-right https://core.parts/os/running/window/demo-folder/resize-top-right https://core.parts/os/running/window/demo-folder/resize-bottom-right https://core.parts/os/running/window/demo-folder/resize-top-left https://core.parts/os/running/window/demo-folder/resize-bottom-left",
+  "https://core.parts/os/running/window/demo-folder.onpointerdown.js?index": "https://core.parts/os/running/taskbar/demo-folder/index.txt",
+  "https://core.parts/os/running/window/demo-folder.onpointerdown.js?selected": "https://core.parts/os/task-bar/selected.txt",
+  "https://core.parts/os/running/window/demo-folder.onpointerdown.js~": "`() => { ${(''+selected) === (''+index) ? '' : `Ω['${selected.headerOf().href}'] = '${''+index}'`} }`",
+  "https://core.parts/os/running/window/demo-folder/active.txt?fx": "https://core.parts/os/running/taskbar/demo-folder/open/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/active.txt?index": "https://core.parts/os/running/taskbar/demo-folder/index.txt",
+  "https://core.parts/os/running/window/demo-folder/active.txt?minimized": "https://core.parts/os/running/window/demo-folder/minimized.txt",
+  "https://core.parts/os/running/window/demo-folder/active.txt?selected": "https://core.parts/os/task-bar/selected.txt",
+  "https://core.parts/os/running/window/demo-folder/active.txt~": "('' + minimized) === '1' ? '0' : ('' + selected) === ('' + index) ? '1' : '0'",
+  "https://core.parts/os/running/window/demo-folder/exit-button.css": ":host { position: relative; width: 16px; height: 14px; background: #c3c3c3; margin-left: 2px; box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb } :host::before, :host::after { --color: #7f7f7f; content: ''; display: block; position: absolute; width: 8px; height: 7px; left: 4px; top: 3px; background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%) } :host::before { --color: white; left: 5px; top: 4px }",
+  "https://core.parts/os/running/window/demo-folder/exit-button/fx.uri": "https://core.parts/os/running/window/demo-folder/exit-button",
+  "https://core.parts/os/running/window/demo-folder/exit-button/manifest.uri": "",
+  "https://core.parts/os/running/window/demo-folder/exit-button?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/exit-button?layout": "https://core.parts/os/running/window/demo-folder/exit-button.css",
+  "https://core.parts/os/running/window/demo-folder/exit-button?manifest": "https://core.parts/os/running/window/demo-folder/exit-button/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/exit-button~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/exit-button~?fx": "https://core.parts/os/running/window/demo-folder/exit-button/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/exit-button~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/explorer-view.css": ":host { overflow-y: auto; flex: 1 1; box-shadow: -0.5px -0.5px 0 0.5px black, 0 0 0 1px #dbdbdb, -0.5px -0.5px 0 1.5px #7a7a7a, 0 0 0 2px white; background: white; margin: 2px; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-auto-rows: 18px; }",
+  "https://core.parts/os/running/window/demo-folder/explorer-view/fx.uri": "https://core.parts/os/running/window/demo-folder/explorer-view",
+  "https://core.parts/os/running/window/demo-folder/explorer-view/manifest.uri?button": "https://core.parts/core/templates/button.js",
+  "https://core.parts/os/running/window/demo-folder/explorer-view/manifest.uri?cell": "https://core.parts/core/templates/part.js",
+  "https://core.parts/os/running/window/demo-folder/explorer-view/manifest.uri~": ("" + (() => {
+   const
+    urlbase = υ.replace(/\/manifest.uri$/, '/header-'),
+    filebase = 'https://core.parts/os/running/window/demo-folder/', //'https://core.parts/demo/',
+    fileurlbase = υ.replace(/\/manifest.uri$/, '/file-'),
+    files = [...new Set(Object.keys(Δ).filter(url => (url !== filebase) && url.startsWith(filebase) && !url.includes('?') && url.replace(/~+$/, '') !== filebase).map(x => x.replace(filebase, '').includes('/') ? x.slice(0, filebase.length + x.replace(filebase, '').indexOf('/') + 1).replace(/~+$/, '') : x.replace(/~+$/, '')))],
+    filenames = files.map(url => [url, url.replace(filebase, '')]),
+    headercss = label => `:host { height: 17px; display: flex; flex-flow: row nowrap; align-items: center; padding-left: 6px; } :host::before { content: '${label}' }`,
+    headers = { name: "Name", type: "Type", size: "Size" },
+    fileourls = [];
+   for (const key in headers) button(urlbase + key, headercss(headers[key]))
+   for (const [url, name] of filenames) {
+    const proxy = Ω[url], itemurl = fileurlbase + name.replace(/\./g, '-').replace(/\/$/, '-folder'), config = proxy.headerOf().groups;
+    fileourls.push(itemurl)
+    const labelurl = itemurl + '/app-label', icontag = config.type.replace(/[^a-zA-Z0-9]+/g, '-') + '-icon', iconurl = 'https://core.parts/os/icons/' + icontag;
+    cell(labelurl, `:host::before { content: '${name}' }`)
+    cell(itemurl, `:host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0; padding-right: 6px } ${icontag} { --size: 16px; margin-right: 4px }`, iconurl + ' ' + labelurl)
+    for (const key of ['type', 'size']) {
+     const keyurl = itemurl + '-' + key;
+     fileourls.push(keyurl)
+     cell(keyurl, `:host::before { content: '${config[key] + (key === 'size' ? ' bytes' : '')}' }`)
     }
    }
-  }
-  var body = new TextEncoder().encode(string);
-  if (binary) {
-   const B = atob(string), k = B.length, A = new ArrayBuffer(k), I = new Uint8Array(A);
-   for (var i = 0; i < k; i++) I[i] = B.charCodeAt(i);
-   body = new Blob([I], { type });
-  }
-  const response = new Response(body, { headers: { "content-type": `${type}${binary ? '' : '; charset=UTF-8'}`, "expires": "Sun, 20 Jul 1969 20:17:00 UTC", "server": "kireji" } })
-  return direct ? response : event.respondWith(response)
- }),
- "https://core.parts/flex-spacer.css": ":host { flex: 1 1 }",
- "https://core.parts/flex-spacer.fx.uri": "https://core.parts/flex-spacer",
- "https://core.parts/flex-spacer?css": "https://core.parts/flex-spacer.css",
- "https://core.parts/flex-spacer?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/flex-spacer~?core": "https://core.parts/~",
- "https://core.parts/flex-spacer?core": "https://core.parts/",
- "https://core.parts/flex-spacer~?fx": "https://core.parts/flex-spacer.fx.uri",
- "https://core.parts/flex-spacer~~": "part()",
-
- "https://core.parts/fullscreen-button?onclick": "https://core.parts/fullscreen-button/onclick.js",
- "https://core.parts/fullscreen-button/onclick.js": "()=>document.documentElement.requestFullscreen()",
- "https://core.parts/fullscreen-button.css": ":host { background: black; width: 16px; height: 16px; cursor: pointer; }",
- "https://core.parts/fullscreen-button.manifest.uri": "",
- "https://core.parts/fullscreen-button.fx.uri": "https://core.parts/fullscreen-button",
- "https://core.parts/fullscreen-button?css": "https://core.parts/fullscreen-button.css",
- "https://core.parts/fullscreen-button?manifest": "https://core.parts/fullscreen-button.manifest.uri",
- "https://core.parts/fullscreen-button~?core": "https://core.parts/~",
- "https://core.parts/fullscreen-button?core": "https://core.parts/",
- "https://core.parts/fullscreen-button~?fx": "https://core.parts/fullscreen-button.fx.uri",
- "https://core.parts/fullscreen-button~~": "part()",
-
- "https://core.parts/os-95.css?fx": "https://core.parts/.fx.uri",
- "https://core.parts/os-95.css?height": "https://core.parts/os/task-bar/css-height.txt",
- "https://core.parts/os-95.css~": "`:host { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: grid; grid-template-rows: 1fr ${height}; font: 12px / 16px sans-serif }`",
- "https://core.parts/os-95.manifest.uri~": "`https://core.parts/desktop-95${''+hide_welcome_folder === '0' ? ' https://core.parts/os/running/window/welcome-folder' : ''} https://core.parts/taskbar-95${''+start_menu === '1' ? ' https://core.parts/start-menu/click-to-close https://core.parts/start-menu': ''}`",
- "https://core.parts/os-95.manifest.uri?fx": "https://core.parts/.fx.uri",
- "https://core.parts/os-95.manifest.uri?start_menu": "https://core.parts/os/start-menu/open.txt",
- "https://core.parts/os-95.manifest.uri?hide_welcome_folder": "https://core.parts/os/running/window/welcome-folder/minimized.txt",
-
- "https://core.parts/os/running_apps.uri": "https://core.parts/os/running/taskbar/welcome-folder",
-
- // ACTUAL FOLDER ==============================================================================================================================================================================================================================================================================>>>
- "https://core.parts/welcome/hello.txt~": "`Welcome to my ${noun}.`",
- "https://core.parts/welcome/hello.txt?noun": "https://core.parts/welcome/noun.txt",
- "https://core.parts/welcome/noun.txt~": "prompt('Please enter a noun.')",
- // TODO: FIX RESUED PARTS ==============================================================================================================================================================================================================================================================================>>>
- "https://core.parts/os/running/welcome-folder/app-icon.css": ":host { display: inline-block; position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; background: magenta; width: 16px; height: 16px; vertical-align: center }",
- "https://core.parts/os/running/welcome-folder/app-icon.fx.uri": "https://core.parts/os/running/welcome-folder/app-icon",
- "https://core.parts/os/running/welcome-folder/app-icon?css": "https://core.parts/os/running/welcome-folder/app-icon.css",
- "https://core.parts/os/running/welcome-folder/app-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/welcome-folder/app-icon~?core": "https://core.parts/~",
- "https://core.parts/os/running/welcome-folder/app-icon?core": "https://core.parts/",
- "https://core.parts/os/running/welcome-folder/app-icon~?fx": "https://core.parts/os/running/welcome-folder/app-icon.fx.uri",
- "https://core.parts/os/running/welcome-folder/app-icon~~": "part()",
-
- "https://core.parts/os/running/welcome-folder/app-label.css": ":host { margin: 0; height: 16px; vertical-align: center } :host::after { content: 'welcome' }",
- "https://core.parts/os/running/welcome-folder/app-label.fx.uri": "https://core.parts/os/running/welcome-folder/app-label",
- "https://core.parts/os/running/welcome-folder/app-label?css": "https://core.parts/os/running/welcome-folder/app-label.css",
- "https://core.parts/os/running/welcome-folder/app-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/welcome-folder/app-label~?core": "https://core.parts/~",
- "https://core.parts/os/running/welcome-folder/app-label?core": "https://core.parts/",
- "https://core.parts/os/running/welcome-folder/app-label~?fx": "https://core.parts/os/running/welcome-folder/app-label.fx.uri",
- "https://core.parts/os/running/welcome-folder/app-label~~": "part()",
- // TASL BAR ITEM==============================================================================================================================================================================================================================================================================>>>
- "https://core.parts/os/running/taskbar/welcome-folder/onclick.js~": "`() => { ${''+minimized === '1' ? `Ω['${minimized.headerOf().href}'] = '0'; ` : `` }Ω['https://core.parts/os/running/window/welcome-folder/active.txt'] = '${(''+open) === '1' ? '0' : '1'}' }`",
- "https://core.parts/os/running/taskbar/welcome-folder/onclick.js?open": "https://core.parts/os/running/window/welcome-folder/active.txt",
- "https://core.parts/os/running/taskbar/welcome-folder/onclick.js?minimized": "https://core.parts/os/running/window/welcome-folder/minimized.txt",
- "https://core.parts/os/running/taskbar/welcome-folder.css?fx": "https://core.parts/os/running/taskbar/welcome-folder.fx.uri",
- "https://core.parts/os/running/taskbar/welcome-folder.css?open": "https://core.parts/os/running/window/welcome-folder/active.txt",
- "https://core.parts/os/running/taskbar/welcome-folder.css~": "`:host { position: relative; height: 100%; margin: 0; width: 160px; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: ${('' + open) === '1' ? 'bold ' : ''}12px sans-serif; box-sizing: border-box; line-height: 16px; padding: ${('' + open) === '0' ? 3 : 4}px 2px 2px; text-align: left; box-shadow: ${('' + open) === '0' ? 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb' : 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a'} } ${('' + open) === '1' ? ':host::after { content: \"\"; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; border: 1px dotted black; pointer-events: none; }' : ''} ${(''+open) === '1' ? ' :host > * { z-index: 3 } :host::before { content: \"\"; position: absolute; margin: 2px; border-top: 1px solid white; left: 0; right: 0; top: 0; bottom: 0; background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px; }' : ''}`",
- "https://core.parts/os/running/taskbar/welcome-folder.fx.uri": "https://core.parts/os/running/taskbar/welcome-folder",
- "https://core.parts/os/running/taskbar/welcome-folder.manifest.uri?open": "https://core.parts/os/running/window/welcome-folder/active.txt",
- "https://core.parts/os/running/taskbar/welcome-folder.manifest.uri": "https://core.parts/os/running/welcome-folder/app-icon https://core.parts/os/running/welcome-folder/app-label",
- "https://core.parts/os/running/taskbar/welcome-folder/datum.txt": "https://core.parts/os/running/window/welcome-folder/active.txt",
- "https://core.parts/os/running/taskbar/welcome-folder/index.fx.uri": "https://core.parts/os/running/window/welcome-folder/active.txt",
- "https://core.parts/os/running/taskbar/welcome-folder/index.txt?datum": "https://core.parts/os/running/taskbar/welcome-folder/datum.txt",
- "https://core.parts/os/running/taskbar/welcome-folder/index.txt?fx": "https://core.parts/os/running/taskbar/welcome-folder/index.fx.uri",
- "https://core.parts/os/running/taskbar/welcome-folder/index.txt?order": "https://core.parts/os/task-bar/selected.txt.fx.uri",
- "https://core.parts/os/running/taskbar/welcome-folder/index.txt~": "''+(''+order).split(' ').indexOf(''+datum)",
- "https://core.parts/os/running/taskbar/welcome-folder/open.fx.uri": "https://core.parts/os/running/taskbar/welcome-folder.css https://core.parts/os/task-bar/selected.txt https://core.parts/os/running/taskbar/welcome-folder/onclick.js https://core.parts/os/running/window/welcome-folder/title-bar.css",
- "https://core.parts/os/running/taskbar/welcome-folder?onclick": "https://core.parts/os/running/taskbar/welcome-folder/onclick.js",
- "https://core.parts/os/running/taskbar/welcome-folder?css": "https://core.parts/os/running/taskbar/welcome-folder.css",
- "https://core.parts/os/running/taskbar/welcome-folder?manifest": "https://core.parts/os/running/taskbar/welcome-folder.manifest.uri",
- "https://core.parts/os/running/taskbar/welcome-folder~?core": "https://core.parts/~",
- "https://core.parts/os/running/taskbar/welcome-folder?core": "https://core.parts/",
- "https://core.parts/os/running/taskbar/welcome-folder~?fx": "https://core.parts/os/running/taskbar/welcome-folder.fx.uri",
- "https://core.parts/os/running/taskbar/welcome-folder~~": "part()",
- // RUNNING WINDOW ==============================================================================================================================================================================================================================================================================>>>
- "https://core.parts/os/running/window/welcome-folder.onpointerdown.js~": "`() => { ${(''+selected) === (''+index) ? '' : `Ω['${selected.headerOf().href}'] = '${''+index}'`} }`",
- "https://core.parts/os/running/window/welcome-folder.onpointerdown.js?selected": "https://core.parts/os/task-bar/selected.txt",
- "https://core.parts/os/running/window/welcome-folder.onpointerdown.js?index": "https://core.parts/os/running/taskbar/welcome-folder/index.txt",
- "https://core.parts/os/running/window/welcome-folder?onpointerdown": "https://core.parts/os/running/window/welcome-folder.onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder.css?fx": "https://core.parts/os/running/window/welcome-folder.fx.uri",
- "https://core.parts/os/running/window/welcome-folder.css~": ("" + (() => {
-  const common = "position: absolute; display: flex; flex-flow: column nowrap; gap: 2px; background: #c3c3c3; box-sizing: border-box"
-  if (('' + maximized) === '1') {
-   return `:host { position: absolute; top: 0; left: 0; right: 0; bottom: 28px; padding: 2px; ${common} }`
-  } else {
-   const { x, y, w, h } = JSON.parse('' + position);
-   return `:host { width: ${w}px; height: ${h}px; left: ${x}px; top: ${y}px; min-height: fit-content; padding: 4px; background: #c3c3c3; box-shadow: inset -1px -1px black, inset 1px 1px #c3c3c3, inset -2px -2px #7a7a7a, inset 2px 2px white; ${common} }`
-  }
- })).slice(6),
- "https://core.parts/os/running/window/welcome-folder.css?position": "https://core.parts/os/running/window/welcome-folder/position.json",
- "https://core.parts/os/running/window/welcome-folder.css?maximized": "https://core.parts/os/running/window/welcome-folder/maximized.txt",
- "https://core.parts/os/running/window/welcome-folder.manifest.uri": "https://core.parts/os/running/window/welcome-folder/title-bar https://core.parts/os/running/window/welcome-folder/menu-bar https://core.parts/os/running/window/welcome-folder/explorer-view https://core.parts/os/running/window/welcome-folder/status-bar https://core.parts/os/running/window/welcome-folder/resize-top https://core.parts/os/running/window/welcome-folder/resize-bottom https://core.parts/os/running/window/welcome-folder/resize-left https://core.parts/os/running/window/welcome-folder/resize-right https://core.parts/os/running/window/welcome-folder/resize-top-right https://core.parts/os/running/window/welcome-folder/resize-bottom-right https://core.parts/os/running/window/welcome-folder/resize-top-left https://core.parts/os/running/window/welcome-folder/resize-bottom-left",
- "https://core.parts/os/running/window/welcome-folder.fx.uri": "https://core.parts/os/running/window/welcome-folder",
- "https://core.parts/os/running/window/welcome-folder?css": "https://core.parts/os/running/window/welcome-folder.css",
- "https://core.parts/os/running/window/welcome-folder?manifest": "https://core.parts/os/running/window/welcome-folder.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder~?fx": "https://core.parts/os/running/window/welcome-folder.fx.uri",
- "https://core.parts/os/running/window/welcome-folder~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/active.txt?fx": "https://core.parts/os/running/taskbar/welcome-folder/open.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/active.txt?index": "https://core.parts/os/running/taskbar/welcome-folder/index.txt",
- "https://core.parts/os/running/window/welcome-folder/active.txt?selected": "https://core.parts/os/task-bar/selected.txt",
- "https://core.parts/os/running/window/welcome-folder/active.txt?minimized": "https://core.parts/os/running/window/welcome-folder/minimized.txt",
- "https://core.parts/os/running/window/welcome-folder/active.txt~": "('' + minimized) === '1' ? '0' : ('' + selected) === ('' + index) ? '1' : '0'",
-
- "https://core.parts/os/running/window/welcome-folder/grab.json": JSON.stringify({ x: 0, y: 0 }),
- "https://core.parts/os/running/window/welcome-folder/position.json": JSON.stringify({ x: 64, y: 32, w: 320, h: 240 }),
- "https://core.parts/os/running/window/welcome-folder/position.json?fx": "https://core.parts/os/running/window/welcome-folder/position.json.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/position.json.fx.uri": "https://core.parts/os/running/window/welcome-folder.css",
- "https://core.parts/os/running/window/welcome-folder/pointer-transform.js": "" + (({ clientX: x, clientY: y }) => {
-  const
-   grabState = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/grab.json']),
-   mousePosition = { x: Math.round(x), y: Math.round(y) };
-  let deltaPosition, finalPosition;
-  if (grabState.mode === 'move') {
-   deltaPosition = { x: grabState.start.x - grabState.x, y: grabState.start.y - grabState.y },
-    finalPosition = { x: deltaPosition.x + mousePosition.x, y: deltaPosition.y + mousePosition.y };
-  }
-  else if (grabState.mode === 'n-resize') finalPosition = { y: grabState.start.y - grabState.y + mousePosition.y, h: grabState.start.h + (grabState.y - mousePosition.y) }
-  else if (grabState.mode === 's-resize') finalPosition = { h: grabState.start.h - (grabState.y - mousePosition.y) }
-  else if (grabState.mode === 'e-resize') finalPosition = { w: grabState.start.w - (grabState.x - mousePosition.x) }
-  else if (grabState.mode === 'w-resize') finalPosition = { x: grabState.start.x - grabState.x + mousePosition.x, w: grabState.start.w + (grabState.x - mousePosition.x) }
-  else if (grabState.mode === 'ne-resize') finalPosition = { y: grabState.start.y - grabState.y + mousePosition.y, h: grabState.start.h + (grabState.y - mousePosition.y), w: grabState.start.w - (grabState.x - mousePosition.x) }
-  else if (grabState.mode === 'se-resize') finalPosition = { h: grabState.start.h - (grabState.y - mousePosition.y), w: grabState.start.w - (grabState.x - mousePosition.x) }
-  else if (grabState.mode === 'nw-resize') finalPosition = { y: grabState.start.y - grabState.y + mousePosition.y, h: grabState.start.h + (grabState.y - mousePosition.y), x: grabState.start.x - grabState.x + mousePosition.x, w: grabState.start.w + (grabState.x - mousePosition.x) }
-  else if (grabState.mode === 'sw-resize') finalPosition = { h: grabState.start.h - (grabState.y - mousePosition.y), x: grabState.start.x - grabState.x + mousePosition.x, w: grabState.start.w + (grabState.x - mousePosition.x) }
-  else throw new ReferenceError('No mode called ' + mode)
-  Ω['https://core.parts/os/running/window/welcome-folder/position.json'] = JSON.stringify({ ...grabState.start, ...finalPosition })
- }),
-
- "https://core.parts/os/running/window/welcome-folder/maximized.txt": "0",
- "https://core.parts/os/running/window/welcome-folder/maximized.txt?fx": "https://core.parts/os/running/window/welcome-folder/maximized.txt.fx.url",
- "https://core.parts/os/running/window/welcome-folder/maximized.txt.fx.url": "https://core.parts/os/running/window/welcome-folder.css https://core.parts/os/running/window/welcome-folder/window-controls.manifest.uri https://core.parts/os/running/window/welcome-folder/title-bar/ondblclick.js",
-
- "https://core.parts/os/running/window/welcome-folder/minimized.txt": "0",
- "https://core.parts/os/running/window/welcome-folder/minimized.txt?fx": "https://core.parts/os/running/window/welcome-folder/minimized.txt.fx.url",
- "https://core.parts/os/running/window/welcome-folder/minimized.txt.fx.url": "https://core.parts/os-95.manifest.uri https://core.parts/os/running/window/welcome-folder/active.txt https://core.parts/start-menu/welcome-folder/onclick.js https://core.parts/os/running/taskbar/welcome-folder/onclick.js",
-
- "https://core.parts/os/running/window/welcome-folder/title-bar.css~": "`:host { background: ${(''+focus) === '1' ? 'rgb(0, 0, 163)' : '#7f7f7f'}; color: white; display: flex; flex-flow: row nowrap; align-items: center; gap: 3px; height: 18px; padding: 0px 2px; box-sizing: border-box; }`",
- "https://core.parts/os/running/window/welcome-folder/title-bar.css?fx": "https://core.parts/os/running/window/welcome-folder/title-bar.css.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/title-bar.css.fx.uri": "https://core.parts/os/running/window/welcome-folder/title-bar",
- "https://core.parts/os/running/window/welcome-folder/title-bar.css?focus": "https://core.parts/os/running/window/welcome-folder/active.txt",
- "https://core.parts/os/running/window/welcome-folder/title-bar.manifest.uri": "https://core.parts/os/running/welcome-folder/app-icon https://core.parts/os/running/welcome-folder/app-label  https://core.parts/flex-spacer https://core.parts/os/running/window/welcome-folder/window-controls",
- "https://core.parts/os/running/window/welcome-folder/title-bar.fx.uri": "https://core.parts/os/running/window/welcome-folder/title-bar",
- "https://core.parts/os/running/window/welcome-folder/title-bar?css": "https://core.parts/os/running/window/welcome-folder/title-bar.css",
- "https://core.parts/os/running/window/welcome-folder/title-bar?manifest": "https://core.parts/os/running/window/welcome-folder/title-bar.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/title-bar~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/title-bar?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/title-bar~?fx": "https://core.parts/os/running/window/welcome-folder/title-bar.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/title-bar~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/title-bar?onpointerdown": "https://core.parts/os/running/window/welcome-folder/title-bar/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/title-bar/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'move' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
- "https://core.parts/os/running/window/welcome-folder/title-bar?ondblclick": "https://core.parts/os/running/window/welcome-folder/title-bar/ondblclick.js",
- "https://core.parts/os/running/window/welcome-folder/title-bar/ondblclick.js~": "`() => { Ω['https://core.parts/os/running/window/welcome-folder/${(''+maximized) === '1' ? 'restore' : 'maximize'}-button/onclick.js']() }`",
- "https://core.parts/os/running/window/welcome-folder/title-bar/ondblclick.js?maximized": "https://core.parts/os/running/window/welcome-folder/maximized.txt",
-
- "https://core.parts/os/running/window/welcome-folder/resize-top.css": ":host { position: absolute; top: -2px; left: 4px; right: 4px; height: 6px; cursor: ns-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-top.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-top",
- "https://core.parts/os/running/window/welcome-folder/resize-top?css": "https://core.parts/os/running/window/welcome-folder/resize-top.css",
- "https://core.parts/os/running/window/welcome-folder/resize-top?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-top~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-top?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-top~?fx": "https://core.parts/os/running/window/welcome-folder/resize-top.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-top~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-top?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-top/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-top/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'n-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-right.css": ":host { position: absolute; bottom: 4px; right: -2px; top: 4px; width: 6px; cursor: ew-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-right.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-right",
- "https://core.parts/os/running/window/welcome-folder/resize-right?css": "https://core.parts/os/running/window/welcome-folder/resize-right.css",
- "https://core.parts/os/running/window/welcome-folder/resize-right?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-right~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-right?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-right~?fx": "https://core.parts/os/running/window/welcome-folder/resize-right.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-right~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-right?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-right/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-right/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'e-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-left.css": ":host { position: absolute; bottom: 4px; left: -2px; top: 4px; width: 6px; cursor: ew-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-left.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-left",
- "https://core.parts/os/running/window/welcome-folder/resize-left?css": "https://core.parts/os/running/window/welcome-folder/resize-left.css",
- "https://core.parts/os/running/window/welcome-folder/resize-left?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-left~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-left?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-left~?fx": "https://core.parts/os/running/window/welcome-folder/resize-left.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-left~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-left?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-left/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-left/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'w-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-top-right.css": ":host { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; cursor: nesw-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-top-right",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right?css": "https://core.parts/os/running/window/welcome-folder/resize-top-right.css",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right~?fx": "https://core.parts/os/running/window/welcome-folder/resize-top-right.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-top-right/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-top-right/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'ne-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right.css": ":host { position: absolute; bottom: -2px; right: -2px; width: 6px; height: 6px; cursor: nwse-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-bottom-right",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right?css": "https://core.parts/os/running/window/welcome-folder/resize-bottom-right.css",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right~?fx": "https://core.parts/os/running/window/welcome-folder/resize-bottom-right.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-bottom-right/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-right/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'se-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-top-left.css": ":host { position: absolute; top: -2px; left: -2px; width: 6px; height: 6px; cursor: nwse-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-top-left",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left?css": "https://core.parts/os/running/window/welcome-folder/resize-top-left.css",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left~?fx": "https://core.parts/os/running/window/welcome-folder/resize-top-left.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-top-left/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-top-left/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'nw-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left.css": ":host { position: absolute; bottom: -2px; left: -2px; width: 6px; height: 6px; cursor: nesw-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-bottom-left",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left?css": "https://core.parts/os/running/window/welcome-folder/resize-bottom-left.css",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left~?fx": "https://core.parts/os/running/window/welcome-folder/resize-bottom-left.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-bottom-left/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom-left/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'sw-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/resize-bottom.css": ":host { position: absolute; bottom: -2px; left: 4px; right: 4px; height: 6px; cursor: ns-resize }",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom.fx.uri": "https://core.parts/os/running/window/welcome-folder/resize-bottom",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom?css": "https://core.parts/os/running/window/welcome-folder/resize-bottom.css",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom~?fx": "https://core.parts/os/running/window/welcome-folder/resize-bottom.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom?onpointerdown": "https://core.parts/os/running/window/welcome-folder/resize-bottom/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/resize-bottom/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/welcome-folder/position.json']); Ω['https://core.parts/os/running/window/welcome-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 's-resize' }); Ω['https://core.parts/grab-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/pointer-transform.js' }`",
-
- "https://core.parts/os/running/window/welcome-folder/menu-bar.css": ":host { height: 18px; display: flex; flex-flow: row nowrap; gap: 16px; align-items: center; padding: 0 4px; }",
- "https://core.parts/os/running/window/welcome-folder/menu-bar.manifest.uri": "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu",
- "https://core.parts/os/running/window/welcome-folder/menu-bar.fx.uri": "https://core.parts/os/running/window/welcome-folder/menu-bar",
- "https://core.parts/os/running/window/welcome-folder/menu-bar?css": "https://core.parts/os/running/window/welcome-folder/menu-bar.css",
- "https://core.parts/os/running/window/welcome-folder/menu-bar?manifest": "https://core.parts/os/running/window/welcome-folder/menu-bar.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/menu-bar~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/menu-bar?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/menu-bar~?fx": "https://core.parts/os/running/window/welcome-folder/menu-bar.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/menu-bar~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu.css": ":host { display: flex; flex-flow: row nowrap; } capital-f { text-decoration: underline }",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu.manifest.uri": "https://core.parts/os/letters/capital-f https://core.parts/os/letters/lowercase-i https://core.parts/os/letters/lowercase-l https://core.parts/os/letters/lowercase-e",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu.fx.uri": "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu?css": "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu.css",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu?manifest": "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu~?fx": "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/menu-bar/file-menu~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/explorer-view.css": ":host { flex: 1 1; box-shadow: inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a; background: white; padding: 2px; display: grid; grid-template-columns: 1fr 1fr 1fr; }",
- "https://core.parts/os/running/window/welcome-folder/explorer-view.manifest.uri?button": "https://core.parts/core/templates/button.js",
- "https://core.parts/os/running/window/welcome-folder/explorer-view.manifest.uri~": `{
-   const
-   urlbase = υ.replace(/\.manifest\.uri$/, '/header-'),
-   files = new Set(Object.keys(Δ).filter(url => url.startsWith('https://core.parts/welcome/') && !url.includes('?')).map(url => url.replace(/~+$/, '').replace('https://core.parts/welcome/', ''))),
-   headercss = label => \`:host { height: 17px; display: flex; flex-flow: row nowrap; align-items: center; padding-left: 6px; } :host::before { content: '\${label}' }\`,
-   headers = { "name": "Name", "type": "Type", "size": "Size" };
-   for (const key in headers) button(urlbase + key, headercss(headers[key]))
-   return Object.keys(headers).map(x=>urlbase + x).join(' ');
- }`,
- "https://core.parts/os/running/window/welcome-folder/explorer-view.fx.uri": "https://core.parts/os/running/window/welcome-folder/explorer-view",
- "https://core.parts/os/running/window/welcome-folder/explorer-view?css": "https://core.parts/os/running/window/welcome-folder/explorer-view.css",
- "https://core.parts/os/running/window/welcome-folder/explorer-view?manifest": "https://core.parts/os/running/window/welcome-folder/explorer-view.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/explorer-view~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/explorer-view?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/explorer-view~?fx": "https://core.parts/os/running/window/welcome-folder/explorer-view.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/explorer-view~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/status-bar.css": ":host { padding: 0 3px; height: 17px; box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a; display: flex; flex-flow: row nowrap; align-items: center; } :host::after { content: '0 object(s), 0 selected' }",
- "https://core.parts/os/running/window/welcome-folder/status-bar.manifest.uri": "",
- "https://core.parts/os/running/window/welcome-folder/status-bar.fx.uri": "https://core.parts/os/running/window/welcome-folder/status-bar",
- "https://core.parts/os/running/window/welcome-folder/status-bar?css": "https://core.parts/os/running/window/welcome-folder/status-bar.css",
- "https://core.parts/os/running/window/welcome-folder/status-bar?manifest": "https://core.parts/os/running/window/welcome-folder/status-bar.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/status-bar~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/status-bar?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/status-bar~?fx": "https://core.parts/os/running/window/welcome-folder/status-bar.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/status-bar~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/window-controls.css": ":host { display: flex; flex-flow: row nowrap }",
- "https://core.parts/os/running/window/welcome-folder/window-controls.manifest.uri~": "`https://core.parts/os/running/window/welcome-folder/minimize-button https://core.parts/os/running/window/welcome-folder/${(''+maximized) === '1' ? 'restore' : 'maximize'}-button https://core.parts/os/running/window/welcome-folder/exit-button`",
- "https://core.parts/os/running/window/welcome-folder/window-controls.manifest.uri?maximized": "https://core.parts/os/running/window/welcome-folder/maximized.txt",
- "https://core.parts/os/running/window/welcome-folder/window-controls.fx.uri": "https://core.parts/os/running/window/welcome-folder/window-controls",
- "https://core.parts/os/running/window/welcome-folder/window-controls?css": "https://core.parts/os/running/window/welcome-folder/window-controls.css",
- "https://core.parts/os/running/window/welcome-folder/window-controls?manifest": "https://core.parts/os/running/window/welcome-folder/window-controls.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/window-controls~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/window-controls?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/window-controls~?fx": "https://core.parts/os/running/window/welcome-folder/window-controls.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/window-controls~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/exit-button.css": ":host { position: relative; width: 16px; height: 14px; background: #c3c3c3; margin-left: 2px; box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb } :host::before, :host::after { --color: #7f7f7f; content: ''; display: block; position: absolute; width: 8px; height: 7px; left: 4px; top: 3px; background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%) } :host::before { --color: white; left: 5px; top: 4px }",
- "https://core.parts/os/running/window/welcome-folder/exit-button.manifest.uri": "",
- "https://core.parts/os/running/window/welcome-folder/exit-button.fx.uri": "https://core.parts/os/running/window/welcome-folder/exit-button",
- "https://core.parts/os/running/window/welcome-folder/exit-button?css": "https://core.parts/os/running/window/welcome-folder/exit-button.css",
- "https://core.parts/os/running/window/welcome-folder/exit-button?manifest": "https://core.parts/os/running/window/welcome-folder/exit-button.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/exit-button~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/exit-button?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/exit-button~?fx": "https://core.parts/os/running/window/welcome-folder/exit-button.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/exit-button~~": "part()",
-
- "https://core.parts/os/running/window/welcome-folder/minimize-button.css~": "`:host { position: relative; width: 16px; height: 14px; background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } :host::before { --color: black; display: block; position: absolute; content: ''; width: 6px; height: 2px; background: var(--color); top: 9px; left: 4px } :host(:hover)::before { --color: blue }`",
- "https://core.parts/os/running/window/welcome-folder/minimize-button.manifest.uri": "",
- "https://core.parts/os/running/window/welcome-folder/minimize-button.fx.uri": "https://core.parts/os/running/window/welcome-folder/minimize-button",
- "https://core.parts/os/running/window/welcome-folder/minimize-button/onclick.js": "()=>{Ω['https://core.parts/os/running/window/welcome-folder/minimized.txt'] = '1' }",
- "https://core.parts/os/running/window/welcome-folder/minimize-button?css": "https://core.parts/os/running/window/welcome-folder/minimize-button.css",
- "https://core.parts/os/running/window/welcome-folder/minimize-button?manifest": "https://core.parts/os/running/window/welcome-folder/minimize-button.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/minimize-button?onclick": "https://core.parts/os/running/window/welcome-folder/minimize-button/onclick.js",
- "https://core.parts/os/running/window/welcome-folder/minimize-button~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/minimize-button?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/minimize-button~?fx": "https://core.parts/os/running/window/welcome-folder/minimize-button.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/minimize-button~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/minimize-button.css?down": "https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt",
- "https://core.parts/os/running/window/welcome-folder/minimize-button?onpointerdown": "https://core.parts/os/running/window/welcome-folder/minimize-button/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/minimize-button/onpointerdown.js": "e => { e.stopPropagation(); Ω['https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/minimize-button/release.js' }",
- "https://core.parts/os/running/window/welcome-folder/minimize-button/release.js": "e => { Ω['https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt'] = '0' }",
- "https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt": "0",
- "https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt?fx": "https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/minimize-button/down.txt.fx.uri": "https://core.parts/os/running/window/welcome-folder/minimize-button.css",
-
- "https://core.parts/os/running/window/welcome-folder/maximize-button.css~": "`:host { position: relative; width: 16px; height: 14px; background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } :host::before { --color: black; display: block; position: absolute; content: ''; width: 9px; height: 9px; top: 2px; left: 3px; box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color) } :host(:hover)::before { --color: blue }`",
- "https://core.parts/os/running/window/welcome-folder/maximize-button.manifest.uri": "",
- "https://core.parts/os/running/window/welcome-folder/maximize-button.fx.uri": "https://core.parts/os/running/window/welcome-folder/maximize-button",
- "https://core.parts/os/running/window/welcome-folder/maximize-button/onclick.js": "()=>{Ω['https://core.parts/os/running/window/welcome-folder/maximized.txt'] = '1' }",
- "https://core.parts/os/running/window/welcome-folder/maximize-button?css": "https://core.parts/os/running/window/welcome-folder/maximize-button.css",
- "https://core.parts/os/running/window/welcome-folder/maximize-button?manifest": "https://core.parts/os/running/window/welcome-folder/maximize-button.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/maximize-button?onclick": "https://core.parts/os/running/window/welcome-folder/maximize-button/onclick.js",
- "https://core.parts/os/running/window/welcome-folder/maximize-button~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/maximize-button?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/maximize-button~?fx": "https://core.parts/os/running/window/welcome-folder/maximize-button.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/maximize-button~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/maximize-button.css?down": "https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt",
- "https://core.parts/os/running/window/welcome-folder/maximize-button?onpointerdown": "https://core.parts/os/running/window/welcome-folder/maximize-button/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/maximize-button/onpointerdown.js": "e => { e.stopPropagation(); Ω['https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/maximize-button/release.js' }",
- "https://core.parts/os/running/window/welcome-folder/maximize-button/release.js": "e => { Ω['https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt'] = '0' }",
- "https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt": "0",
- "https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt?fx": "https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/maximize-button/down.txt.fx.uri": "https://core.parts/os/running/window/welcome-folder/maximize-button.css",
-
- "https://core.parts/os/running/window/welcome-folder/restore-button.css~": "`:host { position: relative; width: 16px; height: 14px; background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } :host::before, :host::after { --color: black; display: block; position: absolute; content: ''; width: 6px; height: 6px; top: 5px; left: 3px; box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color); background: #c3c3c3 } :host::before { top: 2px; left: 5px } :host(:hover)::before, :host(:hover)::after { --color: blue }`",
- "https://core.parts/os/running/window/welcome-folder/restore-button.manifest.uri": "",
- "https://core.parts/os/running/window/welcome-folder/restore-button.fx.uri": "https://core.parts/os/running/window/welcome-folder/restore-button",
- "https://core.parts/os/running/window/welcome-folder/restore-button/onclick.js": "()=>Ω['https://core.parts/os/running/window/welcome-folder/maximized.txt'] = '0'",
- "https://core.parts/os/running/window/welcome-folder/restore-button?css": "https://core.parts/os/running/window/welcome-folder/restore-button.css",
- "https://core.parts/os/running/window/welcome-folder/restore-button?manifest": "https://core.parts/os/running/window/welcome-folder/restore-button.manifest.uri",
- "https://core.parts/os/running/window/welcome-folder/restore-button?onclick": "https://core.parts/os/running/window/welcome-folder/restore-button/onclick.js",
- "https://core.parts/os/running/window/welcome-folder/restore-button~?core": "https://core.parts/~",
- "https://core.parts/os/running/window/welcome-folder/restore-button?core": "https://core.parts/",
- "https://core.parts/os/running/window/welcome-folder/restore-button~?fx": "https://core.parts/os/running/window/welcome-folder/restore-button.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/restore-button~~": "part()",
- "https://core.parts/os/running/window/welcome-folder/restore-button.css?down": "https://core.parts/os/running/window/welcome-folder/restore-button/down.txt",
- "https://core.parts/os/running/window/welcome-folder/restore-button?onpointerdown": "https://core.parts/os/running/window/welcome-folder/restore-button/onpointerdown.js",
- "https://core.parts/os/running/window/welcome-folder/restore-button/onpointerdown.js": "e => { e.stopPropagation(); Ω['https://core.parts/os/running/window/welcome-folder/restore-button/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = 'https://core.parts/os/running/window/welcome-folder/restore-button/release.js' }",
- "https://core.parts/os/running/window/welcome-folder/restore-button/release.js": "e => { Ω['https://core.parts/os/running/window/welcome-folder/restore-button/down.txt'] = '0' }",
- "https://core.parts/os/running/window/welcome-folder/restore-button/down.txt": "0",
- "https://core.parts/os/running/window/welcome-folder/restore-button/down.txt?fx": "https://core.parts/os/running/window/welcome-folder/restore-button/down.txt.fx.uri",
- "https://core.parts/os/running/window/welcome-folder/restore-button/down.txt.fx.uri": "https://core.parts/os/running/window/welcome-folder/restore-button.css",
- // START MENU ITEM ==============================================================================================================================================================================================================================================================================>>>
- "https://core.parts/start-menu/welcome-folder/onclick.js~": "`e => { ${''+minimized === '1' ? `Ω['${minimized.headerOf().href}'] = '0'; ` : `` }Ω['${selected.headerOf().href}'] = '${''+index}' }`",
- "https://core.parts/start-menu/welcome-folder/onclick.js?minimized": "https://core.parts/os/running/window/welcome-folder/minimized.txt",
- "https://core.parts/start-menu/welcome-folder/onclick.js?selected": "https://core.parts/os/task-bar/selected.txt",
- "https://core.parts/start-menu/welcome-folder/onclick.js?index": "https://core.parts/os/running/taskbar/welcome-folder/index.txt",
- "https://core.parts/start-menu/welcome-folder?onclick": "https://core.parts/start-menu/welcome-folder/onclick.js",
- "https://core.parts/start-menu/welcome-folder.css": ":host { position: relative; display: flex; flex-flow: row nowrap; padding: 4px 0 } :host(:hover) { background: #00007f; color: white }",
- "https://core.parts/start-menu/welcome-folder.manifest.uri": "https://core.parts/start-menu/welcome-folder/app-icon https://core.parts/start-menu/welcome-folder/app-label",
- "https://core.parts/start-menu/welcome-folder.fx.uri": "https://core.parts/start-menu/welcome-folder",
- "https://core.parts/start-menu/welcome-folder?css": "https://core.parts/start-menu/welcome-folder.css",
- "https://core.parts/start-menu/welcome-folder?manifest": "https://core.parts/start-menu/welcome-folder.manifest.uri",
- "https://core.parts/start-menu/welcome-folder~?core": "https://core.parts/~",
- "https://core.parts/start-menu/welcome-folder?core": "https://core.parts/",
- "https://core.parts/start-menu/welcome-folder~?fx": "https://core.parts/start-menu/welcome-folder.fx.uri",
- "https://core.parts/start-menu/welcome-folder~~": "part()",
- // ICON
- "https://core.parts/start-menu/welcome-folder/app-icon.css": ":host { width: 24px; height: 24px; background: tomato; margin: 0 10px; }",
- "https://core.parts/start-menu/welcome-folder/app-icon.fx.uri": "https://core.parts/start-menu/welcome-folder/app-icon",
- "https://core.parts/start-menu/welcome-folder/app-icon?css": "https://core.parts/start-menu/welcome-folder/app-icon.css",
- "https://core.parts/start-menu/welcome-folder/app-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/welcome-folder/app-icon~?core": "https://core.parts/~",
- "https://core.parts/start-menu/welcome-folder/app-icon?core": "https://core.parts/",
- "https://core.parts/start-menu/welcome-folder/app-icon~?fx": "https://core.parts/start-menu/welcome-folder/app-icon.fx.uri",
- "https://core.parts/start-menu/welcome-folder/app-icon~~": "part()",
- // LABEL
- "https://core.parts/start-menu/welcome-folder/app-label.css": ":host::after { height: 24px; font: 12px / 24px sans-serif; content: 'welcome' }",
- "https://core.parts/start-menu/welcome-folder/app-label.fx.uri": "https://core.parts/start-menu/welcome-folder/app-label",
- "https://core.parts/start-menu/welcome-folder/app-label?css": "https://core.parts/start-menu/welcome-folder/app-label.css",
- "https://core.parts/start-menu/welcome-folder/app-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/welcome-folder/app-label~?core": "https://core.parts/~",
- "https://core.parts/start-menu/welcome-folder/app-label?core": "https://core.parts/",
- "https://core.parts/start-menu/welcome-folder/app-label~?fx": "https://core.parts/start-menu/welcome-folder/app-label.fx.uri",
- "https://core.parts/start-menu/welcome-folder/app-label~~": "part()",
- // END FOLDER ==============================================================================================================================================================================================================================================================================>>>
-
- "https://core.parts/os/start-menu/open.txt.fx.uri": "https://core.parts/start-95.css https://core.parts/os/task-bar/selected.txt https://core.parts/os-95.manifest.uri",
- "https://core.parts/os/start-menu/open.txt?fx": "https://core.parts/os/start-menu/open.txt.fx.uri",
- "https://core.parts/os/start-menu/open.txt?selected": "https://core.parts/os/task-bar/selected.txt",
- "https://core.parts/os/start-menu/open.txt~": "('' + selected) === '0' ? '1' : '0'",
- "https://core.parts/os/task-bar/css-height.txt": "28px",
- "https://core.parts/os/task-bar/css-height.txt.fx.uri": "https://core.parts/os-95.css https://core.parts/start-menu.css",
- "https://core.parts/os/task-bar/selected.txt.fx.uri": "https://core.parts/os/start-menu/open.txt https://core.parts/os/running/window/welcome-folder/active.txt https://core.parts/os/running/window/welcome-folder.onpointerdown.js https://core.parts/desktop-95/onclick.js",
- "https://core.parts/os/task-bar/selected.txt": "-1",
- "https://core.parts/os/task-bar/selected.txt?fx": "https://core.parts/os/task-bar/selected.txt.fx.uri",
- "https://core.parts/os/task-bar/selected.txt~": `{ let wasOn; const result = ''+(''+fx).split(' ').findIndex(${x => {
-  const src = caller,
-   isX = x === src;
-  wasOn = Δ[src] === '1';
-  return (src && wasOn) ? isX : ('' + Ω[x] === '1')
- }}); return result }`,
- "https://core.parts/part.js": "" + (() => `\`<!DOCTYPE html><script src="https://core.parts/everything.js"></script><script>onload = Ω["https://core.parts/onload.js"]</script><meta name="viewport" content="width=device-width, initial-scale=1" /><style>html, body { overscroll-behavior-y: contain !important; overflow: hidden; }</style>\``),
- "https://core.parts/patterns/tagname.regex": "" + /^[a-z][a-z0-9]*-[a-z0-9-]*$/,
- "https://core.parts/patterns/url.regex": "" + /^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<properties>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?(?<rank>~{0,7})$/,
- "https://core.parts/start-95/onclick.js": "() => Ω['https://core.parts/os/start-menu/open.txt'] = '1'",
- "https://core.parts/start-95?onclick": "https://core.parts/start-95/onclick.js",
- "https://core.parts/start-95.css?fx": "https://core.parts/start-95.fx.uri",
- "https://core.parts/start-95.css?open": "https://core.parts/os/start-menu/open.txt",
- "https://core.parts/start-95.css~": "`:host { flex: 0 0; position: relative; width: 100%; box-sizing: border-box; height: 100%; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: bold 12px sans-serif; box-sizing: border-box; line-height: ${('' + open) === '0' ? 16 : 16}px; padding: ${('' + open) === '0' ? 3 : 4}px 4px 2px; text-align: left; background: #c3c3c3; box-shadow: ${('' + open) === '0' ? 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb' : 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a'} } ${('' + open) === '1' ? ':host::after { content: \"\"; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; border: 1px dotted black; pointer-events: none; }' : ''}`",
- "https://core.parts/start-95.fx.uri": "https://core.parts/start-95",
- "https://core.parts/start-95.manifest.uri": "https://core.parts/start-icon https://core.parts/start-label",
- "https://core.parts/start-95.manifest.uri?open": "https://core.parts/os/start-menu/open.txt",
- "https://core.parts/start-95?css": "https://core.parts/start-95.css",
- "https://core.parts/start-95?manifest": "https://core.parts/start-95.manifest.uri",
- "https://core.parts/start-95~?core": "https://core.parts/~",
- "https://core.parts/start-95?core": "https://core.parts/",
- "https://core.parts/start-95~?fx": "https://core.parts/start-95.fx.uri",
- "https://core.parts/start-95~~": "part()",
- "https://core.parts/start-icon.css": ":host { position: relative; box-sizing: border-box; height: 100%; margin: 0; background: magenta; width: 16px; height: 16px }",
- "https://core.parts/start-icon.fx.uri": "https://core.parts/start-icon",
- "https://core.parts/start-icon?css": "https://core.parts/start-icon.css",
- "https://core.parts/start-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-icon~?core": "https://core.parts/~",
- "https://core.parts/start-icon?core": "https://core.parts/",
- "https://core.parts/start-icon~?fx": "https://core.parts/start-icon.fx.uri",
- "https://core.parts/start-icon~~": "part()",
- "https://core.parts/start-label.css": ":host { position: relative; box-sizing: border-box; margin: 0; height: 16px } :host::before { content: 'Start' }",
- "https://core.parts/start-label.fx.uri": "https://core.parts/start-label",
- "https://core.parts/start-label?css": "https://core.parts/start-label.css",
- "https://core.parts/start-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-label~?core": "https://core.parts/~",
- "https://core.parts/start-label?core": "https://core.parts/",
- "https://core.parts/start-label~?fx": "https://core.parts/start-label.fx.uri",
- "https://core.parts/start-label~~": "part()",
-
- "https://core.parts/start-menu.css?fx": "https://core.parts/start-menu.fx.uri",
- "https://core.parts/start-menu.css~": "`:host { position: relative; min-width: 164px; display: flex; flex-flow: column nowrap; position: absolute; left: 2px; bottom: calc(${height} - 4px); user-select: none; line-height: 18px; text-align: left; background: #c3c3c3; font: 12px sans-serif; box-sizing: border-box; line-height: 16px; padding: 3px 3px 3px 24px; text-align: left; background: #c3c3c3; box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb } :host::after { pointer-events: none; display: block; content: ''; position: absolute; left: 3px; top: 3px; bottom: 3px; background: #7f7f7f; width: 21px }`",
- "https://core.parts/start-menu.css?height": "https://core.parts/os/task-bar/css-height.txt",
- "https://core.parts/start-menu.manifest.uri": "https://core.parts/start-menu/welcome-folder https://core.parts/start-menu/network-folder https://core.parts/os/horizontal-line https://core.parts/start-menu/restart-server https://core.parts/start-menu/restart-computer https://core.parts/start-menu/save-computer",
- "https://core.parts/start-menu.fx.uri": "https://core.parts/start-menu",
- "https://core.parts/start-menu?css": "https://core.parts/start-menu.css",
- "https://core.parts/start-menu?manifest": "https://core.parts/start-menu.manifest.uri",
- "https://core.parts/start-menu?core": "https://core.parts/",
- "https://core.parts/start-menu~?core": "https://core.parts/~",
- "https://core.parts/start-menu~?fx": "https://core.parts/start-menu.fx.uri",
- "https://core.parts/start-menu~~": "part()",
-
- "https://core.parts/start-menu/click-to-close/onclick.js": "() => Ω['https://core.parts/os/start-menu/open.txt'] = '0'",
- "https://core.parts/start-menu/click-to-close?onclick": "https://core.parts/start-menu/click-to-close/onclick.js",
- "https://core.parts/start-menu/click-to-close.css": ":host { position: fixed; display: block; left: 0; top: 0; bottom: 0; right: 0; content: '' }",
- "https://core.parts/start-menu/click-to-close.fx.uri": "https://core.parts/start-menu/click-to-close",
- "https://core.parts/start-menu/click-to-close?css": "https://core.parts/start-menu/click-to-close.css",
- "https://core.parts/start-menu/click-to-close?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/click-to-close~?core": "https://core.parts/~",
- "https://core.parts/start-menu/click-to-close?core": "https://core.parts/",
- "https://core.parts/start-menu/click-to-close~?fx": "https://core.parts/start-menu/click-to-close.fx.uri",
- "https://core.parts/start-menu/click-to-close~~": "part()",
-
- "https://core.parts/start-menu/network-folder.css": ":host { position: relative; display: flex; flex-flow: row nowrap; padding: 4px 0 } :host(:hover) { background: #00007f; color: white }",
- "https://core.parts/start-menu/network-folder.manifest.uri": "https://core.parts/start-menu/network-folder/app-icon https://core.parts/start-menu/network-folder/app-label",
- "https://core.parts/start-menu/network-folder.fx.uri": "https://core.parts/start-menu/network-folder",
- "https://core.parts/start-menu/network-folder?css": "https://core.parts/start-menu/network-folder.css",
- "https://core.parts/start-menu/network-folder?manifest": "https://core.parts/start-menu/network-folder.manifest.uri",
- "https://core.parts/start-menu/network-folder~?core": "https://core.parts/~",
- "https://core.parts/start-menu/network-folder?core": "https://core.parts/",
- "https://core.parts/start-menu/network-folder~?fx": "https://core.parts/start-menu/network-folder.fx.uri",
- "https://core.parts/start-menu/network-folder~~": "part()",
-
- "https://core.parts/start-menu/network-folder/app-icon.css": ":host { width: 24px; height: 24px; background: white; margin: 0 10px; }",
- "https://core.parts/start-menu/network-folder/app-icon.fx.uri": "https://core.parts/start-menu/network-folder/app-icon",
- "https://core.parts/start-menu/network-folder/app-icon?css": "https://core.parts/start-menu/network-folder/app-icon.css",
- "https://core.parts/start-menu/network-folder/app-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/network-folder/app-icon~?core": "https://core.parts/~",
- "https://core.parts/start-menu/network-folder/app-icon?core": "https://core.parts/",
- "https://core.parts/start-menu/network-folder/app-icon~?fx": "https://core.parts/start-menu/network-folder/app-icon.fx.uri",
- "https://core.parts/start-menu/network-folder/app-icon~~": "part()",
-
- "https://core.parts/start-menu/network-folder/app-label.css": ":host::after { height: 24px; font: 12px / 24px sans-serif; content: 'Network' }",
- "https://core.parts/start-menu/network-folder/app-label.fx.uri": "https://core.parts/start-menu/network-folder/app-label",
- "https://core.parts/start-menu/network-folder/app-label?css": "https://core.parts/start-menu/network-folder/app-label.css",
- "https://core.parts/start-menu/network-folder/app-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/network-folder/app-label~?core": "https://core.parts/~",
- "https://core.parts/start-menu/network-folder/app-label?core": "https://core.parts/",
- "https://core.parts/start-menu/network-folder/app-label~?fx": "https://core.parts/start-menu/network-folder/app-label.fx.uri",
- "https://core.parts/start-menu/network-folder/app-label~~": "part()",
-
- "https://core.parts/os/horizontal-line.css": ":host { height: 2px; border-top: 1px solid #7f7f7f; border-bottom: 1px solid white; box-sizing: border-box; margin: 4px 0 }",
- "https://core.parts/os/horizontal-line.fx.uri": "https://core.parts/os/horizontal-line",
- "https://core.parts/os/horizontal-line?css": "https://core.parts/os/horizontal-line.css",
- "https://core.parts/os/horizontal-line?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/os/horizontal-line~?core": "https://core.parts/~",
- "https://core.parts/os/horizontal-line?core": "https://core.parts/",
- "https://core.parts/os/horizontal-line~?fx": "https://core.parts/os/horizontal-line.fx.uri",
- "https://core.parts/os/horizontal-line~~": "part()",
-
- "https://core.parts/start-menu/restart-server.css": ":host { position: relative; display: flex; flex-flow: row nowrap; padding: 4px 0 } :host(:hover) { background: #00007f; color: white }",
- "https://core.parts/start-menu/restart-server.manifest.uri": "https://core.parts/start-menu/restart-server/app-icon https://core.parts/start-menu/restart-server/app-label",
- "https://core.parts/start-menu/restart-server.fx.uri": "https://core.parts/start-menu/restart-server",
- "https://core.parts/start-menu/restart-server?css": "https://core.parts/start-menu/restart-server.css",
- "https://core.parts/start-menu/restart-server?manifest": "https://core.parts/start-menu/restart-server.manifest.uri",
- "https://core.parts/start-menu/restart-server~?core": "https://core.parts/~",
- "https://core.parts/start-menu/restart-server?core": "https://core.parts/",
- "https://core.parts/start-menu/restart-server~?fx": "https://core.parts/start-menu/restart-server.fx.uri",
- "https://core.parts/start-menu/restart-server~~": "part()",
- "https://core.parts/start-menu/restart-server/onclick.js": "" + (() => { navigator.serviceWorker.controller.postMessage('restart'); if (confirm('Restart computer too?')) location.reload() }),
- "https://core.parts/start-menu/restart-server?onclick": "https://core.parts/start-menu/restart-server/onclick.js",
-
- "https://core.parts/start-menu/restart-server/app-icon.css": ":host { width: 24px; height: 24px; background: grey; margin: 0 10px }",
- "https://core.parts/start-menu/restart-server/app-icon.fx.uri": "https://core.parts/start-menu/restart-server/app-icon",
- "https://core.parts/start-menu/restart-server/app-icon?css": "https://core.parts/start-menu/restart-server/app-icon.css",
- "https://core.parts/start-menu/restart-server/app-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/restart-server/app-icon~?core": "https://core.parts/~",
- "https://core.parts/start-menu/restart-server/app-icon?core": "https://core.parts/",
- "https://core.parts/start-menu/restart-server/app-icon~?fx": "https://core.parts/start-menu/restart-server/app-icon.fx.uri",
- "https://core.parts/start-menu/restart-server/app-icon~~": "part()",
-
- "https://core.parts/start-menu/restart-server/app-label.css": ":host::after { height: 24px; font: 12px / 24px sans-serif; content: 'Restart Server' }",
- "https://core.parts/start-menu/restart-server/app-label.fx.uri": "https://core.parts/start-menu/restart-server/app-label",
- "https://core.parts/start-menu/restart-server/app-label?css": "https://core.parts/start-menu/restart-server/app-label.css",
- "https://core.parts/start-menu/restart-server/app-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/restart-server/app-label~?core": "https://core.parts/~",
- "https://core.parts/start-menu/restart-server/app-label?core": "https://core.parts/",
- "https://core.parts/start-menu/restart-server/app-label~?fx": "https://core.parts/start-menu/restart-server/app-label.fx.uri",
- "https://core.parts/start-menu/restart-server/app-label~~": "part()",
-
- "https://core.parts/start-menu/save-computer.css": ":host { position: relative; display: flex; flex-flow: row nowrap; padding: 4px 0; padding-right: 6px } :host(:hover) { background: #00007f; color: white }",
- "https://core.parts/start-menu/save-computer.manifest.uri": "https://core.parts/start-menu/save-computer/app-icon https://core.parts/start-menu/save-computer/app-label",
- "https://core.parts/start-menu/save-computer.fx.uri": "https://core.parts/start-menu/save-computer",
- "https://core.parts/start-menu/save-computer?css": "https://core.parts/start-menu/save-computer.css",
- "https://core.parts/start-menu/save-computer?manifest": "https://core.parts/start-menu/save-computer.manifest.uri",
- "https://core.parts/start-menu/save-computer~?core": "https://core.parts/~",
- "https://core.parts/start-menu/save-computer?core": "https://core.parts/",
- "https://core.parts/start-menu/save-computer~?fx": "https://core.parts/start-menu/save-computer.fx.uri",
- "https://core.parts/start-menu/save-computer~~": "part()",
- "https://core.parts/start-menu/save-computer/onclick.js": "" + (() => {
-  const
-   a = document.createElement('a'),
-   json = JSON.stringify(Δ),
-   js = "onfetch=(Ω=new Proxy({},new Proxy(" + json + ',{get:(Δ,Υ)=>eval(Δ[V="https://core.parts/core.js"])})))["https://core.parts/file.js"]',
-   ourl = URL.createObjectURL(new Blob([json], { type: "application/json" }));
-  a.href = ourl
-  a.download = 'computer.json'
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(ourl)
- }),
- "https://core.parts/start-menu/save-computer?onclick": "https://core.parts/start-menu/save-computer/onclick.js",
-
- "https://core.parts/start-menu/save-computer/app-icon.css": ":host { width: 24px; height: 24px; background: blue; margin: 0 10px }",
- "https://core.parts/start-menu/save-computer/app-icon.fx.uri": "https://core.parts/start-menu/save-computer/app-icon",
- "https://core.parts/start-menu/save-computer/app-icon?css": "https://core.parts/start-menu/save-computer/app-icon.css",
- "https://core.parts/start-menu/save-computer/app-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/save-computer/app-icon~?core": "https://core.parts/~",
- "https://core.parts/start-menu/save-computer/app-icon?core": "https://core.parts/",
- "https://core.parts/start-menu/save-computer/app-icon~?fx": "https://core.parts/start-menu/save-computer/app-icon.fx.uri",
- "https://core.parts/start-menu/save-computer/app-icon~~": "part()",
-
- "https://core.parts/start-menu/save-computer/app-label.css": ":host::after { height: 24px; font: 12px / 24px sans-serif; content: 'Save Computer' }",
- "https://core.parts/start-menu/save-computer/app-label.fx.uri": "https://core.parts/start-menu/save-computer/app-label",
- "https://core.parts/start-menu/save-computer/app-label?css": "https://core.parts/start-menu/save-computer/app-label.css",
- "https://core.parts/start-menu/save-computer/app-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/save-computer/app-label~?core": "https://core.parts/~",
- "https://core.parts/start-menu/save-computer/app-label?core": "https://core.parts/",
- "https://core.parts/start-menu/save-computer/app-label~?fx": "https://core.parts/start-menu/save-computer/app-label.fx.uri",
- "https://core.parts/start-menu/save-computer/app-label~~": "part()",
-
- "https://core.parts/start-menu/restart-computer.css": ":host { position: relative; display: flex; flex-flow: row nowrap; padding: 4px 0; padding-right: 6px } :host(:hover) { background: #00007f; color: white }",
- "https://core.parts/start-menu/restart-computer.manifest.uri": "https://core.parts/start-menu/restart-computer/app-icon https://core.parts/start-menu/restart-computer/app-label",
- "https://core.parts/start-menu/restart-computer.fx.uri": "https://core.parts/start-menu/restart-computer",
- "https://core.parts/start-menu/restart-computer?css": "https://core.parts/start-menu/restart-computer.css",
- "https://core.parts/start-menu/restart-computer?manifest": "https://core.parts/start-menu/restart-computer.manifest.uri",
- "https://core.parts/start-menu/restart-computer~?core": "https://core.parts/~",
- "https://core.parts/start-menu/restart-computer?core": "https://core.parts/",
- "https://core.parts/start-menu/restart-computer~?fx": "https://core.parts/start-menu/restart-computer.fx.uri",
- "https://core.parts/start-menu/restart-computer~~": "part()",
- "https://core.parts/start-menu/restart-computer/onclick.js": "" + (() => { location.reload() }),
- "https://core.parts/start-menu/restart-computer?onclick": "https://core.parts/start-menu/restart-computer/onclick.js",
-
- "https://core.parts/start-menu/restart-computer/app-icon.css": ":host { width: 24px; height: 24px; background: blue; margin: 0 10px }",
- "https://core.parts/start-menu/restart-computer/app-icon.fx.uri": "https://core.parts/start-menu/restart-computer/app-icon",
- "https://core.parts/start-menu/restart-computer/app-icon?css": "https://core.parts/start-menu/restart-computer/app-icon.css",
- "https://core.parts/start-menu/restart-computer/app-icon?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/restart-computer/app-icon~?core": "https://core.parts/~",
- "https://core.parts/start-menu/restart-computer/app-icon?core": "https://core.parts/",
- "https://core.parts/start-menu/restart-computer/app-icon~?fx": "https://core.parts/start-menu/restart-computer/app-icon.fx.uri",
- "https://core.parts/start-menu/restart-computer/app-icon~~": "part()",
-
- "https://core.parts/start-menu/restart-computer/app-label.css": ":host::after { height: 24px; font: 12px / 24px sans-serif; content: 'Restart Computer' }",
- "https://core.parts/start-menu/restart-computer/app-label.fx.uri": "https://core.parts/start-menu/restart-computer/app-label",
- "https://core.parts/start-menu/restart-computer/app-label?css": "https://core.parts/start-menu/restart-computer/app-label.css",
- "https://core.parts/start-menu/restart-computer/app-label?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/start-menu/restart-computer/app-label~?core": "https://core.parts/~",
- "https://core.parts/start-menu/restart-computer/app-label?core": "https://core.parts/",
- "https://core.parts/start-menu/restart-computer/app-label~?fx": "https://core.parts/start-menu/restart-computer/app-label.fx.uri",
- "https://core.parts/start-menu/restart-computer/app-label~~": "part()",
-
- "https://core.parts/taskbar-95.css": ":host { position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: flex; flex-flow: row nowrap; gap: 3px; height: 100%; padding: 4px 2px 2px; background: #c3c3c3; box-shadow: inset 0 1px #c3c3c3, inset 0 2px white }",
- "https://core.parts/taskbar-95.fx.uri": "https://core.parts/taskbar-95",
- "https://core.parts/taskbar-95.manifest.uri~": "`https://core.parts/start-95 ${'' + running_apps ? running_apps + ' ' : ''}https://core.parts/flex-spacer https://core.parts/tray-95`",
- "https://core.parts/taskbar-95.manifest.uri?running_apps": "https://core.parts/os/running_apps.uri",
- "https://core.parts/taskbar-95?css": "https://core.parts/taskbar-95.css",
- "https://core.parts/taskbar-95?manifest": "https://core.parts/taskbar-95.manifest.uri",
- "https://core.parts/taskbar-95~?core": "https://core.parts/~",
- "https://core.parts/taskbar-95?core": "https://core.parts/",
- "https://core.parts/taskbar-95~?fx": "https://core.parts/taskbar-95.fx.uri",
- "https://core.parts/taskbar-95~~": "part()",
- "https://core.parts/tray-95.css?fx": "https://core.parts/tray-95.fx.uri",
- "https://core.parts/tray-95.css~": "`:host { position: relative; display: flex; flex-flow: row nowrap; gap: 3px; box-sizing: border-box; height: 100%; margin: 0; user-select: none; font: 12px sans-serif; line-height: 16px; padding: 3px 4px 3px; text-align: left; background: #c3c3c3; box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a }`",
- "https://core.parts/tray-95.fx.uri": "https://core.parts/tray-95",
- "https://core.parts/tray-95.manifest.uri": "https://core.parts/fullscreen-button https://core.parts/time-h-mm",
- "https://core.parts/tray-95?css": "https://core.parts/tray-95.css",
- "https://core.parts/tray-95?manifest": "https://core.parts/tray-95.manifest.uri",
- "https://core.parts/tray-95~?core": "https://core.parts/~",
- "https://core.parts/tray-95?core": "https://core.parts/",
- "https://core.parts/tray-95~?fx": "https://core.parts/tray-95.fx.uri",
- "https://core.parts/tray-95~~": "part()",
- "https://core.parts/time-h-mm.css?fx": "https://core.parts/time-h-mm.fx.uri",
- "https://core.parts/time-h-mm.css~": "{ const minute = 1000 * 60, delay = minute - (Date.now() % minute); setTimeout(()=>{ β.date = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hourCycle: 'h12' }) }, delay + 5); return `:host::after { content: '${date}'; white-space: nowrap; }`}",
- "https://core.parts/time-h-mm.css?date": "https://core.parts/time-h-mm/date.txt",
- "https://core.parts/time-h-mm.fx.uri": "https://core.parts/time-h-mm",
- "https://core.parts/time-h-mm?css": "https://core.parts/time-h-mm.css",
- "https://core.parts/time-h-mm?manifest": "https://core.parts/empty.manifest.uri",
- "https://core.parts/time-h-mm~?core": "https://core.parts/~",
- "https://core.parts/time-h-mm?core": "https://core.parts/",
- "https://core.parts/time-h-mm~?fx": "https://core.parts/time-h-mm.fx.uri",
- "https://core.parts/time-h-mm~~": "part()",
- "https://core.parts/time-h-mm/date.txt~": "new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hourCycle: 'h12' })",
- "https://core.parts/time-h-mm/date.txt?fx": "https://core.parts/time-h-mm/date.txt.fx.uri",
- "https://core.parts/time-h-mm/date.txt.fx.uri": "https://core.parts/time-h-mm.css",
- "https://core.parts/utils/urlsToTags.js": "" + (manifest => manifest.split(' ').map(url => {
-  if (!url) return ''
-  const { part, path, host } = url.match(/^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<properties>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?(?<rank>~{0,7})$/)?.groups ?? {}
-  return `<${part ?? 'article'}${host !== 'core.parts' ? ` host="${host}"` : ''}${path ? ` path="${path}"` : ''}></${part ?? 'article'}>`
- }).join('\n')),
- "https://core.parts/~?fx": "https://core.parts/.fx.uri",
- "https://core.parts/~?part": "https://core.parts/part.js",
- "https://core.parts/?toTags": "https://core.parts/utils/urlsToTags.js",
- "https://core.parts/?onpointermove": "https://core.parts/onpointermove.js",
- "https://core.parts/?onpointerup": "https://core.parts/onpointerup.js",
- "https://core.parts/onpointermove.js~": "(''+behavior) ? (''+Ω[behavior]) : '()=>{}'",
- "https://core.parts/onpointermove.js?behavior": "https://core.parts/grab-behavior.uri",
- "https://core.parts/onpointerup.js~": "`e => { ${(''+grab) ? `Ω['https://core.parts/grab-behavior.uri'] = ''` : ''}; ${(''+release) ? `Ω['${release}'](e); Ω['https://core.parts/release-behavior.uri'] = ''` : ''} }`",
- "https://core.parts/onpointerup.js?grab": "https://core.parts/grab-behavior.uri",
- "https://core.parts/onpointerup.js?release": "https://core.parts/release-behavior.uri",
- "https://core.parts/grab-behavior.uri": "",
- "https://core.parts/grab-behavior.uri?fx": "https://core.parts/grab-behavior.uri.fx.uri",
- "https://core.parts/grab-behavior.uri.fx.uri": "https://core.parts/onpointermove.js https://core.parts/onpointerup.js",
- "https://core.parts/release-behavior.uri": "",
- "https://core.parts/release-behavior.uri?fx": "https://core.parts/release-behavior.uri.fx.uri",
- "https://core.parts/release-behavior.uri.fx.uri": "https://core.parts/onpointerup.js",
- "https://core.parts/~~": "part()",
- "https://core.parts/client-to-server.js": "" + (({ data: key }) => {
-  if (key === 'restart') registration.unregister()
- }),
- 'https://core.parts/error-404~~': "part()",
- "https://core.parts/wasm/test.js": "WebAssembly.instantiateStreaming(onfetch('https://core.parts/wasm/test.wasm')).then(_ => console.log(_.instance.exports))",
- "https://core.parts/wasm/test.wasm": "AGFzbQEAAAABBwFgA39/fwADAgEABQMBAAEHDgIDbWVtAgAEZmlsbAAACg0BCwAgACABIAL8CwALAAoEbmFtZQIDAQAA",
- "https://core.parts/onload.js": "" + (() => {
-  globalThis.inbox = {}
-  const
-   HOST = document.body,
-   install = node => {
-    if (!('Ω' in node)) return
-    const
-     container = node.attachShadow({ mode: "closed" }),
-     sheet = new CSSStyleSheet(),
-     remanifest = inbox[node.Ω.manifest.headerOf().href] = manifest => {
-      // TODO: fun part! diff algorithm
-      container.innerHTML = ''
-      manifest.split(' ').forEach(url => {
-       if (!url) return ''
-       const
-        child_proxy = Ω[url],
-        { part } = child_proxy.headerOf().groups,
-        child_node = container.appendChild(document.createElement(part));
-       child_node.url = url
-       child_node.Ω = child_proxy;
-       install(child_node)
-      })
-     },
-     restyle = inbox[node.Ω.css.headerOf().href] = css => {
-      sheet.replace(css)
-     };
-    container.adoptedStyleSheets.push(sheet)
-    for (const t of ['onclick', 'onpointerdown', 'onpointerup', 'onpointermove', 'ondblclick']) if (t in node.Ω) node[t] = node.Ω[t]
-    node.ondragstart = e => e.preventDefault()
-    restyle('' + node.Ω.css)
-    remanifest('' + node.Ω.manifest)
-   };
-  HOST.url = location.href
-  HOST.Ω = Ω[HOST.url]
-  install(HOST);
-  oncontextmenu = e => e.preventDefault()
- }),
-}, { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/core.js"]) })))["https://core.parts/file.js"]
-onmessage = Ω['https://core.parts/client-to-server.js']
+   return Object.keys(headers).map(x => urlbase + x).concat(...fileourls).join(' ');
+  })).slice(6),
+  "https://core.parts/os/running/window/demo-folder/explorer-view?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/explorer-view?layout": "https://core.parts/os/running/window/demo-folder/explorer-view.css",
+  "https://core.parts/os/running/window/demo-folder/explorer-view?manifest": "https://core.parts/os/running/window/demo-folder/explorer-view/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/explorer-view~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/explorer-view~?fx": "https://core.parts/os/running/window/demo-folder/explorer-view/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/explorer-view~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/grab.json": "{\"x\":514.88671875,\"y\":328.80859375,\"start\":{\"x\":136.64453125,\"y\":118.046875,\"w\":377.390625,\"h\":212.2890625},\"mode\":\"se-resize\"}",
+  "https://core.parts/os/running/window/demo-folder/maximize-button.css?down": "https://core.parts/os/running/window/demo-folder/maximize-button/down.txt",
+  "https://core.parts/os/running/window/demo-folder/maximize-button.css~": "`:host { position: relative; width: 16px; height: 14px; background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } :host::before { --color: black; display: block; position: absolute; content: ''; width: 9px; height: 9px; top: 2px; left: 3px; box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color) } :host(:hover)::before { --color: blue }`",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/fx.uri": "https://core.parts/os/running/window/demo-folder/maximize-button",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/manifest.uri": "",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/down.txt": "0",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/down/fx.uri": "https://core.parts/os/running/window/demo-folder/maximize-button.css",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/down.txt?fx": "https://core.parts/os/running/window/demo-folder/maximize-button/down/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/onclick.js": "()=>{Ω['https://core.parts/os/running/window/demo-folder/maximized.txt'] = '1' }",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/onpointerdown.js": "e => { e.stopPropagation(); Ω['https://core.parts/os/running/window/demo-folder/maximize-button/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = 'https://core.parts/os/running/window/demo-folder/maximize-button/release.js' }",
+  "https://core.parts/os/running/window/demo-folder/maximize-button/release.js": "e => { Ω['https://core.parts/os/running/window/demo-folder/maximize-button/down.txt'] = '0' }",
+  "https://core.parts/os/running/window/demo-folder/maximize-button?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/maximize-button?layout": "https://core.parts/os/running/window/demo-folder/maximize-button.css",
+  "https://core.parts/os/running/window/demo-folder/maximize-button?manifest": "https://core.parts/os/running/window/demo-folder/maximize-button/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/maximize-button?onclick": "https://core.parts/os/running/window/demo-folder/maximize-button/onclick.js",
+  "https://core.parts/os/running/window/demo-folder/maximize-button?onpointerdown": "https://core.parts/os/running/window/demo-folder/maximize-button/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/maximize-button~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/maximize-button~?fx": "https://core.parts/os/running/window/demo-folder/maximize-button/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/maximize-button~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/maximized.txt": "0",
+  "https://core.parts/os/running/window/demo-folder/maximized/fx.url": "https://core.parts/os/running/window/demo-folder.css https://core.parts/os/running/window/demo-folder/window-controls/manifest.uri https://core.parts/os/running/window/demo-folder/title-bar/ondblclick.js",
+  "https://core.parts/os/running/window/demo-folder/maximized.txt?fx": "https://core.parts/os/running/window/demo-folder/maximized/fx.url",
+  "https://core.parts/os/running/window/demo-folder/menu-bar.css": ":host { height: 18px; display: flex; flex-flow: row nowrap; gap: 16px; align-items: center; padding: 0 4px; }",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/fx.uri": "https://core.parts/os/running/window/demo-folder/menu-bar",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/manifest.uri": "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu.css": ":host { display: flex; flex-flow: row nowrap; } capital-f { text-decoration: underline }",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu/fx.uri": "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu/manifest.uri": "https://core.parts/os/letters/capital-f https://core.parts/os/letters/lowercase-i https://core.parts/os/letters/lowercase-l https://core.parts/os/letters/lowercase-e",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu?layout": "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu.css",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu?manifest": "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu~?fx": "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/menu-bar/file-menu~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/menu-bar?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/menu-bar?layout": "https://core.parts/os/running/window/demo-folder/menu-bar.css",
+  "https://core.parts/os/running/window/demo-folder/menu-bar?manifest": "https://core.parts/os/running/window/demo-folder/menu-bar/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/menu-bar~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/menu-bar~?fx": "https://core.parts/os/running/window/demo-folder/menu-bar/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/menu-bar~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/minimize-button.css?down": "https://core.parts/os/running/window/demo-folder/minimize-button/down.txt",
+  "https://core.parts/os/running/window/demo-folder/minimize-button.css~": "`:host { position: relative; width: 16px; height: 14px; background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } :host::before { --color: black; display: block; position: absolute; content: ''; width: 6px; height: 2px; background: var(--color); top: 9px; left: 4px } :host(:hover)::before { --color: blue }`",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/fx.uri": "https://core.parts/os/running/window/demo-folder/minimize-button",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/manifest.uri": "",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/down.txt": "0",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/down/fx.uri": "https://core.parts/os/running/window/demo-folder/minimize-button.css",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/down.txt?fx": "https://core.parts/os/running/window/demo-folder/minimize-button/down/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/onclick.js": "()=>{Ω['https://core.parts/os/running/window/demo-folder/minimized.txt'] = '1' }",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/onpointerdown.js": "e => { e.stopPropagation(); Ω['https://core.parts/os/running/window/demo-folder/minimize-button/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = 'https://core.parts/os/running/window/demo-folder/minimize-button/release.js' }",
+  "https://core.parts/os/running/window/demo-folder/minimize-button/release.js": "e => { Ω['https://core.parts/os/running/window/demo-folder/minimize-button/down.txt'] = '0' }",
+  "https://core.parts/os/running/window/demo-folder/minimize-button?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/minimize-button?layout": "https://core.parts/os/running/window/demo-folder/minimize-button.css",
+  "https://core.parts/os/running/window/demo-folder/minimize-button?manifest": "https://core.parts/os/running/window/demo-folder/minimize-button/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/minimize-button?onclick": "https://core.parts/os/running/window/demo-folder/minimize-button/onclick.js",
+  "https://core.parts/os/running/window/demo-folder/minimize-button?onpointerdown": "https://core.parts/os/running/window/demo-folder/minimize-button/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/minimize-button~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/minimize-button~?fx": "https://core.parts/os/running/window/demo-folder/minimize-button/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/minimize-button~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/minimized.txt": "0",
+  "https://core.parts/os/running/window/demo-folder/minimized/fx.url": "https://core.parts/os-95/manifest.uri https://core.parts/os/running/window/demo-folder/active.txt https://core.parts/start-menu/demo-folder/onclick.js https://core.parts/os/running/taskbar/demo-folder/onclick.js",
+  "https://core.parts/os/running/window/demo-folder/minimized.txt?fx": "https://core.parts/os/running/window/demo-folder/minimized/fx.url",
+  "https://core.parts/os/running/window/demo-folder/pointer-transform.js": "({ clientX: x, clientY: y }) => {\n  const\n   grabState = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/grab.json']),\n   mousePosition = { x: Math.round(x), y: Math.round(y) };\n  let deltaPosition, finalPosition;\n  if (grabState.mode === 'move') {\n   deltaPosition = { x: grabState.start.x - grabState.x, y: grabState.start.y - grabState.y },\n    finalPosition = { x: Math.max(0, deltaPosition.x + mousePosition.x), y: Math.max(0, deltaPosition.y + mousePosition.y) };\n  }\n  else if (grabState.mode === 'n-resize') finalPosition = { y: Math.max(0, grabState.start.y - grabState.y + mousePosition.y), h: Math.max(64, grabState.start.h + (grabState.y - mousePosition.y)) }\n  else if (grabState.mode === 's-resize') finalPosition = { h: Math.max(64, grabState.start.h - (grabState.y - mousePosition.y)) }\n  else if (grabState.mode === 'e-resize') finalPosition = { w: Math.max(64, grabState.start.w - (grabState.x - mousePosition.x)) }\n  else if (grabState.mode === 'w-resize') finalPosition = { x: Math.max(0, grabState.start.x - grabState.x) + mousePosition.x, w: Math.max(64, grabState.start.w + (grabState.x - mousePosition.x)) }\n  else if (grabState.mode === 'ne-resize') finalPosition = { y: Math.max(0, grabState.start.y - grabState.y + mousePosition.y), h: Math.max(64, grabState.start.h + (grabState.y - mousePosition.y)), w: Math.max(64, grabState.start.w - (grabState.x - mousePosition.x)) }\n  else if (grabState.mode === 'se-resize') finalPosition = { h: Math.max(64, grabState.start.h - (grabState.y - mousePosition.y)), w: Math.max(64, grabState.start.w - (grabState.x - mousePosition.x)) }\n  else if (grabState.mode === 'nw-resize') finalPosition = { y: Math.max(0, grabState.start.y - grabState.y + mousePosition.y), h: Math.max(64, grabState.start.h + (grabState.y - mousePosition.y)), x: Math.max(0, grabState.start.x - grabState.x) + mousePosition.x, w: Math.max(64, grabState.start.w + (grabState.x - mousePosition.x)) }\n  else if (grabState.mode === 'sw-resize') finalPosition = { h: Math.max(64, grabState.start.h - (grabState.y - mousePosition.y)), x: Math.max(0, grabState.start.x - grabState.x) + mousePosition.x, w: Math.max(64, grabState.start.w + (grabState.x - mousePosition.x)) }\n  else throw new ReferenceError('No mode called ' + mode)\n  Ω['https://core.parts/os/running/window/demo-folder/position.json'] = JSON.stringify({ ...grabState.start, ...finalPosition })\n }",
+  "https://core.parts/os/running/window/demo-folder/position.json": "{\"x\":136.64453125,\"y\":118.046875,\"w\":412.50390625,\"h\":245.48046875}",
+  "https://core.parts/os/running/window/demo-folder/position/fx.uri": "https://core.parts/os/running/window/demo-folder.css",
+  "https://core.parts/os/running/window/demo-folder/position.json?fx": "https://core.parts/os/running/window/demo-folder/position/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left.css": ":host { position: absolute; bottom: -2px; left: -2px; width: 6px; height: 6px; cursor: nesw-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-bottom-left",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'sw-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left?layout": "https://core.parts/os/running/window/demo-folder/resize-bottom-left.css",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-bottom-left/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left~?fx": "https://core.parts/os/running/window/demo-folder/resize-bottom-left/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-left~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right.css": ":host { position: absolute; bottom: -2px; right: -2px; width: 6px; height: 6px; cursor: nwse-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-bottom-right",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'se-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right?layout": "https://core.parts/os/running/window/demo-folder/resize-bottom-right.css",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-bottom-right/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right~?fx": "https://core.parts/os/running/window/demo-folder/resize-bottom-right/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom-right~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom.css": ":host { position: absolute; bottom: -2px; left: 4px; right: 4px; height: 6px; cursor: ns-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-bottom",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 's-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom?layout": "https://core.parts/os/running/window/demo-folder/resize-bottom.css",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-bottom/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom~?fx": "https://core.parts/os/running/window/demo-folder/resize-bottom/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-bottom~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-left.css": ":host { position: absolute; bottom: 4px; left: -2px; top: 4px; width: 6px; cursor: ew-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-left/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-left",
+  "https://core.parts/os/running/window/demo-folder/resize-left/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'w-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-left?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-left?layout": "https://core.parts/os/running/window/demo-folder/resize-left.css",
+  "https://core.parts/os/running/window/demo-folder/resize-left?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-left?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-left/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-left~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-left~?fx": "https://core.parts/os/running/window/demo-folder/resize-left/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-left~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-right.css": ":host { position: absolute; bottom: 4px; right: -2px; top: 4px; width: 6px; cursor: ew-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-right/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-right",
+  "https://core.parts/os/running/window/demo-folder/resize-right/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'e-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-right?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-right?layout": "https://core.parts/os/running/window/demo-folder/resize-right.css",
+  "https://core.parts/os/running/window/demo-folder/resize-right?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-right?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-right/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-right~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-right~?fx": "https://core.parts/os/running/window/demo-folder/resize-right/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-right~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left.css": ":host { position: absolute; top: -2px; left: -2px; width: 6px; height: 6px; cursor: nwse-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-top-left",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'nw-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left?layout": "https://core.parts/os/running/window/demo-folder/resize-top-left.css",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-top-left/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left~?fx": "https://core.parts/os/running/window/demo-folder/resize-top-left/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-top-left~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right.css": ":host { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; cursor: nesw-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-top-right",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'ne-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right?layout": "https://core.parts/os/running/window/demo-folder/resize-top-right.css",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-top-right/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right~?fx": "https://core.parts/os/running/window/demo-folder/resize-top-right/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-top-right~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/resize-top.css": ":host { position: absolute; top: -2px; left: 4px; right: 4px; height: 6px; cursor: ns-resize }",
+  "https://core.parts/os/running/window/demo-folder/resize-top/fx.uri": "https://core.parts/os/running/window/demo-folder/resize-top",
+  "https://core.parts/os/running/window/demo-folder/resize-top/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'n-resize' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/resize-top?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/resize-top?layout": "https://core.parts/os/running/window/demo-folder/resize-top.css",
+  "https://core.parts/os/running/window/demo-folder/resize-top?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-top?onpointerdown": "https://core.parts/os/running/window/demo-folder/resize-top/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/resize-top~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/resize-top~?fx": "https://core.parts/os/running/window/demo-folder/resize-top/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/resize-top~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/restore-button.css?down": "https://core.parts/os/running/window/demo-folder/restore-button/down.txt",
+  "https://core.parts/os/running/window/demo-folder/restore-button.css~": "`:host { position: relative; width: 16px; height: 14px; background: #c3c3c3; box-shadow: ${(''+down) === '1' ? 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a' : 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb'} } :host::before, :host::after { --color: black; display: block; position: absolute; content: ''; width: 6px; height: 6px; top: 5px; left: 3px; box-shadow: inset 0 2px var(--color), inset 0 0 0 1px var(--color); background: #c3c3c3 } :host::before { top: 2px; left: 5px } :host(:hover)::before, :host(:hover)::after { --color: blue }`",
+  "https://core.parts/os/running/window/demo-folder/restore-button/fx.uri": "https://core.parts/os/running/window/demo-folder/restore-button",
+  "https://core.parts/os/running/window/demo-folder/restore-button/manifest.uri": "",
+  "https://core.parts/os/running/window/demo-folder/restore-button/down.txt": "0",
+  "https://core.parts/os/running/window/demo-folder/restore-button/down/fx.uri": "https://core.parts/os/running/window/demo-folder/restore-button.css",
+  "https://core.parts/os/running/window/demo-folder/restore-button/down.txt?fx": "https://core.parts/os/running/window/demo-folder/restore-button/down/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/restore-button/onclick.js": "()=>Ω['https://core.parts/os/running/window/demo-folder/maximized.txt'] = '0'",
+  "https://core.parts/os/running/window/demo-folder/restore-button/onpointerdown.js": "e => { e.stopPropagation(); Ω['https://core.parts/os/running/window/demo-folder/restore-button/down.txt'] = '1'; Ω['https://core.parts/release-behavior.uri'] = 'https://core.parts/os/running/window/demo-folder/restore-button/release.js' }",
+  "https://core.parts/os/running/window/demo-folder/restore-button/release.js": "e => { Ω['https://core.parts/os/running/window/demo-folder/restore-button/down.txt'] = '0' }",
+  "https://core.parts/os/running/window/demo-folder/restore-button?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/restore-button?layout": "https://core.parts/os/running/window/demo-folder/restore-button.css",
+  "https://core.parts/os/running/window/demo-folder/restore-button?manifest": "https://core.parts/os/running/window/demo-folder/restore-button/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/restore-button?onclick": "https://core.parts/os/running/window/demo-folder/restore-button/onclick.js",
+  "https://core.parts/os/running/window/demo-folder/restore-button?onpointerdown": "https://core.parts/os/running/window/demo-folder/restore-button/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/restore-button~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/restore-button~?fx": "https://core.parts/os/running/window/demo-folder/restore-button/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/restore-button~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/status-bar.css~": "`:host { padding: 0 3px; height: 17px; box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a; display: flex; flex-flow: row nowrap; align-items: center; } :host::after { content: '${file_count} file${''+file_count === '1' ? '' : 's'}, ${property_count} propert${''+property_count === '1' ? 'y' : 'ies'}' }`",
+  "https://core.parts/os/running/window/demo-folder/status-bar.css?file_count": "https://core.parts/os/running/window/demo-folder/status/files.txt",
+  "https://core.parts/os/running/window/demo-folder/status-bar.css?property_count": "https://core.parts/os/running/window/demo-folder/status/properties.txt",
+  "https://core.parts/os/running/window/demo-folder/status/files.txt": "2",
+  "https://core.parts/os/running/window/demo-folder/status/properties.txt": "1",
+  "https://core.parts/os/running/window/demo-folder/status/files.txt?fx": "https://core.parts/os/running/window/demo-folder/status/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/status/properties.txt?fx": "https://core.parts/os/running/window/demo-folder/status/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/status/fx.uri": "https://core.parts/os/running/window/demo-folder/status-bar.css",
+  "https://core.parts/os/running/window/demo-folder/status-bar/fx.uri": "https://core.parts/os/running/window/demo-folder/status-bar",
+  "https://core.parts/os/running/window/demo-folder/status-bar/manifest.uri": "",
+  "https://core.parts/os/running/window/demo-folder/status-bar?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/status-bar?layout": "https://core.parts/os/running/window/demo-folder/status-bar.css",
+  "https://core.parts/os/running/window/demo-folder/status-bar?manifest": "https://core.parts/os/running/window/demo-folder/status-bar/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/status-bar~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/status-bar~?fx": "https://core.parts/os/running/window/demo-folder/status-bar/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/status-bar~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/title-bar/css-fx.uri": "https://core.parts/os/running/window/demo-folder/title-bar",
+  "https://core.parts/os/running/window/demo-folder/title-bar.css?focus": "https://core.parts/os/running/window/demo-folder/active.txt",
+  "https://core.parts/os/running/window/demo-folder/title-bar.css?fx": "https://core.parts/os/running/window/demo-folder/title-bar/css-fx.uri",
+  "https://core.parts/os/running/window/demo-folder/title-bar.css~": "`:host { background: ${(''+focus) === '1' ? 'rgb(0, 0, 163)' : '#7f7f7f'}; color: white; display: flex; flex-flow: row nowrap; align-items: center; gap: 3px; height: 18px; padding: 0px 2px; box-sizing: border-box; } app-icon { width: 16px; height: 16px }`",
+  "https://core.parts/os/running/window/demo-folder/title-bar/fx.uri": "https://core.parts/os/running/window/demo-folder/title-bar",
+  "https://core.parts/os/running/window/demo-folder/title-bar/manifest.uri": "https://core.parts/start-menu/demo-folder/app-icon https://core.parts/os/running/demo-folder/app-label  https://core.parts/flex-spacer https://core.parts/os/running/window/demo-folder/window-controls",
+  "https://core.parts/os/running/window/demo-folder/title-bar/ondblclick.js?maximized": "https://core.parts/os/running/window/demo-folder/maximized.txt",
+  "https://core.parts/os/running/window/demo-folder/title-bar/ondblclick.js~": "`() => { Ω['https://core.parts/os/running/window/demo-folder/${(''+maximized) === '1' ? 'restore' : 'maximize'}-button/onclick.js']() }`",
+  "https://core.parts/os/running/window/demo-folder/title-bar/onpointerdown.js~": "`({ clientX: x, clientY: y }) => { const start = JSON.parse('' + Ω['https://core.parts/os/running/window/demo-folder/position.json']); Ω['https://core.parts/os/running/window/demo-folder/grab.json'] = JSON.stringify({ x, y, start, mode: 'move' }); Ω['https://core.parts/grab-behavior/src.uri'] = 'https://core.parts/os/running/window/demo-folder/pointer-transform.js' }`",
+  "https://core.parts/os/running/window/demo-folder/title-bar?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/title-bar?layout": "https://core.parts/os/running/window/demo-folder/title-bar.css",
+  "https://core.parts/os/running/window/demo-folder/title-bar?manifest": "https://core.parts/os/running/window/demo-folder/title-bar/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/title-bar?ondblclick": "https://core.parts/os/running/window/demo-folder/title-bar/ondblclick.js",
+  "https://core.parts/os/running/window/demo-folder/title-bar?onpointerdown": "https://core.parts/os/running/window/demo-folder/title-bar/onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder/title-bar~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/title-bar~?fx": "https://core.parts/os/running/window/demo-folder/title-bar/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/title-bar~~": "part()",
+  "https://core.parts/os/running/window/demo-folder/window-controls.css": ":host { display: flex; flex-flow: row nowrap }",
+  "https://core.parts/os/running/window/demo-folder/window-controls/fx.uri": "https://core.parts/os/running/window/demo-folder/window-controls",
+  "https://core.parts/os/running/window/demo-folder/window-controls/manifest.uri?maximized": "https://core.parts/os/running/window/demo-folder/maximized.txt",
+  "https://core.parts/os/running/window/demo-folder/window-controls/manifest.uri~": "`https://core.parts/os/running/window/demo-folder/minimize-button https://core.parts/os/running/window/demo-folder/${(''+maximized) === '1' ? 'restore' : 'maximize'}-button https://core.parts/os/running/window/demo-folder/exit-button`",
+  "https://core.parts/os/running/window/demo-folder/window-controls?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder/window-controls?layout": "https://core.parts/os/running/window/demo-folder/window-controls.css",
+  "https://core.parts/os/running/window/demo-folder/window-controls?manifest": "https://core.parts/os/running/window/demo-folder/window-controls/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder/window-controls~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder/window-controls~?fx": "https://core.parts/os/running/window/demo-folder/window-controls/fx.uri",
+  "https://core.parts/os/running/window/demo-folder/window-controls~~": "part()",
+  "https://core.parts/os/running/window/demo-folder?core": "https://core.parts/",
+  "https://core.parts/os/running/window/demo-folder?layout": "https://core.parts/os/running/window/demo-folder.css",
+  "https://core.parts/os/running/window/demo-folder?manifest": "https://core.parts/os/running/window/demo-folder/manifest.uri",
+  "https://core.parts/os/running/window/demo-folder?onpointerdown": "https://core.parts/os/running/window/demo-folder.onpointerdown.js",
+  "https://core.parts/os/running/window/demo-folder~?core": "https://core.parts/~",
+  "https://core.parts/os/running/window/demo-folder~?fx": "https://core.parts/os/running/window/demo-folder/fx.uri",
+  "https://core.parts/os/running/window/demo-folder~~": "part()",
+  "https://core.parts/os/running_apps.uri": "https://core.parts/os/running/taskbar/demo-folder",
+  "https://core.parts/os/start-menu/open-fx.uri": "https://core.parts/start-95.css https://core.parts/os/task-bar/selected.txt https://core.parts/os-95/manifest.uri",
+  "https://core.parts/os/start-menu/open.txt?fx": "https://core.parts/os/start-menu/open-fx.uri",
+  "https://core.parts/os/start-menu/open.txt?selected": "https://core.parts/os/task-bar/selected.txt",
+  "https://core.parts/os/start-menu/open.txt~": "('' + selected) === '0' ? '1' : '0'",
+  "https://core.parts/os/task-bar/css-height.txt": "28px",
+  "https://core.parts/os/task-bar/css-height/fx.uri": "https://core.parts/os-95.css https://core.parts/start-menu.css",
+  "https://core.parts/os/task-bar/selected.txt": "1",
+  "https://core.parts/os/task-bar/selected/fx.uri": "https://core.parts/os/start-menu/open.txt https://core.parts/os/running/window/demo-folder/active.txt https://core.parts/os/running/window/demo-folder.onpointerdown.js https://core.parts/desktop-95/onclick.js",
+  "https://core.parts/os/task-bar/selected.txt?fx": "https://core.parts/os/task-bar/selected/fx.uri",
+  "https://core.parts/os/task-bar/selected.txt~": "{ let wasOn; const result = ''+(''+fx).split(' ').findIndex(x => {\n  const src = caller,\n   isX = x === src;\n  wasOn = Δ[src] === '1';\n  return (src && wasOn) ? isX : ('' + Ω[x] === '1')\n }); return result }",
+  "https://core.parts/part.js": "() => `\\`<!DOCTYPE html><script src=\"https://core.parts/everything.js\"></script><script>Ω[\"https://core.parts/element.js\"]()</script><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /><style>html, body { overscroll-behavior-y: contain !important; overflow: hidden; }</style>\\``",
+  "https://core.parts/patterns/tagname.regex": "/^[a-z][a-z0-9]*-[a-z0-9-]*$/",
+  "https://core.parts/patterns/url.regex": "/^(?<protocol>https:\\/\\/)(?<host>[^\\/]+?)(?:\\/(?<path>(?:[^\\s.~?\\/]+?\\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\\s~?\\/]*)\\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\\s.~?\\/]+))|\\/(?<index>(?:[^\\s.~?\\/]+?\\/)*))(?:~{0,6}\\?(?<property>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\\d]*\\.?[\\d]*)(?<properties>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\\d]*\\.?[\\d]*)+)?$)?)?(?<rank>~{0,7})$/",
+  "https://core.parts/release-behavior.uri": "",
+  "https://core.parts/release-behavior/fx.uri": "https://core.parts/onpointerup.js",
+  "https://core.parts/release-behavior.uri?fx": "https://core.parts/release-behavior/fx.uri",
+  "https://core.parts/start-95.css?fx": "https://core.parts/start-95/fx.uri",
+  "https://core.parts/start-95.css?open": "https://core.parts/os/start-menu/open.txt",
+  "https://core.parts/start-95.css~": "`:host { flex: 0 0; position: relative; width: 100%; box-sizing: border-box; height: 100%; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: bold 11px / 16px sans-serif; box-sizing: border-box; padding: ${('' + open) === '0' ? 3 : 4}px 4px 2px; text-align: left; background: #c3c3c3; box-shadow: ${('' + open) === '0' ? 'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb' : 'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a'} } ${('' + open) === '1' ? ':host::after { content: \"\"; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; border: 1px dotted black; pointer-events: none; }' : ''}`",
+  "https://core.parts/start-95/fx.uri": "https://core.parts/start-95",
+  "https://core.parts/start-95/manifest.uri": "https://core.parts/start-icon https://core.parts/start-label",
+  "https://core.parts/start-95/manifest.uri?open": "https://core.parts/os/start-menu/open.txt",
+  "https://core.parts/start-95/onclick.js": "() => Ω['https://core.parts/os/start-menu/open.txt'] = '1'",
+  "https://core.parts/start-95?core": "https://core.parts/",
+  "https://core.parts/start-95?layout": "https://core.parts/start-95.css",
+  "https://core.parts/start-95?manifest": "https://core.parts/start-95/manifest.uri",
+  "https://core.parts/start-95?onclick": "https://core.parts/start-95/onclick.js",
+  "https://core.parts/start-95~?core": "https://core.parts/~",
+  "https://core.parts/start-95~?fx": "https://core.parts/start-95/fx.uri",
+  "https://core.parts/start-95~~": "part()",
+  "https://core.parts/start-icon.css~": "`:host { position: relative; box-sizing: border-box; height: 100%; margin: 0; background: url(data:image/png;base64,${icon}); background-size: 16px; width: 16px; height: 16px }`",
+  "https://core.parts/start-icon.css?icon": "https://core.parts/apple-touch-icon.png",
+  "https://core.parts/start-icon/fx.uri": "https://core.parts/start-icon",
+  "https://core.parts/start-icon?core": "https://core.parts/",
+  "https://core.parts/start-icon?layout": "https://core.parts/start-icon.css",
+  "https://core.parts/start-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-icon~?fx": "https://core.parts/start-icon/fx.uri",
+  "https://core.parts/start-icon~~": "part()",
+  "https://core.parts/start-label.css": ":host { position: relative; box-sizing: border-box; margin: 0; height: 16px } :host::before { content: 'Start' }",
+  "https://core.parts/start-label/fx.uri": "https://core.parts/start-label",
+  "https://core.parts/start-label?core": "https://core.parts/",
+  "https://core.parts/start-label?layout": "https://core.parts/start-label.css",
+  "https://core.parts/start-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-label~?core": "https://core.parts/~",
+  "https://core.parts/start-label~?fx": "https://core.parts/start-label/fx.uri",
+  "https://core.parts/start-label~~": "part()",
+  "https://core.parts/start-menu.css?fx": "https://core.parts/start-menu/fx.uri",
+  "https://core.parts/start-menu.css?height": "https://core.parts/os/task-bar/css-height.txt",
+  "https://core.parts/start-menu.css~": "`:host { position: relative; min-width: 164px; display: flex; flex-flow: column nowrap; position: absolute; left: 2px; bottom: calc(${height} - 4px); user-select: none; line-height: 18px; text-align: left; background: #c3c3c3; box-sizing: border-box; padding: 3px 3px 3px 24px; text-align: left; background: #c3c3c3; box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb } :host::after { pointer-events: none; display: block; content: ''; position: absolute; left: 3px; top: 3px; bottom: 3px; background: #7f7f7f; width: 21px }`",
+  "https://core.parts/start-menu/fx.uri": "https://core.parts/start-menu",
+  "https://core.parts/start-menu/manifest.uri": "https://core.parts/start-menu/demo-folder https://core.parts/start-menu/network-folder https://core.parts/os/horizontal-line https://core.parts/start-menu/restart-server https://core.parts/start-menu/save-computer https://core.parts/start-menu/restart-computer https://core.parts/start-menu/save-computer-as",
+  "https://core.parts/start-menu/click-to-close.css": ":host { position: fixed; display: block; left: 0; top: 0; bottom: 0; right: 0; content: '' }",
+  "https://core.parts/start-menu/click-to-close/fx.uri": "https://core.parts/start-menu/click-to-close",
+  "https://core.parts/start-menu/click-to-close/onclick.js": "() => Ω['https://core.parts/os/start-menu/open.txt'] = '0'",
+  "https://core.parts/start-menu/click-to-close?core": "https://core.parts/",
+  "https://core.parts/start-menu/click-to-close?layout": "https://core.parts/start-menu/click-to-close.css",
+  "https://core.parts/start-menu/click-to-close?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/click-to-close?onclick": "https://core.parts/start-menu/click-to-close/onclick.js",
+  "https://core.parts/start-menu/click-to-close~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/click-to-close~?fx": "https://core.parts/start-menu/click-to-close/fx.uri",
+  "https://core.parts/start-menu/click-to-close~~": "part()",
+  "https://core.parts/start-menu/demo-folder.css": ":host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0 } :host(:hover) { background: #00007f; color: white } app-icon { width: 24px; height: 24px; margin: 0 10px; --size: 24px }",
+  "https://core.parts/start-menu/demo-folder/fx.uri": "https://core.parts/start-menu/demo-folder",
+  "https://core.parts/start-menu/demo-folder/manifest.uri": "https://core.parts/start-menu/demo-folder/app-icon https://core.parts/start-menu/demo-folder/app-label",
+  "https://core.parts/start-menu/demo-folder/app-icon.css": ":host { --size: 16px } :host::before { content: '\u{1F4C1}'; font-size: var(--size); line-height: var(--size) }",
+  "https://core.parts/start-menu/demo-folder/app-icon/fx.uri": "https://core.parts/start-menu/demo-folder/app-icon",
+  "https://core.parts/start-menu/demo-folder/app-icon?core": "https://core.parts/",
+  "https://core.parts/start-menu/demo-folder/app-icon?layout": "https://core.parts/start-menu/demo-folder/app-icon.css",
+  "https://core.parts/start-menu/demo-folder/app-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/demo-folder/app-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/demo-folder/app-icon~?fx": "https://core.parts/start-menu/demo-folder/app-icon/fx.uri",
+  "https://core.parts/start-menu/demo-folder/app-icon~~": "part()",
+  "https://core.parts/start-menu/demo-folder/app-label.css": ":host::after { height: 24px; content: 'demo' }",
+  "https://core.parts/start-menu/demo-folder/app-label/fx.uri": "https://core.parts/start-menu/demo-folder/app-label",
+  "https://core.parts/start-menu/demo-folder/app-label?core": "https://core.parts/",
+  "https://core.parts/start-menu/demo-folder/app-label?layout": "https://core.parts/start-menu/demo-folder/app-label.css",
+  "https://core.parts/start-menu/demo-folder/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/demo-folder/app-label~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/demo-folder/app-label~?fx": "https://core.parts/start-menu/demo-folder/app-label/fx.uri",
+  "https://core.parts/start-menu/demo-folder/app-label~~": "part()",
+  "https://core.parts/start-menu/demo-folder/onclick.js?index": "https://core.parts/os/running/taskbar/demo-folder/index.txt",
+  "https://core.parts/start-menu/demo-folder/onclick.js?minimized": "https://core.parts/os/running/window/demo-folder/minimized.txt",
+  "https://core.parts/start-menu/demo-folder/onclick.js?selected": "https://core.parts/os/task-bar/selected.txt",
+  "https://core.parts/start-menu/demo-folder/onclick.js~": "`e => { ${''+minimized === '1' ? `Ω['${minimized.headerOf().href}'] = '0'; ` : `` }Ω['${selected.headerOf().href}'] = '${''+index}' }`",
+  "https://core.parts/start-menu/demo-folder?core": "https://core.parts/",
+  "https://core.parts/start-menu/demo-folder?layout": "https://core.parts/start-menu/demo-folder.css",
+  "https://core.parts/start-menu/demo-folder?manifest": "https://core.parts/start-menu/demo-folder/manifest.uri",
+  "https://core.parts/start-menu/demo-folder?onclick": "https://core.parts/start-menu/demo-folder/onclick.js",
+  "https://core.parts/start-menu/demo-folder~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/demo-folder~?fx": "https://core.parts/start-menu/demo-folder/fx.uri",
+  "https://core.parts/start-menu/demo-folder~~": "part()",
+  "https://core.parts/start-menu/network-folder.css": ":host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0 } :host(:hover) { background: #00007f; color: white } app-icon { width: 24px; height: 24px; margin: 0 10px; --size: 24px }",
+  "https://core.parts/start-menu/network-folder/fx.uri": "https://core.parts/start-menu/network-folder",
+  "https://core.parts/start-menu/network-folder/manifest.uri": "https://core.parts/start-menu/network-folder/app-icon https://core.parts/start-menu/network-folder/app-label",
+  "https://core.parts/start-menu/network-folder/app-icon.css": ":host { --size: 16px } :host::before { content: '\u{1F52D}'; font-size: var(--size); line-height: var(--size) }",
+  "https://core.parts/start-menu/network-folder/app-icon/fx.uri": "https://core.parts/start-menu/network-folder/app-icon",
+  "https://core.parts/start-menu/network-folder/app-icon?core": "https://core.parts/",
+  "https://core.parts/start-menu/network-folder/app-icon?layout": "https://core.parts/start-menu/network-folder/app-icon.css",
+  "https://core.parts/start-menu/network-folder/app-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/network-folder/app-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/network-folder/app-icon~?fx": "https://core.parts/start-menu/network-folder/app-icon/fx.uri",
+  "https://core.parts/start-menu/network-folder/app-icon~~": "part()",
+  "https://core.parts/start-menu/network-folder/app-label.css": ":host::after { height: 24px; content: 'Network' }",
+  "https://core.parts/start-menu/network-folder/app-label/fx.uri": "https://core.parts/start-menu/network-folder/app-label",
+  "https://core.parts/start-menu/network-folder/app-label?core": "https://core.parts/",
+  "https://core.parts/start-menu/network-folder/app-label?layout": "https://core.parts/start-menu/network-folder/app-label.css",
+  "https://core.parts/start-menu/network-folder/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/network-folder/app-label~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/network-folder/app-label~?fx": "https://core.parts/start-menu/network-folder/app-label/fx.uri",
+  "https://core.parts/start-menu/network-folder/app-label~~": "part()",
+  "https://core.parts/start-menu/network-folder?core": "https://core.parts/",
+  "https://core.parts/start-menu/network-folder?layout": "https://core.parts/start-menu/network-folder.css",
+  "https://core.parts/start-menu/network-folder?manifest": "https://core.parts/start-menu/network-folder/manifest.uri",
+  "https://core.parts/start-menu/network-folder~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/network-folder~?fx": "https://core.parts/start-menu/network-folder/fx.uri",
+  "https://core.parts/start-menu/network-folder~~": "part()",
+  "https://core.parts/start-menu/restart-computer.css": ":host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0; padding-right: 6px } :host(:hover) { background: #00007f; color: white } app-icon { width: 24px; height: 24px; margin: 0 10px; --size: 24px }",
+  "https://core.parts/start-menu/restart-computer/fx.uri": "https://core.parts/start-menu/restart-computer",
+  "https://core.parts/start-menu/restart-computer/manifest.uri": "https://core.parts/start-menu/restart-computer/app-icon https://core.parts/start-menu/restart-computer/app-label",
+  "https://core.parts/start-menu/restart-computer/app-icon.css": ":host { background: blue }",
+  "https://core.parts/start-menu/restart-computer/app-icon/fx.uri": "https://core.parts/start-menu/restart-computer/app-icon",
+  "https://core.parts/start-menu/restart-computer/app-icon?core": "https://core.parts/",
+  "https://core.parts/start-menu/restart-computer/app-icon?layout": "https://core.parts/start-menu/restart-computer/app-icon.css",
+  "https://core.parts/start-menu/restart-computer/app-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/restart-computer/app-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/restart-computer/app-icon~?fx": "https://core.parts/start-menu/restart-computer/app-icon/fx.uri",
+  "https://core.parts/start-menu/restart-computer/app-icon~~": "part()",
+  "https://core.parts/start-menu/restart-computer/app-label.css": ":host::after { height: 24px; content: 'Load Last Save' }",
+  "https://core.parts/start-menu/restart-computer/app-label/fx.uri": "https://core.parts/start-menu/restart-computer/app-label",
+  "https://core.parts/start-menu/restart-computer/app-label?core": "https://core.parts/",
+  "https://core.parts/start-menu/restart-computer/app-label?layout": "https://core.parts/start-menu/restart-computer/app-label.css",
+  "https://core.parts/start-menu/restart-computer/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/restart-computer/app-label~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/restart-computer/app-label~?fx": "https://core.parts/start-menu/restart-computer/app-label/fx.uri",
+  "https://core.parts/start-menu/restart-computer/app-label~~": "part()",
+  "https://core.parts/start-menu/restart-computer/onclick.js": "() => { location.reload() }",
+  "https://core.parts/start-menu/restart-computer?core": "https://core.parts/",
+  "https://core.parts/start-menu/restart-computer?layout": "https://core.parts/start-menu/restart-computer.css",
+  "https://core.parts/start-menu/restart-computer?manifest": "https://core.parts/start-menu/restart-computer/manifest.uri",
+  "https://core.parts/start-menu/restart-computer?onclick": "https://core.parts/start-menu/restart-computer/onclick.js",
+  "https://core.parts/start-menu/restart-computer~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/restart-computer~?fx": "https://core.parts/start-menu/restart-computer/fx.uri",
+  "https://core.parts/start-menu/restart-computer~~": "part()",
+  "https://core.parts/start-menu/restart-server.css": ":host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0 } :host(:hover) { background: #00007f; color: white } app-icon { width: 24px; height: 24px; margin: 0 10px; --size: 24px }",
+  "https://core.parts/start-menu/restart-server/fx.uri": "https://core.parts/start-menu/restart-server",
+  "https://core.parts/start-menu/restart-server/manifest.uri": "https://core.parts/start-menu/restart-server/app-icon https://core.parts/start-menu/restart-server/app-label",
+  "https://core.parts/start-menu/restart-server/app-icon.css": ":host { background: grey }",
+  "https://core.parts/start-menu/restart-server/app-icon/fx.uri": "https://core.parts/start-menu/restart-server/app-icon",
+  "https://core.parts/start-menu/restart-server/app-icon?core": "https://core.parts/",
+  "https://core.parts/start-menu/restart-server/app-icon?layout": "https://core.parts/start-menu/restart-server/app-icon.css",
+  "https://core.parts/start-menu/restart-server/app-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/restart-server/app-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/restart-server/app-icon~?fx": "https://core.parts/start-menu/restart-server/app-icon/fx.uri",
+  "https://core.parts/start-menu/restart-server/app-icon~~": "part()",
+  "https://core.parts/start-menu/restart-server/app-label.css": ":host::after { height: 24px; content: 'Factory Reset' }",
+  "https://core.parts/start-menu/restart-server/app-label/fx.uri": "https://core.parts/start-menu/restart-server/app-label",
+  "https://core.parts/start-menu/restart-server/app-label?core": "https://core.parts/",
+  "https://core.parts/start-menu/restart-server/app-label?layout": "https://core.parts/start-menu/restart-server/app-label.css",
+  "https://core.parts/start-menu/restart-server/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/restart-server/app-label~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/restart-server/app-label~?fx": "https://core.parts/start-menu/restart-server/app-label/fx.uri",
+  "https://core.parts/start-menu/restart-server/app-label~~": "part()",
+  "https://core.parts/start-menu/restart-server/onclick.js": "() => { navigator.serviceWorker.controller.postMessage('restart'); setTimeout(()=>location.reload(),1000) }",
+  "https://core.parts/start-menu/restart-server?core": "https://core.parts/",
+  "https://core.parts/start-menu/restart-server?layout": "https://core.parts/start-menu/restart-server.css",
+  "https://core.parts/start-menu/restart-server?manifest": "https://core.parts/start-menu/restart-server/manifest.uri",
+  "https://core.parts/start-menu/restart-server?onclick": "https://core.parts/start-menu/restart-server/onclick.js",
+  "https://core.parts/start-menu/restart-server~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/restart-server~?fx": "https://core.parts/start-menu/restart-server/fx.uri",
+  "https://core.parts/start-menu/restart-server~~": "part()",
+  "https://core.parts/start-menu/save-computer-as.css": ":host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0; padding-right: 6px } :host(:hover) { background: #00007f; color: white } app-icon { width: 24px; height: 24px; margin: 0 10px; --size: 24px }",
+  "https://core.parts/start-menu/save-computer-as/fx.uri": "https://core.parts/start-menu/save-computer-as",
+  "https://core.parts/start-menu/save-computer-as/manifest.uri": "https://core.parts/start-menu/save-computer-as/app-icon https://core.parts/start-menu/save-computer-as/app-label",
+  "https://core.parts/start-menu/save-computer-as/app-icon.css": ":host {background: blue }",
+  "https://core.parts/start-menu/save-computer-as/app-icon/fx.uri": "https://core.parts/start-menu/save-computer-as/app-icon",
+  "https://core.parts/start-menu/save-computer-as/app-icon?core": "https://core.parts/",
+  "https://core.parts/start-menu/save-computer-as/app-icon?layout": "https://core.parts/start-menu/save-computer-as/app-icon.css",
+  "https://core.parts/start-menu/save-computer-as/app-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/save-computer-as/app-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/save-computer-as/app-icon~?fx": "https://core.parts/start-menu/save-computer-as/app-icon/fx.uri",
+  "https://core.parts/start-menu/save-computer-as/app-icon~~": "part()",
+  "https://core.parts/start-menu/save-computer-as/app-label.css": ":host::after { height: 24px; content: 'Download' }",
+  "https://core.parts/start-menu/save-computer-as/app-label/fx.uri": "https://core.parts/start-menu/save-computer-as/app-label",
+  "https://core.parts/start-menu/save-computer-as/app-label?core": "https://core.parts/",
+  "https://core.parts/start-menu/save-computer-as/app-label?layout": "https://core.parts/start-menu/save-computer-as/app-label.css",
+  "https://core.parts/start-menu/save-computer-as/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/save-computer-as/app-label~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/save-computer-as/app-label~?fx": "https://core.parts/start-menu/save-computer-as/app-label/fx.uri",
+  "https://core.parts/start-menu/save-computer-as/app-label~~": "part()",
+  "https://core.parts/start-menu/save-computer-as/onclick.js": "() => {\n   Ω['https://core.parts/os/start-menu/open.txt'] = '0'\n   delete Δ['https://core.parts/time-h-mm/date.txt']\n   delete Δ['https://core.parts/time-h-mm.css']\n   const\n    a = document.createElement('a'),\n    json = JSON.stringify(Object.keys(Δ).sort().reduce((temp_obj, key) => { temp_obj[key] = Δ[key]; return temp_obj }, {})).replace(/\",\"/g,'\",\\n  \"').replace(/^{/s,'\\n {\\n  ').replace(/}$/s, '\\n }'),\n    js = `var causality={},onfetch=(Ω=new Proxy({},new Proxy(${json},\\n {get:(Δ,Υ)=>eval(Δ[V=\"https://core.parts/core.js\"])})))[\"https://core.parts/file.js\"]\\nonmessage=Ω[\"https://core.parts/client-to-server.js\"]`,\n    ourl = URL.createObjectURL(new Blob([js], { type: \"text/javascript\" }));\n   a.href = ourl\n   a.download = 'everything.js'\n   document.body.appendChild(a)\n  a.click();\n   a.remove()\n   URL.revokeObjectURL(ourl)\n }",
+  "https://core.parts/start-menu/save-computer-as?core": "https://core.parts/",
+  "https://core.parts/start-menu/save-computer-as?layout": "https://core.parts/start-menu/save-computer-as.css",
+  "https://core.parts/start-menu/save-computer-as?manifest": "https://core.parts/start-menu/save-computer-as/manifest.uri",
+  "https://core.parts/start-menu/save-computer-as?onclick": "https://core.parts/start-menu/save-computer-as/onclick.js",
+  "https://core.parts/start-menu/save-computer-as~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/save-computer-as~?fx": "https://core.parts/start-menu/save-computer-as/fx.uri",
+  "https://core.parts/start-menu/save-computer-as~~": "part()",
+  "https://core.parts/start-menu/save-computer.css": ":host { position: relative; display: flex; flex-flow: row nowrap; align-items: center; padding: 4px 0; padding-right: 6px } :host(:hover) { background: #00007f; color: white } app-icon { width: 24px; height: 24px; margin: 0 10px; --size: 24px }",
+  "https://core.parts/start-menu/save-computer/fx.uri": "https://core.parts/start-menu/save-computer",
+  "https://core.parts/start-menu/save-computer/manifest.uri": "https://core.parts/start-menu/save-computer/app-icon https://core.parts/start-menu/save-computer/app-label",
+  "https://core.parts/start-menu/save-computer/app-icon.css": ":host { background: blue }",
+  "https://core.parts/start-menu/save-computer/app-icon/fx.uri": "https://core.parts/start-menu/save-computer/app-icon",
+  "https://core.parts/start-menu/save-computer/app-icon?core": "https://core.parts/",
+  "https://core.parts/start-menu/save-computer/app-icon?layout": "https://core.parts/start-menu/save-computer/app-icon.css",
+  "https://core.parts/start-menu/save-computer/app-icon?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/save-computer/app-icon~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/save-computer/app-icon~?fx": "https://core.parts/start-menu/save-computer/app-icon/fx.uri",
+  "https://core.parts/start-menu/save-computer/app-icon~~": "part()",
+  "https://core.parts/start-menu/save-computer/app-label.css": ":host::after { height: 24px; content: 'Quick Save' }",
+  "https://core.parts/start-menu/save-computer/app-label/fx.uri": "https://core.parts/start-menu/save-computer/app-label",
+  "https://core.parts/start-menu/save-computer/app-label?core": "https://core.parts/",
+  "https://core.parts/start-menu/save-computer/app-label?layout": "https://core.parts/start-menu/save-computer/app-label.css",
+  "https://core.parts/start-menu/save-computer/app-label?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/start-menu/save-computer/app-label~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/save-computer/app-label~?fx": "https://core.parts/start-menu/save-computer/app-label/fx.uri",
+  "https://core.parts/start-menu/save-computer/app-label~~": "part()",
+  "https://core.parts/start-menu/save-computer/onclick.js": "() => {\n   Ω['https://core.parts/os/start-menu/open.txt'] = '0'\n   delete Δ['https://core.parts/time-h-mm/date.txt']\n   delete Δ['https://core.parts/time-h-mm.css']\n   navigator.serviceWorker.controller.postMessage(Δ)\n }",
+  "https://core.parts/start-menu/save-computer?core": "https://core.parts/",
+  "https://core.parts/start-menu/save-computer?layout": "https://core.parts/start-menu/save-computer.css",
+  "https://core.parts/start-menu/save-computer?manifest": "https://core.parts/start-menu/save-computer/manifest.uri",
+  "https://core.parts/start-menu/save-computer?onclick": "https://core.parts/start-menu/save-computer/onclick.js",
+  "https://core.parts/start-menu/save-computer~?core": "https://core.parts/~",
+  "https://core.parts/start-menu/save-computer~?fx": "https://core.parts/start-menu/save-computer/fx.uri",
+  "https://core.parts/start-menu/save-computer~~": "part()",
+  "https://core.parts/start-menu?core": "https://core.parts/",
+  "https://core.parts/start-menu?layout": "https://core.parts/start-menu.css",
+  "https://core.parts/start-menu?manifest": "https://core.parts/start-menu/manifest.uri",
+  "https://core.parts/start-menu~?core": "https://core.parts/~",
+  "https://core.parts/start-menu~?fx": "https://core.parts/start-menu/fx.uri",
+  "https://core.parts/start-menu~~": "part()",
+  "https://core.parts/taskbar-95.css": ":host { position: relative; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: flex; flex-flow: row nowrap; gap: 3px; height: 100%; padding: 4px 2px 2px; background: #c3c3c3; box-shadow: inset 0 1px #c3c3c3, inset 0 2px white }",
+  "https://core.parts/taskbar-95/fx.uri": "https://core.parts/taskbar-95",
+  "https://core.parts/taskbar-95/manifest.uri?running_apps": "https://core.parts/os/running_apps.uri",
+  "https://core.parts/taskbar-95/manifest.uri~": "`https://core.parts/start-95 ${'' + running_apps ? running_apps + ' ' : ''}https://core.parts/flex-spacer https://core.parts/tray-95`",
+  "https://core.parts/taskbar-95?core": "https://core.parts/",
+  "https://core.parts/taskbar-95?layout": "https://core.parts/taskbar-95.css",
+  "https://core.parts/taskbar-95?manifest": "https://core.parts/taskbar-95/manifest.uri",
+  "https://core.parts/taskbar-95~?core": "https://core.parts/~",
+  "https://core.parts/taskbar-95~?fx": "https://core.parts/taskbar-95/fx.uri",
+  "https://core.parts/taskbar-95~~": "part()",
+  "https://core.parts/time-h-mm.css?date": "https://core.parts/time-h-mm/date.txt",
+  "https://core.parts/time-h-mm.css?fx": "https://core.parts/time-h-mm/fx.uri",
+  "https://core.parts/time-h-mm.css~": "{ const minute = 1000 * 60, delay = minute - (Date.now() % minute); setTimeout(()=>{ β.date = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hourCycle: 'h12' }) }, delay + 5); return `:host::after { content: '${date}'; white-space: nowrap; }`}",
+  "https://core.parts/time-h-mm?core": "https://core.parts/",
+  "https://core.parts/time-h-mm?layout": "https://core.parts/time-h-mm.css",
+  "https://core.parts/time-h-mm?manifest": "https://core.parts/empty/manifest.uri",
+  "https://core.parts/time-h-mm~?core": "https://core.parts/~",
+  "https://core.parts/time-h-mm~?fx": "https://core.parts/time-h-mm/fx.uri",
+  "https://core.parts/time-h-mm~~": "part()",
+  "https://core.parts/time-h-mm/fx.uri": "https://core.parts/time-h-mm",
+  "https://core.parts/time-h-mm/date/fx.uri": "https://core.parts/time-h-mm.css",
+  "https://core.parts/time-h-mm/date.txt?fx": "https://core.parts/time-h-mm/date/fx.uri",
+  "https://core.parts/time-h-mm/date.txt~": "new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hourCycle: 'h12' })",
+  "https://core.parts/tray-95.css?fx": "https://core.parts/tray-95/fx.uri",
+  "https://core.parts/tray-95.css~": "`:host { position: relative; display: flex; flex-flow: row nowrap; gap: 3px; box-sizing: border-box; height: 100%; margin: 0; user-select: none; padding: 3px 4px 3px; text-align: left; background: #c3c3c3; box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a }`",
+  "https://core.parts/tray-95/fx.uri": "https://core.parts/tray-95",
+  "https://core.parts/tray-95/manifest.uri": "https://core.parts/fullscreen-button https://core.parts/time-h-mm",
+  "https://core.parts/tray-95?core": "https://core.parts/",
+  "https://core.parts/tray-95?layout": "https://core.parts/tray-95.css",
+  "https://core.parts/tray-95?manifest": "https://core.parts/tray-95/manifest.uri",
+  "https://core.parts/tray-95~?core": "https://core.parts/~",
+  "https://core.parts/tray-95~?fx": "https://core.parts/tray-95/fx.uri",
+  "https://core.parts/tray-95~~": "part()",
+  "https://core.parts/utils/urlsToTags.js": "manifest => manifest.split(' ').map(url => {\n  if (!url) return ''\n  const { part, path, host } = url.match(/^(?<protocol>https:\\/\\/)(?<host>[^\\/]+?)(?:\\/(?<path>(?:[^\\s.~?\\/]+?\\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\\s~?\\/]*)\\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\\s.~?\\/]+))|\\/(?<index>(?:[^\\s.~?\\/]+?\\/)*))(?:~{0,6}\\?(?<property>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\\d]*\\.?[\\d]*)(?<properties>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\\d]*\\.?[\\d]*)+)?$)?)?(?<rank>~{0,7})$/)?.groups ?? {}\n  return `<${part ?? 'article'}${host !== 'core.parts' ? ` host=\"${host}\"` : ''}${path ? ` path=\"${path}\"` : ''}></${part ?? 'article'}>`\n }).join('\\n')",
+  "https://core.parts/wasm/test.js": "WebAssembly.instantiateStreaming(onfetch('https://core.parts/wasm/test.wasm')).then(_ => console.log(_.instance.exports))",
+  "https://core.parts/wasm/test.wasm": "AGFzbQEAAAABBwFgA39/fwADAgEABQMBAAEHDgIDbWVtAgAEZmlsbAAACg0BCwAgACABIAL8CwALAAoEbmFtZQIDAQAA",
+  "https://core.parts/~?fx": "https://core.parts/fx.uri",
+  "https://core.parts/~?part": "https://core.parts/part.js",
+  "https://core.parts/~~": "part()"
+ },
+ { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/core.js"]) })))["https://core.parts/file.js"]
+onmessage = Ω["https://core.parts/client-to-server.js"]
