@@ -1,23 +1,48 @@
 <style>
  :root {
   position: relative;
+  margin-bottom: 100vh;
+  display: flex;
+  flex-flow: row nowrap;
  }
+
+ body,
+ :root::after {
+  flex: 0 0 100vw;
+  height: 100vh;
+  width: 100vw;
+ }
+
  body {
+  position: relative;
   overflow: scroll;
   margin: 0;
-  height: 6000px;
-  width: 6000px;
  }
- body>output {
+
+ :root::after {
+  content: '';
+  display: block;
+ }
+
+ #debug {
   position: fixed;
-  top: 18px;
-  left: 18px;
-  padding: 12px;
-  box-sizing: border-box;
-  background: #3337;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 8px;
+  border-radius: 8px;
+  gap: 8px;
+  background: #eee
+ }
+
+ #debug>output {
+  background: #123;
   border-radius: 4px;
+  padding: 8px;
   color: white;
  }
+
  canvas {
   cursor: none;
   position: fixed;
@@ -29,6 +54,9 @@
 </style>
 <script>
  class Mesh {
+  static get companyId() {
+   return 'mesh';
+  }
   #mode = 'shade'
   constructor(shape, transform, name = 'mesh', override = false) {
    this.shape = shape
@@ -76,6 +104,9 @@
   }
  }
  class Group {
+  static get companyId() {
+   return 'group'
+  }
   #mode = 'shade'
   constructor(children) {
    this.children = children.filter(child => !!child)
@@ -88,7 +119,7 @@
    return this.children.map(getter).flat()
   }
   forEach(callback) {
-   this.children.forEach(child => callback(child) );
+   this.children.forEach(child => callback(child));
   }
   get g() {
    return this.map(m => m.g)
@@ -107,6 +138,9 @@
   }
  }
  class Camera {
+  static get companyId() {
+   return 'lens'
+  }
   #core = undefined
   x = 99
   y = 99
@@ -119,16 +153,25 @@
   fov = 35
   near = 1
   far = 100000
-  set pos({x,y,z}) {
-   this.cache.push('pos x',x)
-   this.cache.push('pos y',y)
-   this.cache.push('pos z',z)
+  set pos({
+   x,
+   y,
+   z
+  }) {
+   if (x > this.x) x = this.x;
+   if (x < 0) x = 0;
+   if (y > this.y) y = this.y;
+   if (y < 0) y = 0;
+   this.cache.push('pos x', x)
+   this.cache.push('pos y', y)
+   this.cache.push('pos z', z)
+   this.core.root.parentElement.scroll(x, y)
   }
   get pos() {
    return {
-    x: this.cache.pull('pos x',150),
-    y: this.cache.pull('pos y',60),
-    z: this.cache.pull('pos z',50)
+    x: this.cache.pull('pos x', 150),
+    y: this.cache.pull('pos y', 60),
+    z: this.cache.pull('pos z', 50)
    };
   }
   constructor(core) {
@@ -201,13 +244,13 @@
   }
   get rootView() {
    return MDN.multiplyArrayOfMatrices([
-    MDN.translateMatrix(0, 0, this.y*-Math.SQRT1_2),
+    MDN.translateMatrix(0, 0, this.y * -Math.SQRT1_2),
     MDN.rotateYMatrix(Math.PI),
    ])
   }
   get proj() {
    let
-    out = [], // 900:640, 727:-514, 337:238, 150:105, 
+    out = [],
     fovy = 180 - this.fov,
     aspect = this.aspect,
     near = this.near,
@@ -242,6 +285,9 @@
   }
  }
  class Model {
+  static get companyId() {
+   return 'model'
+  }
   #group
   #mode = 'shade'
   constructor(group) {
@@ -278,11 +324,14 @@
   }
  }
  class Cursor {
+  static get companyId() {
+   return 'arrow'
+  }
   #mode = 'shade'
   constructor(core, subject = false) {
    this.core = core
    this.subject = subject
-   this.mesh = Debug.tap(new Mesh(CURSOR, [0, 0, 0, 200], 'cur'))
+   this.mesh = new Mesh(CURSOR, [0, 0, 0, 200], 'cur')
   }
   set mode(mode) {
    this.mesh.mode = mode
@@ -293,7 +342,7 @@
    return geometry;
   }
   get xyz() {
-   this.mesh.transform = [this.core.camera.mouseX - (this.subject?0:this.core.camera.x/2), this.core.camera.mouseY - (this.subject?0:this.core.camera.y/2), 0, 200]
+   this.mesh.transform = [this.core.camera.mouseX - (this.subject ? 0 : this.core.camera.x / 2), this.core.camera.mouseY - (this.subject ? 0 : this.core.camera.y / 2), 0, 200]
    return this.hoverOnly(this.mesh.xyz);
   }
   get rgba() {
@@ -307,6 +356,9 @@
   }
  }
  class DocMesh {
+  static get companyId() {
+   return 'form'
+  }
   #mode = 'shade'
   constructor(core, subject = false) {
    this.root = core.root
@@ -322,21 +374,16 @@
      width: width,
      height: height
     } = this.root.getBoundingClientRect(),
-     getPlane = node => {
+     getPlane = (node, thickness = 2) => {
       if (!node.hasAttribute('id')) return; // need id for docmesh hit detection
       const rect = node.getBoundingClientRect();
-      return new Mesh(PLANE(...getComputedStyle(node).backgroundColor.slice(5, -1).split(', ')), [rect.width / 2 + rect.x, rect.height / 2 + rect.y, this.subject ? depth -= 0.05 : 0.99999, rect.width, rect.height, 0], node.getAttribute('id'));
-     },
-     getRoot = (node, rootDepth) => {
-      if (!node.hasAttribute('id')) return; // need id for docmesh hit detection
-      const rect = node.getBoundingClientRect();
-      return new Mesh(CUBE, [rect.width / 2 + rect.x, rect.height / 2 + rect.y, this.subject ? rootDepth/2 : 0.99999, rect.width, rect.height, rootDepth], node.getAttribute('id'));
+      return new Mesh(CUBE, [-(rect.width / 2 + rect.x), this.subject ? (depth -= thickness) + thickness / 2 : 0.99999, rect.height / 2 + rect.y, rect.width, thickness, rect.height], node.getAttribute('id'));
      },
      getPlaneRecursive = (node, skipSelf, root) => {
       let plane = undefined;
       if (!skipSelf) {
        if (root) {
-        plane = getRoot(node, this.core.camera.z)
+        plane = getPlane(node, 50)
        } else plane = getPlane(node)
       };
       if (node.children.length) {
@@ -344,8 +391,8 @@
       }
       return plane
      };
-    let depth = 0.5;
-    this._group = getPlaneRecursive(this.root, this.#mode!='wire', true)
+    let depth = 50;
+    this._group = getPlaneRecursive(this.root, false, true)
     this._group.mode = this.#mode
    }
    return this._group;
@@ -366,6 +413,9 @@
   }
  }
  class Core {
+  static get companyId() {
+   return 'core'
+  }
   static #device = undefined
   static #initialized = false
 
@@ -404,6 +454,7 @@
 
   #ui3D = true
   #name = undefined
+  #city = undefined
   #cache = undefined
   #camera = undefined
   #context = undefined
@@ -439,7 +490,7 @@
     html,
     classes
    }
-   Debug.createGUI(this.#root);
+   this.#city = new City(this);
    this.#name = name;
    this.#root.setAttribute('name', name);
    this.#root.setAttribute('class', classes.join(' '));
@@ -466,7 +517,7 @@
     new Cursor(this),
     new DocMesh(this, true),
     new Cursor(this, true),
-    new Mesh(CUBE, [0, 0, 0, 50], 'testa'),
+    new Mesh(CUBE, [0, 0, 0, 5], 'you'),
    ];
    const PAD_SAMPLE = 5;
    const model = new Model(new Group(rootNodes));
@@ -515,6 +566,65 @@
      camera.ry += event.movementX * camSpeed;
     }
    }
+   let _W, _A, _S, _D, _SPACE;
+   this.#root.onkeydown = event => {
+    event.preventDefault();
+    switch (event.code) {
+     case 'KeyW':
+      if (event.repeat) return;
+      console.log('start moving forward')
+      _W = true;
+      break;
+     case 'KeyA':
+      if (event.repeat) return;
+      console.log('start moving left')
+      _A = true;
+      break;
+     case 'KeyS':
+      if (event.repeat) return;
+      console.log('start moving backward')
+      _S = true;
+      break;
+     case 'KeyD':
+      if (event.repeat) return;
+      console.log('start moving right')
+      _D = true;
+      break;
+     case 'Space':
+      if (event.repeat) return;
+      console.log('start jumping')
+      _SPACE = true;
+      break;
+     case 'Enter':
+      console.log('use')
+      break;
+    }
+   }
+   this.#root.onkeyup = event => {
+    event.preventDefault();
+    switch (event.code) {
+     case 'KeyW':
+      _W = false
+      console.log('stop moving forward')
+      break;
+     case 'KeyA':
+      console.log('stop moving left')
+      _A = false
+      break;
+     case 'KeyS':
+      console.log('stop moving backward')
+      _S = false
+      break;
+     case 'KeyD':
+      console.log('stop moving right')
+      _D = false
+      break;
+     case 'Space':
+      console.log('stop jumping')
+      _SPACE = false
+      break;
+    }
+   }
    // canvas.ondblclick = () => Utils.toggleFullscreen();
    context.configure({
     device: Core.device,
@@ -522,7 +632,6 @@
     usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC,
     alphaMode: 'premultiplied'
    });
-   console.log('test');
    this.#attachments = {
     colorAttachments: [{
      get view() {
@@ -622,7 +731,12 @@
      }]
     });
    const resizeObserver = new ResizeObserver(resize => this.onresize())
+   this.#root.parentElement.scroll(camera.pos.x, camera.pos.y);
    resizeObserver.observe(this.#canvas);
+   const tapHover = Debug.watch('hover');
+
+   // =============================================
+
    const render = async time => {
     if (!camera.x || !camera.y || !this.showing) {
      requestAnimationFrame(render)
@@ -630,6 +744,23 @@
     };
     Debug.updateFrameRate(time);
     let commandEncoder, passEncoder, pipeline;
+    let oldPos = camera.pos;
+    const yAngle = ((camera.ry % 360) * Math.PI) / 180;
+    let speed = 1;
+    let velocity = (_S && _W ? 0 : _S ? speed : _W ? -speed : 0);
+    let direction = [velocity * Math.sin(yAngle), velocity * Math.cos(yAngle)]
+    oldPos = camera.pos = {
+     x: oldPos.x + -direction[0],
+     y: oldPos.y + direction[1],
+     z: oldPos.z + (_SPACE ? -10 : -10),
+    }
+    velocity = (_D && _A ? 0 : _D ? speed : _A ? -speed : 0);
+    direction = [velocity * Math.sin(yAngle), velocity * Math.cos(yAngle)]
+    camera.pos = {
+     x: oldPos.x + direction[1],
+     y: oldPos.y + direction[0],
+     z: oldPos.z + (_SPACE ? -10 : -10),
+    }
 
     await this.changeBuffer(uniformBuffer, camera.buffer);
     commandEncoder = this.device.createCommandEncoder();
@@ -654,7 +785,8 @@
     this.#bitmapContext.clearRect(0, 0, camera.x, camera.y);
     this.#bitmapContext.drawImage(this.#offscreen, 0, 0);
     camera.eyedrop = [...this.#bitmapContext.getImageData(camera.mouseX, camera.mouseY, 1, 1).data];
-    Debug.tap(Utils.getKeyFromColor(camera.eyedrop));
+
+    tapHover.innerText = Utils.getKeyFromColor(camera.eyedrop);
     // document.body.style.setProperty('background-color', '#' + camera.eyedrop.map(n => n.toString(16).padStart(2, 0)).join(''))
 
     await this.changeBuffer(uniformBuffer, camera.buffer);
@@ -795,11 +927,36 @@
    this.contextMenu.removeAttribute('open');
   }
  }
+ class City {
+  static get companyId() {
+   return 'city'
+  }
+  constructor(core) {
+   this.companies = [
+    Debug,
+    Utils,
+    Shape,
+    Mesh,
+    Group,
+    Camera,
+    Model,
+    Cursor,
+    DocMesh,
+    Core,
+    City
+   ].map(Company => {
+    if ('createFoundation' in Company) {
+     return core.root.appendChild(Company.createFoundation());
+    }
+    const foundation = core.root.appendChild(document.createElement('div'));
+    foundation.setAttribute('id', Company.companyId);
+    foundation.innerText = Company.companyId
+    return foundation;
+   })
+  }
+ }
  const SHADER = `<? readfile('shader.wgsl') ?>`;
- var OVER = undefined,
-  OVER_NAME = undefined;
-
- onkeydown = e => OVER?.onkeydown?.(e);
+ var OVER, OVER_NAME;
  onmousemove = e => (OVER = e.target, OVER_NAME = e.target.tagName == 'CANVAS' ? e.target.parentElement.getAttribute('name') : null);
  Root.onmouseleave = e => OVER_NAME = undefined;
 </script>

@@ -14,5 +14,7 @@ foreach (MODULES as $filename) {
  include $filename . '.php';
 }
 ?><script>
- Core.initialize().then(_ => new Core({}))
+ Core.initialize().then(_ => {
+  new Core({});
+ })
 </script>

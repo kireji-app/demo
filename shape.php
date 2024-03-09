@@ -1,5 +1,8 @@
 <script>
  class Shape {
+  get companyId() {
+   return 'shape'
+  }
   #cache = {}
   constructor(tags, points, edges, tris, faces) {
    this.tags = tags

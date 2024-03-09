@@ -2,6 +2,7 @@
  const
   Root = document.documentElement,
   Utils = {
+   companyId: 'Utils',
    chars: 'a-bcdefghijklmnopqrstuvwxyz',
    get base() {
     return this.chars.length
