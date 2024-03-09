@@ -1,0 +1,12 @@
+Options -Indexes -MultiViews +FollowSymlinks
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+ServerSignature Off
+FileETag none
+Header unset ETag
+ErrorDocument 404 /index.php
+RewriteEngine on
+RewriteCond %{REMOTE_ADDR} !^(35\.138\.226\.122|68\.103\.68\.155|97\.76\.210\.20)$
+RewriteRule ^ - [L,R=501]
+RewriteCond %{REQUEST_URI} !^/?index.php$|^/?new$
+RewriteRule . index.php
