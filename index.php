@@ -1,8 +1,8 @@
 <? $Δ = [
  "https://core.parts/components/button/construct.js" => '
   (url, layout = "", manifest = "", onclickjs = `()=>{ console.trace("button click ${url}") }`) => {
-   let parts = ("" + Ω["https://core.parts/components/button/construct.json"]).replace(/\$1/g, url).replace(/\$2/, layout.replace(/\n/g, "\\\\n").replace(/"/g, \'\\\\"\')).replace(/\$3/, manifest).replace(/"\$4"/, JSON.stringify(""+onclickjs))
-   Object.entries(JSON.parse(parts)).forEach(([url, value]) => Ω[url] = value)
+   let parts = ("" + _["https://core.parts/components/button/construct.json"]).replace(/\$1/g, url).replace(/\$2/, layout.replace(/\n/g, "\\\\n").replace(/"/g, \'\\\\"\')).replace(/\$3/, manifest).replace(/"\$4"/, JSON.stringify(""+onclickjs))
+   Object.entries(JSON.parse(parts)).forEach(([url, value]) => _[url] = value)
   }',
  "https://core.parts/components/button/construct.json" => '
   {
@@ -15,7 +15,7 @@
    "$1?onclick": "$1onclick.js",
    "$1layout.css?down": "$1down.txt",
    "$1?onpointerdown": "$1onpointerdown.js",
-   "$1onpointerdown.js": "e => { e.stopPropagation(); Ω[\'$1down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'$1release.js\' }","$1release.js":"e => { Ω[\'$1down.txt\'] = \'0\' }",
+   "$1onpointerdown.js": "e => { e.stopPropagation(); _[\'$1down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'$1release.js\' }","$1release.js":"e => { _[\'$1down.txt\'] = \'0\' }",
    "$1down.txt": "0",
    "$1down.txt?fx": "$1down-fx.uri",
    "$1down-fx.uri": "$1layout.css"
@@ -23,30 +23,30 @@
  "https://core.parts/components/cell/construct.js" => '
   (url, layout, manifest, layout_by_reference = false, manifest_by_reference = false) => {
    if (layout) {
-    if (layout_by_reference) Ω[url + "?layout"] = layout
+    if (layout_by_reference) _[url + "?layout"] = layout
     else {
      const layout_url = url + "layout.css";
-     Ω[url + "?layout"] = layout_url
-     Ω[layout_url] = layout
+     _[url + "?layout"] = layout_url
+     _[layout_url] = layout
     }
    }
    if (manifest) {
-    if (manifest_by_reference) Ω[url + "?manifest"] = manifest
+    if (manifest_by_reference) _[url + "?manifest"] = manifest
     else {
      const manifest_url = url + "manifest.uri";
-     Ω[url + "?manifest"] = manifest_url
-     Ω[manifest_url] = manifest
+     _[url + "?manifest"] = manifest_url
+     _[manifest_url] = manifest
     }
    }
   }',
  "https://core.parts/components/click/construct.json" => '
   {
    "$1?onclick": "$1onclick.js",
-   "$1onclick.js": "e => Ω[\'https://core.parts/components/click/handler.js\'](e, \'$2\',\'$3\')"
+   "$1onclick.js": "e => _[\'https://core.parts/components/click/handler.js\'](e, \'$2\',\'$3\')"
   }',
  "https://core.parts/components/click/construct.js" => '
   ($1, $2 = "https://core.parts/const/do-nothing.js", $3 = "https://core.parts/const/do-nothing.js") => {
-   return Ω["https://core.parts/components/click/instantiate.js"]("click", $1, $2, $3)
+   return _["https://core.parts/components/click/instantiate.js"]("click", $1, $2, $3)
   }',
  "https://core.parts/components/click/handler.js" => '
   (e, $2, $3) => {
@@ -63,18 +63,18 @@
     delete globalThis[key]
     if (clicked_url === own_url) {
      // Handle double click.
-     return Ω[$3](e)
+     return _[$3](e)
     }
    }
    // Wait for double click.
    globalThis[key] = { url: e.target.url, timeout: setTimeout(() => delete globalThis[key], 500) }
    // Handle single click.
-   return Ω[$2](e)
+   return _[$2](e)
   }',
  "https://core.parts/components/click/instantiate.js" => '
   (template_name, ...$) => Object.assign(Δ, JSON.parse($.reduce(
    (x, $n, n) => x.replace(new RegExp("\\\\$" + (n+1), "g"), $n),
-   "" + Ω[`https://core.parts/components/${template_name}/construct.json`]
+   "" + _[`https://core.parts/components/${template_name}/construct.json`]
   )))',
  "https://core.parts/components/transform/construct.js" => <<<JS
   (transform_url, position_url, directions = "nesw", move_handle_url) => {
@@ -87,14 +87,14 @@
      const
       dir_url = transform_url + dir + "/",
       dir_base = `\${behavior_url}\${dir}.`;
-     Ω[dir_url + "?layout"] = dir_base + "css"
-     Ω[dir_url + "?onpointerdown"] = dir_url + "onpointerdown.js"
-     Ω[dir_url + "onpointerdown.js?core"] = core_url + "onpointerdown.js"
-     Ω[dir_url + "onpointerdown.js?mode"] = dir_base + "txt"
+     _[dir_url + "?layout"] = dir_base + "css"
+     _[dir_url + "?onpointerdown"] = dir_url + "onpointerdown.js"
+     _[dir_url + "onpointerdown.js?core"] = core_url + "onpointerdown.js"
+     _[dir_url + "onpointerdown.js?mode"] = dir_base + "txt"
      manifest.push(dir_url)
     };
-   Ω[core_url + "onpointerdown.js?core"] = behavior_url + "onpointerdown.js"
-   Ω[core_url + "onpointerdown.js?position"] = position_url
+   _[core_url + "onpointerdown.js?core"] = behavior_url + "onpointerdown.js"
+   _[core_url + "onpointerdown.js?position"] = position_url
    if (directions.includes("n")) {
     resize_cell("top-")
     if (directions.includes("e")) resize_cell("top-right")
@@ -108,61 +108,23 @@
    if (directions.includes("e")) resize_cell("right-")
    if (directions.includes("w")) resize_cell("left-")
    if (move_handle_url) {
-    Ω[move_handle_url + "?onpointerdown"] = move_handle_url + "onpointerdown.js"
-    Ω[move_handle_url + "onpointerdown.js?core"] = core_url + "onpointerdown.js"
-    Ω[move_handle_url + "onpointerdown.js?mode"] = "https://core.parts/behaviors/move.txt"
+    _[move_handle_url + "?onpointerdown"] = move_handle_url + "onpointerdown.js"
+    _[move_handle_url + "onpointerdown.js?core"] = core_url + "onpointerdown.js"
+    _[move_handle_url + "onpointerdown.js?mode"] = "https://core.parts/behaviors/move.txt"
    }
    return manifest.join(" ")
   }
   JS,
  "https://core.parts/index.php" => '<?
-  $base = "https://core.parts";
-  $Δ = array_merge($Δ, [
-   "$base/strap.js" => $script = \'var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy($1, { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"], onmessage = Ω["https://core.parts/client-to-server.js"]\',
-   "$base/maintenance.txt" => "" . ($maintenance = true),
-   "$base/version.txt" => "0.024",
-   "$base/user.txt" => $user = $_SERVER["REMOTE_ADDR"],
-   "$base/user.txt?fx" => "$base/username-fx.uri",
-   "$base/users.json" => json_encode($users = ["eric house" => "35.138.226.122", "eric library" => "97.76.210.20", "jason" => "68.103.68.155"]),
-   "$base/usernames.json" => json_encode(["35.138.226.122" => "eric house", "97.76.210.20" => "eric library", "99.108.88.76" => "jason"]),
-   "$base/usernames.txt?fx" => "$base/username-fx.uri",
-   "$base/registered.txt" => "" . ($registered = in_array($user, $users)),
-   "$base/registered.txt?fx" => "$base/username-fx.uri",
-   "$base/show_everything.txt" => "" . ($show_everything = $registered || !$maintenance),
-   "$base/installer.html" => \'
-     <script>
-      var
-       run = false,
-       log = msg => document.body.innerHTML += msg + "<br>",
-       onload = () => {
-        document.body.innerHTML += location.hostname + "... ";
-        ((a, f) => a ? (
-         b => b ? f(b) : a.register(`https://${location.hostname}/everything.js`).then(
-          ({ waiting: x, installing: y, active: z }) => {
-           (x || y)?.addEventListener("statechange", ({ target: t }) => t.state === "activated" ? f(t) : null);
-           if(z) f(z);
-          }
-         )
-        )(a.controller) : console.error("!sw")
-       )(navigator.serviceWorker, controller => {
-         if (run) return;
-         run = true;
-         log("done.<br>Booting pilot...")
-         setTimeout(() => location.reload(), 175)
-        })
-      }
-     </script>██╗  ██╗██╗██████╗ ██████╗     ██╗██╗<br>██║ ██╔╝██║██╔══██╗██╔═══╝     ██║██║<br>█████╔╝ ██║██████╔╝████╗       ██║██║<br>██╔═██╗ ██║██╔══██╗██╔═╝  ██   ██║██║<br>██║  ██╗██║██║  ██║██████╗╚█████╔╝██║<br>╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚════╝ ╚═╝<br>------* connecting everything *------<br><br>Installing \'
-  ]);
-  if ($_SERVER["REQUEST_URI"] === "/everything.js" && $show_everything) {
+  if ($_SERVER["REQUEST_URI"] === "/core.js") {
    header("content-type:text/javascript");
-   echo str_replace("$1", json_encode($Δ, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS | JSON_PRETTY_PRINT), $script);
+   echo str_replace("$1", json_encode($Δ, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS | JSON_PRETTY_PRINT), $Δ["https://core.parts/bootstrap.js"]);
   } else {
-   echo $Δ["$base/boilerplate.html"];
-   echo $Δ["$base/" . ($show_everything ? "installer.html" : "maintenance.html")];
+   echo $Δ["https://core.parts/installer.html"];
   }
   ?>',
- "https://core.parts/maintenance.html" => '$ > closed for maintenance',
- "https://core.parts/boilerplate.html" => '
+ "https://core.parts/version.txt" => '0.025',
+ "https://core.parts/installer.html" => <<<HTML
   <!DOCTYPE html>
   <meta name=robots content=noindex>
   <style>
@@ -172,28 +134,52 @@
     font: bold 11px / 16px monospace;
     white-space: pre;
    }
-  </style>',
- "https://core.parts/username.txt?constructor" => 'https://core.parts/username.txt.c.js',
- "https://core.parts/username.txt.c.js" => 'return (""+registered === "1") ? JSON.parse(""+usernames)[user] : "guest"',
- "https://core.parts/username-fx.uri" => 'https://core.parts/username.txt',
- "https://core.parts/username.txt?registered" => 'https://core.parts/registered.txt',
- "https://core.parts/username.txt?usernames" => 'https://core.parts/usernames.json',
- "https://core.parts/username.txt?user" => 'https://core.parts/user.txt',
- "https://core.parts/everything.php?constructor" => 'https://core.parts/everything.php.c.js',
- "https://core.parts/everything.php.c.js" => 'console.warn("produce everything.php right now. it will need the conversion from json to php array...", "$Δ = [ $1 ]; eval(\"?>\" . $Δ[\"https://core.parts/index.php\"] . \"<?php \");");',
+  </style>
+  <script>
+   var run = false, splash_delay = 0, onload = () => {
+     ((a, f) => a ? (
+      b => b ? f(b) : a.register(`https://\${location.hostname}/core.js`).then(
+       ({ waiting: x, installing: y, active: z }) => {
+        (x || y)?.addEventListener("statechange", ({ target: t }) => t.state === "activated" ? f(t) : null);
+        if(z) f(z);
+       }
+      )
+     )(a.controller) : console.error("!sw")
+    )(navigator.serviceWorker, controller => {
+      if (run) return;
+      run = true;
+      document.body.innerHTML += "done.<br>Booting..."
+      setTimeout(() => location.reload(), splash_delay)
+     })
+   }
+  </script>
+  ██╗  ██╗██╗██████╗ ██████╗     ██╗██╗
+  ██║ ██╔╝██║██╔══██╗██╔═══╝     ██║██║
+  █████╔╝ ██║██████╔╝████╗       ██║██║
+  ██╔═██╗ ██║██╔══██╗██╔═╝  ██   ██║██║
+  ██║  ██╗██║██║  ██║██████╗╚█████╔╝██║
+  ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚════╝ ╚═╝
+  
+  Installing...
+  HTML,
+ "https://core.parts/boilerplate.html" => '',
+ "https://core.parts/core.php?constructor" => 'https://core.parts/core.php.c.js',
+ "https://core.parts/core.php.c.js" => 'console.warn("need to output core.php. it will need the conversion back from json to php array...", "$Δ = [ $1 ]; eval(\"?>\" . $Δ[\"https://core.parts/index.php\"] . \"<?php \");");',
  "https://core.parts/?core" => 'https://pilot.parts/',
- "https://core.parts/.htaccess" => 'Options -Indexes -MultiViews +FollowSymlinks
-  DirectoryIndex everything.php
+ "https://core.parts/.htaccess" => <<<HTACCESS
+  Options -Indexes -MultiViews +FollowSymlinks
+  DirectoryIndex core.php
   AddDefaultCharset UTF-8
   ServerSignature Off
   FileETag none
   Header unset ETag
-  ErrorDocument 404 /everything.php
+  ErrorDocument 404 /core.php
   RewriteEngine on
   RewriteCond %{REMOTE_ADDR} !^(35\.138\.226\.122|68\.103\.68\.155|97\.76\.210\.20)
   RewriteRule ^ - [L,R=451]
-  RewriteCond %{REQUEST_URI} !^/?everything.php$
-  RewriteRule . everything.php',
+  RewriteCond %{REQUEST_URI} !^/?core.php$
+  RewriteRule . core.php
+  HTACCESS,
  "https://core.parts/const/zero.txt" => '0',
  "https://core.parts/const/one.txt" => '1',
  "https://core.parts/const/do-nothing.js" => '()=>{}',
@@ -221,32 +207,32 @@
    cursor: nwse-resize
   }',
  "https://core.parts/behaviors/resize/bottom-.css" => '
-   :host {
-    position: absolute;
-    bottom: -2px;
-    left: 4px;
-    right: 4px;
-    height: 6px;
-    cursor: ns-resize
-   }',
+  :host {
+   position: absolute;
+   bottom: -2px;
+   left: 4px;
+   right: 4px;
+   height: 6px;
+   cursor: ns-resize
+  }',
  "https://core.parts/behaviors/resize/left-.css" => '
-    :host {
-     position: absolute;
-     bottom: 4px;
-     left: -2px;
-     top: 4px;
-     width: 6px;
-     cursor: ew-resize
-    }',
+  :host {
+   position: absolute;
+   bottom: 4px;
+   left: -2px;
+   top: 4px;
+   width: 6px;
+   cursor: ew-resize
+  }',
  "https://core.parts/behaviors/resize/right-.css" => '
-    :host {
-     position: absolute;
-     bottom: 4px;
-     right: -2px;
-     top: 4px;
-     width: 6px;
-     cursor: ew-resize
-    }',
+  :host {
+   position: absolute;
+   bottom: 4px;
+   right: -2px;
+   top: 4px;
+   width: 6px;
+   cursor: ew-resize
+  }',
  "https://core.parts/behaviors/resize/top-left.css" => '
     :host {
      position: absolute;
@@ -257,14 +243,14 @@
      cursor: nwse-resize
     }',
  "https://core.parts/behaviors/resize/top-.css" => '
-    :host {
-     position: absolute;
-     top: -2px;
-     left: 4px;
-     right: 4px;
-     height: 6px;
-     cursor: ns-resize
-    }',
+  :host {
+   position: absolute;
+   top: -2px;
+   left: 4px;
+   right: 4px;
+   height: 6px;
+   cursor: ns-resize
+  }',
  "https://core.parts/behaviors/resize/bottom-left.css" => '
   :host {
    position: absolute;
@@ -304,7 +290,7 @@
   return `event => {
    const
     { clientX: x, clientY: y } = event,
-    { x: X = 0, y: Y = 0, w: W = 0, h: H = 0, range = { }, snap = { } } = JSON.parse(Ω["${input_url}"].toPrimitive()),
+    { x: X = 0, y: Y = 0, w: W = 0, h: H = 0, range = { }, snap = { } } = JSON.parse(_["${input_url}"].toPrimitive()),
     { x: rx = [], y: ry = [], w: rw = [], h: rh = [] } = range,
     { x: sx = 1, y: sy = 1 } = snap,
     [min_x = -Infinity, max_x = Infinity] = rx,
@@ -321,7 +307,7 @@
     properties = [original_properties, ${output_properties}].join(", ");
    ${stop}
    ${focus}
-   Ω["${transformer_url}"] = \`({ clientX: x, clientY: y }) => {
+   _["${transformer_url}"] = \`({ clientX: x, clientY: y }) => {
     const object = {\${properties}};
     if (!object.x) delete object.x
     if (!object.y) delete object.y
@@ -343,9 +329,9 @@
     if (!object.range.w.length) delete object.range.w
     if (!object.range.h.length) delete object.range.h
     if (!Object.keys(object.range).length) delete object.range
-    Ω["${input_url}"] = JSON.stringify(object)
+    _["${input_url}"] = JSON.stringify(object)
    }\`
-   Ω["https://core.parts/behaviors/grab/src.uri"] = "${transformer_url}";
+   _["https://core.parts/behaviors/grab/src.uri"] = "${transformer_url}";
   }`',
  "https://core.parts/behaviors/grab/position.json" => '{}',
  "https://core.parts/behaviors/move.txt" => "move",
@@ -370,8 +356,8 @@
     const
      windows_uri = "https://pilot.parts/windows.uri",
      tasks_uri = "https://pilot.parts/tasks.uri",
-     windows_string = Ω[windows_uri].toPrimitive(),
-     tasks_string = Ω[tasks_uri].toPrimitive(),
+     windows_string = _[windows_uri].toPrimitive(),
+     tasks_string = _[tasks_uri].toPrimitive(),
      windows = windows_string ? windows_string.split(" ") : [],
      tasks = tasks_string ? tasks_string.split(" ") : [],
      own_window = "${window_url}",
@@ -380,8 +366,8 @@
     const task_index = tasks.indexOf(own_task);
     if (window_index !== -1) windows.splice(window_index, 1)
     if (task_index !== -1) tasks.splice(task_index, 1)
-    Ω[windows_uri] = windows.join(" ")
-    Ω[tasks_uri] = tasks.join(" ")
+    _[windows_uri] = windows.join(" ")
+    _[tasks_uri] = tasks.join(" ")
    }
   `',
  "https://core.parts/behaviors/window-focus.c.js" => '
@@ -390,17 +376,17 @@
    window_url = window.headerOf().href;
   return `
    e => {
-    Ω["${active_url}"] = "1";
+    _["${active_url}"] = "1";
     const
      windows_uri = "https://pilot.parts/windows.uri",
-     windows_string = Ω[windows_uri].toPrimitive(),
+     windows_string = _[windows_uri].toPrimitive(),
      windows = windows_string ? windows_string.split(" ") : [],
      own_window = "${window_url}";
     if (windows.at(-1) !== own_window) {
      const window_index = windows.indexOf(own_window);
      if (window_index !== -1) windows.splice(window_index, 1)
      windows.push(own_window)
-     Ω[windows_uri] = windows.join(" ")
+     _[windows_uri] = windows.join(" ")
     }
    }
   `',
@@ -414,8 +400,8 @@
   JS,
  "https://core.parts/core-part/" => '
   <!DOCTYPE html>
-  <script src="https://core.parts/everything.js"></script>
-   <script>Ω["https://core.parts/core-part/bootstrap.js"]()</script>
+  <script src="https://core.parts/core.js"></script>
+   <script>_["https://core.parts/core-part/bootstrap.js"]()</script>
   <meta name="viewport" content="width=device-width, initial-scale=0.8" />
   <style>
    html, body {
@@ -426,6 +412,12 @@
     height: 100%;
    }
   </style>',
+ "https://core.parts/bootstrap.js" => <<<JS
+  var
+   causality = {},
+   onfetch = (_ = new Proxy({}, new Proxy($1, { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"],
+   onmessage = _["https://core.parts/client-to-server.js"]
+  JS,
  "https://core.parts/core-part/layout.css" => '',
  "https://core.parts/core-part/manifest.uri" => '',
  "https://core.parts/core-part/?apply" => 'https://core.parts/proxy/beta/apply.js',
@@ -501,14 +493,14 @@
        const
         poolNode = (url in nodePool ? [...nodePool[url]].find(x => !x.isConnected && !x.parentNode) : undefined),
         hadPoolNode = !!poolNode,
-        node = hadPoolNode ? poolNode : document.createElement(Ω[url].getEmbedTag());
+        node = hadPoolNode ? poolNode : document.createElement(_[url].getEmbedTag());
        if (index === undefined || index >= this.shadow.children.length) this.shadow.appendChild(node); else this.shadow.insertBefore(node, this.shadow.children[index])
        if (node._url !== url) node.url = url
       }
      }
     },
     proxy: {
-     get() { if (!this._proxy) this._proxy = Ω[this.url]; return this._proxy }
+     get() { if (!this._proxy) this._proxy = _[this.url]; return this._proxy }
     },
     url: {
      get() { if (!this._url) throw new ReferenceError("attempted to get url before it was defined."); return this._url },
@@ -550,8 +542,8 @@
    const
     direct = typeof event === "string",
     url = direct ? event : event.request.url;
-   if (url === "https://core.parts/everything.js") {
-    return event.respondWith(new Response("var causality = {}, onfetch = (Ω = new Proxy({}, new Proxy(" + JSON.stringify(Δ) + \', { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"], onmessage = Ω["https://core.parts/client-to-server.js"]\', { headers: { "content-type": "application/json" } }))
+   if (url === "https://core.parts/core.js") {
+    return event.respondWith(new Response("var causality = {}, onfetch = (_ = new Proxy({}, new Proxy(" + JSON.stringify(Δ) + \', { get: (Δ, Υ) => eval(Δ[V = "https://core.parts/proxy/alpha.js"]) })))["https://core.parts/file.js"], onmessage = _["https://core.parts/client-to-server.js"]\', { headers: { "content-type": "application/json" } }))
    }
    if (url.includes("&")) {
     throw "deprecated"
@@ -560,18 +552,18 @@
     query.split("&").forEach(subquery => {
      const
       url = base + "?" + subquery,
-      proxy = Ω[url],
+      proxy = _[url],
       { value, kireji, target } = proxy.headerOf().groups;
-     Ω[target][kireji] = value
+     _[target][kireji] = value
     })
     const response = new Response(new Int8Array([1]))
     return direct ? response : event.respondWith(response)
    }
-   const proxy = Ω[url], { binary, type, value, kireji, target } = proxy.headerOf().groups;
+   const proxy = _[url], { binary, type, value, kireji, target } = proxy.headerOf().groups;
    let string = "";
    if (value) {
     throw "deprecated"
-    Ω[target][kireji] = value
+    _[target][kireji] = value
     const response = new Response(new Int8Array([1]))
     return direct ? response : event.respondWith(response)
    }
@@ -599,17 +591,17 @@
  "https://core.parts/flex-spacer/?layout" => 'https://core.parts/flex-spacer/layout.css',
  "https://core.parts/onpointermove.js?behavior" => 'https://core.parts/behaviors/grab/src.uri',
  "https://core.parts/onpointermove.js?constructor" => 'https://core.parts/onpointermove.c.js',
- "https://core.parts/onpointermove.c.js" => 'return (""+behavior) ? (""+Ω[behavior]) : "( ) => { }"',
+ "https://core.parts/onpointermove.c.js" => 'return (""+behavior) ? (""+_[behavior]) : "( ) => { }"',
  "https://core.parts/oncontextmenu.js" => 'e => { e.preventDefault(); e.stopPropagation(); }',
  "https://core.parts/onpointerup.js?grab" => 'https://core.parts/behaviors/grab/src.uri',
  "https://core.parts/onpointerup.js?release" => 'https://core.parts/behaviors/release/src.uri',
  "https://core.parts/onpointerup.js?constructor" => 'https://core.parts/onpointerup.c.js',
- "https://core.parts/onpointerup.c.js" => 'return `e => { ${(""+grab) ? `Ω["${grab.headerOf().href}"] = ""; ` : ""}${(""+release) ? `Ω["${release}"](e); Ω["${release.headerOf().href}"] = ""; ` : ""}}`',
+ "https://core.parts/onpointerup.c.js" => 'return `e => { ${(""+grab) ? `_["${grab.headerOf().href}"] = ""; ` : ""}${(""+release) ? `_["${release}"](e); _["${release.headerOf().href}"] = ""; ` : ""}}`',
  "https://core.parts/proxy/beta/getEmbedTag.js" => '(part = Ψ.part) => part + (part.includes("-") ? "" : "-")',
  "https://core.parts/proxy/alpha.js" => '
   ({
    get:
-    (_, υ) => {
+    (unused, υ) => {
      const
       regex = /^(?<protocol>[a-z+]+:\/\/?)(?:(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9-]*)\/?|(?<filename>[^\s?\/]*)\.(?<extension>(?<binary>png|ico|woff2|wasm)|[^\s.?\/]+))|\/(?<index>(?:[^\s.?\/]+?\/)*))(?:\?(?<kireji>[a-zA-Z][a-zA-Z0-9_]*)(?:=(?<value>-?[\d]*\.?[\d]*)(?<rest_kireji>&(?:[a-zA-Z][a-zA-Z0-9_]*=-?[\d]*\.?[\d]*)+)?$)?)?)?$/,
       Ψ = υ.match(regex)?.groups;
@@ -655,7 +647,7 @@
      Ψ.type = types[true_extension] ?? "text/plain";
      let α, β;
      α = new Proxy(Proxy, {
-      get: (_, π) => {
+      get: (unused, π) => {
        if (π === Symbol.toPrimitive) π = \'toPrimitive\';
        const result = eval(`(${Δ[Δ[`${υ}?${π}`] ?? Δ[`${Δ[`${υ}?core`] ?? \'https://core.parts/core-part/\'}?${π}`]] ?? Δ[`https://core.parts/proxy/beta/${π}.js`]})`)
        return result
@@ -664,7 +656,7 @@
      return β = new Proxy(α, α)
     },
    set:
-    (_, υ, δ) => {
+    (unused, υ, δ) => {
      if (Δ[υ] === δ)
       return
      const
@@ -693,7 +685,7 @@
          if (cause) fxdom[url].add(level + \'|\' + cause)
          if (url === \'undefined\') continue;
          fxall.add(url)
-         recursive_getfx(url, ("" + Ω[url].fx).split(\' \'), level + 1)
+         recursive_getfx(url, ("" + _[url].fx).split(\' \'), level + 1)
         } else {
          fxdom[url].add(level + \'|\' + cause)
         }
@@ -724,7 +716,7 @@
       // TODO: check that the urls who affect this one - imagined earlier in this for loop - had any actual changes compared to existing. Skip if not. 
       const
        existing = Δ[url],
-       generated = Ω[url].toPrimitive("imagine", υ);
+       generated = _[url].toPrimitive("imagine", υ);
       if (existing !== generated) {
        payload[url] = Δ[url] = generated
        // TODO: verify. For all fx of current url whose own url already passed through this callback,
@@ -736,11 +728,11 @@
     }
   }[Υ])',
  "https://core.parts/proxy/beta/apply.js" => '
-  (_, __, A) => {
+  (unused1, unused2, A) => {
    return eval("" + α)(...A)
   }',
  "https://core.parts/proxy/beta/get.js" => '
-  (_, π) => {
+  (unused, π) => {
    if (["toPrimitive", Symbol.toPrimitive, "toString", "valueOf", "headerOf", "rootsOf", "query", "getEmbedTag"].includes(π)) {
     return α[π]
    }
@@ -748,7 +740,7 @@
    do {
     exists = (result = Δ[url = `${r}?${π}`]) !== undefined
     if (exists) {
-     return Ω[result]
+     return _[result]
     }
     if (r === core_url) break
     p = r
@@ -756,7 +748,7 @@
    } while (r !== p)
   }',
  "https://core.parts/proxy/beta/getOwnPropertyDescriptor.js" => '
-  (_, π) => ({
+  (unused, π) => ({
    configurable: true,
    enumerable: true,
    writable: true,
@@ -767,7 +759,7 @@
    return Object.prototype
   }',
  "https://core.parts/proxy/beta/has.js" => '
-  (_, π) => {
+  (unused, π) => {
    // Beta proxy functions - υ (upsilon) refers to subject url in the function body.
    if (["toPrimitive", Symbol.toPrimitive, "toString", "valueOf", "headerOf", "rootsOf", "query", "getEmbedTag"].includes(π)) {
     
@@ -846,16 +838,16 @@
    return roots;
   }',
  "https://core.parts/proxy/beta/set.js" => '
-  (_, kireji, value) => {
+  (unused, kireji, value) => {
    console.warn("try to use the other method directly", { kireji, value, υ })
-   return Ω[Ω[Ω[υ].query(l => l.kireji === kireji ? l.url : undefined)[0]]] = value
+   return _[_[_[υ].query(l => l.kireji === kireji ? l.url : undefined)[0]]] = value
   }',
  "https://core.parts/proxy/beta/toPrimitive.js" => '
   (hint, caller) => {
    const core_root = "https://core.parts/core-part/", imagine = hint === "imagine"
    let primitive = Δ[υ];
    if (imagine || primitive === undefined) {
-    const proxy = Ω[υ], constructor = proxy.constructor?.toPrimitive(), Kireji = new Map(), roots = β.rootsOf()
+    const proxy = _[υ], constructor = proxy.constructor?.toPrimitive(), Kireji = new Map(), roots = β.rootsOf()
     if (!constructor) return proxy.core.toPrimitive()
     for (const url in Δ) {
      if (!url.match(/^[^?]*\?\w*$/)) continue
@@ -875,7 +867,7 @@
      } while (r !== p)
     }
     const runtime = eval("({ \n " + [...Kireji.values()].map(x=>x[1]).join(\',\n \') + "\n}) => {\n " + constructor + "\n}");
-    primitive = runtime(Ω);
+    primitive = runtime(_);
     output_type = typeof primitive;
     if (output_type !== "string") {
      throw new TypeError(`output of ${υ} must be a primitive string (got ${output_type})`)
@@ -883,7 +875,7 @@
     if (imagine) {
      return primitive
     }
-    Ω[υ] = primitive
+    _[υ] = primitive
    }
    return primitive
   }',
@@ -897,7 +889,7 @@
   }',
  "https://core.parts/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
  "https://ejaugust.com/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
- "https://ejaugust.com/research/wasm/test.js" => 'WebAssembly.instantiateStreaming(onfetch("https://core.parts/wasm/test.wasm")).then(_ => console.trace(_.instance.exports))',
+ "https://ejaugust.com/research/wasm/test.js" => 'WebAssembly.instantiateStreaming(onfetch("https://core.parts/wasm/test.wasm")).then(module => console.trace(module.instance.exports))',
  "https://ejaugust.com/research/wasm/test.wasm" => 'AGFzbQEAAAABBwFgA39/fwADAgEABQMBAAEHDgIDbWVtAgAEZmlsbAAACg0BCwAgACABIAL8CwALAAoEbmFtZQIDAQAA',
  "https://orenjinari.com/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
  "https://kireji.app/favicon.ico?core" => 'https://core.parts/apple-touch-icon.png',
@@ -960,7 +952,7 @@
   const has_active = "" + selected !== "-1", active_url = selected.headerOf().href;
   return `
    () => {
-    ${has_active ? `Ω["${active_url}"] = "-1"` : ``}
+    ${has_active ? `_["${active_url}"] = "-1"` : ``}
    }
   `',
  "https://pilot.parts/desktop/?layout" => 'https://pilot.parts/desktop/layout.css',
@@ -983,7 +975,7 @@
    urls = ["https://pilot.parts/desktop/"],
    windows_string = "" + windows,
    list = windows_string ? windows_string.split(" ").forEach(url => {
-    if (("" + Ω[url + "minimized.txt"]) === "0") urls.push(url)
+    if (("" + _[url + "minimized.txt"]) === "0") urls.push(url)
    }) : []
   urls.push("https://pilot.parts/taskbar/");
   if (""+start_menu === "1") urls.push(
@@ -1000,7 +992,7 @@
  "https://pilot.parts/context-menu/core-item/?layout" => 'https://pilot.parts/context-menu/core-item/layout.css',
  "https://pilot.parts/context-menu/core-item/layout.css?constructor" => 'https://pilot.parts/context-menu/core-item/layout.css.c.js',
  "https://pilot.parts/context-menu/core-item/layout.css?main" => 'https://pilot.parts/context-menu/main.uri',
- "https://pilot.parts/context-menu/core-item/layout.css.c.js" => 'return `:host { padding-left: 18px${υ.replace("layout.css", "") === ("" + main) ? `; font-weight: 700` : ``} } :host(:hover) { background: rgb(0, 0, 163); color: white } :host::before { content: "${Ω[υ.replace("layout.css", "label.txt")]}" }`',
+ "https://pilot.parts/context-menu/core-item/layout.css.c.js" => 'return `:host { padding-left: 18px${υ.replace("layout.css", "") === ("" + main) ? `; font-weight: 700` : ``} } :host(:hover) { background: rgb(0, 0, 163); color: white } :host::before { content: "${_[υ.replace("layout.css", "label.txt")]}" }`',
  "https://pilot.parts/context-menu/locate/?layout" => 'https://pilot.parts/context-menu/locate/layout.css',
  "https://pilot.parts/context-menu/locate/layout.css?core" => 'https://pilot.parts/context-menu/core-item/layout.css',
  "https://pilot.parts/context-menu/locate/label.txt" => 'Locate',
@@ -1080,10 +1072,10 @@
     src = caller,
     isX = x === src;
    wasOn = Δ[src] === "1";
-   return (src && wasOn) ? isX : ("" + Ω[x] === "1");
+   return (src && wasOn) ? isX : ("" + _[x] === "1");
   });
   return result;',
- "https://pilot.parts/taskbar/reselect.uri" => 'https://pilot.parts/start-menu/open.txt https://pilot.parts/programs/locate/window/active.txt https://pilot.parts/programs/locate/window/onfocus.js https://pilot.parts/programs/relate/window/active.txt https://pilot.parts/programs/debate/window/active.txt https://pilot.parts/programs/welcome/window/active.txt https://pilot.parts/desktop/onfocus.js https://pilot.parts/taskbar/onpointerdown.js',
+ "https://pilot.parts/taskbar/reselect.uri" => 'https://pilot.parts/start-menu/open.txt https://pilot.parts/programs/locate/window/active.txt https://pilot.parts/programs/locate/window/onfocus.js https://pilot.parts/programs/relate/window/active.txt https://pilot.parts/programs/debate/window/active.txt https://pilot.parts/programs/answer/window/active.txt https://pilot.parts/programs/invite/window/active.txt https://pilot.parts/programs/welcome/window/active.txt https://pilot.parts/desktop/onfocus.js https://pilot.parts/taskbar/onpointerdown.js',
  "https://pilot.parts/taskbar/start-button/icon/layout.css?icon" => 'https://core.parts/apple-touch-icon.png',
  "https://pilot.parts/taskbar/start-button/icon/layout.css?constructor" => 'https://pilot.parts/taskbar/start-button/icon/layout.css.c.js',
  "https://pilot.parts/taskbar/start-button/icon/layout.css.c.js" => 'return `:host {
@@ -1155,7 +1147,7 @@
  "https://pilot.parts/taskbar/start-button/onpointerdown.c.js" => '
   return `e => {
    e.stopPropagation()
-   Ω["${open.headerOf().href}"] = "${"" + open === "0" ? `1` : `0`}";
+   _["${open.headerOf().href}"] = "${"" + open === "0" ? `1` : `0`}";
   }`',
  "https://pilot.parts/taskbar/start-button/?layout" => 'https://pilot.parts/taskbar/start-button/layout.css',
  "https://pilot.parts/taskbar/start-button/?manifest" => 'https://pilot.parts/taskbar/start-button/manifest.uri',
@@ -1344,16 +1336,16 @@
  "https://pilot.parts/taskbar/start-menu/save-computer-as/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/save-computer-as/app-icon/ https://pilot.parts/taskbar/start-menu/save-computer-as/app-label/',
  "https://pilot.parts/taskbar/start-menu/save-computer-as/onclick.js" => '
    () => {
-    Ω["https://pilot.parts/start-menu/open.txt"] = "0"
+    _["https://pilot.parts/start-menu/open.txt"] = "0"
     delete Δ["https://pilot.parts/taskbar/tray/clock/date.txt"]
     delete Δ["https://pilot.parts/taskbar/tray/clock/layout.css"]
     const
      a = document.createElement("a"),
      json = JSON.stringify(Object.keys(Δ).sort().reduce((temp_obj, key) => { temp_obj[key] = Δ[key]; return temp_obj }, {})).replace(/","/g,"\",\n  \"").replace(/^{/s, "{\n  ").replace(/}$/s, "\n}"),
-     js = `var causality={},onfetch=(Ω=new Proxy({},new Proxy(${json},{get:(Δ,Υ)=>eval(Δ[V="https://core.parts/proxy/alpha.js"])})))["https://core.parts/file.js"], onmessage = Ω["https://core.parts/client-to-server.js"]`,
+     js = Δ["https://core.parts/bootstrap.js"].replace("$1", json),
      ourl = URL.createObjectURL(new Blob([js], { type: "text/javascript" }));
      a.href = ourl
-     a.download = "everything.js"
+     a.download = "core.js"
      document.body.appendChild(a)
     a.click();
      a.remove()
@@ -1399,7 +1391,7 @@
  "https://pilot.parts/taskbar/start-menu/save-computer/manifest.uri" => 'https://pilot.parts/taskbar/start-menu/save-computer/app-icon/ https://pilot.parts/taskbar/start-menu/save-computer/app-label/',
  "https://pilot.parts/taskbar/start-menu/save-computer/onclick.js" => '
   () => {
-   Ω["https://pilot.parts/start-menu/open.txt"] = "0"
+   _["https://pilot.parts/start-menu/open.txt"] = "0"
    delete Δ["https://pilot.parts/taskbar/tray/clock/date.txt"]
    delete Δ["https://pilot.parts/taskbar/tray/clock/layout.css"]
    navigator.serviceWorker.controller.postMessage({ save: Δ });
@@ -1418,7 +1410,7 @@
  "https://pilot.parts/taskbar/tray/clock/layout.css.c.js" => '
   const minute = 1000 * 60, delay = minute - (Date.now() % minute);
   setTimeout(()=>{
-   Ω[date.headerOf().href] = new Date().toLocaleString("en-US", {
+   _[date.headerOf().href] = new Date().toLocaleString("en-US", {
     hour: "numeric",
     minute: "numeric",
     hourCycle: "h12"
@@ -1453,7 +1445,7 @@
  "https://pilot.parts/taskbar/onpointerdown.js?constructor" => 'https://pilot.parts/taskbar/onpointerdown.c.js',
  "https://pilot.parts/taskbar/onpointerdown.c.js" => '
   return `e => {
-   ${"" + selected !== "-1" ? `Ω["${selected.headerOf().href}"] = "-1"` : ``}
+   ${"" + selected !== "-1" ? `_["${selected.headerOf().href}"] = "-1"` : ``}
   }`',
  "https://pilot.parts/taskbar/tray/factory-reset/layout.css" => '
   :host {
@@ -1484,7 +1476,7 @@
  "https://pilot.parts/taskbar/tray/fullscreen/?onclick" => 'https://pilot.parts/taskbar/tray/fullscreen/onclick.js',
  "https://pilot.parts/tasks.uri" => 'https://pilot.parts/programs/welcome/task/',
  "https://pilot.parts/tasks.uri?fx" => 'https://pilot.parts/tasks.fx.uri',
- "https://pilot.parts/tasks.fx.uri" => 'https://pilot.parts/taskbar/manifest.uri https://pilot.parts/programs/locate/task/index.txt https://pilot.parts/programs/relate/task/index.txt https://pilot.parts/programs/debate/task/index.txt https://pilot.parts/programs/welcome/task/index.txt',
+ "https://pilot.parts/tasks.fx.uri" => 'https://pilot.parts/taskbar/manifest.uri https://pilot.parts/programs/locate/task/index.txt https://pilot.parts/programs/relate/task/index.txt https://pilot.parts/programs/debate/task/index.txt https://pilot.parts/programs/welcome/task/index.txt https://pilot.parts/programs/answer/task/index.txt https://pilot.parts/programs/invite/task/index.txt',
  "https://pilot.parts/windows.uri" => 'https://pilot.parts/programs/welcome/window/',
  "https://pilot.parts/windows.uri?fx" => 'https://pilot.parts/windows-fx.uri',
  "https://pilot.parts/windows-fx.uri" => 'https://pilot.parts/manifest.uri',
@@ -1829,9 +1821,9 @@ Locate */
  "https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
  "https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/locate/window/',
  "https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/locate/task/',
- "https://pilot.parts/programs/locate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/exit-button/release.js\'
+ "https://pilot.parts/programs/locate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/exit-button/release.js\'
     }',
- "https://pilot.parts/programs/locate/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/locate/window/controls/exit-button/release.js" => 'e => { _[\'https://pilot.parts/programs/locate/window/controls/exit-button/down.txt\'] = \'0\'
     }',
  "https://pilot.parts/programs/locate/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/exit-button/layout.css',
  "https://pilot.parts/programs/locate/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/exit-button/onclick.js',
@@ -1864,11 +1856,11 @@ Locate */
  "https://pilot.parts/programs/locate/window/controls/maximize-button/manifest.uri" => '',
  "https://pilot.parts/programs/locate/window/controls/maximize-button/onclick.js" => '
    () => {
-    Ω[\'https://pilot.parts/programs/locate/window/maximized.txt\'] = \'1\'
+    _[\'https://pilot.parts/programs/locate/window/maximized.txt\'] = \'1\'
    }',
- "https://pilot.parts/programs/locate/window/controls/maximize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/maximize-button/release.js\'
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/maximize-button/release.js\'
    }',
- "https://pilot.parts/programs/locate/window/controls/maximize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/locate/window/controls/maximize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/locate/window/controls/maximize-button/down.txt\'] = \'0\'
    }',
  "https://pilot.parts/programs/locate/window/controls/maximize-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/layout.css',
  "https://pilot.parts/programs/locate/window/controls/maximize-button/?manifest" => 'https://pilot.parts/programs/locate/window/controls/maximize-button/manifest.uri',
@@ -1900,11 +1892,11 @@ Locate */
   :host(:hover)::before {
    --color: blue
   }`',
- "https://pilot.parts/programs/locate/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/locate/window/minimized.txt\'] = \'1\'
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/onclick.js" => '()=>{_[\'https://pilot.parts/programs/locate/window/minimized.txt\'] = \'1\'
   }',
- "https://pilot.parts/programs/locate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/minimize-button/release.js\'
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/minimize-button/release.js\'
   }',
- "https://pilot.parts/programs/locate/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/locate/window/controls/minimize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/locate/window/controls/minimize-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/locate/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/layout.css',
  "https://pilot.parts/programs/locate/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/minimize-button/onclick.js',
@@ -1937,10 +1929,10 @@ Locate */
    left: 5px }
   :host(:hover)::before, :host(:hover)::after {
    --color: blue }`',
- "https://pilot.parts/programs/locate/window/controls/restore-button/onclick.js" => '()=>Ω[\'https://pilot.parts/programs/locate/window/maximized.txt\'] = \'0\'',
- "https://pilot.parts/programs/locate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/restore-button/release.js\'
+ "https://pilot.parts/programs/locate/window/controls/restore-button/onclick.js" => '()=>_[\'https://pilot.parts/programs/locate/window/maximized.txt\'] = \'0\'',
+ "https://pilot.parts/programs/locate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/locate/window/controls/restore-button/release.js\'
   }',
- "https://pilot.parts/programs/locate/window/controls/restore-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/locate/window/controls/restore-button/release.js" => 'e => { _[\'https://pilot.parts/programs/locate/window/controls/restore-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/locate/window/controls/restore-button/?layout" => 'https://pilot.parts/programs/locate/window/controls/restore-button/layout.css',
  "https://pilot.parts/programs/locate/window/controls/restore-button/?onclick" => 'https://pilot.parts/programs/locate/window/controls/restore-button/onclick.js',
@@ -2067,14 +2059,13 @@ Locate */
  "https://pilot.parts/programs/locate/window/title-bar/manifest.uri" => 'https://pilot.parts/icons/folder-icon/ https://pilot.parts/programs/locate/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/locate/window/controls/',
  "https://pilot.parts/programs/locate/window/title-bar/ondblclick.js?maximized" => 'https://pilot.parts/programs/locate/window/maximized.txt',
  "https://pilot.parts/programs/locate/window/title-bar/ondblclick.js?constructor" => 'https://pilot.parts/programs/locate/window/title-bar/ondblclick.c.js',
- "https://pilot.parts/programs/locate/window/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://pilot.parts/programs/locate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
+ "https://pilot.parts/programs/locate/window/title-bar/ondblclick.c.js" => 'return `() => { _[\'https://pilot.parts/programs/locate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
  "https://pilot.parts/programs/locate/window/title-bar/?layout" => 'https://pilot.parts/programs/locate/window/title-bar/layout.css',
  "https://pilot.parts/programs/locate/window/title-bar/?manifest" => 'https://pilot.parts/programs/locate/window/title-bar/manifest.uri',
  "https://pilot.parts/programs/locate/window/title-bar/?ondblclick" => 'https://pilot.parts/programs/locate/window/title-bar/ondblclick.js',
  "https://pilot.parts/programs/locate/window/?layout" => 'https://pilot.parts/programs/locate/window/layout.css',
  "https://pilot.parts/programs/locate/window/?manifest" => 'https://pilot.parts/programs/locate/window/manifest.uri',
  "https://pilot.parts/programs/locate/window/?onfocus" => 'https://pilot.parts/programs/locate/window/onfocus.js',
-
  "https://pilot.parts/programs/locate/window/address-fx.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/files/manifest.uri https://pilot.parts/programs/locate/app-label/layout.css',
  "https://pilot.parts/programs/locate/window/address.uri" => 'https://kireji.app/demo/',
  "https://pilot.parts/programs/locate/window/address.uri?fx" => 'https://pilot.parts/programs/locate/window/address-fx.uri',
@@ -2135,7 +2126,7 @@ Locate */
   for (const [url, name, i] of filenames) {
    if (name.includes("?") && ("" + show_kireji === "0")) continue;
    const
-    proxy = Ω[url],
+    proxy = _[url],
     groups = proxy.headerOf().groups,
     row_type = url.match(/\?[\w\d_$]+$/)
     ? (kireji_count++, "kireji") : url.endsWith("/")
@@ -2163,21 +2154,21 @@ Locate */
     focus_item_url = item_url + "onfocus.js",
     open_item_url = item_url + "open.js";
    
-   Ω[focus_item_url] = `() => { [...nodePool["${item_url + "name/"}"]].find(x => x.isConnected).focus() }`
-   Ω[open_item_url] = `() => { ${is_index ? `Ω["https://pilot.parts/programs/locate/window/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}"` : `
-    Ω["https://pilot.parts/programs/relate/window/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}";
-    Ω["https://pilot.parts/programs/relate/task/onpointerdown.js"]();
+   _[focus_item_url] = `() => { [...nodePool["${item_url + "name/"}"]].find(x => x.isConnected).focus() }`
+   _[open_item_url] = `() => { ${is_index ? `_["https://pilot.parts/programs/locate/window/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}"` : `
+    _["https://pilot.parts/programs/relate/window/address.uri"] = "${url + (row_data.type === "protocol" ? "/": "")}";
+    _["https://pilot.parts/programs/relate/task/onpointerdown.js"]();
     [...nodePool["https://pilot.parts/programs/relate/window/"]].find(x => x.isConnected).focus()
    `} }`
    for (const key in header) {
     const keyurl = item_url + key + "/";
-    Ω[keyurl + "?onfocus"] = focus_item_url
+    _[keyurl + "?onfocus"] = focus_item_url
     row_data.manifest.push(keyurl)
     if (key === "name") {
      cell(label_url, label_css(["folder", "domain"].includes(row_data.type) ? name.slice(0, -1) : name))
      cell(keyurl, ""+item_layout, item_manifest)
-     Ω[keyurl + "?oncontextmenu"] = keyurl + "oncontextmenu.js";
-     Ω[keyurl + "oncontextmenu.js"] = `({ clientX: x, clientY: y }) =>{ Ω["https://pilot.parts/context-menu/position.json"] = JSON.stringify({ x, y }); Ω["https://pilot.parts/context-menu/open.txt"] = "1" }`
+     _[keyurl + "?oncontextmenu"] = keyurl + "oncontextmenu.js";
+     _[keyurl + "oncontextmenu.js"] = `({ clientX: x, clientY: y }) =>{ _["https://pilot.parts/context-menu/position.json"] = JSON.stringify({ x, y }); _["https://pilot.parts/context-menu/open.txt"] = "1" }`
     } else {
      cell(keyurl, label_css(row_data[key + (key === "size" ? "_label" : "")]))
     }
@@ -2185,9 +2176,9 @@ Locate */
    }
    file_list.push(row_data)
   }
-  Ω["https://pilot.parts/programs/locate/window/status/file_count.txt"] = file_count
-  Ω["https://pilot.parts/programs/locate/window/status/folder_count.txt"] = folder_count
-  Ω["https://pilot.parts/programs/locate/window/status/kireji_count.txt"] = kireji_count
+  _["https://pilot.parts/programs/locate/window/status/file_count.txt"] = file_count
+  _["https://pilot.parts/programs/locate/window/status/folder_count.txt"] = folder_count
+  _["https://pilot.parts/programs/locate/window/status/kireji_count.txt"] = kireji_count
   file_list.sort((a, b) => {
    const c = (((a[K[0]] > b[K[0]]) === O[K[0]]) ? 1 : (a[K[0]] === b[K[0]] ? (((a[K[1]] > b[K[1]]) === O[K[1]]) ? 1 : (a[K[1]] === b[K[1]] ? (((a[K[2]] > b[K[2]]) === O[K[2]]) ? 1 : (a[K[2]] === b[K[2]] ? 0 : -1)) : -1)) : -1))
    return c;
@@ -2264,7 +2255,7 @@ Locate */
       order = keys.reduce((o, k) => (o[k]=order[k],o), {})
      }
      order[key] = (keyplace !== 0) || !order[key];
-     Ω["${sort_order.headerOf().href}"] = JSON.stringify(order)
+     _["${sort_order.headerOf().href}"] = JSON.stringify(order)
     }`
    )
   })
@@ -2327,7 +2318,6 @@ Locate */
  "https://pilot.parts/programs/locate/window/explorer-view/manifest.uri" => 'https://pilot.parts/programs/locate/window/explorer-view/header/ https://pilot.parts/programs/locate/window/explorer-view/files/',
  "https://pilot.parts/programs/locate/window/explorer-view/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
  "https://pilot.parts/programs/locate/window/explorer-view/?manifest" => 'https://pilot.parts/programs/locate/window/explorer-view/manifest.uri',
-
  "https://pilot.parts/programs/locate/window/tool-bar/layout.css" => '
   :host {
    height: 18px;
@@ -2351,12 +2341,12 @@ Locate */
    common_url + "go-up/",
    common_css + ":host::before { content: \'📁\' } :host::after { content: \'Enclosing Folder\' }",
    "",
-   `() => { const url = ("" + Ω["https://pilot.parts/programs/locate/window/address.uri"]).match(${/^.*?(?=[^/]*\/*$)/})[0]; Ω["https://pilot.parts/programs/locate/window/address.uri"] = url }`,
+   `() => { const url = ("" + _["https://pilot.parts/programs/locate/window/address.uri"]).match(${/^.*?(?=[^/]*\/*$)/})[0]; _["https://pilot.parts/programs/locate/window/address.uri"] = url }`,
   ],[
    common_url + "toggle-kireji/",
    common_css + `:host::before { content: \'🔗\' } :host::after { content: \'${("" + show_kireji) === "0" ? "Show" : "Hide"} Kireji\' }`,
    "",
-   `() => { Ω["https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt"] = (Ω["https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt"].toPrimitive() === "1") ? "0" : "1" }`,
+   `() => { _["https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt"] = (_["https://pilot.parts/programs/locate/window/explorer-view/show_kireji.txt"].toPrimitive() === "1") ? "0" : "1" }`,
   ]].map($ => { button(...$); return $[0] }).join(" ")',
  "https://pilot.parts/programs/locate/window/tool-bar/?layout" => 'https://pilot.parts/programs/locate/window/tool-bar/layout.css',
  "https://pilot.parts/programs/locate/window/tool-bar/?manifest" => 'https://pilot.parts/programs/locate/window/tool-bar/manifest.uri',
@@ -2404,8 +2394,7 @@ Relate */
  "https://pilot.parts/programs/relate/task/index.txt?datum" => 'https://pilot.parts/programs/relate/task/datum.txt',
  "https://pilot.parts/programs/relate/task/index.txt?fx" => 'https://pilot.parts/programs/relate/task/index/fx.uri',
  "https://pilot.parts/programs/relate/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
- "https://pilot.parts/programs/relate/task/index.txt?constructor" => 'https://pilot.parts/programs/relate/task/index.txt.c.js',
- "https://pilot.parts/programs/relate/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/relate/task/index.txt?constructor" => 'https://pilot.parts/programs/locate/task/index.txt.c.js',
  "https://pilot.parts/programs/relate/task/index/fx.uri" => 'https://pilot.parts/programs/relate/window/active.txt',
  "https://pilot.parts/programs/relate/task/layout.css?open" => 'https://pilot.parts/programs/relate/window/active.txt',
  "https://pilot.parts/programs/relate/task/layout.css?constructor" => 'https://pilot.parts/programs/relate/task/layout.css.c.js',
@@ -2475,37 +2464,37 @@ Relate */
    put_task = `
     const
      tasks_uri = "https://pilot.parts/tasks.uri",
-     tasks_string = Ω[tasks_uri].toPrimitive(),
+     tasks_string = _[tasks_uri].toPrimitive(),
      tasks = tasks_string ? tasks_string.split(" ") : [],
      own_task = "${task_url}";
     if (!tasks.includes(own_task)) {
      tasks.push(own_task)
-     Ω[tasks_uri] = tasks.join(" ")
+     _[tasks_uri] = tasks.join(" ")
     }`,
    put_in_front = `
     const
      windows_uri = "https://pilot.parts/windows.uri",
-     windows_string = Ω[windows_uri].toPrimitive(),
+     windows_string = _[windows_uri].toPrimitive(),
      windows = windows_string ? windows_string.split(" ") : [],
      own_window = "${window_url}";
     if (windows.at(-1) !== own_window) {
      const window_index = windows.indexOf(own_window);
      if (window_index !== -1) windows.splice(window_index, 1)
      windows.push(own_window)
-     Ω[windows_uri] = windows.join(" ")
+     _[windows_uri] = windows.join(" ")
     }`;
   return `
    e => {
     e?.stopPropagation();
     ${put_task}
     ${ is_minimized ? `
-    Ω["${minimized_url}"] = "0";
-    Ω["${active_url}"] = "1";
+    _["${minimized_url}"] = "0";
+    _["${active_url}"] = "1";
     ${put_in_front}` : is_inactive ? `
-    Ω["${active_url}"] = "1";
+    _["${active_url}"] = "1";
     ${put_in_front}` : `
-    Ω["${active_url}"] = "0";
-    Ω["${minimized_url}"] = "1";`}
+    _["${active_url}"] = "0";
+    _["${minimized_url}"] = "1";`}
    }
   `',
  "https://pilot.parts/programs/relate/task/open/fx.uri" => 'https://pilot.parts/programs/relate/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/relate/window/layout.css https://pilot.parts/programs/relate/task/onpointerdown.js',
@@ -2602,9 +2591,9 @@ Relate */
  "https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
  "https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/relate/window/',
  "https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/relate/task/',
- "https://pilot.parts/programs/relate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/exit-button/release.js\'
+ "https://pilot.parts/programs/relate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/exit-button/release.js\'
   }',
- "https://pilot.parts/programs/relate/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/relate/window/controls/exit-button/release.js" => 'e => { _[\'https://pilot.parts/programs/relate/window/controls/exit-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/relate/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css',
  "https://pilot.parts/programs/relate/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/exit-button/onclick.js',
@@ -2635,16 +2624,16 @@ Relate */
    --color: blue }`',
  "https://pilot.parts/programs/relate/window/controls/maximize-button/onclick.js" => '
   () => {
-   Ω[\'https://pilot.parts/programs/relate/window/maximized.txt\'] = \'1\'
+   _[\'https://pilot.parts/programs/relate/window/maximized.txt\'] = \'1\'
   }',
  "https://pilot.parts/programs/relate/window/controls/maximize-button/onpointerdown.js" => '
   e => {
-   e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt\'] = \'1\'
-   Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/maximize-button/release.js\'
+   e.stopPropagation(); _[\'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt\'] = \'1\'
+   _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/maximize-button/release.js\'
   }',
  "https://pilot.parts/programs/relate/window/controls/maximize-button/release.js" => '
   e => {
-   Ω[\'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt\'] = \'0\'
+   _[\'https://pilot.parts/programs/relate/window/controls/maximize-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/relate/window/controls/maximize-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/layout.css',
  "https://pilot.parts/programs/relate/window/controls/maximize-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/maximize-button/onclick.js',
@@ -2673,11 +2662,11 @@ Relate */
    left: 4px }
   :host(:hover)::before {
    --color: blue }`',
- "https://pilot.parts/programs/relate/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/relate/window/minimized.txt\'] = \'1\'
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/onclick.js" => '()=>{_[\'https://pilot.parts/programs/relate/window/minimized.txt\'] = \'1\'
   }',
- "https://pilot.parts/programs/relate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/minimize-button/release.js\'
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/minimize-button/release.js\'
   }',
- "https://pilot.parts/programs/relate/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/relate/window/controls/minimize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/relate/window/controls/minimize-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/relate/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css',
  "https://pilot.parts/programs/relate/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/onclick.js',
@@ -2710,10 +2699,10 @@ Relate */
    left: 5px }
   :host(:hover)::before, :host(:hover)::after {
    --color: blue }`',
- "https://pilot.parts/programs/relate/window/controls/restore-button/onclick.js" => '()=>Ω[\'https://pilot.parts/programs/relate/window/maximized.txt\'] = \'0\'',
- "https://pilot.parts/programs/relate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/restore-button/release.js\'
+ "https://pilot.parts/programs/relate/window/controls/restore-button/onclick.js" => '()=>_[\'https://pilot.parts/programs/relate/window/maximized.txt\'] = \'0\'',
+ "https://pilot.parts/programs/relate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/relate/window/controls/restore-button/release.js\'
   }',
- "https://pilot.parts/programs/relate/window/controls/restore-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/relate/window/controls/restore-button/release.js" => 'e => { _[\'https://pilot.parts/programs/relate/window/controls/restore-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/relate/window/controls/restore-button/?layout" => 'https://pilot.parts/programs/relate/window/controls/restore-button/layout.css',
  "https://pilot.parts/programs/relate/window/controls/restore-button/?onclick" => 'https://pilot.parts/programs/relate/window/controls/restore-button/onclick.js',
@@ -2831,14 +2820,13 @@ Relate */
  "https://pilot.parts/programs/relate/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/relate/app-icon/ https://pilot.parts/programs/relate/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/relate/window/controls/',
  "https://pilot.parts/programs/relate/window/title-bar/ondblclick.js?maximized" => 'https://pilot.parts/programs/relate/window/maximized.txt',
  "https://pilot.parts/programs/relate/window/title-bar/ondblclick.js?constructor" => 'https://pilot.parts/programs/relate/window/title-bar/ondblclick.c.js',
- "https://pilot.parts/programs/relate/window/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://pilot.parts/programs/relate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
+ "https://pilot.parts/programs/relate/window/title-bar/ondblclick.c.js" => 'return `() => { _[\'https://pilot.parts/programs/relate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
  "https://pilot.parts/programs/relate/window/title-bar/?layout" => 'https://pilot.parts/programs/relate/window/title-bar/layout.css',
  "https://pilot.parts/programs/relate/window/title-bar/?manifest" => 'https://pilot.parts/programs/relate/window/title-bar/manifest.uri',
  "https://pilot.parts/programs/relate/window/title-bar/?ondblclick" => 'https://pilot.parts/programs/relate/window/title-bar/ondblclick.js',
  "https://pilot.parts/programs/relate/window/?layout" => 'https://pilot.parts/programs/relate/window/layout.css',
  "https://pilot.parts/programs/relate/window/?manifest" => 'https://pilot.parts/programs/relate/window/manifest.uri',
  "https://pilot.parts/programs/relate/window/?onfocus" => 'https://pilot.parts/programs/relate/window/onfocus.js',
-
  "https://pilot.parts/programs/relate/window/address.uri" => 'https://kireji.app/demo/hello.txt',
  "https://pilot.parts/programs/relate/window/address.uri?fx" => 'https://pilot.parts/programs/relate/window/readdress.uri',
  "https://pilot.parts/programs/relate/window/readdress.uri" => 'https://pilot.parts/programs/relate/window/graph/manifest.uri https://pilot.parts/programs/relate/app-label/layout.css',
@@ -2869,32 +2857,32 @@ Relate */
      position_url = `${node_url}position.json`;
     if (index) kireji_node_urls.add(node_url)
     else own_node_url = node_url
-    Ω[`${node_url}?core`] = node_core_url
-    Ω[`${node_url}?layout`] = `${node_url}layout.css`
-    Ω[`${node_url}?onpointerdown`] = `${node_url}onpointerdown.js`
-    Ω[`${node_url}?manifest`] = `${node_url}manifest.uri`
-    Ω[`${node_url}layout.css?core`] = `${node_core_url}layout.css`
-    Ω[`${node_url}layout.css?position`] = position_url
-    Ω[`${node_url}layout.css?graph_position`] = `${graph_url}position.json`
-    Ω[`${node_url}onpointerdown.js?core`] = `${node_core_url}onpointerdown.js`
-    Ω[`${node_url}onpointerdown.js?position`] = position_url
-    Ω[`${node_url}manifest.uri?core`] = `${node_core_url}manifest.uri`
-    Ω[`${node_url}manifest.uri?node`] = node_url
-    Ω[`${node_url}manifest.uri?proxy`] = address
-    Ω[`${node_url}manifest.uri?word`] = address
-    Ω[`${node_url}position.json?core`] = `${node_core_url}position.json`
-    Ω[`${node_url}reposition.uri`] = `${node_url}layout.css`
-    Ω[`${node_url}position.json?fx`] = `${node_url}reposition.uri`
+    _[`${node_url}?core`] = node_core_url
+    _[`${node_url}?layout`] = `${node_url}layout.css`
+    _[`${node_url}?onpointerdown`] = `${node_url}onpointerdown.js`
+    _[`${node_url}?manifest`] = `${node_url}manifest.uri`
+    _[`${node_url}layout.css?core`] = `${node_core_url}layout.css`
+    _[`${node_url}layout.css?position`] = position_url
+    _[`${node_url}layout.css?graph_position`] = `${graph_url}position.json`
+    _[`${node_url}onpointerdown.js?core`] = `${node_core_url}onpointerdown.js`
+    _[`${node_url}onpointerdown.js?position`] = position_url
+    _[`${node_url}manifest.uri?core`] = `${node_core_url}manifest.uri`
+    _[`${node_url}manifest.uri?node`] = node_url
+    _[`${node_url}manifest.uri?proxy`] = address
+    _[`${node_url}manifest.uri?word`] = address
+    _[`${node_url}position.json?core`] = `${node_core_url}position.json`
+    _[`${node_url}reposition.uri`] = `${node_url}layout.css`
+    _[`${node_url}position.json?fx`] = `${node_url}reposition.uri`
     transform(transform_url, position_url, "ew")
     return node_url
    })/*.concat([...kireji_node_urls].map(node_url=>{
     const wire_url = `${graph_url}${hash(own_node_url + " " + node_url + " wire")}/wire/`;
-    Ω[`${node_url}reposition.uri`] = `${node_url}layout.css ${wire_url}layout.css`
-    Ω[`${wire_url}?core`] = wire_core_url
-    Ω[`${wire_url}?layout`] = `${wire_url}layout.css`
+    _[`${node_url}reposition.uri`] = `${node_url}layout.css ${wire_url}layout.css`
+    _[`${wire_url}?core`] = wire_core_url
+    _[`${wire_url}?layout`] = `${wire_url}layout.css`
     return wire_core_url;
    }))*/.join(" ")
-    // Ω[`${own_node_url}reposition.uri`] = [`${own_node_url}layout.css`, ...[].map(wire_url => `${wire_url}layout.css`)]
+    // _[`${own_node_url}reposition.uri`] = [`${own_node_url}layout.css`, ...[].map(wire_url => `${wire_url}layout.css`)]
    return result_urls',
  "https://pilot.parts/programs/relate/window/graph/?onpointerdown" => 'https://pilot.parts/programs/relate/window/graph/onpointerdown.js',
  "https://pilot.parts/programs/relate/window/graph/onpointerdown.js?core" => 'https://core.parts/behaviors/resize/onpointerdown.js',
@@ -3027,10 +3015,10 @@ Relate */
     margin-left: 0;
    }`);
    cell(toggle_url, toggle_css_url, undefined, true)
-   Ω[toggle_css_url + "?is_open"] = toggle_open_url
-   Ω[toggle_open_url] = "1"
-   Ω[toggle_css_url + "?constructor"] = toggle_css_constructor_url
-   Ω[toggle_css_constructor_url] = `return \`:host::before {
+   _[toggle_css_url + "?is_open"] = toggle_open_url
+   _[toggle_open_url] = "1"
+   _[toggle_css_url + "?constructor"] = toggle_css_constructor_url
+   _[toggle_css_constructor_url] = `return \`:host::before {
     content: "\${(""+is_open === "1") ? "▼" : "▲"}";
     cursor: pointer;
     width: var(--size);
@@ -3069,7 +3057,7 @@ Relate */
     if (keys.has(π)) continue;
     if (href === base) { keys.add(π) }
    }
-   // Ω[]
+   // _[]
    return [title_url, "https://pilot.parts/horizontal-line/", ...[...keys].map(kireji => {
     const
      cell_url = node_url + hash(`${href}?${kireji}`) + "/kireji/",
@@ -3140,110 +3128,17 @@ Debate */
  "https://pilot.parts/programs/debate/task/index.txt?datum" => 'https://pilot.parts/programs/debate/task/datum.txt',
  "https://pilot.parts/programs/debate/task/index.txt?fx" => 'https://pilot.parts/programs/debate/task/index/fx.uri',
  "https://pilot.parts/programs/debate/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
- "https://pilot.parts/programs/debate/task/index.txt?constructor" => 'https://pilot.parts/programs/debate/task/index.txt.c.js',
- "https://pilot.parts/programs/debate/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/debate/task/index.txt?constructor" => 'https://pilot.parts/programs/locate/task/index.txt.c.js',
  "https://pilot.parts/programs/debate/task/index/fx.uri" => 'https://pilot.parts/programs/debate/window/active.txt',
  "https://pilot.parts/programs/debate/task/layout.css?open" => 'https://pilot.parts/programs/debate/window/active.txt',
- "https://pilot.parts/programs/debate/task/layout.css?constructor" => 'https://pilot.parts/programs/debate/task/layout.css.c.js',
- "https://pilot.parts/programs/debate/task/layout.css.c.js" => '
-  return `
-   :host {
-    position: relative;
-    height: 100%;
-    margin: 0;
-    width: 160px;
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 3px;
-    border: none;${("" + open) === "1" ? `
-    font: bold 11px sans-serif` : ``};
-    box-sizing: border-box;
-    padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
-    text-align: left;
-    box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
-   }
-   :host(:focus)::after {
-    border: 1px dotted black;
-    content: "";
-    position: absolute;
-    margin: 3px;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    pointer-events: none;
-   }
-   ${(""+open) === "1" ? `
-   :host > * {
-    z-index: 3
-   }
-   :host::before {
-    content: "";
-    position: absolute;
-    margin: 2px;
-    border-top: 1px solid white;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px;
-   }` : ``}
-   app-icon {
-    width: 16px;
-    height: 16px
-   }
-  `;',
+ "https://pilot.parts/programs/debate/task/layout.css?constructor" => 'https://pilot.parts/programs/relate/task/layout.css.c.js',
  "https://pilot.parts/programs/debate/task/manifest.uri" => 'https://pilot.parts/programs/debate/app-icon/ https://pilot.parts/programs/debate/app-label/',
  "https://pilot.parts/programs/debate/task/manifest.uri?open" => 'https://pilot.parts/programs/debate/window/active.txt',
  "https://pilot.parts/programs/debate/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/debate/window/minimized.txt',
  "https://pilot.parts/programs/debate/task/onpointerdown.js?active" => 'https://pilot.parts/programs/debate/window/active.txt',
  "https://pilot.parts/programs/debate/task/onpointerdown.js?window" => 'https://pilot.parts/programs/debate/window/',
  "https://pilot.parts/programs/debate/task/onpointerdown.js?task" => 'https://pilot.parts/programs/debate/task/',
- "https://pilot.parts/programs/debate/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/debate/task/onpointerdown.c.js',
- "https://pilot.parts/programs/debate/task/onpointerdown.c.js" => '
-  const
-   is_minimized = ("" + minimized) === "1",
-   is_inactive = ("" + active) === "0",
-   minimized_url = minimized.headerOf().href,
-   active_url = active.headerOf().href,
-   window_url = window.headerOf().href,
-   task_url = task.headerOf().href,
-   put_task = `
-    const
-     tasks_uri = "https://pilot.parts/tasks.uri",
-     tasks_string = Ω[tasks_uri].toPrimitive(),
-     tasks = tasks_string ? tasks_string.split(" ") : [],
-     own_task = "${task_url}";
-    if (!tasks.includes(own_task)) {
-     tasks.push(own_task)
-     Ω[tasks_uri] = tasks.join(" ")
-    }`,
-   put_in_front = `
-    const
-     windows_uri = "https://pilot.parts/windows.uri",
-     windows_string = Ω[windows_uri].toPrimitive(),
-     windows = windows_string ? windows_string.split(" ") : [],
-     own_window = "${window_url}";
-    if (windows.at(-1) !== own_window) {
-     const window_index = windows.indexOf(own_window);
-     if (window_index !== -1) windows.splice(window_index, 1)
-     windows.push(own_window)
-     Ω[windows_uri] = windows.join(" ")
-    }`;
-  return `
-   e => {
-    e?.stopPropagation();
-    ${put_task}
-    ${ is_minimized ? `
-    Ω["${minimized_url}"] = "0";
-    Ω["${active_url}"] = "1";
-    ${put_in_front}` : is_inactive ? `
-    Ω["${active_url}"] = "1";
-    ${put_in_front}` : `
-    Ω["${active_url}"] = "0";
-    Ω["${minimized_url}"] = "1";`}
-   }
-  `',
+ "https://pilot.parts/programs/debate/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/relate/task/onpointerdown.c.js',
  "https://pilot.parts/programs/debate/task/open/fx.uri" => 'https://pilot.parts/programs/debate/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/debate/window/layout.css https://pilot.parts/programs/debate/task/onpointerdown.js',
  "https://pilot.parts/programs/debate/task/?layout" => 'https://pilot.parts/programs/debate/task/layout.css',
  "https://pilot.parts/programs/debate/task/?manifest" => 'https://pilot.parts/programs/debate/task/manifest.uri',
@@ -3303,42 +3198,18 @@ Debate */
  "https://pilot.parts/programs/debate/window/active.txt?index" => 'https://pilot.parts/programs/debate/task/index.txt',
  "https://pilot.parts/programs/debate/window/active.txt?minimized" => 'https://pilot.parts/programs/debate/window/minimized.txt',
  "https://pilot.parts/programs/debate/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
- "https://pilot.parts/programs/debate/window/active.txt?constructor" => 'https://pilot.parts/programs/debate/window/active.txt.c.js',
- "https://pilot.parts/programs/debate/window/active.txt.c.js" => 'const active = ("" + minimized) === \'1\' ? \'0\' : ("" + selected) === ("" + index) ? \'1\' : \'0\'; return active;',
+ "https://pilot.parts/programs/debate/window/active.txt?constructor" => 'https://pilot.parts/programs/relate/window/active.txt.c.js',
  "https://pilot.parts/programs/debate/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/debate/window/controls/exit-button/layout.css',
  "https://pilot.parts/programs/debate/window/controls/exit-button/down.txt" => '0',
  "https://pilot.parts/programs/debate/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/debate/window/controls/exit-button/down-fx.uri',
  "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt',
- "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/controls/exit-button/layout.css.c.js',
- "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css.c.js" => 'return `
-  :host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   margin-left: 2px;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before, :host::after {
-   --color: black;
-   content: "";
-   display: block;
-   position: absolute;
-   width: 8px;
-   height: 7px;
-   left: 4px;
-   top: 3px;
-   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%);
-  }
-  :host(:hover)::before {
-   --color: blue
-  }`',
+ "https://pilot.parts/programs/debate/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css.c.js',
  "https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
  "https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/debate/window/',
  "https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/debate/task/',
- "https://pilot.parts/programs/debate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/exit-button/release.js\'
+ "https://pilot.parts/programs/debate/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/exit-button/release.js\'
   }',
- "https://pilot.parts/programs/debate/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/debate/window/controls/exit-button/release.js" => 'e => { _[\'https://pilot.parts/programs/debate/window/controls/exit-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/debate/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/exit-button/layout.css',
  "https://pilot.parts/programs/debate/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/exit-button/onclick.js',
@@ -3369,16 +3240,16 @@ Debate */
    --color: blue }`',
  "https://pilot.parts/programs/debate/window/controls/maximize-button/onclick.js" => '
   () => {
-   Ω[\'https://pilot.parts/programs/debate/window/maximized.txt\'] = \'1\'
+   _[\'https://pilot.parts/programs/debate/window/maximized.txt\'] = \'1\'
   }',
  "https://pilot.parts/programs/debate/window/controls/maximize-button/onpointerdown.js" => '
   e => {
-   e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt\'] = \'1\'
-   Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/maximize-button/release.js\'
+   e.stopPropagation(); _[\'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt\'] = \'1\'
+   _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/maximize-button/release.js\'
   }',
  "https://pilot.parts/programs/debate/window/controls/maximize-button/release.js" => '
   e => {
-   Ω[\'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt\'] = \'0\'
+   _[\'https://pilot.parts/programs/debate/window/controls/maximize-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/debate/window/controls/maximize-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/layout.css',
  "https://pilot.parts/programs/debate/window/controls/maximize-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/maximize-button/onclick.js',
@@ -3387,31 +3258,12 @@ Debate */
  "https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt" => '0',
  "https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/down-fx.uri',
  "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt',
- "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css.c.js',
- "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 6px;
-   height: 2px;
-   background: var(--color);
-   top: 9px;
-   left: 4px }
-  :host(:hover)::before {
-   --color: blue }`',
- "https://pilot.parts/programs/debate/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/debate/window/minimized.txt\'] = \'1\'
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/onclick.js" => '()=>{_[\'https://pilot.parts/programs/debate/window/minimized.txt\'] = \'1\'
   }',
- "https://pilot.parts/programs/debate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/minimize-button/release.js\'
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/minimize-button/release.js\'
   }',
- "https://pilot.parts/programs/debate/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/debate/window/controls/minimize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/debate/window/controls/minimize-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/debate/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/layout.css',
  "https://pilot.parts/programs/debate/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/minimize-button/onclick.js',
@@ -3444,10 +3296,10 @@ Debate */
    left: 5px }
   :host(:hover)::before, :host(:hover)::after {
    --color: blue }`',
- "https://pilot.parts/programs/debate/window/controls/restore-button/onclick.js" => '()=>Ω[\'https://pilot.parts/programs/debate/window/maximized.txt\'] = \'0\'',
- "https://pilot.parts/programs/debate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/restore-button/release.js\'
+ "https://pilot.parts/programs/debate/window/controls/restore-button/onclick.js" => '()=>_[\'https://pilot.parts/programs/debate/window/maximized.txt\'] = \'0\'',
+ "https://pilot.parts/programs/debate/window/controls/restore-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/debate/window/controls/restore-button/release.js\'
   }',
- "https://pilot.parts/programs/debate/window/controls/restore-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/debate/window/controls/restore-button/release.js" => 'e => { _[\'https://pilot.parts/programs/debate/window/controls/restore-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/debate/window/controls/restore-button/?layout" => 'https://pilot.parts/programs/debate/window/controls/restore-button/layout.css',
  "https://pilot.parts/programs/debate/window/controls/restore-button/?onclick" => 'https://pilot.parts/programs/debate/window/controls/restore-button/onclick.js',
@@ -3517,22 +3369,11 @@ Debate */
  "https://pilot.parts/programs/debate/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
  "https://pilot.parts/programs/debate/window/manifest.uri?position" => 'https://pilot.parts/programs/debate/window/position.json',
  "https://pilot.parts/programs/debate/window/manifest.uri?constructor" => 'https://pilot.parts/programs/debate/window/manifest.uri.c.js',
- "https://pilot.parts/programs/debate/window/manifest.uri?ice_json" => 'https://pilot.parts/programs/debate/connection/icecandidate.json',
  "https://pilot.parts/programs/debate/window/manifest.uri.c.js" => <<<JS
-  const [title_url, panel_url, transform_url, position_url] = [title, panel, transform_path, position].map(x => x.headerOf().href)
-  const transform_urls = transform(transform_url, position_url, "nesw", title_url);
-  const lc = new RTCPeerConnection();
-  const dc = lc.createDataChannel(location.hostname)
-  dc.onmessage = e => console.log("message says: " + e.data, e)
-  dc.onopen = e => console.log("opened")
-  lc.onicecandidate = e => { const url = ice_json.headerOf().href; Ω[url] = JSON.stringify(lc.localDescription) }
-  lc.createOffer().then(o => lc.setLocalDescription(o))
+  const  [title_url, panel_url, transform_url, position_url] = [title, panel, transform_path, position].map(x => x.headerOf().href), transform_urls = transform(transform_url, position_url, "nesw", title_url);
   return [title_url, panel_url, transform_urls].join(" ")
   JS,
- "https://pilot.parts/programs/debate/connection/icecandidate.json" => '',
- "https://pilot.parts/programs/debate/connection/icecandidate.json?fx" => 'https://pilot.parts/programs/debate/connection/oncandidate.uri',
- "https://pilot.parts/programs/debate/connection/oncandidate.uri" => 'https://pilot.parts/programs/debate/connection/status.txt https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css',
- "https://pilot.parts/programs/debate/connection/status.txt.c.js" => 'return "" + (Δ["https://pilot.parts/programs/debate/connection/icecandidate.json"] ? 1 : 0)',
+ "https://pilot.parts/programs/debate/connection/status.txt.c.js" => 'return "0"',
  "https://pilot.parts/programs/debate/connection/status.txt?constructor" => 'https://pilot.parts/programs/debate/connection/status.txt.c.js',
  "https://pilot.parts/programs/debate/connection/status.txt?fx" => 'https://pilot.parts/programs/debate/connection/onstatus.uri',
  "https://pilot.parts/programs/debate/connection/onstatus.uri" => 'https://pilot.parts/programs/debate/window/panel/status/layout.css',
@@ -3579,7 +3420,7 @@ Debate */
  "https://pilot.parts/programs/debate/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/debate/app-icon/ https://pilot.parts/programs/debate/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/debate/window/controls/',
  "https://pilot.parts/programs/debate/window/title-bar/ondblclick.js?maximized" => 'https://pilot.parts/programs/debate/window/maximized.txt',
  "https://pilot.parts/programs/debate/window/title-bar/ondblclick.js?constructor" => 'https://pilot.parts/programs/debate/window/title-bar/ondblclick.c.js',
- "https://pilot.parts/programs/debate/window/title-bar/ondblclick.c.js" => 'return `() => { Ω[\'https://pilot.parts/programs/debate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
+ "https://pilot.parts/programs/debate/window/title-bar/ondblclick.c.js" => 'return `() => { _[\'https://pilot.parts/programs/debate/window/controls/${(""+maximized) === \'1\' ? \'restore\' : \'maximize\'}-button/onclick.js\']() }`',
  "https://pilot.parts/programs/debate/window/title-bar/?layout" => 'https://pilot.parts/programs/debate/window/title-bar/layout.css',
  "https://pilot.parts/programs/debate/window/title-bar/?manifest" => 'https://pilot.parts/programs/debate/window/title-bar/manifest.uri',
  "https://pilot.parts/programs/debate/window/title-bar/?ondblclick" => 'https://pilot.parts/programs/debate/window/title-bar/ondblclick.js',
@@ -3587,19 +3428,24 @@ Debate */
  "https://pilot.parts/programs/debate/window/?manifest" => 'https://pilot.parts/programs/debate/window/manifest.uri',
  "https://pilot.parts/programs/debate/window/?onfocus" => 'https://pilot.parts/programs/debate/window/onfocus.js',
  "https://pilot.parts/programs/debate/window/panel/?manifest" => 'https://pilot.parts/programs/debate/window/panel/manifest.uri',
- "https://pilot.parts/programs/debate/window/panel/manifest.uri" => 'https://pilot.parts/programs/debate/window/panel/toolbar/ https://pilot.parts/programs/debate/window/panel/contacts/ https://pilot.parts/programs/debate/window/panel/rtc-request/ https://pilot.parts/programs/debate/window/panel/status/',
+ "https://pilot.parts/programs/debate/window/panel/manifest.uri" => 'https://pilot.parts/programs/debate/window/panel/toolbar/ https://pilot.parts/programs/debate/window/panel/contacts/ https://pilot.parts/programs/debate/window/panel/status/',
  "https://pilot.parts/programs/debate/window/panel/?layout" => 'https://pilot.parts/programs/debate/window/panel/layout.css',
  "https://pilot.parts/programs/debate/window/panel/layout.css" => ':host { display: flex; flex-flow: column nowrap; flex: 1 1; gap: 2px; }',
  "https://pilot.parts/programs/debate/window/panel/toolbar/?manifest" => 'https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri',
  "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?constructor" => 'https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri.c.js',
- "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?button_url" => 'https://pilot.parts/programs/debate/window/panel/toolbar/add-contact/',
+ "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?button_url" => 'https://pilot.parts/programs/debate/window/panel/toolbar/',
  "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
  "https://pilot.parts/programs/debate/window/panel/toolbar/manifest.uri.c.js" => <<<JS
   return [[
-   button_url.headerOf().href,
-   `:host { text-align: center; display: flex; flex-flow: column nowrap; width: 40px; box-sizing: border-box } :host::before { content: "👥"; font-size: 24px; line-height: 24px; } :host::after { content: "Add" }`,
+   button_url.headerOf().href + "answer/",
+   `:host { text-align: center; display: flex; flex-flow: column nowrap; width: 40px; box-sizing: border-box } :host::before { content: "👥"; font-size: 24px; line-height: 24px; } :host::after { content: "Answer" }`,
    "",
-   `() => { console.log("this is where you would add a contact") }`,
+   `e => _["https://pilot.parts/programs/answer/task/onpointerdown.js"](e)`,
+  ],[
+   button_url.headerOf().href + "invite/",
+   `:host { text-align: center; display: flex; flex-flow: column nowrap; width: 40px; box-sizing: border-box } :host::before { content: "👥"; font-size: 24px; line-height: 24px; } :host::after { content: "Place" }`,
+   "",
+   `e => _["https://pilot.parts/programs/invite/task/onpointerdown.js"](e)`,
   ]].map(config => { button(...config); return config[0] }).join(" ")
   JS,
  "https://pilot.parts/programs/debate/window/panel/toolbar/?layout" => 'https://pilot.parts/programs/debate/window/panel/toolbar/layout.css',
@@ -3607,11 +3453,6 @@ Debate */
  "https://pilot.parts/programs/debate/window/panel/contacts/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/manifest.uri',
  "https://pilot.parts/programs/debate/window/panel/contacts/manifest.uri" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/ https://pilot.parts/programs/debate/window/panel/contacts/offline/',
  "https://pilot.parts/programs/debate/window/panel/contacts/?layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
- "https://pilot.parts/programs/debate/window/panel/rtc-request/?layout" => 'https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css',
- "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css.c.js" => 'return inset_layout + ` :host::before { content: \'${ice_json}\' }`',
- "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css?constructor" => 'https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css.c.js',
- "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css?inset_layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
- "https://pilot.parts/programs/debate/window/panel/rtc-request/layout.css?ice_json" => 'https://pilot.parts/programs/debate/connection/icecandidate.json',
  "https://pilot.parts/programs/debate/window/panel/status/?manifest" => 'https://pilot.parts/programs/debate/window/panel/status/manifest.uri',
  "https://pilot.parts/programs/debate/window/panel/status/manifest.uri" => '',
  "https://pilot.parts/programs/debate/window/panel/status/?layout" => 'https://pilot.parts/programs/debate/window/panel/status/layout.css',
@@ -3629,126 +3470,33 @@ Debate */
   :host::after {
    content: "👤 ${"" + status === "1" ? "Online" : "Offline"}"
   }`',
-  "https://pilot.parts/programs/debate/window/panel/contacts/online/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/manifest.uri',
-   "https://pilot.parts/programs/debate/window/panel/contacts/online/manifest.uri" => '',
-  "https://pilot.parts/programs/debate/window/panel/contacts/online/?layout" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/layout.css',
-  "https://pilot.parts/programs/debate/window/panel/contacts/online/layout.css" => ':host { display: flex; flex-flow: column nowrap } :host::before { content: "Online"; font-weight: 700 }',
-  "https://pilot.parts/programs/debate/window/panel/contacts/offline/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/offline/manifest.uri',
-   "https://pilot.parts/programs/debate/window/panel/contacts/offline/manifest.uri" => '',
-  "https://pilot.parts/programs/debate/window/panel/contacts/offline/?layout" => 'https://pilot.parts/programs/debate/window/panel/contacts/offline/layout.css',
-  "https://pilot.parts/programs/debate/window/panel/contacts/offline/layout.css" => ':host { display: flex; flex-flow: column nowrap } :host::before { content: "Offline"; font-weight: 700 }',
-  
-  /*
+ "https://pilot.parts/programs/debate/window/panel/contacts/online/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/manifest.uri',
+ "https://pilot.parts/programs/debate/window/panel/contacts/online/manifest.uri" => '',
+ "https://pilot.parts/programs/debate/window/panel/contacts/online/?layout" => 'https://pilot.parts/programs/debate/window/panel/contacts/online/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/contacts/online/layout.css" => ':host { display: flex; flex-flow: column nowrap } :host::before { content: "Online"; font-weight: 700 }',
+ "https://pilot.parts/programs/debate/window/panel/contacts/offline/?manifest" => 'https://pilot.parts/programs/debate/window/panel/contacts/offline/manifest.uri',
+ "https://pilot.parts/programs/debate/window/panel/contacts/offline/manifest.uri" => '',
+ "https://pilot.parts/programs/debate/window/panel/contacts/offline/?layout" => 'https://pilot.parts/programs/debate/window/panel/contacts/offline/layout.css',
+ "https://pilot.parts/programs/debate/window/panel/contacts/offline/layout.css" => ':host { display: flex; flex-flow: column nowrap } :host::before { content: "Offline"; font-weight: 700 }',
+
+ /*
 Welcome */
  "https://pilot.parts/programs/welcome/task/datum.txt" => 'https://pilot.parts/programs/welcome/task/',
  "https://pilot.parts/programs/welcome/task/index.txt" => '1',
  "https://pilot.parts/programs/welcome/task/index.txt?datum" => 'https://pilot.parts/programs/welcome/task/datum.txt',
  "https://pilot.parts/programs/welcome/task/index.txt?fx" => 'https://pilot.parts/programs/welcome/task/index/fx.uri',
  "https://pilot.parts/programs/welcome/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
- "https://pilot.parts/programs/welcome/task/index.txt?constructor" => 'https://pilot.parts/programs/welcome/task/index.txt.c.js',
- "https://pilot.parts/programs/welcome/task/index.txt.c.js" => 'return ""+(""+tasks).split(" ").indexOf(""+datum) + 1',
+ "https://pilot.parts/programs/welcome/task/index.txt?constructor" => 'https://pilot.parts/programs/locate/task/index.txt.c.js',
  "https://pilot.parts/programs/welcome/task/index/fx.uri" => 'https://pilot.parts/programs/welcome/window/active.txt',
  "https://pilot.parts/programs/welcome/task/layout.css?open" => 'https://pilot.parts/programs/welcome/window/active.txt',
- "https://pilot.parts/programs/welcome/task/layout.css?constructor" => 'https://pilot.parts/programs/welcome/task/layout.css.c.js',
- "https://pilot.parts/programs/welcome/task/layout.css.c.js" => '
-  return `
-   :host {
-    position: relative;
-    height: 100%;
-    margin: 0;
-    width: 160px;
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 3px;
-    border: none;${("" + open) === "1" ? `
-    font: bold 11px sans-serif` : ``};
-    box-sizing: border-box;
-    padding: ${("" + open) === "0" ? 3 : 4}px 2px 2px;
-    text-align: left;
-    box-shadow: ${("" + open) === "0" ? "inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb" : "inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a"}
-   }
-   :host(:focus)::after {
-    border: 1px dotted black;
-    content: "";
-    position: absolute;
-    margin: 3px;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    pointer-events: none;
-   }
-   ${(""+open) === "1" ? `
-   :host > * {
-    z-index: 3
-   }
-   :host::before {
-    content: "";
-    position: absolute;
-    margin: 2px;
-    border-top: 1px solid white;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-image:linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);background-size: 2px 2px;background-position: 0 0, 1px 1px;
-   }` : ``}
-   app-icon {
-    width: 16px;
-    height: 16px
-   }
-  `;',
+ "https://pilot.parts/programs/welcome/task/layout.css?constructor" => 'https://pilot.parts/programs/relate/task/layout.css.c.js',
  "https://pilot.parts/programs/welcome/task/manifest.uri" => 'https://pilot.parts/programs/welcome/app-icon/ https://pilot.parts/programs/welcome/app-label/',
  "https://pilot.parts/programs/welcome/task/manifest.uri?open" => 'https://pilot.parts/programs/welcome/window/active.txt',
  "https://pilot.parts/programs/welcome/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/welcome/window/minimized.txt',
  "https://pilot.parts/programs/welcome/task/onpointerdown.js?active" => 'https://pilot.parts/programs/welcome/window/active.txt',
  "https://pilot.parts/programs/welcome/task/onpointerdown.js?window" => 'https://pilot.parts/programs/welcome/window/',
  "https://pilot.parts/programs/welcome/task/onpointerdown.js?task" => 'https://pilot.parts/programs/welcome/task/',
- "https://pilot.parts/programs/welcome/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/welcome/task/onpointerdown.c.js',
- "https://pilot.parts/programs/welcome/task/onpointerdown.c.js" => '
-  const
-   is_minimized = ("" + minimized) === "1",
-   is_inactive = ("" + active) === "0",
-   minimized_url = minimized.headerOf().href,
-   active_url = active.headerOf().href,
-   window_url = window.headerOf().href,
-   task_url = task.headerOf().href,
-   put_task = `
-    const
-     tasks_uri = "https://pilot.parts/tasks.uri",
-     tasks_string = Ω[tasks_uri].toPrimitive(),
-     tasks = tasks_string ? tasks_string.split(" ") : [],
-     own_task = "${task_url}";
-    if (!tasks.includes(own_task)) {
-     tasks.push(own_task)
-     Ω[tasks_uri] = tasks.join(" ")
-    }`,
-   put_in_front = `
-    const
-     windows_uri = "https://pilot.parts/windows.uri",
-     windows_string = Ω[windows_uri].toPrimitive(),
-     windows = windows_string ? windows_string.split(" ") : [],
-     own_window = "${window_url}";
-    if (windows.at(-1) !== own_window) {
-     const window_index = windows.indexOf(own_window);
-     if (window_index !== -1) windows.splice(window_index, 1)
-     windows.push(own_window)
-     Ω[windows_uri] = windows.join(" ")
-    }`;
-  return `
-   e => {
-    e?.stopPropagation();
-    ${put_task}
-    ${ is_minimized ? `
-    Ω["${minimized_url}"] = "0";
-    Ω["${active_url}"] = "1";
-    ${put_in_front}` : is_inactive ? `
-    Ω["${active_url}"] = "1";
-    ${put_in_front}` : `
-    Ω["${active_url}"] = "0";
-    Ω["${minimized_url}"] = "1";`}
-   }
-  `',
+ "https://pilot.parts/programs/welcome/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/relate/task/onpointerdown.c.js',
  "https://pilot.parts/programs/welcome/task/open/fx.uri" => 'https://pilot.parts/programs/welcome/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/welcome/window/layout.css https://pilot.parts/programs/welcome/task/onpointerdown.js',
  "https://pilot.parts/programs/welcome/task/?layout" => 'https://pilot.parts/programs/welcome/task/layout.css',
  "https://pilot.parts/programs/welcome/task/?manifest" => 'https://pilot.parts/programs/welcome/task/manifest.uri',
@@ -3808,42 +3556,18 @@ Welcome */
  "https://pilot.parts/programs/welcome/window/active.txt?index" => 'https://pilot.parts/programs/welcome/task/index.txt',
  "https://pilot.parts/programs/welcome/window/active.txt?minimized" => 'https://pilot.parts/programs/welcome/window/minimized.txt',
  "https://pilot.parts/programs/welcome/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
- "https://pilot.parts/programs/welcome/window/active.txt?constructor" => 'https://pilot.parts/programs/welcome/window/active.txt.c.js',
- "https://pilot.parts/programs/welcome/window/active.txt.c.js" => 'const active = ("" + minimized) === \'1\' ? \'0\' : ("" + selected) === ("" + index) ? \'1\' : \'0\'; return active;',
+ "https://pilot.parts/programs/welcome/window/active.txt?constructor" => 'https://pilot.parts/programs/relate/window/active.txt.c.js',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt" => '0',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/down-fx.uri',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt',
- "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css.c.js',
- "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css.c.js" => 'return `
-  :host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   margin-left: 2px;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before, :host::after {
-   --color: black;
-   content: "";
-   display: block;
-   position: absolute;
-   width: 8px;
-   height: 7px;
-   left: 4px;
-   top: 3px;
-   background: linear-gradient(to top left, transparent 0%, transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%), linear-gradient(to top right,  transparent 0%,  transparent calc(50% - 1px), var(--color) calc(50% - 1px), var(--color) calc(50% + 1px),  transparent calc(50% + 1px),  transparent 100%);
-  }
-  :host(:hover)::before {
-   --color: blue
-  }`',
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css.c.js',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/welcome/window/',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/welcome/task/',
- "https://pilot.parts/programs/welcome/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/welcome/window/controls/exit-button/release.js\'
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/welcome/window/controls/exit-button/release.js\'
   }',
- "https://pilot.parts/programs/welcome/window/controls/exit-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/welcome/window/controls/exit-button/release.js" => 'e => { _[\'https://pilot.parts/programs/welcome/window/controls/exit-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/layout.css',
  "https://pilot.parts/programs/welcome/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/welcome/window/controls/exit-button/onclick.js',
@@ -3852,31 +3576,12 @@ Welcome */
  "https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt" => '0',
  "https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/down-fx.uri',
  "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt',
- "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css.c.js',
- "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css.c.js" => 'return `:host {
-   position: relative;
-   width: 16px;
-   height: 14px;
-   background: #c3c3c3;
-   box-shadow: ${(""+down) === \'1\' ? \'inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a\' : \'inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb\'}
-  }
-  :host::before {
-   --color: black;
-   display: block;
-   position: absolute;
-   content: "";
-   width: 6px;
-   height: 2px;
-   background: var(--color);
-   top: 9px;
-   left: 4px }
-  :host(:hover)::before {
-   --color: blue }`',
- "https://pilot.parts/programs/welcome/window/controls/minimize-button/onclick.js" => '()=>{Ω[\'https://pilot.parts/programs/welcome/window/minimized.txt\'] = \'1\'
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/onclick.js" => '()=>{_[\'https://pilot.parts/programs/welcome/window/minimized.txt\'] = \'1\'
   }',
- "https://pilot.parts/programs/welcome/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); Ω[\'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt\'] = \'1\'; Ω[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/welcome/window/controls/minimize-button/release.js\'
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/welcome/window/controls/minimize-button/release.js\'
   }',
- "https://pilot.parts/programs/welcome/window/controls/minimize-button/release.js" => 'e => { Ω[\'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt\'] = \'0\'
+ "https://pilot.parts/programs/welcome/window/controls/minimize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/welcome/window/controls/minimize-button/down.txt\'] = \'0\'
   }',
  "https://pilot.parts/programs/welcome/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/layout.css',
  "https://pilot.parts/programs/welcome/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/welcome/window/controls/minimize-button/onclick.js',
@@ -3957,25 +3662,8 @@ Welcome */
   }',
  "https://pilot.parts/programs/welcome/window/position.json?fx" => 'https://pilot.parts/programs/welcome/window/position/fx.uri',
  "https://pilot.parts/programs/welcome/window/position/fx.uri" => 'https://pilot.parts/programs/welcome/window/layout.css',
- "https://pilot.parts/programs/welcome/window/title-bar/layout.css" => '
-  :host {
-   background: #7f7f7f;
-   color: white;
-   display: flex;
-   flex-flow: row nowrap;
-   align-items: center;
-   gap: 3px;
-   height: 18px;
-   flex: 0 0 18px;
-   padding: 0px 2px;
-   box-sizing: border-box;
-  }
-  app-icon {
-   width: 16px;
-   height: 16px;
-  }',
  "https://pilot.parts/programs/welcome/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/welcome/app-icon/ https://pilot.parts/programs/welcome/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/welcome/window/controls/',
- "https://pilot.parts/programs/welcome/window/title-bar/?layout" => 'https://pilot.parts/programs/welcome/window/title-bar/layout.css',
+ "https://pilot.parts/programs/welcome/window/title-bar/?layout" => 'https://pilot.parts/programs/invite/window/title-bar/layout.css',
  "https://pilot.parts/programs/welcome/window/title-bar/?manifest" => 'https://pilot.parts/programs/welcome/window/title-bar/manifest.uri',
  "https://pilot.parts/programs/welcome/window/?layout" => 'https://pilot.parts/programs/welcome/window/layout.css',
  "https://pilot.parts/programs/welcome/window/?manifest" => 'https://pilot.parts/programs/welcome/window/manifest.uri',
@@ -4004,17 +3692,17 @@ Welcome */
  "https://pilot.parts/programs/welcome/window/panel/tip/?layout" => 'https://pilot.parts/programs/welcome/window/panel/tip/layout.css',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-0.txt" => 'No matter how much space a file takes up, an exact copy of that file takes up almost no space.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-1.txt" => '🔗 Kireji are files that describe other files.',
- "https://pilot.parts/programs/welcome/window/panel/tip/tip-2.txt" => 'To change which programs open on start up, set everything how you want it and save. Pilot always boots into the last saved state.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-2.txt" => 'To change which programs open on start up, set the core how you want it and save. Pilot always boots into the last saved state.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-3.txt" => '🧬 Relate is a program that lets you modify any Pilot file using a node editor interface.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-4.txt" => 'Use 📁 Locate to browse all files on this virtual computer.',
- "https://pilot.parts/programs/welcome/window/panel/tip/tip-5.txt" => 'Underneath everything, Pilot is a website. 📁 Locate is the complete site map.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-5.txt" => 'Pilot is a website. 📁 Locate is the site map.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-6.txt" => 'This computer is a client. You can open as many different clients as you want.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-7.txt" => 'When the mind is enlightened, the spirit is freed and the body matters not.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-8.txt" => 'There is always a virtual computer running in the background called the server.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-9.txt" => 'On your device, there is one virtual computer running per website in the network.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-10.txt" => 'If you immediately know the candle light is fire, the meal was cooked long ago.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-11.txt" => 'To discard a client without saving, simply close the tab it is running in.',
- "https://pilot.parts/programs/welcome/window/panel/tip/tip-12.txt" => 'When you perform a factory reset, it completely erases everything you\'ve done and re-downloads Pilot from the server.',
+ "https://pilot.parts/programs/welcome/window/panel/tip/tip-12.txt" => 'When you perform a factory reset, it completely erases the core you\'ve made and re-downloads Pilot from the server.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-13.txt" => 'This website doesn\'t have a privacy policy, because it doesn\'t collect any information.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-14.txt" => 'You can establish your own peer-to-peer connections to socialize, stream multimedia, play multiplayer games, and keep files in sync across tabs, browsers, and devices.',
  "https://pilot.parts/programs/welcome/window/panel/tip/tip-15.txt" => 'All in-network websites work offline after you visit any one of them just once.',
@@ -4053,15 +3741,14 @@ Welcome */
   }
   :host::after {
    display: grid;
-   content: "${Ω[`https://pilot.parts/programs/welcome/window/panel/tip/tip-${tip_index}.txt`]}";
+   content: "${_[`https://pilot.parts/programs/welcome/window/panel/tip/tip-${tip_index}.txt`]}";
    min-width: 0;
    white-space: wrap;
    overflow-y: auto;
   }`',
- "https://pilot.parts/programs/welcome/window/panel/menu/?layout" => 'https://pilot.parts/programs/welcome/window/panel/menu/layout.css',
+ "https://pilot.parts/programs/welcome/window/panel/menu/?layout" => 'https://pilot.parts/programs/invite/window/panel/menu/layout.css',
  "https://pilot.parts/programs/welcome/window/panel/menu/?manifest" => 'https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri',
  "https://pilot.parts/programs/welcome/window/panel/menu/?core" => '',
- "https://pilot.parts/programs/welcome/window/panel/menu/layout.css" => ':host { display: flex; flex-flow: column nowrap; gap: 7px; } :host > * { height: 23px; padding: 3px; display: flex; flex-flow: row nowrap; text-align: center; }',
  "https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri?constructor" => 'https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri.c.js',
  "https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
  "https://pilot.parts/programs/welcome/window/panel/menu/manifest.uri.c.js" => <<<JS
@@ -4070,8 +3757,427 @@ Welcome */
    common_url + "next-tip/",
    ":host::before { content: \'Next Tip\'; width: 100%; }",
    "",
-   `() => { Ω["https://pilot.parts/programs/welcome/window/panel/tip/index.txt"] = (parseInt("" + Ω["https://pilot.parts/programs/welcome/window/panel/tip/index.txt"]) + 1) % parseInt("" + Ω["https://pilot.parts/programs/welcome/window/panel/tip/count.txt"]) }`,
+   `() => { _["https://pilot.parts/programs/welcome/window/panel/tip/index.txt"] = (parseInt("" + _["https://pilot.parts/programs/welcome/window/panel/tip/index.txt"]) + 1) % parseInt("" + _["https://pilot.parts/programs/welcome/window/panel/tip/count.txt"]) }`,
   ]].map(config => { button(...config); return config[0] }).join(" ")
- JS
+ JS,/*
+Place Call */
+ "https://pilot.parts/programs/invite/task/datum.txt" => 'https://pilot.parts/programs/invite/task/',
+ "https://pilot.parts/programs/invite/task/index.txt?datum" => 'https://pilot.parts/programs/invite/task/datum.txt',
+ "https://pilot.parts/programs/invite/task/index.txt?fx" => 'https://pilot.parts/programs/invite/task/index/fx.uri',
+ "https://pilot.parts/programs/invite/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/programs/invite/task/index.txt?constructor" => 'https://pilot.parts/programs/locate/task/index.txt.c.js',
+ "https://pilot.parts/programs/invite/task/index/fx.uri" => 'https://pilot.parts/programs/invite/window/active.txt',
+ "https://pilot.parts/programs/invite/task/layout.css?open" => 'https://pilot.parts/programs/invite/window/active.txt',
+ "https://pilot.parts/programs/invite/task/layout.css?constructor" => 'https://pilot.parts/programs/relate/task/layout.css.c.js',
+ "https://pilot.parts/programs/invite/task/manifest.uri" => 'https://pilot.parts/programs/invite/app-icon/ https://pilot.parts/programs/invite/app-label/',
+ "https://pilot.parts/programs/invite/task/manifest.uri?open" => 'https://pilot.parts/programs/invite/window/active.txt',
+ "https://pilot.parts/programs/invite/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/invite/window/minimized.txt',
+ "https://pilot.parts/programs/invite/task/onpointerdown.js?active" => 'https://pilot.parts/programs/invite/window/active.txt',
+ "https://pilot.parts/programs/invite/task/onpointerdown.js?window" => 'https://pilot.parts/programs/invite/window/',
+ "https://pilot.parts/programs/invite/task/onpointerdown.js?task" => 'https://pilot.parts/programs/invite/task/',
+ "https://pilot.parts/programs/invite/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/relate/task/onpointerdown.c.js',
+ "https://pilot.parts/programs/invite/task/open/fx.uri" => 'https://pilot.parts/programs/invite/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/invite/window/layout.css https://pilot.parts/programs/invite/task/onpointerdown.js',
+ "https://pilot.parts/programs/invite/task/?layout" => 'https://pilot.parts/programs/invite/task/layout.css',
+ "https://pilot.parts/programs/invite/task/?manifest" => 'https://pilot.parts/programs/invite/task/manifest.uri',
+ "https://pilot.parts/programs/invite/task/?onpointerdown" => 'https://pilot.parts/programs/invite/task/onpointerdown.js',
+ "https://pilot.parts/programs/invite/app-icon/?layout" => 'https://pilot.parts/programs/invite/app-icon/layout.css',
+ "https://pilot.parts/programs/invite/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: "👥";
+  }',
+ "https://pilot.parts/programs/invite/app-label/layout.css" => '
+  return `:host {
+   margin: 0;
+   height: 16px;
+   vertical-align: center;
+   text-overflow: ellipsis;
+   overflow: clip;
+  }
+  :host::after {
+   content: "Place Call";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/programs/invite/app-label/?layout" => 'https://pilot.parts/programs/invite/app-label/layout.css',
+ "https://pilot.parts/programs/invite/window/active.txt" => '1',
+ "https://pilot.parts/programs/invite/window/active.txt?fx" => 'https://pilot.parts/programs/invite/task/open/fx.uri',
+ "https://pilot.parts/programs/invite/window/active.txt?index" => 'https://pilot.parts/programs/invite/task/index.txt',
+ "https://pilot.parts/programs/invite/window/active.txt?minimized" => 'https://pilot.parts/programs/invite/window/minimized.txt',
+ "https://pilot.parts/programs/invite/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/programs/invite/window/active.txt?constructor" => 'https://pilot.parts/programs/relate/window/active.txt.c.js',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/invite/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/down.txt" => '0',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/invite/window/controls/exit-button/down-fx.uri',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/invite/window/controls/exit-button/down.txt',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css.c.js',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/invite/window/',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/invite/task/',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/invite/window/controls/exit-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/invite/window/controls/exit-button/release.js\'
+  }',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/release.js" => 'e => { _[\'https://pilot.parts/programs/invite/window/controls/exit-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/invite/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/invite/window/controls/exit-button/onclick.js',
+ "https://pilot.parts/programs/invite/window/controls/exit-button/?onpointerdown" => 'https://pilot.parts/programs/invite/window/controls/exit-button/onpointerdown.js',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/down-fx.uri" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/down.txt" => '0',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/down-fx.uri',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/down.txt',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/onclick.js" => '()=>{_[\'https://pilot.parts/programs/invite/window/minimized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/invite/window/controls/minimize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/invite/window/controls/minimize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/invite/window/controls/minimize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/onclick.js',
+ "https://pilot.parts/programs/invite/window/controls/minimize-button/?onpointerdown" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/onpointerdown.js',
+ "https://pilot.parts/programs/invite/window/controls/layout.css" => '
+  :host {
+   display: flex;
+   flex-flow: row nowrap
+  }',
+ "https://pilot.parts/programs/invite/window/controls/manifest.uri" => 'https://pilot.parts/programs/invite/window/controls/minimize-button/ https://pilot.parts/programs/invite/window/controls/exit-button/',
+ "https://pilot.parts/programs/invite/window/controls/?layout" => 'https://pilot.parts/programs/invite/window/controls/layout.css',
+ "https://pilot.parts/programs/invite/window/controls/?manifest" => 'https://pilot.parts/programs/invite/window/controls/manifest.uri',
+ "https://pilot.parts/programs/invite/window/layout.css?active" => 'https://pilot.parts/programs/invite/window/active.txt',
+ "https://pilot.parts/programs/invite/window/layout.css?position" => 'https://pilot.parts/programs/invite/window/position.json',
+ "https://pilot.parts/programs/invite/window/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/layout.css.c.js',
+ "https://pilot.parts/programs/invite/window/manifest.uri?title" => 'https://pilot.parts/programs/invite/window/title-bar/',
+ "https://pilot.parts/programs/invite/window/manifest.uri?panel" => 'https://pilot.parts/programs/invite/window/panel/',
+ "https://pilot.parts/programs/invite/window/manifest.uri?transform_path" => 'https://pilot.parts/programs/invite/window/transform/',
+ "https://pilot.parts/programs/invite/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/invite/window/manifest.uri?position" => 'https://pilot.parts/programs/invite/window/position.json',
+ "https://pilot.parts/programs/invite/window/manifest.uri?constructor" => 'https://pilot.parts/programs/invite/window/manifest.uri.c.js',
+ "https://pilot.parts/programs/invite/window/manifest.uri.c.js" => <<<JS
+  const [title_url, panel_url, transform_url, position_url] = [title, panel, transform_path, position].map(x => x.headerOf().href)
+  const transform_urls = transform(transform_url, position_url, "", title_url);
+  const urlSet = [title_url, panel_url]
+  if (transform_urls) urlSet.push(transform_urls)
+  return urlSet.join(" ")
+  JS,
+ "https://pilot.parts/programs/invite/window/minimized.txt" => '0',
+ "https://pilot.parts/programs/invite/window/minimized.txt?fx" => 'https://pilot.parts/programs/invite/window/minimized/fx.uri',
+ "https://pilot.parts/programs/invite/window/minimized/fx.uri" => 'https://pilot.parts/manifest.uri https://pilot.parts/programs/invite/window/active.txt https://pilot.parts/programs/invite/task/onpointerdown.js',
+ "https://pilot.parts/programs/invite/window/onfocus.js?active" => 'https://pilot.parts/programs/invite/window/active.txt',
+ "https://pilot.parts/programs/invite/window/onfocus.js?window" => 'https://pilot.parts/programs/invite/window/',
+ "https://pilot.parts/programs/invite/window/onfocus.js?constructor" => 'https://core.parts/behaviors/window-focus.c.js',
+ "https://pilot.parts/programs/invite/window/position.json" => '
+  {
+   "x": 32,
+   "y": 24,
+   "w": 492,
+   "h": 229,
+   "range": {
+    "x": [-64, 512],
+    "y": [-2, 256],
+    "w": [96, 256],
+    "h": [64, 128]
+   }
+  }',
+ "https://pilot.parts/programs/invite/window/position.json?fx" => 'https://pilot.parts/programs/invite/window/position/fx.uri',
+ "https://pilot.parts/programs/invite/window/position/fx.uri" => 'https://pilot.parts/programs/invite/window/layout.css',
+ "https://pilot.parts/programs/invite/window/title-bar/layout.css" => '
+  :host {
+   background: #7f7f7f;
+   color: white;
+   display: flex;
+   flex-flow: row nowrap;
+   align-items: center;
+   gap: 3px;
+   height: 18px;
+   flex: 0 0 18px;
+   padding: 0px 2px;
+   box-sizing: border-box;
+  }
+  app-icon {
+   width: 16px;
+   height: 16px;
+  }',
+ "https://pilot.parts/programs/invite/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/invite/app-icon/ https://pilot.parts/programs/invite/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/invite/window/controls/',
+ "https://pilot.parts/programs/invite/window/title-bar/?layout" => 'https://pilot.parts/programs/invite/window/title-bar/layout.css',
+ "https://pilot.parts/programs/invite/window/title-bar/?manifest" => 'https://pilot.parts/programs/invite/window/title-bar/manifest.uri',
+ "https://pilot.parts/programs/invite/window/?layout" => 'https://pilot.parts/programs/invite/window/layout.css',
+ "https://pilot.parts/programs/invite/window/?manifest" => 'https://pilot.parts/programs/invite/window/manifest.uri',
+ "https://pilot.parts/programs/invite/window/?onfocus" => 'https://pilot.parts/programs/invite/window/onfocus.js',
+ "https://pilot.parts/programs/invite/window/panel/?layout" => 'https://pilot.parts/programs/invite/window/panel/layout.css',
+ "https://pilot.parts/programs/invite/window/panel/layout.css" => '
+  :host {
+   height: 100%;
+   display: grid;
+   padding: 12px;
+   gap: 12px;
+   grid-template-columns: 1fr 100px;
+   grid-template-rows: 24px 1fr;
+   grid-template-areas:
+    "head head"
+    "call btns";
+  }
+  heading- {
+   grid-area: head;
+  }',
+ "https://pilot.parts/programs/invite/connection/call.txt" => '',
+ "https://pilot.parts/programs/invite/connection/call.txt?fx" => 'https://pilot.parts/programs/invite/connection/call.uri',
+ "https://pilot.parts/programs/invite/connection/call.uri" => 'https://pilot.parts/programs/invite/window/panel/call/layout.css',
+ "https://pilot.parts/programs/invite/window/panel/?manifest" => 'https://pilot.parts/programs/invite/window/panel/manifest.uri',
+ "https://pilot.parts/programs/invite/window/panel/manifest.uri" => 'https://pilot.parts/programs/invite/window/panel/heading/ https://pilot.parts/programs/invite/window/panel/call/ https://pilot.parts/programs/invite/window/panel/menu/',
+ "https://pilot.parts/programs/invite/window/panel/heading/?layout" => 'https://pilot.parts/programs/invite/window/panel/heading/layout.css',
+ "https://pilot.parts/programs/invite/window/panel/heading/layout.css" => ':host { display: flex; flex-flow: row nowrap; font-size: 24px; line-height: 24px; } :host::before { content: "Place Call\00a0"; font-weight: 300; }',
+ "https://pilot.parts/programs/invite/window/panel/menu/?layout" => 'https://pilot.parts/programs/invite/window/panel/menu/layout.css',
+ "https://pilot.parts/programs/invite/window/panel/menu/?manifest" => 'https://pilot.parts/programs/invite/window/panel/menu/manifest.uri',
+ "https://pilot.parts/programs/invite/window/panel/menu/?core" => '',
+ "https://pilot.parts/programs/invite/window/panel/menu/layout.css" => ':host { display: flex; flex-flow: column nowrap; gap: 7px; } :host > * { height: 23px; padding: 3px; display: flex; flex-flow: row nowrap; text-align: center; }',
+ "https://pilot.parts/programs/invite/window/panel/menu/manifest.uri?constructor" => 'https://pilot.parts/programs/invite/window/panel/menu/manifest.uri.c.js',
+ "https://pilot.parts/programs/invite/window/panel/menu/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
+ "https://pilot.parts/programs/invite/window/panel/menu/manifest.uri?call" => 'https://pilot.parts/programs/invite/connection/call.txt',
+ "https://pilot.parts/programs/invite/window/panel/menu/manifest.uri.c.js" => <<<JS
+  const common_url = "https://pilot.parts/programs/invite/window/panel/menu/";
+  const owner = new RTCPeerConnection()
+  owner.onicecandidate = () => globalThis.offer = _[call.headerOf().href] = JSON.stringify(owner.localDescription)
+  const channel = owner.createDataChannel("untitled")
+
+  channel.onmessage = e => console.log(e.target.label + " message => " + JSON.stringify(e.data))
+  channel.onclose = e => console.log(e.target.label + " closed!")
+  channel.onopen = e => console.log(e.target.label + " opened!")
+
+  owner.createOffer().then(o => owner.setLocalDescription(o))
+  globalThis.answer = a => {
+   owner.setRemoteDescription(a).catch(e => {
+    if (owner.signalingState === "stable") return
+    console.error(e)
+   })
+   return a
+  }
+  
+  return [[
+   common_url + "copy/",
+   ":host::before { content: \'Copy Call\'; width: 100%; }",
+   "",
+    `() => { const str = ""+_["\${call.headerOf().href}"]; navigator.clipboard.writeText(str) }`,
+  ],[
+   common_url + "paste/",
+   ":host::before { content: \'Paste Answer\'; width: 100%; }",
+   "",
+   `() => navigator.clipboard.readText().then(x => _["\${answer.headerOf().href}"] = x )`,
+  ]].map(config => { button(...config); return config[0] }).join(" ")
+  JS,
+ "https://pilot.parts/programs/invite/window/panel/call/?layout" => 'https://pilot.parts/programs/invite/window/panel/call/layout.css',
+ "https://pilot.parts/programs/invite/window/panel/call/layout.css?core" => 'https://pilot.parts/programs/answer/window/panel/answer/layout.css',
+ "https://pilot.parts/programs/invite/window/panel/call/layout.css?data" => 'https://pilot.parts/programs/invite/connection/call.txt',/*
+Answer Call */
+ "https://pilot.parts/programs/answer/task/datum.txt" => 'https://pilot.parts/programs/answer/task/',
+ "https://pilot.parts/programs/answer/task/index.txt?datum" => 'https://pilot.parts/programs/answer/task/datum.txt',
+ "https://pilot.parts/programs/answer/task/index.txt?fx" => 'https://pilot.parts/programs/answer/task/index/fx.uri',
+ "https://pilot.parts/programs/answer/task/index.txt?tasks" => 'https://pilot.parts/tasks.uri',
+ "https://pilot.parts/programs/answer/task/index.txt?constructor" => 'https://pilot.parts/programs/locate/task/index.txt.c.js',
+ "https://pilot.parts/programs/answer/task/index/fx.uri" => 'https://pilot.parts/programs/answer/window/active.txt',
+ "https://pilot.parts/programs/answer/task/layout.css?open" => 'https://pilot.parts/programs/answer/window/active.txt',
+ "https://pilot.parts/programs/answer/task/layout.css?constructor" => 'https://pilot.parts/programs/relate/task/layout.css.c.js',
+ "https://pilot.parts/programs/answer/task/manifest.uri" => 'https://pilot.parts/programs/answer/app-icon/ https://pilot.parts/programs/answer/app-label/',
+ "https://pilot.parts/programs/answer/task/manifest.uri?open" => 'https://pilot.parts/programs/answer/window/active.txt',
+ "https://pilot.parts/programs/answer/task/onpointerdown.js?minimized" => 'https://pilot.parts/programs/answer/window/minimized.txt',
+ "https://pilot.parts/programs/answer/task/onpointerdown.js?active" => 'https://pilot.parts/programs/answer/window/active.txt',
+ "https://pilot.parts/programs/answer/task/onpointerdown.js?window" => 'https://pilot.parts/programs/answer/window/',
+ "https://pilot.parts/programs/answer/task/onpointerdown.js?task" => 'https://pilot.parts/programs/answer/task/',
+ "https://pilot.parts/programs/answer/task/onpointerdown.js?constructor" => 'https://pilot.parts/programs/relate/task/onpointerdown.c.js',
+ "https://pilot.parts/programs/answer/task/open/fx.uri" => 'https://pilot.parts/programs/answer/task/layout.css https://pilot.parts/taskbar/selected.txt https://pilot.parts/programs/answer/window/layout.css https://pilot.parts/programs/answer/task/onpointerdown.js',
+ "https://pilot.parts/programs/answer/task/?layout" => 'https://pilot.parts/programs/answer/task/layout.css',
+ "https://pilot.parts/programs/answer/task/?manifest" => 'https://pilot.parts/programs/answer/task/manifest.uri',
+ "https://pilot.parts/programs/answer/task/?onpointerdown" => 'https://pilot.parts/programs/answer/task/onpointerdown.js',
+ "https://pilot.parts/programs/answer/app-icon/?layout" => 'https://pilot.parts/programs/answer/app-icon/layout.css',
+ "https://pilot.parts/programs/answer/app-icon/layout.css" => '
+  :host {
+   --size: 16px;
+   width: var(--size);
+   height: var(--size);
+   font-size: var(--size);
+   line-height: var(--size);
+  }
+  :host::before {
+   content: "👥";
+  }',
+ "https://pilot.parts/programs/answer/app-label/layout.css" => '
+  return `:host {
+   margin: 0;
+   height: 16px;
+   vertical-align: center;
+   text-overflow: ellipsis;
+   overflow: clip;
+  }
+  :host::after {
+   content: "Answer Call";
+   white-space: nowrap;
+  }`',
+ "https://pilot.parts/programs/answer/app-label/?layout" => 'https://pilot.parts/programs/answer/app-label/layout.css',
+ "https://pilot.parts/programs/answer/window/active.txt" => '1',
+ "https://pilot.parts/programs/answer/window/active.txt?fx" => 'https://pilot.parts/programs/answer/task/open/fx.uri',
+ "https://pilot.parts/programs/answer/window/active.txt?index" => 'https://pilot.parts/programs/answer/task/index.txt',
+ "https://pilot.parts/programs/answer/window/active.txt?minimized" => 'https://pilot.parts/programs/answer/window/minimized.txt',
+ "https://pilot.parts/programs/answer/window/active.txt?selected" => 'https://pilot.parts/taskbar/selected.txt',
+ "https://pilot.parts/programs/answer/window/active.txt?constructor" => 'https://pilot.parts/programs/relate/window/active.txt.c.js',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/down-fx.uri" => 'https://pilot.parts/programs/answer/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/down.txt" => '0',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/down.txt?fx" => 'https://pilot.parts/programs/answer/window/controls/exit-button/down-fx.uri',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/layout.css?down" => 'https://pilot.parts/programs/answer/window/controls/exit-button/down.txt',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/exit-button/layout.css.c.js',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/onclick.js?constructor" => 'https://core.parts/behaviors/window-close.c.js',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/onclick.js?window" => 'https://pilot.parts/programs/answer/window/',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/onclick.js?task" => 'https://pilot.parts/programs/answer/task/',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/answer/window/controls/exit-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/answer/window/controls/exit-button/release.js\'
+  }',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/release.js" => 'e => { _[\'https://pilot.parts/programs/answer/window/controls/exit-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/?layout" => 'https://pilot.parts/programs/answer/window/controls/exit-button/layout.css',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/?onclick" => 'https://pilot.parts/programs/answer/window/controls/exit-button/onclick.js',
+ "https://pilot.parts/programs/answer/window/controls/exit-button/?onpointerdown" => 'https://pilot.parts/programs/answer/window/controls/exit-button/onpointerdown.js',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/down-fx.uri" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/down.txt" => '0',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/down.txt?fx" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/down-fx.uri',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/layout.css?down" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/down.txt',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/layout.css?constructor" => 'https://pilot.parts/programs/relate/window/controls/minimize-button/layout.css.c.js',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/onclick.js" => '()=>{_[\'https://pilot.parts/programs/answer/window/minimized.txt\'] = \'1\'
+  }',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/onpointerdown.js" => 'e => { e.stopPropagation(); _[\'https://pilot.parts/programs/answer/window/controls/minimize-button/down.txt\'] = \'1\'; _[\'https://core.parts/behaviors/release/src.uri\'] = \'https://pilot.parts/programs/answer/window/controls/minimize-button/release.js\'
+  }',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/release.js" => 'e => { _[\'https://pilot.parts/programs/answer/window/controls/minimize-button/down.txt\'] = \'0\'
+  }',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/?layout" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/layout.css',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/?onclick" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/onclick.js',
+ "https://pilot.parts/programs/answer/window/controls/minimize-button/?onpointerdown" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/onpointerdown.js',
+ "https://pilot.parts/programs/answer/window/controls/layout.css" => '
+  :host {
+   display: flex;
+   flex-flow: row nowrap
+  }',
+ "https://pilot.parts/programs/answer/window/controls/manifest.uri" => 'https://pilot.parts/programs/answer/window/controls/minimize-button/ https://pilot.parts/programs/answer/window/controls/exit-button/',
+ "https://pilot.parts/programs/answer/window/controls/?layout" => 'https://pilot.parts/programs/answer/window/controls/layout.css',
+ "https://pilot.parts/programs/answer/window/controls/?manifest" => 'https://pilot.parts/programs/answer/window/controls/manifest.uri',
+ "https://pilot.parts/programs/answer/window/layout.css?active" => 'https://pilot.parts/programs/answer/window/active.txt',
+ "https://pilot.parts/programs/answer/window/layout.css?position" => 'https://pilot.parts/programs/answer/window/position.json',
+ "https://pilot.parts/programs/answer/window/layout.css?constructor" => 'https://pilot.parts/programs/welcome/window/layout.css.c.js',
+ "https://pilot.parts/programs/answer/window/manifest.uri?title" => 'https://pilot.parts/programs/answer/window/title-bar/',
+ "https://pilot.parts/programs/answer/window/manifest.uri?panel" => 'https://pilot.parts/programs/answer/window/panel/',
+ "https://pilot.parts/programs/answer/window/manifest.uri?transform_path" => 'https://pilot.parts/programs/answer/window/transform/',
+ "https://pilot.parts/programs/answer/window/manifest.uri?transform" => 'https://core.parts/components/transform/construct.js',
+ "https://pilot.parts/programs/answer/window/manifest.uri?position" => 'https://pilot.parts/programs/answer/window/position.json',
+ "https://pilot.parts/programs/answer/window/manifest.uri?constructor" => 'https://pilot.parts/programs/answer/window/manifest.uri.c.js',
+ "https://pilot.parts/programs/answer/window/manifest.uri.c.js" => <<<JS
+  const [title_url, panel_url, transform_url, position_url] = [title, panel, transform_path, position].map(x => x.headerOf().href)
+  const transform_urls = transform(transform_url, position_url, "", title_url);
+  const urlSet = [title_url, panel_url]
+  if (transform_urls) urlSet.push(transform_urls)
+  return urlSet.join(" ")
+  JS,
+ "https://pilot.parts/programs/answer/window/minimized.txt" => '0',
+ "https://pilot.parts/programs/answer/window/minimized.txt?fx" => 'https://pilot.parts/programs/answer/window/minimized/fx.uri',
+ "https://pilot.parts/programs/answer/window/minimized/fx.uri" => 'https://pilot.parts/manifest.uri https://pilot.parts/programs/answer/window/active.txt https://pilot.parts/programs/answer/task/onpointerdown.js',
+ "https://pilot.parts/programs/answer/window/onfocus.js?active" => 'https://pilot.parts/programs/answer/window/active.txt',
+ "https://pilot.parts/programs/answer/window/onfocus.js?window" => 'https://pilot.parts/programs/answer/window/',
+ "https://pilot.parts/programs/answer/window/onfocus.js?constructor" => 'https://core.parts/behaviors/window-focus.c.js',
+ "https://pilot.parts/programs/answer/window/position.json" => '
+  {
+   "x": 72,
+   "y": 44,
+   "w": 350,
+   "h": 250,
+   "range": {
+    "x": [-64, 512],
+    "y": [-2, 256],
+    "w": [96, 256],
+    "h": [64, 128]
+   }
+  }',
+ "https://pilot.parts/programs/answer/window/position.json?fx" => 'https://pilot.parts/programs/answer/window/position/fx.uri',
+ "https://pilot.parts/programs/answer/window/position/fx.uri" => 'https://pilot.parts/programs/answer/window/layout.css',
+ "https://pilot.parts/programs/answer/window/title-bar/manifest.uri" => 'https://pilot.parts/programs/answer/app-icon/ https://pilot.parts/programs/answer/app-label/ https://core.parts/flex-spacer/ https://pilot.parts/programs/answer/window/controls/',
+ "https://pilot.parts/programs/answer/window/title-bar/?layout" => 'https://pilot.parts/programs/invite/window/title-bar/layout.css',
+ "https://pilot.parts/programs/answer/window/title-bar/?manifest" => 'https://pilot.parts/programs/answer/window/title-bar/manifest.uri',
+ "https://pilot.parts/programs/answer/window/?layout" => 'https://pilot.parts/programs/answer/window/layout.css',
+ "https://pilot.parts/programs/answer/window/?manifest" => 'https://pilot.parts/programs/answer/window/manifest.uri',
+ "https://pilot.parts/programs/answer/window/?onfocus" => 'https://pilot.parts/programs/answer/window/onfocus.js',
+ "https://pilot.parts/programs/answer/window/panel/?layout" => 'https://pilot.parts/programs/answer/window/panel/layout.css',
+ "https://pilot.parts/programs/answer/window/panel/layout.css" => '
+  :host {
+   height: 100%;
+   display: grid;
+   padding: 12px;
+   gap: 12px;
+   grid-template-columns: 1fr 100px;
+   grid-template-rows: 24px 1fr;
+   grid-template-areas:
+    "head head"
+    "answer btns";
+  }
+  heading- {
+   grid-area: head;
+  }',
+ "https://pilot.parts/programs/answer/connection/call.txt" => '',
+ "https://pilot.parts/programs/answer/connection/call.txt?fx" => 'https://pilot.parts/programs/answer/window/panel/call/change.uri',
+ "https://pilot.parts/programs/answer/window/panel/call/change.uri" => 'https://pilot.parts/programs/answer/window/panel/call/layout.css https://pilot.parts/programs/answer/window/panel/menu/manifest.uri',
+ "https://pilot.parts/programs/answer/connection/answer.txt" => '',
+ "https://pilot.parts/programs/answer/connection/answered.txt" => '0',
+ "https://pilot.parts/programs/answer/connection/answer.txt?fx" => 'https://pilot.parts/programs/answer/window/panel/answer/change.uri',
+ "https://pilot.parts/programs/answer/window/panel/answer/change.uri" => 'https://pilot.parts/programs/answer/window/panel/answer/layout.css',
+ "https://pilot.parts/programs/answer/window/panel/?manifest" => 'https://pilot.parts/programs/answer/window/panel/manifest.uri',
+ "https://pilot.parts/programs/answer/window/panel/manifest.uri" => 'https://pilot.parts/programs/answer/window/panel/heading/ https://pilot.parts/programs/answer/window/panel/answer/ https://pilot.parts/programs/answer/window/panel/menu/',
+ "https://pilot.parts/programs/answer/window/panel/heading/?layout" => 'https://pilot.parts/programs/answer/window/panel/heading/layout.css',
+ "https://pilot.parts/programs/answer/window/panel/heading/layout.css" => ':host { display: flex; flex-flow: row nowrap; font-size: 24px; line-height: 24px; } :host::before { content: "Answer Call\00a0"; font-weight: 300; }',
+ "https://pilot.parts/programs/answer/window/panel/menu/?layout" => 'https://pilot.parts/programs/invite/window/panel/menu/layout.css',
+ "https://pilot.parts/programs/answer/window/panel/menu/?manifest" => 'https://pilot.parts/programs/answer/window/panel/menu/manifest.uri',
+ "https://pilot.parts/programs/answer/window/panel/menu/?core" => '',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri?constructor" => 'https://pilot.parts/programs/answer/window/panel/menu/manifest.uri.c.js',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri?button" => 'https://core.parts/components/button/construct.js',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri?call" => 'https://pilot.parts/programs/answer/connection/call.txt',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri?answer" => 'https://pilot.parts/programs/answer/connection/answer.txt',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri?answered" => 'https://pilot.parts/programs/answer/connection/answered.txt',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri?pickup" => 'https://pilot.parts/programs/answer/connection/pickup.js',
+ "https://pilot.parts/programs/answer/window/panel/menu/manifest.uri.c.js" => <<<JS
+  const
+   common_url = "https://pilot.parts/programs/answer/window/panel/menu/",
+   buttons = [],
+   call_string = "" + call;
+
+  if (call_string) {
+   if ("" + answered === "1") return;
+   
+   const remote = new RTCPeerConnection();
+   remote.onicecandidate = () => _[answer.headerOf().href] = JSON.stringify(globalThis.answer?.(remote.localDescription))
+   remote.ondatachannel = e => {
+    e.channel.onmessage = e => console.log(e.target.label + " message => " + JSON.stringify(e.data))
+    e.channel.onclose = e => console.log(e.target.label + " closed!")
+    e.channel.onopen = e => console.log(e.target.label + " opened!")
+   }
+   remote.setRemoteDescription(JSON.parse(call_string)).then(() => remote.createAnswer().then(a => { remote.setLocalDescription(a); _[answered.headerOf().href] = "1" }))
+   buttons.push([
+    common_url + "copy/",
+    ":host::before { content: \'Copy Answer\'; width: 100%; }",
+    "",
+    `() => { const x = ""+_["\${answer.headerOf().href}"]; navigator.clipboard.writeText(x) }`,
+    // TODO: copy, paste and cut buttons. To instantiate one of these buttons, just set the core along with a single uri file pointing to the file that is being copied from, pasted to or cut.
+   ])
+  } else {
+   buttons.push([
+    common_url + "paste/",
+    ":host::before { content: \'Paste Call\'; width: 100%; }",
+    "",
+    `() => navigator.clipboard.readText().then(x => _["\${call.headerOf().href}"] = x )`,
+   ])
+  }
+
+  return buttons.map(config => { button(...config); return config[0] }).join(" ")
+  JS,
+ "https://pilot.parts/programs/answer/window/panel/answer/?layout" => 'https://pilot.parts/programs/answer/window/panel/answer/layout.css',
+ "https://pilot.parts/programs/answer/window/panel/answer/layout.css.c.js" => 'return inset_layout + ` :host::before { content: \'${data}\'; min-width: 0; white-space: normal; }`',
+ "https://pilot.parts/programs/answer/window/panel/answer/layout.css?constructor" => 'https://pilot.parts/programs/answer/window/panel/answer/layout.css.c.js',
+ "https://pilot.parts/programs/answer/window/panel/answer/layout.css?inset_layout" => 'https://pilot.parts/programs/locate/window/explorer-view/layout.css',
+ "https://pilot.parts/programs/answer/window/panel/answer/layout.css?data" => 'https://pilot.parts/programs/answer/connection/answer.txt'
 ];
 eval('?>' . $Δ["https://core.parts/index.php"] . "<?php ");
