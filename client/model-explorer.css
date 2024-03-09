@@ -1,7 +1,0 @@
-:host {
- width: 100%;
- overflow-x: visible;
- background-color: var(--vellum-white);
- padding: var(--hhu-hw);
- box-sizing: border-box;
-}

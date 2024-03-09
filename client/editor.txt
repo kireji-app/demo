@@ -1,5 +1,0 @@
-crock`<br>`
-crock-a`<br>`
-crock-b`<br>`
-word-crock`<br>`
-(editor.txt)

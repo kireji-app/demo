@@ -1,7 +1,0 @@
-:host {
- font-family: monospace;
-}
-output {
- background-color: var(--vellum-white);
- color: var(--ui-fill);
-}
