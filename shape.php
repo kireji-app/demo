@@ -31,31 +31,50 @@
   getRenderTris(f, method) {
    return f.map(t => this.getRenderTri(t, method))
   }
-  serialize(method) {
+  getEdgePoints(e, method) {
+   return e.map(p => this.getTaggedPoint(p, method))
+  }
+  serialize_shade(method) {
    return this.faces.map(f => this.getRenderTris(f, method)).flat(2)
   }
-  point_serialize(method) {
+  serialize_wire(method) {
+   return this.edges.map(e => this.getEdgePoints(e, method)).flat(2)
+  }
+  serialize_point(method) {
    return this.points.map((_, i) => this.getTaggedPoint(i, method))
   }
-  xyz(x, y, z, s) {
-   const f = s / 2;
-   return this.serialize(_ => [_.x * f + x, _.y * f + y, _.z * f + z]).flat()
+  xyz(x, y, z, sx, sy=sx, sz=sx) {
+   const fx = sx / 2, fy = sy / 2, fz = sz / 2;
+   return this.serialize_shade(_ => [_.x * fx + x, _.y * fy + y, _.z * fz + z]).flat()
   }
-  point_xyz(x, y, z, s) {
-   const f = s / 2;
-   return this.point_serialize(_ => [_.x * f + x, _.y * f + y, _.z * f + z])
+  wire_xyz(x, y, z, sx, sy=sx, sz=sx) {
+   const fx = sx / 2, fy = sy / 2, fz = sz / 2;
+   return this.serialize_wire(_ => [_.x * fx + x, _.y * fy + y, _.z * fz + z]).flat()
+  }
+  point_xyz(x, y, z, sx, sy=sx, sz=sx) {
+   const fx = sx / 2, fy = sy / 2, fz = sz / 2;
+   return this.serialize_point(_ => [_.x * fx + x, _.y * fy + y, _.z * fz + z])
   }
   get rgba() {
-   return this.serialize(_ => [_.r, _.g, _.b, 1]).flat()
+   return this.serialize_shade(_ => [_.r, _.g, _.b, (_.a ?? 1)]).flat()
+  }
+  get wire_rgba() {
+   return this.serialize_wire(_ => [_.r, _.g, _.b, (_.a ?? 1)]).flat()
   }
   get point_rgba() {
-   return this.point_serialize(_ => [_.r, _.g, _.b, 1])
+   return this.serialize_point(_ => [_.r, _.g, _.b, 1])
   }
   get g() {
-   return this.serialize(_ => _.j)
+   return this.serialize_shade(_ => _.layer)
+  }
+  get wire_g() {
+   return this.serialize_wire(_ => _.layer)
   }
   get point_g() {
-   return this.point_serialize(_ => _.j)
+   return this.serialize_point(_ => _.layer)
+  }
+  get point_type() {
+   return this.serialize_point(_ => Utils.getColorKey(_.type))
   }
  }
 </script>

@@ -10,11 +10,13 @@
    this.previousTime = newTime;
    this.previousFrameRate = (this.previousFrameRate + newFrameRate) / 2
    if (!this.frameRateElement) return;
-   this.frameRateElement.innerText = `${Math.round(oldrate)} fps`;
+   this.frameRateElement.innerText = `${Math.round(this.previousFrameRate)} fps`;
   },
 
   createGUI(parent) {
-   this.output = parent.appendChild(document.createElement('output'));
+   this.frameRateElement = parent.appendChild(document.createElement('output'));
+   this.frameRateElement.setAttribute('rgba','0 0 0 0');
+   this.frameRateElement.setAttribute('id','fps');
   },
 
   tap(variable, transform = x => x) {

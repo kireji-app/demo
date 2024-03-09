@@ -1,62 +1,106 @@
+<style>
+ :root {
+  position: relative;
+ }
+ body {
+  overflow: scroll;
+  margin: 0;
+  height: 6000px;
+  width: 6000px;
+ }
+ body>output {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  padding: 12px;
+  box-sizing: border-box;
+  background: #3337;
+  border-radius: 4px;
+  color: white;
+ }
+ canvas {
+  cursor: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+ }
+</style>
 <script>
  class Mesh {
-  constructor(shape, transform) {
+  #mode = 'shade'
+  constructor(shape, transform, name = 'mesh', override = false) {
    this.shape = shape
    this.transform = transform
+   this.name = name
+   this.override = override
+  }
+  set mode(mode) {
+   this.#mode = mode
   }
   get g() {
-   return this.shape.g
+   if (this.override) {
+    switch (this.#mode) {
+     case 'wire':
+      return this.shape.wire_g.fill(this.override);
+     default:
+      return this.shape.g.fill(this.override);
+    }
+   }
+   switch (this.#mode) {
+    case 'wire':
+     return this.shape.wire_g;
+    default:
+     return this.shape.g;
+   }
   }
   get xyz() {
-   return this.shape.xyz(...this.transform)
+   switch (this.#mode) {
+    case 'wire':
+     return this.shape.wire_xyz(...this.transform);
+    default:
+     return this.shape.xyz(...this.transform);
+   }
   }
   get rgba() {
-   return this.shape.rgba
+   switch (this.#mode) {
+    case 'wire':
+     return this.shape.wire_rgba;
+    default:
+     return this.shape.rgba;
+   }
   }
-  get p() {
-   return [...this.g].fill(0)
-  }
- }
- class PointView {
-  static shape = PRIM_CUBE
-  static size = 3
-  constructor(mesh) {
-   this.mesh = mesh
-  }
-  get #shape() {
-   return this.mesh.shape;
-  }
-  get xyz() {
-   return this.#shape.point_xyz(...this.mesh.transform).map(point => PointView.shape.xyz(...point, PointView.size)).flat()
-  }
-  get rgba() {
-   return this.#shape.point_rgba.map(color => this.#shape.serialize(_ => color)).flat(2)
-  }
-  get g() {
-   return this.#shape.point_g.map(g => this.#shape.serialize(_ => g)).flat()
-  }
-  get p() {
-   return [...this.g].fill(1)
+  get type() {
+   return this.g.map(g => Utils.getColorKey(this.name)).flat();
   }
  }
  class Group {
-  constructor(meshes) {
-   this.meshes = meshes
+  #mode = 'shade'
+  constructor(children) {
+   this.children = children.filter(child => !!child)
+  }
+  set mode(mode) {
+   this.#mode = mode
+   this.forEach(child => child.mode = mode)
   }
   map(getter) {
-   return this.meshes.map(getter).flat()
+   return this.children.map(getter).flat()
+  }
+  forEach(callback) {
+   this.children.forEach(child => callback(child) );
   }
   get g() {
    return this.map(m => m.g)
-  }
-  get p() {
-   return this.map(m => m.p)
   }
   get xyz() {
    return this.map(m => m.xyz)
   }
   get rgba() {
    return this.map(m => m.rgba)
+  }
+  get type() {
+   return this.map(m => m.type)
   }
   get length() {
    return this.g.length
@@ -66,13 +110,32 @@
   #core = undefined
   x = 99
   y = 99
+  z = 1000
   mx = 0
   my = 0
+  eyedrop = [0, 0, 0, 0]
+  mouseX = 0
+  mouseY = 0
   fov = 35
   near = 1
-  far = 1000
+  far = 100000
+  set pos({x,y,z}) {
+   this.cache.push('pos x',x)
+   this.cache.push('pos y',y)
+   this.cache.push('pos z',z)
+  }
+  get pos() {
+   return {
+    x: this.cache.pull('pos x',150),
+    y: this.cache.pull('pos y',60),
+    z: this.cache.pull('pos z',50)
+   };
+  }
   constructor(core) {
    this.#core = core
+  }
+  get pixelRatio() {
+   return this.#core.pixelRatio
   }
   get core() {
    return this.#core;
@@ -84,13 +147,13 @@
    this.cache.push('rx', v)
   }
   get rx() {
-   return this.cache.pull('rx', 12)
+   return this.cache.pull('rx', 0)
   }
   set ry(v) {
    this.cache.push('ry', v)
   }
   get ry() {
-   return this.cache.pull('ry', -35)
+   return this.cache.pull('ry', 180)
   }
   set rz(v) {
    this.cache.push('rz', v)
@@ -136,9 +199,15 @@
     MDN.rotateYMatrix(this.ry * Math.PI / 180),
    ])
   }
+  get rootView() {
+   return MDN.multiplyArrayOfMatrices([
+    MDN.translateMatrix(0, 0, this.y*-Math.SQRT1_2),
+    MDN.rotateYMatrix(Math.PI),
+   ])
+  }
   get proj() {
    let
-    out = [],
+    out = [], // 900:640, 727:-514, 337:238, 150:105, 
     fovy = 180 - this.fov,
     aspect = this.aspect,
     near = this.near,
@@ -169,13 +238,20 @@
    return out
   }
   get buffer() {
-   return new Float32Array([...this.proj, ...this.view, this.aspect, this.mx, this.my, this.t, this.s])
+   return new Float32Array([...this.proj, ...this.view, ...this.rootView, this.aspect, this.mx, this.my, this.t, this.s, this.x * this.pixelRatio, this.y * this.pixelRatio, this.z])
   }
  }
  class Model {
   #group
+  #mode = 'shade'
   constructor(group) {
    this.#group = group
+  }
+  get mode() {
+   return this.#mode
+  }
+  set mode(mode) {
+   this.#mode = this.#group.mode = mode
   }
   get xyz() {
    const typedArray = new Float32Array(this.#group.xyz);
@@ -183,14 +259,10 @@
   }
   get rgba() {
    const typedArray = new Float32Array(this.#group.rgba);
-   return Core.createBuffer(typedArray)
+   return Core.createBuffer(typedArray);
   }
   get g() {
    const typedArray = new Int32Array(this.#group.g);
-   return Core.createBuffer(typedArray)
-  }
-  get p() {
-   const typedArray = new Int32Array(this.#group.p);
    return Core.createBuffer(typedArray)
   }
   get index() {
@@ -200,6 +272,98 @@
   get length() {
    return this.#group.length
   }
+  get type() {
+   const typedArray = new Float32Array(this.#group.type);
+   return Core.createBuffer(typedArray);
+  }
+ }
+ class Cursor {
+  #mode = 'shade'
+  constructor(core, subject = false) {
+   this.core = core
+   this.subject = subject
+   this.mesh = Debug.tap(new Mesh(CURSOR, [0, 0, 0, 200], 'cur'))
+  }
+  set mode(mode) {
+   this.mesh.mode = mode
+   this.#mode = mode
+  }
+  hoverOnly(geometry) {
+   if (this.core.name != OVER_NAME || this.#mode == 'id' && !this.subject) return [];
+   return geometry;
+  }
+  get xyz() {
+   this.mesh.transform = [this.core.camera.mouseX - (this.subject?0:this.core.camera.x/2), this.core.camera.mouseY - (this.subject?0:this.core.camera.y/2), 0, 200]
+   return this.hoverOnly(this.mesh.xyz);
+  }
+  get rgba() {
+   return this.hoverOnly(this.mesh.rgba)
+  }
+  get g() {
+   return this.hoverOnly(this.mesh.g.fill(this.subject ? 0 : 101))
+  }
+  get type() {
+   return this.hoverOnly(this.mesh.type)
+  }
+ }
+ class DocMesh {
+  #mode = 'shade'
+  constructor(core, subject = false) {
+   this.root = core.root
+   this.core = core
+   this.subject = subject
+  }
+  set mode(mode) {
+   this.#mode = mode
+  }
+  get group() {
+   if (!this._group) {
+    const {
+     width: width,
+     height: height
+    } = this.root.getBoundingClientRect(),
+     getPlane = node => {
+      if (!node.hasAttribute('id')) return; // need id for docmesh hit detection
+      const rect = node.getBoundingClientRect();
+      return new Mesh(PLANE(...getComputedStyle(node).backgroundColor.slice(5, -1).split(', ')), [rect.width / 2 + rect.x, rect.height / 2 + rect.y, this.subject ? depth -= 0.05 : 0.99999, rect.width, rect.height, 0], node.getAttribute('id'));
+     },
+     getRoot = (node, rootDepth) => {
+      if (!node.hasAttribute('id')) return; // need id for docmesh hit detection
+      const rect = node.getBoundingClientRect();
+      return new Mesh(CUBE, [rect.width / 2 + rect.x, rect.height / 2 + rect.y, this.subject ? rootDepth/2 : 0.99999, rect.width, rect.height, rootDepth], node.getAttribute('id'));
+     },
+     getPlaneRecursive = (node, skipSelf, root) => {
+      let plane = undefined;
+      if (!skipSelf) {
+       if (root) {
+        plane = getRoot(node, this.core.camera.z)
+       } else plane = getPlane(node)
+      };
+      if (node.children.length) {
+       return new Group([...[...node.children].map(node => getPlaneRecursive(node)), plane]);
+      }
+      return plane
+     };
+    let depth = 0.5;
+    this._group = getPlaneRecursive(this.root, this.#mode!='wire', true)
+    this._group.mode = this.#mode
+   }
+   return this._group;
+  }
+  get xyz() {
+   return this.group.xyz;
+  }
+  get g() {
+   const final = [...this.group.g].fill(this.subject ? 0 : 100);
+   this._group = undefined
+   return final;
+  }
+  get rgba() {
+   return this.group.rgba;
+  }
+  get type() {
+   return this.group.type;
+  }
  }
  class Core {
   static #device = undefined
@@ -208,7 +372,7 @@
   static async initialize(...names) {
    if (!this.#initialized) {
     Utils.checkSupport();
-    
+
     return await Promise.all([
      navigator.gpu.requestAdapter().then(adapter => adapter.requestDevice()),
      navigator.serviceWorker.register('serviceWorker.js'),
@@ -224,73 +388,97 @@
    return this.#device;
   }
 
-  static add(manifest='{"name":"untitled","width":64,"height":64}') {
+  static add(manifest = '{"name":"untitled"}') {
    manifest = prompt('New Project | Edit Manifest', manifest);
    let parsed = undefined;
    try {
     parsed = JSON.parse(manifest);
    } catch {
-    alert('Error! Bad Manifest: `'+manifest+'`')
+    alert('Error! Bad Manifest: `' + manifest + '`')
     return Core.add(manifest);
    }
    if (!parsed) return;
-   Utils.updateCache('core '+parsed.name, manifest)
+   Utils.updateCache('core ' + parsed.name, manifest)
    return new Core(parsed);
   }
 
+  #ui3D = true
   #name = undefined
   #cache = undefined
   #camera = undefined
+  #context = undefined
   #startTime = undefined
+  #bitmapContext = undefined
   #pixelRatio = undefined
   #attachments = undefined
   #uniformBuffer = undefined
-  #onmanifestchanged = [ ]
-  #onstatechanged = [ ]
+  #onmanifestchanged = []
+  #onstatechanged = []
+  #manifest = {}
 
-  #root = document.createElement('div')
+  #root = document.body
   #canvas = this.#root.appendChild(document.createElement('canvas'))
-  #attributes = { }
+  #attributes = {}
+  #offscreen = new OffscreenCanvas(64, 64)
 
   constructor({
-   name = 'base',
+   name = 'desktop',
    width,
    height,
-   pixelRatio
+   pixelRatio = 1,
+   points,
+   html = 1,
+   classes = []
   } = {}) {
+   this.#manifest = {
+    name,
+    width,
+    height,
+    pixelRatio,
+    points,
+    html,
+    classes
+   }
    Debug.createGUI(this.#root);
    this.#name = name;
    this.#root.setAttribute('name', name);
-   this.#root.setAttribute('class', 'tab');
+   this.#root.setAttribute('class', classes.join(' '));
+   this.#root.setAttribute('id', 'root');
    this.#root.ontabbed = event => this.onresize();
    this.#cache = Utils.linkCache(this);
    this.#startTime = this.cache.pull('start-time', () => Date.now());
    const camera = this.#camera = new Camera(this),
-   canvas = this.canvas;
+    canvas = this.canvas;
    if (width && height) {
-    canvas.width = camera.x = width;
-    canvas.height = camera.y = height;
+    canvas.width = camera.x = this.#offscreen.width = width;
+    canvas.height = camera.y = this.#offscreen.height = height;
    } else {
     this.#pixelRatio = pixelRatio ?? 1;
-    canvas.setAttribute('class',canvas.getAttribute('class') + ' pixelRatio')
+    canvas.setAttribute('class', canvas.getAttribute('class') + ' pixelRatio')
     const rect = canvas.getBoundingClientRect();
-    canvas.width = camera.x = Math.round(rect.width / pixelRatio);
-    canvas.height = camera.y = Math.round(rect.height / pixelRatio);
+    canvas.width = camera.x = this.#offscreen.width = Math.round(rect.width / pixelRatio);
+    canvas.height = camera.y = this.#offscreen.height = Math.round(rect.height / pixelRatio);
    }
    this.#root.setAttribute('style', `--aspect:${camera.aspect}`);
    const uniformBuffer = this.#uniformBuffer = Core.createBuffer(camera.buffer, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST);
-   const model = new Model(new Group([
-    this.getCursor(),
-    TEST_MESH,
-    TEST_MESH_POINTS
-   ]));
-   const
-    context = canvas.getContext('webgpu');
-
+   const rootNodes = [
+    //new DocMesh(this),
+    new Cursor(this),
+    new DocMesh(this, true),
+    new Cursor(this, true),
+    new Mesh(CUBE, [0, 0, 0, 50], 'testa'),
+   ];
+   const PAD_SAMPLE = 5;
+   const model = new Model(new Group(rootNodes));
+   const context = this.#context = this.#offscreen.getContext('webgpu');
+   const bitmapContext = this.#bitmapContext = this.#canvas.getContext("2d", {
+    willReadFrequently: true
+   });
    let
     pointerState = 0,
     camSpeed = 0.2;
    canvas.onwheel = event => {
+    event.preventDefault();
     const factor = Math.sign(event.deltaY);
     if (factor > 0) camera.tz *= 3 / 3.2;
     else camera.tz *= 3.1 / 3;
@@ -305,6 +493,7 @@
     }
    }
    canvas.onmousedown = event => {
+    canvas.click();
     pointerState = 1
     event.preventDefault()
     globalThis.onmouseup = event => {
@@ -319,28 +508,33 @@
      h = rect.height;
     camera.mx = 2 * event.offsetX / w - 1
     camera.my = -2 * event.offsetY / h + 1
+    camera.mouseX = event.offsetX;
+    camera.mouseY = event.offsetY;
     if (pointerState) {
      camera.rx = Math.min(Math.max(-90, camera.rx + event.movementY * camSpeed), 90);
      camera.ry += event.movementX * camSpeed;
     }
    }
-   canvas.ondblclick = () => Utils.toggleFullscreen();
+   // canvas.ondblclick = () => Utils.toggleFullscreen();
    context.configure({
     device: Core.device,
     format: 'bgra8unorm',
     usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC,
     alphaMode: 'premultiplied'
    });
+   console.log('test');
    this.#attachments = {
     colorAttachments: [{
      get view() {
       return context.getCurrentTexture().createView()
      },
-     clearValue: {
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 0
+     get clearValue() {
+      return {
+       r: 0,
+       g: 0,
+       b: 0,
+       a: 0
+      }
      },
      loadOp: 'clear',
      storeOp: 'store'
@@ -362,14 +556,14 @@
      stencilStoreOp: 'store'
     }
    }
-   let
-    pipeline = Core.device.createRenderPipeline({
+   const
+    getPipeline = (topology = 'line-list', code = SHADER) => Core.device.createRenderPipeline({
      layout: 'auto',
      vertex: {
       module: Core.device.createShaderModule({
-       code: COMMON_SHADER + `struct VSOut { @builtin(position) Position: vec4<f32>, @location(0) color: vec4<f32>, }; @vertex fn main( @location(0) inPos: vec3<f32>, @location(1) inColor: vec4<f32>, @location(2) inGui: u32, @location(3) inType: u32 ) -> VSOut { var vsOut: VSOut; vsOut.color = inColor; var factor = uniforms.t * f32(inGui); var m = vec2<f32>(uniforms.mx, uniforms.my); if (inGui != 1) { var pos = vec4<f32>(inPos, 1.0); pos = vec4<f32>(inPos.x+sin(factor),inPos.y+cos(factor/2),inPos.z+cos(factor), 1); if (f32(inGui) == round(uniforms.s)) { if (f32(inType) == 1) { vsOut.color = vec4<f32>(((sin(uniforms.t * 5)+1)/2) * vec3<f32>(1,1,1), 1); } } vsOut.Position = uniforms.proj * uniforms.view * pos; } else { vsOut.Position = vec4<f32>(inPos[0] / uniforms.aspect + m.x, inPos[1] + m.y, inPos[2], 1.0); } return vsOut; }`
+       code
       }),
-      entryPoint: 'main',
+      entryPoint: 'v',
       buffers: [{
        attributes: [{
         shaderLocation: 0,
@@ -394,29 +588,21 @@
        }],
        arrayStride: 4,
        stepMode: 'vertex'
-      }, {
-       attributes: [{
-        shaderLocation: 3,
-        offset: 0,
-        format: 'uint32'
-       }],
-       arrayStride: 4,
-       stepMode: 'vertex'
       }]
      },
      fragment: {
       module: Core.device.createShaderModule({
-       code: COMMON_SHADER + `@fragment fn main(@builtin(position)inPos: vec4<f32>, @location(0) inColor: vec4<f32>) -> @location(0) vec4<f32> { var color = inColor; return color; }`
+       code
       }),
-      entryPoint: 'main',
+      entryPoint: 'f',
       targets: [{
-       format: 'bgra8unorm'
+       format: "bgra8unorm"
       }]
      },
      primitive: {
       frontFace: 'cw',
       cullMode: 'none',
-      topology: 'triangle-list'
+      topology
      },
      depthStencil: {
       depthWriteEnabled: true,
@@ -424,7 +610,7 @@
       format: 'depth24plus-stencil8'
      },
     }),
-    uniformBindGroup = Core.device.createBindGroup({
+    getUniformBindGroup = pipeline => Core.device.createBindGroup({
      layout: pipeline.getBindGroupLayout(0),
      entries: [{
       binding: 0,
@@ -435,30 +621,73 @@
       }
      }]
     });
+   const resizeObserver = new ResizeObserver(resize => this.onresize())
+   resizeObserver.observe(this.#canvas);
    const render = async time => {
     if (!camera.x || !camera.y || !this.showing) {
      requestAnimationFrame(render)
      return;
     };
     Debug.updateFrameRate(time);
-    await this.changeBuffer(uniformBuffer, camera.buffer);
-    let commandEncoder = this.device.createCommandEncoder();
-    let passEncoder = commandEncoder.beginRenderPass(this.attachments);
+    let commandEncoder, passEncoder, pipeline;
 
+    await this.changeBuffer(uniformBuffer, camera.buffer);
+    commandEncoder = this.device.createCommandEncoder();
+    passEncoder = commandEncoder.beginRenderPass(this.attachments);
+    passEncoder.setViewport(0, 0, camera.x, camera.y, 0, 1);
+    //optimization: passEncoder.setScissorRect(Math.max(camera.mouseX - PAD_SAMPLE, 0), Math.max(camera.mouseY - PAD_SAMPLE, 0), Math.min(camera.x - camera.mouseX, PAD_SAMPLE * 2), Math.min(camera.y - camera.mouseY, PAD_SAMPLE * 2));
+    passEncoder.setScissorRect(0, 0, camera.x, camera.y);
+
+    pipeline = getPipeline('triangle-list');
+    model.mode = 'id';
     passEncoder.setPipeline(pipeline);
-    passEncoder.setBindGroup(0, uniformBindGroup);
+    passEncoder.setBindGroup(0, getUniformBindGroup(pipeline));
+    passEncoder.setIndexBuffer(model.index, 'uint16');
+    passEncoder.setVertexBuffer(0, model.xyz);
+    passEncoder.setVertexBuffer(1, model.type);
+    passEncoder.setVertexBuffer(2, model.g);
+    passEncoder.drawIndexed(model.length);
+
+    passEncoder.end();
+    this.device.queue.submit([commandEncoder.finish()]);
+
+    this.#bitmapContext.clearRect(0, 0, camera.x, camera.y);
+    this.#bitmapContext.drawImage(this.#offscreen, 0, 0);
+    camera.eyedrop = [...this.#bitmapContext.getImageData(camera.mouseX, camera.mouseY, 1, 1).data];
+    Debug.tap(Utils.getKeyFromColor(camera.eyedrop));
+    // document.body.style.setProperty('background-color', '#' + camera.eyedrop.map(n => n.toString(16).padStart(2, 0)).join(''))
+
+    await this.changeBuffer(uniformBuffer, camera.buffer);
+    commandEncoder = this.device.createCommandEncoder();
+    passEncoder = commandEncoder.beginRenderPass(this.attachments);
     passEncoder.setViewport(0, 0, camera.x, camera.y, 0, 1);
     passEncoder.setScissorRect(0, 0, camera.x, camera.y);
 
+    pipeline = getPipeline('triangle-list');
+    model.mode = 'shade';
+    passEncoder.setPipeline(pipeline);
+    passEncoder.setBindGroup(0, getUniformBindGroup(pipeline));
     passEncoder.setIndexBuffer(model.index, 'uint16');
     passEncoder.setVertexBuffer(0, model.xyz);
     passEncoder.setVertexBuffer(1, model.rgba);
     passEncoder.setVertexBuffer(2, model.g);
-    passEncoder.setVertexBuffer(3, model.p);
-
     passEncoder.drawIndexed(model.length);
+
+    pipeline = getPipeline('line-list');
+    model.mode = 'wire';
+    passEncoder.setPipeline(pipeline);
+    passEncoder.setBindGroup(0, getUniformBindGroup(pipeline));
+    passEncoder.setIndexBuffer(model.index, 'uint16');
+    passEncoder.setVertexBuffer(0, model.xyz);
+    passEncoder.setVertexBuffer(1, model.type);
+    passEncoder.setVertexBuffer(2, model.g);
+    passEncoder.drawIndexed(model.length);
+
     passEncoder.end();
     this.device.queue.submit([commandEncoder.finish()]);
+    this.#bitmapContext.clearRect(0, 0, camera.x, camera.y);
+    this.#bitmapContext.drawImage(this.#offscreen, 0, 0);
+
     requestAnimationFrame(render)
    };
    render();
@@ -468,6 +697,9 @@
   }
   get name() {
    return this.#name;
+  }
+  get pixelRatio() {
+   return this.#pixelRatio
   }
   get device() {
    return Core.device;
@@ -488,16 +720,11 @@
    return this.#root;
   }
   get manifest() {
-   const size = this.#pixelRatio ? {
-    pixelRatio: this.#pixelRatio
-   } : {
-    width: this.camera.x,
-    height: this.camera.y
-   }
-   return JSON.stringify({
-    name: this.name,
-    ...size
-   });
+   return JSON.stringify(this.#manifest);
+  }
+  set manifest(value) {
+   this.#manifest = JSON.parse(value);
+   this.onmanifestchanged.forEach(callback => callback(core))
   }
   get onstatechanged() {
    return this.#onstatechanged;
@@ -509,49 +736,15 @@
    return this.#attributes;
   }
   get showing() {
-   return !!( this.root.offsetWidth || this.root.offsetHeight || this.root.getClientRects().length )
+   return !!(this.root.offsetWidth || this.root.offsetHeight || this.root.getClientRects().length)
   }
   onresize() {
-   if (!this.#pixelRatio || !this.showing) return;
-   const rect = this.canvas.parentNode.getBoundingClientRect();
-   this.canvas.width = this.camera.x = Math.round(rect.width / this.#pixelRatio);
-   this.canvas.height = this.camera.y = Math.round((rect.height-34) / this.#pixelRatio);
-  }
-  getCursor() {
-   const NAME = this.name,
-    cameraWidth = this.camera.x,
-    getClientWidth = () => this.canvas.getBoundingClientRect().width;
-   return {
-    get g() {
-     if (NAME != OVER_NAME) {
-      return []
-     }
-     return [1, 1, 1]
-    },
-    get xyz() {
-     if (NAME != OVER_NAME) {
-      return []
-     }
-     const factor = 2;//cameraWidth / getClientWidth();
-     return [
-      0, 0, 0,
-      0, -0.1 * factor, 0,
-      0.07 * factor, -0.07 * factor, 0
-     ]
-    },
-    get rgba() {
-     if (NAME != OVER_NAME) {
-      return []
-     }
-     return [1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1]
-    },
-    get p() {
-     if (NAME != OVER_NAME) {
-      return []
-     }
-     return [0, 0, 0]
-    }
-   }
+   setTimeout(() => {
+    if (!this.#pixelRatio || !this.showing) return;
+    const rect = this.canvas.getBoundingClientRect();
+    this.canvas.width = this.camera.x = this.#offscreen.width = Math.round(rect.width / this.#pixelRatio);
+    this.canvas.height = this.camera.y = this.#offscreen.height = Math.round(rect.height / this.#pixelRatio);
+   }, 0)
   }
   static createBuffer(arr, usage = GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST) {
    let desc = {
@@ -573,15 +766,40 @@
    this.device.queue.writeBuffer(buffer, 0, arr);
    this.device.queue.submit([encoder.finish()]);
   }
+  showContextMenu({
+   x,
+   y
+  }, target) {
+   const cache = onclick;
+   const rules = `left:${x}px;top:${y}px`
+   this.contextMenu.style = rules
+   this.contextMenu.setAttribute('open', '');
+   onclick = e => {
+    this.hideContextMenu();
+    onclick = cache
+   };
+  }
+  hideContextMenu() {
+   this.contextMenu.removeAttribute('open');
+  }
+  showToolTip({
+   x,
+   y
+  }, target) {
+   const cache = onclick;
+   const rules = `left:${x}px;top:${y}px`
+   this.tooltip.style = rules
+   this.tooltip.setAttribute('open', '');
+  }
+  hideToolTip() {
+   this.contextMenu.removeAttribute('open');
+  }
  }
- const
-  COMMON_SHADER = `struct UBO { proj: mat4x4<f32>, view: mat4x4<f32>, aspect: f32, mx: f32, my: f32, t: f32, s: f32 }; @group(0) @binding(0) var<uniform> uniforms: UBO;`,
-  TEST_MESH = new Mesh(PRIM_CUBE, [0, 0, 0, 50]),
-  TEST_MESH_POINTS = new PointView(TEST_MESH);
+ const SHADER = `<? readfile('shader.wgsl') ?>`;
  var OVER = undefined,
   OVER_NAME = undefined;
 
  onkeydown = e => OVER?.onkeydown?.(e);
- onmousemove = e => (OVER = e.target, OVER_NAME = e.target.tagName == 'CANVAS' ? e.target.parentNode.getAttribute('name') : null);
+ onmousemove = e => (OVER = e.target, OVER_NAME = e.target.tagName == 'CANVAS' ? e.target.parentElement.getAttribute('name') : null);
  Root.onmouseleave = e => OVER_NAME = undefined;
 </script>
