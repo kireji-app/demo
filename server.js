@@ -1,4 +1,4 @@
-onfetch = (Ω = new Proxy({
+onfetch = (Ω = new Proxy({}, new Proxy({
  "https://core.parts/part.js": "" + (hasScript => `\`<!DOCTYPE html>${hasScript ? '<script>${js}</script>' : ''}<style>iframe { border: none } \${css}</style>\${html}\``),
 
  "https://core.parts/~~": "part()",
@@ -64,7 +64,7 @@ onfetch = (Ω = new Proxy({
  "https://core.parts/apple-touch-icon.png": "<?=b64('icon.png')?>",
  "https://core.parts/favicon.ico?src": "https://core.parts/apple-touch-icon.png",
  "https://core.parts/patterns/tagname.regex": "" + /^[a-z][a-z0-9]*-[a-z0-9-]*$/,
- "https://core.parts/patterns/url.regex": "" + /^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9-]+)(?:=(?<assign>[01])$)?)?(?<rank>~{0,7})$/,
+ "https://core.parts/patterns/url.regex": "" + /^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9-]+)(?:=(?<value>[01])$)?)?(?<rank>~{0,7})$/,
  "https://core.parts/favicon.ico~": "src[Symbol.toPrimitive]()",
 
  // TODO get crossorigin
@@ -72,9 +72,9 @@ onfetch = (Ω = new Proxy({
   const
    { url } = event.request,
    proxy = Ω[url],
-   { binary, type, assign, property, target } = proxy.headerOf();
+   { binary, type, value, property, target } = proxy.headerOf().groups;
   let string = '';
-  if (assign) Ω[target][property] = assign
+  if (value) Ω[target][property] = value
   else string = proxy.toPrimitive()
   var body = new TextEncoder().encode(string);
   if (binary) {
@@ -84,17 +84,6 @@ onfetch = (Ω = new Proxy({
   }
   event.respondWith(new Response(body, { headers: { "content-type": `${type}${binary ? '' : '; charset=UTF-8'}`, "expires": "Sun, 20 Jul 1969 20:17:00 UTC", "server": "kireji" } }))
  }),
-
- "https://core.parts/core.js": "(α = new Proxy(Proxy, { get: " + ((_, Π) => {
-  // alpha get handler
-  const
-   π = ({ [Symbol.toPrimitive]: 'toPrimitive' }[Π] ?? Π),
-   Ψ = υ.match(/^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9-]+)(?:=(?<assign>[01])$)?)?(?<rank>~{0,7})$/)?.groups;
-  if (!Ψ) throw new TypeError('bad request: ' + υ)
-  if (Ψ.assign) Ψ.target = υ.slice(0, - Ψ.property.length - (2 + Ψ.assign.length))
-  Ψ.type = { 'js': "text/javascript", 'css': "text/css", 'json': 'application/json', 'png': 'image/png', 'woff2': 'font/woff2', 'ico': 'image/vnd.microsoft.icon', 'html': 'text/html' }[Ψ.assign ? 'js' : (Ψ.index !== undefined || Ψ.part !== undefined) ? 'html' : (Ψ.rank.length ? 'js' : (Ψ.property === undefined && Ψ.extension || 'txt'))] ?? 'text/plain'
-  return eval(`(${Δ[Δ[`${υ}?${π}`] ?? Δ[`${Δ[`${υ}?core`]}?${π}`] ?? Δ[`${`https://core.parts/core.js`}?${π}`]]})`)
- }) + "}), β = new Proxy(α, α))",
 
  "https://core.parts/core.js?apply": `https://core.parts/core/apply.js`,
  "https://core.parts/core.js?get": `https://core.parts/core/get.js`,
@@ -118,23 +107,7 @@ onfetch = (Ω = new Proxy({
  "https://core.parts/core.js?setPrototypeOf": "https://core.parts/core/throw/unused-native.js",
 
  "https://core.parts/core/apply.js": "" + ((_, __, A) => eval("" + α)(...A)),
- "https://core.parts/core/set.js": "" + ((_, property, assign) => {
-  const
-   true_url = Ω[Ω[υ].query(l => l.property === property ? l.url : undefined)[0]][Symbol.toPrimitive](),
-   existing = Δ[true_url];
-  if (existing !== assign) {
-   Δ[true_url] = assign
-   const changed = ("" + Ω[true_url].affect).split(' ');
-   const update = new BroadcastChannel('update')
-   for (const rebuild_target of changed) {
-    delete Δ[rebuild_target];
-    console.log(Δ[rebuild_target])
-    console.log(Ω[rebuild_target][Symbol.toPrimitive]())
-   }
-   update.postMessage(changed.concat(true_url))
-   update.close()
-  }
- }),
+ "https://core.parts/core/set.js": "" + ((_, property, value) => Ω[Ω[Ω[υ].query(l => l.property === property ? l.url : undefined)[0]]] = value),
  "https://core.parts/core/ownKeys.js": "" + (() => α.query(l => l.property)),
  "https://core.parts/core/query.js": "" + ((ƒ = x => x) => {
   const roots = β.rootsOf()
@@ -151,16 +124,16 @@ onfetch = (Ω = new Proxy({
   if (['toPrimitive', Symbol.toPrimitive, 'toString', 'valueOf', 'headerOf', 'rootsOf', 'query'].includes(π)) return α[π]
   return Ω[Ω[`${υ}?${π}`]]
  }),
- "https://core.parts/core/headerOf.js": "" + (() => Ψ),
+ "https://core.parts/core/headerOf.js": "" + (() => ({ kernelActionLocation: V, kernelActionKey: Υ, full: υ, metaKernel: α, self: β, groups: Ψ, metaKernelKey: π })),
  "https://core.parts/core/rootsOf.js": "" + (() => {
   const roots = [υ]
   let root = υ, key;
   while (root = Δ[key = root + '?core']) {
    if (roots.includes(root)) throw 'core loop'
    roots.push(root);
-   if (root === Λ) break;
+   if (root === Υ) break;
   }
-  if (!roots.includes(Λ)) roots.push(Λ)
+  if (!roots.includes(Υ)) roots.push(Υ)
   return roots;
  }),
  "https://core.parts/core/toPrimitive.js": "" + (hint => {
@@ -178,7 +151,7 @@ onfetch = (Ω = new Proxy({
    const
     urls = Ω[url].query(l => `"${Ω[l.url]}":${l.property}`),
     build = eval(`({${urls.join(',')}})=>${Ω[`${url}~`]}`)
-   console.warn('assigning here (post build)', url)
+   console.warn('setting here (post build)', url)
    Δ[url] = build(Ω)
   }
   return Δ[υ]
@@ -190,4 +163,35 @@ onfetch = (Ω = new Proxy({
  "https://core.parts/core/toString.js": "() => Δ[υ]",
  "https://core.parts/core/valueOf.js": "() => Δ[υ]",
  "https://core.parts/core/throw/unused-native.js": "() => { throw new TypeError(`unused native trap '${π}' called on ${υ}`) }",
-}, { get: (Δ, υ, α, β, Λ) => eval(Δ[Λ = 'https://core.parts/core.js']) }))["https://core.parts/file.js"];
+
+ "https://core.parts/core.js": "({ get: " + ((_, υ) => {
+  const Ψ = υ.match(/^(?<protocol>https:\/\/)(?<host>[^\/]+?)(?:\/(?<path>(?:[^\s.~?\/]+?\/)*)(?:(?<part>[a-z][a-z0-9]*-[a-z0-9-]*)|(?<filename>[^\s~?\/]*)\.(?<extension>(?<binary>png|ico|woff2)|[^\s.~?\/]+))|\/(?<index>(?:[^\s.~?\/]+?\/)*))(?:~{0,6}\?(?<property>[a-zA-Z][a-zA-Z0-9-]+)(?:=(?<value>[01])$)?)?(?<rank>~{0,7})$/)?.groups;
+  if (!Ψ) throw new TypeError('bad request: ' + υ)
+  if (Ψ.value) Ψ.target = υ.slice(0, - Ψ.property.length - (2 + Ψ.value.length))
+  Ψ.type = { 'js': "text/javascript", 'css': "text/css", 'json': 'application/json', 'png': 'image/png', 'woff2': 'font/woff2', 'ico': 'image/vnd.microsoft.icon', 'html': 'text/html' }[Ψ.value ? 'js' : (Ψ.index !== undefined || Ψ.part !== undefined) ? 'html' : (Ψ.rank.length ? 'js' : (Ψ.property === undefined && Ψ.extension || 'txt'))] ?? 'text/plain'
+  let α, β;
+  α = new Proxy(Proxy, {
+   get: (_, π) => {
+    // context { Ω, Δ, V, Υ, υ, α, β, Ψ, π }
+    if (π === Symbol.toPrimitive) π = 'toPrimitive';
+    return eval(`(${Δ[Δ[`${υ}?${π}`] ?? Δ[`${Δ[`${υ}?core`]}?${π}`] ?? Δ[`${`https://core.parts/core.js`}?${π}`]]})`)
+   }
+  })
+  return β = new Proxy(α, α);
+ }) + ", set: " + ((_, υ, δ) => {
+  // context { Ω, Δ, V, Υ, υ, δ }
+  const existing = Δ[υ];
+  if (existing !== δ) {
+   Δ[υ] = δ
+   const changed = ("" + Ω[υ].affect).split(' ');
+   const update = new BroadcastChannel('update')
+   for (const rebuild_target of changed) {
+    delete Δ[rebuild_target];
+    console.log(Δ[rebuild_target])
+    console.log(Ω[rebuild_target][Symbol.toPrimitive]())
+   }
+   update.postMessage(changed.concat(υ))
+   update.close()
+  }
+ }) + " }[Υ] ?? console.error('unexpected omega request', Υ))",
+}, { get: (Δ, Υ) => eval(Δ[V = 'https://core.parts/core.js']) })))["https://core.parts/file.js"];
