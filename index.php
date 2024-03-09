@@ -1,6 +1,6 @@
 <?
 const
- VERSION = 15 / 1000,
+ VERSION = 16 / 1000,
  MAINTENANCE = true,
  HOME_IP = '35.138.226.122',
  LIBRARY_IP = '97.76.210.20',

@@ -1,6 +1,12 @@
-<? if ($uri == 'server.js') {
+<? if ($uri == 'everything.js') {
  header("content-type:text/javascript");
- include 'server.js';
+ include 'everything.js';
+ exit;
+} ?><? if ($uri == 'test1.html') {
+ include 'test1.html';
+ exit;
+} ?><? if ($uri == 'test2.html') {
+ include 'test.wasm';
  exit;
 } ?>
 <!DOCTYPE html>
@@ -14,7 +20,7 @@
  }
 </style>
 <script>
- ((a, f) => a ? (a.addEventListener('message', _ => location.reload()), b => b ? f(b) : a.register(`https://${location.hostname}/server.js`).then(({
+ ((a, f) => a ? (a.addEventListener('message', _ => location.reload()), b => b ? f(b) : a.register(`https://${location.hostname}/everything.js`).then(({
   waiting: x,
   installing: y,
   active: z
