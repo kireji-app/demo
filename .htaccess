@@ -1,11 +1,51 @@
-Options -Indexes -MultiViews +FollowSymlinks
-AddDefaultCharset UTF-8
-ServerSignature Off
-FileETag none
-Header unset ETag
-ErrorDocument 404 /index.html
-RewriteEngine on
-RewriteCond %{REMOTE_ADDR} !^(35\.138\.226\.122|68\.103\.68\.155|97\.76\.210\.20)$
-RewriteRule ^ - [L,R=501]
-RewriteCond %{REQUEST_URI} !^/?serviceWorker.js$|^/?new$
-RewriteRule . index.html
+# This .htaccess file does everything.
+
+SetEnv BOILERPLATE "\
+<!DOCTYPE html>\
+<link rel=manifest />\
+<meta name=viewport content=\"width=device-width,initial-scale=0.8\" />
+
+SetEnv SERVER "/server.js"
+
+SetEnvIf Remote_Addr 35.138.226.122 "YOU=Eric"
+SetEnvIf Remote_Addr 68.103.68.155 "YOU=Jason"
+SetEnvIf Remote_Addr 97.76.210.20 "YOU=Eric"
+
+<If "!(%{REMOTE_ADDR} in {'35.138.226.122', '68.103.68.155', '97.76.210.20'})">
+ Header always set Content-Type "text/html; charset=utf-8
+ ErrorDocument 404 "%{ENV:BOILERPLATE}\
+<h1>Coming Soon!</h1>\
+<p>The project is undergoing research and development and is hidden for most people.
+ Redirect 404
+</If>
+
+<ElseIf "%{REQUEST_URI} == '/server.js'">
+ Header always set Content-Type "text/javascript; charset=utf-8
+ ErrorDocument 200 "\
+i=Promise.all(['404','%{ENV:SERVER}'].map(u=>fetch(u).then(r=>this[r.url]=r)))\n\
+onfetch=e=>e.respondWith(i.then(([_404])=>(this[e.request.url]??_404).clone()))\n\
+onmessage=e=>console.log('write files here')"
+ Redirect 200
+</ElseIf>
+
+<Else>
+ Header always set Content-Type "text/html; charset=utf-8
+ ErrorDocument 404 "%{ENV:BOILERPLATE}\
+<script>\n\
+ Promise.all([\n\
+  new Promise(resolve => navigator.serviceWorker.register(location.origin + '%{ENV:SERVER}').then(({ active: $, waiting: w, installing: i }) => $ ? resolve($) : (w ?? i).onstatechange = ({ target: $ }) => { if ($.state === 'activated') resolve($) })),\n\
+  new Promise(resolve => onload = resolve)\n\
+ ]).then(() => {\n\
+ })\n\
+</script>\n\
+<menu>\
+ 👋 Hello, <b>%{ENV:YOU}</b>!<sub><code>%{REMOTE_ADDR}</code></sub>\
+ %{ENV:SERVER}\
+ %{REQUEST_URI}\
+</menu>\
+<header>\
+ <h1>Error 404</h1>\
+ <p>You don't have that file in your local cache.\
+</header>
+ Redirect 404
+</Else>
