@@ -1,51 +1,19 @@
-# This .htaccess file does everything.
-
-SetEnv BOILERPLATE "\
-<!DOCTYPE html>\
-<link rel=manifest />\
-<meta name=viewport content=\"width=device-width,initial-scale=0.8\" />
-
-SetEnv SERVER "/server.js"
-
-SetEnvIf Remote_Addr 35.138.226.122 "YOU=Eric"
-SetEnvIf Remote_Addr 68.103.68.155 "YOU=Jason"
-SetEnvIf Remote_Addr 97.76.210.20 "YOU=Eric"
-
-<If "!(%{REMOTE_ADDR} in {'35.138.226.122', '68.103.68.155', '97.76.210.20'})">
- Header always set Content-Type "text/html; charset=utf-8
- ErrorDocument 404 "%{ENV:BOILERPLATE}\
-<h1>Coming Soon!</h1>\
-<p>The project is undergoing research and development and is hidden for most people.
- Redirect 404
+<If "true">
+ SetEnv SERVER "/server.js"
+ SetEnv BOILERPLATE "<!DOCTYPE html><link rel=manifest /><meta name=viewport content=\"width=device-width,initial-scale=0.8\" />
+ <If "!(%{REMOTE_ADDR} in {'35.138.226.122', '68.103.68.155', '97.76.210.20'})">
+  Header always set Content-Type "text/html; charset=utf-8
+  ErrorDocument 404 "%{ENV:BOILERPLATE}<h1>Coming Soon
+  Redirect 404
+ </If>
+ <ElseIf "%{REQUEST_URI} == '/server.js'">
+  Header always set Content-Type "text/javascript; charset=utf-8
+  ErrorDocument 200 "i=Promise.all(['404','%{ENV:SERVER}'].map(u=>fetch(u).then(r=>this[r.url]=r)));onfetch=e=>e.respondWith(i.then(([_404])=>(this[e.request.url.replace(/^(.*)\\\/$/,'$1')]??_404).clone()));onmessage=e=>console.log('write files here...');oninstall=e=>skipWaiting()
+  Redirect 200
+ </ElseIf>
+ <Else>
+  Header always set Content-Type "text/html; charset=utf-8
+  ErrorDocument 404 "%{ENV:BOILERPLATE}\n<script>\n\nconsole.log(history)\n\nvar make = () => {\nhistory.pushState({}, null, location.href + '?')\n}\n\nvar render = () => {\n}\nPromise.all([\n\nnew Promise(resolve => navigator.serviceWorker.register(location.origin + '%{ENV:SERVER}').then(({ active: $, waiting: w, installing: i }) => $ ? resolve($) : (w ?? i).onstatechange = ({ target: $ }) => { if ($.state === 'activated') resolve($) })),\n\nnew Promise(resolve => onload = resolve)\n\n]).then(() => {\n\nconst\n$ = '/',\n_ = '',\nhost = location.host,\nis_folder = location.pathname.endsWith($),\npath = host + (location.pathname.slice(0,is_folder?-1:undefined)),\ncrumbs = path.split($),\nfilename = `${is_folder?'📁':'📄'} ${crumbs.at(-1)}`;\n\nif (location.href.includes('?')) {\nconst object = document.body.appendChild(document.createElement('iframe'))\n\nobject.src='https://' + path + (is_folder?$:_)\n\n}\n\nfetch('data:text/plain,test document')\n\ndocument.getElementById('filename').innerHTML = filename\n\ndocument.getElementById('crumbs').innerHTML = crumbs.reduce(\n([href, html], crumb, i) => [(href += crumb) + ((i+1)===crumbs.length&&!is_folder?_:$), html + `<a href=${href + (i?_:$+' id=host')}>${crumb + (i===0 ? ` ${$} ` : _)}</a>${i===0 ? `` : ((i+1)===crumbs.length&&!is_folder) ? _ : `<a class=slash href=${href + $}>/</a>`}`],\n['//', _]\n)[1]\n})\n\n</script>\n\n<style>\n\nhtml {\n--theme-rgb: 56, 182, 255;\n--theme: rgb(var(--theme-rgb));\n--color: #0a0d0d;\ncolor: var(--color);\nbackground: rgba(var(--theme-rgb), 0.15);\noverflow: clip;\npointer-events: none;\nfont: 18px system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';\n}\nbody {\nmargin: 0;\npadding: 15px;\nheight: 100vh;\nbox-sizing: border-box;\n}\nh1, h2 {\ntext-align: center;\nline-height: 100vh;\nheight: 100vh;\nposition: fixed;\nwidth: 100vw;\nleft: 0;\ntop: 0;\nmargin: 0;\npadding: 0;\n}\n\#logo {\ncolor: var(--theme);\nfont-weight: 500;\n}\nh1 {\nfont-size: 50vw;\ncolor: rgba(var(--theme-rgb), 0.25);\n}\nbutton {\ncolor: white;\nbackground: var(--color);\nbackground: var(--theme);\nfont: inherit;\nfont-weight: 500;\nfont-size: 18px;\nborder: none;\noutline: none;\nborder-radius: 10px;\nwidth: auto;\nheight: auto;\npadding: 6px 12px;\n}\nbutton, a {\ncursor: pointer;\ntransform: scale(1);\ntransition: 0.13s all ease;\npointer-events: all;\n}\nbutton:hover, a:hover {\ntransform: scale(1.1);\n}\nbutton:active, a:active {\ntransform: scale(0.95);\n}\nheader {\nfont-size: 15px / 15px;\noverflow-wrap: break-word;\nword-wrap: break-word;\nword-break: break-all;\nposition: relative;\npadding-bottom: 15px;\n}\nheader::after {\ncontent: ' ';\nwidth: 100vw;\nleft: -15px;\nposition: absolute;\nbackground-color: rgba(var(--theme-rgb), 0.5);\nheight: 1px;\nbottom: 0;\n}\niframe {\nborder: none;\n}\na, a:visited, a:hover, a:active {\ncolor: inherit;\ntext-decoration: none;\npadding: 5px 8px;\nborder-radius: 30px;\n}\na:hover {\nbackground: rgba(var(--theme-rgb), 0.25);\n}\n.thin {\nfont-weight: 200;\n}\n\#float {\ndisplay: inline-block;\nline-height: 1em;\n}\n\#host {\nfont-weight: 600;\n}\n</style><header><span id=logo>kheb</span><span id=crumbs class=thin>...</span></header><h1>404</h1><h2><span id=float><span class=thin id=filename>That file</span> doesn't exist<br><br><button onclick=make()>Create it</button></span></h2>
+  Redirect 404
+ </Else>
 </If>
-
-<ElseIf "%{REQUEST_URI} == '/server.js'">
- Header always set Content-Type "text/javascript; charset=utf-8
- ErrorDocument 200 "\
-i=Promise.all(['404','%{ENV:SERVER}'].map(u=>fetch(u).then(r=>this[r.url]=r)))\n\
-onfetch=e=>e.respondWith(i.then(([_404])=>(this[e.request.url]??_404).clone()))\n\
-onmessage=e=>console.log('write files here')"
- Redirect 200
-</ElseIf>
-
-<Else>
- Header always set Content-Type "text/html; charset=utf-8
- ErrorDocument 404 "%{ENV:BOILERPLATE}\
-<script>\n\
- Promise.all([\n\
-  new Promise(resolve => navigator.serviceWorker.register(location.origin + '%{ENV:SERVER}').then(({ active: $, waiting: w, installing: i }) => $ ? resolve($) : (w ?? i).onstatechange = ({ target: $ }) => { if ($.state === 'activated') resolve($) })),\n\
-  new Promise(resolve => onload = resolve)\n\
- ]).then(() => {\n\
- })\n\
-</script>\n\
-<menu>\
- 👋 Hello, <b>%{ENV:YOU}</b>!<sub><code>%{REMOTE_ADDR}</code></sub>\
- %{ENV:SERVER}\
- %{REQUEST_URI}\
-</menu>\
-<header>\
- <h1>Error 404</h1>\
- <p>You don't have that file in your local cache.\
-</header>
- Redirect 404
-</Else>
