@@ -1,11 +1,11 @@
-ErrorDocument 404 "<!DOCTYPE html><h1>Coming Soon
-<If "%{REMOTE_ADDR} in {'35.138.226.122','68.103.68.155','97.76.210.20'}">
- <If "%{REQUEST_URI} == '/server.js'">
-  ErrorDocument 200 "i=fetch('/').then(r=>this[r.url]=r);onfetch=e=>e.respondWith(i.then(_=>(this[e.request.url.replace(/^(.*)\\\/$/,'$1')]??_).clone()));onmessage=e=>console.log('write files here...');oninstall=e=>skipWaiting()
-  Header always set Content-Type "text/javascript;charset=utf-8
-  Redirect 200
- </If>
- ErrorDocument 404 "<!DOCTYPE html><link rel=manifest /><meta name=viewport content=\"width=device-width,initial-scale=0.8\" /><script>make=()=>history.pushState({},null,location.href+'?');Promise.all([new Promise(r=>navigator.serviceWorker.register(location.origin+'/server.js').then(({active:a,waiting:w,installing:i})=>a?r(a):(w??i).onstatechange=({target:t})=>{if(t.state==='activated')r(t)})),new Promise(r=>onload=r)]).then(()=>{const host=location.host,isFolder=location.pathname.endsWith('/'),path=host+(location.pathname.slice(0,isFolder?-1:undefined)),crumbs=path.split('/'),filename=`${isFolder?'📁':'📄'} ${crumbs.at(-1)}`;if(location.href.includes('?')){const object=document.body.appendChild(document.createElement('iframe'));object.src='https://'+path+(isFolder?'/':'');}fetch('data:text/plain,test document');document.getElementById('filename').innerHTML=filename;document.getElementById('crumbs').innerHTML=crumbs.reduce(([href,html],crumb,i)=>[(href+=crumb)+((i+1)===crumbs.length&&!isFolder?'':'/'),html+`<a href=${href+(i?'':'/'+' id=host')}>${crumb+(i===0?` ${'/'}`:'')}</a>${i===0?``:((i+1)===crumbs.length&&!isFolder)?'':`<a class=slash href=${href+'/'}>/</a>`}`],['//',''])[1]})</script><style>html{--theme-rgb:56,182,255;--theme:rgb(var(--theme-rgb));--color:#0a0d0d;color:var(--color);background:rgba(var(--theme-rgb),0.15);overflow:clip;pointer-events:none;font:18px system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';}body{margin:0;padding:15px;height:100vh;box-sizing:border-box;}h1,h2{text-align:center;line-height:100vh;height:100vh;position:fixed;width:100vw;left:0;top:0;margin:0;padding:0;}#logo{color:var(--theme);font-weight:500;}h1{font-size:50vw;color:rgba(var(--theme-rgb),0.25);}button{color:white;background:var(--color);background:var(--theme);font:inherit;font-weight:500;font-size:18px;border:none;outline:none;border-radius:10px;width:auto;height:auto;padding:6px 12px;}button,a{cursor:pointer;transform:scale(1);transition:0.13s all ease;pointer-events:all;}button:hover,a:hover{transform:scale(1.1);}button:active,a:active{transform:scale(0.95);}header{font-size:15px/15px;overflow-wrap:break-word;word-wrap:break-word;word-break:break-all;position:relative;padding-bottom:15px;}header::after{content:' ';width:100vw;left:-15px;position:absolute;background-color:rgba(var(--theme-rgb),0.5);height:1px;bottom:0;}iframe{border:none;}a,a:visited,a:hover,a:active{color:inherit;text-decoration:none;padding:5px8px;border-radius:30px;}a:hover{background:rgba(var(--theme-rgb),0.25);}.thin{font-weight:200;}\#float{display:inline-block;line-height:1em;}#host{font-weight:600;}</style><header><span id=logo>kheb</span><span id=crumbs class=thin>...</span></header><h1>404</h1><h2><span id=float><span class=thin id=filename>That file</span> doesn't exist<br><br><button onclick=make()>Create it</button></span></h2>
+<If "%{HTTP_HOST} != 'pilot.parts'">
+ Redirect 404
 </If>
-Header always set Content-Type "text/html;charset=utf-8
-Redirect 404
+AddDefaultCharset UTF-8
+ServerSignature Off
+FileETag none
+Header unset ETag
+DirectoryIndex pilot.php
+Options -Indexes -MultiViews +FollowSymlinks
+RewriteEngine on
+RewriteRule . pilot.php
