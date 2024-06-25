@@ -1,100 +1,163 @@
 onload = e => {
  const
   root = {
-   ".views": { value: {} },
-   "empty.txt": { value: "" },
-   "view.nodes": { value: [] },
-   "tagname.txt": { value: "tag-" },
-   "viewers.branches": { value: {} },
-   "live.color": { value: "tomato" },
-   "tomato.color": { value: "tomato" },
-   "grey.color": { value: "#333445" },
-   "grey2.color": { value: "#333446" },
-   "version.float": { value: 40 / 1000 },
-   "root.map": { get() { return root } },
-   "name.txt": { value: "https://core.parts" },
-   "grey1.map": { value: [["grey.color", "data:text/color,#333443"]] },
-   "grey2.map": { value: [["grey.color", "grey2.color"]] },
-   "header.map": { value: [["manifest.txt", "empty.txt"], ["tagname.txt", "nametag.txt"]] },
-   "article.map": { value: [["inner.html", "color.html"], ["tagname.txt", "nametag.txt"]] },
-   "footer.map": { value: [["inner.html", "../path.uri"], ["tagname.txt", "nametag.txt"]] },
-   "prototype.branch": { get() { return Object.getPrototypeOf(this) } },
-   "layout.css": { get() { return `:host { background: ${this["live.color"]} }` } },
-   "manifest.txt": { get() { return `header article footer` } },
-   "dev.core.parts.map": { value: [["live.color", "grey.color"]] },
-   "inner.html": { value: null },
-   "color.html": { get() { return `<h1><b>I am <i>${this["live.color"]}</i></b></h1>` } },
-   "path.uri": { get() { return (this["prototype.branch"]?.["path.uri"] ?? "") + this["name.txt"] + "/" } },
-   "shadow.nodes": { get() { return this["view.nodes"].map(n => n.shadowRoot ?? n.attachShadow({ mode: "open" })) } },
+   // Queries
+   "grey2.query": { value: "grey.color=grey2.color" },
+   "grey1.query": { value: "grey.color=data:text/color,#333443" },
+   "dev.core.parts.query": { value: "background.color=grey.color" },
+   "version.query": { value: "inner.html=version.float&view.tag=name.tag" },
+   "article.query": { value: "inner.html=color.html&view.tag=native.tag" },
+   "footer.query": { value: "inner.html=../path.uri&view.tag=native.tag" },
+   "header.query": { value: "view.children=header.txt&view.tag=native.tag" },
+   "greyBackground.query": { value: "background.color=grey.color&layout.css=background.css" },
 
-   "nametag.txt": {
+   // Meta
+   "branches.metas": { value: {} },
+   "prototype.meta": { get() { return Object.getPrototypeOf(this) } },
+
+   // Views and nodes
+   ".views": { value: {} },
+   "view.nodes": { value: [] },
+   "shadow.nodes": { get() { return this["view.nodes"].map(node => node.shadowRoot ?? node.attachShadow({ mode: "open" })) } },
+
+   // Child lists and html
+   "inner.html": { value: null },
+   "color.html": { get() { return `<h1><b>I am <i>${this["background.color"]}</i></b></h1>` } },
+   "view.children": { get() { return `header article footer` } },
+
+   // HTML tag names
+   "view.tag": { value: "tag-" },
+   "native.tag": {
+    get() {
+
+     const name = this["name.uri"]
+
+     if (!/^[a-zA-Z]+$/.test(name))
+      throw RangeError(`Error: name "${name}" is not a native tagname.`)
+
+     return name
+    }
+   },
+   "name.tag": {
     get() {
 
      const
-      name = this["name.txt"].replaceAll(/[^a-zA-Z0-9]+/g, '-'),
+      name = this["name.uri"].replaceAll(/[^a-zA-Z0-9]+/g, '-'),
       tag = name + (name.includes('-') ? '' : '-')
 
      return tag
     }
    },
 
-   "view.stylesheet": {
+   // Stylesheets, layouts, and css tokens
+   "layout.css": { value: "" },
+   "view.stylesheet": { value: null },
+   "view.layout": { get() { return `greyBackground` } },
+   "background.css": { get() { return `:host { background: ${this["background.color"]} }` } },
+   "grey2.color": { value: "#333446" },
+   "grey.color": { value: "#333445" },
+   "background.color": { value: "tomato" },
+
+   // Plain text values
+   "empty.txt": { value: "" },
+   "header.txt": { value: "version" },
+
+   // Numerical values
+   "version.float": { value: 41 / 1000 },
+
+   // Booleans
+   "debug.bool": { value: false },
+
+   // URIs
+   "name.uri": { value: "https://core.parts" },
+   "path.uri": { get() { return (this["prototype.meta"]?.["path.uri"] ?? "") + this["name.uri"] + "/" } },
+
+   // Functions
+   "branch.fn": {
     get() {
-     return (
-      this["#stylesheet"] ||
-      ((this["#stylesheet"] = new CSSStyleSheet()),
-       this["shadow.nodes"].forEach(shadow => shadow.adoptedStyleSheets.push(this["#stylesheet"]))),
-      this["#stylesheet"]
-     );
-    },
-   },
+     return (name, inputs) => {
 
-   "branch.run": {
-    get() {
-     return (name, nodes = []) => {
+      if (name === core["name.uri"])
+       return (this["branches.metas"][name] = Object.create(this, root))
 
-      const descriptormap = this["getDescriptorMap.run"](name)
+      const
+       description = {},
+       query = this[name + ".query"]
 
-      return (this["viewers.branches"][name] = Object.create(this, {
-       "name.txt": { value: name },
-       "root.map": { value: descriptormap },
-       "viewers.branches": { value: {} },
-       "view.nodes": { value: nodes },
-       ...descriptormap,
-      }))
+      if (query === undefined || query === null)
+       throw new RangeError('Error: missing query "' + name + '.query"')
+
+      const entries = (query ? query.split('&') : []).map(attribute => attribute ? attribute.split('=') : [])
+
+      for (const [key, ref] of entries) {
+
+       if (ref.startsWith('data:')) {
+        const datum = ref.slice(ref.indexOf(',') + 1)
+        description[key] = { get() { return datum } }
+        continue
+       }
+
+       let
+        levels = 0,
+        subkey = ref
+
+       while (subkey.startsWith('../')) {
+        subkey = subkey.slice(3)
+        levels++
+       }
+
+       description[key] = {
+        get() {
+
+         let meta = this
+
+         for (let i = 0; i < levels; i++) {
+          meta = meta["prototype.meta"]
+          if (meta === null) throw new RangeError(`Error: looking beyond core (from ${this["path.uri"]} to ${ref})`)
+         }
+
+         return meta[subkey]
+        }
+       }
+      }
+
+
+      description["name.uri"] = { value: name }
+      description["branches.metas"] = { value: {} }
+      description["view.nodes"] = { value: inputs?.["view.nodes"] ?? [] }
+      description["view.stylesheet"] = { value: inputs?.["view.stylesheet"] ?? null }
+
+      return (this["branches.metas"][name] = Object.create(this, description))
      }
     }
    },
-
-   "donate.run": {
+   "donate.fn": {
     get() {
-     return (child, parent, name = child["name.txt"]) => {
-      delete this["viewers.branches"][name]
-      parent["viewers.branches"][name] = child
+     return (child, parent, name = child["name.uri"]) => {
+      delete this["branches.metas"][name]
+      parent["branches.metas"][name] = child
       Object.setPrototypeOf(child, parent)
-      child["render.run"]()
+      child["render.fn"]()
      };
     },
    },
-
-   "insert.run": {
+   "insert.fn": {
     get() {
      return name => {
 
       const
-       branch = this["branch.run"](name),
-       branches = this["viewers.branches"]
+       meta = this["branch.fn"](name),
+       branches = this["branches.metas"]
 
-      for (const n in branches)
-       if (branches[n] !== branch)
-        this["donate.run"](branches[n], branch, n)
+      for (const subkey in branches)
+       if (branches[subkey] !== meta)
+        this["donate.fn"](branches[subkey], meta, subkey)
 
-      return branch
+      return meta
      }
     }
    },
-
-   "remove.run": {
+   "remove.fn": {
     get() {
      return () => {
 
@@ -102,120 +165,89 @@ onload = e => {
        throw new Error("Error: Attempted to remove core.")
 
       const
-       prototype = this["prototype.branch"],
-       branches = this["viewers.branches"]
+       prototype = this["prototype.meta"],
+       branches = this["branches.metas"]
 
-      delete prototype["viewers.branches"][this["name.txt"]]
+      delete prototype["branches.metas"][this["name.uri"]]
 
-      for (const n in branches)
-       this["donate.run"](branches[n], prototype, n)
+      for (const subkey in branches)
+       this["donate.fn"](branches[subkey], prototype, subkey)
 
       return prototype
      }
     }
    },
-
-   "replaceWith.run": {
+   "replaceWith.fn": {
     get() {
      return name => {
 
       if (this === core)
-       return this["insert.run"](name)
+       return this["insert.fn"](name)
 
       const
-       prototype = this["prototype.branch"],
-       branch = prototype["branch.run"](name),
-       branches = this["viewers.branches"]
+       prototype = this["prototype.meta"],
+       meta = prototype["branch.fn"](name),
+       branches = this["branches.metas"]
 
-      delete prototype["viewers.branches"][this["name.txt"]]
+      delete prototype["branches.metas"][this["name.uri"]]
 
-      for (const n in branches)
-       this["donate.run"](branches[n], branch, n)
+      for (const subkey in branches)
+       this["donate.fn"](branches[subkey], meta, subkey)
 
-      return branch
+      return meta
      }
     }
    },
-
-   "getDescriptorMap.run": {
-    get() {
-     return name => {
-
-      if (name === core["name.txt"])
-       return root
-
-      if (!(name + ".map" in this))
-       throw new RangeError('No such map as "' + name + '.map"')
-
-      const result = {}
-
-      for (const [a, n] of this[name + ".map"]) {
-       if (n.startsWith('data:')) {
-        const datum = n.slice(n.indexOf(',') + 1)
-        result[a] = {
-         get() { return datum }
-        }
-        continue;
-       }
-       let levels = 0, b = n
-       while (b.startsWith('../')) {
-        b = b.slice(3)
-        levels++
-       }
-       result[a] = {
-        get() {
-         let branch = this;
-         for (let i = 0; i < levels; i++) {
-          branch = branch["prototype.branch"]
-          if (branch === null) throw new RangeError(`Error: looking beyond core branch (from ${this["path.uri"]} to ${n})`)
-         }
-         return branch[b]
-        }
-       }
-      }
-
-      return result
-     }
-    }
-   },
-
-   "render.run": {
+   "render.fn": {
     get() {
      return () => {
 
-      if (!this["view.nodes"].length)
-       throw new Error('Error: render called on non-view branch.')
+      // this["view.nodes"].forEach(subkey => subkey.setAttribute("data-path", this["path.uri"]))
 
-      this["view.stylesheet"].replaceSync(this["layout.css"])
-      this["view.nodes"].forEach(n => n.setAttribute("data-path", this["path.uri"]))
-      this["populate.run"]()
-      const branches = this["viewers.branches"]
+      this["setLayouts.fn"]()
+      this["setChildren.fn"]()
+      this["subrender.fn"]()
+     }
+    }
+   },
+   "subrender.fn": {
+    get() {
+     return () => {
+      const branches = this["branches.metas"]
 
       for (const name in branches)
-       branches[name]["render.run"]()
+       branches[name]["render.fn"]()
      }
     }
    },
-
-   "populate.run": {
+   "setChildren.fn": {
     get() {
      return () => {
 
       if (!this["view.nodes"].length)
-       throw new Error('Error: populate called on non-view branch.')
+       return
 
-      const innerHTML = this["inner.html"];
+      const
+       innerHTML = this["inner.html"],
+       showAttributes = this["debug.bool"],
+       path = this["path.uri"]
 
       if (innerHTML !== null) {
 
-       for (const shadow of this["shadow.nodes"])
-        shadow.innerHTML = innerHTML
+       for (const shadow of this["shadow.nodes"]) {
+
+        if (shadow.innerHTML != innerHTML)
+         shadow.innerHTML = innerHTML
+
+        if (showAttributes)
+         shadow.host.setAttribute('data-path', path)
+       }
 
        return
       }
 
       const
-       manifest = this["manifest.txt"],
+       manifest = this["view.children"],
        incomingNames = manifest === '' ? [] : manifest.split(' ')
 
       for (const shadow of this["shadow.nodes"]) {
@@ -223,31 +255,35 @@ onload = e => {
        const
         children = shadow.children,
         existingNodes = [...children],
-        existingNames = existingNodes.map(node => node.branch["name.txt"])
+        existingBranches = existingNodes.map(node => node.meta)
+
+       if (showAttributes)
+        shadow.host.setAttribute('data-path', path)
 
        let i = -1
 
-       while (existingNames.length && incomingNames.length) {
+       while (existingBranches.length && incomingNames.length) {
 
         i++
 
         const
-         existing = existingNames.shift(),
+         existingBranch = existingBranches.shift(),
+         existing = existingBranch["name.uri"],
          incoming = incomingNames.shift()
 
         if (existing !== incoming) {
 
-         const existingIndex = existingNames.findIndex(name => name === incoming)
+         const existingIndex = existingBranches.findIndex(meta => meta["name.uri"] === incoming)
 
          if (existingIndex === -1) {
-          this["install.run"](incoming, i)
+          this["installChild.fn"](incoming, i)
          } else {
           shadow.insertBefore(children[i + existingIndex + 1], children[i])
-          existingNames.splice(existingIndex, 1)
+          existingBranches.splice(existingIndex, 1)
          }
 
          if (incomingNames.some(name => name === existing)) {
-          existingNames.unshift(existing)
+          existingBranches.unshift(existing)
           continue
          }
 
@@ -255,59 +291,136 @@ onload = e => {
         }
        }
 
-       if (existingNames.length) {
-        existingNames.forEach(() => children[i + 1].remove())
+       if (existingBranches.length) {
+        existingBranches.forEach(() => children[i + 1].remove())
         return
        }
 
        if (incomingNames.length)
-        incomingNames.forEach(name => this["install.run"](name))
+        incomingNames.forEach(name => this["installChild.fn"](name))
       }
      }
     }
    },
+   "setLayouts.fn": {
+    get() {
+     return () => {
 
-   "install.run": {
+      if (this["view.stylesheet"] !== null)
+       this["view.stylesheet"].replaceSync(this["layout.css"])
+
+      if (!this["view.nodes"].length)
+       return
+
+      const
+       layout = this["view.layout"],
+       incomingNames = layout === '' ? [] : layout.split(' '),
+       showAttributes = this["debug.bool"]
+
+      for (const shadow of this["shadow.nodes"]) {
+
+       const
+        stylesheets = shadow.adoptedStyleSheets,
+        existingSheets = [...stylesheets],
+        existingBranches = existingSheets.map(sheet => sheet.meta)
+
+       if (showAttributes)
+        shadow.host.setAttribute('data-layout', layout)
+
+       let i = -1
+
+       while (existingBranches.length && incomingNames.length) {
+
+        i++
+
+        const
+         existingBranch = existingBranches.shift(),
+         existing = existingBranch["name.uri"],
+         incoming = incomingNames.shift()
+
+        if (existing === incoming)
+         continue
+
+        const existingIndex = existingBranches.findIndex(meta => meta["name.uri"] === incoming)
+
+        let stylesheet
+
+        if (existingIndex === -1) {
+         stylesheet = new CSSStyleSheet()
+         stylesheet.meta = this["branch.fn"](incoming, { ["view.stylesheet"]: stylesheet })
+        } else {
+         const stylesheetIndex = i + existingIndex + 1
+         stylesheet = stylesheets[stylesheetIndex]
+         stylesheets.splice(stylesheetIndex, 1)
+         existingBranches.splice(existingIndex, 1)
+        }
+
+        stylesheets.splice(i, 0, stylesheet)
+
+        if (incomingNames.some(name => name === existing)) {
+         existingBranches.unshift(existing)
+         continue
+        }
+
+        stylesheets.splice(i + 1, 1)
+       }
+
+       if (existingBranches.length)
+        existingBranches.forEach(() => stylesheets.pop())
+       else if (incomingNames.length)
+        for (const incoming of incomingNames) {
+         const stylesheet = new CSSStyleSheet()
+         stylesheet.meta = this["branch.fn"](incoming, { ["view.stylesheet"]: stylesheet })
+         stylesheets.push(stylesheet)
+        }
+      }
+     }
+    }
+   },
+   "installChild.fn": {
     get() {
      return (name, index = -1) => {
 
       const
        nodes = [],
-       branch = this["branch.run"](name, nodes)
+       meta = this["branch.fn"](name, { "view.nodes": nodes }),
+       showAttributes = this["debug.bool"]
 
       for (const shadow of this["shadow.nodes"]) {
 
        const
-        node = document.createElement(branch["tagname.txt"]),
+        node = document.createElement(meta["view.tag"]),
         children = shadow.children
 
-       node.branch = branch
+       node.meta = meta
        nodes.push(node)
 
-       if (index !== -1 && index < children.length) {
+       if (showAttributes)
+        node.setAttribute('data-name', name)
+
+
+       if (index !== -1 && index < children.length)
         shadow.insertBefore(node, children[index])
-       } else {
+       else
         shadow.appendChild(node)
-       }
       }
      }
     }
    },
-
-   "test.run": {
+   "test.fn": {
     get() {
      return () => {
       const
-       delay = 250,
+       delay = 65 / 1000,
        action = delay > (1000 / 60) ? setTimeout : requestAnimationFrame;
 
       action(() => {
-       const $1 = this["insert.run"]("grey1");
+       const $1 = this["insert.fn"]("grey1");
        action(() => {
-        const $2 = $1["replaceWith.run"]("grey2")
+        const $2 = $1["replaceWith.fn"]("grey2")
         action(() => {
-         $2["remove.run"]()
-         this["test.run"]()
+         $2["remove.fn"]()
+         this["test.fn"]()
         }, delay)
        }, delay)
       }, delay)
@@ -316,9 +429,9 @@ onload = e => {
    }
   },
   core = Object.create(null, root),
-  main = core["branch.run"](location.host, [document.body]);
+  main = core["branch.fn"](location.host, { "view.nodes": [document.body] })
 
- document.body.branch = main
- main["render.run"]()
- core["test.run"]()
+ document.body.meta = main
+ main["render.fn"]()
+ core["test.fn"]()
 }
