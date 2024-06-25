@@ -1,90 +1,191 @@
-const root = {
- word: { get() { return "core.parts" } },
- core: { get() { return null } },
- version: { get() { return 37 / 1000 } },
- extensions: { value: new Set() },
- root: { get() { return root } },
- node: { get() { return document.body } },
- rebuild: {
-  get() {
-   return root => {
-    console.warn('hey, should rebuild here!', { core: this.core, root })
-   }
-  }
- },
- populate: {
-  get() {
-   return () => {
-    console.warn('layout.css and content.html fx mark here');
-    this["stylesheet"].replaceSync(this["layout.css"])
-    this["shadow"].innerHTML = this["content.html"]
-   }
-  }
- },
- shadow: { get() { return this._shadow ??= this.node.attachShadow({ mode: "closed" }) } },
- stylesheet: {
-  get() {
-   if (!this._stylesheet) {
-    this._stylesheet = new CSSStyleSheet()
-    this["shadow"].adoptedStyleSheets.push(this._stylesheet)
-   }
-   return this._stylesheet
-  }
- },
- render: { get() { return () => this.extend(location.host).populate() } },
- extend: {
-  get() {
-   return word => {
-    const
-     new_root = this[word],
-     extension = Object.create(this, {
-      ...new_root,
-      core: { value: this },
-      word: { value: word },
-      root: { value: new_root },
-      extensions: { value: new Set() }
-     })
-    this.extensions.add(extension)
-    return extension
-   }
-  }
- },
- cover: { get() { return (a, b) => (console.warn(`fx mark ${b} in core of this to ${a} in root being returned`), { [a]: root[b] }) } },
- setBackground: { get() { return color => `:host { background: ${color} }` } },
- "content.html": { get() { console.log('somehow mark fx of live.color for content.html here'); return `I am ${this["live.color"]}.` } },
- "layout.css": { get() { console.log('somehow mark fx of setBackground and live.color in layout.css here'); return this.setBackground(this["live.color"]) } },
- "live.color": { value: 'tomato' },
- "green.color": { value: 'green' },
- "brown.color": { value: 'brown' },
- "dev.core.parts": { get() { return this.cover("live.color", "green.color") } },
- "brown.parts": { get() { return this.cover("green.color", "brown.color") } },
- reroot: {
-  get() {
-   return word => {
-    const rerooted = this.extend(word)
-    for (const extension of this.extensions) {
-     if (extension === rerooted) continue
-     this.extensions.delete(extension)
-     rerooted.extensions.add(extension)
-     Object.setPrototypeOf(extension, rerooted)
+const
+ debug_limit = 1000,
+ root = {
+  ["version.float"]: {
+   value: 38 / 1000
+  },
+  ["name.txt"]: {
+   get() { return "https://core.parts" }
+  },
+  ["prototype.branch"]: {
+   get() { return Object.getPrototypeOf(this) }
+  },
+  [".branches"]: {
+   value: {}
+  },
+  ["view.node"]: {
+   get() { return document.body }
+  },
+  ["shadow.node"]: {
+   get() { return this["#shadow"] ??= this["view.node"].attachShadow({ mode: "closed" }) }
+  },
+  ["path.uri"]: {
+   get() { return (this["prototype.branch"]?.["path.uri"] ?? '') + this["name.txt"] + '/' }
+  },
+  ["view.html"]: {
+   get() { return `I am ${this["live.color"]}.` }
+  },
+  ["layout.css"]: {
+   get() { return `:host { background: ${this["live.color"]} }` }
+  },
+  ["view.stylesheet"]: {
+   get() {
+    if (!this["#stylesheet"]) {
+     this["#stylesheet"] = new CSSStyleSheet()
+     this["shadow.node"].adoptedStyleSheets.push(this["#stylesheet"])
     }
-    rerooted.extensions.forEach(extension => extension.rebuild(rerooted.root))
+    return this["#stylesheet"]
    }
-  }
- }
-}, core = Object.create(null, root)
+  },
 
-// An event says "this address has become this address"
-// Challenge: Every time we change the prototype of something, it's url should update to account for that
-// Challenge: Replace a property descriptor and have it change the body shadow's innerHTML and css.
-//            When root["live.color"] changes from tomato to silver, do not update the debug core at all.
-//            When root["green.color"] changes from green to brown, core[location.host]["content.html"] and debug["live.color"] change
-// Challenge: Instead of innerHTML, use a manifest checking scheme with child node list.
-// Challenge: Instead of one layout, allow a set of layouts, synced the same way as the child node list.
+  ["live.color"]: {
+   value: 'tomato'
+  },
+  ["green.color"]: {
+   value: 'green'
+  },
+  ["yellow.color"]: {
+   value: 'yellow'
+  },
+  ["brown.color"]: {
+   value: 'brown'
+  },
 
+  ["root.map"]: {
+   get() { return root }
+  },
+  ["dev.core.parts.map"]: {
+   value: [["live.color", "green.color"]]
+  },
+  ["brown.map"]: {
+   value: [["green.color", "brown.color"]]
+  },
+  ["yellow.map"]: {
+   value: [["green.color", "yellow.color"]]
+  },
+
+  ["append.run"]: {
+   get() {
+    return name => {
+
+     const descriptorMap = this["getDescriptorMap.run"](name);
+
+     return this[".branches"][name] = Object.create(this, {
+      ...descriptorMap,
+      ["name.txt"]: { value: name },
+      ["root.map"]: { value: descriptorMap },
+      [".branches"]: { value: {} }
+     })
+    }
+   }
+  },
+  ["donate.run"]: {
+   get() {
+    return (branch, recipient, name = branch["name.txt"]) => {
+     delete this[".branches"][name]
+     recipient[".branches"][name] = branch
+     Object.setPrototypeOf(branch, recipient)
+     branch["render.run"]()
+    }
+   }
+  },
+  ["insert.run"]: {
+   get() {
+    return name => {
+
+     const insertedBranch = this["append.run"](name)
+
+     for (const subname in this[".branches"]) {
+      const branch = this[".branches"][subname];
+      if (branch === insertedBranch) continue
+      this["donate.run"](branch, insertedBranch, subname)
+     }
+
+     return insertedBranch
+    }
+   }
+  },
+  ["remove.run"]: {
+   get() {
+    return () => {
+
+     if (this["path.uri"] === root["name.txt"].get())
+      throw Error("Error: Attempted to delete core node.")
+
+     const
+      prototype = this["prototype.branch"],
+      branches = this[".branches"];
+
+     for (const subname in branches)
+      this["donate.run"](branches[subname], prototype, subname)
+
+     return prototype
+    }
+   }
+  },
+  ["replaceWith.run"]: {
+   get() {
+    return name => {
+
+     if (this["path.uri"] === root["name.txt"].get())
+      return this["insert.run"](name)
+
+     const
+      newCore = this["prototype.branch"]["append.run"](name),
+      branches = this[".branches"];
+
+     for (const subname in branches)
+      this["donate.run"](branches[subname], newCore, subname)
+
+     return newCore
+    }
+   }
+  },
+  ["getDescriptorMap.run"]: {
+   get() {
+    return name => {
+
+     if (debug++ >= debug_limit) throw 'over limit'
+
+     if (name === root["name.txt"].get())
+      return root
+
+     if (!(name + '.map' in this))
+      throw RangeError('No such map as "' + name + '.map"')
+
+     const map = {}
+
+     for (const [a, b] of this[name + '.map'])
+      map[a] = { get() { return this["prototype.branch"][b] } }
+
+     return map
+    }
+   }
+  },
+  ["render.run"]: {
+   get() {
+    return () => {
+     // TODO: Spawn fx network instead of full rerender.
+     // TODO: Turn view.html and view.stylesheet into ordered lists of nodes and stylesheets, respectively.
+     this["view.stylesheet"].replaceSync(this["layout.css"])
+     this["shadow.node"].innerHTML = this["view.html"]
+     this["view.node"].setAttribute('data-path', this["path.uri"])
+    }
+   }
+  },
+ }, hosted = Object.create(null, root)["append.run"](location.host)
+
+var debug = 0
 onload = () => {
- core.render()
+ // Tests...
+ hosted["render.run"]()
  setTimeout(() => {
-  core.reroot("brown.parts")
+  const browned = hosted["prototype.branch"]["insert.run"]("brown")
+  setTimeout(() => {
+   const yellowed = browned["replaceWith.run"]("yellow")
+   setTimeout(() => {
+    yellowed["remove.run"]()
+   }, 3000)
+  }, 3000)
  }, 2000)
 }
