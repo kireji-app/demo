@@ -9,8 +9,10 @@ const
      ".layout": { value: "" },
      // .children determines which rows to use as child nodes when rendering the current row as an element
      ".children": { value: "" },
-     // The inner html, if set, overrides .children and just sets the inner HTML of the shadow to the given string
-     "inner.html": { value: null },
+     // The html, if set, overrides .children and just sets the inner HTML of the shadow to the given string
+     ".html": { value: null },
+     // The css, if set, overrides .layout and just sets a single stylesheet on the shadow to the given string
+     ".css": { value: null },
      // The layout css determines what the current row's css is if the row is used as a css stylesheet
      "layout.css": { value: "" },
      // The view node is the node which gets it's render data from this row
@@ -30,8 +32,10 @@ const
   "parent.row": { get() { return Object.getPrototypeOf(this) } },
 
   // Numerical values
-  ".version": { value: 46 / 1000 },
+  ".version": { value: 47 / 1000 },
   "next.version": { get() { return Math.trunc(this[".version"] * 1000 + 1) / 1000 } },
+
+  "error404.html": { get() { return `<b><i>404</i></b>` } },
 
   // Booleans
   "debug.bool": { value: false },
@@ -46,73 +50,86 @@ const
       Layouts are space-separated lists of row names which are to be treated as stylesheets. */
   "theme.layout": { value: "main-layout" },
   "sidebar.layout": { value: "sidebar" },
-  "addressbar.layout": { value: "addressbar-layout" },
+  "pill.layout": { value: "pill-layout" },
   "header.layout": { value: "header-layout" },
   "flex-spacer.layout": { value: "flex-spacer-layout" },
+  "menu-buttons.layout": { value: "menu-buttons-layout" },
 
   /* Children
       Children is a space-separated list of row names which all are to be treated as child nodes. */
   "editor.children": { get() { return `${this["sidebar-open.bool"] ? 'sidebar ' : ''}header article` } },
-  "sidebar.children": { get() { return `side-menu inspector` } },
+  "sidebar.children": { get() { return `side-menu${this["inspector-open.bool"] ? ' inspector' : ''}` } },
   "inspector.children": { get() { return `header menu` } },
   "header.children": { value: "address flex-spacer version" },
   "zero.children": { value: "" },
-  "menu-buttons.children": { value: "button button button button button" },
+  "menu-buttons.children": { value: "inspector-button flex-spacer account-button settings-button" },
 
   /* Commits
    A commit is a string representation of the set of differences between a row and it's parent row */
   "grey2.commit": { value: "grey.color=grey2.color" },
   "grey1.commit": { value: "grey.color=data:text/color,#344555" },
-  "core.parts.commit": { value: "background.color=grey.color&.children=editor.children&.layout=theme.layout&color.html=./background.color" },
-  "version.commit": { value: "inner.html=./.version&view.tag=./name.tag" },
-  "address.commit": { value: "inner.html=./path.uri&view.tag=data:text/tag,addressbar-&.layout=addressbar.layout" },
+  "core.parts.commit": { value: "background.color=grey.color&.children=./editor.children&.layout=theme.layout&color.html=./background.color&sidebar-open.bool=true.bool" },
+  "version.commit": { value: ".html=./.version&view.tag=./name.tag&pill-icon-right.bool=true.bool&.layout=pill.layout" },
+  "address.commit": { value: ".html=./path.uri&view.tag=data:text/tag,addressbar-&.layout=pill.layout" },
   "sidebar.commit": { value: ".children=sidebar.children&view.tag=./name.tag&.layout=sidebar.layout&layout.css=sidebar.css" },
-  "article.commit": { value: "inner.html=color.html&view.tag=./native.tag" },
+  "article.commit": { value: ".html=color.html&view.tag=./native.tag" },
   "header.commit": { value: ".children=header.children&view.tag=./native.tag&.layout=header.layout" },
   "grey-background.commit": { value: "background.color=grey.color&layout.css=background.css" },
   "inspector.commit": { value: "header.commit=inspector-header.commit&.children=zero.children&view.tag=./name.tag" },
-  "inspector-header.commit": { value: "inner.html=data:text/html,Some panel" },
-  "side-menu.commit": { value: ".children=menu-buttons.children&view.tag=./name.tag" },
-  "bottom-menu.commit": { value: "inner.html=data:text/html,bottom&view.tag=data:text/tag,bottom-menu" },
+  "inspector-header.commit": { value: ".html=data:text/html,Some panel" },
+  "side-menu.commit": { value: ".children=menu-buttons.children&view.tag=./name.tag&.layout=menu-buttons.layout" },
+  "bottom-menu.commit": { value: ".html=data:text/html,bottom&view.tag=data:text/tag,bottom-menu" },
   "main-layout.commit": { value: "layout.css=main-layout.css" },
-  "open-sidebar.commit": { value: "sidebar-open.bool=true.bool" },
+  "hide-sidebar.commit": { value: "sidebar-open.bool=false.bool" },
   "open-inspector.commit": { value: "inspector-open.bool=true.bool" },
   "lighten-background.commit": { value: "background.color=light-background.color" },
-  "addressbar-layout.commit": { value: 'layout.css=addressbar.css' },
+  "pill-layout.commit": { value: 'layout.css=pill.css' },
   "header-layout.commit": { value: 'layout.css=header.css' },
   "flex-spacer.commit": { value: '.layout=flex-spacer.layout&view.tag=./name.tag' },
   "flex-spacer-layout.commit": { value: 'layout.css=flex-spacer.css' },
   "next-version.commit": { value: '.version=https://core.parts/next.version' },
-  "button.commit": { value: "" },
+  "button.commit": { value: "view.tag=./name.tag" },
+  "menu-buttons-layout.commit": { value: "layout.css=menu-buttons.css" },
+  "error404.commit": { value: '.css=error404.css&.html=error404.html' },
+  "inspector-button.commit": { value: '.html=data:text/html,Inspector' },
+  "account-button.commit": { value: '.html=data:text/html,User' },
+  "settings-button.commit": { value: '.html=data:text/html,Settings' },
 
-  // CSS color tokens
+  // CSS tokens
+  "sidebar-width.length": { value: "42px" },
   "grey2.color": { value: "#444444" },
   "grey.color": { value: "#333445" },
   "light-background.color": { get() { return '#' + this["background.color"].match(/[^#]{2}/g).map(s => Math.trunc((1 - (1 - parseInt(s, 16) / 255) * 0.5) * 255).toString(16)).join('') } },
   "background.color": { value: "tomato" },
 
   // CSS
+  "error404.css": { get() { return `:host { background: magenta }` } },
+  "menu-buttons.css": { get() { return `:host { display: flex; flex-flow: column nowrap; gap: 4px; padding: 4px; } tag- { height: auto !important; aspect-ratio: 1 / 1; }` } },
   "background.css": { get() { return `:host { color: white; padding: 12px; background: ${this["background.color"]} }` } },
-  "addressbar.css": { get() { return `:host::before { content: 'ⓘ'; padding: 5px; border-radius: 50%; background: ${this["light-background.color"]}; margin-right: 8px; } :host { min-width: 50%; margin: 7px; display: inline-block; line-height: 24px; padding: 5px; color: white; border-radius: 16px; background: ${this["background.color"]}}` } },
-  "header.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["beget.fn"]("lighten-background")["light-background.color"]}}` } },
+  "pill.css": { get() { return `:host::${this["pill-icon-right.bool"] ? 'after' : 'before'} { content: 'ⓘ'; padding: 5px; border-radius: 50%; background: ${this["light-background.color"]}; margin-${this["pill-icon-right.bool"] ? 'left' : 'right'}: 8px; } :host { ${this["pill-icon-right.bool"] ? 'text-align: right; ' : ''}margin: 7px; display: inline-block; line-height: 24px; padding: 5px; color: white; border-radius: 16px; background: ${this["background.color"]}}` } },
+  "header.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["branch.fn"]("lighten-background")["light-background.color"]}}` } },
   "flex-spacer.css": { value: `:host { flex: 1 1 }` },
   "sidebar.css": {
    get() {
-    const inspectorOpen = this["inspector-open.bool"];
+    const inspectorOpen = this["inspector-open.bool"], sidebarWidth = this["sidebar-width.length"]
     return `
     :host {
      color: ${this["background.color"]};
      background: ${this["light-background.color"]};
      display: grid;
-     grid-template: "b${inspectorOpen ? ' i' : ''}" 1fr / 56px ${inspectorOpen ? '1fr' : ''};
+     grid-template: "b${inspectorOpen ? ' i' : ''}" 1fr / ${sidebarWidth} ${inspectorOpen ? '1fr' : ''};
     }
-    side-menu { grid-area: t }
-    ${inspectorOpen ? `inspector- { grid-area: i; background: ${this["beget.fn"]("lighten-background")["light-background.color"]} }` : ''}`
+    side-menu { grid-area: b }
+    ${inspectorOpen ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}`
    }
   },
   "main-layout.css": {
    get() {
-    const sidebarOpen = this["sidebar-open.bool"]
+    const {
+     "sidebar-open.bool": sidebarOpen,
+     "inspector-open.bool": inspectorOpen,
+     "sidebar-width.length": sidebarWidth
+    } = this
     return `
    :host {
     --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -122,16 +139,15 @@ const
     display: grid;
     grid-template: 
      "${sidebarOpen ? 'h ' : ''}h" 48px
-     "${sidebarOpen ? 's ' : ''}c" auto / ${sidebarOpen ? `${(this["inspector-open.bool"] ? '2' : '')}56px ` : ''}1fr;
+     "${sidebarOpen ? 's ' : ''}c" auto / ${sidebarOpen ? `${inspectorOpen ? '2' : ''}${sidebarWidth} ` : ''}1fr;
    }
-   sidebar- { grid-area: s }
+   ${sidebarOpen ? "sidebar- { grid-area: s }" : ""}
    header { grid-area: h }
    article { grid-area: c; margin: 24px }`
    }
   },
 
   // HTML tag names
-  "h1.tag": { value: "h1" },
   "native.tag": {
    get() {
 
@@ -158,7 +174,7 @@ const
       A test is a linked list item whose string represents a single instruction
       test.fn plays the linked list as a function block starting from a given named instruction and waiting the given amount of time
   */
-  "sidebar.test": { value: " insert open-sidebar grey1 100" },
+  "sidebar.test": { value: " insert hide-sidebar grey1 100" },
   "grey1.test": { value: "sidebar insert grey1 grey2 1000" },
   "grey2.test": { value: "grey1 replaceWith grey2 lighten" },
   "lighten.test": { value: " insert next-version removed1" },
@@ -169,8 +185,6 @@ const
   "removed2.test": { value: "sidebarFocus remove  removed3 200" },
   "removed3.test": { value: "inspect remove  removed4 200" },
   "removed4.test": { value: "sidebar remove  sidebar 2000" },
-
-  // Functions
   "test.fn": {
    get() {
     return (name, o) => {
@@ -183,16 +197,18 @@ const
      const [src, fn, str, n2, t] = protorow[`${name}.test`].split(' ')
 
      setTimeout(() => {
-      console.groupCollapsed('test ' + name)
+      // console.groupCollapsed('test ' + name)
       o[name] = o[src][fn + '.fn'](str || undefined)
       // console.log(name, Object.getOwnPropertyDescriptors(o[name]))
       protorow["render.fn"]()
-      console.groupEnd()
+      // console.groupEnd()
       this["test.fn"](n2, o)
      }, parseInt(t || 2000))
     }
    }
   },
+
+  // Functions
   "render.fn": {
    // Re/populates this row's nodes and stylesheets
    get() {
@@ -213,99 +229,96 @@ const
       layouts: {
 
        const
-        layout = this[".layout"],
-        incomingLayoutUris = layout === '' ? [] : layout.split(' ')
-
-       const
+        rawCSS = this[".css"],
         stylesheets = shadowRoot.adoptedStyleSheets,
         existingSheets = [...stylesheets],
         existingSheetRows = existingSheets.map(sheet => sheet.row)
 
-       if (showAttributes)
-        shadowRoot.host.setAttribute('data-layout', layout)
+       if (rawCSS !== null) {
 
-       let i = -1
+        console.warn('putting own css', rawCSS, this["name.uri"])
 
-       while (existingSheetRows.length && incomingLayoutUris.length) {
+        let singleSheet = existingSheets[0];
 
-        i++
+        if (existingSheetRows.length !== 1 || singleSheet !== this) {
+         for (const existingSheetRow of existingSheetRows) {
+          existingSheetRow?.["remove.fn"]()
+          stylesheets.pop()
+         }
+         singleSheet = new CSSStyleSheet()
+         singleSheet.row = this
+         stylesheets.push(singleSheet)
+        }
+
+        console.log(singleSheet)
+        singleSheet.replaceSync(rawCSS)
+       } else {
 
         const
-         existingSheetRow = existingSheetRows.shift(),
-         existingSheetName = existingSheetRow["name.uri"],
-         incomingSheetName = incomingLayoutUris.shift()
+         layout = this[".layout"],
+         incomingSheetNames = layout === '' ? [] : layout.split(' ')
 
-        if (existingSheetName === incomingSheetName)
-         continue
+        if (showAttributes)
+         shadowRoot.host.setAttribute('data-layout', layout)
 
-        const existingIndex = existingSheetRows.findIndex(row => row["name.uri"] === incomingSheetName)
+        let i = -1
 
-        let stylesheet
+        while (existingSheetRows.length && incomingSheetNames.length) {
 
-        if (existingIndex === -1) {
-         stylesheet = new CSSStyleSheet()
-         stylesheet.row = this["beget.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet } })
-        } else {
-         const stylesheetIndex = i + existingIndex + 1
-         stylesheet = stylesheets[stylesheetIndex]
-         stylesheets.splice(stylesheetIndex, 1)
-         existingSheetRows.splice(existingIndex, 1)
+         i++
+
+         const
+          existingSheetRow = existingSheetRows.shift(),
+          existingSheetName = existingSheetRow?.["name.uri"],
+          incomingSheetName = incomingSheetNames.shift()
+
+         if (existingSheetName === incomingSheetName)
+          continue
+
+         const existingIndex = existingSheetRows.findIndex(row => row["name.uri"] === incomingSheetName)
+
+         let stylesheet
+
+         if (existingIndex === -1) {
+          stylesheet = new CSSStyleSheet()
+          stylesheet.row = this["branch.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet } })
+         } else {
+          const stylesheetIndex = i + existingIndex + 1
+          stylesheet = stylesheets[stylesheetIndex]
+          stylesheets.splice(stylesheetIndex, 1)
+          existingSheetRows.splice(existingIndex, 1)
+         }
+
+         stylesheets.splice(i, 0, stylesheet)
+
+         if (incomingSheetNames.some(name => name === existingSheetName)) {
+          existingSheetRows.unshift(existingSheetRow)
+          continue
+         }
+
+         stylesheets.splice(i + 1, 1)
         }
 
-        stylesheets.splice(i, 0, stylesheet)
-
-        if (incomingLayoutUris.some(name => name === existingSheetName)) {
-         existingSheetRows.unshift(existingSheetRow)
-         continue
-        }
-
-        stylesheets.splice(i + 1, 1)
+        if (existingSheetRows.length)
+         existingSheetRows.forEach(() => stylesheets.pop())
+        else if (incomingSheetNames.length)
+         for (const incomingSheetName of incomingSheetNames) {
+          const stylesheet = new CSSStyleSheet()
+          stylesheet.row = this["branch.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet } })
+          stylesheets.push(stylesheet)
+         }
        }
-
-       if (existingSheetRows.length)
-        existingSheetRows.forEach(() => stylesheets.pop())
-       else if (incomingLayoutUris.length)
-        for (const incomingSheetName of incomingLayoutUris) {
-         const stylesheet = new CSSStyleSheet()
-         stylesheet.row = this["beget.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet } })
-         stylesheets.push(stylesheet)
-        }
       }
 
       children: {
 
        const
-        innerHTML = this["inner.html"],
-        path = this["path.uri"],
-        createNode = (name, index = -1) => {
-
-         let node = this[".rows"][name]?.[".rows"][index]?.["view.node"];
-
-         const
-          nameRow = this["beget.fn"](name),
-          childRow = nameRow["beget.fn"](index, { "view.node": { get() { return node } } }),
-          children = shadowRoot.children
-
-         if (!node) {
-          node ??= document.createElement(childRow["view.tag"])
-          node.row = childRow
-
-          if (showAttributes)
-           node.setAttribute('data-name', name)
-
-          try { node.attachShadow({ mode: 'open' }) }
-          catch (e) { throw new Error(`Error: cannot attach shadow to <${childRow["view.tag"]}>. (creating node "${name}" at [${index}] using row "${this["name.uri"]}")`) }
-         }
-
-         if (index !== -1 && index < children.length)
-          shadowRoot.insertBefore(node, children[index])
-         else
-          shadowRoot.appendChild(node)
-        }
+        innerHTML = this[".html"],
+        path = this["path.uri"]
 
        if (innerHTML !== null) {
 
-        console.warn(`Warning: no garbage removal of .rows was done before innerHTML set on ${this["path.uri"]}`)
+        //  console.warn(`Warning: no garbage removal of .rows was done before innerHTML set on ${this["path.uri"]}`)
 
         if (shadowRoot.innerHTML != innerHTML)
          shadowRoot.innerHTML = innerHTML
@@ -315,6 +328,31 @@ const
        } else {
 
         const
+         createNode = (name, index = -1) => {
+
+          let node = this[".rows"][name]?.[".rows"][index]?.["view.node"];
+
+          const
+           nameRow = this["branch.fn"](name),
+           childRow = nameRow["branch.fn"](index, { "view.node": { get() { return node } } }),
+           children = shadowRoot.children
+
+          if (!node) {
+           node ??= document.createElement(childRow["view.tag"])
+           node.row = childRow
+
+           if (showAttributes)
+            node.setAttribute('data-name', name)
+
+           try { node.attachShadow({ mode: 'open' }) }
+           catch (e) { throw new Error(`Error: cannot attach shadow to <${childRow["view.tag"]}>. (creating node "${name}" at [${index}] using row "${this["name.uri"]}")`) }
+          }
+
+          if (index !== -1 && index < children.length)
+           shadowRoot.insertBefore(node, children[index])
+          else
+           shadowRoot.appendChild(node)
+         },
          incomingManifest = this[".children"],
          children = shadowRoot.children,
          existingNodes = [...children],
@@ -358,37 +396,6 @@ const
            createNode(incomingName, i)
 
           }
-
-          /*
-
-           if (existingNodeName !== incomingNodeName) {
- 
-            const existingIndex = existingNodeRows.findIndex(row => row["name.uri"] === incomingNodeName)
- 
-            log += `\n\t\tDIFFERENT | Existing index: ${existingIndex}`
- 
-            if (existingIndex === -1) {
-             log += `\n\t\t\tCreating ${incomingNodeName} @ [${i}]...`
-             createNode(incomingNodeName, i)
-            } else {
-             log += `\n\t\t\tRepositioning ${incomingNodeName} [${i + existingIndex + 1}] => [${i}]`
-             shadowRoot.insertBefore(children[i + existingIndex + 1], children[i])
-             existingNodeRows.splice(existingIndex, 1)
-             log += `\n\t\t\tSplicing from existing.\n\t\t\t\tnow existing: ${existingNodeRows.map(row => row["name.uri"]).join(' ')}`
-            }
- 
-            if (incomingNames.some(name => name === existingNodeName)) {
-             existingNodeRows.unshift(existingNodeRow)
-             log += `\n\t\tThere is an incoming child named ${existingNodeName} so we'll keep it.\n\t\t\texisting: ${existingNodeRows.map(row => row["name.uri"]).join(' ')}\n\t\tCONTINUE...`
-             continue
-            }
- 
-            const removedNode = children[i + 1]
-            removedNode.remove()
-            removedNode.row["remove.fn"]()
-            log += `\n\t\tRemoving node from children and row from node list.\n\t\t\t\tnow children: ${[...children].map(node => node.row["name.uri"]).join(' ')}\n\t\tCONTINUE...`
-           }
-          */
          }
 
          existingNames.forEach((existingName, ii) => {
@@ -414,7 +421,7 @@ const
           createNode(incomingName, i + ii + 1)
          })
 
-         console.log(log)
+         // console.log(log)
         }
        }
 
@@ -425,7 +432,7 @@ const
     }
    }
   },
-  "beget.fn": {
+  "branch.fn": {
    get() {
     return (name, inputColumns) => {
 
@@ -437,12 +444,17 @@ const
      const
       isIndex = !isNaN(name),
       description = { ... this["default.columns"] },
-      commit = isIndex ? `index.int=data:math/integer,${name}&view.tag=view.tag&.layout=.layout&inner.html=inner.html&.children=.children` : this[name + ".commit"]
+      commit = isIndex ? `index.int=data:math/integer,${name}&view.tag&.layout&.html&.children&.css` : name + ".commit" in this ? this[name + ".commit"] : this["error404.commit"]
 
      if (!isIndex && !(name + ".commit" in this))
-      throw new RangeError('Error: no commit called "' + name + '"')
+      console.error('404: commit not found "' + name + '"')
 
      for (const [key, ref] of (commit ? commit.split('&') : []).map(a => a ? a.split('=') : [])) {
+
+      if (ref === undefined) {
+       description[key] = { get() { return this["parent.row"][key] } }
+       continue
+      }
 
       if (ref.startsWith('data:')) {
        // TODO: datum should not just be string. It should be parsed by creating a parsing node and giving it the datauri and retrieving the value
@@ -467,7 +479,7 @@ const
          let row = protorow
 
          for (const subpath of subpaths)
-          row = row["beget.fn"](subpath)
+          row = row["branch.fn"](subpath)
 
          // console.warn(`absolute cell ${row["path.uri"]}`)
 
@@ -533,7 +545,7 @@ const
     return name => {
 
      const
-      row = this["beget.fn"](name),
+      row = this["branch.fn"](name),
       rows = this[".rows"]
 
      for (const subkey in rows)
@@ -573,7 +585,7 @@ const
 
      const
       parent = this["parent.row"],
-      row = parent["beget.fn"](name),
+      row = parent["branch.fn"](name),
       rows = this[".rows"]
 
      delete parent[".rows"][this["name.uri"]]
@@ -588,10 +600,10 @@ const
   "boot.fn": {
    get() {
     return (hostname, viewNode) => {
-     console.groupCollapsed('boot')
+     // console.groupCollapsed('boot')
      viewNode.attachShadow({ mode: 'open' });
-     (viewNode.row = this["beget.fn"](hostname, { "view.node": { value: viewNode } }))["render.fn"]();
-     console.groupEnd()
+     (viewNode.row = this["branch.fn"](hostname, { "view.node": { value: viewNode } }))["render.fn"]();
+     // console.groupEnd()
     }
    }
   }
