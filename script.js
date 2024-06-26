@@ -1,5 +1,5 @@
 (C = {
- "version.number": { get() { return 51 / 1000 } },
+ "version.number": { get() { return 52 / 1000 } },
  "next-version.number": { get() { return Math.trunc(this["version.number"] * 1000 + 1) / 1000 } },
  "sidebar-width.number": { get() { return 42 } },
  "branch-length.number": {
@@ -16,10 +16,13 @@
  "boot.fn": {
   get() {
    return () => {
-    globalThis.T = Date.now() % (2 ** 10)
+    globalThis.BOOT_TIME = Date.now()
     globalThis.NODES ??= new Map()
     globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get()))
-    globalThis.HOST = ROW["branch.fn"](location.host.slice(location.host.startsWith('dev.') ? 4 : 0), { ".host": { value: location.host }, ".node": { get() { return this["auto.node"] } } })
+    globalThis.HOST = ROW["branch.fn"](location.host.slice(location.host.startsWith('dev.') ? 4 : 0) + location.search, {
+     ".host": { value: location.host },
+     ".node": { get() { return this["auto.node"] } }
+    })
     HOST["install.fn"]()
    }
   },
@@ -58,7 +61,7 @@
     if (NODES.has(this)) {
 
      if (incomingNode)
-      throw new Error(`Own Node Error: this row already owns a node.\n\tNode Path: "${this["path.uri"]}"`)
+      throw new Error(`Own Node Error: this row already owns a node.\n\tNode Path: "${this[".path"]}"`)
 
      return NODES.get(this)
     }
@@ -90,7 +93,7 @@
     try {
      node.attachShadow({ mode: 'open' })
     } catch (e) {
-     throw new Error(`Own Node Error: this native tag can't support a shadow DOM.\n\tNode Tag: <${this[".tag"]}>.\n\tNode Path: "${this["path.uri"]}"\n\tNative Error: ${e.message}`)
+     throw new Error(`Own Node Error: this native tag can't support a shadow DOM.\n\tNode Tag: <${this[".tag"]}>.\n\tNode Path: "${this[".path"]}"\n\tNative Error: ${e.message}`)
     }
 
     return node
@@ -102,11 +105,14 @@
    return () => {
 
     if (this["server.bool"])
-     throw new Error('Server Error: signal called in server. ' + this["path.uri"])
+     throw new Error('Server Error: signal called in server. ' + this[".path"])
 
     if (this["view.stylesheet"] !== null)
      this["view.stylesheet"].replaceSync(this["layout.css"])
 
+    if (this[".node"] === undefined) {
+     throw "here " + this[".rid"]
+    }
     if (this[".node"] !== null) {
      const { shadowRoot } = this[".node"]
 
@@ -134,11 +140,11 @@
         i++
         const
          existingSheetRow = existingSheetRows.shift(),
-         existingSheetName = existingSheetRow?.["name.uri"],
+         existingSheetName = existingSheetRow?.[".name"],
          incomingSheetName = incomingSheetNames.shift()
         if (existingSheetName === incomingSheetName)
          continue
-        const existingIndex = existingSheetRows.findIndex(row => row["name.uri"] === incomingSheetName)
+        const existingIndex = existingSheetRows.findIndex(row => row[".name"] === incomingSheetName)
         let stylesheet
         if (existingIndex === -1) {
          stylesheet = new CSSStyleSheet()
@@ -178,13 +184,13 @@
         children = shadowRoot.children,
         existingNodes = [...children],
         existingRows = existingNodes.map(node => node.row),
-        existingNames = existingRows.map(row => row["name.uri"]),
+        existingNames = existingRows.map(row => row[".name"]),
         existingManifest = existingNames.join(' '),
         createNode = (name, index = -1) => {
          const row = this["branch.fn"](name), node = row[".node"]
 
          if (node === null)
-          throw new Error(`Create Node Error: this row doesn't have a node.\n\tRow Path: ${row["path.uri"]}`)
+          throw new Error(`Create Node Error: this row doesn't have a node.\n\tRow Path: ${row[".path"]}`)
 
          if (index !== -1 && index < children.length)
           shadowRoot.insertBefore(node, children[index])
@@ -220,53 +226,73 @@
    }
   }
  },
+
  "server.fn": {
   get() {
    return () => {
-    console.log('Evaluating incoming server.')
     onfetch = e => HOST["fetch.fn"](e.request.url, e)
-    onactivate = () => {
-     this["log.fn"]('Created!')
-     clients.claim()
-    }
+    onactivate = onmessage = e => clients.claim()
     oninstall = e => {
      globalThis.skipWaiting()
      e.waitUntil(fetch(location.origin).then(index => index.text()).then(text => {
       globalThis.INDEX = text.replace(`<link rel="manifest">`, `<link rel="manifest" href="${this["manifest.uri"]}"/>`)
+      this["log.fn"]()
      }))
     }
-    onmessage = e => {
-     this["log.fn"]('Claiming FORCED-CLIENT-###')
-     clients.claim()
-    }
-
    }
   }
  },
- "prefix.txt": { get() { return (this["force-refresh.bool"] ? "FORCED-" : this["force-refresh.bool"] ? "HTTPS-" : "") + (this["server.bool"] ? "SERVER-" : "CLIENT-") + T } },
  "log.fn": { get() { return (...args) => console.log(this["prefix.txt"], ...args) } },
  "client.fn": {
   get() {
    return () => {
+
     Promise.all([
      (async () => {
-      let { waiting: w, installing: i, active: a } = await navigator.serviceWorker.register(location.origin + '/script.js')
-      if (!a) a = await new Promise(resolve => (w ?? i).onstatechange = ({ target: t }) => t.state === 'activated' ? resolve(t) : 0)
-      return a
+      const
+       registration = await navigator.serviceWorker.register(location.origin + '/script.js'),
+       { waiting: w, installing: i, active: a } = registration
+      if (!a)
+       await new Promise(resolve => (w ?? i).onstatechange = ({ target: t }) => t.state === 'activated' ? resolve(t) : 0)
+      return registration
      })(),
      new Promise(resolve => onload = resolve)
-    ]).then(([server]) => {
+    ]).then(([registration]) => {
+
+
+     if (location.host.startsWith('dev.')) {
+      document.onvisibilitychange = () => document.hidden || registration.update()
+      window.onfocus = () => registration.update()
+     }
 
      const
       manifest = document.querySelector('[rel="manifest"]'),
       original = !manifest.href,
-      forceRefreshed = !navigator.serviceWorker.controller,
+      server = navigator.serviceWorker.controller,
+      forceRefreshed = !server,
       begin = () => {
 
-       this["log.fn"]('Created!')
+       this["log.fn"]()
 
        if (original)
         manifest.href = HOST["manifest.uri"]
+
+       //let row = ROW["insert.fn"]("twist-base")["insert.fn"]('twist-layer')
+       HOST["ownNode.fn"](document.body)
+       ROW["signal.fn"]()
+
+       /*
+            const loop = () => requestAnimationFrame(() => {
+             row = row["insert.fn"]('blank')
+             if (row["branch-length.number"] > 100 || row[".path"].length > 2048) {
+              row = row["remove.fn"]()
+              ROW["signal.fn"]()
+              return
+             }
+             ROW["signal.fn"]()
+             loop()
+            })
+            loop()*/
       }
 
      let waiting;
@@ -274,12 +300,11 @@
      navigator.serviceWorker.oncontrollerchange = () => {
       // can only be waiting if there was no controller yet until now
       if (waiting) {
-       waiting = false;
+       waiting = false
        begin()
        return
       }
       // can only get here if the controller has changed which can only happen if the server-side script changes.
-      this["log.fn"]('The true server has updated.')
       location.reload()
      }
 
@@ -292,122 +317,116 @@
       waiting = true
       server.postMessage(1)
      } else begin()
-
-
-     //let row = ROW["insert.fn"]("twist-base")["insert.fn"]('twist-layer')
-     HOST["ownNode.fn"](document.body)
-     ROW["signal.fn"]()
-     /*
-          const loop = () => requestAnimationFrame(() => {
-           row = row["insert.fn"]('blank')
-           if (row["branch-length.number"] > 100 || row["path.uri"].length > 2048) {
-            row = row["remove.fn"]()
-            ROW["signal.fn"]()
-            return
-           }
-           ROW["signal.fn"]()
-           loop()
-          })
-          loop()*/
     })
    }
   }
  },
  "branch.fn": {
   get() {
-   return (name, inputColumns) => {
-    if (name in this[".rows"]) {
+   return (rid, inputColumns) => {
+
+    if (rid in this[".rows"]) {
+
      if (inputColumns) {
-      const oldRow = this[".rows"][name]
-      delete this[".rows"][name]
-      return oldRow["replaceWith.fn"](name, inputColumns)
+      const oldRow = this[".rows"][rid]
+      delete this[".rows"][rid]
+      return oldRow["replaceWith.fn"](rid, inputColumns)
      }
-     return this[".rows"][name]
+
+     return this[".rows"][rid]
     }
+
     const
+     [name, search] = rid.split('?'),
      description = { ... this["default.columns"] },
-     exists = name + "/" in this,
-     filesetName = (exists ? name : 'error404') + "/",
-     fileset = this[filesetName],
-     instance = (fileset ? fileset.split('&') : []).map(a => a ? a.split('=') : []);
-    // if (!exists) console.warn('Warning: 404 on branch ' + name + ' from ' + this["path.uri"])
-    for (const [key, ref] of instance) {
-     if (ref === undefined) {
-      description[key] = { get() { return Object.getPrototypeOf(this)[key] } }
+     exists = name + ".commit" in this,
+     commitName = (exists ? name : 'error404') + ".commit",
+     commit = { ...this[commitName] };
+    if (search) {
+     search.split('&').forEach(e => {
+      const [name, href] = e.split('=')
+      commit[name] = href
+     })
+    }
+    // if (!exists) console.warn('Warning: 404 on branch ' + name + ' from ' + this[".path"])
+    for (const name in commit) {
+     const href = commit[name]
+     if (href.startsWith('data:')) {
+      const datum = href.slice(href.indexOf(',') + 1)
+      description[name] = { get() { return datum } }
       continue
      }
-     if (ref.startsWith('data:')) {
-      const datum = ref.slice(ref.indexOf(',') + 1)
-      description[key] = { get() { return datum } }
-      continue
-     }
-     if (ref.startsWith('https://')) {
+     if (href.startsWith('https://')) {
       const
-       subpaths = ref.slice(8).split('/'),
-       subkey = subpaths.pop()
-      if (!subkey)
-       throw new RangeError(`Error: absolute cell reference must include a file name. Get reference to entire row not yet supported. (on ${this["path.uri"]}, adding ${ref})`)
-      description[key] = {
+       subpaths = href.slice(8).split('/'),
+       subname = subpaths.pop()
+      if (!subname)
+       throw new RangeError(`Error: absolute cell reference must include a file name. Get reference to entire row not yet supported. (on ${this[".path"]}, adding ${href})`)
+      description[name] = {
        get() {
+
         let row = ROW
+
         for (const subpath of subpaths)
          row = row["branch.fn"](subpath)
-        return row[subkey]
+
+        return row[subname]
        }
       }
       continue
      }
      let
       levels = 1,
-      subkey = ref
-     if (subkey.startsWith('./')) {
-      subkey = subkey.slice(2)
+      subname = href
+     if (subname.startsWith('./')) {
+      subname = subname.slice(2)
       levels = 0
-     } else while (subkey.startsWith('../')) {
-      subkey = subkey.slice(3)
+     } else while (subname.startsWith('../')) {
+      subname = subname.slice(3)
       levels++
      }
-     description[key] = {
+     description[name] = {
       get() {
        let row = this
        for (let i = 0; i < levels; i++) {
         row = Object.getPrototypeOf(row)
         if (row === null)
-         throw new RangeError(`Error: relative reference to row which is beyond ROW ${ref})`)
+         throw new RangeError(`Error: relative reference to row which is beyond ROW ${href})`)
        }
        let result;
-       result = row[subkey]
+       result = row[subname]
        return result
       }
      }
     }
-    return this[".rows"][name] = Object.create(this, Object.assign(description, inputColumns, {
-     "inputs.uri": { value: Object.keys(inputColumns ?? {}) },
-     "instance.uri": { value: instance.map(([k]) => k) },
-     "name.uri": { value: name },
-     "/": { value: filesetName }
+    return this[".rows"][rid] = Object.create(this, Object.assign(description, inputColumns, {
+     "input.names": { value: Object.keys(inputColumns ?? {}) },
+     "instance.names": { value: Object.keys(commit) },
+     ".name": { value: name },
+     ".rid": { value: rid },
+     "commit.name": { value: commitName }
     }))
    }
   }
  },
  "donate.fn": {
   get() {
-   return (child, parent, name = child["name.uri"]) => {
-    delete this[".rows"][name]
-    parent[".rows"][name] = child
+   return (child, parent, rid = child[".rid"]) => {
+    delete this[".rows"][rid]
+    parent[".rows"][rid] = child
     Object.setPrototypeOf(child, parent)
    };
   },
  },
  "insert.fn": {
   get() {
-   return (name, inputColumns) => {
+   return (rid, inputColumns) => {
     const
-     row = this["branch.fn"](name, inputColumns),
+     row = this["branch.fn"](rid, inputColumns),
      rows = this[".rows"]
-    for (const subkey in rows)
-     if (rows[subkey] !== row)
-      this["donate.fn"](rows[subkey], row, subkey)
+    for (const rid in rows)
+     if (rows[rid] !== row)
+      this["donate.fn"](rows[rid], row, rid)
     return row
    }
   }
@@ -420,9 +439,9 @@
     const
      parent = Object.getPrototypeOf(this),
      rows = this[".rows"]
-    delete parent[".rows"][this["name.uri"]]
-    for (const subkey in rows)
-     this["donate.fn"](rows[subkey], parent, subkey)
+    delete parent[".rows"][this[".rid"]]
+    for (const rid in rows)
+     this["donate.fn"](rows[rid], parent, rid)
     return parent
    }
   }
@@ -468,16 +487,16 @@
  },
  "replaceWith.fn": {
   get() {
-   return (name, inputColumns) => {
+   return (rid, inputColumns) => {
     if (this === ROW)
-     return this["insert.fn"](name, inputColumns)
+     return this["insert.fn"](rid, inputColumns)
     const
      parent = Object.getPrototypeOf(this),
-     row = parent["branch.fn"](name, inputColumns),
+     row = parent["branch.fn"](rid, inputColumns),
      rows = this[".rows"]
-    delete parent[".rows"][this["name.uri"]]
-    for (const subkey in rows)
-     this["donate.fn"](rows[subkey], row, subkey)
+    delete parent[".rows"][this[".rid"]]
+    for (const rid in rows)
+     this["donate.fn"](rows[rid], row, rid)
     return row
    }
   }
@@ -489,7 +508,7 @@
    let body, type;
 
    if (this["isFile.bool"]) {
-    const extension = this[".extension"], string = this[this["name.uri"]]
+    const extension = this[".extension"], string = this[this[".name"]]
     body = encoder.encode(string)
     if (extension === 'png') {
      type = "image/png"
@@ -508,10 +527,12 @@
   }
  },
 
- ".extension": { get() { return this["isFile.bool"] && this["name.uri"].split('.').at(-1) || null } },
+ ".extension": { get() { return this["isFile.bool"] && this[".name"].split('.').at(-1) || null } },
 
  "toggle-inspector.fn": { get() { return this["makeToggle.fn"]("open-inspector") } },
  "toggle-start-menu.fn": { get() { return this["makeToggle.fn"]("open-start-menu") } },
+
+ ".null": { get() { return null } },
 
  "default.columns": {
   get() {
@@ -527,31 +548,35 @@
     "layout.css": { value: "" },
     "onclick.fn": { value: null },
     "onresize.fn": { value: null },
+    "options.commit": { value: {} },
     "view.stylesheet": { value: null },
     "onpointerdown.fn": { value: null },
    })
   }
  },
 
- "name.uri": { get() { return `` } },
- "path.uri": {
+ ".name": { get() { return `` } },
+ "host.rid": { get() { return HOST[".rid"] } },
+
+ ".path": {
   get() {
-   let row = this, names = [];
+   let row = this, rids = [];
    while (row) {
-    names.unshift(row["name.uri"])
+    rids.unshift(row[".rid"])
     row = Object.getPrototypeOf(row)
    }
-   return 'https:/' + names.join('/')
+   return rids
   }
  },
  "manifest.uri": { get() { return `https://${this[".host"]}/manifest.json` } },
- "location.uri": { get() { return HOST["path.uri"] } },
 
  "auto.node": { get() { return this["ownNode.fn"]() } },
 
- "tray/": {
+ "host.commit": { get() { return HOST["options.commit"] } },
+ "tray.commit": {
   get() {
-   return `.node=./auto.node&.children=tray.children&.css=data:,:host {
+   return {
+    ".node": `./auto.node`, ".children": `tray.children`, ".css": `data:,:host {
      position: relative;
      display: flex;
      flex-flow: row nowrap;
@@ -564,21 +589,23 @@
      text-align: left;
      background: #c3c3c3;
      box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
-    }` }
+    }`}
+  }
  },
- "blank/": { get() { return `` } },
- "clock/": { get() { return `.node=./auto.node&.html=./time.txt` } },
- "grey1/": { get() { return `grey.color=data:text/color,#344555` } },
- "grey2/": { get() { return `grey.color=grey2.color` } },
- "header/": { get() { return `.node=./auto.node&.children=header.children&.tag=./native.tag&.layout=header.layout` } },
- "button/": { get() { return `.node=./auto.node&.tag=./name.tag` } },
- "version/": { get() { return `.node=./auto.node&.html=./version.number&.tag=./name.tag&pill-icon-right.bool=true.bool&.css=./pill.css` } },
- "address/": { get() { return `.node=./auto.node&.html=./location.uri&.tag=data:text/tag,addressbar-&.css=./pill.css` } },
- "sidebar/": { get() { return `.node=./auto.node&.children=sidebar.children&.tag=./name.tag&.css=sidebar.css` } },
- "article/": { get() { return `.node=./auto.node&.html=color.html&.tag=./native.tag&.css=data:,:host{ overflow-y: auto; background-color: ${this["branch.fn"]("lighten-background")["branch.fn"]("lighten-background")["light-background.color"]}; padding: 24px; }` } },
- "taskbar/": {
+ "clock.commit": { get() { return { ".node": `./auto.node`, ".html": `./time.txt` } } },
+ "grey1.commit": { get() { return { "grey.color": `data:text/color,#344555` } } },
+ "grey2.commit": { get() { return { "grey.color": `grey2.color` } } },
+ "title.commit": { get() { return { ".node": `./auto.node`, ".html": `./title.html`, ".tag": `./name.tag` } } },
+ "header.commit": { get() { return { ".node": `./auto.node`, ".children": `header.children`, ".tag": `./native.tag`, ".layout": `header.layout` } } },
+ "button.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag` } } },
+ "version.commit": { get() { return { ".node": `./auto.node`, ".html": `./version.number`, ".tag": `./name.tag`, "pill-icon-right.bool": `true.bool`, ".css": `./pill.css` } } },
+ "address.commit": { get() { return { ".node": `./auto.node`, ".html": `./host.rid`, ".tag": `data:text/tag,addressbar-`, ".css": `./pill.css` } } },
+ "sidebar.commit": { get() { return { ".node": `./auto.node`, ".children": `sidebar.children`, ".tag": `./name.tag`, ".css": `sidebar.css` } } },
+ "article.commit": { get() { return { ".node": `./auto.node`, ".html": `welcome.html`, ".tag": `./native.tag`, ".css": `welcome.css` } } },
+ "taskbar.commit": {
   get() {
-   return `.node=./auto.node&.tag=./name.tag&height.number=data:,28px&.children=./taskbar.children&.css=data:,:host {
+   return {
+    ".node": `./auto.node`, ".tag": `./name.tag`, "height.number": `data:,28px`, ".children": `./taskbar.children`, ".css": `data:,:host {
      position: relative;
      width: 100%;
      box-sizing: border-box;
@@ -592,32 +619,52 @@
      background: #c3c3c3;
      box-shadow: inset 0 1px #c3c3c3, inset 0 2px white;
      }` }
+  }
  },
- "desktop/": { get() { return `.node=./auto.node&.tag=./name.tag&.css=data:,:host{ background: #377f7f }` } },
- "error404/": { get() { return `.node=./auto.node&.css=./error404.css&.html=./error404.html&.tag=./name.tag` } },
- "side-menu/": { get() { return `.node=./auto.node&.children=menu-buttons.children&.tag=./name.tag&.layout=menu-buttons.layout` } },
- "inspector/": { get() { return `.node=./auto.node&.html=inspector.html&.tag=./name.tag&.css=data:,:host{overflow-y: auto; max-height: 100%; position: relative; padding: 16px; } h3, h4 { margin: 0 } section > pre { background: black; color: white; border-radius: 4px; margin: 0; padding: 4px }` } },
- "start-menu/": { get() { return `.node=./auto.node&.tag=./name.tag&.css=start-menu.css&.children=start-menu.children` } },
- "core.parts/": { get() { return `.node=./auto.node&.tag=./name.tag&background.color=grey.color&.children=./editor.children&.css=./theme.css&sidebar-open.bool=true.bool` } },
- "twist-base/": { get() { return `red.color=data:,#d44&green.color=data:,#4d4&blue.color=data:,#44d&twist.bool=true.bool` } },
- "twist-layer/": { get() { return `red.color=green.color&green.color=blue.color&blue.color=red.color` } },
- "pilot.parts/": { get() { return `.node=./auto.node&.tag=./name.tag&.css=./os.css&.children=./os.children` } },
- "flex-spacer/": { get() { return `.node=./auto.node&.layout=flex-spacer.layout&.tag=./name.tag` } },
- "bottom-menu/": { get() { return `.node=./auto.node&.html=data:text/html,bottom&.tag=data:text/tag,bottom-menu` } },
- "start-button/": { get() { return `.node=./auto.node&.css=start-button.css&.html=data:,<icon-></icon->Start&onpointerdown.fn=https://pilot.parts/toggle-start-menu.fn&tabIndex.int=1` } },
- "hide-sidebar/": { get() { return `sidebar-open.bool=false.bool` } },
- "next-version/": { get() { return `version.number=https://core.parts/next-version.number` } },
- "ejaugust.com/": { get() { return `.node=./auto.node&.tag=./name.tag&.children=./portfolio.children&.css=./portfolio.css&onresize.fn=./grid-snap.fn` } },
- "header-layout/": { get() { return `layout.css=header.css` } },
- "account-button/": { get() { return `.node=./auto.node&.html=data:text/html,👤&.css=unicode-button.css&.tag=./name.tag` } },
- "open-inspector/": { get() { return `inspector-open.bool=true.bool` } },
- "open-start-menu/": { get() { return `start-menu.bool=true.bool` } },
- "grey-background/": { get() { return `background.color=grey.color&layout.css=background.css` } },
- "settings-button/": { get() { return `.node=./auto.node&.html=data:text/html,⚙&.css=unicode-button.css&.tag=./name.tag` } },
- "inspector-button/": { get() { return `.node=./auto.node&.html=data:text/html,⚡&.css=unicode-button.css&.tag=./name.tag&onclick.fn=https://core.parts/toggle-inspector.fn` } },
- "lighten-background/": { get() { return `background.color=light-background.color` } },
- "flex-spacer-layout/": { get() { return `layout.css=flex-spacer.css` } },
- "menu-buttons-layout/": { get() { return `layout.css=menu-buttons.css` } },
+ "desktop.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `data:,:host{ background: #377f7f }` } } },
+ "error404.commit": { get() { return { ".node": `./auto.node`, ".css": `./error404.css`, ".html": `./error404.html`, ".tag": `data:,error-404` } } },
+ "side-menu.commit": { get() { return { ".node": `./auto.node`, ".children": `menu-buttons.children`, ".tag": `./name.tag`, ".layout": `menu-buttons.layout` } } },
+ "inspector.commit": { get() { return { "title.txt": "data:,Inspector", ".node": `./auto.node`, ".children": `inspector.children`, ".tag": `./name.tag`, ".css": `data:,:host{display: flex; flex-flow: column nowrap; overflow-y: auto } title- { margin: 0; padding: 4px; text-transform: uppercase; position: sticky; top: 0; background: inherit }` } } },
+ "start-menu.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `start-menu.css`, ".children": `start-menu.children` } } },
+ "core.parts.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./editor.children`, ".css": `./theme.css`, "sidebar-open.bool": `true.bool` } } },
+ "twist-base.commit": { get() { return { "red.color": `data:,#d44`, "green.color": `data:,#4d4`, "blue.color": `data:,#44d`, "twist.bool": `true.bool` } } },
+ "twist-layer.commit": { get() { return { "red.color": `green.color`, "green.color": `blue.color`, "blue.color": `red.color` } } },
+ "pilot.parts.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `./os.css`, ".children": `./os.children` } } },
+ "flex-spacer.commit": { get() { return { ".node": `./auto.node`, ".layout": `flex-spacer.layout`, ".tag": `./name.tag` } } },
+ "bottom-menu.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,bottom`, ".tag": `data:text/tag,bottom-menu` } } },
+ "start-button.commit": { get() { return { ".node": `./auto.node`, ".css": `start-button.css`, ".html": `data:,<icon-></icon->Start`, "onpointerdown.fn": `https://pilot.parts/toggle-start-menu.fn`, "tabIndex.int": `1` } } },
+ "hide-sidebar.commit": { get() { return { "sidebar-open.bool": `false.bool` } } },
+ "next-version.commit": { get() { return { "version.number": `https://core.parts/next-version.number` } } },
+ "ejaugust.com.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".children": `./portfolio.children`, ".css": `./portfolio.css`, "onresize.fn": `./grid-snap.fn` } } },
+ "header-layout.commit": { get() { return { "layout.css": `header.css` } } },
+ "inspector-item.commit": {
+  get() {
+   return {
+    ".node": `./auto.node`, ".tag": `./name.tag`, ".html": `./inspector-item.html`, ".css": `data:,:host {
+     cursor: pointer;
+     padding: 4px;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     overflow: hidden;
+     min-height: 16px;
+    }
+    :host(:hover) {
+     color:white;
+     background: ${this["background.color"]};
+    }` }
+  }
+ },
+ "account-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,👤`, ".css": `unicode-button.css`, ".tag": `./name.tag` } } },
+ "open-inspector.commit": { get() { return { "inspector-open.bool": `true.bool` } } },
+ "open-start-menu.commit": { get() { return { "start-menu.bool": `true.bool` } } },
+ "grey-background.commit": { get() { return { "background.color": `grey.color`, "layout.css": `background.css` } } },
+ "settings-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,⚙`, ".css": `unicode-button.css`, ".tag": `./name.tag` } } },
+ "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,⚡`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://core.parts/toggle-inspector.fn` } } },
+ "lighten-background.commit": { get() { return { "background.color": `light-background.color` } } },
+ "flex-spacer-layout.commit": { get() { return { "layout.css": `flex-spacer.css` } } },
+ "menu-buttons-layout.commit": { get() { return { "layout.css": `menu-buttons.css` } } },
+
+ "inspector.children": { get() { return ["title", ...Object.keys(C).map(name => `inspector-item?item.rid=data:,${name}`)] } },
 
  "icon.png": {
   get() {
@@ -644,8 +691,8 @@
  "manifest.json": {
   get() {
    return JSON.stringify({
-    "name": HOST["name.uri"].split('.')[0],
-    "short_name": HOST["name.uri"],
+    "name": HOST[".name"].split('.')[0],
+    "short_name": HOST[".name"],
     "start_url": ".",
     "display": "standalone",
     "background_color": this["background.color"],
@@ -664,6 +711,7 @@
  "header.layout": { get() { return ['header-layout'] } },
  "flex-spacer.layout": { get() { return ['flex-spacer-layout'] } },
  "menu-buttons.layout": { get() { return ['menu-buttons-layout'] } },
+ "title.html": { get() { return `<b>${this["title.txt"] ?? "Untitled"}<b>` } },
 
  "script.js": { get() { return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()` } },
 
@@ -673,22 +721,19 @@
    return new Date().toLocaleString("en-US", { hour: "numeric", minute: "numeric", hourCycle: "h12" })
   }
  },
+ "prefix.txt": { get() { return (this["force-refresh.bool"] ? "FORCED-" : this["original.bool"] ? "HTTPS-" : "") + (this["server.bool"] ? "SERVER-" : "CLIENT-") + BOOT_TIME } },
+ "item-icon.txt": { get() { return { "bool": "⏼", "html": "📄", "css": "📄", "txt": "📄", "color": "🌈", "layout": "🍱", "number": "ℕ", "fn": "ƒ", "rid": "⎋", "test": "🧪", "tag": "🏷", "js": "📃", "children": "🧒", "commit": "🗃" }[this["item.extension"]] ?? "#" } },
+ "item.extension": { get() { return this["branch.fn"](this["item.rid"] + '?.node=.null')[".extension"] } },
 
  "true.bool": { get() { return true } },
  "false.bool": { get() { return false } },
- "isFile.bool": { get() { return this["name.uri"] in this } },
+ "isFile.bool": { get() { return this[".name"] in this } },
  "server.bool": { get() { return typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope } },
 
- "color.html": { get() { return this["twist.bool"] ? `${this["red.color"]}<br>${this["green.color"]}<br>${this["blue.color"]}<br><b>length of path:</b> ${HOST["path.uri"].length}<br><b>number of commits:</b> ${HOST["branch-length.number"]}` : `<b><i>changed ${this["background.color"]}</i></b>` } },
+ "welcome.html": { get() { return `<heading><h1>Core Parts</h1><h2>Web Self Editor</h2></heading><aside><section><h3>Start</h3><p>a</p><p>b</p><p>c</p></section><section><h3>Recent</h3><p>d</p><p>e</p></section></aside><aside><h3>Learning</h3>Lorem ipsum etc</aside>` } },
  "index.html": { get() { return INDEX } },
  "error404.html": { get() { return `<b><i>404</i></b>` } },
- "inspector.html": {
-  get() {
-   const columns = Object.getOwnPropertyDescriptors(HOST)
-   return `<section><h3>${HOST["name.uri"]}</h3><pre>${HOST["/"]}</pre><h4>Properties</h4>${HOST["instance.uri"].map(name => HOST["inputs.uri"].includes(name) ? '' : `<pre>${name}</pre>`).join('')}<h4>Inputs</h4>${HOST["inputs.uri"].map(name => `<pre>${name}</pre>`).join('')}</section>`
-  }
- },
-
+ "inspector-item.html": { get() { return `${this["item-icon.txt"]}&nbsp;${this["item.rid"]}` } },
 
  "grey.color": { get() { return `#333445` } },
  "grey2.color": { get() { return `#444444` } },
@@ -724,6 +769,19 @@
  },
  "header.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["branch.fn"]("lighten-background")["light-background.color"]}}` } },
  "sidebar.css": { get() { return `:host { overflow: hidden; color: ${this["background.color"]}; background: ${this["light-background.color"]}; display: grid; grid-template: "b${this["inspector-open.bool"] ? ' i' : ''}" 1fr / ${this["sidebar-width.number"]}px ${this["inspector-open.bool"] ? '1fr' : ''}; } side-menu { grid-area: b } ${this["inspector-open.bool"] ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}` } },
+ "welcome.css": {
+  get() {
+   return `:host{
+    display: grid;
+    grid-template: "h h" auto "o l" auto / 1fr 1fr;
+    overflow-y: auto;
+    background-color: ${this["branch.fn"]("lighten-background")["branch.fn"]("lighten-background")["light-background.color"]}; padding: 24px;
+   }
+   heading {
+    grid-area: h;
+   }
+   ` }
+ },
  "error404.css": { get() { return `:host { background: magenta }` } },
  "portfolio.css": {
   get() {
@@ -809,8 +867,8 @@
  "menu-buttons.css": { get() { return `:host { display: flex; flex-flow: column nowrap; gap: 4px; padding: 4px; }` } },
  "unicode-button.css": { get() { return `:host { cursor: pointer; border-radius: 4px; line-height: 32px; width: 32px; font-size: 32px; aspect-ratio: 1 / 1; height: auto; } :host(:hover) { background: ${this["background.color"]} }` } },
 
- "name.tag": { get() { return this["name.uri"].replaceAll(/[^a-zA-Z0-9]+/g, '-') + '-' } },
- "native.tag": { get() { if (!this["name.uri"] || !/^[a-zA-Z]+$/.test(this["name.uri"])) throw RangeError(`Error: name "${this["name.uri"]}" is not a native tagname.`); return this["name.uri"] } },
+ "name.tag": { get() { return this[".name"].replaceAll(/[^a-zA-Z0-9]+/g, '-') + '-' } },
+ "native.tag": { get() { if (!this[".name"] || !/^[a-zA-Z]+$/.test(this[".name"])) throw RangeError(`Error: name "${this[".name"]}" is not a native tagname.`); return this[".name"] } },
 
  "grey1.test": { get() { return `sidebar insert grey1 grey2 1000` } },
  "grey2.test": { get() { return `grey1 replaceWith grey2 lighten` } },
