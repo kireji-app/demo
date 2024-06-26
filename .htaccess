@@ -1,13 +1,4 @@
-##### Make sure we can put emojis into the source code.
 AddCharset utf-8 .js
-
-##### Set the 404 page to the home page, so all requests return the index,
-#####  except if they lead to a real file on the server.
 ErrorDocument 404 /index.php
-
-##### Deal with fetches directly to this document, which always have status 403 in Apache.
 ErrorDocument 403 /index.php
-
-##### Prevent Apache from generating a separate index page for requests to folders.
-##### It is only needed if there are real subfolders on the server.
 Options -Indexes

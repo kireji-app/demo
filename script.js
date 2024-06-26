@@ -1,5 +1,5 @@
 (C = {
- "version.number": { get() { return 50 / 1000 } },
+ "version.number": { get() { return 51 / 1000 } },
  "next-version.number": { get() { return Math.trunc(this["version.number"] * 1000 + 1) / 1000 } },
  "sidebar-width.number": { get() { return 42 } },
  "branch-length.number": {
@@ -16,6 +16,7 @@
  "boot.fn": {
   get() {
    return () => {
+    globalThis.T = Date.now() % (2 ** 10)
     globalThis.NODES ??= new Map()
     globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get()))
     globalThis.HOST = ROW["branch.fn"](location.host.slice(location.host.startsWith('dev.') ? 4 : 0), { ".host": { value: location.host }, ".node": { get() { return this["auto.node"] } } })
@@ -222,52 +223,92 @@
  "server.fn": {
   get() {
    return () => {
+    console.log('Evaluating incoming server.')
     onfetch = e => HOST["fetch.fn"](e.request.url, e)
-    oninstall = e => {
-     skipWaiting()
-     console.warn('installing service worker ...')
+    onactivate = () => {
+     this["log.fn"]('Created!')
+     clients.claim()
     }
-    onmessage = ({ data }) => globalThis.INDEX = data
+    oninstall = e => {
+     globalThis.skipWaiting()
+     e.waitUntil(fetch(location.origin).then(index => index.text()).then(text => {
+      globalThis.INDEX = text.replace(`<link rel="manifest">`, `<link rel="manifest" href="${this["manifest.uri"]}"/>`)
+     }))
+    }
+    onmessage = e => {
+     this["log.fn"]('Claiming FORCED-CLIENT-###')
+     clients.claim()
+    }
+
    }
   }
  },
+ "prefix.txt": { get() { return (this["force-refresh.bool"] ? "FORCED-" : this["force-refresh.bool"] ? "HTTPS-" : "") + (this["server.bool"] ? "SERVER-" : "CLIENT-") + T } },
+ "log.fn": { get() { return (...args) => console.log(this["prefix.txt"], ...args) } },
  "client.fn": {
   get() {
    return () => {
     Promise.all([
      (async () => {
-      const {
-       waiting: w,
-       installing: i,
-       active: a = await new Promise(resolve => (w ?? i).onstatechange = ({ target: t }) => t.state === 'activated' ? resolve(t) : 0)
-      } = await navigator.serviceWorker.register(location.origin + '/script.js')
-      return w ?? i ?? a
+      let { waiting: w, installing: i, active: a } = await navigator.serviceWorker.register(location.origin + '/script.js')
+      if (!a) a = await new Promise(resolve => (w ?? i).onstatechange = ({ target: t }) => t.state === 'activated' ? resolve(t) : 0)
+      return a
      })(),
      new Promise(resolve => onload = resolve)
     ]).then(([server]) => {
 
-     server.postMessage(globalThis.INDEX = `<!DOCTYPE html>` + document.documentElement.outerHTML.replace(`<link rel="manifest">`, `<link rel="manifest" href="${this["manifest.uri"]}"/>`))
+     const
+      manifest = document.querySelector('[rel="manifest"]'),
+      original = !manifest.href,
+      forceRefreshed = !navigator.serviceWorker.controller,
+      begin = () => {
 
-     const manifestNode = document.querySelector('[rel="manifest"]');
-     if (!manifestNode.href) location.reload()
+       this["log.fn"]('Created!')
 
-     let row = ROW["insert.fn"]("twist-base")["insert.fn"]('twist-layer')
+       if (original)
+        manifest.href = HOST["manifest.uri"]
+      }
 
-     HOST["ownNode.fn"](document.body)
-     // manifestNode.setAttribute('href', HOST["manifest.uri"])
-     ROW["signal.fn"]()
+     let waiting;
 
-     const loop = () => requestAnimationFrame(() => {
-      row = row["insert.fn"]('blank')
-      if (row["branch-length.number"] > 100 || row["path.uri"].length > 2048) {
-       row = row["remove.fn"]()
-       ROW["signal.fn"]()
+     navigator.serviceWorker.oncontrollerchange = () => {
+      // can only be waiting if there was no controller yet until now
+      if (waiting) {
+       waiting = false;
+       begin()
        return
       }
-      ROW["signal.fn"]()
-      loop()
+      // can only get here if the controller has changed which can only happen if the server-side script changes.
+      this["log.fn"]('The true server has updated.')
+      location.reload()
+     }
+
+     Object.defineProperties(this, {
+      "original.bool": { value: original },
+      "force-refresh.bool": { value: forceRefreshed },
      })
-     loop()
+
+     if (forceRefreshed) {
+      waiting = true
+      server.postMessage(1)
+     } else begin()
+
+
+     //let row = ROW["insert.fn"]("twist-base")["insert.fn"]('twist-layer')
+     HOST["ownNode.fn"](document.body)
+     ROW["signal.fn"]()
+     /*
+          const loop = () => requestAnimationFrame(() => {
+           row = row["insert.fn"]('blank')
+           if (row["branch-length.number"] > 100 || row["path.uri"].length > 2048) {
+            row = row["remove.fn"]()
+            ROW["signal.fn"]()
+            return
+           }
+           ROW["signal.fn"]()
+           loop()
+          })
+          loop()*/
     })
    }
   }
@@ -286,9 +327,11 @@
     const
      description = { ... this["default.columns"] },
      exists = name + "/" in this,
-     fileset = this[(exists ? name : 'error404') + "/"]
+     filesetName = (exists ? name : 'error404') + "/",
+     fileset = this[filesetName],
+     instance = (fileset ? fileset.split('&') : []).map(a => a ? a.split('=') : []);
     // if (!exists) console.warn('Warning: 404 on branch ' + name + ' from ' + this["path.uri"])
-    for (const [key, ref] of (fileset ? fileset.split('&') : []).map(a => a ? a.split('=') : [])) {
+    for (const [key, ref] of instance) {
      if (ref === undefined) {
       description[key] = { get() { return Object.getPrototypeOf(this)[key] } }
       continue
@@ -339,10 +382,10 @@
      }
     }
     return this[".rows"][name] = Object.create(this, Object.assign(description, inputColumns, {
-     "context.uri": { value: "context.uri instance.uri name.uri /" },
-     "instance.uri": { value: Object.keys(description).join(' ') },
+     "inputs.uri": { value: Object.keys(inputColumns ?? {}) },
+     "instance.uri": { value: instance.map(([k]) => k) },
      "name.uri": { value: name },
-     "/": { value: fileset }
+     "/": { value: filesetName }
     }))
    }
   }
@@ -532,7 +575,7 @@
  "version/": { get() { return `.node=./auto.node&.html=./version.number&.tag=./name.tag&pill-icon-right.bool=true.bool&.css=./pill.css` } },
  "address/": { get() { return `.node=./auto.node&.html=./location.uri&.tag=data:text/tag,addressbar-&.css=./pill.css` } },
  "sidebar/": { get() { return `.node=./auto.node&.children=sidebar.children&.tag=./name.tag&.css=sidebar.css` } },
- "article/": { get() { return `.node=./auto.node&.html=color.html&.tag=./native.tag&.css=data:,:host{ background-color: ${this["branch.fn"]("lighten-background")["branch.fn"]("lighten-background")["light-background.color"]}; padding: 24px; }` } },
+ "article/": { get() { return `.node=./auto.node&.html=color.html&.tag=./native.tag&.css=data:,:host{ overflow-y: auto; background-color: ${this["branch.fn"]("lighten-background")["branch.fn"]("lighten-background")["light-background.color"]}; padding: 24px; }` } },
  "taskbar/": {
   get() {
    return `.node=./auto.node&.tag=./name.tag&height.number=data:,28px&.children=./taskbar.children&.css=data:,:host {
@@ -553,7 +596,7 @@
  "desktop/": { get() { return `.node=./auto.node&.tag=./name.tag&.css=data:,:host{ background: #377f7f }` } },
  "error404/": { get() { return `.node=./auto.node&.css=./error404.css&.html=./error404.html&.tag=./name.tag` } },
  "side-menu/": { get() { return `.node=./auto.node&.children=menu-buttons.children&.tag=./name.tag&.layout=menu-buttons.layout` } },
- "inspector/": { get() { return `.node=./auto.node&header/=inspector-header/&.children=zero.children&.tag=./name.tag` } },
+ "inspector/": { get() { return `.node=./auto.node&.html=inspector.html&.tag=./name.tag&.css=data:,:host{overflow-y: auto; max-height: 100%; position: relative; padding: 16px; } h3, h4 { margin: 0 } section > pre { background: black; color: white; border-radius: 4px; margin: 0; padding: 4px }` } },
  "start-menu/": { get() { return `.node=./auto.node&.tag=./name.tag&.css=start-menu.css&.children=start-menu.children` } },
  "core.parts/": { get() { return `.node=./auto.node&.tag=./name.tag&background.color=grey.color&.children=./editor.children&.css=./theme.css&sidebar-open.bool=true.bool` } },
  "twist-base/": { get() { return `red.color=data:,#d44&green.color=data:,#4d4&blue.color=data:,#44d&twist.bool=true.bool` } },
@@ -571,7 +614,6 @@
  "open-start-menu/": { get() { return `start-menu.bool=true.bool` } },
  "grey-background/": { get() { return `background.color=grey.color&layout.css=background.css` } },
  "settings-button/": { get() { return `.node=./auto.node&.html=data:text/html,⚙&.css=unicode-button.css&.tag=./name.tag` } },
- "inspector-header/": { get() { return `.node=./auto.node&.html=data:text/html,Some panel` } },
  "inspector-button/": { get() { return `.node=./auto.node&.html=data:text/html,⚡&.css=unicode-button.css&.tag=./name.tag&onclick.fn=https://core.parts/toggle-inspector.fn` } },
  "lighten-background/": { get() { return `background.color=light-background.color` } },
  "flex-spacer-layout/": { get() { return `layout.css=flex-spacer.css` } },
@@ -595,7 +637,6 @@
  "header.children": { get() { return ['address', 'flex-spacer', 'version'] } },
  "taskbar.children": { get() { return ['start-button', ...(this["apps.children"] ?? []), 'flex-spacer', 'tray'] } },
  "sidebar.children": { get() { return ['side-menu', ...(this["inspector-open.bool"] ? ['inspector'] : [])] } },
- "inspector.children": { get() { return ['header', 'menu'] } },
  "portfolio.children": { get() { return ['core.parts', 'pilot.parts'] } },
  "start-menu.children": { get() { return ['locate', 'relate', 'debate', 'horizontal-line-1', 'welcome', 'horizontal-line-2', 'save-computer', 'restart-computer', 'restart-server'] } },
  "menu-buttons.children": { get() { return ['inspector-button', 'flex-spacer', 'account-button', 'settings-button'] } },
@@ -624,7 +665,7 @@
  "flex-spacer.layout": { get() { return ['flex-spacer-layout'] } },
  "menu-buttons.layout": { get() { return ['menu-buttons-layout'] } },
 
- "script.js": { get() { return `(C = {${Object.entries(C).map(([k, { get }]) => `\n "${k}": { ${get} }`)}\n})["boot.fn"].get()()` } },
+ "script.js": { get() { return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()` } },
 
  "time.txt": {
   get() {
@@ -638,9 +679,16 @@
  "isFile.bool": { get() { return this["name.uri"] in this } },
  "server.bool": { get() { return typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope } },
 
- "color.html": { get() { return this["twist.bool"] ? `${this["red.color"]}<br>${this["green.color"]}<br>${this["blue.color"]}<br><b>length of path:</b> ${HOST["path.uri"].length}<br><b>number of commits:</b> ${HOST["branch-length.number"]}` : `<b><i>${this["background.color"]}</i></b>` } },
+ "color.html": { get() { return this["twist.bool"] ? `${this["red.color"]}<br>${this["green.color"]}<br>${this["blue.color"]}<br><b>length of path:</b> ${HOST["path.uri"].length}<br><b>number of commits:</b> ${HOST["branch-length.number"]}` : `<b><i>changed ${this["background.color"]}</i></b>` } },
  "index.html": { get() { return INDEX } },
  "error404.html": { get() { return `<b><i>404</i></b>` } },
+ "inspector.html": {
+  get() {
+   const columns = Object.getOwnPropertyDescriptors(HOST)
+   return `<section><h3>${HOST["name.uri"]}</h3><pre>${HOST["/"]}</pre><h4>Properties</h4>${HOST["instance.uri"].map(name => HOST["inputs.uri"].includes(name) ? '' : `<pre>${name}</pre>`).join('')}<h4>Inputs</h4>${HOST["inputs.uri"].map(name => `<pre>${name}</pre>`).join('')}</section>`
+  }
+ },
+
 
  "grey.color": { get() { return `#333445` } },
  "grey2.color": { get() { return `#444444` } },
@@ -675,7 +723,7 @@
    }` }
  },
  "header.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["branch.fn"]("lighten-background")["light-background.color"]}}` } },
- "sidebar.css": { get() { return `:host { color: ${this["background.color"]}; background: ${this["light-background.color"]}; display: grid; grid-template: "b${this["inspector-open.bool"] ? ' i' : ''}" 1fr / ${this["sidebar-width.number"]}px ${this["inspector-open.bool"] ? '1fr' : ''}; } side-menu { grid-area: b } ${this["inspector-open.bool"] ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}` } },
+ "sidebar.css": { get() { return `:host { overflow: hidden; color: ${this["background.color"]}; background: ${this["light-background.color"]}; display: grid; grid-template: "b${this["inspector-open.bool"] ? ' i' : ''}" 1fr / ${this["sidebar-width.number"]}px ${this["inspector-open.bool"] ? '1fr' : ''}; } side-menu { grid-area: b } ${this["inspector-open.bool"] ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}` } },
  "error404.css": { get() { return `:host { background: magenta }` } },
  "portfolio.css": {
   get() {
