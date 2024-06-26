@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
 <!-- Don't let search engines index the page while it's in development -->
-<meta name="robots" content="noindex" />
+<meta name="robots" content="noindex">
 
 <!-- Prepare a manafest link. Leaving the href empty allows us to 
       choose which web app manifest we want the page to have at load time -->
-<link rel="manifest" />
+<link rel="manifest">
 
 <!-- Set the viewport (helps fix scaling on mobile devices) -->
-<meta name="viewport" content="width=device-width,initial-scale=0.8" />
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <!-- Prepare generic body and html that will apply to every page of every app.
      Any per-page or per-component style is encapsulated in the shadow DOM of the body. -->
@@ -41,4 +41,4 @@
 </style>
 
 <!-- Load the script that will render the rest of the page. -->
-<script src="https://<?= $_SERVER['HTTP_HOST'] ?>/live.js"></script>
+<script src="https://<?= $_SERVER['HTTP_HOST'] ?>/script.js"></script>
