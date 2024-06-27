@@ -1,5 +1,7 @@
 (C = {
- "version.number": { get() { return 52 / 1000 } },
+ "version.number": { get() { return 53 / 1000 } },
+ "host-size.number": { get() { return HOST[".rid"].length } },
+ "host-memory.number": { get() { return ('https://' + HOST[".rid"]).length / 20.48 } },
  "next-version.number": { get() { return Math.trunc(this["version.number"] * 1000 + 1) / 1000 } },
  "sidebar-width.number": { get() { return 42 } },
  "branch-length.number": {
@@ -17,11 +19,11 @@
   get() {
    return () => {
     globalThis.BOOT_TIME = Date.now()
-    globalThis.NODES ??= new Map()
-    globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get()))
+    globalThis.NODES = new Map()
+    globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get(), { ".rid": { value: "root" } }))
     globalThis.HOST = ROW["branch.fn"](location.host.slice(location.host.startsWith('dev.') ? 4 : 0) + location.search, {
-     ".host": { value: location.host },
-     ".node": { get() { return this["auto.node"] } }
+     ".host": { value: location.host, configurable: true },
+     ".node": { get() { return this["auto.node"] }, configurable: true }
     })
     HOST["install.fn"]()
    }
@@ -32,7 +34,6 @@
    return (name, o = { "": ROW }) => {
     const [src, fn, str, n2, t] = ROW[`${name}.test`].split(' ')
     setTimeout(() => {
-     console.log(src)
      o[name] = (src === "this" ? this : src === "host" ? HOST : o[src])[fn + '.fn'](str || undefined)
      ROW["signal.fn"]()
      this["test.fn"](n2, o)
@@ -104,6 +105,8 @@
   get() {
    return () => {
 
+    this["checkout.fn"]()
+
     if (this["server.bool"])
      throw new Error('Server Error: signal called in server. ' + this[".path"])
 
@@ -148,7 +151,7 @@
         let stylesheet
         if (existingIndex === -1) {
          stylesheet = new CSSStyleSheet()
-         stylesheet.row = this["branch.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet } })
+         stylesheet.row = this["branch.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet, configurable: true } })
         } else {
          const stylesheetIndex = i + existingIndex + 1
          stylesheet = stylesheets[stylesheetIndex]
@@ -167,7 +170,7 @@
        else if (incomingSheetNames.length)
         for (const incomingSheetName of incomingSheetNames) {
          const stylesheet = new CSSStyleSheet()
-         stylesheet.row = this["branch.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet } })
+         stylesheet.row = this["branch.fn"](incomingSheetName, { ["view.stylesheet"]: { value: stylesheet, configurable: true } })
          stylesheets.push(stylesheet)
         }
       }
@@ -179,13 +182,13 @@
        if (shadowRoot.innerHTML != innerHTML) shadowRoot.innerHTML = innerHTML
       } else {
        const
-        incomingNames = this[".children"],
-        incomingManifest = incomingNames.join(' '),
+        incomingRIDs = this[".children"],
+        incomingManifest = incomingRIDs.join(' '),
         children = shadowRoot.children,
         existingNodes = [...children],
         existingRows = existingNodes.map(node => node.row),
-        existingNames = existingRows.map(row => row[".name"]),
-        existingManifest = existingNames.join(' '),
+        existingRIDs = existingRows.map(row => row[".rid"]),
+        existingManifest = existingRIDs.join(' '),
         createNode = (name, index = -1) => {
          const row = this["branch.fn"](name), node = row[".node"]
 
@@ -208,16 +211,16 @@
         }
        if (existingManifest !== incomingManifest) {
         let i = -1
-        while (existingNames.length && incomingNames.length) {
+        while (existingRIDs.length && incomingRIDs.length) {
          i++
-         const incomingName = incomingNames.shift();
-         if (existingNames.shift() !== incomingName) {
+         const incomingName = incomingRIDs.shift();
+         if (existingRIDs.shift() !== incomingName) {
           removeNode()
           createNode(incomingName, i)
          }
         }
-        existingNames.forEach(() => removeNode(1))
-        incomingNames.forEach((incomingName, ii) => createNode(incomingName, i + ii + 1))
+        existingRIDs.forEach(() => removeNode(1))
+        incomingRIDs.forEach((incomingName, ii) => createNode(incomingName, i + ii + 1))
        }
       }
      }
@@ -309,13 +312,13 @@
      }
 
      Object.defineProperties(this, {
-      "original.bool": { value: original },
-      "force-refresh.bool": { value: forceRefreshed },
+      "original.bool": { value: original, configurable: true },
+      "force-refresh.bool": { value: forceRefreshed, configurable: true },
      })
 
      if (forceRefreshed) {
       waiting = true
-      server.postMessage(1)
+      registration.active.postMessage(1)
      } else begin()
     })
    }
@@ -338,40 +341,68 @@
 
     const
      [name, search] = rid.split('?'),
-     description = { ... this["default.columns"] },
      exists = name + ".commit" in this,
      commitName = (exists ? name : 'error404') + ".commit",
-     commit = { ...this[commitName] };
-    if (search) {
-     search.split('&').forEach(e => {
-      const [name, href] = e.split('=')
-      commit[name] = href
-     })
-    }
-    // if (!exists) console.warn('Warning: 404 on branch ' + name + ' from ' + this[".path"])
+     commit = this[commitName],
+     workingTree = (search ? search.split('&') : []).reduce((attrs, param) => {
+      const [name, href] = param.split('=')
+      attrs[name] = href
+      return attrs
+     }, {}),
+     contextColumns = {
+      "input.names": { value: Object.keys(inputColumns ?? {}), configurable: true },
+      "instance.names": { value: Object.keys(commit), configurable: true },
+      ".name": { value: name, configurable: true },
+      ".rid": { value: rid, configurable: true },
+      "commit.name": { value: commitName, configurable: true },
+      "workingTree.commit": { value: workingTree, configurable: true }
+     }
+
+    // if (!exists)
+    // console.warn('Warning: 404 on branch ' + name, this)
+
+    const row = this[".rows"][rid] = Object.create(this, Object.assign(this["default.columns"], inputColumns, contextColumns))
+
+    for (const name in workingTree)
+     row["attributes.names"].add(name)
+
+    row["checkout.fn"](commit)
+    row["checkout.fn"](workingTree)
+
+    return row
+   }
+  }
+ },
+ "checkout.fn": {
+  get() {
+   return commit => {
+    const description = {}
     for (const name in commit) {
      const href = commit[name]
      if (href.startsWith('data:')) {
       const datum = href.slice(href.indexOf(',') + 1)
-      description[name] = { get() { return datum } }
+      description[name] = { get() { return datum }, configurable: true }
       continue
      }
      if (href.startsWith('https://')) {
       const
        subpaths = href.slice(8).split('/'),
+       host = subpaths.shift() + (HOST[".rid"].split('?')[1] ? '?' + HOST[".rid"].split('?')[1] : ''),
        subname = subpaths.pop()
+
       if (!subname)
        throw new RangeError(`Error: absolute cell reference must include a file name. Get reference to entire row not yet supported. (on ${this[".path"]}, adding ${href})`)
+
       description[name] = {
        get() {
 
-        let row = ROW
+        let row = ROW["branch.fn"](host)
 
         for (const subpath of subpaths)
          row = row["branch.fn"](subpath)
 
         return row[subname]
-       }
+       }, configurable: true
       }
       continue
      }
@@ -396,16 +427,10 @@
        let result;
        result = row[subname]
        return result
-      }
+      }, configurable: true
      }
     }
-    return this[".rows"][rid] = Object.create(this, Object.assign(description, inputColumns, {
-     "input.names": { value: Object.keys(inputColumns ?? {}) },
-     "instance.names": { value: Object.keys(commit) },
-     ".name": { value: name },
-     ".rid": { value: rid },
-     "commit.name": { value: commitName }
-    }))
+    Object.defineProperties(this, description)
    }
   }
  },
@@ -528,29 +553,89 @@
  },
 
  ".extension": { get() { return this["isFile.bool"] && this[".name"].split('.').at(-1) || null } },
+ "item.extension": { get() { return this["branch.fn"](this["item.rid"] + '?.node=.null')[".extension"] } },
 
- "toggle-inspector.fn": { get() { return this["makeToggle.fn"]("open-inspector") } },
- "toggle-start-menu.fn": { get() { return this["makeToggle.fn"]("open-start-menu") } },
+ "toggle-inspector.fn": {
+  get() {
+   return () => {
+
+    if (HOST["inspector.bool"]) delete HOST["workingTree.commit"]["inspector.bool"]
+    else HOST["workingTree.commit"]["inspector.bool"] = "true.bool"
+
+    HOST["setAttributes.fn"]()
+   }
+  }
+ },
+ "toggle-start-menu.fn": {
+  get() {
+   return () => {
+
+    if (HOST["start-menu.bool"]) delete HOST["workingTree.commit"]["start-menu.bool"]
+    else HOST["workingTree.commit"]["start-menu.bool"] = "true.bool"
+
+    HOST["setAttributes.fn"]()
+   }
+  }
+ },
+
+ "setAttributes.fn": {
+  get() {
+   return () => {
+    const
+     existingNames = this["attributes.names"],
+     targetCommit = this["workingTree.commit"],
+     search = Object.entries(targetCommit).map(e => e.join('=')).join('&'),
+     parentRows = Object.getPrototypeOf(this)[".rows"],
+     query = (search ? '?' + search : ''),
+     newRID = this[".name"] + query
+    delete parentRows[this[".rid"]]
+    Object.defineProperties(this, { ".rid": { value: newRID, configurable: true } })
+    parentRows[this[".rid"]] = this
+    this["checkout.fn"](targetCommit)
+    for (const name of existingNames) {
+     if (name in targetCommit) continue
+     delete this[name]
+     existingNames.delete(name)
+    }
+    for (const name in targetCommit)
+     existingNames.add(name)
+    this["signal.fn"]()
+    history.replaceState({}, null, location.origin + '/' + query)
+   }
+  }
+ },
+
 
  ".null": { get() { return null } },
+
+ "select-item.fn": {
+  get() {
+   return () => {
+
+    HOST["workingTree.commit"]["selection.rid"] = `data:,${this["item.rid"]}`
+
+    HOST["setAttributes.fn"]()
+   }
+  }
+ },
 
  "default.columns": {
   get() {
    return ({
-    ".css": { value: null },
-    ".tag": { value: "tag-" },
-    ".html": { value: null },
-    ".rows": { value: {} },
-    ".node": { value: null },
-    ".layout": { value: [] },
-    ".children": { value: [] },
-    "index.int": { value: -1 },
-    "layout.css": { value: "" },
-    "onclick.fn": { value: null },
-    "onresize.fn": { value: null },
-    "options.commit": { value: {} },
-    "view.stylesheet": { value: null },
-    "onpointerdown.fn": { value: null },
+    ".css": { value: null, configurable: true },
+    ".tag": { value: "tag-", configurable: true },
+    ".html": { value: null, configurable: true },
+    ".rows": { value: {}, configurable: true },
+    ".node": { value: null, configurable: true },
+    ".layout": { value: [], configurable: true },
+    ".children": { value: [], configurable: true },
+    "index.int": { value: -1, configurable: true },
+    "layout.css": { value: "", configurable: true },
+    "onclick.fn": { value: null, configurable: true },
+    "onresize.fn": { value: null, configurable: true },
+    "view.stylesheet": { value: null, configurable: true },
+    "attributes.names": { value: new Set(), configurable: true },
+    "onpointerdown.fn": { value: null, configurable: true },
    })
   }
  },
@@ -572,7 +657,7 @@
 
  "auto.node": { get() { return this["ownNode.fn"]() } },
 
- "host.commit": { get() { return HOST["options.commit"] } },
+ "size.commit": { get() { return { ".node": "./auto.node", ".html": "./host-size.number", ".css": `./stat.css` } } },
  "tray.commit": {
   get() {
    return {
@@ -596,12 +681,13 @@
  "grey1.commit": { get() { return { "grey.color": `data:text/color,#344555` } } },
  "grey2.commit": { get() { return { "grey.color": `grey2.color` } } },
  "title.commit": { get() { return { ".node": `./auto.node`, ".html": `./title.html`, ".tag": `./name.tag` } } },
- "header.commit": { get() { return { ".node": `./auto.node`, ".children": `header.children`, ".tag": `./native.tag`, ".layout": `header.layout` } } },
  "button.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag` } } },
- "version.commit": { get() { return { ".node": `./auto.node`, ".html": `./version.number`, ".tag": `./name.tag`, "pill-icon-right.bool": `true.bool`, ".css": `./pill.css` } } },
- "address.commit": { get() { return { ".node": `./auto.node`, ".html": `./host.rid`, ".tag": `data:text/tag,addressbar-`, ".css": `./pill.css` } } },
+ "editor.commit": { get() { return { ".node": `./auto.node`, ".children": `editor.children`, ".tag": `./name.tag`, ".css": `./editor.css` } } },
+ "memory.commit": { get() { return { ".node": "./auto.node", ".html": "./host-memory.html", ".css": `./stat.css` } } },
+ "status.commit": { get() { return { ".node": `./auto.node`, ".children": `status.children`, ".tag": `./name.tag`, ".layout": `status.layout` } } },
+ "version.commit": { get() { return { ".node": `./auto.node`, ".html": `./version.number`, ".tag": `./name.tag`, "pill-icon-right.bool": `true.bool`, ".css": `./stat.css` } } },
+ "address.commit": { get() { return { ".node": `./auto.node`, ".html": `./host.rid`, ".tag": `data:text/tag,rid-`, ".css": `./address.css` } } },
  "sidebar.commit": { get() { return { ".node": `./auto.node`, ".children": `sidebar.children`, ".tag": `./name.tag`, ".css": `sidebar.css` } } },
- "article.commit": { get() { return { ".node": `./auto.node`, ".html": `welcome.html`, ".tag": `./native.tag`, ".css": `welcome.css` } } },
  "taskbar.commit": {
   get() {
    return {
@@ -626,7 +712,7 @@
  "side-menu.commit": { get() { return { ".node": `./auto.node`, ".children": `menu-buttons.children`, ".tag": `./name.tag`, ".layout": `menu-buttons.layout` } } },
  "inspector.commit": { get() { return { "title.txt": "data:,Inspector", ".node": `./auto.node`, ".children": `inspector.children`, ".tag": `./name.tag`, ".css": `data:,:host{display: flex; flex-flow: column nowrap; overflow-y: auto } title- { margin: 0; padding: 4px; text-transform: uppercase; position: sticky; top: 0; background: inherit }` } } },
  "start-menu.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `start-menu.css`, ".children": `start-menu.children` } } },
- "core.parts.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./editor.children`, ".css": `./theme.css`, "sidebar-open.bool": `true.bool` } } },
+ "core.parts.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./core.parts.children`, ".css": `./theme.css`, "sidebar-open.bool": `true.bool` } } },
  "twist-base.commit": { get() { return { "red.color": `data:,#d44`, "green.color": `data:,#4d4`, "blue.color": `data:,#44d`, "twist.bool": `true.bool` } } },
  "twist-layer.commit": { get() { return { "red.color": `green.color`, "green.color": `blue.color`, "blue.color": `red.color` } } },
  "pilot.parts.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `./os.css`, ".children": `./os.children` } } },
@@ -636,35 +722,25 @@
  "hide-sidebar.commit": { get() { return { "sidebar-open.bool": `false.bool` } } },
  "next-version.commit": { get() { return { "version.number": `https://core.parts/next-version.number` } } },
  "ejaugust.com.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".children": `./portfolio.children`, ".css": `./portfolio.css`, "onresize.fn": `./grid-snap.fn` } } },
- "header-layout.commit": { get() { return { "layout.css": `header.css` } } },
+ "status-layout.commit": { get() { return { "layout.css": `status.css` } } },
  "inspector-item.commit": {
   get() {
    return {
-    ".node": `./auto.node`, ".tag": `./name.tag`, ".html": `./inspector-item.html`, ".css": `data:,:host {
-     cursor: pointer;
-     padding: 4px;
-     text-overflow: ellipsis;
-     white-space: nowrap;
-     overflow: hidden;
-     min-height: 16px;
-    }
-    :host(:hover) {
-     color:white;
-     background: ${this["background.color"]};
-    }` }
+    ".node": `./auto.node`, ".tag": `./name.tag`, ".html": `./inspector-item.html`, "onclick.fn": `./select-item.fn`, ".css": `./inspector-item.css`
+   }
   }
  },
  "account-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,👤`, ".css": `unicode-button.css`, ".tag": `./name.tag` } } },
- "open-inspector.commit": { get() { return { "inspector-open.bool": `true.bool` } } },
+ "open-inspector.commit": { get() { return { "inspector.bool": `true.bool` } } },
  "open-start-menu.commit": { get() { return { "start-menu.bool": `true.bool` } } },
  "grey-background.commit": { get() { return { "background.color": `grey.color`, "layout.css": `background.css` } } },
  "settings-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,⚙`, ".css": `unicode-button.css`, ".tag": `./name.tag` } } },
- "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,⚡`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://core.parts/toggle-inspector.fn` } } },
+ "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,☰`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://core.parts/toggle-inspector.fn` } } },
  "lighten-background.commit": { get() { return { "background.color": `light-background.color` } } },
  "flex-spacer-layout.commit": { get() { return { "layout.css": `flex-spacer.css` } } },
  "menu-buttons-layout.commit": { get() { return { "layout.css": `menu-buttons.css` } } },
 
- "inspector.children": { get() { return ["title", ...Object.keys(C).map(name => `inspector-item?item.rid=data:,${name}`)] } },
+ "inspector.children": { get() { return ["title", ...Object.getOwnPropertyNames(this).map(name => `inspector-item?item.rid=data:,${name}`)] } },
 
  "icon.png": {
   get() {
@@ -680,13 +756,13 @@
  "os.children": { get() { return ['desktop', 'taskbar', ...(this["windows.children"] ?? []), ...(this["start-menu.bool"] ? [`start-menu`] : []), ...(this["context-menu.bool"] ? [`context-menu`] : [])] } },
  "tray.children": { get() { return ['factory-reset', 'fullscreen', 'clock'] } },
  "zero.children": { get() { return [] } },
- "editor.children": { get() { return ['header', 'article', ...(this["sidebar-open.bool"] ? ['sidebar'] : [])] } },
- "header.children": { get() { return ['address', 'flex-spacer', 'version'] } },
+ "core.parts.children": { get() { return ['editor', 'status', ...(this["sidebar-open.bool"] ? ['sidebar'] : [])] } },
+ "status.children": { get() { return ['memory', 'address', 'version'] } },
  "taskbar.children": { get() { return ['start-button', ...(this["apps.children"] ?? []), 'flex-spacer', 'tray'] } },
- "sidebar.children": { get() { return ['side-menu', ...(this["inspector-open.bool"] ? ['inspector'] : [])] } },
+ "sidebar.children": { get() { return ['side-menu', ...(this["inspector.bool"] ? ['inspector'] : [])] } },
  "portfolio.children": { get() { return ['core.parts', 'pilot.parts'] } },
  "start-menu.children": { get() { return ['locate', 'relate', 'debate', 'horizontal-line-1', 'welcome', 'horizontal-line-2', 'save-computer', 'restart-computer', 'restart-server'] } },
- "menu-buttons.children": { get() { return ['inspector-button', 'flex-spacer', 'account-button', 'settings-button'] } },
+ "menu-buttons.children": { get() { return ['inspector-button', 'flex-spacer'] } },
 
  "manifest.json": {
   get() {
@@ -708,7 +784,7 @@
   }
  },
 
- "header.layout": { get() { return ['header-layout'] } },
+ "status.layout": { get() { return ['status-layout'] } },
  "flex-spacer.layout": { get() { return ['flex-spacer-layout'] } },
  "menu-buttons.layout": { get() { return ['menu-buttons-layout'] } },
  "title.html": { get() { return `<b>${this["title.txt"] ?? "Untitled"}<b>` } },
@@ -723,17 +799,17 @@
  },
  "prefix.txt": { get() { return (this["force-refresh.bool"] ? "FORCED-" : this["original.bool"] ? "HTTPS-" : "") + (this["server.bool"] ? "SERVER-" : "CLIENT-") + BOOT_TIME } },
  "item-icon.txt": { get() { return { "bool": "⏼", "html": "📄", "css": "📄", "txt": "📄", "color": "🌈", "layout": "🍱", "number": "ℕ", "fn": "ƒ", "rid": "⎋", "test": "🧪", "tag": "🏷", "js": "📃", "children": "🧒", "commit": "🗃" }[this["item.extension"]] ?? "#" } },
- "item.extension": { get() { return this["branch.fn"](this["item.rid"] + '?.node=.null')[".extension"] } },
 
  "true.bool": { get() { return true } },
  "false.bool": { get() { return false } },
  "isFile.bool": { get() { return this[".name"] in this } },
  "server.bool": { get() { return typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope } },
 
- "welcome.html": { get() { return `<heading><h1>Core Parts</h1><h2>Web Self Editor</h2></heading><aside><section><h3>Start</h3><p>a</p><p>b</p><p>c</p></section><section><h3>Recent</h3><p>d</p><p>e</p></section></aside><aside><h3>Learning</h3>Lorem ipsum etc</aside>` } },
  "index.html": { get() { return INDEX } },
+ "editor.children": { get() { return [] } },
  "error404.html": { get() { return `<b><i>404</i></b>` } },
- "inspector-item.html": { get() { return `${this["item-icon.txt"]}&nbsp;${this["item.rid"]}` } },
+ "host-memory.html": { get() { return Math.trunc(this["host-memory.number"]) + " %" } },
+ "inspector-item.html": { get() { return `<span>${this["item-icon.txt"]}</span>${this["item.rid"]}` } },
 
  "grey.color": { get() { return `#333445` } },
  "grey2.color": { get() { return `#444444` } },
@@ -741,35 +817,25 @@
  "light-background.color": { get() { return '#' + this["background.color"].match(/[^#]{2}/g).map(s => Math.trunc((1 - (1 - parseInt(s, 16) / 255) * 0.5) * 255).toString(16)).join('') } },
 
  "os.css": { get() { return `:host { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: grid; grid-template-rows: 1fr ${this["branch.fn"]("taskbar")["height.number"]}; font: 11px / 16px sans-serif; }` } },
- "pill.css": {
+ "stat.css": {
   get() {
-   return `
-   :host::${this["pill-icon-right.bool"] ? 'after' : 'before'} {
-    content: 'ⓘ';
-    padding: 5px;
-    border-radius: 50%;
-    background: ${this["light-background.color"]};
-    margin-${this["pill-icon-right.bool"] ? 'left' : 'right'}: 8px;
-   }
-   :host {
+   return `:host {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     ${this["pill-icon-right.bool"] ? 'text-align: right; ' : ''}
-    margin: 7px;
     display: inline-block;
     line-height: 24px;
-    padding: 5px;
+    padding: 3px;
     color: white;
-    border-radius: 16px;
     background: ${this["background.color"]};
     padding-${this["pill-icon-right.bool"] ? 'left' : 'right'}: 12px;
-    max-width: min(100%, 256px);
    }` }
  },
- "header.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["branch.fn"]("lighten-background")["light-background.color"]}}` } },
- "sidebar.css": { get() { return `:host { overflow: hidden; color: ${this["background.color"]}; background: ${this["light-background.color"]}; display: grid; grid-template: "b${this["inspector-open.bool"] ? ' i' : ''}" 1fr / ${this["sidebar-width.number"]}px ${this["inspector-open.bool"] ? '1fr' : ''}; } side-menu { grid-area: b } ${this["inspector-open.bool"] ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}` } },
- "welcome.css": {
+ "status.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["branch.fn"]("lighten-background")["light-background.color"]}}` } },
+ "address.css": { get() { return this["stat.css"] + this["flex-spacer.css"] } },
+ "sidebar.css": { get() { return `:host { overflow: hidden; color: ${this["background.color"]}; background: ${this["light-background.color"]}; display: grid; grid-template: "b${this["inspector.bool"] ? ' i' : ''}" 1fr / ${this["sidebar-width.number"]}px ${this["inspector.bool"] ? '1fr' : ''}; } side-menu { grid-area: b } ${this["inspector.bool"] ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}` } },
+ "editor.css": {
   get() {
    return `:host{
     display: grid;
@@ -860,12 +926,35 @@
      width: 21px
     }` }
  },
- "theme.css": { get() { return `:host { --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font: 13px var(--system-ui); margin: 0; padding: 0; display: grid; grid-template:   "${this["sidebar-open.bool"] ? 'h ' : ''}h" 48px  "${this["sidebar-open.bool"] ? 's ' : ''}c" auto / ${this["sidebar-open.bool"] ? `${this["inspector-open.bool"] ? '2' : ''}${this["sidebar-width.number"]}px ` : ''}1fr;} ${this["sidebar-open.bool"] ? "sidebar- { grid-area: s }" : ""} header { grid-area: h } article { grid-area: c }` } },
+ "theme.css": { get() { return `:host { --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font: 13px var(--system-ui); margin: 0; padding: 0; display: grid; grid-template:  "${this["sidebar-open.bool"] ? 'sbar ' : ''}art" auto "${this["sidebar-open.bool"] ? 'stat ' : ''}stat" 32px / ${this["sidebar-open.bool"] ? `${this["inspector.bool"] ? '2' : ''}${this["sidebar-width.number"]}px ` : ''}1fr;} ${this["sidebar-open.bool"] ? "sidebar- { grid-area: sbar }" : ""} status- { grid-area: stat } editor- { grid-area: art }` } },
  "background.css": { get() { return `:host { color: white; padding: 12px; background: ${this["background.color"]} }` } },
  "flex-spacer.css": { get() { return `:host { flex: 1 1 }` } },
  "start-button.css": { get() { return `:host { flex: 0 0; position: relative; width: 100%; box-sizing: border-box; height: 100%; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: bold 11px / 16px sans-serif; box-sizing: border-box; padding: ${this["start-menu.bool"] ? 4 : 3}px 4px 2px; text-align: left; background: #c3c3c3; box-shadow: ${this["start-menu.bool"] ? `  inset -1px -1px white,  inset 1px 1px black,  inset -2px -2px #dbdbdb,  inset 2px 2px #7a7a7a` : `  inset -1px -1px black,  inset 1px 1px white,  inset -2px -2px #7a7a7a,  inset 2px 2px #dbdbdb`};}:host(:focus)::after { border: 1px dotted black; content: ""; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none;}icon- { width: 16px; height: 16px; background: url(data:image/png;base64,${this["icon.png"]}); background-size: 16px;}` } },
  "menu-buttons.css": { get() { return `:host { display: flex; flex-flow: column nowrap; gap: 4px; padding: 4px; }` } },
- "unicode-button.css": { get() { return `:host { cursor: pointer; border-radius: 4px; line-height: 32px; width: 32px; font-size: 32px; aspect-ratio: 1 / 1; height: auto; } :host(:hover) { background: ${this["background.color"]} }` } },
+ "unicode-button.css": { get() { return `:host { cursor: pointer; border-radius: 4px; line-height: 32px; width: 32px; font-size: 32px; aspect-ratio: 1 / 1; height: 32px; text-align: center; } :host(:hover) { background: ${this["background.color"]}; color: white }` } },
+ "inspector-item.css": {
+  get() {
+   return `:host {
+     cursor: pointer;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     overflow: hidden;
+     min-height: 24px;
+     line-height: 24px;
+    }
+    span {
+     display: inline-block;
+     width: 24px;
+     height: 24px;
+     font-size: 17px;
+     line-height: 24px;
+     text-align: center;
+    }
+    :host${this["selection.rid"] === this["item.rid"] ? "" : '(:hover)'} {
+     color: white;
+     background: ${this["background.color"]};
+    }` }
+ },
 
  "name.tag": { get() { return this[".name"].replaceAll(/[^a-zA-Z0-9]+/g, '-') + '-' } },
  "native.tag": { get() { if (!this[".name"] || !/^[a-zA-Z]+$/.test(this[".name"])) throw RangeError(`Error: name "${this[".name"]}" is not a native tagname.`); return this[".name"] } },
