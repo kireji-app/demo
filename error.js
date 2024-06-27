@@ -20,7 +20,7 @@
     globalThis.BOOT_TIME = Date.now()
     globalThis.NODES = new Map()
     globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get(), { ".rid": { value: "root" } }))
-    globalThis.HOST = ROW["branch.fn"]('placeholder' + location.search, {
+    globalThis.HOST = ROW["branch.fn"]('error' + location.search, {
      ".node": { get() { return this["auto.node"] }, configurable: true }
     })
     HOST["install.fn"]()
@@ -32,7 +32,7 @@
    return (url, event) => {
     const
      { host, pathname } = new URL(url),
-     names = ('placeholder' + pathname).split('/')
+     names = ('error' + pathname).split('/')
     let row = ROW;
     for (const name of names)
      row = row["branch.fn"](name)
@@ -254,7 +254,7 @@
     Promise.all([
      (async () => {
       const
-       registration = await navigator.serviceWorker.register(location.origin + '/placeholder.js'),
+       registration = await navigator.serviceWorker.register(location.origin + '/error.js'),
        { waiting: w, installing: i, active: a } = registration
       if (!a)
        await new Promise(resolve => (w ?? i).onstatechange = ({ target: t }) => t.state === 'activated' ? resolve(t) : 0)
@@ -702,13 +702,13 @@
  "grey2.commit": { get() { return { "grey.color": `grey2.color` } } },
  "title.commit": { get() { return { ".node": `./auto.node`, ".html": `./title.html`, ".tag": `./name.tag` } } },
  "button.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag` } } },
- "preview.commit": { get() { return { ".node": `./auto.node`, ".tag": "./name.tag", ".css": "./preview.css", ".html": `./placeholder.html` } } },
+ "preview.commit": { get() { return { ".node": `./auto.node`, ".tag": "./name.tag", ".css": "./preview.css", ".html": `./error.html` } } },
  "sidebar.commit": { get() { return { ".node": `./auto.node`, ".children": `sidebar.children`, ".tag": `./name.tag`, ".css": `sidebar.css` } } },
 
  "error404.commit": { get() { return { ".node": `./auto.node`, ".css": `./error404.css`, ".html": `./error404.html`, ".tag": `./name.tag` } } },
  "side-menu.commit": { get() { return { ".node": `./auto.node`, ".children": `menu-buttons.children`, ".tag": `./name.tag`, ".layout": `menu-buttons.layout` } } },
  "inspector.commit": { get() { return { "scroll.number": `./inspector-scroll.number`, "title.txt": "data:,Coming soon", ".node": `./auto.node`, ".children": `inspector.children`, ".tag": `./name.tag`, "onscroll.fn": `./scroll-self.fn`, ".css": `data:,:host{display: flex; flex-flow: column nowrap; overflow-y: auto } title- { margin: 0; padding: 4px; text-transform: uppercase; position: sticky; top: 0; background: inherit }` } } },
- "placeholder.commit": { get() { return { ".css": `./theme.css`, ".host": location.host, ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./placeholder.children`, "sidebar-open.bool": `true.bool` } } },
+ "error.commit": { get() { return { ".css": `./theme.css`, ".host": location.host, ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./error.children`, "sidebar-open.bool": `true.bool` } } },
  "flex-spacer.commit": { get() { return { ".node": `./auto.node`, ".layout": `flex-spacer.layout`, ".tag": `./name.tag` } } },
  "inspector-item.commit": {
   get() {
@@ -719,7 +719,7 @@
  },
  "open-inspector.commit": { get() { return { "inspector.bool": `true.bool` } } },
  "grey-background.commit": { get() { return { "background.color": `grey.color`, "layout.css": `background.css` } } },
- "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,☰`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://placeholder/toggle-inspector.fn` } } },
+ "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,☰`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://error/toggle-inspector.fn` } } },
  "lighten-background.commit": { get() { return { "background.color": `light-background.color` } } },
  "flex-spacer-layout.commit": { get() { return { "layout.css": `flex-spacer.css` } } },
  "menu-buttons-layout.commit": { get() { return { "layout.css": `menu-buttons.css` } } },
@@ -739,7 +739,7 @@
 
  "zero.children": { get() { return [] } },
  "sidebar.children": { get() { return ['side-menu', ...(this["inspector.bool"] ? ['inspector'] : [])] } },
- "placeholder.children": { get() { return ['preview', ...(this["sidebar-open.bool"] ? ['sidebar'] : [])] } },
+ "error.children": { get() { return ['preview', ...(this["sidebar-open.bool"] ? ['sidebar'] : [])] } },
  "menu-buttons.children": { get() { return ['inspector-button', 'flex-spacer'] } },
 
  "manifest.json": {
@@ -765,7 +765,7 @@
  "flex-spacer.layout": { get() { return ['flex-spacer-layout'] } },
  "menu-buttons.layout": { get() { return ['menu-buttons-layout'] } },
  "title.html": { get() { return `<b>${this["title.txt"] ?? "Untitled"}<b>` } },
- "placeholder.html": {
+ "error.html": {
   get() {
    return `<h1>503</h1>
 <span id=float>
@@ -773,7 +773,7 @@
 </span>` }
  },
 
- "placeholder.js": { get() { return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()` } },
+ "error.js": { get() { return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()` } },
 
  "time.txt": {
   get() {
