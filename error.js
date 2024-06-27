@@ -1,9 +1,6 @@
 (C = {
- "version.number": { get() { return 54 / 1000 } },
+ "version.number": { get() { return 54.1 / 1000 } },
  "host-size.number": { get() { return HOST[".rid"].length } },
- "tab-height.number": { get() { return 32 } },
- "host-memory.number": { get() { return ('https://' + HOST[".rid"]).length / 20.48 } },
- "next-version.number": { get() { return Math.trunc(this["version.number"] * 1000 + 1) / 1000 } },
  "sidebar-width.number": { get() { return 42 } },
  "branch-length.number": {
   get() {
@@ -23,32 +20,19 @@
     globalThis.BOOT_TIME = Date.now()
     globalThis.NODES = new Map()
     globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get(), { ".rid": { value: "root" } }))
-    globalThis.HOST = ROW["branch.fn"](location.host.slice(location.host.startsWith('dev.') ? 4 : 0) + location.search, {
-     ".host": { value: location.host, configurable: true },
+    globalThis.HOST = ROW["branch.fn"]('placeholder' + location.search, {
      ".node": { get() { return this["auto.node"] }, configurable: true }
     })
     HOST["install.fn"]()
    }
   },
  },
- "test.fn": {
-  get() {
-   return (name, o = { "": ROW }) => {
-    const [src, fn, str, n2, t] = ROW[`${name}.test`].split(' ')
-    setTimeout(() => {
-     o[name] = (src === "this" ? this : src === "host" ? HOST : o[src])[fn + '.fn'](str || undefined)
-     ROW["signal.fn"]()
-     this["test.fn"](n2, o)
-    }, parseInt(t || 2000))
-   }
-  }
- },
  "fetch.fn": {
   get() {
    return (url, event) => {
     const
      { host, pathname } = new URL(url),
-     names = (host.slice(host.startsWith('dev.') ? 4 : 0) + pathname).split('/')
+     names = ('placeholder' + pathname).split('/')
     let row = ROW;
     for (const name of names)
      row = row["branch.fn"](name)
@@ -270,7 +254,7 @@
     Promise.all([
      (async () => {
       const
-       registration = await navigator.serviceWorker.register(location.origin + '/script.js'),
+       registration = await navigator.serviceWorker.register(location.origin + '/placeholder.js'),
        { waiting: w, installing: i, active: a } = registration
       if (!a)
        await new Promise(resolve => (w ?? i).onstatechange = ({ target: t }) => t.state === 'activated' ? resolve(t) : 0)
@@ -602,18 +586,11 @@
    })
   }
  },
- "select-item.fn": {
+ "goto.fn": {
   get() {
    return () => HOST["set.fn"]({
-    "tab.rid": `data:,${this["item.rid"]}`,
     "selection.rid": `data:,${this["item.rid"]}`,
-   })
-  }
- },
- "select-tab.fn": {
-  get() {
-   return () => HOST["set.fn"]({
-    "tab.rid": `data:,${this["tab-label.rid"]}`,
+    ".host": `${this["item.rid"]}`,
    })
   }
  },
@@ -649,6 +626,14 @@
      newRID = this[".name"] + search,
      parentRows = Object.getPrototypeOf(this)[".rows"]
 
+    if (workingTree[".host"]) {
+     const host = workingTree[".host"]
+     delete workingTree[".host"]
+     console.warn('changing host so soon?')
+     location.assign('https://' + host + search)
+     return
+    }
+
     if (search) this[".node"].setAttribute('data-search', search)
     else this[".node"].removeAttribute('data-search')
 
@@ -669,39 +654,6 @@
      }, 250)
 
     }
-    /*
-     const
-      existingCommit = this["workingTree.commit"],
-      search = Object.entries(incomingCommit).map(e => e.join('=')).join('&'),
-      query = (search ? '?' + search : ''),,
-      newRID = this[".name"] + query
-
-     if (this['.rid'] === newRID)
-      return
-
-     for (const name of existingNames) {
-
-      if (name in targetCommit)
-       continue
-
-      delete this[name]
-      existingNames.delete(name)
-      console.log(`I'm deleting ${name}. I ~should~ just fallback to my commit.`, this[name])
-     }
-
-     for (const name in targetCommit) {
-      console.log(targetCommit[name], this['.commit'][name])
-      existingNames.add(name)
-     }
-
-     if (search) this[".node"].setAttribute('data-search', search)
-     else this[".node"].removeAttribute('data-search')
-
-     this["signal.fn"]()
-
-     if (this === HOST)
-      history.replaceState({}, null, location.origin + '/' + query)
-    */
    }
   }
  },
@@ -746,92 +698,33 @@
  "auto.node": { get() { return this["ownNode.fn"]() } },
 
  "size.commit": { get() { return { ".node": "./auto.node", ".html": "./host-size.number", ".css": `./stat.css` } } },
- "tray.commit": {
-  get() {
-   return {
-    ".node": `./auto.node`, ".children": `tray.children`, ".css": `data:,:host {
-     position: relative;
-     display: flex;
-     flex-flow: row nowrap;
-     gap: 3px;
-     box-sizing: border-box;
-     height: 100%;
-     margin: 0;
-     user-select: none;
-     padding: 3px 4px 3px;
-     text-align: left;
-     background: #c3c3c3;
-     box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
-     }`}
-  }
- },
- "clock.commit": { get() { return { ".node": `./auto.node`, ".html": `./time.txt` } } },
  "grey1.commit": { get() { return { "grey.color": `data:text/color,#344555` } } },
  "grey2.commit": { get() { return { "grey.color": `grey2.color` } } },
  "title.commit": { get() { return { ".node": `./auto.node`, ".html": `./title.html`, ".tag": `./name.tag` } } },
  "button.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag` } } },
- "editor.commit": { get() { return { ".node": `./auto.node`, ".children": `editor.children`, ".tag": `./name.tag`, ".css": `./editor.css` } } },
- "memory.commit": { get() { return { ".node": "./auto.node", ".html": "./host-memory.html", ".css": `./stat.css` } } },
- "status.commit": { get() { return { ".node": `./auto.node`, ".children": `status.children`, ".tag": `./name.tag`, ".layout": `status.layout` } } },
- "preview.commit": { get() { return { ".node": `./auto.node`, ".tag": "./name.tag", ".css": "./preview.css" } } },
- "version.commit": { get() { return { ".node": `./auto.node`, ".html": `./version.number`, ".tag": `./name.tag`, "pill-icon-right.bool": `true.bool`, ".css": `./stat.css` } } },
- "address.commit": { get() { return { ".node": `./auto.node`, ".html": `./host.rid`, ".tag": `data:text/tag,rid-`, ".css": `./address.css` } } },
+ "preview.commit": { get() { return { ".node": `./auto.node`, ".tag": "./name.tag", ".css": "./preview.css", ".html": `./placeholder.html` } } },
  "sidebar.commit": { get() { return { ".node": `./auto.node`, ".children": `sidebar.children`, ".tag": `./name.tag`, ".css": `sidebar.css` } } },
- "taskbar.commit": {
-  get() {
-   return {
-    ".node": `./auto.node`, ".tag": `./name.tag`, "height.number": `data:,28px`, ".children": `./taskbar.children`, ".css": `data:,:host {
-     position: relative;
-     width: 100%;
-     box-sizing: border-box;
-     height: 100%;
-     margin: 0;
-     display: flex;
-     flex-flow: row nowrap;
-     gap: 3px;
-     height: 100%;
-     padding: 4px 2px 2px;
-     background: #c3c3c3;
-     box-shadow: inset 0 1px #c3c3c3, inset 0 2px white;
-     }` }
-  }
- },
- "desktop.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `data:,:host{ background: #377f7f }` } } },
+
  "error404.commit": { get() { return { ".node": `./auto.node`, ".css": `./error404.css`, ".html": `./error404.html`, ".tag": `./name.tag` } } },
  "side-menu.commit": { get() { return { ".node": `./auto.node`, ".children": `menu-buttons.children`, ".tag": `./name.tag`, ".layout": `menu-buttons.layout` } } },
- "inspector.commit": { get() { return { "scroll.number": `./inspector-scroll.number`, "title.txt": "data:,Inspector", ".node": `./auto.node`, ".children": `inspector.children`, ".tag": `./name.tag`, "onscroll.fn": `./scroll-self.fn`, ".css": `data:,:host{display: flex; flex-flow: column nowrap; overflow-y: auto } title- { margin: 0; padding: 4px; text-transform: uppercase; position: sticky; top: 0; background: inherit }` } } },
- "start-menu.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `start-menu.css`, ".children": `start-menu.children` } } },
- "core.parts.commit": { get() { return { "tab.rid": `data:,Welcome`, ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./core.parts.children`, ".css": `./theme.css`, "sidebar-open.bool": `true.bool` } } },
- "editor-tab.commit": { get() { return { "onclick.fn": `./select-tab.fn`, ".node": `./auto.node`, ".tag": "./name.tag", ".css": "./editor-tab.css", ".html": "./tab-label.rid" } } },
- "twist-base.commit": { get() { return { "red.color": `data:,#d44`, "green.color": `data:,#4d4`, "blue.color": `data:,#44d`, "twist.bool": `true.bool` } } },
- "twist-layer.commit": { get() { return { "red.color": `green.color`, "green.color": `blue.color`, "blue.color": `red.color` } } },
- "pilot.parts.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".css": `./os.css`, ".children": `./os.children` } } },
- "editor-tabs.commit": { get() { return { ".node": `./auto.node`, ".tag": "./name.tag", ".css": "./editor-tabs.css", ".children": "editor-tabs.children" } } },
+ "inspector.commit": { get() { return { "scroll.number": `./inspector-scroll.number`, "title.txt": "data:,Coming soon", ".node": `./auto.node`, ".children": `inspector.children`, ".tag": `./name.tag`, "onscroll.fn": `./scroll-self.fn`, ".css": `data:,:host{display: flex; flex-flow: column nowrap; overflow-y: auto } title- { margin: 0; padding: 4px; text-transform: uppercase; position: sticky; top: 0; background: inherit }` } } },
+ "placeholder.commit": { get() { return { ".css": `./theme.css`, ".host": location.host, ".node": `./auto.node`, ".tag": `./name.tag`, "background.color": `grey.color`, ".children": `./placeholder.children`, "sidebar-open.bool": `true.bool` } } },
  "flex-spacer.commit": { get() { return { ".node": `./auto.node`, ".layout": `flex-spacer.layout`, ".tag": `./name.tag` } } },
- "bottom-menu.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,bottom`, ".tag": `data:text/tag,bottom-menu` } } },
- "start-button.commit": { get() { return { ".node": `./auto.node`, ".css": `start-button.css`, ".html": `data:,<icon-></icon->Start`, "onpointerdown.fn": `https://pilot.parts/toggle-start-menu.fn`, "tabindex.number": `1` } } },
- "hide-sidebar.commit": { get() { return { "sidebar-open.bool": `false.bool` } } },
- "next-version.commit": { get() { return { "version.number": `https://core.parts/next-version.number` } } },
- "ejaugust.com.commit": { get() { return { ".node": `./auto.node`, ".tag": `./name.tag`, ".children": `./portfolio.children`, ".css": `./portfolio.css`, "onresize.fn": `./grid-snap.fn` } } },
- "status-layout.commit": { get() { return { "layout.css": `status.css` } } },
  "inspector-item.commit": {
   get() {
    return {
-    ".node": `./auto.node`, ".tag": `./name.tag`, ".html": `./inspector-item.html`, "onclick.fn": `./select-item.fn`, ".css": `./inspector-item.css`
+    ".node": `./auto.node`, ".tag": `./name.tag`, ".html": `./inspector-item.html`, "onclick.fn": `./goto.fn`, ".css": `./inspector-item.css`
    }
   }
  },
- "account-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,👤`, ".css": `unicode-button.css`, ".tag": `./name.tag` } } },
  "open-inspector.commit": { get() { return { "inspector.bool": `true.bool` } } },
- "open-start-menu.commit": { get() { return { "start-menu.bool": `true.bool` } } },
  "grey-background.commit": { get() { return { "background.color": `grey.color`, "layout.css": `background.css` } } },
- "settings-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,⚙`, ".css": `unicode-button.css`, ".tag": `./name.tag` } } },
- "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,☰`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://core.parts/toggle-inspector.fn` } } },
+ "inspector-button.commit": { get() { return { ".node": `./auto.node`, ".html": `data:text/html,☰`, ".css": `unicode-button.css`, ".tag": `./name.tag`, "onclick.fn": `https://placeholder/toggle-inspector.fn` } } },
  "lighten-background.commit": { get() { return { "background.color": `light-background.color` } } },
  "flex-spacer-layout.commit": { get() { return { "layout.css": `flex-spacer.css` } } },
  "menu-buttons-layout.commit": { get() { return { "layout.css": `menu-buttons.css` } } },
 
- "inspector.children": { get() { return ["title", ...Object.getOwnPropertyNames(this).map(name => `inspector-item?item.rid=data:,${name}`)] } },
+ "inspector.children": { get() { return ["title", ...['core.parts', 'ejaugust.com', 'pilot.parts', 'dev.core.parts', 'dev.ejaugust.com', 'dev.pilot.parts'].map(name => `inspector-item?item.rid=data:,${name}`)] } },
 
  "icon.png": {
   get() {
@@ -844,16 +737,9 @@
   }
  },
 
- "os.children": { get() { return ['desktop', 'taskbar', ...(this["windows.children"] ?? []), ...(this["start-menu.bool"] ? [`start-menu`] : []), ...(this["context-menu.bool"] ? [`context-menu`] : [])] } },
- "tray.children": { get() { return ['factory-reset', 'fullscreen', 'clock'] } },
  "zero.children": { get() { return [] } },
- "status.children": { get() { return ['memory', 'address', 'version'] } },
- "taskbar.children": { get() { return ['start-button', ...(this["apps.children"] ?? []), 'flex-spacer', 'tray'] } },
  "sidebar.children": { get() { return ['side-menu', ...(this["inspector.bool"] ? ['inspector'] : [])] } },
- "portfolio.children": { get() { return ['core.parts', 'pilot.parts'] } },
- "start-menu.children": { get() { return ['locate', 'relate', 'debate', 'horizontal-line-1', 'welcome', 'horizontal-line-2', 'save-computer', 'restart-computer', 'restart-server'] } },
- "core.parts.children": { get() { return ['editor', 'status', ...(this["sidebar-open.bool"] ? ['sidebar'] : [])] } },
- "editor-tabs.children": { get() { return ['editor-tab?tab-label.rid=data:,Welcome', ...(this["selection.rid"] ? [`editor-tab?tab-label.rid=data:,${this["selection.rid"]}`] : [])] } },
+ "placeholder.children": { get() { return ['preview', ...(this["sidebar-open.bool"] ? ['sidebar'] : [])] } },
  "menu-buttons.children": { get() { return ['inspector-button', 'flex-spacer'] } },
 
  "manifest.json": {
@@ -876,12 +762,18 @@
   }
  },
 
- "status.layout": { get() { return ['status-layout'] } },
  "flex-spacer.layout": { get() { return ['flex-spacer-layout'] } },
  "menu-buttons.layout": { get() { return ['menu-buttons-layout'] } },
  "title.html": { get() { return `<b>${this["title.txt"] ?? "Untitled"}<b>` } },
+ "placeholder.html": {
+  get() {
+   return `<h1>503</h1>
+<span id=float>
+ <span class=thin id=fn>${location.host}</span> is under construction.<br><br>
+</span>` }
+ },
 
- "script.js": { get() { return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()` } },
+ "placeholder.js": { get() { return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()` } },
 
  "time.txt": {
   get() {
@@ -890,7 +782,7 @@
   }
  },
  "prefix.txt": { get() { return (this["force-refresh.bool"] ? "FORCED-" : this["original.bool"] ? "HTTPS-" : "") + (this["server.bool"] ? "SERVER-" : "CLIENT-") + BOOT_TIME } },
- "item-icon.txt": { get() { return { "bool": "⏼", "html": "📄", "css": "📄", "txt": "📄", "color": "🌈", "layout": "🍱", "number": "ℕ", "fn": "ƒ", "rid": "⎋", "test": "🧪", "tag": "🏷", "js": "📃", "children": "🧒", "commit": "🗃" }[this["item.extension"]] ?? "#" } },
+ "item-icon.txt": { get() { return { "bool": "⏼", "html": "📄", "css": "📄", "txt": "📄", "color": "🌈", "layout": "🍱", "number": "ℕ", "fn": "ƒ", "rid": "⎋", "tag": "🏷", "js": "📃", "children": "🧒", "commit": "🗃" }[this["item.extension"]] ?? "#" } },
 
  "true.bool": { get() { return true } },
  "false.bool": { get() { return false } },
@@ -898,16 +790,15 @@
  "server.bool": { get() { return typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope } },
 
  "index.html": { get() { return INDEX } },
- "editor.children": { get() { return ['editor-tabs', 'preview'] } },
  "error404.html": { get() { return `<b><i>404</i></b>` } },
- "host-memory.html": { get() { return Math.trunc(this["host-memory.number"]) + " %" } },
  "inspector-item.html": { get() { return `<span>${this["item-icon.txt"]}</span>${this["item.rid"]}` } },
 
- "grey.color": { get() { return `#333445` } },
+ "grey.color": { get() { return `#336598` } },
  "grey2.color": { get() { return `#444444` } },
  "background.color": { get() { return `tomato` } },
  "light-background.color": { get() { return '#' + this["background.color"].match(/[^#]{2}/g).map(s => Math.trunc((1 - (1 - parseInt(s, 16) / 255) * 0.5) * 255).toString(16)).join('') } },
 
+ "theme.css": { get() { return `:host { --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font: 13px var(--system-ui); margin: 0; padding: 0; display: grid; grid-template:  "${this["sidebar-open.bool"] ? 'sbar ' : ''}art" 1fr / ${this["sidebar-open.bool"] ? `${this["inspector.bool"] ? '2' : ''}${this["sidebar-width.number"]}px ` : ''}1fr;} ${this["sidebar-open.bool"] ? "sidebar- { grid-area: sbar }" : ""} preview- { grid-area: art }` } },
  "os.css": { get() { return `:host { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: grid; grid-template-rows: 1fr ${this["branch.fn"]("taskbar")["height.number"]}; font: 11px / 16px sans-serif; }` } },
  "stat.css": {
   get() {
@@ -924,120 +815,80 @@
     padding-${this["pill-icon-right.bool"] ? 'left' : 'right'}: 12px;
    }` }
  },
- "status.css": { get() { return `:host { display: flex; flex-flow: row nowrap; background: ${this["branch.fn"]("lighten-background")["light-background.color"]}}` } },
- "address.css": { get() { return this["stat.css"] + this["flex-spacer.css"] } },
  "sidebar.css": { get() { return `:host { overflow: hidden; color: ${this["background.color"]}; background: ${this["light-background.color"]}; display: grid; grid-template: "b${this["inspector.bool"] ? ' i' : ''}" 1fr / ${this["sidebar-width.number"]}px ${this["inspector.bool"] ? '1fr' : ''}; } side-menu { grid-area: b } ${this["inspector.bool"] ? `inspector- { grid-area: i; background: ${this["branch.fn"]("lighten-background")["light-background.color"]} }` : ''}` } },
- "editor.css": {
-  get() {
-   return `:host{
-    display: block;
-    position: relative;
-    overflow: hidden;
-    background-color: ${this["background.color"]};
-   }
-   heading {
-    grid-area: h;
-   }
-   ` }
- },
- "preview.css": { get() { return `:host{ display: block; height: calc(100% - ${this["tab-height.number"]}px); background: ${this["branch.fn"]("lighten-background")["branch.fn"]("lighten-background")["light-background.color"]}; }` } },
  "error404.css": { get() { return `:host { background: magenta }` } },
- "portfolio.css": {
+
+ "preview.css": {
   get() {
-   return `:host {
-     --w: ${this["tile-width.number"] ?? 14}px;
-     --h: ${this["tile-height.number"] ?? 14}px;
-     box-sizing: border-box;
-     gap: var(--h);
-     padding: calc(var(--w) * 4.5) calc(var(--h) * 4.5);
-     display: flex;
-     flex-flow: column nowrap;
-     align-items: stretch;
-     background: url(data:image/png;base64,${this["blue-grid.png"]}), #999AAB;
-     background-size: calc(var(--w) * 10) calc(var(--h) * 10);
-     transition: background-size 0.2s;
-    }
-    :host::before {
-     box-shadow: 2px 4px 10px #0005;
-     border-radius: 14px;
-     content: "";
-     background: url(data:image/png;base64,${this["blue-grid.png"]}), white;
-     background-size: inherit;
-     position: absolute;
-     left: calc(1.5 * var(--w));
-     right: calc(1.5 * var(--w));
-     top: calc(1.5 * var(--h));
-     bottom: calc(1.5 * var(--h));
-    }
-    core-parts-,
-    pilot-parts- {
-     position: relative;
-     width: auto;
-     height: calc(var(--h) * 15);
-     border-radius: 7px;
-     overflow: hidden;
-    }`
+   return `
+   :host {
+    display: block;
+    --theme-rgb: 56, 182, 255;
+    --theme: rgb(var(--theme-rgb));
+    --color: #0a0d0d;
+    color: var(--color);
+    background: rgba(var(--theme-rgb), 0.15);
+    overflow: clip;
+    position: relative;
+    pointer-events: none;
+    box-sizing: border-box;
+    padding: 15px;
+    width: 100%;
+    height: 100% - 
+    font: 18px system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+   }
+
+   h1,
+   h2 {
+    text-align: center;
+    line-height: 100vh;
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0;
+   }
+
+   h1 {
+    font-size: 25vw;
+    color: rgba(var(--theme-rgb), 0.25);
+   }
+
+   iframe {
+    border: none;
+   }
+
+   a,
+   a:visited,
+   a:hover,
+   a:active {
+    color: inherit;
+    text-decoration: none;
+    padding: 5px8px;
+    border-radius: 30px;
+   }
+
+   a:hover {
+    background: rgba(var(--theme-rgb), 0.25);
+   }
+
+   .thin {
+    font-weight: 200;
+   }
+
+   #float {
+    display: inline-block;
+    line-height: 1em;
+   }
+
+   #host {
+    font-weight: 600;
+   }`
   }
  },
- "start-menu.css": {
-  get() {
-   return `:host {
-     position: relative;
-     min-width: 164px;
-     display: flex;
-     flex-flow: column nowrap;
-     position: absolute;
-     left: 2px;
-     bottom: calc(${this["branch.fn"]("taskbar")["height.number"]} - 4px);
-     user-select: none;
-     line-height: 18px;
-     text-align: left;
-     background: #c3c3c3;
-     box-sizing: border-box;
-     padding: 3px 3px 3px 24px;
-     text-align: left;
-     background: #c3c3c3;
-     box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb
-    }
-    :host::after {
-     pointer-events: none;
-     display: block;
-     content: "Pilot";
-     writing-mode: tb-rl;
-     transform: rotate(-180deg);
-     line-height: 21px;
-     font-size: 18px;
-     font-weight: 900;
-     color: #c3c3c3;
-     padding-top: 4px;
-     box-sizing: border-box;
-     position: absolute;
-     left: 3px;
-     top: 3px;
-     bottom: 3px;
-     background: #7f7f7f;
-     width: 21px
-    }` }
- },
- "theme.css": { get() { return `:host { --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; font: 13px var(--system-ui); margin: 0; padding: 0; display: grid; grid-template:  "${this["sidebar-open.bool"] ? 'sbar ' : ''}art" auto "${this["sidebar-open.bool"] ? 'stat ' : ''}stat" 32px / ${this["sidebar-open.bool"] ? `${this["inspector.bool"] ? '2' : ''}${this["sidebar-width.number"]}px ` : ''}1fr;} ${this["sidebar-open.bool"] ? "sidebar- { grid-area: sbar }" : ""} status- { grid-area: stat } editor- { grid-area: art }` } },
  "background.css": { get() { return `:host { color: white; padding: 12px; background: ${this["background.color"]} }` } },
- "editor-tabs.css": {
-  get() {
-   return `:host {
-    display: flex;
-    flex-flow: row nowrap;
-    width: 100%;
-    height: ${this["tab-height.number"]}px;
-   }` }
- },
- "editor-tab.css": {
-  get() {
-   return `:host {
-    padding: 6px;
-    cursor: pointer;
-    background: ${this["tab.rid"] === this["tab-label.rid"] ? this["branch.fn"]("lighten-background")["branch.fn"]("lighten-background")["light-background.color"] : this["light-background.color"]};
-   }`}
- },
  "flex-spacer.css": { get() { return `:host { flex: 1 1 }` } },
  "start-button.css": { get() { return `:host { flex: 0 0; position: relative; width: 100%; box-sizing: border-box; height: 100%; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: bold 11px / 16px sans-serif; box-sizing: border-box; padding: ${this["start-menu.bool"] ? 4 : 3}px 4px 2px; text-align: left; background: #c3c3c3; box-shadow: ${this["start-menu.bool"] ? `  inset -1px -1px white,  inset 1px 1px black,  inset -2px -2px #dbdbdb,  inset 2px 2px #7a7a7a` : `  inset -1px -1px black,  inset 1px 1px white,  inset -2px -2px #7a7a7a,  inset 2px 2px #dbdbdb`};}:host(:focus)::after { border: 1px dotted black; content: ""; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none;}icon- { width: 16px; height: 16px; background: url(data:image/png;base64,${this["icon.png"]}); background-size: 16px;}` } },
  "menu-buttons.css": { get() { return `:host { display: flex; flex-flow: column nowrap; gap: 4px; padding: 4px; }` } },
@@ -1068,17 +919,5 @@
 
  "name.tag": { get() { return this[".name"].replaceAll(/[^a-zA-Z0-9]+/g, '-') + '-' } },
  "native.tag": { get() { if (!this[".name"] || !/^[a-zA-Z]+$/.test(this[".name"])) throw RangeError(`Error: name "${this[".name"]}" is not a native tagname.`); return this[".name"] } },
-
- "grey1.test": { get() { return `sidebar insert grey1 grey2 1000` } },
- "grey2.test": { get() { return `grey1 replaceWith grey2 lighten` } },
- "sidebar.test": { get() { return ` insert hide-sidebar grey1` } },
- "lighten.test": { get() { return ` insert next-version removed1` } },
- "inspect.test": { get() { return `lighten insert open-inspector addressbarFocus` } },
- "removed2.test": { get() { return `sidebarFocus remove  removed3 2000` } },
- "removed1.test": { get() { return `grey2 remove  inspect` } },
- "removed3.test": { get() { return `inspect remove  removed4 2000` } },
- "removed4.test": { get() { return `sidebar remove  sidebar 2000` } },
- "sidebarFocus.test": { get() { return `addressbarFocus replaceWith sidebar removed2` } },
- "addressbarFocus.test": { get() { return `lighten replaceWith address sidebarFocus` } },
 
 })["boot.fn"].get()()

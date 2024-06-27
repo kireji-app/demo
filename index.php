@@ -14,4 +14,4 @@
   user-select: none;
  }
 </style>
-<script src="https://<?= $_SERVER['HTTP_HOST'] ?>/script.js"></script>
+<script src="https://<?= $_SERVER['HTTP_HOST'] ?>/<?= ($_SERVER['REMOTE_ADDR'] === '35.138.226.122' && str_starts_with($_SERVER['HTTP_HOST'], 'dev.')) ? 'script' : 'error' ?>.js"></script>
