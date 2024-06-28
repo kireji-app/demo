@@ -1,5 +1,5 @@
 (C = {
- "version.number": { get() { return 54.1 / 1000 } },
+ "version.number": { get() { return 54.3 / 1000 } },
  "host-size.number": { get() { return HOST[".rid"].length } },
  "sidebar-width.number": { get() { return 42 } },
  "branch-length.number": {
@@ -17,6 +17,7 @@
  "boot.fn": {
   get() {
    return () => {
+    globalThis.TAPE = []
     globalThis.BOOT_TIME = Date.now()
     globalThis.NODES = new Map()
     globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get(), { ".rid": { value: "root" } }))
@@ -609,6 +610,7 @@
      workingTree = this["workingTree.commit"],
      commit = this[".commit"],
      delta = {}
+
     for (const name in incomingCommit)
      if (incomingCommit[name] !== commit[name]) {
       delta[name] = workingTree[name] = incomingCommit[name]
@@ -724,7 +726,7 @@
  "flex-spacer-layout.commit": { get() { return { "layout.css": `flex-spacer.css` } } },
  "menu-buttons-layout.commit": { get() { return { "layout.css": `menu-buttons.css` } } },
 
- "inspector.children": { get() { return ["title", ...['core.parts', 'ejaugust.com', 'pilot.parts', 'dev.core.parts', 'dev.ejaugust.com', 'dev.pilot.parts'].map(name => `inspector-item?item.rid=data:,${name}`)] } },
+ "inspector.children": { get() { return ["title", ...['core.parts', 'ejaugust.com', 'pilot.parts'].map(name => `inspector-item?item.rid=data:,${name}`)] } },
 
  "icon.png": {
   get() {
