@@ -1,4 +1,4 @@
-; (globalThis.Columns = {
+;(globalThis.Columns = {
  "size.commit": {
   get() {
    return {
@@ -25,35 +25,6 @@
      background: #c3c3c3;
      box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
      }`
-   }
-  }
- },
- "variant.commit": {
-  get() {
-   return {
-    "index.names": `./variant-input.names`,
-    "title.txt": `data:text/column,return this[".tag"]`,
-    "style.css": `data:text/css,:host {
-     border-radius: 8px;
-     overflow: hidden;
-     display: flex;
-     flex-flow: column nowrap;
-     box-shadow:
-      inset 0 0 0 1px ${this["theme.color"]},
-      2px 4px 9px -2px ${this["theme.color"]};
-    }
-    :host > :not(title-) {
-     flex: 1 0;
-    }`,
-    ".variants": `data:text/json,${JSON.stringify([
-     [
-      "no-content",
-      [
-       "variant?input.names=data:text/names,&.tag=data:,variant-0",
-       `variant?input.names=data:text/names,status&.tag=data:,variant-1`
-      ]
-     ]
-    ])}`
    }
   }
  },
@@ -97,11 +68,14 @@
        text-align: right;
        padding-right: 0.5ch;
        color: white;
-       background: ${this["light-theme.color"]};
+       background: ${this["shade-theme.fn"]()};
       }`
     })}`,
     ".variants": `data:text/json,${JSON.stringify([
-     ["one-line", ["line?index.number=data:text/json,0&content.txt=data:, // one line"]],
+     [
+      "one-line",
+      ["line?index.number=data:text/json,0&content.txt=data:, // one line"]
+     ],
      [
       "two-lines",
       [
@@ -119,7 +93,11 @@
      ],
      [
       "validation",
-      ["line", 'line?index.number=data:text/json,"bad line number"', "line?content.txt=data:, // missing line number"]
+      [
+       "line",
+       'line?index.number=data:text/json,"bad line number"',
+       "line?content.txt=data:, // missing line number"
+      ]
      ]
     ])}`
    }
@@ -142,7 +120,21 @@
    return {
     "index.names": "empty.names",
     "onresize.fn": `./capture-resize.fn`,
-    "style.css": `./empty.css`
+    "style.css": `./empty.css`,
+    ".variants": `data:text/json,${JSON.stringify([
+     [
+      "Empty Variants Panel",
+      ["variants?selected-commit.name=data:,fake-name-12345.fake"],
+      { width: 150, height: 300 }
+     ],
+     [
+      "Empty Property Chat",
+      [
+       "property-chat?selected-commit.name=data:,fake-name-12345.fake&item.rid=data:,fake-item"
+      ],
+      { width: 150, height: 300 }
+     ]
+    ])}`
    }
   }
  },
@@ -159,34 +151,27 @@
    }
   }
  },
- "variants.commit": {
+ "search.commit": {
   get() {
    return {
-    "title.txt": "data:,Variants",
-    "index.names": `./variants.names`,
-    "style.css": `data:text/css,:host {
-     display: flex;
-     flex-flow: column nowrap;
-     gap: 16px;
-     padding: 16px;
-     padding-top: 39px;
-     overflow: hidden;
-     position: relative;
-    }
-    title- {
-     position: absolute;
-     top: 0;
-     left: 0;
-     right: 0;
-    }`
+    "index.names": "./search.names",
+    "style.css": `data:text/css,:host { flex: 1 1; display: flex }`,
+    "search-input.commit": `data:text/json,${JSON.stringify({
+     "style.css": `data:text/css,:host { flex: 1 1; }`,
+     "index.htm": `data:text/html,Search`
+    })}`,
+    "search-icon.commit": `data:text/json,${JSON.stringify({
+     "index.htm": `data:text/html,🔍`
+    })}`
    }
   }
  },
- "editor.commit": {
+ "header.commit": {
   get() {
    return {
-    "index.names": `editor.names`,
-    "style.css": `./editor.css`
+    "index.names": "./header.names",
+    "style.css": `./header.css`,
+    "title.css": `data:text/css,:host { font-size: 32px; font-weight: 500 }`
    }
   }
  },
@@ -257,6 +242,33 @@
    }
   }
  },
+ "variants.commit": {
+  get() {
+   return {
+    "title.txt": "data:,Variants",
+    "index.names": `./variants.names`,
+    "onscroll.fn": "./scroll-name-y.fn",
+    "style.css": `data:text/css,:host {
+     display: flex;
+     flex-flow: row wrap;
+     align-content: start;
+     gap: 16px;
+     padding: 16px;
+     padding-top: 39px;
+     overflow: hidden;
+     position: relative;
+     overflow-y: auto;
+     align-items: start;
+    }
+    title- {
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+    }`
+   }
+  }
+ },
  "host-rid.commit": {
   get() {
    return {
@@ -273,40 +285,14 @@
    }
   }
  },
- "explorer.commit": {
-  get() {
-   return {
-    "title.txt": "./.name",
-    "style.css": `data:,:host{
-     display: flex;
-     flex-flow: column nowrap;
-     overflow-y: auto
-    }
-    :host(:focus){
-     box-shadow: inset 0 0 0 1px blue;
-    }`,
-    "index.names": `explorer.names`,
-    "onscroll.fn": `./scroll-name-y.fn`,
-    "tabindex.number": "data:text/json,1"
-   }
-  }
- },
  "inspector.commit": {
   get() {
    return {
-    "title.txt": "data:,Parts",
+    "title.txt": "data:,Columns",
     "style.css": `data:,:host{display: flex; flex-flow: column nowrap; overflow-y: auto } :host(:focus){ box-shadow: inset 0 0 0 1px blue }`,
     "index.names": `inspector.names`,
-    "onscroll.fn": `./scroll-name-y.fn`,
+    "onscroll.fn": "./scroll-name-y.fn",
     "tabindex.number": "data:text/json,1"
-   }
-  }
- },
- "tab-label.commit": {
-  get() {
-   return {
-    "index.htm": "./target.name",
-    "style.css": "./tab-label.css"
    }
   }
  },
@@ -330,39 +316,32 @@
    return {
     "index.names": `./core.parts.names`,
     "style.css": `./core.parts.css`,
-    "editor-tabs-scroll-x.number": "data:text/json,0",
     "inspector-scroll-y.number": "data:text/json,0",
-    "explorer-scroll-y.number": "data:text/json,0",
+    "commit-explorer-scroll-y.number": "data:text/json,0",
     "variants-scroll-y.number": "data:text/json,0",
     "property-chat-box-scroll-y.number": "data:text/json,0",
     "inspector.bool": `true.bool`,
-    "explorer.bool": `true.bool`,
+    "commit-explorer.bool": `true.bool`,
     "item.rid": `data:text/name,style.css`,
-    "target.name": `data:text/name,Host`,
-    "targets.names": `data:text/names,Root;Host`,
-    "sidebar-open.bool": `true.bool`
-   }
-  }
- },
- "editor-tab.commit": {
-  get() {
-   return {
-    "onclick.fn": `./select-target.fn`,
-    "style.css": "./editor-tab.css",
-    "index.names": "./tab.names"
+    "selected-commit.name": `data:text/name,Core`,
+    "sidebar-open.bool": `true.bool`,
+    ".variants": `data:text/json,${JSON.stringify([
+     ["home", ["core.parts"], { width: 1024, height: 768 }],
+     [
+      "editing line",
+      [
+       "core.parts?commit-explorer.bool=false.bool&selected-commit.name=data:,line"
+      ],
+      { width: 1024, height: 768 }
+     ]
+    ])}`
    }
   }
  },
  "test-canvas.commit": {
   get() {
    return {
-    "style.css": `data:text/css,:host{
-     display: block;
-     padding: 16px;
-     box-sizing: border-box;
-     background: ${this["branch.fn"]("lighten-theme")["branch.fn"]("lighten-theme")["light-theme.color"]};
-     position: relative;
-    }`
+    "style.css": `./test-canvas.css`
    }
   }
  },
@@ -371,15 +350,6 @@
    return {
     "style.css": `./os.css`,
     "index.names": `./os.names`
-   }
-  }
- },
- "editor-tabs.commit": {
-  get() {
-   return {
-    "onscroll.fn": `./scroll-name-x.fn`,
-    "style.css": "./editor-tabs.css",
-    "index.names": "editor-tabs.names"
    }
   }
  },
@@ -414,6 +384,22 @@
    }
   }
  },
+ "commit-list.commit": {
+  get() {
+   return {
+    "style.css": `data:,:host {
+     padding: 12px;
+     display: flex;
+     flex-flow: column;
+     background: ${this["shade-theme.fn"](0.9)};
+     font-size: 17px;
+     font-weight: 200;
+     border-radius: 12px;
+    }`,
+    "index.names": `./commit-list.names`
+   }
+  }
+ },
  "reset-button.commit": {
   get() {
    return {
@@ -423,11 +409,20 @@
    }
   }
  },
- "tab-contents.commit": {
+ "mini-browser.commit": {
   get() {
    return {
-    "style.css": "./tab-contents.css",
-    "index.names": `./tab-contents.names`
+    "index.names": `./mini-browser.names`,
+    "style.css": `./mini-browser.css`,
+    ".variants": `data:text/json,${JSON.stringify([
+     [
+      "no-content",
+      [
+       "mini-browser?input.names=data:text/names,",
+       `mini-browser?input.names=data:text/names,status`
+      ]
+     ]
+    ])}`
    }
   }
  },
@@ -447,14 +442,12 @@
     "index.names": `./portfolio.names`,
     "style.css": `./portfolio.css`,
     "onresize.fn": `./grid-snap.fn`,
-    "targets.names": "data:text/names,ejaugust.com",
-    "target.name": `data:text/name,ejaugust.com`,
+    "selected-commit.name": `data:text/name,ejaugust.com`,
     "inspector.bool": `false.bool`,
-    "explorer.bool": `false.bool`,
+    "commit-explorer.bool": `false.bool`,
     "item.rid": `data:,style.css`,
-    "editor-tabs-scroll-x.number": "data:text/json,0",
     "inspector-scroll-y.number": "data:text/json,0",
-    "explorer-scroll-y.number": "data:text/json,0",
+    "commit-explorer-scroll-y.number": "data:text/json,0",
     "variants-scroll-y.number": "data:text/json,0",
     "property-chat-box-scroll-y.number": "data:text/json,0",
     "sidebar-open.bool": `true.bool`
@@ -468,19 +461,11 @@
    }
   }
  },
- "remove-target.commit": {
+ "commit-editor.commit": {
   get() {
    return {
-    "onclick.fn": `./remove-target.fn`,
-    "index.htm": "data:,X",
-    "style.css": `data:,:host{display:inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; margin-left: 6px; } :host(:hover) { background: black; color: white }`
-   }
-  }
- },
- "lighten-theme.commit": {
-  get() {
-   return {
-    "theme.color": `light-theme.color`
+    "style.css": "./commit-editor.css",
+    "index.names": `./commit-editor.names`
    }
   }
  },
@@ -488,7 +473,6 @@
   get() {
    return {
     "style.css": "./property-chat.css",
-    "onscroll.fn": "./scroll-name-y.fn",
     "index.names": `./property-chat.names`,
     "title.txt": `data:,Property Chat`
    }
@@ -499,14 +483,6 @@
    return {
     "index.htm": "./author.txt",
     "style.css": `data:text/css,:host { color: #fffa; font-size: 0.85em; font-weight: 500; }`
-   }
-  }
- },
- "message-content.commit": {
-  get() {
-   return {
-    "index.htm": `./sanitize-msg.htm`,
-    "style.css": `./message-bubble.css`
    }
   }
  },
@@ -525,34 +501,39 @@
     "index.names": `./orenjinari.com.names`,
     "style.css": `./orenjinari.com.css`,
     "portfolio-scroll-y.number": "data:text/json,0",
-    ".variants": `data:text/json,${JSON.stringify([["variant-0", ["orenjinari.com"]]])}`
+    ".variants": `data:text/json,${JSON.stringify([
+     ["Error 404 page", ["orenjinari.com"], { width: 1024, height: 768 }]
+    ])}`
    }
   }
  },
- "explorer-target.commit": {
+ "message-content.commit": {
   get() {
    return {
-    "index.htm": `./target.name`,
-    "onclick.fn": `./select-target.fn`,
-    "style.css": `./target.css`
+    "index.htm": `./sanitize-msg.htm`,
+    "style.css": `./message-bubble.css`
    }
   }
  },
- "explorer-button.commit": {
+ "commit-explorer.commit": {
   get() {
    return {
-    "index.htm": `data:text/html,e`,
-    "style.css": `unicode-button.css`,
-    "onclick.fn": `./toggle-explorer.fn`
-   }
-  }
- },
- "property-chat-box.commit": {
-  get() {
-   return {
-    "style.css": "./property-chat-box.css",
+    "title.txt": "data:,Parts",
     "onscroll.fn": "./scroll-name-y.fn",
-    "index.names": `./property-chat-box.names`
+    "style.css": `data:,:host{
+     display: flex;
+     flex-flow: column nowrap;
+     overflow-y: auto;
+     background: ${this["shade-theme.fn"](0.7)};
+    }
+    :host(:focus){
+     box-shadow: inset 0 0 0 1px blue;
+    }
+    commit-list {
+     margin: 48px;
+    }`,
+    "index.names": this["packNames.fn"](["header", "commit-list"]),
+    "tabindex.number": "data:text/json,1"
    }
   }
  },
@@ -562,6 +543,15 @@
     "index.htm": `data:text/html,i`,
     "style.css": `unicode-button.css`,
     "onclick.fn": `./toggle-inspector.fn`
+   }
+  }
+ },
+ "property-chat-box.commit": {
+  get() {
+   return {
+    "style.css": "./property-chat-box.css",
+    "onscroll.fn": "./scroll-name-y.fn",
+    "index.names": `./property-chat-box.names`
    }
   }
  },
@@ -576,6 +566,24 @@
   get() {
    return {
     "layout.css": `menu-buttons.css`
+   }
+  }
+ },
+ "commit-list-item.commit": {
+  get() {
+   return {
+    "index.htm": `./selected-commit.name`,
+    "onclick.fn": `./select-commit.fn`,
+    "style.css": `./commit-list-item.css`
+   }
+  }
+ },
+ "commit-explorer-button.commit": {
+  get() {
+   return {
+    "index.htm": `data:text/html,☰`,
+    "style.css": `unicode-button.css`,
+    "onclick.fn": `./toggle-commit-explorer.fn`
    }
   }
  },
@@ -610,16 +618,22 @@
 
     if (!Object.keys(delta).length) return
 
-    this["checkout-commit.fn"](delta, { author: "User", msg: "please make a change 😅🥵😳😭" })
+    this["checkout-commit.fn"](delta, {
+     author: "User",
+     msg: "please make a change 😅🥵😳😭"
+    })
     this["signal.fn"]()
 
     if (this === Host) {
      if (history._timeout) clearTimeout(history._timeout)
 
-     // console.warn('[' + Object.keys(delta) + '] are at the root of fx chain.')
-
      history._timeout = setTimeout(
-      () => history.replaceState({}, null, location.origin + this["workingTree.search"]),
+      () =>
+       history.replaceState(
+        {},
+        null,
+        location.origin + this["workingTree.search"]
+       ),
       120
      )
     }
@@ -642,9 +656,10 @@
      msg: "Define the initial Columns and call one of them to boot the page.",
      meta: { author: "User", msg: "🙏🏻 please render me a page!!!" }
     }
-    globalThis.Root = Object.create(null, Columns)
-    globalThis.Host = Root["branch.fn"](
-     location.host.slice(location.host.startsWith("dev.") ? 4 : 0) + location.search,
+    globalThis.Core = Object.create(null, Columns)
+    globalThis.Host = Core["branch.fn"](
+     location.host.slice(location.host.startsWith("dev.") ? 4 : 0) +
+      location.search,
      undefined,
      { author: "boot.fn", msg: "Ok, booting the page.", meta: META }
     )
@@ -657,7 +672,7 @@
    return (url, event) => {
     const { host, pathname } = new URL(url)
 
-    let repo = Root["branch.fn"](host.slice(host.startsWith("dev.") ? 4 : 0))
+    let repo = Core["branch.fn"](host.slice(host.startsWith("dev.") ? 4 : 0))
 
     const names = pathname.split("/")
 
@@ -681,9 +696,13 @@
  "signal.fn": {
   get() {
    return () => {
-    if (this["server.bool"]) throw new Error("Server Error: signal called in server." + this["trace.txt"])
+    if (this["server.bool"])
+     throw new Error(
+      "Server Error: signal called in server." + this["trace.txt"]
+     )
 
-    if (this[".stylesheet"] !== undefined) this[".stylesheet"].replaceSync(this["layout.css"])
+    if (this[".stylesheet"] !== undefined)
+     this[".stylesheet"].replaceSync(this["layout.css"])
 
     if (this[".node"] !== undefined) {
      const ownNode = this[".node"],
@@ -705,13 +724,11 @@
         }
         singleSheet = new CSSStyleSheet()
         stylesheets.push(singleSheet)
-        // console.warn('fx log', "style.css", this[".rid"])
        }
        singleSheet.replaceSync(rawCSS)
       } else {
        const incomingSheetNames = this["style.layout"] ?? []
 
-       // console.warn('(lazy) fx log', incomingSheetNames, this[".rid"])
        let i = -1
        while (existingSheetReposet.length && incomingSheetNames.length) {
         i++
@@ -719,7 +736,9 @@
          existingSheetName = existingSheetRepo?.[".name"],
          incomingSheetName = incomingSheetNames.shift()
         if (existingSheetName === incomingSheetName) continue
-        const existingIndex = existingSheetReposet.findIndex(repo => repo[".name"] === incomingSheetName)
+        const existingIndex = existingSheetReposet.findIndex(
+         repo => repo[".name"] === incomingSheetName
+        )
         let stylesheet
         if (existingIndex === -1) {
          stylesheet = new CSSStyleSheet()
@@ -744,7 +763,8 @@
         }
         stylesheets.splice(i + 1, 1)
        }
-       if (existingSheetReposet.length) existingSheetReposet.forEach(() => stylesheets.pop())
+       if (existingSheetReposet.length)
+        existingSheetReposet.forEach(() => stylesheets.pop())
        else if (incomingSheetNames.length)
         for (const incomingSheetName of incomingSheetNames) {
          const stylesheet = new CSSStyleSheet()
@@ -765,12 +785,15 @@
       const innerHTML = this["index.htm"]
       if (innerHTML !== undefined) {
        if (shadowRoot.innerHTML != innerHTML) shadowRoot.innerHTML = innerHTML
-       // console.warn('fx log', "index.htm", this[".rid"])
       } else {
        const incomingRIDs = this["index.names"] ?? []
 
        if (!(incomingRIDs && Array.isArray(incomingRIDs)))
-        throw new Error(`Cannot use .names file of type ${typeof incomingRIDs}.${this["trace.txt"]}`)
+        throw new Error(
+         `Cannot use .names file of type ${typeof incomingRIDs}.${
+          this["trace.txt"]
+         }`
+        )
 
        const { children } = shadowRoot,
         max = 250
@@ -787,12 +810,16 @@
 
         if (!incomingRID)
          throw new Error(
-          `Create Node failed. No name on node.\n\t${JSON.stringify(this["index.names"])}${this["trace.txt"]}`
+          `Create Node failed. No name on node.\n\t${JSON.stringify(
+           this["index.names"]
+          )}${this["trace.txt"]}`
          )
 
         if (existingRID === incomingRID) continue
 
-        const existingIndex = [...children].findIndex((n, o) => o > i && n.repo[".rid"] === incomingRID)
+        const existingIndex = [...children].findIndex(
+         (n, o) => o > i && n.repo[".rid"] === incomingRID
+        )
 
         if (existingIndex !== -1) {
          shadowRoot.insertBefore(children[existingIndex], children[i])
@@ -802,11 +829,13 @@
         const repo = this["branch.fn"](incomingRID),
          node = repo[".node"]
 
-        // console.warn('fx log', incomingRID, this[".rid"])
+        if (!node)
+         throw new Error(
+          `Create Node Error: this repo doesn't have a node.${this["trace.txt"]}`
+         )
 
-        if (!node) throw new Error(`Create Node Error: this repo doesn't have a node.${this["trace.txt"]}`)
-
-        if (i !== -1 && i < children.length) shadowRoot.insertBefore(node, children[i])
+        if (i !== -1 && i < children.length)
+         shadowRoot.insertBefore(node, children[i])
         else shadowRoot.appendChild(node)
 
         node.callback?.()
@@ -848,18 +877,23 @@
    return meta => {
     Promise.all([
      (async () => {
-      const registration = await navigator.serviceWorker.register(location.origin + "/script.js"),
+      const registration = await navigator.serviceWorker.register(
+        location.origin + "/script.js"
+       ),
        { waiting: w, installing: i, active: a } = registration
       if (!a)
        await new Promise(
-        resolve => ((w ?? i).onstatechange = ({ target: t }) => (t.state === "activated" ? resolve(t) : 0))
+        resolve =>
+         ((w ?? i).onstatechange = ({ target: t }) =>
+          t.state === "activated" ? resolve(t) : 0)
        )
       return registration
      })(),
      new Promise(resolve => (onload = resolve))
     ]).then(([registration]) => {
      if (location.host.startsWith("dev.")) {
-      document.onvisibilitychange = () => document.hidden || registration.update()
+      document.onvisibilitychange = () =>
+       document.hidden || registration.update()
       window.onfocus = () => registration.update()
      }
 
@@ -894,16 +928,21 @@
      }
 
      const outputs = {
-      "original.bool": original,
-      "force-refresh.bool": forceRefreshed
-     },
+       "original.bool": original,
+       "force-refresh.bool": forceRefreshed
+      },
       bootColumns = {}
 
      for (const filename in outputs) {
       const get = function () {
        return outputs[filename]
       }
-      get.meta = { author: "client.fn", output: true, msg: `Add client-related boot details to the Host node.`, meta }
+      get.meta = {
+       author: "client.fn",
+       output: true,
+       msg: `Add client-related boot details to the Host node.`,
+       meta
+      }
       bootColumns[filename] = {
        get,
        configurable: true,
@@ -924,7 +963,7 @@
  "branch.fn": {
   get() {
    return (rid, inputColumns, meta = null) => {
-    if (rid === "Root") return Root
+    if (rid === "Core") return Core
 
     if (rid === "Host") return Host
 
@@ -938,12 +977,12 @@
      ignoreColumns = Object.fromEntries(
       ignoreNames.map(name => {
        const ignoreGet = function () {
-        return Columns[name]?.get.apply(this)
-       },
+         return Columns[name]?.get.apply(this)
+        },
         ignoreColumn = { get: ignoreGet, configurable: true }
 
        ignoreGet.meta = {
-        msg: `Set ${name} to behave like it does on Root.`,
+        msg: `Set ${name} to behave like it does on Core.`,
         author: "branch.fn",
         ignore: true,
         meta
@@ -957,7 +996,10 @@
       return attrs
      }, {}),
      output = {
-      ".name": [name, `Tell the object what name was used to create it and used to find it's commit. (${name})`],
+      ".name": [
+       name,
+       `Tell the object what name was used to create it and used to find it's commit. (${name})`
+      ],
       "commit.name": [
        commitName,
        `Add the name of the commit that was ultimately used to make this object. (${commitName}).`
@@ -976,7 +1018,9 @@
      get.meta = {
       author: "branch.fn",
       output: true,
-      msg: output[filename][1] ?? "Add context about the branch operation that created this repo.",
+      msg:
+       output[filename][1] ??
+       "Add context about the branch operation that created this repo.",
       meta
      }
      contextColumns[filename] = {
@@ -986,9 +1030,18 @@
      }
     }
 
-    if (!exists) console.warn("404 " + name, { search, rid, self: this, commitName })
+    if (!exists)
+     this["log.fn"]("No commit for " + name, {
+      search,
+      rid,
+      self: this,
+      commitName
+     })
 
-    const repo = Object.create(this, Object.assign({}, ignoreColumns, inputColumns, contextColumns))
+    const repo = Object.create(
+     this,
+     Object.assign({}, ignoreColumns, inputColumns, contextColumns)
+    )
 
     repo["checkout-commit.fn"](commit, {
      author: "branch.fn",
@@ -1008,7 +1061,7 @@
  "remove.fn": {
   get() {
    return () => {
-    if (this === Root) throw new Error(`can't remove Root.${this["trace.txt"]}`)
+    if (this === Core) throw new Error(`can't remove Core.${this["trace.txt"]}`)
 
     this[".node"]?.remove()
    }
@@ -1019,26 +1072,18 @@
    return callback => {
     const { shadowRoot } = this[".node"] ?? {}
 
-    if (!shadowRoot) throw Error(`called subsignal on a repo with no shadowRoot.${this["trace.txt"]}`)
+    if (!shadowRoot)
+     throw Error(
+      `called subsignal on a repo with no shadowRoot.${this["trace.txt"]}`
+     )
 
     let index = 0
 
-    for (const node of shadowRoot.children) if (node.repo) callback(node.repo, index++, "node")
+    for (const node of shadowRoot.children)
+     if (node.repo) callback(node.repo, index++, "node")
 
-    for (const sheet of shadowRoot.adoptedStyleSheets) if (sheet.repo) callback(sheet.repo, index++, "sheet")
-   }
-  }
- },
- "forChain.fn": {
-  get() {
-   return callback => {
-    let repo = this,
-     index = 0
-
-    while (repo) {
-     callback(repo, index++)
-     repo = Object.getPrototypeOf(repo)
-    }
+    for (const sheet of shadowRoot.adoptedStyleSheets)
+     if (sheet.repo) callback(sheet.repo, index++, "sheet")
    }
   }
  },
@@ -1056,11 +1101,15 @@
   get() {
    return incomingNode => {
     if (NODES.has(this)) {
-     if (incomingNode) throw new Error(`Own Node Error: this repo already owns a node.${this["trace.txt"]}"`)
+     if (incomingNode)
+      throw new Error(
+       `Own Node Error: this repo already owns a node.${this["trace.txt"]}"`
+      )
 
      return NODES.get(this)
     }
 
+    console.log(this[".rid"], this[".name"], this["trace.txt"])
     const node = incomingNode ?? document.createElement(this[".tag"])
 
     NODES.set(this, node)
@@ -1078,7 +1127,10 @@
      new ResizeObserver(e => {
       if (scroll) {
        scroll = false
-       node.scrollTo(this[this[".name"] + "-scroll-x.number"] ?? 0, this[this[".name"] + "-scroll-y.number"] ?? 0)
+       node.scrollTo(
+        this[this[".name"] + "-scroll-x.number"] ?? 0,
+        this[this[".name"] + "-scroll-y.number"] ?? 0
+       )
       }
 
       if (timeout) clearTimeout(timeout)
@@ -1091,18 +1143,33 @@
     try {
      node.attachShadow({ mode: "open" })
     } catch {
-     throw new Error(`Error: can't attach shadow to ${this[".tag"]}.${this["trace.txt"]}`)
+     throw new Error(
+      `Error: can't attach shadow to ${this[".tag"]}.${this["trace.txt"]}`
+     )
     }
     return node
+   }
+  }
+ },
+ "forChain.fn": {
+  get() {
+   return callback => {
+    let repo = this,
+     index = 0
+
+    while (repo) {
+     callback(repo, index++)
+     repo = Object.getPrototypeOf(repo)
+    }
    }
   }
  },
  "item-get.fn": {
   get() {
    return Object.getOwnPropertyDescriptor(
-    Root["branch.fn"](this["target.name"], undefined, {
+    Core["branch.fn"](this["selected-commit.name"], undefined, {
      author: "item-get.fn",
-     msg: `Create a branch so that we can fetch ${this["item.rid"]} from ${this["target.name"]} as a repo.`
+     msg: `Create a branch so that we can fetch ${this["item.rid"]} from ${this["selected-commit.name"]} as a repo.`
     }),
     this["item.rid"]
    ).get
@@ -1112,8 +1179,8 @@
   get() {
    return entry => {
     const {
-     borderBoxSize: [{ blockSize: height, inlineSize: width }]
-    } = entry,
+      borderBoxSize: [{ blockSize: height, inlineSize: width }]
+     } = entry,
      tileSize = 14,
      trueTilesWide = width / tileSize,
      trueTilesHigh = height / tileSize,
@@ -1124,7 +1191,7 @@
      tileWidth = xFactor * tileSize,
      tileHeight = yFactor * tileSize
 
-    Object.assign(Root, {
+    Object.assign(Core, {
      "tile-width.number": tileWidth,
      "tile-height.number": tileHeight
     })
@@ -1156,13 +1223,13 @@
     const datum = href?.slice(href.indexOf(",") + 1)
     return datum
      ? datum
-      .split(this["name-delim.txt"])
-      .map(escapedName =>
-       escapedName
-        .replaceAll(this["escaped-name-delim.txt"], this["name-delim.txt"])
-        .replaceAll("%26", "&")
-        .replaceAll("%25", "%")
-      )
+        .split(this["name-delim.txt"])
+        .map(escapedName =>
+         escapedName
+          .replaceAll(this["escaped-name-delim.txt"], this["name-delim.txt"])
+          .replaceAll("%26", "&")
+          .replaceAll("%25", "%")
+        )
      : []
    }
   }
@@ -1197,79 +1264,59 @@
       type === "text/json"
        ? JSON.parse(datum)
        : type === "text/names"
-        ? datum
+       ? datum
          ? this["unpackNames.fn"](href)
          : []
-        : type === "text/name"
-         ? datum || null
-         : type === "text/column"
-          ? (get => (
-           (get.meta = { meta, author: "literal-cell.fn", href, msg: "Add the default datauri column." }),
-           get.apply(this)
-          ))(new Function(datum))
-          : datum
+       : type === "text/name"
+       ? datum || null
+       : type === "text/column"
+       ? (get => (
+          (get.meta = {
+           meta,
+           author: "literal-cell.fn",
+           href,
+           msg: "Add the default datauri column."
+          }),
+          get.apply(this)
+         ))(new Function(datum))
+       : datum
 
     return body
    }
   }
  },
- "select-target.fn": {
+ "shade-theme.fn": {
+  get() {
+   return (addend = 0.1) =>
+    "#" +
+    this["theme.color"]
+     .match(/[^#]{2}/g)
+     .map(s =>
+      Math.trunc(
+       (1 - (1 - parseInt(s, 16) / 255) * (1 - addend)) * 255
+      ).toString(16)
+     )
+     .join("")
+  }
+ },
+ "select-commit.fn": {
   get() {
    return () => {
-    const targetNames = [...Host["targets.names"]],
-     commit = {
-      "target.name": `data:text/name,${this["target.name"]}`,
-      "explorer.bool": `false.bool`
-     },
-     index = Host["targets.names"].indexOf(this["target.name"])
-
-    if (index === -1) {
-     targetNames.push(this["target.name"])
-     commit["targets.names"] = this["packNames.fn"](targetNames)
-    }
-
-    Host["set.fn"](commit)
-   }
-  }
- },
- "capture-resize.fn": {
-  get() {
-   return entry => {
-    const {
-     borderBoxSize: [{ blockSize, inlineSize }]
-    } = entry
-
-    console.log('capture\'d!', blockSize, inlineSize, this[".rid"])
-
-    Object.defineProperties(this, {
-     "resize-width.number": { get() { return inlineSize }, configurable: true },
-     "resize-height.number": { get() { return blockSize }, configurable: true }
+    Host["set.fn"]({
+     "selected-commit.name": `data:text/name,${this["selected-commit.name"]}`,
+     "commit-explorer.bool": `false.bool`
     })
-
-    this["signal.fn"]()
-   }
-  }
- },
- "remove-target.fn": {
-  get() {
-   return event => {
-    event.stopPropagation()
-
-    const targets = Host["targets.names"].filter(c => c !== this["target.name"]),
-     commit = {
-      "targets.names": this["packNames.fn"](targets)
-     }
-
-    if (Host["target.name"] === this["target.name"]) commit["target.name"] = `data:text/name,${targets.at(-1) ?? ""}`
-
-    Host["set.fn"](commit)
    }
   }
  },
  "checkout-cell.fn": {
   get() {
    return href => {
-    const cellType = href.startsWith("data:") ? "literal" : href.startsWith("https://") ? "absolute" : "relative"
+    const cellType = href.startsWith("data:")
+     ? "literal"
+     : href.startsWith("https://")
+     ? "absolute"
+     : "relative"
     return this[cellType + "-cell.fn"](href)
    }
   }
@@ -1278,7 +1325,9 @@
   get() {
    return (href, meta) => {
     const subpaths = href.slice(8).split("/"),
-     host = subpaths.shift() + (Host[".rid"].split("?")[1] ? "?" + Host[".rid"].split("?")[1] : ""),
+     host =
+      subpaths.shift() +
+      (Host[".rid"].split("?")[1] ? "?" + Host[".rid"].split("?")[1] : ""),
      subname = subpaths.pop()
 
     if (!subname)
@@ -1287,11 +1336,19 @@
      )
 
     let nextMeta = { author: "absolute-cell.fn", msg: "", meta },
-     repo = Root["branch.fn"](host.slice(host.startsWith("dev.") ? 4 : 0), undefined, nextMeta)
+     repo = Core["branch.fn"](
+      host.slice(host.startsWith("dev.") ? 4 : 0),
+      undefined,
+      nextMeta
+     )
 
     for (const subpath of subpaths) {
      const prevMeta = nextMeta
-     nextMeta = { author: prevMeta.author, meta: prevMeta, msg: `Seek ${subname} from subrepo ${subpath}.` }
+     nextMeta = {
+      author: prevMeta.author,
+      meta: prevMeta,
+      msg: `Seek ${subname} from subrepo ${subpath}.`
+     }
      repo = repo["branch.fn"](subpath, undefined, nextMeta)
     }
 
@@ -1319,7 +1376,9 @@
     for (let i = 0; i < levels; i++) {
      repo = Object.getPrototypeOf(repo)
      if (repo === null)
-      throw new RangeError(`Error: relative reference to repo which is beyond Root ${href}.${this["trace.txt"]}`)
+      throw new RangeError(
+       `Error: relative reference to repo which is beyond Core ${href}.${this["trace.txt"]}`
+      )
     }
 
     let result
@@ -1347,6 +1406,32 @@
    }
   }
  },
+ "capture-resize.fn": {
+  get() {
+   return entry => {
+    const {
+     borderBoxSize: [{ blockSize, inlineSize }]
+    } = entry
+
+    Object.defineProperties(this, {
+     "resize-width.number": {
+      get() {
+       return inlineSize
+      },
+      configurable: true
+     },
+     "resize-height.number": {
+      get() {
+       return blockSize
+      },
+      configurable: true
+     }
+    })
+
+    this["signal.fn"]()
+   }
+  }
+ },
  "checkout-commit.fn": {
   get() {
    return (commit, meta) => {
@@ -1363,21 +1448,17 @@
        })
       }
 
-     get.meta = { href, msg: `Check out ${name}, which forwards to ${href}.`, author: "checkout-commit.fn", meta }
+     get.meta = {
+      href,
+      msg: `Check out ${name}, which forwards to ${href}.`,
+      author: "checkout-commit.fn",
+      meta
+     }
 
      description[name] = { get, configurable: true, enumerable: true }
     }
 
     Object.defineProperties(this, description)
-   }
-  }
- },
- "toggle-explorer.fn": {
-  get() {
-   return () => {
-    Host["set.fn"]({
-     "explorer.bool": !Host["explorer.bool"] + ".bool"
-    })
    }
   }
  },
@@ -1398,13 +1479,24 @@
     })
   }
  },
+ "toggle-commit-explorer.fn": {
+  get() {
+   return () => {
+    Host["set.fn"]({
+     "commit-explorer.bool": !Host["commit-explorer.bool"] + ".bool"
+    })
+   }
+  }
+ },
 
  "os.css": {
   get() {
-   return `:host { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: grid; grid-template-rows: 1fr ${this["branch.fn"]("taskbar", undefined, { author: "os.css", msg: "I need to get the taskbar's height..." })[
-    "height.number"
-   ]
-    }; font: 11px / 16px sans-serif; }`
+   return `:host { position: fixed; top: 0; left: 0; width: 100%; box-sizing: border-box; height: 100%; margin: 0; display: grid; grid-template-rows: 1fr ${
+    this["branch.fn"]("taskbar", undefined, {
+     author: "os.css",
+     msg: "I need to get the taskbar's height..."
+    })["height.number"]
+   }; font: 11px / 16px sans-serif; }`
   }
  },
  "item.css": {
@@ -1417,19 +1509,21 @@
      min-height: 24px;
      line-height: 24px;
      ${this["ignore.bool"] ? "opacity: 25%;" : ""}
-     ${this["output.bool"]
-     ? `font-weight: 800;
+     ${
+      this["output.bool"]
+       ? `font-weight: 800;
      color: ${this["theme.color"]};
      background-color: #b74`
-     : ""
-    }
+       : ""
+     }
     }
 
-    ${this["ignore.bool"]
-     ? `:host::after {
-     content: " = Root[k]";
+    ${
+     this["ignore.bool"]
+      ? `:host::after {
+     content: " = Core[k]";
     }`
-     : ""
+      : ""
     }
     span {
      display: inline-block;
@@ -1440,7 +1534,7 @@
      text-align: center;
     }
     :host${Host["item.rid"] === this["item.rid"] ? "" : "(:hover)"} {
-     background: ${this["light-theme.color"]};
+     background: ${this["shade-theme.fn"]()};
     }`
   }
  },
@@ -1462,7 +1556,15 @@
  },
  "title.css": {
   get() {
-   return `:host { margin: 0; display: block; font-weight: 600; padding: 4px; text-transform: uppercase; position: sticky; top: 0; color: white; background: ${this["theme.color"]} }`
+   return `:host {
+    margin: 0;
+    display: block;
+    font-weight: 600;
+    padding: 4px;
+    text-transform: uppercase;
+    color: white;
+    background: ${this["theme.color"]};
+   }`
   }
  },
  "empty.css": {
@@ -1482,44 +1584,24 @@
    }`
   }
  },
- "editor.css": {
-  get() {
-   return `:host{
-    display: block;
-    position: relative;
-    overflow: hidden;
-    background-color: ${this["theme.color"]};
-   }
-   heading {
-    grid-area: h;
-   }`
-  }
- },
- "target.css": {
-  get() {
-   return `:host {
-     cursor: pointer;
-     text-overflow: ellipsis;
-     white-space: nowrap;
-     overflow: hidden;
-     min-height: 24px;
-     line-height: 24px;
-    }
-    :host${Host["target.name"] === this["target.name"] ? "" : "(:hover)"} {
-     background: ${this["light-theme.color"]};
-    }`
-  }
- },
  "status.css": {
   get() {
    return `:host {
     display: flex;
     flex-flow: row nowrap;
-    background: ${this["branch.fn"]("lighten-theme", undefined, {
-    author: "status.css",
-    msg: "This seems like a lot of paperwork to fill out for a simple request for the light theme color."
-   })["light-theme.color"]
-    };
+    background: ${this["shade-theme.fn"](0.2)};
+   }`
+  }
+ },
+ "header.css": {
+  get() {
+   return `:host {
+    display: flex;
+    flex-flow: row;
+    padding: 32px;
+    box-sizing: border-box;
+    background: ${this["shade-theme.fn"](0.8)};
+    color: ${this["theme.color"]};
    }`
   }
  },
@@ -1535,18 +1617,6 @@
     box-sizing: border-box;
     border: 0.5px dashed #821;
    }`
-  }
- },
- "tab-label.css": {
-  get() {
-   return `:host {
-     cursor: pointer;
-     text-overflow: ellipsis;
-     white-space: nowrap;
-     overflow: hidden;
-     min-height: 16px;
-     line-height: 16px;
-    }`
   }
  },
  "portfolio.css": {
@@ -1577,9 +1647,9 @@
     top: calc(1.5 * var(--h));
     bottom: calc(1.5 * var(--h));
    }
-   core-parts-,
-   pilot-parts-,
-   orenjinari-com- {
+   core-parts,
+   pilot-parts,
+   orenjinari-com {
     position: relative;
     width: calc(var(--w) * 40);
     height: calc(var(--h) * 30);
@@ -1598,12 +1668,13 @@
     display: grid;
     grid-template:
      "${this["sidebar-open.bool"] ? "sbar " : ""}art" auto
-     "${this["sidebar-open.bool"] ? "stat " : ""}stat" 32px / ${this["sidebar-open.bool"] ? `${this["sidebar-width.number"]}px ` : ""
-    }1fr;
+     "${this["sidebar-open.bool"] ? "stat " : ""}stat" 32px / ${
+    this["sidebar-open.bool"] ? `${this["sidebar-width.number"]}px ` : ""
+   }1fr;
     }
     ${this["sidebar-open.bool"] ? "sidebar- { grid-area: sbar }" : ""}
     status- { grid-area: stat }
-    editor-, explorer- { grid-area: art }`
+    commit-editor, commit-explorer { grid-area: art }`
   }
  },
  "start-menu.css": {
@@ -1615,11 +1686,12 @@
        flex-flow: column nowrap;
        position: absolute;
        left: 2px;
-       bottom: calc(${this["branch.fn"]("taskbar", undefined, {
-    author: "start-menu.css",
-    msg: "Just need the height of the taskbar."
-   })["height.number"]
-    } - 4px);
+       bottom: calc(${
+        this["branch.fn"]("taskbar", undefined, {
+         author: "start-menu.css",
+         msg: "Just need the height of the taskbar."
+        })["height.number"]
+       } - 4px);
        user-select: none;
        line-height: 18px;
        text-align: left;
@@ -1656,49 +1728,95 @@
    return `:host { color: white; padding: 12px; background: ${this["theme.color"]} }`
   }
  },
- "editor-tab.css": {
-  get() {
-   return `:host {
-    display: inline-block;
-    height: 100%;
-    padding: 6px;
-    box-sizing: border-box;
-    cursor: pointer;
-    background: ${Host["target.name"] === this["target.name"]
-     ? this["branch.fn"]("lighten-theme")["branch.fn"]("lighten-theme")["light-theme.color"]
-     : this["light-theme.color"]
-    };
-   }`
-  }
- },
  "flex-spacer.css": {
   get() {
    return `:host { flex: 1 1 }`
   }
  },
- "editor-tabs.css": {
+ "test-canvas.css": {
+  get() {
+   const { width, height } = this["size.json"] ?? { width: 640, height: 480 },
+    standardHeight = Math.min(256, height),
+    aspect = width / height,
+    scale = standardHeight / height
+
+   console.log("compute size here", {
+    standardHeight,
+    width,
+    height,
+    aspect,
+    scale
+   })
+
+   return `:host {
+     box-sizing: border-box;
+     background: ${this["shade-theme.fn"](0.6)};
+     position: absolute;
+     width: ${width}px;
+     height: ${height}px;
+     transform-origin: top left;
+     top: 23px;
+     transform: scale(${scale});
+    }`
+  }
+ },
+ "start-button.css": {
+  get() {
+   return `:host { flex: 0 0; position: relative; width: 100%; box-sizing: border-box; height: 100%; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: bold 11px / 16px sans-serif; box-sizing: border-box; padding: ${
+    this["start-menu.bool"] ? 4 : 3
+   }px 4px 2px; text-align: left; background: #c3c3c3; box-shadow: ${
+    this["start-menu.bool"]
+     ? `  inset -1px -1px white,  inset 1px 1px black,  inset -2px -2px #dbdbdb,  inset 2px 2px #7a7a7a`
+     : `  inset -1px -1px black,  inset 1px 1px white,  inset -2px -2px #7a7a7a,  inset 2px 2px #dbdbdb`
+   };}:host(:focus)::after { border: 1px dotted black; content: ""; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none;}icon- { width: 16px; height: 16px; background: url(data:image/png;base64,${
+    this["icon.png"]
+   }); background-size: 16px;}`
+  }
+ },
+ "menu-buttons.css": {
   get() {
    return `:host {
-    display: block;
-    white-space: nowrap;
-    overflow-y: auto;
-    width: 100%;
-    height: ${this["tab-height.number"]}px;
-    background: ${this["theme.color"]};
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 4px;
+    padding: 4px;
+    background: ${this["shade-theme.fn"]()};
    }`
   }
  },
- "tab-contents.css": {
+ "mini-browser.css": {
+  get() {
+   const { width = 300, height = 150 } = this["size.json"] ?? {},
+    standardHeight = Math.min(256, height),
+    aspect = width / height,
+    scaledWidth = standardHeight * aspect
+
+   return `:host {
+    border-radius: 8px;
+    display: flex;
+    flex-flow: column;
+    position: relative;
+    overflow: clip;
+    box-shadow:
+     inset 0 0 0 1px ${this["theme.color"]},
+     2px 4px 9px -2px ${this["theme.color"]};
+    flex: 0 0 ${scaledWidth}px;
+    height: ${standardHeight}px;
+   }`
+  }
+ },
+ "commit-editor.css": {
   get() {
    return `:host{
     overflow: hidden;
     display: grid;
     grid-template:
      "t${this["inspector.bool"] ? ` i` : ""}" 1fr
-     "t${this["inspector.bool"] ? ` v` : ""}" 1fr / 1fr${this["inspector.bool"] ? ` ${this["inspector-width.number"]}px` : ""
-    };
-    height: calc(100% - ${this["tab-height.number"]}px);
-    background: ${this["branch.fn"]("lighten-theme")["branch.fn"]("lighten-theme")["light-theme.color"]};
+     "t${this["inspector.bool"] ? ` v` : ""}" 1fr / 1fr${
+    this["inspector.bool"] ? ` ${this["inspector-width.number"]}px` : ""
+   };
+    height: 100%;
+    background: ${this["shade-theme.fn"](0.4)};
    }
    variants- {
     grid-area: t;
@@ -1706,24 +1824,9 @@
    inspector- {
     grid-area: i;
    }
-   property-chat- {
+   property-chat {
     grid-area: v;
    }`
-  }
- },
- "start-button.css": {
-  get() {
-   return `:host { flex: 0 0; position: relative; width: 100%; box-sizing: border-box; height: 100%; display: flex; flex-flow: row nowrap; gap: 3px; border: none; font: bold 11px / 16px sans-serif; box-sizing: border-box; padding: ${this["start-menu.bool"] ? 4 : 3
-    }px 4px 2px; text-align: left; background: #c3c3c3; box-shadow: ${this["start-menu.bool"]
-     ? `  inset -1px -1px white,  inset 1px 1px black,  inset -2px -2px #dbdbdb,  inset 2px 2px #7a7a7a`
-     : `  inset -1px -1px black,  inset 1px 1px white,  inset -2px -2px #7a7a7a,  inset 2px 2px #dbdbdb`
-    };}:host(:focus)::after { border: 1px dotted black; content: ""; position: absolute; margin: 3px; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none;}icon- { width: 16px; height: 16px; background: url(data:image/png;base64,${this["icon.png"]
-    }); background-size: 16px;}`
-  }
- },
- "menu-buttons.css": {
-  get() {
-   return `:host { display: flex; flex-flow: column nowrap; gap: 4px; padding: 4px; }`
   }
  },
  "property-chat.css": {
@@ -1753,17 +1856,17 @@
     height: 100%;
     pad: 24px;
    }
-   nari-artwork- {
+   nari-artwork {
     grid-area: art;
    }
-   nari-recent-:nth-of-type(1) {
-    grid-area: re1
+   nari-recent:nth-of-type(1) {
+    grid-area: re1;
    }
-   nari-recent-:nth-of-type(2) {
-    grid-area: re2
+   nari-recent:nth-of-type(2) {
+    grid-area: re2;
    }
-   nari-recent-:nth-of-type(3) {
-    grid-area: re3
+   nari-recent:nth-of-type(3) {
+    grid-area: re3;
    }`
   }
  },
@@ -1805,6 +1908,28 @@
    }`
   }
  },
+ "commit-list-item.css": {
+  get() {
+   return `:host {
+     cursor: pointer;
+     text-overflow: ellipsis;
+     white-space: nowrap;
+     overflow: hidden;
+     min-height: 24px;
+     line-height: 24px;
+     box-sizing: border-box;
+     padding: 12px;
+     border-radius: 8px;
+    }
+    :host${
+     Host["selected-commit.name"] === this["selected-commit.name"]
+      ? ""
+      : "(:hover)"
+    } {
+     background: ${this["shade-theme.fn"](0.4)};
+    }`
+  }
+ },
 
  "os.names": {
   get() {
@@ -1817,11 +1942,6 @@
    ]
   }
  },
- "tab.names": {
-  get() {
-   return ["tab-label", "remove-target"]
-  }
- },
  "tray.names": {
   get() {
    return ["factory-reset", "fullscreen", "clock"]
@@ -1832,29 +1952,24 @@
    return []
   }
  },
- "variants.names": {
-  get() {
-   return [
-    "title",
-    ...(Root["branch.fn"](this["target.name"])?.[".variants"]?.map(
-     ([name, names]) => `variant?.tag=data:,${this["toTag.fn"](name)}&input.names=${this["packNames.fn"](names)}`
-    ) ?? ["empty"])
-   ]
-  }
- },
  "empty.names": {
   get() {
    return ["empty-icon"]
   }
  },
- "editor.names": {
-  get() {
-   return ["editor-tabs", "tab-contents"]
-  }
- },
  "status.names": {
   get() {
    return ["memory", "host-rid", "version"]
+  }
+ },
+ "search.names": {
+  get() {
+   return ["search-icon", "search-input"]
+  }
+ },
+ "header.names": {
+  get() {
+   return ["title", "search", "filters", "add"]
   }
  },
  "taskbar.names": {
@@ -1867,17 +1982,35 @@
    return ["message-author", this["msg.rid"] ?? "message-content"]
   }
  },
- "explorer.names": {
+ "sidebar.names": {
   get() {
-   const makeTarget = name => `explorer-target?target.name=data:text/name,${name}`,
-    descriptors = Object.getOwnPropertyDescriptors(Root),
-    descriptorEntries = Object.entries(descriptors),
-    reducer = (rids, [name]) => {
-     if (name.endsWith(".commit")) rids.push(makeTarget(name.slice(0, -7)))
-
-     return rids
-    }
-   return descriptorEntries.reduce(reducer, ["title", makeTarget("Root"), makeTarget("Host")])
+   return [
+    "commit-explorer-button",
+    ...(this["commit-explorer.bool"] ? [] : ["inspector-button"]),
+    "flex-spacer",
+    "reset-button"
+   ]
+  }
+ },
+ "variants.names": {
+  get() {
+   return [
+    "title",
+    `mini-browser?title.txt=data:,Default Form&input.names=${this[
+     "packNames.fn"
+    ]([
+     (console.log(this["selected-commit.name"]), this["selected-commit.name"])
+    ])}`,
+    ...(Core["branch.fn"](this["selected-commit.name"])?.[".variants"]?.map(
+     ([name, names, { width = 300, height = 150 } = {}]) =>
+      `mini-browser?title.txt=data:,${name}&size.json=data:text/json,${JSON.stringify(
+       {
+        width,
+        height
+       }
+      )}&input.names=${this["packNames.fn"](names)}`
+    ) ?? [])
+   ]
   }
  },
  "portfolio.names": {
@@ -1885,13 +2018,11 @@
    return [
     `core.parts?${[
      "inspector.bool",
-     "targets.names",
-     "target.name",
-     "explorer.bool",
+     "selected-commit.name",
+     "commit-explorer.bool",
      "item.rid",
-     "editor-tabs-scroll-x.number",
      "inspector-scroll-y.number",
-     "explorer-scroll-y.number",
+     "commit-explorer-scroll-y.number",
      "variants-scroll-y.number",
      "property-chat-scroll-y.number",
      "sidebar-open.bool"
@@ -1905,10 +2036,13 @@
   get() {
    return [
     "title",
-    ...Object.entries(Root["branch.fn"](this["target.name"])["property.columns"]).map(
+    ...Object.entries(
+     Core["branch.fn"](this["selected-commit.name"])["property.columns"]
+    ).map(
      ([n, { get }]) =>
-      `inspector-item?item.rid=data:text/name,${n}${get.meta?.ignore ? `&ignore.bool=true.bool` : ""}${get.meta?.output ? `&output.bool=true.bool` : ""
-      }`
+      `inspector-item?item.rid=data:text/name,${n}${
+       get.meta?.ignore ? `&ignore.bool=true.bool` : ""
+      }${get.meta?.output ? `&output.bool=true.bool` : ""}`
     )
    ]
   }
@@ -1930,42 +2064,42 @@
  },
  "core.parts.names": {
   get() {
-   return [this["explorer.bool"] ? "explorer" : "editor", "status", ...(this["sidebar-open.bool"] ? ["sidebar"] : [])]
-  }
- },
- "variant-input.names": {
-  get() {
-   const packedNames = this["packNames.fn"](this["input.names"])
-   console.log(packedNames, this["input.names"])
-   return ["title", `test-canvas?index.names=${packedNames}`]
+   return [
+    this["commit-explorer.bool"] ? "commit-explorer" : "commit-editor",
+    "status",
+    ...(this["sidebar-open.bool"] ? ["sidebar"] : [])
+   ]
   }
  },
  "column-code.names": {
   get() {
-   const lines = this["property.columns"][this["source.rid"]].get.toString().split(/\r\n|\r|\n/g)
+   const lines = this["property.columns"][this["source.rid"]].get
+    .toString()
+    .split(/\r\n|\r|\n/g)
    return lines.map(
     (line, index) =>
-     `line?index.number=data:text/json,${index}&content.txt=data:,${line.replaceAll(`&`, `TEMP-AMPERSAND`)}`
+     `line?index.number=data:text/json,${index}&content.txt=data:,${line.replaceAll(
+      `&`,
+      `TEMP-AMPERSAND`
+     )}`
    )
   }
  },
- "editor-tabs.names": {
+ "mini-browser.names": {
   get() {
-   return Host["targets.names"].map(c => `editor-tab?target.name=data:text/name,${c}`)
+   return ["title", `test-canvas?index.names=input.names`]
   }
  },
- "sidebar.names": {
+ "commit-editor.names": {
   get() {
-   return ["explorer-button", ...(this["explorer.bool"] ? [] : ["inspector-button"]), "flex-spacer", "reset-button"]
-  }
- },
- "tab-contents.names": {
-  get() {
-   const target = this["target.name"]
+   const name = this["selected-commit.name"]
 
-   if (!target) return ["empty"]
+   if (!name) return ["empty"]
 
-   return ["variants", ...(this["inspector.bool"] ? ["inspector", "property-chat"] : [])]
+   return [
+    "variants",
+    ...(this["inspector.bool"] ? ["inspector", "property-chat"] : [])
+   ]
   }
  },
  "property-chat.names": {
@@ -1983,15 +2117,28 @@
    ]
   }
  },
+ "commit-list.names": {
+  get() {
+   const makeItem = name =>
+     `commit-list-item?selected-commit.name=data:text/name,${name}`,
+    columnEntries = Object.entries(Columns),
+    reducer = (rids, [name]) => {
+     if (name.endsWith(".commit")) rids.push(makeItem(name.slice(0, -7)))
+
+     return rids
+    }
+   return columnEntries.reduce(reducer, [makeItem("Core")])
+  }
+ },
  "property-chat-box.names": {
   get() {
-   const targetName = this["target.name"],
-    targetRepo = Root["branch.fn"](targetName, undefined, {
+   const name = this["selected-commit.name"],
+    repo = Core["branch.fn"](name, undefined, {
      author: "property-chat.names",
-     msg: `Branch off to ${targetName} in order to inspect it.`
+     msg: `Branch off to ${name} in order to inspect it.`
     }),
     itemName = this["item.rid"],
-    columns = targetRepo["property.columns"],
+    columns = repo["property.columns"],
     column = columns[itemName]
 
    if (column) {
@@ -2003,7 +2150,9 @@
      ]
 
     while (meta) {
-     names.push(`message?author.txt=data:,${meta.author}&msg.txt=data:,${meta.msg}`)
+     names.push(
+      `message?author.txt=data:,${meta.author}&msg.txt=data:,${meta.msg}`
+     )
      meta = meta.meta
     }
 
@@ -2016,17 +2165,12 @@
 
  "version.number": {
   get() {
-   return 56 / 1000
+   return 57 / 1000
   }
  },
  "host-size.number": {
   get() {
    return Host[".rid"].length
-  }
- },
- "tab-height.number": {
-  get() {
-   return 32
   }
  },
  "host-memory.number": {
@@ -2070,14 +2214,14 @@
    return `${this["title.txt"] ?? "Untitled"}`
   }
  },
- "bootstrap.htm": {
-  get() {
-   return BOOTSTRAP
-  }
- },
  "error404.htm": {
   get() {
    return `404`
+  }
+ },
+ "bootstrap.htm": {
+  get() {
+   return BOOTSTRAP
   }
  },
  "host-memory.htm": {
@@ -2109,7 +2253,11 @@
  "prefix.txt": {
   get() {
    return (
-    (this["force-refresh.bool"] ? "FORCED-" : this["original.bool"] ? "HTTPS-" : "") +
+    (this["force-refresh.bool"]
+     ? "FORCED-"
+     : this["original.bool"]
+     ? "HTTPS-"
+     : "") +
     (this["server.bool"] ? "SERVER-" : "CLIENT-") +
     BOOT_TIME
    )
@@ -2171,7 +2319,10 @@
  },
  "server.bool": {
   get() {
-   return typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope
+   return (
+    typeof WorkerGlobalScope !== "undefined" &&
+    self instanceof WorkerGlobalScope
+   )
   }
  },
 
@@ -2180,31 +2331,20 @@
    return ["status-layout"]
   }
  },
- "flex-spacer.layout": {
-  get() {
-   return ["flex-spacer-layout"]
-  }
- },
  "sidebar.layout": {
   get() {
    return ["menu-buttons-layout"]
+  }
+ },
+ "flex-spacer.layout": {
+  get() {
+   return ["flex-spacer-layout"]
   }
  },
 
  "theme.color": {
   get() {
    return `#333445`
-  }
- },
- "light-theme.color": {
-  get() {
-   return (
-    "#" +
-    this["theme.color"]
-     .match(/[^#]{2}/g)
-     .map(s => Math.trunc((1 - (1 - parseInt(s, 16) / 255) * 0.5) * 255).toString(16))
-     .join("")
-   )
   }
  },
 
@@ -2232,7 +2372,7 @@
 
  ".rid": {
   get() {
-   return this[".name"] + (this === Root ? "" : this["workingTree.search"])
+   return this[".name"] + (this === Core ? "" : this["workingTree.search"])
   }
  },
 
@@ -2256,7 +2396,7 @@
 
  ".name": {
   get() {
-   return ``
+   return `Core`
   }
  },
 
@@ -2300,7 +2440,7 @@
      body = new Blob([I], { type })
     }
    } else {
-    body = encoder.encode(Root["bootstrap.htm"])
+    body = encoder.encode(Core["bootstrap.htm"])
     type = "text/html; charset=UTF-8"
    }
    return new Response(body, {
@@ -2364,7 +2504,8 @@
    return this["reduceChain.fn"]((columns, repo) => {
     const repoColumns = Object.getOwnPropertyDescriptors(repo)
 
-    for (const filename in repoColumns) if (!(filename in columns)) columns[filename] = repoColumns[filename]
+    for (const filename in repoColumns)
+     if (!(filename in columns)) columns[filename] = repoColumns[filename]
 
     return columns
    }, {})
