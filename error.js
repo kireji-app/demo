@@ -1,5 +1,5 @@
 (C = {
- "version.number": { get() { return 54.3 / 1000 } },
+ "version.number": { get() { return 54.4 / 1000 } },
  "host-size.number": { get() { return HOST[".rid"].length } },
  "sidebar-width.number": { get() { return 42 } },
  "branch-length.number": {
@@ -726,7 +726,7 @@
  "flex-spacer-layout.commit": { get() { return { "layout.css": `flex-spacer.css` } } },
  "menu-buttons-layout.commit": { get() { return { "layout.css": `menu-buttons.css` } } },
 
- "inspector.children": { get() { return ["title", ...['core.parts', 'ejaugust.com', 'pilot.parts'].map(name => `inspector-item?item.rid=data:,${name}`)] } },
+ "inspector.children": { get() { return ["title", ...['core.parts', 'ejaugust.com', 'pilot.parts', 'kheb.online', 'fallback.cloud', 'kireji.app', 'kireji.io', 'orenjinari.com', 'stargate.design'].map(name => `inspector-item?item.rid=data:,${name}`)] } },
 
  "icon.png": {
   get() {
