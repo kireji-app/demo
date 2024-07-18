@@ -1,7 +1,6 @@
 class Part {
  static 𝒳
- static navigationBuffer
- static willRender = new Set()
+ static changes = new Set()
  static group(prototype, config, ospath = ["c:"]) {
   const group = Object.create(prototype)
   for (const partname in config) {
@@ -16,15 +15,72 @@ class Part {
  }
  static mutate(𝒳ʹ) {
   this.𝒳 = new URL(𝒳ʹ, this.𝒳)
-  this.root.𝒳.disrupt()
-  this.root["index.html"].reflect($ => {
-   document.body.innerHTML = $
-  })
-  this.root["href.txt"].reflect($ => {
+  const group = this.root,
+   node = document.body
+  group.𝒳.disrupt()
+  this.syncNode(node, group, "c:")
+  address: {
+   const { value, changed } = group["href.txt"].build()
+   if (!changed) break address
    if (this.navigationBuffer) clearTimeout(this.navigationBuffer)
-   this.navigationBuffer = setTimeout(() => history.replaceState({}, null, $), 120)
-  })
-  this.willRender.clear()
+   this.navigationBuffer = setTimeout(() => history.replaceState({}, null, value), 120)
+  }
+  this.changes.clear()
+ }
+ static createNode(value) {
+  if (value === "#text") return document.createTextNode("")
+  try {
+   return document.createElement(value)
+  } catch (e) {
+   console.warn(e)
+  }
+  return document.createElement("tag-name-error")
+ }
+ static getSubgroup(group, id) {
+  if (id in group) {
+   const subgroup = group[id].build().value
+   return subgroup
+  }
+  console.warn('404: no subgroup "' + id + '" in group "' + group[Symbol.for("ospath")] + '".')
+ }
+ static syncNode(node, group, id) {
+  tag: {
+   const { value, changed } = group[".tag"]?.build() ?? {}
+   if (node) {
+    if (changed && node !== document.body) {
+     const newNode = this.createNode(value)
+     node.replaceWith(newNode)
+     node = newNode
+    }
+    break tag
+   }
+   node = this.createNode(value)
+   node._id = id
+  }
+
+  content: {
+   const { value, changed } = group["content.txt"]?.build() ?? {}
+   if (value) {
+    if (changed) {
+     if (node instanceof Text) node.nodeValue = value
+     else node.textContent = value
+    }
+    return node
+   }
+  }
+
+  names: {
+   if (node instanceof Text) break names
+   const { value } = group["index.names"]?.build() ?? {}
+   value.forEach((id, i) => {
+    const subgroup = this.getSubgroup(group, id)
+    if (node.childNodes[i]) this.syncNode(node.childNodes[i], subgroup, id)
+    else node.appendChild(this.syncNode(null, subgroup, id))
+   })
+   while (node.childNodes.length > value.length) node.childNodes[node.childNodes.length - 1].remove()
+  }
+
+  return node
  }
  static core = new Part("core", () =>
   Part.group(null, {
@@ -38,27 +94,21 @@ class Part {
    "href.txt": ({ 𝒳 }) => 𝒳.href,
    "path.txt": ({ 𝒳 }) => 𝒳.path,
    "query.txt": ({ 𝒳 }) => 𝒳.query,
-   "index.html"() {
-    return `<h1>hello ${this["host.txt"]}!</h1>${this["codes/index.html"]}`
+   "version.number": () => 64 / 1000,
+   "index.uri": ({ 𝒳 }) => "a b",
+   "index.names": ({ "index.uri": uri }) => uri.split(" "),
+   a: {
+    ".tag": () => "h1",
+    "content.txt": () => "Welcome"
    },
-   codes: {
-    "index.html"() {
-     return [this["href.html"], this["ospath.html"], this["partpath.html"]].join("<br>")
-    },
-    "href.html"() {
-     return `<code>${this["href.txt"]}</code>`
-    },
-    "ospath.html"() {
-     return `<code>${this[Symbol.for("ospath")].join("/")}</code>`
-    },
-    "partpath.html"() {
-     return `<code>${this[Symbol.for("partpath")].join("/")}</code>`
-    }
+   b: {
+    ".tag": ({ "hash.txt": hash }) => (hash ? hash.slice(1) : "p"),
+    "content.txt": ({ "href.txt": href }) => `You've found my website at ${href}.`
    },
    [Symbol.for("part")]: null
   })
  )
- static root = Part.core.build()
+ static root = Part.core.build().value
  constructor(partname, action, group = null) {
   this.partname = partname
   this.action = action
@@ -90,12 +140,15 @@ class Part {
   return this.meta
  }
  build() {
+  let changed = false
+  if (this.servers.size)
+   [...this.servers].forEach(part => {
+    if (part.disruptors.size) part.build()
+   })
+
   if (this.disruptors.size) {
    this.disruptors.clear()
-   if (!this.group) {
-    console.log("no group here...", this)
-   }
-   const thisArg = new Proxy(this.group ?? {}, {
+   const thisArg = new Proxy(this.group ?? Object.create(null), {
      get: (group, request) => {
       if (typeof request === "symbol") {
        const partname = request.description
@@ -152,10 +205,11 @@ class Part {
     this.clients.forEach(client => client.undisrupt(this))
    } else {
     this.cache = value
-    Part.willRender.add(this)
+    Part.changes.add(this)
+    changed = true
    }
   }
-  return this.cache
+  return { value: this.cache, changed }
  }
  import(part) {
   if (!this.servers.has(part)) {
@@ -163,11 +217,7 @@ class Part {
    part.clients.add(this)
    this.servers.add(part)
   }
-  return part.build()
- }
- reflect(render) {
-  const value = this.build()
-  if (Part.willRender.has(this)) render(value)
+  return part.build().value
  }
  disrupt(disruptor = this) {
   this.disruptors.add(disruptor)
@@ -183,12 +233,20 @@ onload = () => {
  Part.mutate(location)
  // Debug testing.
  {
-  const testLocation = (href, ƒ) => setTimeout(() => (Part.mutate(href), ƒ?.()), 2000),
+  const testLocation = (href, ƒ) => setTimeout(() => (Part.mutate(href), ƒ?.()), 500),
    testLoop = () =>
-    testLocation(`../`, () =>
-     testLocation(`${location.origin}/users/?inspector.bool=true.bool&other.test=123.json`, () =>
-      testLocation(`${location.origin}/users/part/?other.test=456.json#dislikes`, () =>
-       testLocation(`#saved`, () => testLocation(`#home`, () => testLocation(`?other.test=789.json`, () => testLoop())))
+    testLocation(`##text`, () =>
+     testLocation(`#h1`, () =>
+      testLocation(`#pre`, () =>
+       testLocation(`#article`, () =>
+        testLocation(`#subtitle`, () =>
+         testLocation(`#i`, () =>
+          testLocation(`#b`, () =>
+           testLocation(`#u`, () => testLocation(`#input`, () => testLocation(`##h3`, () => testLoop())))
+          )
+         )
+        )
+       )
       )
      )
     )
