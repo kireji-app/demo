@@ -5,11 +5,12 @@ const LIB = {
  "path.txt": ({ 𝑥 }) => 𝑥.pathname,
  "query.txt": ({ 𝑥 }) => 𝑥.search,
  "time.number": ({ 𝓉 }) => 𝓉,
+ "fork-data.txt": () => "",
  "max-url.number": () => 2048,
  "theme.color": () => "#333445",
- "version.number": () => 65 / 1000,
+ "version.number": () => 66 / 1000,
  "index.uri": () => "header shelf part-list status",
- "style.css": ({ "theme.color": bg }) => `:host {
+ "style.css": ({ "theme.color": bg, "shelf/height.number": height }) => `:host {
    --system-ui:
    system-ui,
    "Segoe UI",
@@ -29,7 +30,7 @@ const LIB = {
    color: white;
    grid-template:
     "header" auto
-    "shelf" ${42 /* todo: get from shelf */}px
+    "shelf" ${height}px
     "main" 1fr
     "status" 32px / 100%;
   }
@@ -48,12 +49,17 @@ const LIB = {
 
   :host > status- {
    grid-area: status;
-  }
-   
-  button {
-   border: none;
-   cursor: pointer;
   }`,
+ makeNameScroll() {
+  return (groupname, direction = "y") =>
+   ({ target }) => {
+    scroll = target.scrollTop
+    Part.patch𝑥({ [`${groupname}-${direction}`]: scroll })
+   }
+ },
+ makeNameFocus() {
+  return (groupname, focus) => () => Part.patch𝑥({ [groupname + "-focus"]: focus })
+ },
  header: {
   "tag.txt": () => "h1",
   "style.css": () => `:host {
@@ -86,6 +92,8 @@ const LIB = {
    color: white;
   }
   :host > button {
+   border: none;
+   cursor: pointer;
    border-radius: 16px;
    line-height: 0px;
    vertical-align: baseline;
@@ -107,7 +115,9 @@ const LIB = {
     "index.htm": () => "Search"
    },
    "index.uri": () => "field",
-   "tag.txt": () => "search"
+   "tag.txt": () => "search",
+   onfocus: ({ [Symbol.for("groupname")]: name, makeNameFocus }) => makeNameFocus(name, true),
+   onblur: ({ [Symbol.for("groupname")]: name, makeNameFocus }) => makeNameFocus(name, false)
   },
   "add-part": {
    "tag.txt": () => "button",
@@ -125,6 +135,8 @@ const LIB = {
    }
 
    :host > button {
+    border: none;
+    cursor: pointer;
     border-radius: 4px;
     line-height: 32px;
     width: 32px;
@@ -194,35 +206,22 @@ const LIB = {
     font-weight: 200;
    }`
   },
-  "index.uri": () => Array(1000).fill("part-list-item").join(" "),
+  "index.uri": ({ "c:": test }) =>
+   Object.keys(test)
+    .map(partname => `part-list-item#${partname}`)
+    .join(" "),
   onscroll() {
-   return this.scrollNameY
+   return this.makeNameScroll(this[Symbol.for("groupname")])
   },
   "part-list-item": {
-   name: {
-    "content.txt"() {
-     return "example part"
-    }
-   },
-   size: {
-    "content.txt"() {
-     return "1234 ch"
-    }
-   },
+   "name.txt": ({ "fork-data.txt": data }) => data,
+   name: { "content.txt": ({ "name.txt": name }) => name },
+   size: { "content.txt": () => "1234 ch" },
    "index.uri": () => "name size",
    onclick() {
     return () => {
-     const partName = this["part.name"]
-     if (partName.endsWith("/")) {
-      const computedPath = this["path.txt"] + partName
-      this.goto({
-       get "path.txt"() {
-        return computedPath
-       }
-      })
-     } else {
-      console.warn("open " + partName + " now")
-     }
+     if (this["name.txt"].endsWith("/")) Part.patch𝑥({ path: this["path.txt"] + this["name.txt"] })
+     else Part.patch𝑥({ part: this["name.txt"] })
     }
    },
    "style.css"() {
@@ -273,7 +272,7 @@ const LIB = {
    }`
   },
   "address-usage": {
-   "content.txt": () => "TBD"
+   "content.txt": ({ "max-url.number": max, "href.txt": href }) => Math.trunc((href.length * 1000) / max) / 10 + "%"
   },
   address: {
    "content.txt": ({ "href.txt": h }) => h
@@ -289,9 +288,9 @@ const LIB = {
 }
 class Part {
  static changes = new Set()
- static group(parent, delta, ospath = ["c:"]) {
+ static group(parent, delta, ospath = ["c:"], record) {
   const partdefmap = Object.assign(
-   Object.create(null),
+   {},
    parent?.[Symbol.for("partdefmap")] ?? {},
    {
     "index.uri"() {},
@@ -306,10 +305,23 @@ class Part {
    },
    delta
   )
+  if (record) {
+   console.warn("impliment record here", record)
+  }
   const group = {
-   [Symbol.for("partdefmap")]: partdefmap,
+   // todo: put these onto a meta group, just like we do with parts.
    [Symbol.for("ospath")]: ospath,
-   [Symbol.for("parent")]: parent
+   [Symbol.for("parent")]: parent,
+   [Symbol.for("groupname")]: ospath.at(-1),
+   [Symbol.for("partdefmap")]: partdefmap,
+   [Symbol.for("fork")](data) {
+    if (Symbol.for(data) in this) return this[Symbol.for(data)]
+    console.warn("forking", data)
+    return (this[Symbol.for(data)] = Part.group(group, { ...delta, "fork-data.txt": () => data.slice(1) }, [
+     ...ospath,
+     data
+    ]))
+   }
   }
   for (const partname in partdefmap) {
    if (typeof partname === "symbol") continue
@@ -320,12 +332,22 @@ class Part {
   }
   return group
  }
- static mutate(href) {
+ static set𝑥(href) {
   this.url = new URL(href, this.url)
   this.𝑥.disrupt()
-  // this.syncNode(document.body, this.root, "c:")
   this.syncAddressbar()
-  // this.changes.clear()
+ }
+ static patch𝑥(record) {
+  for (const key in record) {
+   this.url.searchParams.set(key, record[key])
+   this.url.searchParams.sort()
+  }
+
+  // todo: find out why some things don't update without this line
+  this.url = new URL(this.url)
+
+  this.𝑥.disrupt()
+  this.syncAddressbar()
  }
  static tick() {
   Part.now = Date.now()
@@ -348,13 +370,6 @@ class Part {
    // console.warn('Invalid tag name "' + value + '".')
   }
   return document.createElement("invalid-tag")
- }
- static getSubgroup(group, id) {
-  if (id in group) {
-   const subgroup = group[id].build().value
-   return subgroup
-  }
-  console.warn('404: no subgroup "' + id + '" in group "' + group[Symbol.for("ospath")] + '".')
  }
  static syncNode(node, group, id) {
   tag: {
@@ -434,11 +449,27 @@ class Part {
    const { value } = group["index.children"]?.build() ?? {}
    if (value) {
     value.forEach((id, i) => {
-     const subgroup = this.getSubgroup(group, id)
-     if (container.childNodes[i]) this.syncNode(container.childNodes[i], subgroup, id)
-     else container.appendChild(this.syncNode(null, subgroup, id))
+     const index = id.indexOf("#"),
+      groupname = index >= 0 ? id.slice(0, index) : id,
+      hash = index >= 0 ? id.slice(index) : null
+     if (!(groupname in group))
+      return console.warn(`404: no subgroup "${groupname}" in group "${group[Symbol.for("ospath")].join("/")}".`, {
+       group,
+       groupname
+      })
+     let subgroup = group[groupname].build().value
+     if (hash) subgroup = subgroup[Symbol.for("fork")](hash)
+     if (container.childNodes[i]) this.syncNode(container.childNodes[i], subgroup, groupname)
+     else container.appendChild(this.syncNode(null, subgroup, groupname))
     })
     while (container.childNodes.length > value.length) container.childNodes[container.childNodes.length - 1].remove()
+   }
+  }
+
+  events: {
+   for (const eventname of ["click", "scroll", "focus", "blur", "pointerdown", "keydown"]) {
+    const { value, changed } = group["on" + eventname]?.build() ?? {}
+    if (changed) node["on" + eventname] = value
    }
   }
 
@@ -447,7 +478,7 @@ class Part {
  static syncAddressbar() {
   if (this.navigationBuffer) clearTimeout(this.navigationBuffer)
   if (!this.navigationAutoCapture) this.navigationAutoCapture = Date.now()
-  else if (Date.now() - this.navigationAutoCapture > 1000) {
+  else if (Date.now() - this.navigationAutoCapture > 240) {
    this.setAddressbar()
    return
   }
@@ -504,12 +535,13 @@ class Part {
        const partname = request.description
        group = this.meta
        if (partname in group) return this.import(group[partname])
-       return console.warn('404: no part "' + partname + '" in meta group "' + group[Symbol.for("ospath")] + '"', {
+       return console.warn(`404: no part "${partname}" in meta group "${group[Symbol.for("ospath")].join("/")}".`, {
         group,
         request
        })
       }
       if (["𝓉", "𝑥"].includes(request)) return this.import(Part[request])
+      if (request === "c:") return this.import(Part.core)
       const path = request.split("/"),
        partname = path.pop()
       if (path.length) {
@@ -528,7 +560,7 @@ class Part {
           group = this.import(parentGroup[Symbol.for("part")])
           continue
          }
-         return console.warn('404: no parent for group "' + group[Symbol.for("ospath")] + '".', request)
+         return console.warn(`404: no parent for group "${group[Symbol.for("ospath")]}".`, { request })
         }
        }
        while (path.length) {
@@ -537,15 +569,15 @@ class Part {
          group = this.import(group[groupname])
          continue
         }
-        return console.warn(
-         '404: no subgroup "' + groupname + '" in group "' + group[Symbol.for("ospath")] + '".',
+        return console.warn(`404: no subgroup "${groupname}" in group "${group[Symbol.for("ospath")].join("/")}".`, {
+         group,
          request
-        )
+        })
        }
       }
       if (partname in group) return this.import(group[partname])
 
-      return console.warn('404: no part "' + partname + '" in group "' + group[Symbol.for("ospath")] + '"', {
+      return console.warn(`404: no part "${partname}" in group "${group[Symbol.for("ospath")].join("/")}".`, {
        group,
        request
       })
@@ -582,10 +614,10 @@ class Part {
  }
 }
 onload = () => {
- Part.mutate(location)
+ Part.set𝑥(location)
  Part.tick(Date.now())
  /* Debug.
-  const ƒ = (href, ƒ) => requestAnimationFrame(() => (Part.mutate(href), ƒ?.()), 1000),
+  const ƒ = (href, ƒ) => requestAnimationFrame(() => (Part.set𝑥(href), ƒ?.()), 1000),
    testLoop = () =>
     ƒ(`##text`, () =>
      ƒ(`#h1`, () =>
