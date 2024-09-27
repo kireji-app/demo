@@ -1,9 +1,7 @@
+# All content copyright 2024 Eric Augustinowicz.
+# You do not have permission to see, use, access, copy or view this file in any way.
+# If you can see this, an error has occured or you have illegally accessed my data.
 AddCharset utf-8 .js
 ErrorDocument 404 /index.php
 ErrorDocument 403 /index.php
 Options -Indexes
-
-RewriteEngine on
-RewriteCond %{REMOTE_ADDR} !^(35\.138\.226\.122)
-RewriteCond %{REQUEST_URI} ^/?script.js$
-RewriteRule ^ - [L,R=403]
