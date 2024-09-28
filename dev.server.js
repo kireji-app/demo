@@ -1,61 +1,84 @@
-console.log(
- new (class {
-  constructor(x) {
-   console.log()
-   this["\u{e000}"](x)
-  }
-  // e000-f8ff = Routines (6,400).
-  "\u{e000}"(x) {
-   // The primary routine (all code points) passes x to a subroutine depending on what region the first code point is in.
-   return this[String.fromCodePoint(0xe001 + [...("\u{f8ff}\u{ffffd}\u{107fff}" + [...x][0])].sort((a, b) => a.localeCompare(b)).indexOf([...x][0]))](x)
-  }
-  "\u{e001}"(x) {
-   // Subroutine #1 (up to f8ff) uses the first letter of x to retrieve a routine, uses the rest of x to retrieve inputs, and calls the routine on the inputs.
-   return this[x[0]](...[...x.slice(1)].map(x => this["\u{e000}"](x)))
-  }
-  "\u{e002}"(x) {
-   // Subroutine #2 (up to ffffd) returns the constant at x.
-   return this[x]
-  }
-  "\u{e003}"(x) {
-   // Subroutine #3 (up to 107fff) calls the primary routine on the string at x.
-   return this["\u{e000}"](this[x])
-  }
-  "\u{e004}"(x) {
-   // Subroutine #4 (up to 10fffd) calls the primary routine on every code point of the string at x.
-   return [...this[x]].map(x => this["\u{e000}"](x))
-  }
-  "\u{e005}"(a, b) {
-   return a[b]
-  }
-  "\u{e006}"(a, b) {
-   return a(b)
-  }
-  "\u{e007}"(a, b, c) {
-   return (a[b] = c)
-  }
-  // f0000-f7fff = Native constants (32,768).
-  "\u{f0000}" = false
-  "\u{f0001}" = true
-  "\u{f0002}" = globalThis
-  "\u{f0003}" = console
-  // f8000-ffffd = designer constants (32,766).
-  "\u{f8000}" = "remoteScript"
-  "\u{f8001}" = "environment"
-  "\u{f8002}" = "common"
-  // 100000-107fff = Routine calls. (32,768).
-  "\u{100000}" = "\u{e007}\u{f0002}\u{f8000}\u{f0001}"
-  "\u{100001}" = "\u{e007}\u{f0002}\u{f8001}\u{f8002}"
-  // 108000-10fffd = Routine call sequences (32,766).
-  "\u{108000}" = "\u{100000}\u{100001}"
- })("\u{108000}")
-)
+class Part {
+ static cache = {}
+ static core = new Part("\u{108000}")
+ constructor(x) {
+  if (x in Part.cache) return Part.cache[x]
+  Part.cache[x] = this
+  // The primary routine (all code points) passes x to a subroutine depending on what region the first code point is in.
+  this.value = this[String.fromCodePoint(0xe000 + [...("\u{f8ff}\u{ffffd}\u{107fff}" + [...x][0])].sort((a, b) => a.localeCompare(b)).indexOf([...x][0]))](x)
+ }
 
-console.log({ remoteScript, environment })
+ // e000-f8ff = Routines (6,400).
+ "\u{e000}"(x) {
+  // Subroutine #1 (up to f8ff) uses the first letter of x to retrieve a routine, uses the rest of x to retrieve inputs, and calls the routine on the inputs.
+  return this[x[0]](...[...x.slice(1)].map(x => new Part(x).value))
+ }
+ "\u{e001}"(x) {
+  // Subroutine #2 (up to ffffd) returns the constant at x.
+  return this[x]
+ }
+ "\u{e002}"(x) {
+  // Subroutine #3 (up to 107fff) calls the primary routine on the string at x.
+  return new Part(this[x]).value
+ }
+ "\u{e003}"(x) {
+  // Subroutine #4 (up to 10fffd) calls the primary routine on every code point of the string at x.
+  return Object.fromEntries([...this[x]].map(x => [x, new Part(x)]))
+ }
+ "\u{e004}"(a, b) {
+  return a[b]
+ }
+ "\u{e005}"(a, b) {
+  return a(b)
+ }
+ "\u{e006}"(a, b, c) {
+  return (a[b] = c)
+ }
+ "\u{e007}"() {
+  return {}
+ }
+ "\u{e008}"(a, b) {
+  return a / b
+ }
+
+ // f0000-f7fff = Native constants (32,768).
+ "\u{f0000}" = false
+ "\u{f0001}" = true
+ "\u{f0002}" = globalThis
+ "\u{f0003}" = console
+
+ // f8000-ffffd = Designer constants (32,766).
+ "\u{f8000}" = "remoteScript"
+ "\u{f8001}" = "environment"
+ "\u{f8002}" = "common"
+ "\u{f8003}" = "version"
+ "\u{f8004}" = 80
+ "\u{f8005}" = "pool"
+ "\u{f8006}" = 1000
+
+ // 100000-107fff = Routine calls. (32,768).
+ "\u{100000}" = "\u{e006}\u{f0002}\u{f8000}\u{f0001}"
+ "\u{100001}" = "\u{e006}\u{f0002}\u{f8001}\u{f8002}"
+ "\u{100002}" = "\u{e006}\u{f0002}\u{f8003}\u{f8004}"
+ "\u{100003}" = "\u{e006}\u{f0002}\u{f8005}\u{100004}"
+ "\u{100004}" = "\u{e008}\u{f8004}\u{f8006}"
+
+ // 108000-10fffd = Routine call sequences (32,766).
+ "\u{108000}" = "\u{100000}\u{100001}\u{100002}\u{100003}"
+}
+
+console.log({
+ core: Part.core,
+ remoteScript,
+ environment,
+ version,
+ pool
+})
+
 /*
 var remoteScript = true,
  environment = "common",
- version = 78 / 1000,
+ version = 80 / 1000,
  pool = {},
  logframe = "padding:3px 6px;overflow:hidden;white-space:nowrap;padding-right:100%;border-collapse:collapse",
  maskdevSubdomain = url => {
