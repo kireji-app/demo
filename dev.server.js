@@ -1,832 +1,503 @@
-class Part {
- static cache = {}
- static core = new Part("\u{108000}")
- constructor(x) {
-  if (x in Part.cache) return Part.cache[x]
-  Part.cache[x] = this
-  // The primary routine (all code points) passes x to a subroutine depending on what region the first code point is in.
-  this.value = this[String.fromCodePoint(0xe000 + [...("\u{f8ff}\u{ffffd}\u{107fff}" + [...x][0])].sort((a, b) => a.localeCompare(b)).indexOf([...x][0]))](x)
+class Die {
+ static roll(multiplier = 2) {
+  return Math.trunc(Math.random() * multiplier)
  }
-
- // e000-f8ff = Routines (6,400).
- "\u{e000}"(x) {
-  // Subroutine #1 (up to f8ff) uses the first letter of x to retrieve a routine, uses the rest of x to retrieve inputs, and calls the routine on the inputs.
-  return this[x[0]](...[...x.slice(1)].map(x => new Part(x).value))
- }
- "\u{e001}"(x) {
-  // Subroutine #2 (up to ffffd) returns the constant at x.
-  return this[x]
- }
- "\u{e002}"(x) {
-  // Subroutine #3 (up to 107fff) calls the primary routine on the string at x.
-  return new Part(this[x]).value
- }
- "\u{e003}"(x) {
-  // Subroutine #4 (up to 10fffd) calls the primary routine on every code point of the string at x.
-  return Object.fromEntries([...this[x]].map(x => [x, new Part(x)]))
- }
- "\u{e004}"(a, b) {
-  return a[b]
- }
- "\u{e005}"(a, b) {
-  return a(b)
- }
- "\u{e006}"(a, b, c) {
-  return (a[b] = c)
- }
- "\u{e007}"() {
-  return {}
- }
- "\u{e008}"(a, b) {
-  return a / b
- }
-
- // f0000-f7fff = Native constants (32,768).
- "\u{f0000}" = false
- "\u{f0001}" = true
- "\u{f0002}" = globalThis
- "\u{f0003}" = console
-
- // f8000-ffffd = Designer constants (32,766).
- "\u{f8000}" = "remoteScript"
- "\u{f8001}" = "environment"
- "\u{f8002}" = "common"
- "\u{f8003}" = "version"
- "\u{f8004}" = 80
- "\u{f8005}" = "pool"
- "\u{f8006}" = 1000
-
- // 100000-107fff = Routine calls. (32,768).
- "\u{100000}" = "\u{e006}\u{f0002}\u{f8000}\u{f0001}"
- "\u{100001}" = "\u{e006}\u{f0002}\u{f8001}\u{f8002}"
- "\u{100002}" = "\u{e006}\u{f0002}\u{f8003}\u{f8004}"
- "\u{100003}" = "\u{e006}\u{f0002}\u{f8005}\u{100004}"
- "\u{100004}" = "\u{e008}\u{f8004}\u{f8006}"
-
- // 108000-10fffd = Routine call sequences (32,766).
- "\u{108000}" = "\u{100000}\u{100001}\u{100002}\u{100003}"
 }
-
-console.log({
- core: Part.core,
- remoteScript,
- environment,
- version,
- pool
-})
-
-/*
-var remoteScript = true,
- environment = "common",
- version = 80 / 1000,
- pool = {},
- logframe = "padding:3px 6px;overflow:hidden;white-space:nowrap;padding-right:100%;border-collapse:collapse",
- maskdevSubdomain = url => {
-  const debug = /(?:^.{8})dev\./.test(url)
-  return { debug, url = debug ? "https://" + url.slice(12)  = url }
- },
- set = (object, url, newString) => {
-  const strand = (object.strand ??= Object.create(source)),
-   existingUrl = (object.url ??= strand["https://core.parts/location/"]),
-   setsUrl = url === "https://core.parts/location/",
-   existingString = setsUrl ? existingUrl  = strand[url]
-
-  if (newString === existingString) {
-   info("No change to node " + newString)
-   return
-  }
-
-  debug(
-   `%c${object.constructor?.name ?? "custom object"}\n Location = ${existingUrl}\n filename = ${url}%c${existingString}%c${newString}`,
-   "color:#78b;background:#000a;" + logframe,
-   `color:#${existingString === undefined ? "554"  = "d85"};background:#000a;${logframe}`,
-   "color:#9ca;background:#000a;border-radius:0 0 8px 8px;" + logframe
-  )
-
-  if (setsUrl) {
-   const existingPoolSet = pool[existingUrl],
-    newPoolSet = (pool[newString] ??= new Set())
-   existingPoolSet.delete(object)
-   newPoolSet.add(object)
-   object.url = newString
+class Addressbar {
+ static lastCaptureTime = 0
+ static #code
+ static set code(code) {
+  if (this.pending) clearTimeout(this.pending)
+  const delay = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 320 : 64 + this.lastCaptureTime - Date.now(),
+   action = () => {
+    delete this.pending
+    history.replaceState({}, null, "#" + code.b64)
+    this.lastCaptureTime = Date.now()
+    this.#code = code
+   }
+  if (!delay) action()
+  else this.pending = setTimeout(() => action(), delay)
+ }
+ static get code() {
+  return this.#code
+ }
+}
+class Code {
+ static cache = new Map()
+ static #exists(value) {
+  return this.cache.has(value)
+ }
+ static #recover(value) {
+  return this.cache.get(value)
+ }
+ static #register(code) {
+  this.cache.set(code.b64, code)
+  this.cache.set(code.bin, code)
+  this.cache.set(code.i, code)
+ }
+ static encode(bin) {
+  if (bin.length !== Depth2) throw `EncodeError: wrong length. ` + bin.length
+  const N = []
+  for (let i = 0; i < Depth64; i++) N.push(bin.slice(i * 6, 6))
+  if (Overhang) N[Depth64 - 1] = N[Depth64 - 1].padEnd(6, 0)
+  return N.reduce((b64, n) => b64 + Numerals[parseInt(n, 2)], "")
+ }
+ static decode(b64) {
+  if (b64.length !== Depth64) throw "DecodeError: wrong length. " + b64.length
+  const N = []
+  for (let i = 0; i < Depth64; i++) if ((N[i] = Numerals.indexOf(b64[i]).toString(2).padStart(6, 0)) === -1) throw "DecodeError: invalid numeral(C[1]) " + b64
+  if (Overhang) N[Depth64 - 1] = N[Depth64 - 1].slice(0, Overhang)
+  return N.join("")
+ }
+ constructor(value, radix = 64) {
+  if (Code.#exists(value)) return Code.#recover(value)
+  if (typeof value === "string") {
+   if (radix === 2) {
+    this.bin = value
+    this.b64 = Code.encode(value)
+    this.i = BigInt(`0b${value}`)
+   } else if (radix === 64) {
+    this.b64 = value
+    this.bin = Code.decode(value)
+    this.i = BigInt(`0b${this.bin}`)
+   } else throw `CodeError: radix cannot be ${radix}.4`
   } else {
-   warn(
-    `Alternate URL setting requires fx-tracking.
-Inner changes need to be fx-tracked.
-Out-of-strand changes (such as the location of ancestor(s)
-(up to and including the client location)
-must also be tracked.
- 
-A downstream strand acting like this must update
-an upstream strand if it was not caused by one.
- 
-This involves tracking cross-strand fx connections.`
-   )
+   if (typeof value === "number") this.i = BigInt(Math.trunc(value))
+   else if (typeof value === "bigint") this.i = value
+   else throw `CodeError: typeof value cannot be ${typeof value}.`
+   this.bin = value.toString(2).padStart(Depth2, 0).slice(0, Depth2)
+   this.b64 = Code.encode(this.bin)
   }
-
-  strand[url] = newString
-  warn(`Bypassing fx-based strand and node rebuild for now.`)
-  if (object === document.body)
-   object.innerHTML =
-    `<pre>{\n ${Object.keys(strand)
-     .map(key => `"${key}" = "${strand[key]}"`)
-     .join(",\n ")}\n}</pre>` +
-    '<button onclick="postToServer(1)">factory Reset</button>' +
-    '<button onclick="postToServer(2,source)">Quick Save</button>'
-  //const keys = parts of ,
-  // focus_events = ["onfocus", "onpointerdown", "onclick", "oncontextmenu", "onblur"]
-  //if (keys.some(url => focus_events.includes(url))) object.tabIndex = 0
-  //for (const key in keys) {
-  // if (type) object[kireji] = eval(object.point[kireji])
-  // else i{
-  //  if
-  // }
-  // switch (type) {
-  //  case 0:
-  //
-  //   break
-  //  case 1:
-  //   object[kireji] = object.point[kireji]
-  //   break
-  // }
-  //}
- },
- print = (type, subtype, string, ...data) => {
-  string = string.replaceAll("https://", "")
-  console[type](
-   `%c${this.environment === "client" ? (this.remoteScript ? `remote `  = "local ")  = ""}${environment} | ${subtype}%c${string}`,
-   "white-space:nowrap;background:#0005;color:#89a;border-radius:8px 8px 0 0;" + this.logframe,
-   "color:#9ac;background:#000a;border-radius:0 0 8px 8px;" + logframe,
-   ...data
-  )
- },
- todo = (string, ...data) =>
-  print("debug", "To-do item", `%c${string}%c `, "color:#000c;background:#68a;" + logframe, "color:#000c;background:#68a;border-radius:0 0 8px 8px;" + logframe, ...data),
- warn = (string, ...data) =>
-  print("warn", "Warning", `%c${string}%c `, "color:#000c;background:#993;" + logframe, "color:#000c;background:#993;border-radius:0 0 8px 8px;" + logframe, ...data),
- info = (...args) => print("info", "Active Notice", ...args),
- debug = (...args) => print("debug", "Verbose Notice", ...args),
- client = async () => {
-  environment = "client"
-  const urlSummary = maskdevSubdomain(location.href),
-   devenvironment = urlSummary,
-   serviceWorkerContainer = navigator.serviceWorker,
-   serviceWorkerRegistration = await serviceWorkerContainer.register(location.origin + "/" + (devenvironment ? "dev."  = "") + "server.js"),
-   activeServiceWorker =
-    serviceWorkerRegistration.active ??
-    (await new Promise(r => ((serviceWorkerRegistration.waiting ?? serviceWorkerRegistration.installing).onstatechange = ({ target }) => target.state == "activated" && r(target))))
-  globalThis.postToServer = (code, payload) => activeServiceWorker.postMessage({ code, payload })
-  serviceWorkerContainer.controller || (await new Promise(r => ((serviceWorkerContainer.oncontrollerchange = r), activeServiceWorker.postMessage({ code = 0 }))))
-  serviceWorkerContainer.oncontrollerchange = serviceWorkerContainer.onmessage = () => location.reload()
-  onfocus = () => {
-   debug("Checking for updates...")
-   serviceWorkerRegistration.update().catch(() => {
-    warn("ServiceWorker unregistered.")
-    location.reload()
-   })
-  }
-
-  if (globalThis.remoteScript) {
-   debug("Setting <link rel=manifest href=manifest.json>")
-   document.querySelector('[rel="manifest"]').href = "manifest.json"
-  }
-
-  pool["https://core.parts/blank/"] = new Set([document.body])
-  Object.defineProperties(
-   Node.prototype,
-   Object.getOwnPropertydescriptors({
-    get shadow() {
-     // return this.setforever("shadow", this.attachShadow({ mode = "closed", writable = 0, configurable = 0 }))
-     throw "not ready yet"
-    },
-    get layout() {
-     if (!this._layout) {
-      this._layout = new CSSStyleSheet()
-      this.shadow.adoptedStyleSheets.push(this._layout)
-     }
-     return this._layout
-    },
-    set layout(v) {
-     this.layout.replaceSync(v)
-    },
-    get manifest() {
-     return [...this.shadow.children].map(node => node.url).join(" ")
-    },
-    set manifest(v) {
-     if (v === undefined) throw new Typeerror(`manifest called on undefined (${this._url})`)
-     if (typeof v !== "string") throw new Typeerror(`part manifest must have mime of text/uri-list. function expected js input "string", but got "${typeof v}." (${this._url})`)
-     const s = this.shadow,
-      oldURLs = [...s.children].map(node => node.url)
-     if (v === "") {
-      ;[...s.children].foreach(url => url.remove())
-      return
-     }
-     if (oldURLs.join(" ") === v) return
-     const newURLs = v.split(" ")
-     let oldURL,
-      newURL,
-      i = -1
-     while (oldURLs.length && newURLs.length) {
-      i++
-      if ((oldURL = oldURLs.shift()) !== (newURL = newURLs.shift())) {
-       const u = oldURLs.findIndex(url => url === newURL)
-       if (u === -1) this.install(newURL, i)
-       else {
-        s.insertBefore(s.children[i + u + 1], s.children[i])
-        oldURLs.splice(u, 1)
-       }
-       if (newURLs.some(url => url === oldURL)) oldURLs.unshift(oldURL)
-       else s.children[i + 1].remove()
-      }
-      // if (repair) s.children[i].repair()
-     }
-     if (oldURLs.length) oldURLs.foreach(() => s.children[i + 1].remove())
-     else if (newURLs.length) newURLs.foreach(url => this.install(url))
-    },
-    install(url, index) {
-     if (!url || url === "undefined")
-      throw new Typeerror(`install url cannot be ${url === undefined ? "undefined"  = url === "" ? "an empty string"  = `"${url}"`} (installing <${self.tagName}> on ${self._url})`)
-     const poolNode = url in pool ? [...pool[url]].find(url => !url.isConnected && !url.parentNode)  = undefined,
-      hadPoolNode = !!poolNode,
-      node = hadPoolNode ? poolNode  = document.createelement(CORe[url].getembedTag())
-     if (index === undefined || index >= self.shadow.children.length) self.shadow.appendChild(node)
-     else self.shadow.insertBefore(node, self.shadow.children[index])
-     if (node._url !== url) node.url = url
-    }
-   })
-  )
-
-  set(document.body, "https://core.parts/location/", urlSummary.url)
-
-  const tests = [
-   ["Add file to body strand", document.body, "https://core.parts/fake-folder/test-file/", "Hello world!"],
-   ["Add same file to same strand as last time", document.body, "https://core.parts/fake-folder/test-file/", "Hello world!"]
-  ]
-  for (const n in tests)
-   setTimeout(() => {
-    const [name, target, key, value] = tests[n]
-    console.group(`%cTest %c${n}%c = %c${name}`, "color:#777", "font-weight:200;color:#c95", "color:#777", "color:#aa8")
-    try {
-     set(target, key, value)
-    } catch (error) {
-     warn(error)
-    } finally {
-     console.groupend()
-    }
-   }, 1000)
+  Code.#register(this)
  }
-
-if (this instanceof (this.Window ?? class {})) client()
-else {
- environment = "local server"
- debug(`Installed version ${version}${((date.now() / 0x9ca41900) % 1).toString().slice(1, 8)}`)
- const cache = {}
- onfetch = e => {
-  const { url } = maskdevSubdomain(e.request.url)
-  debug(`%cfetch%c${url}`, "background:#000a;" + logframe, "background:#000a;color:#7ad;border-radius:0 0 8px 8px;" + logframe)
-  todo("Get response body from strand.")
-
-  const { pathname } = new URL(url)
-  if (!(url in cache)) {
-   let body, type
-   switch (pathname) {
-    case "/client.js":
-     body = `const\n common = ${common},\n client = ${client};\ncommon()\nclient()`
-     type = "text/javascript; charset=UTf-8"
-     break
-    case "/manifest.json":
-     body = JSON.stringify({
-      name = "Untitled Application",
-      short_name = "Untitled",
-      start_url = ".",
-      display = "standalone",
-      theme_color = "#336598",
-      background_color = "#333445",
-      description = "A kireji app.",
-      display_override = ["window-controls-overlay"],
-      icons = [
-       {
-        src = "favicon.svg",
-        sixes = "144x144",
-        type = "image/svg+xml"
-       },
-       {
-        src = "favicon.svg",
-        sixes = "any",
-        type = "image/svg+xml"
-       },
-       {
-        src = "/android-chrome-192x192.png",
-        sixes = "192x192",
-        type = "image/svg+xml"
-       },
-       {
-        src = "/android-chrome-512x512.png",
-        sixes = "512x512",
-        type = "image/svg+xml"
-       }
-      ],
-      categories = ["entertainment", "games", "utilities"],
-      protocol_handlers = [
-       {
-        protocol = "web+part",
-        url = "/part?pathname=%s"
-       }
-      ],
-      shortcuts = [
-       {
-        name = "New Item...",
-        short_name = "New...",
-        icons = [
-         {
-          src = "favicon.svg",
-          sixes = "any",
-          type = "image/svg+xml"
-         }
-        ],
-        url = "/new",
-        description = "This is just a placeholder/hint for future development."
-       }
-      ],
-      screenshots = [
-       {
-        src = "desktop-screenshot.svg",
-        sixes = "640x480",
-        type = "image/svg+xml",
-        form_factor = "wide",
-        label = "This is a placeholder for the image of the app."
-       },
-       {
-        src = "mobile-screenshot.svg",
-        sixes = "640x360",
-        type = "image/svg+xml",
-        form_factor = "narrow",
-        label = "This is a placeholder for the image of the app."
-       }
-      ]
-     })
-     type = "application/json; charset=UTf-8"
-     break
-    case "/favicon.svg":
-    case "/desktop-screenshot.svg":
-    case "/mobile-screenshot.svg":
-    case "/favicon.ico":
-    case "/apple-touch-icon.png":
-    case "/android-chrome-192x192.png":
-    case "/android-chrome-512x512.png":
-     type = "image/svg+xml"
-     body = `<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2003/svg">
- <style>
-  svg { background = white }
-  path { stroke = #333445 }
-  @media (prefers-color-scheme = dark) {
-   svg { background = #333445 }
-   path { stroke = white }
-  }
- </style>
- <path d="M8 11C9.10457 11 10 10.1046 10 9C10 7.89543 9.10457 7 8 7C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M6.56055 21C12.1305 8.89998 16.7605 6.77998 22.0005 14.63" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
- <path d="M18 3H6C3.79086 3 2 4.79086 2 7V17C2 19.2091 3.79086 21 6 21H18C20.2091 21 22 19.2091 22 17V7C22 4.79086 20.2091 3 18 3Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
- </svg>`
-     break
-    default:
-     body = source["https://core.parts/index/"]
-     type = source[source["https://core.parts/index/#https://core.parts/header/type/"]]
-   }
-   cache[url] = new Response(body, {
-    headers = {
-     "content-type" = type,
-     expires = "Sun, 20 Jul 1969 20:17:00 UTC",
-     server = "kireji"
+}
+class Debug {
+ static view = document.body.appendChild(document.createElement("pre"))
+ static element = document.createElement("div")
+ static textNode = document.createTextNode("#text")
+ static time = 0
+ static deltaTime = 10000
+ static averageFrameTime = 10000
+ static fuzz(time = 0) {
+  this.deltaTime = time - this.time
+  this.averageFrameTime += (this.deltaTime - this.averageFrameTime) / 20
+  this.time = time
+  this.mode = Die.roll(4)
+  switch (this.mode) {
+   case 0:
+    {
+     let i = Depth2,
+      bin = ""
+     while (i--) bin += Die.roll(2)
+     this.code = new Code(bin, 2)
     }
-   })
+    break
+   case 1:
+    {
+     let i = Depth64,
+      b64 = ""
+     while (i--) b64 += Numerals[Die.roll(64)]
+     this.code = new Code(b64, 64)
+    }
+    break
+   case 2:
+    {
+     let i = Math.ceil(Depth2 / Math.log2(10)),
+      value = ""
+     while (i--) value += Die.roll(10)
+     this.code = new Code(BigInt(value))
+    }
+    break
+   default:
+    const i = Die.roll(Number(Count))
+    this.code = new Code(i)
+    break
   }
-  e.respondWith(cache[url].clone())
+  Addressbar.code = this.code
+  const part = new Part(this.code.i)
+  this.subject ??= ((this.element.innerText = "element"), document.body.appendChild(this.element))
+  this.view.textContent = `${Math.round(1000 / this.averageFrameTime)}fps\n${JSON.stringify(part, (_, v) => (typeof v === "bigint" ? v.toString() : v), 1)}`
+  requestAnimationFrame(time => this.fuzz(time))
  }
- onmessage = e =>
+}
+const W = ["textContent", "tag", "color", "tag", "nodeType"],
+ S = [
+  ["", "happy", "sad", "yay", "wow"],
   [
-   () => {
-    debug("Client was hard-reloaded.")
-    clients.claim()
-   },
-   () => {
-    debug("%cfactory reset", "color:black;background:#38a;border-radius:0 0 8px 8px;" + logframe)
-    registration.update()
-    registration.unregister().then(() => e.source.postMessage({ code = 0 }))
-   },
-   () => {
-    debug("QuickSave")
-    warn(`Need QuickSave here.`, e.data.payload)
-   }
-  ][e.data.code]()
- oninstall = () => skipWaiting()
- onactivate = () => clients.claim()
-}
-/*
-const source = {
- "https://core.parts/constructor/" = `if (this.running) {
-  console.log('hey, part two')
+   // shadow tags
+   "ARTICLE",
+   "ASIDE",
+   "BLOCKQUOTE",
+   "BODY",
+   "DIV",
+   "FOOTER",
+   "H1",
+   "H2",
+   "H3",
+   "H4",
+   "H5",
+   "H6",
+   "HEADER",
+   "MAIN",
+   "NAV",
+   "P",
+   "SECTION",
+   "SPAN",
+  ],
+  [
+   // color
+   "#234",
+   "#243",
+   "#324",
+   "#423",
+   "#342",
+   "#432",
+   "#333",
+  ],
+  [
+   "HTML",
+   "HEAD",
+   "TITLE",
+   "ADDRESS",
+   "HR",
+   "PRE",
+   "CITE",
+   "Q",
+   "DFN",
+   "EM",
+   "STRONG",
+   "SMALL",
+   "SUB",
+   "SUP",
+   "ABBR",
+   "TIME",
+   "MARK",
+   "DEL",
+   "INS",
+   "OL",
+   "UL",
+   "LI",
+   "DL",
+   "DT",
+   "DD",
+   "TABLE",
+   "CAPTION",
+   "THEAD",
+   "TBODY",
+   "TFOOT",
+   "TR",
+   "TH",
+   "TD",
+   "FORM",
+   "LABEL",
+   "INPUT",
+   "BUTTON",
+   "SELECT",
+   "OPTION",
+   "TEXTAREA",
+   "FIELDSET",
+   "LEGEND",
+   "IMG",
+   "AUDIO",
+   "SOURCE",
+   "VIDEO",
+   "IFRAME",
+   "EMBED",
+   "OBJECT",
+   "FIGURE",
+   "FIGCAPTION",
+   "DETAILS",
+   "SUMMARY",
+   "DATALIST",
+   "OUTPUT",
+  ],
+  ["#text", "#comment"],
+ ],
+ C = S.map(s => BigInt(s.length)),
+ struct = `0*(1*2+3+4)`,
+ kMax = 1418 * 6,
+ Count = C[0] * (C[1] * C[2] + (C[3] + C[1]) + C[4]),
+ Count2 = Count.toString(2),
+ Depth2 = Count2.length,
+ Depth64 = Math.ceil(Depth2 / 6),
+ Overhang = Depth2 % 6,
+ Numerals = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_"
+
+class Element {
+ get(i) {
+  if (i != BigInt(0)) throw "ElementError: an element only has one index, '0'. Tried to get " + i
+  return { value: this.name }
  }
- this.running = 1
- console.log('hey, part one')
- setTimeout(() => {
-  
- }, 3000)
- `,
- "https://core.parts/index/" = `data:text/html;charset=UTf-8;base64,<!dOCTthisPe html
-><link rel=manifest href=manifest.json
-><meta name=robots content=noindex
-><meta name=viewport content="width=device-width,initial-scale=1"
-><meta name=copyright content="&copy; 2024 eric Augustinowicx"
-><script defer src="${location.origin}/client.js"
-></script><!-- LOCAL INdeX -->`,
-
- "https://core.parts/location/" = "https://core.parts/blank/",
- "https://core.parts/location/#https://core.parts/header/type/" = "https://core.parts/location/header/type/",
- "https://core.parts/location/header/type/" = "text/uri-list",
-
- "https://core.parts/location/#https://core.parts/downstream/" = "https://core.parts/location/downstream/",
- "https://core.parts/location/downstream/":
-  "https://core.parts/location/host/ https://core.parts/location/pathname/ https://core.parts/location/hash/ https://core.parts/location/query/",
-
- "https://core.parts/location/host/#https://core.parts/constructor/" = "https://core.parts/location/host/constructor/",
- "https://core.parts/location/hash/#https://core.parts/constructor/" = "https://core.parts/location/hash/constructor/",
- "https://core.parts/location/query/#https://core.parts/constructor/" = "https://core.parts/location/query/constructor/",
- "https://core.parts/location/pathname/#https://core.parts/constructor/" = "https://core.parts/location/pathname/constructor/",
- "https://core.parts/location/host/constructor/" = "console.log('get the host', this)",
- "https://core.parts/location/hash/constructor/" = "console.log('get the hash', this)",
- "https://core.parts/location/query/constructor/" = "console.log('get the hash', this)",
- "https://core.parts/location/pathname/constructor/" = "console.log('get the pathname', this)",
-
- "https://core.parts/node/element/onblur/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onkeyup/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onclick/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onwheel/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onfocus/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onkeydown/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/ondblclick/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onpointerup/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/ondragstart/#https://core.parts/node/element/events/type/" = -1,
- "https://core.parts/node/element/events/oncontextmenu/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onpointerdown/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/events/onpointermove/#https://core.parts/node/element/events/type/" = 0,
- "https://core.parts/node/element/layout/#https://core.parts/node/element/events/type/" = 1,
- "https://core.parts/node/element/manifest/#https://core.parts/node/element/events/type/" = 1
+ constructor(name) {
+  this.name = name
+  this.size = BigInt(1)
+ }
 }
 
-eval(source["https://core.parts/constructor/"])
-
-
-var remoteScript = true
-const common = () => {
-  Object.assign(globalThis, {
-   environment = "common",
-   version = 78 / 1000,
-   pool = {},
-   logframe = "padding:3px 6px;overflow:hidden;white-space:nowrap;padding-right:100%;border-collapse:collapse",
-   maskdevSubdomain(url) {
-    const debug = /(?:^.{8})dev\./.test(url)
-    return { debug, url = debug ? "https://" + url.slice(12)  = url }
-   },
-   set(object, url, newString) {
-    const strand = (object.strand ??= Object.create(source)),
-     existingUrl = (object.url ??= strand["https://core.parts/location/"]),
-     setsUrl = url === "https://core.parts/location/",
-     existingString = setsUrl ? existingUrl  = strand[url]
-
-    if (newString === existingString) {
-     info("No change to node " + newString)
-     return
+class Space extends Element {
+ get(i) {
+  let item = { i },
+   bin = i.toString(2).padStart(this.bitdepth, 0)
+  if (this.cartesian) {
+   for (let e = 0; e < this.elements.length; e++) {
+    const unit = this.elements.slice(e + 1).reduce((y, E) => y * E.size, BigInt(1))
+    const element = this.elements[e]
+    if (element instanceof Space) item[element.name] = element.get(i / unit)
+    else item = element.name
+    i %= unit
+   }
+  } else {
+   let offset = BigInt(0)
+   for (let e = 0; e < this.elements.length; e++) {
+    const element = this.elements[e]
+    if (i - offset >= element.size) {
+     offset += element.size
+     continue
     }
-
-    debug(
-     `%c${object.constructor?.name ?? "custom object"}\n Location = ${existingUrl}\n filename = ${url}%c${existingString}%c${newString}`,
-     "color:#78b;background:#000a;" + logframe,
-     `color:#${existingString === undefined ? "554"  = "d85"};background:#000a;${logframe}`,
-     "color:#9ca;background:#000a;border-radius:0 0 8px 8px;" + logframe
-    )
-
-    if (setsUrl) {
-     const existingPoolSet = pool[existingUrl],
-      newPoolSet = (pool[newString] ??= new Set())
-     existingPoolSet.delete(object)
-     newPoolSet.add(object)
-     object.url = newString
-    } else {
-     warn(
-      `Alternate URL setting requires fx-tracking.
-Inner changes need to be fx-tracked.
-Out-of-strand changes (such as the location of ancestor(s)
-(up to and including the client location)
-must also be tracked.
- 
-A downstream strand acting like this must update
-an upstream strand if it was not caused by one.
- 
-This involves tracking cross-strand fx connections.`
-     )
-    }
-
-    strand[url] = newString
-    warn(`Bypassing fx-based strand and node rebuild for now.`)
-    if (object === document.body)
-     object.innerHTML =
-      `<pre>{\n ${Object.keys(strand)
-       .map(key => `"${key}" = "${strand[key]}"`)
-       .join(",\n ")}\n}</pre>` +
-      '<button onclick="postToServer(1)">factory Reset</button>' +
-      '<button onclick="postToServer(2,source)">Quick Save</button>'
-    //const keys = parts of ,
-    // focus_events = ["onfocus", "onpointerdown", "onclick", "oncontextmenu", "onblur"]
-    //if (keys.some(url => focus_events.includes(url))) object.tabIndex = 0
-    //for (const key in keys) {
-    // if (type) object[kireji] = eval(object.point[kireji])
-    // else i{
-    //  if 
-    // }
-    // switch (type) {
-    //  case 0:
-    //   
-    //   break
-    //  case 1:
-    //   object[kireji] = object.point[kireji]
-    //   break
-    // }
-    //}
-    },
-    print(type, subtype, string, ...data) {
-     string = string.replaceAll("https://", "")
-     console[type](
-      `%c${this.environment === "client" ? (this.remoteScript ? `remote `  = "local ")  = ""}${environment} | ${subtype}%c${string}`,
-      "white-space:nowrap;background:#0005;color:#89a;border-radius:8px 8px 0 0;" + this.logframe,
-      "color:#9ac;background:#000a;border-radius:0 0 8px 8px;" + logframe,
-      ...data
-     )
-    },
-    todo = (string, ...data) =>
-     print("debug", "To-do item", `%c${string}%c `, "color:#000c;background:#68a;" + logframe, "color:#000c;background:#68a;border-radius:0 0 8px 8px;" + logframe, ...data),
-    warn = (string, ...data) =>
-     print("warn", "Warning", `%c${string}%c `, "color:#000c;background:#993;" + logframe, "color:#000c;background:#993;border-radius:0 0 8px 8px;" + logframe, ...data),
-    info = (...args) => print("info", "Active Notice", ...args),
-    debug = (...args) => print("debug", "Verbose Notice", ...args)
-   })
-  },
-  client = async () => {
-   environment = "client"
-   const urlSummary = maskdevSubdomain(location.href),
-    devenvironment = urlSummary,
-    serviceWorkerContainer = navigator.serviceWorker,
-    serviceWorkerRegistration = await serviceWorkerContainer.register(location.origin + "/" + (devenvironment ? "dev."  = "") + "server.js"),
-    activeServiceWorker =
-     serviceWorkerRegistration.active ??
-     (await new Promise(r => ((serviceWorkerRegistration.waiting ?? serviceWorkerRegistration.installing).onstatechange = ({ target }) => target.state == "activated" && r(target))))
-   globalThis.postToServer = (code, payload) => activeServiceWorker.postMessage({ code, payload })
-   serviceWorkerContainer.controller || (await new Promise(r => ((serviceWorkerContainer.oncontrollerchange = r), activeServiceWorker.postMessage({ code = 0 }))))
-   serviceWorkerContainer.oncontrollerchange = serviceWorkerContainer.onmessage = () => location.reload()
-   onfocus = () => {
-    debug("Checking for updates...")
-    serviceWorkerRegistration.update().catch(() => {
-     warn("ServiceWorker unregistered.")
-     location.reload()
-    })
+    if (element instanceof Space) item[element.name] = element.get(i - offset)
+    else item = element.name
+    break
    }
- 
-   if (globalThis.remoteScript) {
-    debug("Setting <link rel=manifest href=manifest.json>")
-    document.querySelector('[rel="manifest"]').href = "manifest.json"
-   }
- 
-   pool["https://core.parts/blank/"] = new Set([document.body])
-   Object.defineProperties(
-    Node.prototype,
-    Object.getOwnPropertydescriptors({
-     get shadow() {
-      // return this.setforever("shadow", this.attachShadow({ mode = "closed", writable = 0, configurable = 0 }))
-      throw "not ready yet"
-     },
-     get layout() {
-      if (!this._layout) {
-       this._layout = new CSSStyleSheet()
-       this.shadow.adoptedStyleSheets.push(this._layout)
-      }
-      return this._layout
-     },
-     set layout(v) {
-      this.layout.replaceSync(v)
-     },
-     get manifest() {
-      return [...this.shadow.children].map(node => node.url).join(" ")
-     },
-     set manifest(v) {
-      if (v === undefined) throw new Typeerror(`manifest called on undefined (${this._url})`)
-      if (typeof v !== "string") throw new Typeerror(`part manifest must have mime of text/uri-list. function expected js input "string", but got "${typeof v}." (${this._url})`)
-      const s = this.shadow,
-       oldURLs = [...s.children].map(node => node.url)
-      if (v === "") {
-       ;[...s.children].foreach(url => url.remove())
-       return
-      }
-      if (oldURLs.join(" ") === v) return
-      const newURLs = v.split(" ")
-      let oldURL,
-       newURL,
-       i = -1
-      while (oldURLs.length && newURLs.length) {
-       i++
-       if ((oldURL = oldURLs.shift()) !== (newURL = newURLs.shift())) {
-        const u = oldURLs.findIndex(url => url === newURL)
-        if (u === -1) this.install(newURL, i)
-        else {
-         s.insertBefore(s.children[i + u + 1], s.children[i])
-         oldURLs.splice(u, 1)
-        }
-        if (newURLs.some(url => url === oldURL)) oldURLs.unshift(oldURL)
-        else s.children[i + 1].remove()
-       }
-       // if (repair) s.children[i].repair()
-      }
-      if (oldURLs.length) oldURLs.foreach(() => s.children[i + 1].remove())
-      else if (newURLs.length) newURLs.foreach(url => this.install(url))
-     },
-     install(url, index) {
-      if (!url || url === "undefined")
-       throw new Typeerror(`install url cannot be ${url === undefined ? "undefined"  = url === "" ? "an empty string"  = `"${url}"`} (installing <${self.tagName}> on ${self._url})`)
-      const poolNode = url in pool ? [...pool[url]].find(url => !url.isConnected && !url.parentNode)  = undefined,
-       hadPoolNode = !!poolNode,
-       node = hadPoolNode ? poolNode  = document.createelement(CORe[url].getembedTag())
-      if (index === undefined || index >= self.shadow.children.length) self.shadow.appendChild(node)
-      else self.shadow.insertBefore(node, self.shadow.children[index])
-      if (node._url !== url) node.url = url
-     }
-    })
-   )
- 
-   set(document.body, "https://core.parts/location/", urlSummary.url)
- 
-   const tests = [
-    ["Add file to body strand", document.body, "https://core.parts/fake-folder/test-file/", "Hello world!"],
-    ["Add same file to same strand as last time", document.body, "https://core.parts/fake-folder/test-file/", "Hello world!"]
-   ]
-   for (const n in tests)
-    setTimeout(() => {
-     const [name, target, key, value] = tests[n]
-     console.group(`%cTest %c${n}%c = %c${name}`, "color:#777", "font-weight:200;color:#c95", "color:#777", "color:#aa8")
-     try {
-      set(target, key, value)
-     } catch (error) {
-      warn(error)
-     } finally {
-      console.groupend()
-     }
-    }, 1000)
-  },
-  server = () => {
-   environment = "local server"
-   debug(`Installed version ${version}${((date.now() / 0x9ca41900) % 1).toString().slice(1, 8)}`)
-   const cache = {}
-   onfetch = e => {
-    const { url } = maskdevSubdomain(e.request.url)
-    debug(`%cfetch%c${url}`, "background:#000a;" + logframe, "background:#000a;color:#7ad;border-radius:0 0 8px 8px;" + logframe)
-    todo("Get response body from strand.")
- 
-    const { pathname } = new URL(url)
-    if (!(url in cache)) {
-     let body, type
-     switch (pathname) {
-      case "/client.js":
-       body = `const\n common = ${common},\n client = ${client};\ncommon()\nclient()`
-       type = "text/javascript; charset=UTf-8"
-       break
-      case "/manifest.json":
-       body = JSON.stringify({
-        name = "Untitled Application",
-        short_name = "Untitled",
-        start_url = ".",
-        display = "standalone",
-        theme_color = "#336598",
-        background_color = "#333445",
-        description = "A kireji app.",
-        display_override = ["window-controls-overlay"],
-        icons = [
-         {
-          src = "favicon.svg",
-          sixes = "144x144",
-          type = "image/svg+xml"
-         },
-         {
-          src = "favicon.svg",
-          sixes = "any",
-          type = "image/svg+xml"
-         },
-         {
-          src = "/android-chrome-192x192.png",
-          sixes = "192x192",
-          type = "image/svg+xml"
-         },
-         {
-          src = "/android-chrome-512x512.png",
-          sixes = "512x512",
-          type = "image/svg+xml"
-         }
-        ],
-        categories = ["entertainment", "games", "utilities"],
-        protocol_handlers = [
-         {
-          protocol = "web+part",
-          url = "/part?pathname=%s"
-         }
-        ],
-        shortcuts = [
-         {
-          name = "New Item...",
-          short_name = "New...",
-          icons = [
-           {
-            src = "favicon.svg",
-            sixes = "any",
-            type = "image/svg+xml"
-           }
-          ],
-          url = "/new",
-          description = "This is just a placeholder/hint for future development."
-         }
-        ],
-        screenshots = [
-         {
-          src = "desktop-screenshot.svg",
-          sixes = "640x480",
-          type = "image/svg+xml",
-          form_factor = "wide",
-          label = "This is a placeholder for the image of the app."
-         },
-         {
-          src = "mobile-screenshot.svg",
-          sixes = "640x360",
-          type = "image/svg+xml",
-          form_factor = "narrow",
-          label = "This is a placeholder for the image of the app."
-         }
-        ]
-       })
-       type = "application/json; charset=UTf-8"
-       break
-      case "/favicon.svg":
-      case "/desktop-screenshot.svg":
-      case "/mobile-screenshot.svg":
-      case "/favicon.ico":
-      case "/apple-touch-icon.png":
-      case "/android-chrome-192x192.png":
-      case "/android-chrome-512x512.png":
-       type = "image/svg+xml"
-       body = `<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2003/svg">
-  <style>
-   svg { background = white }
-   path { stroke = #333445 }
-   @media (prefers-color-scheme = dark) {
-    svg { background = #333445 }
-    path { stroke = white }
-   }
-  </style>
-  <path d="M8 11C9.10457 11 10 10.1046 10 9C10 7.89543 9.10457 7 8 7C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M6.56055 21C12.1305 8.89998 16.7605 6.77998 22.0005 14.63" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M18 3H6C3.79086 3 2 4.79086 2 7V17C2 19.2091 3.79086 21 6 21H18C20.2091 21 22 19.2091 22 17V7C22 4.79086 20.2091 3 18 3Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`
-       break
-      default:
-       body = source["https://core.parts/index/"]
-       type = source[source["https://core.parts/index/#https://core.parts/header/type/"]]
-     }
-     cache[url] = new Response(body, {
-      headers = {
-       "content-type" = type,
-       expires = "Sun, 20 Jul 1969 20:17:00 UTC",
-       server = "kireji"
-      }
-     })
-    }
-    e.respondWith(cache[url].clone())
-   }
-   onmessage = e =>
-    [
-     () => {
-      debug("Client was hard-reloaded.")
-      clients.claim()
-     },
-     () => {
-      debug("%cfactory reset", "color:black;background:#38a;border-radius:0 0 8px 8px;" + logframe)
-      registration.update()
-      registration.unregister().then(() => e.source.postMessage({ code = 0 }))
-     },
-     () => {
-      debug("QuickSave")
-      warn(`Need QuickSave here.`, e.data.payload)
-     }
-    ][e.data.code]()
-   oninstall = () => skipWaiting()
-   onactivate = () => clients.claim()
   }
- common()
- if (this instanceof (this.Window ?? class {})) client()
- else server()
- 
+  return item
+ }
+ random() {
+  return this.get(this.randomIndex())
+ }
+ randomIndex() {
+  let i = this.bitdepth
+  let bin = "0b"
+  while (i--) bin += Die.roll(2)
+  const result = BigInt(bin)
+  if (result >= this.size) {
+   // reroll if out of range
+   return this.randomIndex()
+  }
+  return result
+ }
+ constructor(name, elements, cartesian = false) {
+  super(name)
+  this.elements = elements.map(e => (typeof e === "string" ? new Element(e) : e))
+  this.cartesian = cartesian
+  this.size = this.elements.reduce((y, element) => {
+   const { size } = element
+   return cartesian ? y * size : y + size
+  }, BigInt(+cartesian))
+  this.lastkey = this.size.toString(2)
+  this.bitdepth = this.lastkey.length
+  this.depth64 = Math.ceil(this.bitdepth / 6)
+  this.overhang = this.bitdepth % 6
+ }
+}
+
+const words = new Space("textContent", ["", "happy", "sad", "yay", "wow"])
+const shadowTags = new Space("tag", [
+ "ARTICLE",
+ "ASIDE",
+ "BLOCKQUOTE",
+ "BODY",
+ "DIV",
+ "FOOTER",
+ "H1",
+ "H2",
+ "H3",
+ "H4",
+ "H5",
+ "H6",
+ "HEADER",
+ "MAIN",
+ "NAV",
+ "P",
+ "SECTION",
+ "SPAN",
+])
+const colors = new Space("color", ["#234", "#243", "#324", "#423", "#342", "#432", "#333"])
+const nodeTypes = new Space("nodeType", ["#text", "#comment"])
+const lightTags = new Space("tag", [
+ "HTML",
+ "HEAD",
+ "TITLE",
+ "ADDRESS",
+ "HR",
+ "PRE",
+ "CITE",
+ "Q",
+ "DFN",
+ "EM",
+ "STRONG",
+ "SMALL",
+ "SUB",
+ "SUP",
+ "ABBR",
+ "TIME",
+ "MARK",
+ "DEL",
+ "INS",
+ "OL",
+ "UL",
+ "LI",
+ "DL",
+ "DT",
+ "DD",
+ "TABLE",
+ "CAPTION",
+ "THEAD",
+ "TBODY",
+ "TFOOT",
+ "TR",
+ "TH",
+ "TD",
+ "FORM",
+ "LABEL",
+ "INPUT",
+ "BUTTON",
+ "SELECT",
+ "OPTION",
+ "TEXTAREA",
+ "FIELDSET",
+ "LEGEND",
+ "IMG",
+ "AUDIO",
+ "SOURCE",
+ "VIDEO",
+ "IFRAME",
+ "EMBED",
+ "OBJECT",
+ "FIGURE",
+ "FIGCAPTION",
+ "DETAILS",
+ "SUMMARY",
+ "DATALIST",
+ "OUTPUT",
+])
+const allTags = new Space("node", [lightTags, shadowTags])
+const components = new Space("component", [shadowTags, colors], true)
+const containers = new Space("container", [components, allTags, nodeTypes])
+const wordNodes = new Space("wordNode", [words, containers], true)
+
+class Part {
+ static cache = new Map()
+ constructor(i) {
+  if (Part.cache.has(i)) return Part.cache.get(i)
+  Part.cache.set(i, this)
+  this.i = i
+
+  i %= wordNodes.size
+
+  this.textContent = S[0][i / (C[1] * C[2] + (C[3] + C[1]) + C[4])]
+  i %= C[1] * C[2] + (C[3] + C[1]) + C[4]
+  this.container = { i }
+  if (i < C[1] * C[2]) {
+   this.container.component = { i }
+   this.container.component.tag = S[1][i / C[2]]
+   i %= C[2]
+   this.container.component.color = S[2][i]
+  } else {
+   i -= C[1] * C[2]
+   if (i < C[3] + C[1]) {
+    this.container.node = { i }
+    if (i < C[3]) {
+     this.container.node.tag = S[3][i]
+    } else {
+     i -= C[3]
+     this.container.node.tag = S[1][i]
+    }
+   } else {
+    i -= C[3] + C[1]
+    this.container.nodeType = S[4][i]
+   }
+  }
+ }
+}
+
+function compareObjects(referencePart, particle) {
+ for (const key in referencePart) {
+  if (!(key in particle)) {
+   console.warn({ referencePart, particle })
+   throw `particle missing key ` + key
+  }
+  if (typeof referencePart[key] === "object") {
+   if (typeof particle[key] !== "object") {
+    console.warn({ referencePart, particle })
+    throw `particle shouldn't have object ` + typeof particle[key]
+   }
+   compareObjects(referencePart[key], particle[key])
+  } else if (referencePart[key] !== particle[key]) {
+   console.warn({ referencePart, particle })
+   throw `particle has wrong ${key} value - "${referencePart[key]}" vs. "${particle[key]}"`
+  }
+ }
+ for (const key in particle) {
+  if (!(key in referencePart)) {
+   console.warn({ referencePart, particle })
+   throw `particle has extra key ` + key
+  }
+  if (typeof referencePart[key] === "object") {
+   if (typeof particle[key] === "object") {
+    if (typeof referencePart[key] !== "object") {
+     console.warn({ referencePart, particle })
+     throw `particle is missing object ` + key
+    }
+    compareObjects(referencePart[key], particle[key])
+   }
+  } else if (referencePart[key] !== particle[key]) {
+   console.warn({ referencePart, particle })
+   throw `particle has wrong ${key} value - "${referencePart[key]}" vs. "${particle[key]}"`
+  }
+ }
+}
+
+// Get every particle in space. WARNING: slow for large particle counts!
+for (let i = BigInt(0); i < wordNodes.size; i++) {
+ const referencePart = new Part(i)
+ const particle = wordNodes.get(i)
+ compareObjects(referencePart, particle)
+ console.log({ referencePart, particle })
+}
+
+console.log(wordNodes.get(BigInt(0)))
+// Debug.fuzz()
+
+/* These functions are not reccomended for large count!
+
+ // Precompute every part to debug the indexer.
+ let i = 0
+ const precomputeCache = {}
+
+ function addPrecomputedPart(data) {
+  data.bin = i.toString(2).padStart(this.Depth2, 0)
+  precomputeCache[data.bin] = data
+  i++
+ }
+
+ for (let $0 = 0; $0 < S[0].length; $0++) {
+  for (let $1 = 0; $1 < S[1].length; $1++) {
+   for (let $2 = 0; $2 < S[2].length; $2++) {
+    addPrecomputedPart({
+     [W[0]]: S[0][$0],
+     [W[1]]: S[1][$1],
+     [W[2]]: S[2][$2],
+    })
+   }
+  }
+  for (let $1 = 0; $1 < S[3].length; $1++) {
+   addPrecomputedPart({
+    [W[0]]: S[0][$0],
+    [W[3]]: S[3][$1],
+   })
+  }
+  for (let $1 = 0; $1 < S[4].length; $1++) {
+   addPrecomputedPart({
+    [W[0]]: S[0][$0],
+    [W[4]]: S[4][$1],
+   })
+  }
+ }
+
+ // Create every part using indexer.
+ for (let i = 0; i < Count; i++) {
+  const bin = i.toString(2).padStart(Depth2, 0)
+  console.log(new Part(bin))
+ }
+
 */
