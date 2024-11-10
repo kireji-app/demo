@@ -1,415 +1,358 @@
-const Raw = {
- shadowTags: "ARTICLE ASIDE BLOCKQUOTE BODY DIV FOOTER H1 H2 H3 H4 H5 H6 HEADER MAIN NAV P SECTION SPAN",
- lightTags:
-  "HTML HEAD TITLE ADDRESS HR PRE CITE Q DFN EM STRONG SMALL SUB SUP ABBR TIME MARK DEL INS OL UL LI DL DT DD TABLE CAPTION THEAD TBODY TFOOT TR TH TD FORM LABEL INPUT BUTTON SELECT OPTION TEXTAREA FIELDSET LEGEND IMG AUDIO SOURCE VIDEO IFRAME EMBED OBJECT FIGURE FIGCAPTION DETAILS SUMMARY DATALIST OUTPUT",
- colors:
-  "black silver gray white maroon red purple fuchsia green lime olive yellow navy blue teal aqua aliceblue antiquewhite aquamarine azure beige bisque blanchedalmond blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen gainsboro ghostwhite gold goldenrod greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow limegreen linen magenta mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite oldlace olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue rebeccapurple rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna skyblue slateblue slategray slategrey snow springgreen steelblue tan thistle tomato transparent turquoise violet wheat whitesmoke yellowgreen",
-}
-class Hash {
- static numerals = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_"
- static fromIndex(index) {
-  const bin = index.toString(2),
-   newLength = Math.ceil(bin.length / 6),
-   hexads = [],
-   fullbin = bin.padStart(newLength * 6, 0)
-  for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
-  const hash = "#" + hexads.reduce((hash, hexad) => hash + this.numerals[parseInt(hexad, 2)], "")
-  if (this.indexOf(hash) != index) throw Debug.error(this, `lossy encoding detected.\n - hash = ${hash}\n - index = ${index}\n - Hash.indexOf(hash) = ${Hash.indexOf(hash)}`)
-  return hash
- }
- static indexOf(hash) {
-  if (typeof hash !== "string" || hash.length <= 1 || hash[0] !== "#")
-   throw Debug.error(this, `incorrectly formatted hash "${hash}". Hashes must begin with the hash mark '#' followed by one or more hexads.`)
-  let bin = "0b"
-  for (let i = 1; i < hash.length; i++) bin += this.numerals.indexOf(hash[i]).toString(2).padStart(6, 0)
-  return BigInt(bin)
- }
- static fromData(data, part = Core) {
-  const index = part.indexOf(data)
-  if (index !== -1n) return this.fromIndex(index)
- }
- static home() {
-  const hash = Hash.fromData({
-   core: {
-    container: {
-     component: {
-      tag: "ARTICLE",
-      color: "black",
-      background: "silver",
-     },
-    },
-    a: "red",
-    b: "green",
-    c: "blue",
-    byte: 200n,
+// TODO: Lock the interface from interaction from the moment the hash changes to when the document is set.
+function boot() {
+ async function client() {
+  var time = performance.now(),
+   averageFrameTime = 1000,
+   framerate = 0,
+   frameRequest,
+   pausedAction
+
+  const IS_MAC = navigator.userAgent.indexOf("Mac") > -1,
+   VERSION = 86 / 1000,
+   DEFAULT_HASH = "#.htaccess",
+   EMPTY_HASH = "#empty",
+   throttle = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 350 : 75,
+   swContainer = navigator.serviceWorker,
+   swReg = await swContainer.register(location.origin + "/" + (/^dev\./.test(location.host) ? "dev." : "") + "server.js"),
+   swActive = swReg.active ?? (await new Promise(r => ((swReg.waiting ?? swReg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t)))),
+   setLocation = () => {
+    if (pausedAction) {
+     clearTimeout(pausedAction)
+     pausedAction = undefined
+    }
+    pausedAction = setTimeout(() => {
+     pausedAction = undefined
+     if (hash === location.hash) return
+     history.timestamp = performance.now()
+     if (!location.hash && hash === DEFAULT_HASH) history.replaceState({}, null, hash)
+     else history.pushState({}, null, hash)
+    }, throttle - time + history.timestamp)
    },
-  })
-  console.warn("TODO: Hardcode this hash.", hash)
-  return hash
- }
-}
-class Addressbar {
- static throttleTime = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 350 : 75
- static timeLastSet = 0
- static render() {
-  if (this.pausedAction) clearTimeout(this.pausedAction)
-  const elapsedPause = Date.now() - this.timeLastSet,
-   remainingPause = this.throttleTime - elapsedPause,
-   action = () => {
-    delete this.pausedAction
-    const hash = Hash.fromIndex(Engine.index)
-    if (hash === location.hash) return
-    history.replaceState({}, null, hash)
-    this.timeLastSet = Date.now()
-   }
-  this.pausedAction = setTimeout(() => action(), remainingPause)
- }
-}
-class Part {
- indexOf(data) {
-  let index = -1n
-  if (this.terminal) {
-   if (this.range) {
-    if (typeof data === "object" && this.name in data && typeof data[this.name] === "bigint" && data[this.name] >= 0n && data[this.name] < this.size) index = data[this.name]
-   } else if (data === this.name) index = 0n
-  } else if (typeof data === "object") {
-   if (Object.keys(data).length === 1 && this.name in data) {
-    const subdata = data[this.name]
-    if (this.composite) {
-     if (typeof subdata === "object") {
-      const names = Object.keys(subdata)
-      if (names.length === this.length) {
-       index = 0n
-       for (let e = 0; e < this.length; e++) {
-        const unit = this.parts.slice(e + 1).reduce((u, part) => u * part.size, 1n),
-         part = this.parts[e],
-         name = part.name
-        if (!(name in subdata)) {
-         index = -1n
-         break
+   error = () => {
+    throw document.hash + ": no transition to " + hash
+   },
+   setDocument = () => {
+    // TODO: Use indexing here...
+    switch (document.hash) {
+     case EMPTY_HASH:
+      switch (hash) {
+       case "#.htaccess":
+       case "#dev.server.js":
+       case "#index.php":
+       case "#server.js":
+       case "#nothing":
+        document.querySelector("head>style").innerHTML = `html, body {
+         background: linear-gradient(45deg, rgb(66,138,186) 0%, rgb(88,163,201) 47%, rgb(106,186,223) 100%);
+         overflow: hidden;
+         height: 100vh;
+         width: 100vw;
+         margin: 0;
         }
-        const subindex = part.indexOf({ [name]: subdata[name] })
-        if (subindex === -1n) {
-         index = -1n
-         break
+        body {
+         font-family: Arial, sans-serif;
+         color: white;
+         box-sizing: border-box;
+         padding: 16px;
+         --system-ui:
+          system-ui,
+          "Segoe UI",
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif,
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+          "Segoe UI Symbol";
+         font: 13px var(--system-ui);
         }
-        index += unit * subindex
-       }
-      }
-     }
-    } else {
-     let name
-     if (typeof subdata === "string") name = subdata
-     else if (typeof subdata === "object" && Object.keys(subdata).length === 1) name = Object.keys(subdata)[0]
-     const stack = this.planes[name]
-     if (stack) {
-      for (const { part, offset } of stack) {
-       const addend = part.indexOf(subdata)
-       if (addend !== -1n) {
-        index = offset + addend
+        #file-list {
+         list-style-type: none;
+         padding: 0;
+         margin-top: 16px;
+         border-radius: 3px;
+         overflow: hidden;
+         box-shadow: 2px 8px 16px #00208007;
+         display: flex;
+         gap: 1px;
+         flex-flow: column;
+        }
+        #file-list li {
+         background: #adf6;
+         padding: 15px;
+         font-size: 16px;
+         font-weight: 200;
+         border-radius: 1.5px;
+         color: #246;
+        }
+        .file-icon {
+         margin-right: 10px;
+         font-size: 20px;
+        }
+        #file-list li[data-selected="true"] {
+         background: #2466;
+         color: white;
+        }`
+        const onclickAttr = `event.stopPropagation();globalThis.hash='#'+this.getAttribute('data-href')`,
+         selectAttr = ` data-selected="true"`,
+         file = hash.slice(1),
+         list = [".htaccess", "dev.server.js", "server.js", "index.php", "empty"].map(
+          href => `<li onclick="${onclickAttr}" data-href="${href}"${file === href ? selectAttr : ""}><span class="file-icon">📄</span>${href}</li>`,
+         )
+        document.body.setAttribute("data-href", "nothing")
+        document.body.setAttribute("onclick", onclickAttr)
+        document.body.innerHTML = `<h1 id="header">File Explorer</h1><ul id="file-list">${list.join("")}</ul>`
+        globalThis.fileNodes = [...document.querySelectorAll("#file-list>li")].reduce((memory, node) => ((memory[node.getAttribute("data-href")] = node), memory), {})
+        globalThis.selectedNode = fileNodes[file]
         break
-       }
+       default:
+        error()
       }
-     }
+      break
+     case "#.htaccess":
+     case "#dev.server.js":
+     case "#index.php":
+     case "#server.js":
+     case "#nothing":
+      switch (hash) {
+       case "#.htaccess":
+       case "#dev.server.js":
+       case "#index.php":
+       case "#server.js":
+       case "#nothing":
+        globalThis.selectedNode?.removeAttribute("data-selected")
+        globalThis.selectedNode = globalThis.fileNodes[hash.slice(1)]
+        globalThis.selectedNode?.setAttribute("data-selected", "true")
+        break
+       case EMPTY_HASH:
+        document.querySelector("head>style").innerHTML = document.body.innerHTML = ``
+        document.body.removeAttribute("data-href")
+        document.body.removeAttribute("onclick")
+        break
+       default:
+        error()
+      }
+      break
+     default:
+      error()
     }
+    document.hash = document.title = hash
+   },
+   loop = now => {
+    averageFrameTime += (now - time - averageFrameTime) / 20
+    framerate = Math.round(1000 / averageFrameTime)
+    time = now
+    if (location.hash !== hash) setLocation()
+    if (document.hash !== hash) setDocument()
+    frameRequest = requestAnimationFrame(loop)
    }
-  }
-  return index
- }
- get(index) {
-  if (index < 0n) return undefined
-  if (index in this.cache) return this.cache[index]
-  if (index >= this.size) index %= this.size
-  let data = {}
-  if (this.terminal) {
-   if (this.range) data = { [this.name]: index }
-   else data = this.name
-  } else if (this.composite) {
-   const subobject = (data[this.name] = {})
-   for (let e = 0; e < this.length; e++) {
-    const unit = this.parts.slice(e + 1).reduce((u, part) => u * part.size, 1n),
-     part = this.parts[e]
-    // todo: what if composite has a terminal dimension?
-    Object.assign(subobject, part.get(index / unit))
-    index %= unit
-   }
-  } else {
-   let offset = 0n
-   for (let e = 0; e < this.length; e++) {
-    const part = this.parts[e]
-    if (index - offset < part.size) {
-     data[this.name] = part.get(index - offset)
-     break
-    }
-    offset += part.size
-   }
-  }
-  return (this.cache[index] = data)
- }
- random() {
-  return this.get(this.randomIndex())
- }
- randomIndex() {
-  let { bitdepth } = this
-  let bin = "0b"
-  while (bitdepth--) bin += Math.trunc(Math.random() * 2)
-  const result = BigInt(bin)
-  return result >= this.size ? this.randomIndex() : result
- }
- weightedRandom() {
-  return this.get(this.weightedRandomIndex())
- }
- weightedRandomIndex() {
-  let index = -1n,
-   part
-  if (this.terminal) {
-   part = this
-   if (this.range) index = this.randomIndex()
-   else index = 0n
-  } else if (this.composite) {
-   index = 1n
-   part = []
-   for (let e = 0; e < this.length; e++) {
-    const unit = this.parts.slice(e + 1).reduce((u, part) => u * part.size, 1n),
-     subpart = this.parts[e],
-     subindex = subpart.weightedRandomIndex()
-    part.push(subpart)
-    index += unit * subindex
-   }
-  } else {
-   const i = Math.trunc(Math.random() * this.parts.length)
-   part = this.parts[i]
-   const offset = this.planes[part.name][0].offset,
-    subindex = part.weightedRandomIndex()
-   index = subindex + offset
-  }
-  return index
- }
- constructor({ name, parts, composite = 0, bitdepth }) {
-  this.name = name
-  this.terminal = !parts
-  if (this.terminal) {
-   this.range = !!bitdepth
-   this.size = this.range ? 2n ** bitdepth : 1n
-   this.length = 1
-   this.composite = 0
-   this.lastkey = this.range ? this.size.toString(2) : "0"
-  } else {
-   this.composite = composite
-   this.length = parts.length
-   if (composite) {
-    const dimensions = new Set()
-    this.parts = parts.map(e => {
-     const part = typeof e === "string" ? new Part({ name: e }) : e
-     if (dimensions.has(part.name)) throw Debug.error(this, `duplicate identifier "${part.name}" in composite part ${this.name}.`)
-     dimensions.add(part.name)
-     return part
-    })
-    this.size = this.parts.reduce((size, part) => size * part.size, BigInt(composite))
-   } else {
-    let offset = 0n
-    this.planes = {}
-    this.parts = parts.map((e, i) => {
-     const part = typeof e === "string" ? new Part({ name: e }) : e
-     const plane = (this.planes[part.name] ??= [])
-     plane.push({ part, i, offset })
-     offset += part.size
-     return part
-    })
-    this.size = this.parts.reduce((size, part) => size + part.size, BigInt(composite))
-   }
-   this.lastkey = this.size.toString(2)
-  }
-  this.bitdepth = this.lastkey.length
-  this.depth64 = Math.ceil(this.bitdepth / 6)
-  this.overhang = this.bitdepth % 6
- }
- cache = {}
-}
-class CSSParts {
- static {
-  this.colors = new Part({ name: "color", parts: Raw.colors.split(" ") })
-  this.backgrounds = new Part({ name: "background", parts: Raw.colors.split(" ") })
- }
-}
-class DOMParts {
- static {
-  this.shadowTags = new Part({ name: "tag", parts: Raw.shadowTags.split(" ") })
-  this.lightTags = new Part({ name: "tag", parts: Raw.lightTags.split(" ") })
-  this.elements = new Part({ name: "node", parts: [this.lightTags, this.shadowTags] })
-  this.components = new Part({ name: "component", parts: [this.shadowTags, CSSParts.colors, CSSParts.backgrounds], composite: true })
-  this.nodes = new Part({ name: "nodeType", parts: ["#text", "#comment"] })
-  this.containers = new Part({ name: "container", parts: [this.components, this.elements, this.nodes] })
- }
-}
-class Library {
- static placeholder = new Part({ name: "token", parts: new Array(128).map((_, i) => i) })
- static placeholder2 = new Part({ name: "token", bitdepth: 7n })
-}
-class Engine {
- static fps = 60
- static time = performance.now()
- static averageFrameTime = 1000
- static randomize() {
-  this.index = Core.weightedRandomIndex()
- }
- static stopped = true
- static get data() {
-  return Core.get(this.index).core
- }
- static start() {
-  // Handle all navigation events.
+
+  swContainer.controller || (await new Promise(r => ((swContainer.oncontrollerchange = r), swActive.postMessage({ code: 0 }))))
+  swContainer.oncontrollerchange = swContainer.onmessage = () => location.reload()
+  onfocus = () => swReg.update().catch(() => location.reload())
+  onblur = () => (contextKeysDown = shifts = 0)
   onhashchange = () => {
-   // Provide the default landing page.
-   if (!location.hash) location.hash = Hash.home()
-   Engine.index = Hash.indexOf(location.hash)
+   if (frameRequest) cancelAnimationFrame(frameRequest)
+   history.lastSetTime = performance.now()
+   hash = location.hash || DEFAULT_HASH
+   loop(performance.now())
   }
-
+  var contextKeysDown = 0,
+   shifts = 0
+  onkeydown = e => {
+   if (IS_MAC) {
+    if (e.key === "Meta") contextKeysDown++
+   } else if (e.key === "Control") contextKeysDown++
+   if (e.key === "Shift") shifts++
+   if (contextKeysDown === 1 && !shifts && e.key === "z") history.back()
+   if (contextKeysDown === 1 && !shifts && e.key === "y") history.forward()
+   if (contextKeysDown === 1 && shifts && e.key === "z") history.forward()
+   e.preventDefault()
+  }
+  onkeyup = e => {
+   if (IS_MAC) {
+    if (e.key === "Meta") contextKeysDown = Math.max(0, contextKeysDown - 1)
+   } else if (e.key === "Control") contextKeysDown = Math.max(0, contextKeysDown - 1)
+   if (e.key === "Shift") shifts = Math.max(0, shifts - 1)
+   e.preventDefault()
+  }
+  document.querySelector('[rel="manifest"]').href = location.origin + "/manifest.json"
+  document.hash = document.title = globalThis.hash = EMPTY_HASH
   onhashchange()
-  Debug.initialize()
-  this.loop()
  }
- static loop() {
-  if (Debug.fuzzing) this.randomize()
-  Addressbar.render()
-  Debug.render()
-  this.render()
-  this.frame = requestAnimationFrame(time => (this.tick(time), this.loop()))
- }
- static stop() {
-  cancelAnimationFrame(this.frame)
- }
- static tick(time) {
-  this.deltaTime = time - this.time
-  this.averageFrameTime += (this.deltaTime - this.averageFrameTime) / 20
-  this.fps = Math.round(1000 / this.averageFrameTime)
-  this.time = time
- }
- static render() {
-  const { previousview } = this,
-   { a, b, c, container } = this.data,
-   content = (document.title = [a, b, c].join(" "))
+ if (this.constructor === this.Window) client()
+ else {
+  const cache = {} // TODO: use built-in cache?
+  onfetch = e => {
+   // debug = /^dev\./.test(location.host)
+   // const url = debug ? "https://" + e.request.url.slice(12) : e.request.url
+   const { pathname } = new URL(e.request.url),
+    cacheKey = pathname
+   if (!(cacheKey in cache)) {
+    let body, type
+    switch (pathname) {
+     // Reproduce real server files.
+     case "/.htaccess":
+      type = "text/plain"
+      body = `AddCharset utf-8 .js
+ ErrorDocument 404 /index.php
+ ErrorDocument 403 /index.php
+ Options -Indexes`
+      break
+     case "/index.php":
+      body = `<!DOCTYPE html
+  ><link rel=manifest
+  ><meta name=robots content=noindex
+  ><meta name=viewport content="width=device-width,initial-scale=1"
+  ><meta name=copyright content="&copy; 2024 Eric Augustinowicz"
+  ><script defer src="https://<?=$_SERVER['HTTP_HOST']."/".(in_array($_SERVER['REMOTE_ADDR'],['173.168.55.24'])?'dev.':'')?>server.js"
+  ></script><style></style><!-- REMOTE INDEX -->`
+      type = "text/html"
+     case "/server.js":
+     case "/dev.server.js":
+      body = `${boot}\nboot()\n`
+      type = "text/javascript; charset=UTF-8"
+      break
 
-  let currentview = previousview
-  if (container.node) {
-   if (container.node.tag) {
-    const tag = container.node.tag
-    if (!(currentview && currentview instanceof Element && currentview.tagName === tag && !currentview.shadowRoot)) {
-     currentview = document.createElement(tag)
-     if (!previousview) {
-      document.body.appendChild(currentview)
-     } else {
-      previousview.replaceWith(currentview)
-     }
-    }
-    if (currentview.textContent !== content) {
-     currentview.textContent = content
-    }
+     // Define virtual local files.
+     case "/client.js":
+      body = `(${client})()`
+      type = "text/javascript; charset=UTF-8"
+      break
+     case "/manifest.json":
+      body = JSON.stringify(
+       {
+        name: location.host.split(".").join(" "),
+        short_name: location.host,
+        start_url: ".",
+        display: "standalone",
+        background_color: "#336598",
+        description: "An expirimental app.",
+        icons: [
+         {
+          src: "favicon.svg",
+          sizes: "144x144",
+          type: "image/svg+xml",
+         },
+        ],
+       },
+       /*{
+       name: "Untitled Application",
+       short_name: "Untitled",
+       start_url: ".",
+       display: "standalone",
+       theme_color: "#336598",
+       background_color: "#333445",
+       description: "A kireji app.",
+       display_override: ["window-controls-overlay"],
+       icons: [
+        {
+         src: "favicon.svg",
+         sixes: "144x144",
+         type: "image/svg+xml",
+        },
+        {
+         src: "favicon.svg",
+         sixes: "any",
+         type: "image/svg+xml",
+        },
+        {
+         src: "/android-chrome-192x192.png",
+         sixes: "192x192",
+         type: "image/svg+xml",
+        },
+        {
+         src: "/android-chrome-512x512.png",
+         sixes: "512x512",
+         type: "image/svg+xml",
+        },
+       ],
+       categories: ["entertainment", "games", "utilities"],
+       protocol_handlers: [
+        {
+         protocol: "web+Part",
+         url: "/Part?pathname=%s",
+        },
+       ],
+       shortcuts: [
+        {
+         name: "New Item...",
+         short_name: "New...",
+         icons: [
+          {
+           src: "favicon.svg",
+           sixes: "any",
+           type: "image/svg+xml",
+          },
+         ],
+         url: "/new",
+         description: "This is just a placeholder/hint for future development.",
+        },
+       ],
+       screenshots: [
+        {
+         src: "desktop-screenshot.svg",
+         sixes: "640x480",
+         type: "image/svg+xml",
+         form_factor: "wide",
+         label: "This is a placeholder for the image of the app.",
+        },
+        {
+         src: "mobile-screenshot.svg",
+         sixes: "640x360",
+         type: "image/svg+xml",
+         form_factor: "narrow",
+         label: "This is a placeholder for the image of the app.",
+        },
+       ],
+      }*/
+      )
+      type = "application/json; charset=UTf-8"
+      break
+     case "/favicon.svg":
+     case "/favicon.ico":
+     case "/apple-touch-icon.png":
+     case "/mobile-screenshot.svg":
+     case "/desktop-screenshot.svg":
+     case "/android-chrome-192x192.png":
+     case "/android-chrome-512x512.png":
+      type = "image/svg+xml"
+      body = `<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+   svg { background: white }
+   path { stroke: #333445 }
+   @media (prefers-color-scheme = dark) {
+    svg { background: #333445 }
+    path { stroke: white }
    }
-  } else if (container.nodeType) {
-   if (container.nodeType === "#text") {
-    if (!(currentview && currentview instanceof Text)) {
-     currentview = document.createTextNode(content)
-     if (!previousview) {
-      document.body.appendChild(currentview)
-     } else {
-      previousview.replaceWith(currentview)
-     }
+  </style>
+  <path d="M8 11C9.10457 11 10 10.1046 10 9C10 7.89543 9.10457 7 8 7C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.56055 21C12.1305 8.89998 16.7605 6.77998 22.0005 14.63" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18 3H6C3.79086 3 2 4.79086 2 7V17C2 19.2091 3.79086 21 6 21H18C20.2091 21 22 19.2091 22 17V7C22 4.79086 20.2091 3 18 3Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`
+      break
+     default:
+      body = `<!DOCTYPE html
+ ><link rel=manifest href="${location.origin}/manifest.json"
+ ><meta name=robots content=noindex
+ ><meta name=viewport content="width=device-width,initial-scale=1"
+ ><meta name=copyright content="&copy; 2024 Eric Augustinowicz"
+ ><script defer src="${location.origin}/client.js"
+ ></script><style></style><!-- LOCAL INDEX -->`
+      type = "text/html"
     }
-   } else if (container.nodeType === "#comment") {
-    if (!(currentview && currentview instanceof Comment)) {
-     currentview = document.createComment(content)
-     if (!previousview) {
-      document.body.appendChild(currentview)
-     } else {
-      previousview.replaceWith(currentview)
-     }
-    }
+    cache[cacheKey] = new Response(body, {
+     headers: {
+      "content-type": type,
+      expires: "Sun, 20 Jul 1969 20:17:00 UTC",
+      server: "kireji",
+     },
+    })
    }
-   if (currentview.nodeValue !== content) {
-    currentview.nodeValue = content
-   }
-  } else if (container.component) {
-   const tag = container.component.tag
-   if (!(currentview instanceof Element && tag === currentview.tagName)) {
-    currentview = document.createElement(tag)
-    if (!previousview) {
-     document.body.appendChild(currentview)
-    } else {
-     previousview.replaceWith(currentview)
-    }
-   }
-   if (currentview.component !== container.component) {
-    const color = container.component.color
-    const background = container.component.background
-    if (!currentview.component) {
-     currentview.component = container.component
-     const shadow = currentview.attachShadow({ mode: "open" }),
-      sheet = new CSSStyleSheet()
-     shadow.adoptedStyleSheets.push(sheet)
-     sheet.replaceSync(`:host { background-color: ${background}; color: ${color} }`)
-    } else {
-     if (!(currentview.component.color === container.component.color && currentview.component.background === container.component.background)) {
-      currentview.shadowRoot.adoptedStyleSheets[0].replaceSync(`:host { background-color: ${background}; color: ${color} }`)
-     }
-    }
-    currentview.component = container.component
-   }
-   if (currentview.shadowRoot.textContent !== content) {
-    currentview.shadowRoot.textContent = content
-   }
+   e.respondWith(cache[cacheKey].clone())
   }
-  this.previousview = currentview
+  oninstall = e => skipWaiting()
+  onactivate = e => clients.claim()
+  onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 })), () => console.warn("TODO: local save", e.data)][e.data.code]()
  }
 }
-const Core = new Part({
- name: "core",
- parts: [
-  DOMParts.containers,
-  new Part({ name: "a", parts: Raw.colors.split(" ") }),
-  new Part({ name: "b", parts: Raw.colors.split(" ") }),
-  new Part({ name: "c", parts: Raw.colors.split(" ") }),
-  new Part({ name: "byte", bitdepth: 8n }),
- ],
- composite: true,
-})
-class Debug {
- static fuzzing = false
- static dirty = true
- static stats = {
-  parts: Core.size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-  get framerate() {
-   return `${Engine.fps}fps`
-  },
-  get data() {
-   return Engine.data
-  },
- }
- static error(owner, msg) {
-  Engine.stop()
-  this.fuzzing = false
-  return `${owner.name}Error: ${msg}`
- }
- static initialize() {
-  this.view = document.body.appendChild(document.createElement("div"))
-  this.button = this.view.appendChild(document.createElement("button"))
-  this.statview = this.view.appendChild(document.createElement("pre"))
-  this.view.id = "debug"
-  this.statview.id = "stats"
-  this.button.id = "fuzzbtn"
- }
- static render() {
-  this.statview.innerHTML = `<pre>${JSON.stringify(Debug.stats, (_, v) => (typeof v === "bigint" ? v.toString() : v), 1)}</pre>`
-  if (this.dirty) {
-   this.button.onclick = () => {
-    this.fuzzing = !this.fuzzing
-    this.dirty = true
-   }
-   this.button.innerText = this.fuzzing ? "⏸" : "⏵"
-   this.dirty = false
-  }
- }
-}
-
-// Start the engine.
-Engine.start()
+boot()
