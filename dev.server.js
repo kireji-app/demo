@@ -1891,7 +1891,7 @@ function boot() {
        ([label, hash]) =>
         `<li onclick="${onclickAttr}" data-hash=${hash} data-filename=${label}${filename === label ? selectAttr : ""}><span class="file-icon">📄</span>${label}</li>`,
       )
-     body.setAttribute("data-filename", 1)
+     body.setAttribute("data-hash", "5")
      body.setAttribute("onclick", onclickAttr)
      body.innerHTML = `<h1 id="header">File Explorer</h1><ul id="file-list">${list.join("")}</ul>`
      this.fileNodes = [...document.querySelectorAll("#file-list>li")].reduce((memory, node) => ((memory[node.getAttribute("data-filename")] = node), memory), {})
@@ -2328,12 +2328,12 @@ function boot() {
       break
      default:
       body = `<!DOCTYPE html
- ><link rel=manifest href="${location.origin}/manifest.json"
- ><meta name=robots content=noindex
- ><meta name=viewport content="width=device-width,initial-scale=1"
- ><meta name=copyright content="&copy; 2024 Eric Augustinowicz"
- ><script defer src="${location.origin}/client.js"
- ></script><style></style><!-- LOCAL INDEX -->`
+><link rel=manifest href="${location.origin}/manifest.json"
+><meta name=robots content=noindex
+><meta name=viewport content="width=device-width,initial-scale=1"
+><meta name=copyright content="&copy; 2024 Eric Augustinowicz"
+><script defer src="${location.origin}/client.js"
+></script><style></style><!-- LOCAL INDEX -->`
       type = "text/html"
     }
     cache[cacheKey] = new Response(body, {
