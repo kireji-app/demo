@@ -4,5 +4,6 @@
 **/.tmp.driveupload
 **/.tmp.drivedownload
 **/*.gdoc
+.vscode/scratch/*
 favicon.gif
 favicon.ico
