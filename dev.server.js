@@ -1,14 +1,10 @@
+// version 86.7 / 1000
 function boot() {
  async function client() {
   const style = document.querySelector("head>style"),
    body = document.body,
-   json = value => {
-    return JSON.stringify(value, (_, v) => (["bigint", "function"].includes(typeof v) ? v.toString() : v), 1)
-   },
-   dump = value => {
-    console.debug(json(value))
-   },
    alphabet64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
+   go = index => ($_CLIENT.HASH = encode(index)),
    encode = index => {
     const hexads = []
     const binaryString = index.toString(2)
@@ -19,7 +15,7 @@ function boot() {
     }
     const hash = "#" + hexads.reduce((hash, hexad) => hash + alphabet64[parseInt(hexad, 2)], "")
     debug: {
-     const testBigInt = this.decode(hash)
+     const testBigInt = decode(hash)
      if (testBigInt != index) {
       throw this.error("EncodeHash", `lossy encoding detected.\n - hash = ${hash}\n - index = ${index}\n - test index = ${testBigInt}`)
      }
@@ -48,13 +44,7 @@ function boot() {
     DOCUMENT_HASH: "#0",
     DOCUMENT_INDEX: 0,
     CONTEXT_KEYS: 0,
-    SHIFT_KEYS: 0,
-   },
-   reset = () => {
-    if ($_CLIENT.ANIM_FRAME) cancelAnimationFrame($_CLIENT.ANIM_FRAME)
-    if (location.pathname !== "/" || location.search || !location.hash) history.replaceState({}, null, `${location.origin}/${location.hash || "#1"}`)
-    $_CLIENT.HASH = location.hash
-    loop(($_CLIENT.THROTTLE_START_TIME = performance.now()))
+    SHIFTS_DOWN: 0,
    },
    loop = now => {
     $_CLIENT.MEAN_FRAME_TIME += (now - $_CLIENT.NOW - $_CLIENT.MEAN_FRAME_TIME) / 20
@@ -67,21 +57,20 @@ function boot() {
     }
 
     if ($_CLIENT.DOCUMENT_HASH !== $_CLIENT.HASH) {
-     const transitionFunction = oldCore[$_CLIENT.DOCUMENT_HASH + $_CLIENT.HASH]
-     newCore.set(decode($_CLIENT.HASH))
-     dump(newCore)
-     transitionFunction?.()
+     newCore.populate(decode($_CLIENT.HASH))
      $_CLIENT.DOCUMENT_HASH = $_CLIENT.HASH
     }
 
     $_CLIENT.ANIM_FRAME = requestAnimationFrame(loop)
    }
+  globalThis.$_CLIENT = $_CLIENT
   if ($_CLIENT.HAS_SW) {
+   const _ = navigator.serviceWorker
    $_CLIENT.SW =
-    ($_CLIENT.SW_REGISTRATION = await navigator.serviceWorker.register(location.origin + "/" + (/^dev\./.test(location.host) ? "dev." : "") + "server.js")).active ??
+    ($_CLIENT.SW_REGISTRATION = await _.register(location.origin + "/" + (/^dev\./.test(location.host) ? "dev." : "") + "server.js")).active ??
     (await new Promise(r => (($_CLIENT.SW_REGISTRATION.waiting ?? $_CLIENT.SW_REGISTRATION.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
-   navigator.serviceWorker.controller || (await new Promise(r => ((navigator.serviceWorker.oncontrollerchange = r), $_CLIENT.SW.postMessage({ code: 0 }))))
-   navigator.serviceWorker.oncontrollerchange = navigator.serviceWorker.onmessage = () => location.reload()
+   _.controller || (await new Promise(r => ((_.oncontrollerchange = r), $_CLIENT.SW.postMessage({ code: 0 }))))
+   _.oncontrollerchange = _.onmessage = () => location.reload()
    $_CLIENT.MANIFEST_HREF = document.querySelector('[rel="manifest"]').href = location.origin + "/manifest.json"
    debug: {
     addEventListener("focus", () => $_CLIENT.SW_REGISTRATION.update().catch(() => location.reload()))
@@ -93,42 +82,42 @@ function boot() {
    $_CLIENT.GPU = await (await navigator.gpu.requestAdapter()).requestDevice()
   }
   class Part {
+   index = 0n
    cardinality = 1n
-
    constructor(name) {
     this.name = name
    }
-  }
-  class StatefulPart extends Part {
-   index = 0n
-
-   set(index) {
-    this.validate(index)
-    this.index = index
-    this.postSet?.()
+   indexOf(data) {
+    const index = this.getIndex(data) ?? -1n
+    if (index === -1n) console.warn(`couldn't find data in part`, { data, part: this })
+    return index
    }
-
-   validate(index) {
-    if (this.index === index) throw new RangeError("part set to index it is already on: " + this.name)
+   getIndex(data) {
+    if (data === this.name) return 0n
+   }
+   enter() {}
+   populate(index) {
+    if (this.index === index) return
     if (index < 0n || index >= this.cardinality) throw new RangeError(`index ${index} out of range (cardinality ${this.cardinality}): ${this.name}`)
+    this.index = index
    }
-
-   constructor(name, controller) {
-    super(name)
-    this.controller = controller
+   leave() {
+    this.index = 0n
    }
   }
-  class Bitmask extends StatefulPart {
-   constructor(name, length, controller) {
-    super(name, controller)
+  class Bitmask extends Part {
+   constructor(name, length) {
+    super(name)
     this.cardinality = 2n ** BigInt(length)
    }
+   getIndex(data) {
+    if (typeof data === "bigint" && data >= 0n && data < this.cardinality) return data
+   }
   }
-  class Decision extends StatefulPart {
+  class Decision extends Part {
    cardinality = 0n
-
-   constructor(name, controller, ...choices) {
-    super(name, controller)
+   constructor(name, choices) {
+    super(name)
     let offset = 0n
     this.planes = {}
     this.choices = choices.map((e, i) => {
@@ -136,71 +125,230 @@ function boot() {
      if (!(choice instanceof Part)) throw new TypeError(`unexpected ${typeof e} encountered as choice ${i} of decision ${this.name}`)
      const plane = (this.planes[choice.name] ??= [])
      plane.push({ choice, i, offset })
-     console.log(choice.cardinality, name, choice.name)
      offset += choice.cardinality
      this.cardinality += choice.cardinality
+     choice.controller = this
      return choice
     })
-    this.choice = this.choices[0]
    }
-
-   postSet() {
-    let subindex = this.index
-    for (const choice of this.choices) {
-     if (subindex < choice.cardinality) {
-      if (this.choice !== choice) {
-       console.log(`[${this.name}:${this.constructor.name}] ${this.choice.name} => ${choice.name}`)
-       this.choice = choice
-      }
-      choice.set?.(subindex)
-      return
+   getIndex(data) {
+    let name
+    if (typeof data === "object" && Object.keys(data).length === 1) name = Object.keys(data)[0]
+    const stack = this.planes[name]
+    if (stack) {
+     for (const { part, offset } of stack) {
+      const addend = part.indexOf(data)
+      if (addend !== -1n) return offset + addend
      }
-     subindex -= choice.cardinality
     }
    }
+   enter() {
+    console.group("Entering Decision", this)
+    super.enter()
+    this.choice = this.choices[0]
+    this.choice.enter()
+    console.groupEnd()
+   }
+   populate(index) {
+    console.group("Populating", `${this.index} => ${index}`, this)
+    super.populate(index)
+    for (const choice of this.choices) {
+     if (index < choice.cardinality) {
+      if (this.choice !== choice) {
+       this.choice?.leave()
+       this.choice = choice
+       choice.enter()
+      }
+      if (choice.index !== index) choice.populate(index)
+      break
+     }
+     index -= choice.cardinality
+    }
+    console.groupEnd()
+   }
+   leave() {
+    console.group("Leaving Decision", this)
+    super.leave()
+    this.choice.leave()
+    delete this.choice
+    console.groupEnd()
+   }
   }
-  class Composite extends StatefulPart {
-   constructor(name, controller, ...factors) {
-    super(name, controller)
-    const factorNames = new Set()
-    this.units = []
-    this.factors = factors.reduceRight((factors, part) => {
+  class Composite extends Part {
+   constructor(name, factors) {
+    super(name)
+    this.units = [1n]
+    this.factors = {}
+    this.parts = factors.reduceRight((parts, part) => {
      if (typeof part === "string") part = new Part(part)
      if (!(part instanceof Part)) throw new TypeError(`unexpected ${typeof part} encountered as factor of composite ${this.name}`)
-     if (factorNames.has(part.name)) throw new RangeError(`duplicate part name ${part.name} in composite ${name}`)
-     factorNames.add(part.name)
-     factors.unshift(part)
-     return factors
+     if (part.name in this.factors) throw new RangeError(`duplicate part name ${part.name} in composite ${name}`)
+     this.factors[part.name] = part
+     parts.unshift(part)
+     this.units.unshift(this.units[0] * part.cardinality)
+     part.controller = this
+     return parts
     }, [])
     this.cardinality = this.units.shift()
-    console.log(this.cardinality, this.units, this.factors)
    }
-   postSet() {
-    for (let x = 0, index = this.index; x < this.units.length; x++) {
+   getIndex(data) {
+    const names = Object.keys(data)
+    if (names.length !== this.parts.length) return
+    let index = 0n
+    for (let x = 0; x < this.units.length; x++) {
      const unit = this.units[x],
-      factor = this.factors[x],
+      part = this.parts[x],
+      name = part.name
+     if (!(name in data)) return
+     const subindex = part.indexOf(data[name])
+     if (subindex === -1n) return
+     index += unit * subindex
+    }
+    return index
+   }
+   enter() {
+    console.group("Entering Composite", this)
+    super.enter()
+    for (const part of this.parts) part.enter()
+    console.groupEnd()
+   }
+   populate(index) {
+    console.group("Populating", `${this.index} => ${index}`, this)
+    super.populate(index)
+    for (let x = 0; x < this.units.length; x++) {
+     const unit = this.units[x],
+      part = this.parts[x],
       subindex = index / unit
-     if (subindex !== factor.index) factor.set(subindex)
+     part.populate(subindex)
      index %= unit
+    }
+    console.groupEnd()
+   }
+   leave() {
+    console.group("Leaving Composite", this)
+    super.leave()
+    for (const part of this.parts) part.leave()
+    console.groupEnd()
+   }
+  }
+  class ExplorerSelectionAnchor extends Decision {
+   constructor(items) {
+    super("anchor", items)
+    this.items = items
+   }
+   enter() {
+    console.group("Entering ExplorerSelectionAnchor", this)
+    super.enter()
+    this.itemNodes = this.controller.itemNodes
+    this.defaultNode = this.itemNodes[this.items[0]]
+    this.anchorNode = this.defaultNode
+    console.groupEnd()
+   }
+   populate(index) {
+    console.group("Populating", `${this.index} => ${index}`, this)
+    super.populate(index)
+    this.anchorNode.removeAttribute("data-anchor")
+    this.anchorNode = this.itemNodes[this.items[index]]
+    this.anchorNode.setAttribute("data-anchor", "true")
+    console.groupEnd()
+   }
+   leave() {
+    super.leave()
+    if (this.anchorNode !== this.defaultNode) {
+     this.anchorNode.removeAttribute("data-anchor")
+     this.defaultNode.setAttribute("data-anchor", "true")
     }
    }
   }
-  class Empty extends Composite {
-   constructor() {
-    super("empty")
+  class ExplorerSelectionMask extends Bitmask {
+   sparseArray = {}
+   constructor(items) {
+    super("mask", items.length - 1)
+    this.items = items
+   }
+   enter() {
+    console.group("Entering ExplorerSelectionMask", this)
+    super.enter()
+    this.anchor = this.controller.anchor
+    this.itemNodes = this.controller.itemNodes
+    this.sparseArray = { 0: this.anchor.defaultNode }
+    this.sparseArray[0].setAttribute("data-selected", "true")
+    console.groupEnd()
+   }
+   populate(index) {
+    console.group("Populating", `${this.index} => ${index}`, this)
+    super.populate(index)
+    const prefix = [...index.toString(2).padStart(this.items.length - 1, "0")].map(c => c === "1").reverse(),
+     suffix = prefix.splice(Number(this.anchor.index)),
+     mask = prefix.concat(true, suffix)
+    for (let i = 0; i < mask.length; i++) {
+     if (i in this.sparseArray) {
+      if (!mask[i]) {
+       this.sparseArray[i].removeAttribute("data-selected")
+       delete this.sparseArray[i]
+      }
+     } else if (mask[i]) {
+      this.sparseArray[i] = this.itemNodes[this.items[i]]
+      this.sparseArray[i].setAttribute("data-selected", "true")
+     }
+    }
+    console.groupEnd()
+   }
+   leave() {
+    super.leave()
+    for (const index in this.sparseArray) {
+     this.sparseArray[index].removeAttribute("data-selected")
+    }
    }
   }
-  class Explorer extends Composite {
-   constructor(...filenames) {
-    super("explorer", new Decision("filename", ".", ...filenames))
+  class ExplorerSelection extends Composite {
+   constructor(items) {
+    super("selection", [new ExplorerSelectionAnchor(items), new ExplorerSelectionMask(items)])
+    this.anchor = this.factors.anchor
    }
-   create(filename, directory = { "Empty Document": "0", ".htaccess": "1", "dev.server.js": "2", "index.php": "3", "server.js": "4", "3D Preview": "6" }) {
+   enter() {
+    console.group("Entering ExplorerSelection", this)
+    this.itemNodes = this.controller.itemNodes
+    super.enter()
+    console.groupEnd()
+   }
+  }
+  class Explorer extends Decision {
+   constructor() {
+    const items = [
+     ".htaccess",
+     "index.php",
+     "server.js",
+     "client.js",
+     "/favicon.svg",
+     "/favicon.ico",
+     "/apple-touch-icon.png",
+     "/mobile-screenshot.svg",
+     "/desktop-screenshot.svg",
+     "/android-chrome-192x192.png",
+     "/android-chrome-512x512.png",
+    ]
+    super("explorer", ["no-selection", new ExplorerSelection(items)])
+    this.items = items
+    this.container = body
+    // TODO: get offset dynamically... hardcoding will be cumbersome
+    this.offset = 1n
+    this.selectionOffset = this.offset + 1n
+    this.maskCardinality = this.choices[1].factors.mask.cardinality
+    console.log(this.constructor.name, this.cardinality)
+   }
+   enter() {
+    console.group("Entering Explorer", this)
     style.innerHTML = `html, body {
      background: linear-gradient(45deg, rgb(66,138,186) 0%, rgb(88,163,201) 47%, rgb(106,186,223) 100%);
      overflow: hidden;
      height: 100vh;
      width: 100vw;
      margin: 0;
+     -webkit-user-select: none;
+     overscroll-behavior-y: contain !important;
+     -ms-user-select: none;
+     user-select: none;
     }
     body {
      font-family: Arial, sans-serif;
@@ -220,69 +368,166 @@ function boot() {
      font: 13px var(--system-ui);
     }
     #file-list {
-     list-style-type: none;
      padding: 0;
      margin-top: 16px;
      border-radius: 3px;
      overflow: hidden;
      box-shadow: 2px 8px 16px #00208007;
-     display: flex;
-     gap: 1px;
-     flex-flow: column;
     }
-    #file-list li {
+    li {
+     list-style-type: none;
+     display: flex;
      background: #adf6;
      padding: 15px;
      font-size: 16px;
      font-weight: 200;
+     line-height: 16px;
      border-radius: 1.5px;
      color: #246;
+     margin-bottom: 1px;
     }
-    .file-icon {
-     margin-right: 10px;
-     font-size: 20px;
+    li::before, [data-anchor="true"]::after {
+     content: "📄";
+     width: 16px;
+     height: 16px;
+     font-size: 16px;
+     line-height: 16px;
+     margin-right: 1ch;
     }
-    #file-list li[data-selected="true"] {
+    [data-anchor="true"]::after {
+     background: #0005;
+     content: "";
+     margin-left: 1ch;
+     margin-right: 0;
+     border-radius: 8px;
+    }
+    [data-selected="true"] {
      background: #2466;
      color: white;
     }`
-    const onclickAttr = `event.stopPropagation();$_CLIENT.HASH='#'+this.getAttribute('data-hash')`,
-     selectAttr = ` data-selected="true"`,
-     list = Object.entries(directory).map(
-      ([label, hash]) =>
-       `<li onclick="${onclickAttr}" data-hash=${hash} data-filename=${label}${filename === label ? selectAttr : ""}><span class="file-icon">📄</span>${label}</li>`,
-     )
-    body.setAttribute("data-hash", "5")
-    body.setAttribute("onclick", onclickAttr)
-    body.innerHTML = `<h1 id="header">File Explorer</h1><ul id="file-list">${list.join("")}</ul>`
-    this.fileNodes = [...document.querySelectorAll("#file-list>li")].reduce((memory, node) => ((memory[node.getAttribute("data-filename")] = node), memory), {})
-    this.selectItem(filename)
+    body.innerHTML = `<h1 id="header">File Explorer</h1>`
+    body.onclick = () => go(this.offset)
+    const fileList = body.appendChild(document.createElement("ul"))
+    fileList.setAttribute("id", "file-list")
+    fileList.onclick = e => e.stopPropagation()
+    this.itemNodes = {}
+    for (let i = 0; i < this.items.length; i++) {
+     const filename = this.items[i],
+      itemNode = fileList.appendChild(document.createElement("li")),
+      I = BigInt(i),
+      replaceWithThis = () => go(this.selectionOffset + this.maskCardinality * I)
+     itemNode.innerText = filename
+     this.itemNodes[filename] = itemNode
+     itemNode.onclick = e => {
+      e.stopPropagation()
+      const isSelected = itemNode.hasAttribute("data-selected"),
+       anchorIndex = this.choices[1].factors.anchor.index,
+       anchorOffset = anchorIndex * this.maskCardinality,
+       anchorMaskThreshold = 2n ** anchorIndex,
+       premaskOffset = this.selectionOffset + anchorOffset,
+       clickedAnchor = anchorIndex === I,
+       existingMaskIndex = this.choices[1].factors.mask.index,
+       hasSelectionBelowAnchor = anchorMaskThreshold <= existingMaskIndex
+      if ($_CLIENT.CONTEXT_KEYS) {
+       if (isSelected) {
+        if (clickedAnchor) {
+         if (existingMaskIndex === 0n) go(this.offset)
+         else if (hasSelectionBelowAnchor) {
+          const fineMask = existingMaskIndex % anchorMaskThreshold,
+           courseMask = existingMaskIndex / anchorMaskThreshold,
+           courseMaskString = courseMask.toString(2),
+           trimmedCourseMaskString = courseMaskString.replace(/0*$/, ""),
+           trimCount = courseMaskString.length - trimmedCourseMaskString.length,
+           reducedCourseMask = courseMask / 2n ** BigInt(trimCount + 1),
+           newAnchorIndex = BigInt(i + trimCount + 1),
+           adjustedAnchorMaskIndex = newAnchorIndex * this.maskCardinality,
+           adjustedAnchorThreshold = 2n ** newAnchorIndex,
+           newPremaskOffset = this.selectionOffset + adjustedAnchorMaskIndex,
+           adjustedMaskIndex = reducedCourseMask * adjustedAnchorThreshold + fineMask
+          go(newPremaskOffset + adjustedMaskIndex)
+         } else {
+          const newAnchorIndex = BigInt(existingMaskIndex.toString(2).length - 1),
+           newAnchorMaskIndex = newAnchorIndex * this.maskCardinality,
+           newPremaskOffset = this.selectionOffset + newAnchorMaskIndex,
+           removeMask = 2n ** newAnchorIndex,
+           newMaskIndex = existingMaskIndex - removeMask
+          go(newPremaskOffset + newMaskIndex)
+         }
+        } else {
+         const fineMask = existingMaskIndex % anchorMaskThreshold,
+          courseMask = existingMaskIndex / anchorMaskThreshold,
+          fullMask = (courseMask * 2n + 1n) * anchorMaskThreshold + fineMask,
+          removeTargetMask = 2n ** I,
+          newFullMask = fullMask - removeTargetMask,
+          hasSelectionBelowTarget = newFullMask > removeTargetMask
+         if (hasSelectionBelowTarget) {
+          const newFineMask = newFullMask % removeTargetMask,
+           newCourseMask = newFullMask / (removeTargetMask * 2n),
+           newCourseMaskString = newCourseMask.toString(2),
+           trimmedCourseMaskString = newCourseMaskString.replace(/0*$/, ""),
+           trimCount = newCourseMaskString.length - trimmedCourseMaskString.length,
+           reducedCourseMask = newCourseMask / 2n ** BigInt(trimCount + 1),
+           newAnchorIndex = BigInt(i + trimCount + 1),
+           adjustedAnchorMaskIndex = newAnchorIndex * this.maskCardinality,
+           adjustedAnchorThreshold = 2n ** newAnchorIndex,
+           newPremaskOffset = this.selectionOffset + adjustedAnchorMaskIndex,
+           adjustedMaskIndex = reducedCourseMask * adjustedAnchorThreshold + newFineMask
+          go(newPremaskOffset + adjustedMaskIndex)
+         } else {
+          const newAnchorIndex = BigInt(newFullMask.toString(2).length - 1),
+           newAnchorMaskIndex = newAnchorIndex * this.maskCardinality,
+           newPremaskOffset = this.selectionOffset + newAnchorMaskIndex,
+           removeMask = 2n ** newAnchorIndex,
+           newMaskIndex = newFullMask - removeMask
+          go(newPremaskOffset + newMaskIndex)
+         }
+        }
+       } else {
+        if (this.index === 0n) replaceWithThis()
+        else {
+         const fineMask = existingMaskIndex % anchorMaskThreshold,
+          courseMask = existingMaskIndex / anchorMaskThreshold,
+          fullMask = (courseMask * 2n + 1n) * anchorMaskThreshold + fineMask,
+          newAnchorMaskThreshold = 2n ** I,
+          newFineMask = fullMask % newAnchorMaskThreshold,
+          newCourseMask = fullMask / (newAnchorMaskThreshold * 2n),
+          newMaskIndex = newCourseMask * newAnchorMaskThreshold + newFineMask,
+          newAnchorMask = I * this.maskCardinality
+         go(this.selectionOffset + newAnchorMask + newMaskIndex)
+        }
+       }
+      } else if ($_CLIENT.SHIFTS_DOWN) {
+       if (clickedAnchor) replaceWithThis()
+       else {
+        const delta = I - anchorIndex,
+         clickedBelowAnchor = delta > 0,
+         absDelta = clickedBelowAnchor ? delta : delta * -1n,
+         ones = (2n ** absDelta - 1n) * 2n ** (anchorIndex - (clickedBelowAnchor ? 0n : absDelta))
+        go(premaskOffset + ones)
+       }
+      } else replaceWithThis()
+     }
+    }
+    this.anchorNode = this.itemNodes[this.items[0]]
+    this.anchorNode.setAttribute("data-anchor", "true")
+    super.enter()
+    console.groupEnd()
    }
-   update(filename) {
-    this.deselectAll()
-    this.selectItem(filename)
-   }
-   destroy() {
-    while (body.attributes.length > 0) body.removeAttribute(body.attributes[0].name)
+   leave() {
+    console.group("Leaving Explorer", this)
+    super.leave()
     style.innerHTML = body.innerHTML = ``
-    document.querySelector("head>title").remove()
-    console.warn("inspect memory closely to ensure file explorer is completely destroyed.")
-   }
-   selectItem(filename) {
-    this.selectedNode = this.fileNodes[filename]
-    this.selectedNode?.setAttribute("data-selected", "true")
-    if (filename === ".") document.title = "Explorer | No selection"
-    else document.title = "Explorer | Selecting 1 file (" + filename + ")"
-   }
-   deselectAll() {
-    this.selectedNode?.removeAttribute("data-selected")
+    body.onclick = undefined
+    console.groupEnd()
    }
   }
   class Engine extends Composite {
    constructor() {
-    super("engine", new Bitmask("byte", 8))
+    super("engine", [new Bitmask("byte", 8)])
    }
-   create(byte) {
+   enter(byte) {
+    console.group("Entering Engine", this)
+    super.enter()
     console.warn("now doing a heavy process - creating the 3D engine from scratch. Use input for creation state... btye?", byte)
     const Utils = {
       foundation: classObj => {
@@ -2077,83 +2322,34 @@ function boot() {
     })
     resizeObserver.observe(canvas)
     scene.render()
+    console.groupEnd()
    }
-   update(byte) {
-    console.log('nothing here yet ... update the "byte" or something?', byte)
+   populate(index) {
+    console.group("Populating", `${this.index} => ${index} ... using "byte"?'`, this)
+    super.populate(index)
+    console.groupEnd()
    }
-   destroy() {
+   leave() {
+    console.group("Leaving Engine.\nInspect memory closely to ensure 3D engine is completely destroyed.", this)
+    super.leave()
     while (body.attributes.length > 0) body.removeAttribute(body.attributes[0].name)
     style.innerHTML = body.innerHTML = ``
     document.querySelector("head>title").remove()
     globalThis.MyScene.stop()
     delete globalThis.MyScene
-    console.warn("inspect memory closely to ensure 3D engine is completely destroyed.")
-   }
-  }
-  class OriginExplorer extends Explorer {
-   constructor() {
-    super(".htaccess", "index.php", "server.js")
+    console.groupEnd()
    }
   }
   class Core extends Decision {
    constructor() {
-    super("core", new Empty(), new OriginExplorer(), new Engine())
+    super("core", ["empty", new Explorer(), new Engine()])
    }
   }
-  const oldCore = {
-    "#0#1": () => explorer.create(".htaccess"),
-    "#0#2": () => explorer.create("dev.server.js"),
-    "#0#3": () => explorer.create("index.php"),
-    "#0#4": () => explorer.create("server.js"),
-    "#0#5": () => explorer.create("."),
-    "#0#6": () => engine.create(),
+  const newCore = new Core()
+  newCore.enter() // enters at index 0 - shouldn't do anything to the page
 
-    "#1#0": () => explorer.destroy(),
-    "#1#2": () => explorer.update("dev.server.js"),
-    "#1#3": () => explorer.update("index.php"),
-    "#1#4": () => explorer.update("server.js"),
-    "#1#5": () => explorer.update("."),
-    "#1#6": () => (explorer.destroy(), engine.create()),
-
-    "#2#0": () => explorer.destroy(),
-    "#2#1": () => explorer.update(".htaccess"),
-    "#2#3": () => explorer.update("index.php"),
-    "#2#4": () => explorer.update("server.js"),
-    "#2#5": () => explorer.update("."),
-    "#2#6": () => (explorer.destroy(), engine.create()),
-
-    "#3#0": () => explorer.destroy(),
-    "#3#1": () => explorer.update(".htaccess"),
-    "#3#2": () => explorer.update("dev.server.js"),
-    "#3#4": () => explorer.update("server.js"),
-    "#3#5": () => explorer.update("."),
-    "#3#6": () => (explorer.destroy(), engine.create()),
-
-    "#4#0": () => explorer.destroy(),
-    "#4#1": () => explorer.update(".htaccess"),
-    "#4#2": () => explorer.update("dev.server.js"),
-    "#4#3": () => explorer.update("index.php"),
-    "#4#5": () => explorer.update("."),
-    "#4#6": () => (explorer.destroy(), engine.create()),
-
-    "#5#0": () => explorer.destroy(),
-    "#5#1": () => explorer.update(".htaccess"),
-    "#5#2": () => explorer.update("dev.server.js"),
-    "#5#3": () => explorer.update("index.php"),
-    "#5#4": () => explorer.update("server.js"),
-    "#5#6": () => (explorer.destroy(), engine.create()),
-
-    "#6#0": () => engine.destroy(),
-    "#6#1": () => (engine.destroy(), explorer.create(".htaccess")),
-    "#6#2": () => (engine.destroy(), explorer.create("dev.server.js")),
-    "#6#3": () => (engine.destroy(), explorer.create("index.php")),
-    "#6#4": () => (engine.destroy(), explorer.create("server.js")),
-    "#6#5": () => (engine.destroy(), explorer.create(".")),
-   },
-   newCore = new Core()
-  dump(newCore)
-  addEventListener("blur", () => ($_CLIENT.CONTEXT_KEYS = $_CLIENT.SHIFTS_DOWN = 0))
-  addEventListener("keydown", e => {
+  onblur = () => ($_CLIENT.CONTEXT_KEYS = $_CLIENT.SHIFTS_DOWN = 0)
+  onkeydown = e => {
    if ($_CLIENT.IS_MAC) {
     if (e.key === "Meta") $_CLIENT.CONTEXT_KEYS++
    } else if (e.key === "Control") $_CLIENT.CONTEXT_KEYS++
@@ -2162,16 +2358,21 @@ function boot() {
    if ($_CLIENT.CONTEXT_KEYS === 1 && !$_CLIENT.SHIFTS_DOWN && e.key === "y") history.forward()
    if ($_CLIENT.CONTEXT_KEYS === 1 && $_CLIENT.SHIFTS_DOWN && e.key === "z") history.forward()
    e.preventDefault()
-  })
-  addEventListener("keyup", e => {
+  }
+  onkeyup = e => {
    if ($_CLIENT.IS_MAC) {
     if (e.key === "Meta") $_CLIENT.CONTEXT_KEYS = Math.max(0, $_CLIENT.CONTEXT_KEYS - 1)
    } else if (e.key === "Control") $_CLIENT.CONTEXT_KEYS = Math.max(0, $_CLIENT.CONTEXT_KEYS - 1)
    if (e.key === "Shift") $_CLIENT.SHIFTS_DOWN = Math.max(0, $_CLIENT.SHIFTS_DOWN - 1)
    e.preventDefault()
-  })
-  addEventListener("hashchange", reset)
-  reset()
+  }
+  onhashchange = () => {
+   if ($_CLIENT.ANIM_FRAME) cancelAnimationFrame($_CLIENT.ANIM_FRAME)
+   if (location.pathname !== "/" || location.search || !location.hash) history.replaceState({}, null, `${location.origin}/${location.hash || "#1"}`)
+   $_CLIENT.HASH = location.hash
+   loop(($_CLIENT.THROTTLE_START_TIME = performance.now()))
+  }
+  onhashchange()
  }
  if (this.constructor === this.Window) client()
  else {
@@ -2349,22 +2550,3 @@ function boot() {
  }
 }
 boot()
-/*
-
- Version 86.7 / 1000
-
- TODO:
-  - Get 3D viwer working
-  - Create an overall client part including subparts for ServiceWorker, GPU, viewport size and all other factors which affect the rendered output but, unlike settable design aspects, are measured environmental properties which are independant of designer interface states.
-  --- In essence, the client factor is the cardinality of a configuration space representing all of those states which every single client interface state must support...
-  --- ... although we could conceive of a hybrid approach to a no-client-space and entire-factor-per-non-client-space, wherein the client interface states are, to some extent, obligated to support certain
-  --- client-side error states like no serviceworker, no gpu, etc. and some interface states may want to tap into other client state parts - which will be included as subparts of the core part only exactly where needed.
-  - Add an abstraction layer between Part and node population (ala our Node extensions before?).
-  --- someDocumentAbstraction.set("style.css", `html, body {...}`)
-  - Add an abstraction layer between Part and HASH?
-  --- someHashAbstraction.set("explorer/filename.txt", `html, body {...}`)
-  - Consider native cache for serviceWorker ... why and why not.
-  - Fix and replace (or just replace) oldCore
-  - Organize client() initialization lines a bit.
-
-*/
