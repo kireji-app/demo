@@ -1,9 +1,10 @@
+/*----------------------------------------------------------*\
+ *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
+ *  All Rights Reserved.                                    *
+ *  0.54.8-release                                          *
+\*----------------------------------------------------------*/
+
 ;(C = {
- "version.txt": {
-  get() {
-   return "0.54.7-release"
-  },
- },
  "host-size.number": {
   get() {
    return HOST[".rid"].length

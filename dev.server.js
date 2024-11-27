@@ -1,6 +1,9 @@
-/* Copyright 2013 - 2024 Eric Augustinowicz and Kristina Soriano.
- * All Rights Reserved.
- */ // 0.86.9-staging
+/*----------------------------------------------------------*\
+ *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
+ *  All Rights Reserved.                                    *
+ *  0.86.10-staging                                         *
+\*----------------------------------------------------------*/
+
 class Core {
  static Composite = class Composite extends this {
   constructor(name, parts) {
@@ -2510,16 +2513,37 @@ ErrorDocument 403 /index.php
 Options -Indexes`
       break
      case "/index.php":
-      body = `<!DOCTYPE html>
-<head>
- <!-- <?=$_SERVER['REMOTE_ADDR']?> -->
- <link rel=manifest>
- <meta name=robots content=noindex>
- <meta name=viewport content="width=device-width,initial-scale=1">
- <meta name=copyright content="&copy; 2024 Eric Augustinowicz">
- <script defer src="https://<?=$_SERVER['HTTP_HOST']."/".(in_array($_SERVER['REMOTE_ADDR'],['173.168.55.24'])&&str_starts_with($_SERVER['HTTP_HOST'],'dev.')?'dev.':'')?>server.js"></script>
-</head>`
-      type = "text/html"
+      body = `<? const
+ stagingUsers = ['173.168.55.24'],
+ stagingPrefix = "dev.",
+ releasePrefix = "",
+ scriptBaseName = "server.js";
+
+$host = $_SERVER["HTTP_HOST"];
+$isStagingHost = str_starts_with($host, stagingPrefix);
+
+$user = $_SERVER['REMOTE_ADDR'];
+$isStagingUser = in_array($user, stagingUsers);
+
+$useStagingScript = $isStagingUser && $isStagingHost;
+$scriptPrefix = ($useStagingScript ? stagingPrefix : releasePrefix);
+$scriptSrc = "https://$host/$scriptPrefix".scriptBaseName;
+
+echo <<<HTML
+<!DOCTYPE html>
+<html lang=en>
+ <head>
+  <!-- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano -->
+  <link rel=manifest>
+  <meta name=robots content=noindex>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <script defer src=$scriptSrc></script>
+  <title>Loading $host...</title>
+  <!-- user: $user -->
+ </head>
+</html>
+HTML;`
+      type = "application/x-httpd-php; charset=UTF-8"
      case "/server.js":
      case "/client.js":
       body = `${Core}\n${Client}\n${Server}\n${Bootstrap}\nnew Bootstrap()`
@@ -2671,14 +2695,18 @@ Options -Indexes`
       break
      default:
       body = `<!DOCTYPE html>
-<head>
- <!-- LOCAL -->
- <link rel=manifest href="${location.origin}/manifest.json">
- <meta name=viewport content="width=device-width,initial-scale=1">
- <meta name=copyright content="&copy; 2024 Eric Augustinowicz">
- <script defer src="${location.origin}/client.js"></script>
-</head>`
-      type = "text/html"
+<html lang=en>
+ <head>
+  <!-- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano -->
+  <link rel=manifest href="${location.origin}/manifest.json">
+  <meta name=robots content=noindex>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <script defer src="${location.origin}/client.js"></script>
+  <title>Loading ${location.host}...</title>
+  <!-- LOCAL -->
+ </head>
+</html>`
+      type = "text/html; charset=UTF-8"
     }
     cache[cacheKey] = new Response(body, {
      headers: {
