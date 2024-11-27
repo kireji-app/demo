@@ -1,7 +1,30 @@
-<!DOCTYPE html
-><link rel=manifest
-><meta name=robots content=noindex
-><meta name=viewport content="width=device-width,initial-scale=1"
-><meta name=copyright content="&copy; 2024 Eric Augustinowicz"
-><script defer src="https://<?=$_SERVER['HTTP_HOST']."/".(in_array($_SERVER['REMOTE_ADDR'],['173.168.55.24'])&&str_starts_with($_SERVER['HTTP_HOST'],'dev.')?'dev.':'')?>server.js"
-></script><style></style><!-- REMOTE INDEX [<?=$_SERVER['REMOTE_ADDR']?>] -->
+<? const
+ stagingUsers = ['173.168.55.24'],
+ stagingPrefix = "dev.",
+ releasePrefix = "",
+ scriptBaseName = "server.js";
+
+$host = $_SERVER["HTTP_HOST"];
+$isStagingHost = str_starts_with($host, stagingPrefix);
+
+$user = $_SERVER['REMOTE_ADDR'];
+$isStagingUser = in_array($user, stagingUsers);
+
+$useStagingScript = $isStagingUser && $isStagingHost;
+$scriptPrefix = ($useStagingScript ? stagingPrefix : releasePrefix);
+$scriptSrc = "https://$host/$scriptPrefix".scriptBaseName;
+
+echo <<<HTML
+<!DOCTYPE html>
+<html lang=en>
+ <head>
+  <!-- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano -->
+  <link rel=manifest>
+  <meta name=robots content=noindex>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <script defer src=$scriptSrc></script>
+  <title>Loading $host...</title>
+  <!-- user: $user -->
+ </head>
+</html>
+HTML;

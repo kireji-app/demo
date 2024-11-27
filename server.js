@@ -1,7 +1,7 @@
 ;(C = {
- "version.number": {
+ "version.txt": {
   get() {
-   return 54.6 / 1000
+   return "0.54.7-release"
   },
  },
  "host-size.number": {
