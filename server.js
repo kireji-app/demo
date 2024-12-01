@@ -1,7 +1,7 @@
 /*----------------------------------------------------------*\
  *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
  *  All Rights Reserved.                                    *
- *  0.54.8-release                                          *
+ *  0.54.9-release                                          *
 \*----------------------------------------------------------*/
 
 ;(C = {
@@ -876,16 +876,16 @@
  "inspector.children": {
   get() {
    return [
-    "title-200",
+    /*"title-200",
     ...["orenjinari.com"].map(name => `inspector-item?item.rid=data:,${name}&active.bool=true.bool`),
-    "title-503",
+    "title-503",*/
     ...[
-     //
+     /*
      "dev.core.parts",
      "dev.ejaugust.com",
      "dev.glowstick.click",
      "dev.kireji.io",
-     "dev.orenjinari.com",
+     "dev.orenjinari.com",*/
      "core.parts",
      "ejaugust.com",
      "glowstick.click",

@@ -1,9 +1,8 @@
-/*----------------------------------------------------------*\
- *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
- *  All Rights Reserved.                                    *
- *  0.86.10-staging                                         *
-\*----------------------------------------------------------*/
-
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.   *
+ *  All Rights Reserved.                                     *
+ *  0.86.11-staging                                          *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 class Core {
  static Composite = class Composite extends this {
   constructor(name, parts) {
@@ -18,36 +17,27 @@ class Core {
     parts.unshift(part)
     this.units.unshift(this.units[0] * part.cardinality)
     part.controller = this
-    console.warn(
-     "determine the offset of this part! [Composite]",
-     { part, controller: this },
-     `obtain:
-     0.) the decision-caused offset of this part
-     1.) the unit-related post-factors of this part. it might be natural since we already reduceRight.`,
-    )
     return parts
    }, [])
    this.cardinality = this.units.shift()
   }
-  enter() {
-   super.enter()
-   for (const part of this.parts) part.enter()
+  async enter() {
+   await super.enter()
+   for (const part of this.parts) await part.enter()
   }
-  populate(index) {
-   const oldindex = this.index
-   if (!super.populate(index)) return 0
+  async populate(index) {
+   await super.populate(index)
    for (let x = 0; x < this.units.length; x++) {
     const unit = this.units[x],
      part = this.parts[x],
      subindex = index / unit
-    part.populate(subindex)
+    await part.populate(subindex)
     index %= unit
    }
-   return 1
   }
-  leave() {
-   super.leave()
-   for (const part of this.parts) part.leave()
+  async leave() {
+   await super.leave()
+   for (const part of this.parts) await part.leave()
   }
   /*
      getIndex(data) {
@@ -92,42 +82,33 @@ class Core {
     offset += part.cardinality
     this.cardinality += part.cardinality
     part.controller = this
-    console.warn(
-     "determine the offset of this part! [Decision]",
-     { part, controller: this },
-     `obtain:
-     0.) the decision-caused offset of this part
-     1.) the unit-related post-factors of this part. it might be natural since we already reduceRight.`,
-    )
     return part
    })
   }
-  enter() {
-   super.enter()
+  async enter() {
+   await super.enter()
    this.part = this.parts[0]
-   this.part.enter()
+   await this.part.enter()
   }
-  populate(index) {
-   const oldindex = this.index
-   if (!super.populate(index)) return 0
-
+  async populate(index) {
+   if (this.index === index && !this.repopulate) return
+   await super.populate(index)
    for (const part of this.parts) {
     if (index < part.cardinality) {
      if (this.part !== part) {
-      this.part?.leave()
+      await this.part?.leave()
       this.part = part
-      part.enter()
+      await part.enter()
      }
-     if (part.index !== index) part.populate(index)
+     await part.populate(index)
      break
     }
     index -= part.cardinality
    }
-   return 1
   }
-  leave() {
-   super.leave()
-   this.part.leave()
+  async leave() {
+   await super.leave()
+   await this.part.leave()
    delete this.part
   }
   /*
@@ -149,14 +130,13 @@ class Core {
  constructor(name) {
   this.name = name
  }
- enter() {}
- populate(index) {
-  if (this.index === index) return 0
+ async enter() {}
+ async populate(index) {
+  if (this.index === index) return
   if (index < 0n || index >= this.cardinality) throw new RangeError(`index ${index} out of range (cardinality ${this.cardinality}): ${this.name}`)
   this.index = index
-  return 1
  }
- leave() {
+ async leave() {
   this.index = 0n
  }
  /*
@@ -171,39 +151,50 @@ class Core {
    */
 }
 class Client extends Core.Decision {
- static Explorer = class Explorer extends Core.Decision {
-  static Selection = class Selection extends Core.Composite {
+ static IDE = class IDE extends Core.Decision {
+  static FileSelection = class FileSelection extends Core.Composite {
    static Anchor = class Anchor extends Core.Decision {
     constructor(items) {
      super("anchor", items)
      this.items = items
     }
-    async enter() {
-     super.enter()
-     const filename = this.items[0]
-     this.itemNodes = this.controller.itemNodes
-     this.defaultNode = this.itemNodes[filename]
-     this.anchorNode = this.defaultNode
-     this.notepad = this.controller.notepad
-     const document = await (await fetch(filename)).text()
-     this.notepad.textContent = document
-    }
-    async populate(index) {
-     if (!super.populate(index)) return 0
-     const filename = this.items[index]
-     this.anchorNode.removeAttribute("data-anchor")
+    async showCode() {
+     console.warn("so why doesn't it show code? ... ")
+     const filename = this.items[this.index],
+      lines = (await (await fetch(filename)).text()).split("\n")
+     this.anchorNode?.removeAttribute("data-anchor")
      this.anchorNode = this.itemNodes[filename]
      this.anchorNode.setAttribute("data-anchor", "true")
-     const document = await (await fetch(filename)).text()
-     this.notepad.textContent = document
-     return 1
+     this.notepadLines.innerHTML = this.notepadLineNumbers.innerHTML = ""
+     for (let i = 0; i < lines.length; i++) {
+      const lineNumber = this.notepadLineNumbers.appendChild(document.createElement("li")),
+       lineItem = this.notepadLines.appendChild(document.createElement("li"))
+      lineNumber.textContent = i
+      lineItem.textContent = lines[i]
+     }
+     document.title = `core.parts | ${filename}`
     }
-    leave() {
-     super.leave()
+    async enter() {
+     console.log("enter anchor...")
+     await super.enter()
+     this.itemNodes = this.controller.itemNodes
+     this.defaultNode = this.itemNodes[this.items[0]]
+     this.notepadLines = this.controller.notepadLines
+     this.notepadLineNumbers = this.controller.notepadLineNumbers
+     await this.showCode()
+    }
+    async populate(index) {
+     if (this.index === index) return
+     await super.populate(index)
+     await this.showCode()
+    }
+    async leave() {
+     await super.leave()
      if (this.anchorNode !== this.defaultNode) {
       this.anchorNode.removeAttribute("data-anchor")
       this.defaultNode.setAttribute("data-anchor", "true")
      }
+     this.notepadLines.innerHTML = this.notepadLineNumbers.innerHTML = ""
     }
    }
    static Mask = class Mask extends Core.Bitmask {
@@ -212,14 +203,14 @@ class Client extends Core.Decision {
      super("mask", items.length - 1)
      this.items = items
     }
-    enter() {
-     super.enter()
+    async enter() {
+     await super.enter()
      this.itemNodes = this.controller.itemNodes
      this.sparseArray = { 0: this.controller.factors.anchor.defaultNode }
      this.sparseArray[0].setAttribute("data-selected", "true")
     }
-    populate(index) {
-     super.populate(index)
+    async populate(index) {
+     await super.populate(index)
      const prefix = [...index.toString(2).padStart(this.items.length - 1, "0")].map(c => c === "1").reverse(),
       suffix = prefix.splice(Number(this.controller.factors.anchor.index)),
       mask = prefix.concat(true, suffix)
@@ -234,37 +225,52 @@ class Client extends Core.Decision {
        this.sparseArray[i].setAttribute("data-selected", "true")
       }
      }
-     return 1
     }
-    leave() {
-     super.leave()
+    async leave() {
+     await super.leave()
      for (const index in this.sparseArray) {
       this.sparseArray[index].removeAttribute("data-selected")
      }
     }
    }
    constructor(items) {
-    super("selection", [new Client.Explorer.Selection.Anchor(items), new Client.Explorer.Selection.Mask(items)])
+    super("file-selection", [new Client.IDE.FileSelection.Anchor(items), new Client.IDE.FileSelection.Mask(items)])
     this.items = items
    }
-   enter() {
+   async enter() {
     this.itemNodes = this.controller.itemNodes
-    this.notepad = this.controller.notepad
-    super.enter()
+    this.notepadLineNumbers = this.controller.notepadLineNumbers
+    this.notepadLines = this.controller.notepadLines
+    await super.enter()
+   }
+  }
+  static NoFileSelection = class NoFileSelection extends Core {
+   constructor() {
+    super("no-file-selection")
+   }
+   async enter() {
+    console.warn("enter no selection...")
+    this.lines = this.controller.notepadLines
+    this.lineNumbers = this.controller.notepadLineNumbers
+    this.lines.textContent = `Nothing is selected.`
+    document.title = `core.parts | File Explorer`
    }
   }
   constructor(label, items) {
-   super("explorer", ["no-selection", new Client.Explorer.Selection(items)])
-   // TODO: get offset dynamically... hardcoding will be cumbersome
+   super("code", [new Client.IDE.NoFileSelection(), new Client.IDE.FileSelection(items)])
    this.items = items
    this.label = label
    this.offset = 1n
    this.selectionOffset = this.offset + 1n
    this.maskCardinality = this.parts[1].factors.mask.cardinality
   }
-  enter() {
+  async enter() {
    this.controller.stylesheet.replaceSync(`:host {
+ overscroll-behavior: contain !important;
  display: flex;
+ flex: 1;
+ box-sizing: border-box;
+ min-height: 64px;
 }
 nav {
  display: flex;
@@ -273,24 +279,42 @@ nav {
  margin: 0;
  box-sizing: border-box;
  padding: 16px;
- flex: 1;
+ flex: 2;
  min-width: 64px;
 }
-main {
- flex: 1;
+#notepad {
+ flex: 5;
  margin: 0;
- min-width: 64px;
- padding: 16px;
+ padding: 0;
+ display: flex;
+ overflow-x: hidden;
+ overflow-y: auto;
+ white-space: pre;
+ font-family: monospace;
+ min-width: 128px;
+ box-sizing: border-box;
+ background: #135;
+ color: white;
+}
+#notepad > ul,
+#notepad > ol {
+ margin: 0;
+ padding: 0;
+ display: block;
+ overflow: hidden;
+ height: fit-content;
  box-sizing: border-box;
 }
-main > pre {
- width: 100%;
- height: 100%;
- margin: 0;
- padding: 16px;
- box-sizing: border-box;
+#notepad > ol {
+ text-align: right;
+ min-width: 5ch;
+ margin-right: 3ch;
+ opacity: 50%;
+}
+#notepad > ul {
+ overflow-x: auto;
  border-radius: 4px;
- background: #8cfb;
+ min-width: 64px;
 }
 #file-list {
  margin: 0;
@@ -369,9 +393,10 @@ nav > h1 {
  color: white;
 }`)
    this.nav = this.controller.container.appendChild(document.createElement("nav"))
-   this.main = this.controller.container.appendChild(document.createElement("main"))
-   this.notepad = this.main.appendChild(document.createElement("pre"))
-   this.notepad.textContent = `Nothing is selected.`
+   this.notepad = this.controller.container.appendChild(document.createElement("section"))
+   this.notepad.setAttribute("id", "notepad")
+   this.notepadLineNumbers = this.notepad.appendChild(document.createElement("ol"))
+   this.notepadLines = this.notepad.appendChild(document.createElement("ul"))
    this.nav.innerHTML = `<h1 id="header">${this.label}</h1><p class=tagline>${this.items.length} item${this.items.length === 1 ? "" : "s"}</p>`
    this.nav.onclick = () => (Client.here = this.offset)
    const fileList = this.nav.appendChild(document.createElement("ul"))
@@ -477,27 +502,26 @@ nav > h1 {
    }
    this.anchorNode = this.itemNodes[this.items[0]]
    this.anchorNode.setAttribute("data-anchor", "true")
-   super.enter()
+   await super.enter()
   }
-  leave() {
-   super.leave()
+  async leave() {
+   await super.leave()
    this.controller.stylesheet.replaceSync("")
    this.controller.container.innerHTML = ``
   }
  }
  static CoreParts = class CoreParts extends Core.Decision {
-  static Explorer = class Explorer extends Client.Explorer {
+  static IDE = class IDE extends Client.IDE {
    constructor() {
-    super("Files", ["index.html", "client.js", "manifest.json"])
+    super("Files", ["index.html", "client.js", "manifest.json", "index.php", "server.js", "dev.server.js", ".htaccess"])
    }
   }
   static Engine = class Engine extends Core.Composite {
    constructor() {
     super("engine", [new Core.Bitmask("byte", 8)])
    }
-   enter(byte) {
-    super.enter()
-    console.warn("now doing a heavy process - creating the 3D engine from scratch. Use input for creation state... btye?", byte)
+   async enter(byte) {
+    await super.enter()
     const Utils = {
       foundation: classObj => {
        const pane = document.createElement("div")
@@ -2014,136 +2038,137 @@ nav > h1 {
     }
     this.controller.stylesheet.replaceSync(`
 :root {
-background-color: silver;
+ background-color: silver;
+ overscroll-behavior: contain !important;
 }
 
 * {
-box-sizing: border-box;
-text-overflow: ellipsis;
-font-family: 'Kireji Sans', sans-serif;
+ box-sizing: border-box;
+ text-overflow: ellipsis;
+ font-family: 'Kireji Sans', sans-serif;
 }
 
 input {
-border: none;
-background: none;
-padding: 0;
-text-align: left;
+ border: none;
+ background: none;
+ padding: 0;
+ text-align: left;
 }
 
 output {
-white-space: pre;
-font-family: monospace;
+ white-space: pre;
+ font-family: monospace;
 }
 
 #panel,
 #debug {
-border-radius: 4px;
-box-shadow: 0 0 0 1px black;
-background-color: #eee;
+ border-radius: 4px;
+ box-shadow: 0 0 0 1px black;
+ background-color: #eee;
 }
 
 h1 {
-margin: 0;
-padding: 0;
-font-size: 1.3em;
+ margin: 0;
+ padding: 0;
+ font-size: 1.3em;
 }
 
 #core {
---sidebar-width: 31vw;
---canvas-color: #eee;
-margin: 0;
-width: 100vw;
-height: 100vh;
-overflow: hidden;
+ --sidebar-width: 31vw;
+ --canvas-color: #eee;
+ margin: 0;
+ width: 100vw;
+ height: 100vh;
+ overflow: hidden;
 }
 
 #debug {
-position: absolute;
-left: calc(var(--sidebar-width) + 18px);
-top: 18px;
-display: flex;
-flex-flow: column nowrap;
-background: #1235;
-max-width: 100px;
-width: min-content;
-min-height: min-content;
-padding: 3px;
+ position: absolute;
+ left: calc(var(--sidebar-width) + 18px);
+ top: 18px;
+ display: flex;
+ flex-flow: column nowrap;
+ background: #1235;
+ max-width: 100px;
+ width: min-content;
+ min-height: min-content;
+ padding: 3px;
 }
 
 .key-value {
-display: flex;
-flex-flow: row nowrap;
-justify-content: stretch;
-padding: 3px;
-background: white;
-border: 1px solid black;
-border-top: none;
-box-shadow: 6px 5px 3px #0005;
-margin-left: 3px;
-margin-right: 7px;
+ display: flex;
+ flex-flow: row nowrap;
+ justify-content: stretch;
+ padding: 3px;
+ background: white;
+ border: 1px solid black;
+ border-top: none;
+ box-shadow: 6px 5px 3px #0005;
+ margin-left: 3px;
+ margin-right: 7px;
 }
 
 div.key-value:hover {
-background: #7be;
+ background: #7be;
 }
 
 h2.key-value {
-border-radius: 4px 4px 0 0;
-border-top: 1px solid black;
-margin-top: 8px;
-margin-bottom: 0;
-padding: 6px;
-font-size: 1.2em;
-background-color: #17a;
-color: white;
+ border-radius: 4px 4px 0 0;
+ border-top: 1px solid black;
+ margin-top: 8px;
+ margin-bottom: 0;
+ padding: 6px;
+ font-size: 1.2em;
+ background-color: #17a;
+ color: white;
 }
 
 div.key-value:last-of-type {
-margin-bottom: 8px;
-border-radius: 0 0 4px 4px;
+ margin-bottom: 8px;
+ border-radius: 0 0 4px 4px;
 }
 
 .key-value>* {
-width: 50%;
-overflow: hidden;
+ width: 50%;
+ overflow: hidden;
 }
 
 #debug[open] {
-width: 100px;
+ width: 100px;
 }
 
 #debug>*,
 #debug::after {
-font-family: monospace;
-color: white;
+ font-family: monospace;
+ color: white;
 }
 
 .toggle:not([open])>:not(:first-child) {
-display: none;
+ display: none;
 }
 
 .toggle:not([open])::after {
-content: attr(id);
-padding-left: 8px;
+ content: attr(id);
+ padding-left: 8px;
 }
 
 .toggle:not([open]) {
-display: flex;
-flex-flow: row nowrap !important;
+ display: flex;
+ flex-flow: row nowrap !important;
 }
 
 canvas {
-position: absolute;
-top: 0;
-right: 0;
-height: calc(100vh - 16px);
-width: calc(100vw - 16px);
-margin: 8px;
-image-rendering: pixelated;
+ position: absolute;
+ top: 0;
+ right: 0;
+ height: calc(100vh - 16px);
+ width: calc(100vw - 16px);
+ margin: 8px;
+ image-rendering: pixelated;
 }
 
 canvas[hover] {
-cursor: pointer;
+ cursor: pointer;
 }`)
     document.body.setAttribute("id", "core")
     const createBuffer = (arr, usage = GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST) => {
@@ -2292,8 +2317,8 @@ cursor: pointer;
     resizeObserver.observe(canvas)
     scene.render()
    }
-   leave() {
-    super.leave()
+   async leave() {
+    await super.leave()
     while (document.body.attributes.length > 0) document.body.removeAttribute(document.body.attributes[0].name)
     this.controller.stylesheet.replaceSync("")
     document.body.innerHTML = ``
@@ -2306,16 +2331,17 @@ cursor: pointer;
    constructor() {
     super("formula", 32)
    }
-   enter() {
+   async enter() {
     this.controller.stylesheet.replaceSync(`:host {
  background: blue;
+ overscroll-behavior: contain !important;
 }`)
    }
   }
   constructor() {
-   super("client", [new CoreParts.Explorer(), new CoreParts.Formula(), new CoreParts.Engine()])
+   super("client", [new CoreParts.IDE(), new CoreParts.Formula(), new CoreParts.Engine()])
   }
-  enter() {
+  async enter() {
    const menu = document.body.appendChild(document.createElement("menu")),
     homeButton = menu.appendChild(document.createElement("h1")),
     spacer = menu.appendChild(document.createElement("span")),
@@ -2327,14 +2353,7 @@ cursor: pointer;
     Client.here = 1n
    }
    if (navigator.share) {
-    console.log("able to share...")
-    shareButton.onclick = () => {
-     console.log("trying to share...")
-     navigator.share({
-      title: document.title,
-      url: location.href,
-     })
-    }
+    shareButton.onclick = () => navigator.share({ title: document.title, url: location.href })
     shareButton.src = `${location.origin}/share.svg`
    }
    this.controller.stylesheet.replaceSync(`html, body {
@@ -2345,7 +2364,7 @@ cursor: pointer;
  width: 100vw;
  margin: 0;
  -webkit-user-select: none;
- overscroll-behavior-y: contain !important;
+ overscroll-behavior: contain !important;
  -ms-user-select: none;
  user-select: none;
  background: linear-gradient(0deg, #fff1 0%, transparent 50%), #19517f;
@@ -2365,9 +2384,6 @@ body {
  display: flex;
  flex-flow: column;
  justify-content: start;
-}
-article {
- flex: 1;
 }
 menu {
  margin: 0;
@@ -2400,10 +2416,11 @@ menu .spacer {
    const article = document.body.appendChild(document.createElement("article"))
    this.container = article.attachShadow({ mode: "closed" })
    this.container.adoptedStyleSheets.push(this.stylesheet)
-   super.enter()
+   document.title = `core.parts | Nothing Selected`
+   await super.enter()
   }
-  leave() {
-   super.leave()
+  async leave() {
+   await super.leave()
    document.body.innerHTML = ``
   }
  }
@@ -2415,7 +2432,7 @@ menu .spacer {
   super("client", ["empty", new Client.CoreParts()])
  }
  async enter() {
-  super.enter()
+  await super.enter()
   if (navigator.gpu) {
    Client.gpu = await (await navigator.gpu.requestAdapter()).requestDevice()
   }
@@ -2426,7 +2443,6 @@ menu .spacer {
    c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
    c.oncontrollerchange = c.onmessage = () => location.reload()
    document.querySelector('[rel="manifest"]').href = location.origin + "/manifest.json"
-   // debug
    addEventListener("focus", () => reg.update().catch(() => location.reload()))
   }
 
@@ -2439,7 +2455,6 @@ menu .spacer {
    loop = now => {
     fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
     time = now
-    this.populate(Client.here)
     if (time - throttleStartTime >= throttleDuration && addressbarIndex !== Client.here) {
      const hexads = [],
       binaryString = Client.here.toString(2),
@@ -2451,6 +2466,7 @@ menu .spacer {
      addressbarIndex = Client.here
      throttleStartTime = time
     }
+    this.populate(Client.here)
     requestAnimationFrame(loop)
    }
 
@@ -2496,24 +2512,33 @@ class Server extends Core {
  constructor() {
   super("server")
  }
- enter() {
-  const cache = {}
+ async enter() {
+  const cache = {},
+   boilerplate = [
+    "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\",
+    " *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.   * ",
+    " *  All Rights Reserved.                                     * ",
+    " *  0.86.11-staging                                          * ",
+    "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */",
+   ]
   globalThis.onfetch = e => {
    const { pathname } = new URL(e.request.url),
     cacheKey = pathname
    if (!(cacheKey in cache)) {
     let body, type
     switch (pathname) {
-     /* recreate real server files */
      case "/.htaccess":
       type = "text/plain"
-      body = `AddCharset utf-8 .js
+      body = `${boilerplate.map(line => "# " + line).join("\n")}
+AddCharset utf-8 .js
 ErrorDocument 404 /index.php
 ErrorDocument 403 /index.php
 Options -Indexes`
       break
      case "/index.php":
-      body = `<? const
+      body = `<?
+${boilerplate.join("\n")}
+const
  stagingUsers = ['173.168.55.24'],
  stagingPrefix = "dev.",
  releasePrefix = "",
@@ -2533,7 +2558,7 @@ echo <<<HTML
 <!DOCTYPE html>
 <html lang=en>
  <head>
-  <!-- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano -->
+  <!--${boilerplate.join("\n      ")}-->
   <link rel=manifest>
   <meta name=robots content=noindex>
   <meta name=viewport content="width=device-width,initial-scale=1">
@@ -2544,22 +2569,13 @@ echo <<<HTML
 </html>
 HTML;`
       type = "application/x-httpd-php; charset=UTF-8"
+      break
      case "/server.js":
      case "/client.js":
-      body = `${Core}\n${Client}\n${Server}\n${Bootstrap}\nnew Bootstrap()`
+     case "/dev.server.js":
+      body = `${boilerplate.join("\n")}\n\n${Core}\n${Client}\n${Server}\n${Bootstrap}\nnew Bootstrap()`
       type = "text/javascript; charset=UTF-8"
       break
-     /* To respond with a truncated client script w/o server logic:
-      case "/server.js":
-       body = `${Core}\n${Client}\n${Bootstrap}\nnew Bootstrap()`
-       type = "text/javascript; charset=UTF-8"
-       break
-      case "/client.js":
-       body = `${Core}\n${Client}\nnew Client().enter()`
-       type = "text/javascript; charset=UTF-8"
-       break
-     */
-     /* create virtual local files */
      case "/manifest.json":
       body = JSON.stringify(
        {
@@ -2569,7 +2585,7 @@ HTML;`
         display: "standalone",
         theme_color: "#122334",
         background_color: "#122334",
-        description: "An expirimental app.",
+        description: "This app is under development.",
         display_override: ["window-controls-overlay"],
         icons: [
          {
@@ -2577,36 +2593,19 @@ HTML;`
           sizes: "144x144",
           type: "image/svg+xml",
          },
-        ],
-       },
-       /*{
-        name: "Untitled Application",
-        short_name: "Untitled",
-        start_url: ".",
-        display: "standalone",
-        theme_color: "#122334",
-        background_color: "#122334",
-        description: "A kireji app.",
-        display_override: ["window-controls-overlay"],
-        icons: [
          {
           src: "favicon.svg",
-          sixes: "144x144",
-          type: "image/svg+xml",
-         },
-         {
-          src: "favicon.svg",
-          sixes: "any",
+          sizes: "any",
           type: "image/svg+xml",
          },
          {
           src: "/android-chrome-192x192.png",
-          sixes: "192x192",
+          sizes: "192x192",
           type: "image/svg+xml",
          },
          {
           src: "/android-chrome-512x512.png",
-          sixes: "512x512",
+          sizes: "512x512",
           type: "image/svg+xml",
          },
         ],
@@ -2624,7 +2623,7 @@ HTML;`
           icons: [
            {
             src: "favicon.svg",
-            sixes: "any",
+            sizes: "any",
             type: "image/svg+xml",
            },
           ],
@@ -2635,39 +2634,38 @@ HTML;`
         screenshots: [
          {
           src: "desktop-screenshot.svg",
-          sixes: "640x480",
+          sizes: "640x480",
           type: "image/svg+xml",
           form_factor: "wide",
           label: "This is a placeholder for the image of the app.",
          },
          {
           src: "mobile-screenshot.svg",
-          sixes: "640x360",
+          sizes: "640x360",
           type: "image/svg+xml",
           form_factor: "narrow",
           label: "This is a placeholder for the image of the app.",
          },
         ],
-       }*/
+       },
        null,
        1,
       )
       type = "application/json; charset=UTf-8"
       break
      case "/share.svg":
-      body = `<?xml version="1.0" encoding="iso-8859-1"?>
-<svg fill="#fff" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	 viewBox="0 0 458.624 458.624" xml:space="preserve">
-<g>
-	<g>
-		<path d="M339.588,314.529c-14.215,0-27.456,4.133-38.621,11.239l-112.682-78.67c1.809-6.315,2.798-12.976,2.798-19.871
-			c0-6.896-0.989-13.557-2.798-19.871l109.64-76.547c11.764,8.356,26.133,13.286,41.662,13.286c39.79,0,72.047-32.257,72.047-72.047
-			C411.634,32.258,379.378,0,339.588,0c-39.79,0-72.047,32.257-72.047,72.047c0,5.255,0.578,10.373,1.646,15.308l-112.424,78.491
-			c-10.974-6.759-23.892-10.666-37.727-10.666c-39.79,0-72.047,32.257-72.047,72.047s32.256,72.047,72.047,72.047
-			c13.834,0,26.753-3.907,37.727-10.666l113.292,79.097c-1.629,6.017-2.514,12.34-2.514,18.872c0,39.79,32.257,72.047,72.047,72.047
-			c39.79,0,72.047-32.257,72.047-72.047C411.635,346.787,379.378,314.529,339.588,314.529z"/>
-	</g>
-</g>
+      body = `<svg fill="#fff" height="800px" width="800px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 458.624 458.624" xml:space="preserve">
+ <!--${boilerplate.join("\n      ")}-->
+ <g>
+ 	<g>
+ 		<path d="M339.588,314.529c-14.215,0-27.456,4.133-38.621,11.239l-112.682-78.67c1.809-6.315,2.798-12.976,2.798-19.871
+ 			c0-6.896-0.989-13.557-2.798-19.871l109.64-76.547c11.764,8.356,26.133,13.286,41.662,13.286c39.79,0,72.047-32.257,72.047-72.047
+ 			C411.634,32.258,379.378,0,339.588,0c-39.79,0-72.047,32.257-72.047,72.047c0,5.255,0.578,10.373,1.646,15.308l-112.424,78.491
+ 			c-10.974-6.759-23.892-10.666-37.727-10.666c-39.79,0-72.047,32.257-72.047,72.047s32.256,72.047,72.047,72.047
+ 			c13.834,0,26.753-3.907,37.727-10.666l113.292,79.097c-1.629,6.017-2.514,12.34-2.514,18.872c0,39.79,32.257,72.047,72.047,72.047
+ 			c39.79,0,72.047-32.257,72.047-72.047C411.635,346.787,379.378,314.529,339.588,314.529z"/>
+ 	</g>
+ </g>
 </svg>`
       type = "image/svg+xml"
       break
@@ -2680,24 +2678,24 @@ HTML;`
      case "/android-chrome-512x512.png":
       type = "image/svg+xml"
       body = `<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-   <style>
-    svg { background: white }
-    path { stroke: #333445 }
-    @media (prefers-color-scheme = dark) {
-     svg { background: #333445 }
-     path { stroke: white }
-    }
-   </style>
-   <path d="M8 11C9.10457 11 10 10.1046 10 9C10 7.89543 9.10457 7 8 7C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-   <path d="M6.56055 21C12.1305 8.89998 16.7605 6.77998 22.0005 14.63" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-   <path d="M18 3H6C3.79086 3 2 4.79086 2 7V17C2 19.2091 3.79086 21 6 21H18C20.2091 21 22 19.2091 22 17V7C22 4.79086 20.2091 3 18 3Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-   </svg>`
+ <style>
+  svg { background: white }
+  path { stroke: #333445 }
+  @media (prefers-color-scheme = dark) {
+   svg { background: #333445 }
+   path { stroke: white }
+  }
+ </style>
+ <path d="M8 11C9.10457 11 10 10.1046 10 9C10 7.89543 9.10457 7 8 7C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M6.56055 21C12.1305 8.89998 16.7605 6.77998 22.0005 14.63" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="M18 3H6C3.79086 3 2 4.79086 2 7V17C2 19.2091 3.79086 21 6 21H18C20.2091 21 22 19.2091 22 17V7C22 4.79086 20.2091 3 18 3Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
       break
      default:
       body = `<!DOCTYPE html>
 <html lang=en>
  <head>
-  <!-- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano -->
+  <!--${boilerplate.join("\n      ")}-->
   <link rel=manifest href="${location.origin}/manifest.json">
   <meta name=robots content=noindex>
   <meta name=viewport content="width=device-width,initial-scale=1">
@@ -2730,3 +2728,34 @@ class Bootstrap extends Core.Decision {
  }
 }
 new Bootstrap()
+console.warn(`
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\
+ * A part:                                                   *
+ * 1.) either is the core or extends from another part       *
+ * 2.) has a constructor taking 0+ arbitrary arguments       *
+ * 3.) is constructed exactly once                           *
+ * 4.) is constructed at startup                             *
+ * 5.) can construct subparts during its own construction    *
+\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+Bugs:
+ 1.) NoFileSelection calls enter() twice on page load (A)
+ 2.) File Explorer doesn't enter FileSelection when it's supposed to on load (A)
+ 3.) FileSelection calls showCode() twice when coming from NoFileSelection (A)
+
+Potential task list:
+ 0.) maintain in-app bug list
+ 1.) compute and maintain the offset and coefficient of each part.
+ 2.) pass an event object through populate to control signal. Allow the event to stop propagation.
+ 3.) mask should only repopulate when anchor changes. Double check this.
+ 4.) consider modifying the document by setting the index of a subpart, inverting the data flow.
+ 5.) integegrate a working IDE despite the current sharing paradigm.
+     a.) clone and stringify classes?
+     b.) use old fx-net method?
+     c.) etc.
+ 6.) remove the onfocus check-for-updates callout
+ 7.) consider a scheme whereupon one crafts a "potential" core to harvest its index
+     a.) the current core is cloned and used as a jig to compute how subpart changes can provide us with resulting indices
+     b.) the cloned core doesn't update the document and should be quick to update
+     c.) successive changes can be made to the potential such as changing various indices
+`)
