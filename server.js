@@ -1,7 +1,7 @@
 /*----------------------------------------------------------*\
  *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
  *  All Rights Reserved.                                    *
- *  0.54.10-release                                         *
+ *  0.54.11-release                                         *
 \*----------------------------------------------------------*/
 
 ;(C = {
@@ -877,8 +877,8 @@
   get() {
    return [
     /*"title-200",
-    ...["orenjinari.com"].map(name => `inspector-item?item.rid=data:,${name}&active.bool=true.bool`),
-    "title-503",*/
+    ...["orenjinari.com"].map(name => `inspector-item?item.rid=data:,${name}&active.bool=true.bool`),*/
+    "title-503",
     ...[
      /*
      "dev.core.parts",
@@ -986,7 +986,7 @@
    return `/*----------------------------------------------------------*\\
  *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
  *  All Rights Reserved.                                    *
- *  0.54.10-release                                         *
+ *  0.54.11-release                                         *
 \\*----------------------------------------------------------*/
 (C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()`
   },
