@@ -1,7 +1,7 @@
 /*----------------------------------------------------------*\
  *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
  *  All Rights Reserved.                                    *
- *  0.54.9-release                                          *
+ *  0.54.10-release                                         *
 \*----------------------------------------------------------*/
 
 ;(C = {
@@ -983,7 +983,12 @@
 
  "server.js": {
   get() {
-   return `(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()`
+   return `/*----------------------------------------------------------*\\
+ *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
+ *  All Rights Reserved.                                    *
+ *  0.54.10-release                                         *
+\\*----------------------------------------------------------*/
+(C = {${Object.entries(C).map(([name, { get }]) => `\n "${name}": {\n  ${get}\n }`)}\n})["boot.fn"].get()()`
   },
  },
 
