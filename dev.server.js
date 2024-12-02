@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
  *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.   *
  *  All Rights Reserved.                                     *
- *  0.86.11-staging                                          *
+ *  0.86.12-staging                                          *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 class Core {
  static Composite = class Composite extends this {
@@ -2518,7 +2518,7 @@ class Server extends Core {
     "/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\\",
     " *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.   * ",
     " *  All Rights Reserved.                                     * ",
-    " *  0.86.11-staging                                          * ",
+    " *  0.86.12-staging                                          * ",
     "\\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */",
    ]
   globalThis.onfetch = e => {
@@ -2744,7 +2744,7 @@ Bugs:
  3.) FileSelection calls showCode() twice when coming from NoFileSelection (A)
 
 Potential task list:
- 0.) maintain in-app bug list
+ 0.) maintain in-app bug list.
  1.) compute and maintain the offset and coefficient of each part.
  2.) pass an event object through populate to control signal. Allow the event to stop propagation.
  3.) mask should only repopulate when anchor changes. Double check this.
@@ -2753,9 +2753,9 @@ Potential task list:
      a.) clone and stringify classes?
      b.) use old fx-net method?
      c.) etc.
- 6.) remove the onfocus check-for-updates callout
- 7.) consider a scheme whereupon one crafts a "potential" core to harvest its index
-     a.) the current core is cloned and used as a jig to compute how subpart changes can provide us with resulting indices
-     b.) the cloned core doesn't update the document and should be quick to update
-     c.) successive changes can be made to the potential such as changing various indices
+ 6.) remove the onfocus check-for-updates callout.
+ 7.) consider a scheme whereupon one crafts a "potential" core to harvest its index.
+     a.) the current core is cloned and used as a jig to compute how subpart changes can provide us with resulting indices.
+     b.) the cloned core doesn't update the document and should be quick to update.
+     c.) successive changes can be made to the potential such as changing various indices.
 `)
