@@ -1,6 +1,6 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 class Core {
- static VERSION = `0.87.1`
+ static VERSION = `0.87.2`
  static Composite = class Composite extends this {
   constructor(name, parts) {
    console.group(`${EN}::${name}:Core.Composite[${0n}].constructor(name, parts)`)
@@ -264,6 +264,19 @@ class Server extends Core {
     if (!(cacheKey in cache)) {
      let body, type
      switch (pathname) {
+      case "/.gitignore":
+       type = "text/plain"
+       body = `# © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
+**/.DS_Store
+**/Icon
+**/.well-known
+**/.tmp.driveupload
+**/.tmp.drivedownload
+**/*.gdoc
+.vscode/scratch/*
+favicon.gif
+favicon.ico`
+       break
       case "/.htaccess":
        type = "text/plain"
        body = `# ${boilerplate}
@@ -273,43 +286,35 @@ ErrorDocument 403 /index.php
 Options -Indexes`
        break
       case "/index.php":
-       body = `<? // ${boilerplate}
-const
- devUsers = ['173.168.55.24'],
- devPrefix = "${Server.DEV_PREFIX}",
- releasePrefix = "",
- scriptBaseName = "server.js";
-
-$host = $_SERVER["HTTP_HOST"];
-$isDevHost = str_starts_with($host, devPrefix);
-
-$user = $_SERVER['REMOTE_ADDR'];
-$isDevUser = in_array($user, devUsers);
-
-$useDevScript = $isDevUser && $isDevHost;
-$scriptPrefix = ($useDevScript ? devPrefix : releasePrefix);
-$scriptSrc = "https://$host/$scriptPrefix".scriptBaseName;
-
-echo <<<HTML
-<!DOCTYPE html>
+       body = `<!DOCTYPE html>
 <html lang=en>
  <head>
   <!-- ${boilerplate} -->
   <link rel=manifest>
   <meta name=robots content=noindex>
   <meta name=viewport content="width=device-width,initial-scale=1">
-  <script defer src=$scriptSrc></script>
-  <title>Loading $host...</title>
-  <!-- user: $user -->
+  <script defer src="https://<?=$_SERVER["HTTP_HOST"]?>/server.js"></script>
+  <title>Loading ...</title>
  </head>
-</html>
-HTML;`
+</html>`
        type = "application/x-httpd-php; charset=UTF-8"
+       break
+      case "/README.md":
+       type = "text/markdown; charset=UTF-8"
+       body = `<!--- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved. --->
+
+# About Core
+
+This project aims to meet a large number of requirements which we will detail later.
+
+Every app has a host (domain name) where it can be publically reached.
+
+Domains beginning with the "dev." subdomain are dedicated to an unstable (but still publically available) version of the app used for staging changes.
+`
        break
       case "/server.js":
       case "/client.js":
-      case "/dev.server.js":
-       body = `// ${boilerplate}\n\n${Core}\n${Client}\n${Server}\n${Bootstrap}\nnew Bootstrap().enter()`
+       body = `// ${boilerplate}\n\n${Core}\n${Server}\n${Client}\n${Bootstrap}\nnew Bootstrap().enter()`
        type = "text/javascript; charset=UTF-8"
        break
       case "/manifest.json":
@@ -417,8 +422,7 @@ HTML;`
   <meta name=robots content=noindex>
   <meta name=viewport content="width=device-width,initial-scale=1">
   <script defer src="${origin}/client.js"></script>
-  <title>Loading ${host}...</title>
-  <!-- LOCAL -->
+  <title>Loading ...</title>
  </head>
 </html>`
        type = "text/html; charset=UTF-8"
@@ -707,14 +711,13 @@ class Client extends Core.Decision {
       this.stylesheet.replaceSync(`
 :host {
  display: block;
- --theme-rgb: 23, 29, 35;
+ --theme-rgb: 23, 29, 42;
  --theme: rgb(var(--theme-rgb));
  --color: #0a0d0d;
  color: var(--color);
- background: rgba(var(--theme-rgb), 0.15);
+ background: rgba(var(--theme-rgb), 0.14);
  overflow: clip;
  position: relative;
- pointer-events: none;
  box-sizing: border-box;
  padding: 15px;
  width: 100%;
@@ -722,8 +725,7 @@ class Client extends Core.Decision {
  font: 18px system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
-h1,
-h2 {
+h1 {
  text-align: center;
  line-height: 100vh;
  height: 100%;
@@ -742,11 +744,15 @@ h1 {
 
 .thin {
  font-weight: 200;
- font-size: 42px;
 }
 
 #float {
- display: inline-block;
+ font-size: 42px;
+ height: 100%;
+ align-items: center;
+ justify-content: center;
+ display: flex;
+ gap: 0.5ch;
  line-height: 1em;
 }
 
@@ -760,8 +766,8 @@ img {
 }`)
       this.container = this.controller.container
       this.container.innerHTML = `<h1>503</h1>
-<h2><span id=float>
- <img src=https://${Server.DEV_PREFIX}${Server.APP_HOST}/favicon.svg /><span class=thin>${Server.APP_SHORT_NAME}</span> is under construction.<br><br>
+<span id=float>
+ <img src=https://${Server.DEV_PREFIX}${Server.APP_HOST}/favicon.svg><span class=thin>${Server.APP_SHORT_NAME}</span><span>is coming soon.</span>
 </span>`
       await super.enter()
      }
@@ -930,7 +936,6 @@ body {
 #toolbar > h1 > img {
  height: 39px;
  width: 39px;
- border-radius: 5px;
  margin: -5px;
 }
 #toolbar > h1 > .label {
@@ -944,19 +949,19 @@ body {
 #toolbar > .spacer {
  flex: 1;
 }
-#dev-tag {
+#version {
  text-align: center;
- width: 38px;
  padding: 0 8px;
  font-family: var(--system-ui-mono);
- font-size: 13px;
+ font-size: 10px;
  line-height: 18px;
- background-color: var(--official-blue);
- color: var(--vellum-white);
+ color: var(--official-blue);
+ background-color: var(--vellum-white);
  box-sizing: border-box;
  border-radius: 7px;
  font-weight: 900;
  margin: auto;
+ box-shadow: 0 0 1px var(--official-blue);
 }
 #sidebar {
  margin: 0;
@@ -1037,7 +1042,6 @@ body {
 #sidebar .module > ul > li > img {
  height: 25px;
  width: 25px;
- border-radius: 4px;
 }
 #sidebar .module > ul > li > .label {
  overflow-y: visible;
@@ -1105,15 +1109,13 @@ body {
     this.sidebar = document.body.appendChild(document.createElement("menu"))
     this.sidebar.setAttribute("id", "sidebar")
     const sidebarHeading = this.sidebar.appendChild(document.createElement("h2"))
-    sidebarHeading.innerHTML = `<span id=logo>Kireji</span><span class=label>${Server.APP_SHORT_NAME}</span>${
-     Server.IS_DEV_HOST ? `<span id=dev-tag>dev</span>` : ``
-    }<span id=version>${Core.VERSION}</span>`
+    sidebarHeading.innerHTML = `<span id=logo>Kireji</span><span class=label>${Server.APP_SHORT_NAME}</span><span id=version>${Core.VERSION}</span>`
     const appsModule = this.sidebar.appendChild(document.createElement("section")),
      appsTitle = appsModule.appendChild(document.createElement("h3")),
      appList = appsModule.appendChild(document.createElement("ul"))
     appsTitle.innerText = `Apps`
     appsModule.setAttribute("class", "module")
-    if (Server.IS_DEV_HOST) {
+    if (false && Server.IS_DEV_HOST) {
      const pinsModule = this.sidebar.appendChild(document.createElement("section")),
       pinsTitle = pinsModule.appendChild(document.createElement("h3")),
       pinList = pinsModule.appendChild(document.createElement("ul"))
@@ -1184,7 +1186,7 @@ body {
 
    if (navigator.serviceWorker) {
     const c = navigator.serviceWorker,
-     reg = await c.register(location.origin + "/" + Server.DEV_PREFIX + "server.js"),
+     reg = await c.register(location.origin + "/server.js"),
      sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
     c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
     c.oncontrollerchange = c.onmessage = () => location.reload()
