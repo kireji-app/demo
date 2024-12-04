@@ -1,6 +1,6 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 class Core {
- static VERSION = `0.87.2`
+ static VERSION = `0.87.3`
  static Composite = class Composite extends this {
   constructor(name, parts) {
    console.group(`${EN}::${name}:Core.Composite[${0n}].constructor(name, parts)`)
@@ -767,7 +767,7 @@ img {
       this.container = this.controller.container
       this.container.innerHTML = `<h1>503</h1>
 <span id=float>
- <img src=https://${Server.DEV_PREFIX}${Server.APP_HOST}/favicon.svg><span class=thin>${Server.APP_SHORT_NAME}</span><span>is coming soon.</span>
+ <img src=https://${Server.HOST_PREFIX}${Server.APP_HOST}/favicon.svg><span class=thin>${Server.APP_SHORT_NAME}</span><span>is coming soon.</span>
 </span>`
       await super.enter()
      }
