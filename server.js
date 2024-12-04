@@ -1,9 +1,9 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 class Core {
- static VERSION = `0.87.4`
+ static VERSION = `0.87.5`
  static Composite = class Composite extends this {
   constructor(name, parts) {
-   console.group(`${EN}::${name}:Core.Composite[${0n}].constructor(name, parts)`)
+   // console.group(`${EN}::${name}:Core.Composite[${0n}].constructor(name, parts)`)
    {
     super(name)
     const units = (this.units = [1n])
@@ -27,19 +27,18 @@ class Core {
     }, [])
     this.size = this.units.shift()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async enter() {
-   console.group(`${EN}::${this.name}:Core.Composite[${this.index}].enter()`)
+   // console.group(`${EN}::${this.name}:Core.Composite[${this.index}].enter()`)
    {
-    console.assert(EN, this.index === 0n)
     await super.enter()
     for (const part of this.parts) await part.enter()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async populate(index) {
-   console.group(`${EN}::${this.name}:Core.Composite[${this.index}].populate(${index})`)
+   // console.group(`${EN}::${this.name}:Core.Composite[${this.index}].populate(${index})`)
    {
     await super.populate(index)
     for (let x = 0; x < this.units.length; x++) {
@@ -48,83 +47,80 @@ class Core {
       factor = this.factors[name],
       unit = factor.unit,
       subindex = index / unit
-     console.log({ factor, unit })
      await part.populate(subindex)
      factor.indexCache = subindex
      index %= unit
     }
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async leave() {
-   console.group(`${EN}::${this.name}:Core.Composite[${this.index}].leave()`)
+   // console.group(`${EN}::${this.name}:Core.Composite[${this.index}].leave()`)
    {
     await super.leave()
     for (const part of this.parts) await part.leave()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   notify(from) {
-   console.group(`${EN}::${this.name}:Core[${this.index}].notify(from: ${from})`)
+   // console.group(`${EN}::${this.name}:Core[${this.index}].notify(from: ${from})`)
    {
     const factor = this.factors[from],
      { part, indexCache } = factor,
      { index: subindex } = part,
      unit = factor.unit
-    console.log(indexCache, subindex, part)
     const difference = subindex - indexCache,
      deltaIndex = difference * unit,
      newIndex = this.index + deltaIndex
     this.index = newIndex
-    console.log(this.index)
     factor.indexCache = subindex
     super.notify(from)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
  }
  static Bitmask = class Bitmask extends this {
   constructor(name, length) {
-   console.group(`${EN}::${name}:Core.Bitmask[${0n}].constructor(name, length)`)
+   // console.group(`${EN}::${name}:Core.Bitmask[${0n}].constructor(name, length)`)
    {
     super(name)
     this.size = 2n ** BigInt(length)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async enter() {
-   console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].enter()`)
+   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].enter()`)
    {
     await super.enter()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async populate(index) {
-   console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].populate(${index})`)
+   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].populate(${index})`)
    {
     await super.populate(index)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async leave() {
-   console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].leave()`)
+   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].leave()`)
    {
     await super.leave()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   notify(from) {
-   console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].notify(from: ${from})`)
+   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].notify(from: ${from})`)
    {
     super.notify(from)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
  }
  static Decision = class Decision extends this {
   size = 0n
   constructor(name, parts) {
-   console.group(`${EN}::${name}:Core.Decision[${0n}].constructor(name, parts)`)
+   // console.group(`${EN}::${name}:Core.Decision[${0n}].constructor(name, parts)`)
    {
     super(name)
     let offset = 0n
@@ -139,19 +135,19 @@ class Core {
      return part
     })
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async enter() {
-   console.group(`${EN}::${this.name}:Core.Decision[${this.index}].enter()`)
+   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].enter()`)
    {
     await super.enter()
     this.option = this.options[this.parts[0].name]
     await this.option.part.enter()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async populate(index) {
-   console.group(`${EN}::${this.name}:Core.Decision[${this.index}].populate(${index})`)
+   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].populate(${index})`)
    {
     if (this.index !== index || this.repopulate) {
      await super.populate(index)
@@ -169,66 +165,66 @@ class Core {
      }
     }
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async leave() {
-   console.group(`${EN}::${this.name}:Core.Decision[${this.index}].leave()`)
+   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].leave()`)
    {
     await super.leave()
     await this.option.part.leave()
     delete this.option
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   notify(from) {
-   console.group(`${EN}::${this.name}:Core.Decision[${this.index}].notify(from: ${from})`)
+   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].notify(from: ${from})`)
    {
     this.index = this.option.offset + this.option.part.index
-    console.log(this.index)
+    // console.log(this.index)
     super.notify(from)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
  }
  index = 0n
  size = 1n
  constructor(name) {
-  console.group(`${EN}::${name}:Core[${0n}].constructor(name)`)
+  // console.group(`${EN}::${name}:Core[${0n}].constructor(name)`)
   {
    this.name = name
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async enter() {
-  console.group(`${EN}::${this.name}:Core[${this.index}].enter()`)
+  // console.group(`${EN}::${this.name}:Core[${this.index}].enter()`)
   {
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async populate(index) {
   {
-   console.group(`${EN}::${this.name}:Core[${this.index}].populate(${index})`)
+   // console.group(`${EN}::${this.name}:Core[${this.index}].populate(${index})`)
    if (this.index !== index) {
     if (index < 0n || index >= this.size) throw new RangeError(`index ${index} out of range (size ${this.size}): ${this.name}`)
     this.index = index
-    console.log(index)
+    // console.log(index)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
  }
  async leave() {
-  console.group(`${EN}::${this.name}:Core[${this.index}].leave()`)
+  // console.group(`${EN}::${this.name}:Core[${this.index}].leave()`)
   {
    this.index = 0n
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  notify(from) {
-  console.group(`${EN}::${this.name}:Core[${this.index}].notify(from: ${from})`)
+  // console.group(`${EN}::${this.name}:Core[${this.index}].notify(from: ${from})`)
   {
    this.controller?.notify(this.name)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
 }
 class Server extends Core {
@@ -240,14 +236,14 @@ class Server extends Core {
  static APP_TLD = this.APP_HOST_PARTS.at(-1)
  static APP_SHORT_NAME = this.APP_HOST.slice(0, -1 - this.APP_TLD.length)
  constructor(name = "server") {
-  console.group(`${EN}::${name}:Server[${0n}].constructor(name)`)
+  // console.group(`${EN}::${name}:Server[${0n}].constructor(name)`)
   {
    super(name)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async enter() {
-  console.group(`${EN}::${this.name}:Server[${this.index}].enter()`)
+  // console.group(`${EN}::${this.name}:Server[${this.index}].enter()`)
   {
    const cache = {},
     boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
@@ -441,28 +437,28 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
    globalThis.onactivate = e => globalThis.clients.claim()
    globalThis.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async populate(index) {
-  console.group(`${EN}::${this.name}:Server[${this.index}].populate(${index})`)
+  // console.group(`${EN}::${this.name}:Server[${this.index}].populate(${index})`)
   {
    await super.populate(index)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async leave() {
-  console.group(`${EN}::${this.name}:Server[${this.index}].leave()`)
+  // console.group(`${EN}::${this.name}:Server[${this.index}].leave()`)
   {
    await super.leave()
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  notify(from) {
-  console.group(`${EN}::${this.name}:Server[${this.index}].notify(from: ${from})`)
+  // console.group(`${EN}::${this.name}:Server[${this.index}].notify(from: ${from})`)
   {
    super.notify(from)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
 }
 class Client extends Core.Decision {
@@ -470,63 +466,61 @@ class Client extends Core.Decision {
   static Sidebar = class Sidebar extends Core.Decision {
    static Closed = class SidebarClosed extends Core {
     constructor(name = "closed") {
-     console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.Closed[${0n}].constructor(name)`)
+     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.Closed[${0n}].constructor(name)`)
      {
       super(name)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async enter() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].enter()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].enter()`)
      {
       this.sidebar = this.controller.sidebar
       this.button = this.controller.button
       this.button.onclick = async () => {
-       console.log("current page index is ... " + this.controller.controller.controller.index)
        await this.controller?.populate(1n)
        this.controller?.controller?.notify(this.controller.name)
-       console.log("new index is ... (drumroll please ...)", this.controller.controller.controller.index)
       }
       this.sidebar.setAttribute("style", "--sidebar-tween: 0")
       await super.enter()
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async populate(index) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].populate(${index})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].populate(${index})`)
      {
       await super.populate(index)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async leave() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].leave()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].leave()`)
      {
       await super.leave()
       if (document.activeElement === this.sidebar) this.sidebar.blur()
       this.button.onclick = undefined
       this.sidebar.removeAttribute("style")
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     notify(from) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].notify(from: ${from})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].notify(from: ${from})`)
      {
       super.notify(from)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
    }
    static TweenIn = class SidebarTweenIn extends Core.Decision {
     constructor(name = "tween-in") {
-     console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.TweenIn[${0n}].constructor(name)`)
+     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.TweenIn[${0n}].constructor(name)`)
      {
       super(name, ["half"])
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async enter() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].enter()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].enter()`)
      {
       this.sidebar = this.controller.sidebar
       this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
@@ -536,41 +530,41 @@ class Client extends Core.Decision {
       })
       await super.enter()
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async populate(index) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].populate(${index})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].populate(${index})`)
      {
       await super.populate(index)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async leave() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].leave()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].leave()`)
      {
       await super.leave()
       this.sidebar.removeAttribute("style")
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     notify(from) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].notify(from: ${from})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].notify(from: ${from})`)
      {
       super.notify(from)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
    }
    static Open = class SidebarOpen extends Core {
     constructor(name = "open") {
-     console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.Open[${0n}].constructor(name)`)
+     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.Open[${0n}].constructor(name)`)
      {
       super(name)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async enter() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].enter()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].enter()`)
      {
       this.sidebar = this.controller.sidebar
       this.sidebar.focus()
@@ -581,43 +575,43 @@ class Client extends Core.Decision {
       this.sidebar.setAttribute("style", "--sidebar-tween: 1")
       await super.enter()
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async populate(index) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].populate(${index})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].populate(${index})`)
      {
       await super.populate(index)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async leave() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].leave()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].leave()`)
      {
       await super.leave()
       if (document.activeElement === this.sidebar) this.sidebar.blur()
       this.sidebar.onblur = undefined
       this.sidebar.removeAttribute("style")
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     notify(from) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].notify(from: ${from})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].notify(from: ${from})`)
      {
       super.notify(from)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
    }
    static TweenOut = class SidebarTweenOut extends Core.Decision {
     constructor(name = "tween-out") {
-     console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.TweenOut[${0n}].constructor(name)`)
+     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.TweenOut[${0n}].constructor(name)`)
      {
       super(name, ["half"])
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async enter() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].enter()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].enter()`)
      {
       this.sidebar = this.controller.sidebar
       this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
@@ -627,33 +621,33 @@ class Client extends Core.Decision {
       })
       await super.enter()
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async populate(index) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].populate(${index})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].populate(${index})`)
      {
       await super.populate(index)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async leave() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].leave()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].leave()`)
      {
       await super.leave()
       this.sidebar.removeAttribute("style")
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     notify(from) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].notify(from: ${from})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].notify(from: ${from})`)
      {
       super.notify(from)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
    }
    constructor(name = "sidebar") {
-    console.group(`${EN}::${name}:Client.CommonLayout.Sidebar[${0n}].constructor(name)`)
+    // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar[${0n}].constructor(name)`)
     {
      super(name, [
       new Client.CommonLayout.Sidebar.Closed(),
@@ -662,50 +656,50 @@ class Client extends Core.Decision {
       new Client.CommonLayout.Sidebar.TweenOut(),
      ])
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    async enter() {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].enter()`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].enter()`)
     {
      this.button = this.controller.menuButton
      this.sidebar = this.controller.sidebar
      await super.enter()
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    async populate(index) {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].populate(${index})`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].populate(${index})`)
     {
      await super.populate(index)
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    async leave() {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].leave()`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].leave()`)
     {
      await super.leave()
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    notify(from) {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].notify(from: ${from})`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].notify(from: ${from})`)
     {
      super.notify(from)
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
   }
   static App = class App extends Core.Decision {
    static Error503 = class Error503 extends Core {
     constructor(name = "error503") {
-     console.group(`${EN}::${name}:Client.CommonLayout.App.Error503[${0n}].constructor(name)`)
+     // console.group(`${EN}::${name}:Client.CommonLayout.App.Error503[${0n}].constructor(name)`)
      {
       super(name)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async enter() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].enter()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].enter()`)
      {
       this.stylesheet = this.controller.stylesheet
       this.stylesheet.replaceSync(`
@@ -771,70 +765,70 @@ img {
 </span>`
       await super.enter()
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async populate(index) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].populate(${index})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].populate(${index})`)
      {
       await super.populate(index)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     async leave() {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].leave()`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].leave()`)
      {
       await super.leave()
       this.container.innerHTML = ``
       this.stylesheet.replaceSync(``)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
     notify(from) {
-     console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].notify(from: ${from})`)
+     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].notify(from: ${from})`)
      {
       super.notify(from)
      }
-     console.groupEnd()
+     // console.groupEnd()
     }
    }
    constructor(name = "app") {
-    console.group(`${EN}::${name}:Client.CommonLayout.App[${0n}].constructor(name)`)
+    // console.group(`${EN}::${name}:Client.CommonLayout.App[${0n}].constructor(name)`)
     {
      super(name, [new Client.CommonLayout.App.Error503()])
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    async enter() {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].enter()`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].enter()`)
     {
      this.container = this.controller.appRoot
      this.stylesheet = new CSSStyleSheet()
      this.container.adoptedStyleSheets.push(this.stylesheet)
      await super.enter()
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    async populate(index) {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].populate(${index})`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].populate(${index})`)
     {
      await super.populate(index)
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    async leave() {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].leave()`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].leave()`)
     {
      await super.leave()
      this.container.adoptedStyleSheets = []
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
    notify(from) {
-    console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].notify(from: ${from})`)
+    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].notify(from: ${from})`)
     {
      super.notify(from)
     }
-    console.groupEnd()
+    // console.groupEnd()
    }
   }
   static ColorMode = class ColorMode extends Core.Decision {
@@ -843,16 +837,16 @@ img {
    }
   }
   constructor(name = "common") {
-   console.group(`${EN}::${name}:Client.CommonLayout[${0n}].constructor(name)`)
+   // console.group(`${EN}::${name}:Client.CommonLayout[${0n}].constructor(name)`)
    {
     const apps = ["core.parts", "fallback.cloud", "kireji.io", "glowstick.click", "ejaugust.com", "orenjinari.com"].sort()
     super(name, [new Client.CommonLayout.Sidebar(), new Client.CommonLayout.App(), new Client.CommonLayout.ColorMode()])
     this.apps = apps
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async enter() {
-   console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].enter()`)
+   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].enter()`)
    {
     this.controller.stylesheet.replaceSync(`html, body {
  --sidebar-tween: 0;
@@ -1092,16 +1086,9 @@ body {
     }
     if (navigator.share) {
      shareButton.onclick = () =>
-      navigator
-       .share({ title: document.title, url: location.href })
-       .then(() => console.log("Successful share"))
-       .catch(error => {
-        if (error.name === "AbortError") {
-         console.log("Share cancelled")
-        } else {
-         console.error("Error sharing:", error)
-        }
-       })
+      navigator.share({ title: document.title, url: location.href }).catch(error => {
+       if (error.name !== "AbortError") console.error("Error sharing:", error)
+      })
      shareButton.innerText = `➦`
     }
     this.stylesheet = new CSSStyleSheet()
@@ -1143,29 +1130,29 @@ body {
     document.title = Server.APP_SHORT_NAME
     await super.enter()
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async populate(index) {
-   console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].populate(${index})`)
+   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].populate(${index})`)
    {
     await super.populate(index)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   async leave() {
-   console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].leave()`)
+   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].leave()`)
    {
     await super.leave()
     document.body.innerHTML = ``
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
   notify(from) {
-   console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].notify(from: ${from})`)
+   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].notify(from: ${from})`)
    {
     super.notify(from)
    }
-   console.groupEnd()
+   // console.groupEnd()
   }
  }
  static gpu
@@ -1173,14 +1160,14 @@ body {
  static shiftKeysDown = 0
  static contextKeysDown = 0
  constructor(name = "client") {
-  console.group(`${EN}::${name}:Client[${0n}].constructor(name)`)
+  // console.group(`${EN}::${name}:Client[${0n}].constructor(name)`)
   {
    super(name, ["empty", new Client.CommonLayout()])
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async enter() {
-  console.group(`${EN}::${this.name}:Client[${this.index}].enter()`)
+  // console.group(`${EN}::${this.name}:Client[${this.index}].enter()`)
   {
    await super.enter()
 
@@ -1213,7 +1200,6 @@ body {
     loop = now => {
      fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
      time = now
-
      if (time - throttleStartTime >= throttleDuration && addressbarIndex !== Client.here) {
       const hexads = [],
        binaryString = Client.here.toString(2),
@@ -1225,12 +1211,7 @@ body {
       addressbarIndex = Client.here
       throttleStartTime = time
      }
-
-     if (this.index !== Client.here) {
-      console.info(this.name + " ==> populate self from loop")
-      this.populate(Client.here).then(() => this.controller?.notify(this.name))
-     }
-
+     if (this.index !== Client.here) this.populate(Client.here).then(() => this.controller?.notify(this.name))
      requestAnimationFrame(loop)
     }
 
@@ -1265,68 +1246,68 @@ body {
 
    loop()
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async populate(index) {
-  console.group(`${EN}::${this.name}:Client[${this.index}].populate(${index})`)
+  // console.group(`${EN}::${this.name}:Client[${this.index}].populate(${index})`)
   {
    await super.populate(index)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async leave() {
-  console.group(`${EN}::${this.name}:Client[${this.index}].leave()`)
+  // console.group(`${EN}::${this.name}:Client[${this.index}].leave()`)
   {
    await super.leave()
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  notify(from) {
-  console.group(`${EN}::${this.name}:Client[${this.index}].notify(from: ${from})`)
+  // console.group(`${EN}::${this.name}:Client[${this.index}].notify(from: ${from})`)
   {
    super.notify(from)
    Client.here = this.index
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
 }
 class Bootstrap extends Core.Decision {
  constructor(name = "boot") {
   globalThis.EN = globalThis.constructor === globalThis.Window ? "client" : "server"
-  console.group(`${EN}::${name}:Bootstrap[${0n}].constructor(name)`)
+  // console.group(`${EN}::${name}:Bootstrap[${0n}].constructor(name)`)
   {
    super(name, ["boot", new Server(), new Client()])
   }
  }
  async enter() {
-  console.group(`${EN}::${this.name}:Bootstrap[${this.index}].enter()`)
+  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].enter()`)
   {
    await super.enter()
    await this.populate(this.options[EN].offset)
    this.controller?.notify(this.name)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async populate(index) {
-  console.group(`${EN}::${this.name}:Bootstrap[${this.index}].populate(${index})`)
+  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].populate(${index})`)
   {
    await super.populate(index)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  async leave() {
-  console.group(`${EN}::${this.name}:Bootstrap[${this.index}].leave()`)
+  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].leave()`)
   {
    await super.leave()
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
  notify(from) {
-  console.group(`${EN}::${this.name}:Bootstrap[${this.index}].notify(from: ${from})`)
+  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].notify(from: ${from})`)
   {
    super.notify(from)
   }
-  console.groupEnd()
+  // console.groupEnd()
  }
 }
 new Bootstrap().enter()
