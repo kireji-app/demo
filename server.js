@@ -1,13 +1,18 @@
 /*----------------------------------------------------------*\
  *  © 2013 - 2024 Eric Augustinowicz and Kristina Soriano.  *
  *  All Rights Reserved.                                    *
- *  0.54.11-release                                         *
+ *  0.54.12-release                                         *
 \*----------------------------------------------------------*/
 
 ;(C = {
  "host-size.number": {
   get() {
    return HOST[".rid"].length
+  },
+ },
+ "dev.bool": {
+  get() {
+   return location.host.startsWith("dev.")
   },
  },
  "sidebar-width.number": {
@@ -39,7 +44,8 @@
     globalThis.BOOT_TIME = Date.now()
     globalThis.NODES = new Map()
     globalThis.ROW = Object.create(null, Object.assign({ ...C }, C["default.columns"].get(), { ".rid": { value: "root" } }))
-    if (!location.search) globalThis.history?.replaceState({}, null, location.origin + "/?inspector.bool=true.bool&selection.rid=data:," + location.host)
+    if (!location.search)
+     globalThis.history?.replaceState({}, null, location.origin + "/?inspector.bool=true.bool&selection.rid=data:," + location.host.slice(4 * location.host.startsWith("dev.")))
     globalThis.HOST = ROW["branch.fn"]("error" + location.search, {
      ".node": {
       get() {
@@ -277,7 +283,7 @@
      })(),
      new Promise(resolve => (onload = resolve)),
     ]).then(([registration]) => {
-     document.querySelector("head>style").innerHTML = `html, body {
+     document.head.appendChild(document.createElement("style")).innerHTML = `html, body {
  overscroll-behavior-y: contain !important;
  overflow: clip;
  height: 100%;
@@ -656,7 +662,8 @@
     if (workingTree[".host"]) {
      const host = workingTree[".host"]
      delete workingTree[".host"]
-     location.assign("https://" + host + search)
+     const finalHost = this["dev.bool"] ? "dev." + host : host
+     location.assign("https://" + finalHost + search)
      return
     }
 
@@ -876,20 +883,20 @@
  "inspector.children": {
   get() {
    return [
-    /*"title-200",
-    ...["orenjinari.com"].map(name => `inspector-item?item.rid=data:,${name}&active.bool=true.bool`),*/
+    "title-200",
+    ...[
+     // active
+     "fallback.cloud",
+     // "orenjinari.com",
+    ].map(name => `inspector-item?item.rid=data:,${name}&active.bool=true.bool`),
     "title-503",
     ...[
-     /*
-     "dev.core.parts",
-     "dev.ejaugust.com",
-     "dev.glowstick.click",
-     "dev.kireji.io",
-     "dev.orenjinari.com",*/
+     // inactive
+     "kireji.io",
      "core.parts",
      "ejaugust.com",
      "glowstick.click",
-     "kireji.io",
+     //
     ].map(name => `inspector-item?item.rid=data:,${name}`),
    ]
   },
@@ -976,7 +983,7 @@
   get() {
    return `<h1>503</h1>
 <span id=float>
- <span class=thin id=fn>${location.host}</span> is under construction.<br><br>
+ <span class=thin id=fn>${this["selection.rid"]}</span> is under construction.<br><br>
 </span>`
   },
  },
