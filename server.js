@@ -1,6 +1,6 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 class Core {
- static VERSION = `0.87.3`
+ static VERSION = `0.87.4`
  static Composite = class Composite extends this {
   constructor(name, parts) {
    console.group(`${EN}::${name}:Core.Composite[${0n}].constructor(name, parts)`)
@@ -1132,7 +1132,7 @@ body {
      this.appNodes[appname] = appNode
      appNode.onclick = () => {
       const host = this.apps[i]
-      if (Server.APP_HOST !== host) location = "https://" + Server.DEV_PREFIX + host + "/#5"
+      if (Server.APP_HOST !== host) location = "https://" + Server.HOST_PREFIX + host + "/#5"
      }
     }
     this.selectedNode = this.appNodes[Server.APP_HOST]
