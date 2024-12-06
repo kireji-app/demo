@@ -1,262 +1,173 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
-class Core {
- static VERSION = `0.87.5`
- static Composite = class Composite extends this {
-  constructor(name, parts) {
-   // console.group(`${EN}::${name}:Core.Composite[${0n}].constructor(name, parts)`)
-   {
-    super(name)
-    const units = (this.units = [1n])
-    this.factors = {}
-    this.parts = parts.reduceRight((parts, part, i) => {
-     if (typeof part === "string") part = new Core(part)
-     if (!(part instanceof Core)) throw new TypeError(`unexpected ${typeof part} encountered as factor of composite ${this.name}`)
-     if (part.name in this.factors) throw new RangeError(`duplicate part name ${part.name} in composite ${name}`)
-     this.factors[part.name] = {
-      part,
-      i,
-      indexCache: part.index,
-      get unit() {
-       return units[i]
-      },
-     }
-     parts.unshift(part)
-     units.unshift(units[0] * part.size)
-     part.controller = this
-     return parts
-    }, [])
-    this.size = this.units.shift()
-   }
-   // console.groupEnd()
+function boot() {
+ const VERSION = `0.87.6`,
+  VERBOSE = true,
+  DEV_PREFIX = "dev.",
+  IS_DEV_HOST = location.host.startsWith(DEV_PREFIX),
+  APP_HOST = location.host.slice(DEV_PREFIX.length * IS_DEV_HOST),
+  HOST_PREFIX = IS_DEV_HOST ? DEV_PREFIX : "",
+  APP_SHORT_NAME = APP_HOST.slice(0, -1 - APP_HOST.split(".").at(-1).length),
+  EN = this.constructor === this.Window ? "client" : "server"
+
+ class core_parts {
+  get host() {
+   return this.constructor.name.replaceAll("_", ".")
   }
-  async enter() {
-   // console.group(`${EN}::${this.name}:Core.Composite[${this.index}].enter()`)
-   {
-    await super.enter()
-    for (const part of this.parts) await part.enter()
-   }
-   // console.groupEnd()
+  constructor() {
+   this.index = 0n
+   this.size = 1n
   }
   async populate(index) {
-   // console.group(`${EN}::${this.name}:Core.Composite[${this.index}].populate(${index})`)
-   {
-    await super.populate(index)
-    for (let x = 0; x < this.units.length; x++) {
-     const part = this.parts[x],
-      { name } = part,
-      factor = this.factors[name],
-      unit = factor.unit,
-      subindex = index / unit
-     await part.populate(subindex)
-     factor.indexCache = subindex
-     index %= unit
-    }
-   }
-   // console.groupEnd()
-  }
-  async leave() {
-   // console.group(`${EN}::${this.name}:Core.Composite[${this.index}].leave()`)
-   {
-    await super.leave()
-    for (const part of this.parts) await part.leave()
-   }
-   // console.groupEnd()
-  }
-  notify(from) {
-   // console.group(`${EN}::${this.name}:Core[${this.index}].notify(from: ${from})`)
-   {
-    const factor = this.factors[from],
-     { part, indexCache } = factor,
-     { index: subindex } = part,
-     unit = factor.unit
-    const difference = subindex - indexCache,
-     deltaIndex = difference * unit,
-     newIndex = this.index + deltaIndex
-    this.index = newIndex
-    factor.indexCache = subindex
-    super.notify(from)
-   }
-   // console.groupEnd()
-  }
- }
- static Bitmask = class Bitmask extends this {
-  constructor(name, length) {
-   // console.group(`${EN}::${name}:Core.Bitmask[${0n}].constructor(name, length)`)
-   {
-    super(name)
-    this.size = 2n ** BigInt(length)
-   }
-   // console.groupEnd()
-  }
-  async enter() {
-   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].enter()`)
-   {
-    await super.enter()
-   }
-   // console.groupEnd()
-  }
-  async populate(index) {
-   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].populate(${index})`)
-   {
-    await super.populate(index)
-   }
-   // console.groupEnd()
-  }
-  async leave() {
-   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].leave()`)
-   {
-    await super.leave()
-   }
-   // console.groupEnd()
-  }
-  notify(from) {
-   // console.group(`${EN}::${this.name}:Core.Bitmask[${this.index}].notify(from: ${from})`)
-   {
-    super.notify(from)
-   }
-   // console.groupEnd()
-  }
- }
- static Decision = class Decision extends this {
-  size = 0n
-  constructor(name, parts) {
-   // console.group(`${EN}::${name}:Core.Decision[${0n}].constructor(name, parts)`)
-   {
-    super(name)
-    let offset = 0n
-    this.options = {}
-    this.parts = parts.map((part, i) => {
-     if (typeof part === "string") part = new Core(part)
-     if (!(part instanceof Core)) throw new TypeError(`unexpected ${typeof e} encountered at part = ${i} of decision ${this.name}`)
-     this.options[part.name] = { part, i, offset }
-     offset += part.size
-     this.size += part.size
-     part.controller = this
-     return part
-    })
-   }
-   // console.groupEnd()
-  }
-  async enter() {
-   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].enter()`)
-   {
-    await super.enter()
-    this.option = this.options[this.parts[0].name]
-    await this.option.part.enter()
-   }
-   // console.groupEnd()
-  }
-  async populate(index) {
-   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].populate(${index})`)
-   {
-    if (this.index !== index || this.repopulate) {
-     await super.populate(index)
-     for (const part of this.parts) {
-      if (index < part.size) {
-       if (this.option.part !== part) {
-        await this.option.part?.leave()
-        this.option = this.options[part.name]
-        await part.enter()
-        if (index !== 0n) await part.populate(index)
-       } else await part.populate(index)
-       break
-      }
-      index -= part.size
-     }
-    }
-   }
-   // console.groupEnd()
-  }
-  async leave() {
-   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].leave()`)
-   {
-    await super.leave()
-    await this.option.part.leave()
-    delete this.option
-   }
-   // console.groupEnd()
-  }
-  notify(from) {
-   // console.group(`${EN}::${this.name}:Core.Decision[${this.index}].notify(from: ${from})`)
-   {
-    this.index = this.option.offset + this.option.part.index
-    // console.log(this.index)
-    super.notify(from)
-   }
-   // console.groupEnd()
-  }
- }
- index = 0n
- size = 1n
- constructor(name) {
-  // console.group(`${EN}::${name}:Core[${0n}].constructor(name)`)
-  {
-   this.name = name
-  }
-  // console.groupEnd()
- }
- async enter() {
-  // console.group(`${EN}::${this.name}:Core[${this.index}].enter()`)
-  {
-  }
-  // console.groupEnd()
- }
- async populate(index) {
-  {
-   // console.group(`${EN}::${this.name}:Core[${this.index}].populate(${index})`)
    if (this.index !== index) {
-    if (index < 0n || index >= this.size) throw new RangeError(`index ${index} out of range (size ${this.size}): ${this.name}`)
+    if (index < 0n || index >= this.size) throw new RangeError(`index ${index} out of range (size ${this.size}): ${this.host}`)
     this.index = index
-    // console.log(index)
    }
-   // console.groupEnd()
   }
- }
- async leave() {
-  // console.group(`${EN}::${this.name}:Core[${this.index}].leave()`)
-  {
+  async enter() {}
+  async leave() {
    this.index = 0n
   }
-  // console.groupEnd()
- }
- notify(from) {
-  // console.group(`${EN}::${this.name}:Core[${this.index}].notify(from: ${from})`)
-  {
-   this.controller?.notify(this.name)
+  notify(from) {
+   this.controller?.notify(this.host)
   }
-  // console.groupEnd()
  }
-}
-class Server extends Core {
- static DEV_PREFIX = "dev."
- static IS_DEV_HOST = location.host.startsWith(this.DEV_PREFIX)
- static APP_HOST = location.host.slice(this.DEV_PREFIX.length * this.IS_DEV_HOST)
- static HOST_PREFIX = this.IS_DEV_HOST ? this.DEV_PREFIX : ""
- static APP_HOST_PARTS = this.APP_HOST.split(".")
- static APP_TLD = this.APP_HOST_PARTS.at(-1)
- static APP_SHORT_NAME = this.APP_HOST.slice(0, -1 - this.APP_TLD.length)
- constructor(name = "server") {
-  // console.group(`${EN}::${name}:Server[${0n}].constructor(name)`)
-  {
-   super(name)
+ class composite_core_parts extends core_parts {
+  constructor(parts) {
+   super()
+   const units = (this.units = [1n])
+   this.factors = {}
+   this.parts = parts.reduceRight((parts, part, i) => {
+    if (typeof part === "string") part = new core_parts(part)
+    if (!(part instanceof core_parts)) throw new TypeError(`unexpected ${typeof part} encountered as factor of composite ${this.host}`)
+    if (part.host in this.factors) throw new RangeError(`duplicate part name ${part.host} in composite ${this.host}`)
+    this.factors[part.host] = {
+     part,
+     i,
+     indexCache: part.index,
+     get unit() {
+      return units[i]
+     },
+    }
+    parts.unshift(part)
+    units.unshift(units[0] * part.size)
+    part.controller = this
+    return parts
+   }, [])
+   this.size = this.units.shift()
   }
-  // console.groupEnd()
+  async enter() {
+   await super.enter()
+   for (const part of this.parts) await part.enter()
+  }
+
+  async populate(index) {
+   await super.populate(index)
+   for (let x = 0; x < this.units.length; x++) {
+    const part = this.parts[x],
+     factor = this.factors[part.host],
+     unit = factor.unit,
+     subindex = index / unit
+    await part.populate(subindex)
+    factor.indexCache = subindex
+    index %= unit
+   }
+  }
+  async leave() {
+   await super.leave()
+   for (const part of this.parts) await part.leave()
+  }
+  notify(from) {
+   const factor = this.factors[from],
+    { part, indexCache } = factor,
+    { index: subindex } = part,
+    unit = factor.unit
+   const difference = subindex - indexCache,
+    deltaIndex = difference * unit,
+    newIndex = this.index + deltaIndex
+   this.index = newIndex
+   factor.indexCache = subindex
+   super.notify(from)
+  }
  }
- async enter() {
-  // console.group(`${EN}::${this.name}:Server[${this.index}].enter()`)
-  {
+ class bitmask_core_parts extends core_parts {
+  constructor(length) {
+   super()
+   this.size = 2n ** BigInt(length)
+  }
+ }
+ class decision_core_parts extends core_parts {
+  size = 0n
+  constructor(parts) {
+   super()
+   let offset = 0n
+   this.options = {}
+   this.parts = parts.map((part, i) => {
+    if (typeof part === "string") part = new core_parts(part)
+    if (!(part instanceof core_parts)) throw new TypeError(`unexpected ${typeof e} encountered at part = ${i} of decision ${this.host}`)
+    this.options[part.host] = { part, i, offset }
+    offset += part.size
+    this.size += part.size
+    part.controller = this
+    return part
+   })
+  }
+  async enter() {
+   await super.enter()
+   this.option = this.options[this.parts[0].host]
+   await this.option.part.enter()
+  }
+  async populate(index) {
+   if (this.index !== index || this.repopulate) {
+    await super.populate(index)
+    for (const part of this.parts) {
+     if (index < part.size) {
+      if (this.option.part !== part) {
+       await this.option.part?.leave()
+       this.option = this.options[part.host]
+       await part.enter()
+       if (index !== 0n) await part.populate(index)
+      } else await part.populate(index)
+      break
+     }
+     index -= part.size
+    }
+   }
+  }
+  async leave() {
+   await super.leave()
+   await this.option.part.leave()
+   delete this.option
+  }
+  notify(from) {
+   this.index = this.option.offset + this.option.part.index
+   super.notify(from)
+  }
+ }
+ class boot_core_parts extends decision_core_parts {
+  constructor() {
+   super(["boot", new server_core_parts(), new client_core_parts()])
+  }
+  async enter() {
+   await super.enter()
+   console.log(this.options, EN + ".core.parts")
+   await this.populate(this.options[EN + ".core.parts"].offset)
+   this.controller?.notify(this.host)
+  }
+ }
+ class server_core_parts extends core_parts {
+  async enter() {
    const cache = {},
     boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
    globalThis.onfetch = e => {
     // TODO: detect and throw error on any cross-deployment-stage resource fetches.
     const { pathname, host, origin } = new URL(e.request.url),
-     isDevHost = host.startsWith(Server.DEV_PREFIX),
+     isDevHost = host.startsWith(DEV_PREFIX),
      shortname = host
       .split(".")
       .slice(isDevHost ? 1 : 0, -1)
       .join("."),
      cacheKey = host + pathname
-    if (isDevHost !== Server.IS_DEV_HOST) throw new ReferenceError(`cannot request assets across deployment stages (${e.request.url})`)
+    if (isDevHost !== IS_DEV_HOST) throw new ReferenceError(`cannot request assets across deployment stages (${e.request.url})`)
     if (!(cacheKey in cache)) {
      let body, type
      switch (pathname) {
@@ -299,7 +210,7 @@ Options -Indexes`
        type = "text/markdown; charset=UTF-8"
        body = `<!--- © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved. --->
 
-# About Core
+# About core_parts
 
 This project aims to meet a large number of requirements which we will detail later.
 
@@ -310,7 +221,7 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
        break
       case "/server.js":
       case "/client.js":
-       body = `// ${boilerplate}\n\n${Core}\n${Server}\n${Client}\n${Bootstrap}\nnew Bootstrap().enter()`
+       body = `// ${boilerplate}\n${boot}\nboot()`
        type = "text/javascript; charset=UTF-8"
        break
       case "/manifest.json":
@@ -348,8 +259,8 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
         categories: ["entertainment", "games", "utilities"] /*
         protocol_handlers: [
          {
-          protocol: "web+Core",
-          url: "/Core?pathname=%s",
+          protocol: "web+core_parts",
+          url: "/core_parts?pathname=%s",
          },
         ],
         shortcuts: [
@@ -437,743 +348,21 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
    globalThis.onactivate = e => globalThis.clients.claim()
    globalThis.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()
   }
-  // console.groupEnd()
  }
- async populate(index) {
-  // console.group(`${EN}::${this.name}:Server[${this.index}].populate(${index})`)
-  {
-   await super.populate(index)
-  }
-  // console.groupEnd()
- }
- async leave() {
-  // console.group(`${EN}::${this.name}:Server[${this.index}].leave()`)
-  {
-   await super.leave()
-  }
-  // console.groupEnd()
- }
- notify(from) {
-  // console.group(`${EN}::${this.name}:Server[${this.index}].notify(from: ${from})`)
-  {
-   super.notify(from)
-  }
-  // console.groupEnd()
- }
-}
-class Client extends Core.Decision {
- static CommonLayout = class CommonLayout extends Core.Composite {
-  static Sidebar = class Sidebar extends Core.Decision {
-   static Closed = class SidebarClosed extends Core {
-    constructor(name = "closed") {
-     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.Closed[${0n}].constructor(name)`)
-     {
-      super(name)
-     }
-     // console.groupEnd()
-    }
-    async enter() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].enter()`)
-     {
-      this.sidebar = this.controller.sidebar
-      this.button = this.controller.button
-      this.button.onclick = async () => {
-       await this.controller?.populate(1n)
-       this.controller?.controller?.notify(this.controller.name)
-      }
-      this.sidebar.setAttribute("style", "--sidebar-tween: 0")
-      await super.enter()
-     }
-     // console.groupEnd()
-    }
-    async populate(index) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].populate(${index})`)
-     {
-      await super.populate(index)
-     }
-     // console.groupEnd()
-    }
-    async leave() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].leave()`)
-     {
-      await super.leave()
-      if (document.activeElement === this.sidebar) this.sidebar.blur()
-      this.button.onclick = undefined
-      this.sidebar.removeAttribute("style")
-     }
-     // console.groupEnd()
-    }
-    notify(from) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Closed[${this.index}].notify(from: ${from})`)
-     {
-      super.notify(from)
-     }
-     // console.groupEnd()
-    }
-   }
-   static TweenIn = class SidebarTweenIn extends Core.Decision {
-    constructor(name = "tween-in") {
-     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.TweenIn[${0n}].constructor(name)`)
-     {
-      super(name, ["half"])
-     }
-     // console.groupEnd()
-    }
-    async enter() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].enter()`)
-     {
-      this.sidebar = this.controller.sidebar
-      this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
-      requestAnimationFrame(() => {
-       this.controller.populate(2n)
-       this.controller.controller.notify(this.controller.name)
-      })
-      await super.enter()
-     }
-     // console.groupEnd()
-    }
-    async populate(index) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].populate(${index})`)
-     {
-      await super.populate(index)
-     }
-     // console.groupEnd()
-    }
-    async leave() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].leave()`)
-     {
-      await super.leave()
-      this.sidebar.removeAttribute("style")
-     }
-     // console.groupEnd()
-    }
-    notify(from) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenIn[${this.index}].notify(from: ${from})`)
-     {
-      super.notify(from)
-     }
-     // console.groupEnd()
-    }
-   }
-   static Open = class SidebarOpen extends Core {
-    constructor(name = "open") {
-     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.Open[${0n}].constructor(name)`)
-     {
-      super(name)
-     }
-     // console.groupEnd()
-    }
-    async enter() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].enter()`)
-     {
-      this.sidebar = this.controller.sidebar
-      this.sidebar.focus()
-      this.sidebar.onblur = () => {
-       this.controller?.populate(3n)
-       this.controller?.controller?.notify(this.controller.name)
-      }
-      this.sidebar.setAttribute("style", "--sidebar-tween: 1")
-      await super.enter()
-     }
-     // console.groupEnd()
-    }
-    async populate(index) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].populate(${index})`)
-     {
-      await super.populate(index)
-     }
-     // console.groupEnd()
-    }
-    async leave() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].leave()`)
-     {
-      await super.leave()
-      if (document.activeElement === this.sidebar) this.sidebar.blur()
-      this.sidebar.onblur = undefined
-      this.sidebar.removeAttribute("style")
-     }
-     // console.groupEnd()
-    }
-    notify(from) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.Open[${this.index}].notify(from: ${from})`)
-     {
-      super.notify(from)
-     }
-     // console.groupEnd()
-    }
-   }
-   static TweenOut = class SidebarTweenOut extends Core.Decision {
-    constructor(name = "tween-out") {
-     // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar.TweenOut[${0n}].constructor(name)`)
-     {
-      super(name, ["half"])
-     }
-     // console.groupEnd()
-    }
-    async enter() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].enter()`)
-     {
-      this.sidebar = this.controller.sidebar
-      this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
-      requestAnimationFrame(() => {
-       this.controller.populate(0n)
-       this.controller.controller.notify(this.controller.name)
-      })
-      await super.enter()
-     }
-     // console.groupEnd()
-    }
-    async populate(index) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].populate(${index})`)
-     {
-      await super.populate(index)
-     }
-     // console.groupEnd()
-    }
-    async leave() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].leave()`)
-     {
-      await super.leave()
-      this.sidebar.removeAttribute("style")
-     }
-     // console.groupEnd()
-    }
-    notify(from) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar.TweenOut[${this.index}].notify(from: ${from})`)
-     {
-      super.notify(from)
-     }
-     // console.groupEnd()
-    }
-   }
-   constructor(name = "sidebar") {
-    // console.group(`${EN}::${name}:Client.CommonLayout.Sidebar[${0n}].constructor(name)`)
-    {
-     super(name, [
-      new Client.CommonLayout.Sidebar.Closed(),
-      new Client.CommonLayout.Sidebar.TweenIn(),
-      new Client.CommonLayout.Sidebar.Open(),
-      new Client.CommonLayout.Sidebar.TweenOut(),
-     ])
-    }
-    // console.groupEnd()
-   }
-   async enter() {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].enter()`)
-    {
-     this.button = this.controller.menuButton
-     this.sidebar = this.controller.sidebar
-     await super.enter()
-    }
-    // console.groupEnd()
-   }
-   async populate(index) {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].populate(${index})`)
-    {
-     await super.populate(index)
-    }
-    // console.groupEnd()
-   }
-   async leave() {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].leave()`)
-    {
-     await super.leave()
-    }
-    // console.groupEnd()
-   }
-   notify(from) {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.Sidebar[${this.index}].notify(from: ${from})`)
-    {
-     super.notify(from)
-    }
-    // console.groupEnd()
-   }
-  }
-  static App = class App extends Core.Decision {
-   static Error503 = class Error503 extends Core {
-    constructor(name = "error503") {
-     // console.group(`${EN}::${name}:Client.CommonLayout.App.Error503[${0n}].constructor(name)`)
-     {
-      super(name)
-     }
-     // console.groupEnd()
-    }
-    async enter() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].enter()`)
-     {
-      this.stylesheet = this.controller.stylesheet
-      this.stylesheet.replaceSync(`
-:host {
- display: block;
- --theme-rgb: 23, 29, 42;
- --theme: rgb(var(--theme-rgb));
- --color: #0a0d0d;
- color: var(--color);
- background: rgba(var(--theme-rgb), 0.14);
- overflow: clip;
- position: relative;
- box-sizing: border-box;
- padding: 15px;
- width: 100%;
- height: 100%;
- font: 18px system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
-h1 {
- text-align: center;
- line-height: 100vh;
- height: 100%;
- position: absolute;
- width: 100%;
- left: 0;
- top: 0;
- margin: 0;
- padding: 0;
-}
-
-h1 {
- font-size: 35vw;
- color: rgba(var(--theme-rgb), 0.08);
-}
-
-.thin {
- font-weight: 200;
-}
-
-#float {
- font-size: 42px;
- height: 100%;
- align-items: center;
- justify-content: center;
- display: flex;
- gap: 0.5ch;
- line-height: 1em;
-}
-
-img {
- width: 64px;
- height: 64px;
-}
-
-#host {
- font-weight: 600;
-}`)
-      this.container = this.controller.container
-      this.container.innerHTML = `<h1>503</h1>
-<span id=float>
- <img src=https://${Server.HOST_PREFIX}${Server.APP_HOST}/favicon.svg><span class=thin>${Server.APP_SHORT_NAME}</span><span>is coming soon.</span>
-</span>`
-      await super.enter()
-     }
-     // console.groupEnd()
-    }
-    async populate(index) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].populate(${index})`)
-     {
-      await super.populate(index)
-     }
-     // console.groupEnd()
-    }
-    async leave() {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].leave()`)
-     {
-      await super.leave()
-      this.container.innerHTML = ``
-      this.stylesheet.replaceSync(``)
-     }
-     // console.groupEnd()
-    }
-    notify(from) {
-     // console.group(`${EN}::${this.name}:Client.CommonLayout.App.Error503[${this.index}].notify(from: ${from})`)
-     {
-      super.notify(from)
-     }
-     // console.groupEnd()
-    }
-   }
-   constructor(name = "app") {
-    // console.group(`${EN}::${name}:Client.CommonLayout.App[${0n}].constructor(name)`)
-    {
-     super(name, [new Client.CommonLayout.App.Error503()])
-    }
-    // console.groupEnd()
-   }
-   async enter() {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].enter()`)
-    {
-     this.container = this.controller.appRoot
-     this.stylesheet = new CSSStyleSheet()
-     this.container.adoptedStyleSheets.push(this.stylesheet)
-     await super.enter()
-    }
-    // console.groupEnd()
-   }
-   async populate(index) {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].populate(${index})`)
-    {
-     await super.populate(index)
-    }
-    // console.groupEnd()
-   }
-   async leave() {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].leave()`)
-    {
-     await super.leave()
-     this.container.adoptedStyleSheets = []
-    }
-    // console.groupEnd()
-   }
-   notify(from) {
-    // console.group(`${EN}::${this.name}:Client.CommonLayout.App[${this.index}].notify(from: ${from})`)
-    {
-     super.notify(from)
-    }
-    // console.groupEnd()
-   }
-  }
-  static ColorMode = class ColorMode extends Core.Decision {
-   constructor() {
-    super("color-mode", ["light", "dark"])
-   }
-  }
-  constructor(name = "common") {
-   // console.group(`${EN}::${name}:Client.CommonLayout[${0n}].constructor(name)`)
-   {
-    const apps = ["core.parts", "fallback.cloud", "kireji.io", "glowstick.click", "ejaugust.com", "orenjinari.com"].sort()
-    super(name, [new Client.CommonLayout.Sidebar(), new Client.CommonLayout.App(), new Client.CommonLayout.ColorMode()])
-    this.apps = apps
-   }
-   // console.groupEnd()
+ class client_core_parts extends decision_core_parts {
+  constructor() {
+   super(["empty", new common_core_parts()])
   }
   async enter() {
-   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].enter()`)
-   {
-    this.controller.stylesheet.replaceSync(`html, body {
- --sidebar-tween: 0;
- --sidebar-width: 256px;
- --vellum-white: #faf9f8;
- --prussian-blue: #19517f;
- --official-blue: #131823;
- overflow: hidden;
- height: 100vh;
- width: 100vw;
- margin: 0;
- -webkit-user-select: none;
- overscroll-behavior: contain !important;
- -ms-user-select: none;
- user-select: none;
- color: var(--official-blue);
- background: var(--vellum-white);
-}
-body {
- --system-ui:
-  system-ui,
-  "Segoe UI",
-  Roboto,
-  Helvetica,
-  Arial,
-  sans-serif,
-  "Apple Color Emoji",
-  "Segoe UI Emoji",
-  "Segoe UI Symbol";
- --system-ui-mono: ui-monospace, 
-  Menlo, Monaco, 
-  "Cascadia Mono", "Segoe UI Mono", 
-  "Roboto Mono", 
-  "Oxygen Mono", 
-  "Ubuntu Mono", 
-  "Source Code Pro",
-  "Fira Mono", 
-  "Droid Sans Mono", 
-  "Consolas", "Courier New", monospace;
- font: 13px var(--system-ui);
- display: flex;
- flex-flow: column;
- justify-content: start;
-}
-#toolbar {
- margin: 0;
- padding: 0;
- line-height: 61px;
- display: flex;
- color: var(--official-blue);
- height: 61px;
- box-sizing: border-box;
- box-shadow: 0px 2px 7px #0002;
-}
-#toolbar > button {
- height: 29px;
- width: 29px;
- cursor: pointer;
- margin: 16px;
- border-radius: 5px;
- border: none;
- color: inherit;
- background: transparent;
- font-size: 29px;
- line-height: 29px;
- padding: 0;
- margin: 16px;
-}
-#toolbar > button:hover {
- background: #fff5;
-}
-#toolbar > h1 {
- cursor: pointer;
- margin: 16px 0;
- padding: 0;
- font-size: 21px;
- line-height: 29px;
- font-weight: 400;
- display: flex;
-}
-#toolbar > h1 > img {
- height: 39px;
- width: 39px;
- margin: -5px;
-}
-#toolbar > h1 > .label {
- margin-left: 1.5ch;
- flex: 1;
- line-height: 29px;
-}
-#toolbar > h1:hover {
- text-decoration: underline;
-}
-#toolbar > .spacer {
- flex: 1;
-}
-#version {
- text-align: center;
- padding: 0 8px;
- font-family: var(--system-ui-mono);
- font-size: 10px;
- line-height: 18px;
- color: var(--official-blue);
- background-color: var(--vellum-white);
- box-sizing: border-box;
- border-radius: 7px;
- font-weight: 900;
- margin: auto;
- box-shadow: 0 0 1px var(--official-blue);
-}
-#sidebar {
- margin: 0;
- padding: 0;
- position: fixed;
- left: calc((var(--sidebar-tween) - 1) * var(--sidebar-width));
- top: 0;
- height: 100vh;
- width: var(--sidebar-width);
- background: white;
- opacity: var(--sidebar-tween);
- box-shadow: 0px 0px 22px 8px #0001;
-}
-#sidebar {
- display: flex;
- flex-flow: column;
- background: var(--vellum-white);
- margin: 0;
- box-sizing: border-box;
- flex: 2;
- min-width: 64px;
- color: var(--official-blue);
- outline: none;
-}
-#sidebar > .tagline {
- font-weight: 300;
- opacity: 60%;
- max-height: 100%;
- margin: 0;
-}
-#sidebar > h2 {
- display: flex;
- margin: 0;
- gap: 0.5ch;
- padding: 21px 21px 27px 21px;
- box-sizing: border-box;
- font-weight: 400;
-}
-#sidebar > h2 > .label {
- flex: 1;
-}
-#sidebar > * {
- box-shadow: 0 1px 0 0 #0002;
-}
-#sidebar .module {
- padding: 16px;
-}
-#sidebar .module > h3 {
- margin: 0;
- padding: 0;
- margin-bottom: 12px;
-}
-#sidebar .module > ul {
- margin: 0;
- display: flex;
- flex-flow: column;
- gap: 1px;
- counter-reset: item;
- overflow: hidden;
- overflow-y: auto;
- flex: 0 1 auto;
- box-sizing: border-box;
- line-height: 29px;
- padding: 0;
-}
-#sidebar .module > ul > li {
- list-style-type: none;
- display: flex;
- gap: 1.5ch;
- padding: 4px 13px;
- font-size: 13.5px;
- border-radius: 3px;
- flex: 0;
- font-weight: 500;
- margin: -1px;
- line-height: 25px;
-}
-#sidebar .module > ul > li > img {
- height: 25px;
- width: 25px;
-}
-#sidebar .module > ul > li > .label {
- overflow-y: visible;
- overflow-x: clip;
- text-overflow: ellipsis;
- min-width: 0;
- flex: 1 1;
-}
-#sidebar .module > ul > [data-selected="true"] {
- color: rgba(12,103,192,1);
-}
-#sidebar .module > ul > li:not([data-selected="true"]):hover {
- color: rgba(12,103,192,1);
- cursor: pointer;
-}
-#logo {
- font-weight: 700;
-}
-@media (display-mode: window-controls-overlay) {
- #toolbar {
-  padding-left: env(titlebar-area-x, 0);
-  top: env(titlebar-area-y, 0);
-  padding-right: calc(100% - env(titlebar-area-width, 100%) - env(titlebar-area-x, 0));
-  height: 61px;
-  width: 100%;
-  -webkit-app-region: drag;
-  app-region: drag;
- }
- #toolbar > h1,
- #toolbar > button {
-  -webkit-app-region: no-drag;
-  app-region: no-drag;
- }
-}
-`)
-    const toolbar = document.body.appendChild(document.createElement("nav")),
-     menuButton = toolbar.appendChild(document.createElement("button")),
-     homeButton = toolbar.appendChild(document.createElement("h1")),
-     spacer = toolbar.appendChild(document.createElement("span")),
-     shareButton = toolbar.appendChild(document.createElement("button"))
-    menuButton.innerText = "≡"
-    this.menuButton = menuButton
-    spacer.setAttribute("class", "spacer")
-    toolbar.setAttribute("id", "toolbar")
-    homeButton.innerHTML = `<img src=https://${Server.HOST_PREFIX}${Server.APP_HOST}/favicon.svg /><span class=label>${Server.APP_SHORT_NAME}</span>`
-    homeButton.onclick = () => {
-     this.factors.app
-    }
-    if (navigator.share) {
-     shareButton.onclick = () =>
-      navigator.share({ title: document.title, url: location.href }).catch(error => {
-       if (error.name !== "AbortError") console.error("Error sharing:", error)
-      })
-     shareButton.innerText = `➦`
-    }
-    this.stylesheet = new CSSStyleSheet()
-    const appRoot = document.body.appendChild(document.createElement("main"))
-    this.sidebar = document.body.appendChild(document.createElement("menu"))
-    this.sidebar.setAttribute("id", "sidebar")
-    const sidebarHeading = this.sidebar.appendChild(document.createElement("h2"))
-    sidebarHeading.innerHTML = `<span id=logo>Kireji</span><span class=label>${Server.APP_SHORT_NAME}</span><span id=version>${Core.VERSION}</span>`
-    const appsModule = this.sidebar.appendChild(document.createElement("section")),
-     appsTitle = appsModule.appendChild(document.createElement("h3")),
-     appList = appsModule.appendChild(document.createElement("ul"))
-    appsTitle.innerText = `Apps`
-    appsModule.setAttribute("class", "module")
-    if (false && Server.IS_DEV_HOST) {
-     const pinsModule = this.sidebar.appendChild(document.createElement("section")),
-      pinsTitle = pinsModule.appendChild(document.createElement("h3")),
-      pinList = pinsModule.appendChild(document.createElement("ul"))
-     pinsTitle.innerText = `Pins`
-     pinsModule.setAttribute("class", "module")
-    }
-    this.appNodes = {}
-    for (let i = 0; i < this.apps.length; i++) {
-     const appname = this.apps[i],
-      appParts = appname.split(".").slice(0, -1),
-      shortName = appParts.join(" "),
-      appNode = appList.appendChild(document.createElement("li"))
-     appNode.innerHTML = `<img src=https://${Server.HOST_PREFIX}${appname}/favicon.svg /><span class=label>${shortName}</span>`
-     this.appNodes[appname] = appNode
-     appNode.onclick = () => {
-      const host = this.apps[i]
-      if (Server.APP_HOST !== host) location = "https://" + Server.HOST_PREFIX + host + "/#5"
-     }
-    }
-    this.selectedNode = this.appNodes[Server.APP_HOST]
-    this.selectedNode.setAttribute("data-selected", "true")
-    this.sidebar.tabIndex = 1
-    this.appRoot = appRoot.attachShadow({ mode: "closed" })
-    this.appRoot.adoptedStyleSheets.push(this.stylesheet)
-    document.title = Server.APP_SHORT_NAME
-    await super.enter()
-   }
-   // console.groupEnd()
-  }
-  async populate(index) {
-   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].populate(${index})`)
-   {
-    await super.populate(index)
-   }
-   // console.groupEnd()
-  }
-  async leave() {
-   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].leave()`)
-   {
-    await super.leave()
-    document.body.innerHTML = ``
-   }
-   // console.groupEnd()
-  }
-  notify(from) {
-   // console.group(`${EN}::${this.name}:Client.CommonLayout[${this.index}].notify(from: ${from})`)
-   {
-    super.notify(from)
-   }
-   // console.groupEnd()
-  }
- }
- static gpu
- static here = 0n
- static shiftKeysDown = 0
- static contextKeysDown = 0
- constructor(name = "client") {
-  // console.group(`${EN}::${name}:Client[${0n}].constructor(name)`)
-  {
-   super(name, ["empty", new Client.CommonLayout()])
-  }
-  // console.groupEnd()
- }
- async enter() {
-  // console.group(`${EN}::${this.name}:Client[${this.index}].enter()`)
-  {
    await super.enter()
 
-   if (navigator.serviceWorker) {
-    const c = navigator.serviceWorker,
-     reg = await c.register(location.origin + "/server.js"),
+   const alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
+    { gpu: g, userAgent: a, serviceWorker: c } = navigator,
+    isMac = a.indexOf("Mac") > -1,
+    throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
+
+   if (c) {
+    const reg = await c.register(location.origin + "/server.js"),
      sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
     c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
     c.oncontrollerchange = c.onmessage = () => location.reload()
@@ -1181,133 +370,963 @@ body {
     addEventListener("focus", () => reg.update().catch(() => location.reload()))
    }
 
-   if (navigator.gpu) {
-    Client.gpu = await (await navigator.gpu.requestAdapter()).requestDevice()
+   if (g) {
+    GPU = await (await g.requestAdapter()).requestDevice()
    }
 
    this.stylesheet = new CSSStyleSheet()
    document.adoptedStyleSheets.push(this.stylesheet)
 
    let fps = 1,
-    meanFrameTime = 1000,
     addressbarIndex,
     throttleStartTime,
-    time = performance.now()
+    meanFrameTime = 1000,
+    time = performance.now(),
+    contextKeysDown = 0,
+    shiftKeysDown = 0
 
-   const isMac = navigator.userAgent.indexOf("Mac") > -1,
-    alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
-    throttleDuration = /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 350 : 75,
-    loop = now => {
-     fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
-     time = now
-     if (time - throttleStartTime >= throttleDuration && addressbarIndex !== Client.here) {
-      const hexads = [],
-       binaryString = Client.here.toString(2),
-       newLength = Math.ceil(binaryString.length / 6),
-       fullbin = binaryString.padStart(newLength * 6, 0)
-      for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
-      const hash = "#" + hexads.reduce((hash, hexad) => hash + alphabet[parseInt(hexad, 2)], "")
-      history.pushState({}, null, hash)
-      addressbarIndex = Client.here
-      throttleStartTime = time
-     }
-     if (this.index !== Client.here) this.populate(Client.here).then(() => this.controller?.notify(this.name))
-     requestAnimationFrame(loop)
-    }
-
-   onblur = e => {
-    Client.contextKeysDown = Client.shiftKeysDown = 0
+   onblur = () => {
+    contextKeysDown = shiftKeysDown = 0
    }
+
    onkeyup = e => {
     if (isMac) {
-     if (e.key === "Meta") Client.contextKeysDown = Math.max(0, Client.contextKeysDown - 1)
-    } else if (e.key === "Control") Client.contextKeysDown = Math.max(0, Client.contextKeysDown - 1)
-    if (e.key === "Shift") Client.shiftKeysDown = Math.max(0, Client.shiftKeysDown - 1)
+     if (e.key === "Meta") contextKeysDown = Math.max(0, contextKeysDown - 1)
+    } else if (e.key === "Control") contextKeysDown = Math.max(0, contextKeysDown - 1)
+    if (e.key === "Shift") shiftKeysDown = Math.max(0, shiftKeysDown - 1)
     e.preventDefault()
    }
+
    onkeydown = e => {
     if (isMac) {
-     if (e.key === "Meta") Client.contextKeysDown++
-    } else if (e.key === "Control") Client.contextKeysDown++
-    if (e.key === "Shift") Client.shiftKeysDown++
-    if (Client.contextKeysDown === 1 && !Client.shiftKeysDown && e.key === "z") history.back()
-    if (Client.contextKeysDown === 1 && !Client.shiftKeysDown && e.key === "y") history.forward()
-    if (Client.contextKeysDown === 1 && Client.shiftKeysDown && e.key === "z") history.forward()
+     if (e.key === "Meta") contextKeysDown++
+    } else if (e.key === "Control") contextKeysDown++
+    if (e.key === "Shift") shiftKeysDown++
+    if (contextKeysDown === 1 && !shiftKeysDown && e.key === "z") history.back()
+    if (contextKeysDown === 1 && !shiftKeysDown && e.key === "y") history.forward()
+    if (contextKeysDown === 1 && shiftKeysDown && e.key === "z") history.forward()
     e.preventDefault()
    }
-   ;(onhashchange = () => {
+
+   onhashchange = () => {
     let { pathname, search, hash, origin } = location
     if (pathname !== "/" || search || !hash || hash.length <= 1) history.replaceState({}, null, `${origin}/${(hash ||= "#1")}`)
     let binaryString = "0b"
     for (let i = 1; i < hash.length; i++) binaryString += alphabet.indexOf(hash[i]).toString(2).padStart(6, 0)
-    addressbarIndex = Client.here = BigInt(binaryString)
+    addressbarIndex = this.documentIndex = BigInt(binaryString)
     throttleStartTime = time
-   })()
+   }
 
-   loop()
+   const onframechange = now => {
+    fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
+    time = now
+    if (time - throttleStartTime >= throttleDuration && addressbarIndex !== this.documentIndex) {
+     const hexads = [],
+      binaryString = this.documentIndex.toString(2),
+      newLength = Math.ceil(binaryString.length / 6),
+      fullbin = binaryString.padStart(newLength * 6, 0)
+     for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
+     const hash = "#" + hexads.reduce((hash, hexad) => hash + alphabet[parseInt(hexad, 2)], "")
+     history.pushState({}, null, hash)
+     addressbarIndex = this.documentIndex
+     throttleStartTime = time
+    }
+    if (this.index !== this.documentIndex) this.populate(this.documentIndex).then(() => this.controller?.notify(this.host))
+    requestAnimationFrame(onframechange)
+   }
+
+   onhashchange()
+   onframechange(time)
   }
-  // console.groupEnd()
- }
- async populate(index) {
-  // console.group(`${EN}::${this.name}:Client[${this.index}].populate(${index})`)
-  {
-   await super.populate(index)
-  }
-  // console.groupEnd()
- }
- async leave() {
-  // console.group(`${EN}::${this.name}:Client[${this.index}].leave()`)
-  {
-   await super.leave()
-  }
-  // console.groupEnd()
- }
- notify(from) {
-  // console.group(`${EN}::${this.name}:Client[${this.index}].notify(from: ${from})`)
-  {
+  notify(from) {
    super.notify(from)
-   Client.here = this.index
+   this.documentIndex = this.index
   }
-  // console.groupEnd()
  }
+ class common_core_parts extends composite_core_parts {
+  constructor() {
+   const apps = ["core.parts", "fallback.cloud", "kireji.io", "glowstick.click", "ejaugust.com", "orenjinari.com"].sort()
+   super([new sidebar_common_core_parts(), new app_common_core_parts(), new colormode_core_parts()])
+   this.apps = apps
+  }
+  async enter() {
+   this.controller.stylesheet.replaceSync(`html, body {
+--sidebar-tween: 0;
+--sidebar-width: 256px;
+--vellum-white: #faf9f8;
+--prussian-blue: #19517f;
+--official-blue: #131823;
+overflow: hidden;
+height: 100vh;
+width: 100vw;
+margin: 0;
+-webkit-user-select: none;
+overscroll-behavior: contain !important;
+-ms-user-select: none;
+user-select: none;
+color: var(--official-blue);
+background: var(--vellum-white);
 }
-class Bootstrap extends Core.Decision {
- constructor(name = "boot") {
-  globalThis.EN = globalThis.constructor === globalThis.Window ? "client" : "server"
-  // console.group(`${EN}::${name}:Bootstrap[${0n}].constructor(name)`)
-  {
-   super(name, ["boot", new Server(), new Client()])
-  }
- }
- async enter() {
-  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].enter()`)
-  {
+body {
+--system-ui:
+ system-ui,
+ "Segoe UI",
+ Roboto,
+ Helvetica,
+ Arial,
+ sans-serif,
+ "Apple Color Emoji",
+ "Segoe UI Emoji",
+ "Segoe UI Symbol";
+--system-ui-mono: ui-monospace, 
+ Menlo, Monaco, 
+ "Cascadia Mono", "Segoe UI Mono", 
+ "Roboto Mono", 
+ "Oxygen Mono", 
+ "Ubuntu Mono", 
+ "Source Code Pro",
+ "Fira Mono", 
+ "Droid Sans Mono", 
+ "Consolas", "Courier New", monospace;
+font: 13px var(--system-ui);
+display: flex;
+flex-flow: column;
+justify-content: start;
+}
+#toolbar {
+margin: 0;
+padding: 0;
+line-height: 61px;
+display: flex;
+color: var(--official-blue);
+height: 61px;
+box-sizing: border-box;
+box-shadow: 0px 2px 7px #0002;
+}
+#toolbar > button {
+height: 29px;
+width: 29px;
+cursor: pointer;
+margin: 16px;
+border-radius: 5px;
+border: none;
+color: inherit;
+background: transparent;
+font-size: 29px;
+line-height: 29px;
+padding: 0;
+margin: 16px;
+}
+#toolbar > button:hover {
+background: #fff5;
+}
+#toolbar > h1 {
+cursor: pointer;
+margin: 16px 0;
+padding: 0;
+font-size: 21px;
+line-height: 29px;
+font-weight: 400;
+display: flex;
+}
+#toolbar > h1 > img {
+height: 39px;
+width: 39px;
+margin: -5px;
+}
+#toolbar > h1 > .label {
+margin-left: 1.5ch;
+flex: 1;
+line-height: 29px;
+}
+#toolbar > h1:hover {
+text-decoration: underline;
+}
+#toolbar > .spacer {
+flex: 1;
+}
+#version {
+text-align: center;
+padding: 0 8px;
+font-family: var(--system-ui-mono);
+font-size: 10px;
+line-height: 18px;
+color: var(--official-blue);
+background-color: var(--vellum-white);
+box-sizing: border-box;
+border-radius: 7px;
+font-weight: 900;
+margin: auto;
+box-shadow: 0 0 1px var(--official-blue);
+}
+#sidebar {
+margin: 0;
+padding: 0;
+position: fixed;
+left: calc((var(--sidebar-tween) - 1) * var(--sidebar-width));
+top: 0;
+height: 100vh;
+width: var(--sidebar-width);
+background: white;
+opacity: var(--sidebar-tween);
+box-shadow: 0px 0px 22px 8px #0001;
+}
+#sidebar {
+display: flex;
+flex-flow: column;
+background: var(--vellum-white);
+margin: 0;
+box-sizing: border-box;
+flex: 2;
+min-width: 64px;
+color: var(--official-blue);
+outline: none;
+}
+#sidebar > .tagline {
+font-weight: 300;
+opacity: 60%;
+max-height: 100%;
+margin: 0;
+}
+#sidebar > h2 {
+display: flex;
+margin: 0;
+gap: 0.5ch;
+padding: 21px 21px 27px 21px;
+box-sizing: border-box;
+font-weight: 400;
+}
+#sidebar > h2 > .label {
+flex: 1;
+}
+#sidebar > * {
+box-shadow: 0 1px 0 0 #0002;
+}
+#sidebar .module {
+padding: 16px;
+}
+#sidebar .module > h3 {
+margin: 0;
+padding: 0;
+margin-bottom: 12px;
+}
+#sidebar .module > ul {
+margin: 0;
+display: flex;
+flex-flow: column;
+gap: 1px;
+counter-reset: item;
+overflow: hidden;
+overflow-y: auto;
+flex: 0 1 auto;
+box-sizing: border-box;
+line-height: 29px;
+padding: 0;
+}
+#sidebar .module > ul > li {
+list-style-type: none;
+display: flex;
+gap: 1.5ch;
+padding: 4px 13px;
+font-size: 13.5px;
+border-radius: 3px;
+flex: 0;
+font-weight: 500;
+margin: -1px;
+line-height: 25px;
+}
+#sidebar .module > ul > li > img {
+height: 25px;
+width: 25px;
+}
+#sidebar .module > ul > li > .label {
+overflow-y: visible;
+overflow-x: clip;
+text-overflow: ellipsis;
+min-width: 0;
+flex: 1 1;
+}
+#sidebar .module > ul > [data-selected="true"] {
+color: rgba(12,103,192,1);
+}
+#sidebar .module > ul > li:not([data-selected="true"]):hover {
+color: rgba(12,103,192,1);
+cursor: pointer;
+}
+#logo {
+font-weight: 700;
+}
+@media (display-mode: window-controls-overlay) {
+#toolbar {
+ padding-left: env(titlebar-area-x, 0);
+ top: env(titlebar-area-y, 0);
+ padding-right: calc(100% - env(titlebar-area-width, 100%) - env(titlebar-area-x, 0));
+ height: 61px;
+ width: 100%;
+ -webkit-app-region: drag;
+ app-region: drag;
+}
+#toolbar > h1,
+#toolbar > button {
+ -webkit-app-region: no-drag;
+ app-region: no-drag;
+}
+}
+`)
+   const toolbar = document.body.appendChild(document.createElement("nav")),
+    menuButton = toolbar.appendChild(document.createElement("button")),
+    homeButton = toolbar.appendChild(document.createElement("h1")),
+    spacer = toolbar.appendChild(document.createElement("span")),
+    shareButton = toolbar.appendChild(document.createElement("button"))
+   menuButton.innerText = "≡"
+   this.menuButton = menuButton
+   spacer.setAttribute("class", "spacer")
+   toolbar.setAttribute("id", "toolbar")
+   homeButton.innerHTML = `<img src=https://${HOST_PREFIX}${APP_HOST}/favicon.svg /><span class=label>${APP_SHORT_NAME}</span>`
+   homeButton.onclick = () => {
+    this.factors.app
+   }
+   if (navigator.share) {
+    shareButton.onclick = () =>
+     navigator.share({ title: document.title, url: location.href }).catch(error => {
+      if (error.name !== "AbortError") console.error("Error sharing:", error)
+     })
+    shareButton.innerText = `➦`
+   }
+   this.stylesheet = new CSSStyleSheet()
+   const appRoot = document.body.appendChild(document.createElement("main"))
+   this.sidebar = document.body.appendChild(document.createElement("menu"))
+   this.sidebar.setAttribute("id", "sidebar")
+   const sidebarHeading = this.sidebar.appendChild(document.createElement("h2"))
+   sidebarHeading.innerHTML = `<span id=logo>Kireji</span><span class=label>${APP_SHORT_NAME}</span><span id=version>${VERSION}</span>`
+   const appsModule = this.sidebar.appendChild(document.createElement("section")),
+    appsTitle = appsModule.appendChild(document.createElement("h3")),
+    appList = appsModule.appendChild(document.createElement("ul"))
+   appsTitle.innerText = `Apps`
+   appsModule.setAttribute("class", "module")
+   if (false && IS_DEV_HOST) {
+    const pinsModule = this.sidebar.appendChild(document.createElement("section")),
+     pinsTitle = pinsModule.appendChild(document.createElement("h3")),
+     pinList = pinsModule.appendChild(document.createElement("ul"))
+    pinsTitle.innerText = `Pins`
+    pinsModule.setAttribute("class", "module")
+   }
+   this.appNodes = {}
+   for (let i = 0; i < this.apps.length; i++) {
+    const appname = this.apps[i],
+     appParts = appname.split(".").slice(0, -1),
+     shortName = appParts.join(" "),
+     appNode = appList.appendChild(document.createElement("li"))
+    appNode.innerHTML = `<img src=https://${HOST_PREFIX}${appname}/favicon.svg /><span class=label>${shortName}</span>`
+    this.appNodes[appname] = appNode
+    appNode.onclick = () => {
+     const host = this.apps[i]
+     if (APP_HOST !== host) location = "https://" + HOST_PREFIX + host + "/#5"
+    }
+   }
+   this.selectedNode = this.appNodes[APP_HOST]
+   this.selectedNode.setAttribute("data-selected", "true")
+   this.sidebar.tabIndex = 1
+   this.appRoot = appRoot.attachShadow({ mode: "closed" })
+   this.appRoot.adoptedStyleSheets.push(this.stylesheet)
+   document.title = APP_SHORT_NAME
    await super.enter()
-   await this.populate(this.options[EN].offset)
-   this.controller?.notify(this.name)
   }
-  // console.groupEnd()
- }
- async populate(index) {
-  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].populate(${index})`)
-  {
-   await super.populate(index)
-  }
-  // console.groupEnd()
- }
- async leave() {
-  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].leave()`)
-  {
+  async leave() {
    await super.leave()
+   document.body.innerHTML = ``
   }
-  // console.groupEnd()
  }
- notify(from) {
-  // console.group(`${EN}::${this.name}:Bootstrap[${this.index}].notify(from: ${from})`)
-  {
-   super.notify(from)
+ class sidebar_common_core_parts extends decision_core_parts {
+  constructor() {
+   super([new closed_sidebar_common_core_parts(), new introduce_sidebar_common_core_parts(), new open_sidebar_common_core_parts(), new dismiss_sidebar_common_core_parts()])
   }
-  // console.groupEnd()
+  async enter() {
+   this.button = this.controller.menuButton
+   this.sidebar = this.controller.sidebar
+   await super.enter()
+  }
  }
+ class closed_sidebar_common_core_parts extends core_parts {
+  async enter() {
+   this.sidebar = this.controller.sidebar
+   this.button = this.controller.button
+   this.button.onclick = async () => {
+    await this.controller?.populate(1n)
+    this.controller?.controller?.notify(this.controller.host)
+   }
+   this.sidebar.setAttribute("style", "--sidebar-tween: 0")
+   await super.enter()
+  }
+  async leave() {
+   await super.leave()
+   if (document.activeElement === this.sidebar) this.sidebar.blur()
+   this.button.onclick = undefined
+   this.sidebar.removeAttribute("style")
+  }
+ }
+ class introduce_sidebar_common_core_parts extends decision_core_parts {
+  constructor() {
+   super(["half"])
+  }
+  async enter() {
+   this.sidebar = this.controller.sidebar
+   this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
+   requestAnimationFrame(() => {
+    this.controller.populate(2n)
+    this.controller.controller.notify(this.controller.host)
+   })
+   await super.enter()
+  }
+  async leave() {
+   await super.leave()
+   this.sidebar.removeAttribute("style")
+  }
+ }
+ class open_sidebar_common_core_parts extends core_parts {
+  async enter() {
+   this.sidebar = this.controller.sidebar
+   this.sidebar.focus()
+   this.sidebar.onblur = () => {
+    this.controller?.populate(3n)
+    this.controller?.controller?.notify(this.controller.host)
+   }
+   this.sidebar.setAttribute("style", "--sidebar-tween: 1")
+   await super.enter()
+  }
+  async leave() {
+   await super.leave()
+   if (document.activeElement === this.sidebar) this.sidebar.blur()
+   this.sidebar.onblur = undefined
+   this.sidebar.removeAttribute("style")
+  }
+ }
+ class dismiss_sidebar_common_core_parts extends decision_core_parts {
+  constructor() {
+   super(["half"])
+  }
+  async enter() {
+   this.sidebar = this.controller.sidebar
+   this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
+   requestAnimationFrame(() => {
+    this.controller.populate(0n)
+    this.controller.controller.notify(this.controller.host)
+   })
+   await super.enter()
+  }
+  async leave() {
+   await super.leave()
+   this.sidebar.removeAttribute("style")
+  }
+ }
+ class error503_app_common_core_parts extends core_parts {
+  async enter() {
+   this.stylesheet = this.controller.stylesheet
+   this.stylesheet.replaceSync(`
+:host {
+display: block;
+--theme-rgb: 23, 29, 42;
+--theme: rgb(var(--theme-rgb));
+--color: #0a0d0d;
+color: var(--color);
+background: rgba(var(--theme-rgb), 0.14);
+overflow: clip;
+position: relative;
+box-sizing: border-box;
+padding: 15px;
+width: 100%;
+height: 100%;
+font: 18px system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
-new Bootstrap().enter()
+
+h1 {
+text-align: center;
+line-height: 100vh;
+height: 100%;
+position: absolute;
+width: 100%;
+left: 0;
+top: 0;
+margin: 0;
+padding: 0;
+}
+
+h1 {
+font-size: 35vw;
+color: rgba(var(--theme-rgb), 0.08);
+}
+
+.thin {
+font-weight: 200;
+}
+
+#float {
+font-size: 32px;
+height: 100%;
+align-items: center;
+justify-content: center;
+display: flex;
+gap: 0.5ch;
+line-height: 1em;
+}
+
+img {
+width: 64px;
+height: 64px;
+}
+
+#host {
+font-weight: 600;
+}`)
+   this.container = this.controller.container
+   this.container.innerHTML = `<h1>503</h1>
+<span id=float>
+<img src=https://${HOST_PREFIX}${APP_HOST}/favicon.svg><span class=thin>${APP_SHORT_NAME}</span><span>is coming soon.</span>
+</span>`
+   await super.enter()
+  }
+  async leave() {
+   await super.leave()
+   this.container.innerHTML = ``
+   this.stylesheet.replaceSync(``)
+  }
+ }
+ class app_common_core_parts extends decision_core_parts {
+  constructor() {
+   super([new error503_app_common_core_parts()])
+  }
+  async enter() {
+   this.container = this.controller.appRoot
+   this.stylesheet = new CSSStyleSheet()
+   this.container.adoptedStyleSheets.push(this.stylesheet)
+   await super.enter()
+  }
+  async leave() {
+   await super.leave()
+   this.container.adoptedStyleSheets = []
+  }
+ }
+ class colormode_core_parts extends decision_core_parts {
+  constructor() {
+   super(["light", "dark"])
+  }
+ }
+ new boot_core_parts().enter()
+
+ const everything = {
+   "https://core.parts/constructor.js": `this.index = 0n
+this.size = 1n`,
+   "https://core.parts/enter.js": ``,
+   "https://core.parts/populate.js": `if (this.index !== index) {
+// todo: error page instead of console - keep all api-related information user-facing
+if (index < 0n || index >= this.size) throw new RangeError(\`index \${index} out of range (size \${this.size}): \${this.host}\`)
+this.index = index
+}`,
+   "https://core.parts/leave.js": `this.index = 0n`,
+   "https://core.parts/notify.js": `this.controller?.notify(this.host)`,
+
+   "https://composite.core.parts/inputs.txt": `parts`,
+   "https://composite.core.parts/constructor.js": `super()
+const units = (this.units = [1n])
+this.factors = {}
+this.parts = parts.reduceRight((parts, part, i) => {
+if (typeof part === "string") part = new (Part("core.parts"))(part)
+if (!(part instanceof core_parts)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of composite \${this.host}\`)
+if (part.host in this.factors) throw new RangeError(\`duplicate part \${part.host} in composite \${this.host}\`)
+this.factors[part.host] = {
+ part,
+ i,
+ indexCache: part.index,
+ get unit() {
+  return units[i]
+ },
+}
+parts.unshift(part)
+units.unshift(units[0] * part.size)
+part.controller = this
+return parts
+}, [])
+this.size = this.units.shift()`,
+   "https://composite.core.parts/enter.js": `await super.enter()
+for (const part of this.parts) await part.enter()`,
+   "https://composite.core.parts/populate.js": `await super.populate(index)
+for (let x = 0; x < this.units.length; x++) {
+const part = this.parts[x],
+ factor = this.factors[part.host],
+ unit = factor.unit,
+ subindex = index / unit
+await part.populate(subindex)
+factor.indexCache = subindex
+index %= unit
+}`,
+   "https://composite.core.parts/leave.js": `await super.leave()
+for (const part of this.parts) await part.leave()`,
+   "https://composite.core.parts/notify.js": `const factor = this.factors[from],
+    { part, indexCache } = factor,
+    { index: subindex } = part,
+    unit = factor.unit
+   const difference = subindex - indexCache,
+    deltaIndex = difference * unit,
+    newIndex = this.index + deltaIndex
+   this.index = newIndex
+   factor.indexCache = subindex
+super.notify(from)`,
+
+   "https://bitmask.core.parts/inputs.txt": `length`,
+   "https://bitmask.core.parts/constructor.js": `super()
+this.size = 2n ** BigInt(length)`,
+
+   "https://decision.core.parts/inputs.txt": `parts`,
+   "https://decision.core.parts/constructor.js": `super()
+let offset = 0n
+this.options = {}
+this.parts = parts.map((part, i) => {
+if (typeof part === "string") part = new (Part("core.parts"))(part)
+if (!(part instanceof core_parts)) throw new TypeError(\`unexpected \${typeof e} encountered at part = \${i} of decision \${this.host}\`)
+this.options[part.host] = { part, i, offset }
+offset += part.size
+this.size += part.size
+part.controller = this
+return part
+})`,
+   "https://decision.core.parts/enter.js": `await super.enter()
+this.option = this.options[this.parts[0].host]
+await this.option.part.enter()`,
+   "https://decision.core.parts/populate.js": `if (this.index !== index || this.repopulate) {
+await super.populate(index)
+for (const part of this.parts) {
+ if (index < part.size) {
+  if (this.option.part !== part) {
+   await this.option.part?.leave()
+   this.option = this.options[part.host]
+   await part.enter()
+   if (index !== 0n) await part.populate(index)
+  } else await part.populate(index)
+  break
+ }
+ index -= part.size
+}
+}`,
+   "https://decision.core.parts/leave.js": `await super.leave()
+await this.option.part.leave()
+delete this.option`,
+   "https://decision.core.parts/notify.js": `this.index = this.option.offset + this.option.part.index
+super.notify(from)`,
+
+   "https://boot.core.parts/core.txt": "decision.core.parts",
+   "https://boot.core.parts/constructor.js": `super(["boot", new (Part("server.core.parts"))(), new (Part("client.core.parts"))()])`,
+   "https://boot.core.parts/enter.js": `await super.enter()
+await this.populate(this.options[EN + ".core.parts"].offset)
+this.controller?.notify(this.host)`,
+
+   "https://server.core.parts/enter.js": `const cache = {},
+   boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
+  globalThis.onfetch = e => {
+   // TODO: detect and throw error on any cross-deployment-stage resource fetches.
+   const { pathname, host, origin } = new URL(e.request.url),
+    isDevHost = host.startsWith(DEV_PREFIX),
+    shortname = host
+     .split(".")
+     .slice(isDevHost ? 1 : 0, -1)
+     .join("."),
+    cacheKey = host + pathname
+   if (isDevHost !== IS_DEV_HOST) throw new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`)
+   if (!(cacheKey in cache)) {
+    let body, type
+    switch (pathname) {
+     case "/.gitignore":
+      type = "text/plain"
+      body = \`# \${boilerplate}
+**/.DS_Store
+**/Icon
+**/.well-known
+**/.tmp.driveupload
+**/.tmp.drivedownload
+**/*.gdoc
+.vscode/scratch/*
+favicon.gif
+favicon.ico\`
+      break
+     case "/.htaccess":
+      type = "text/plain"
+      body = \`# \${boilerplate}
+AddCharset utf-8 .js
+ErrorDocument 404 /index.php
+ErrorDocument 403 /index.php
+Options -Indexes\`
+      break
+     case "/index.php":
+      body = \`<!DOCTYPE html>
+<html lang=en>
+<head>
+ <!-- \${boilerplate} -->
+ <link rel=manifest>
+ <meta name=robots content=noindex>
+ <meta name=viewport content="width=device-width,initial-scale=1">
+ <script defer src="https://<?=$_SERVER["HTTP_HOST"]?>/server.js"></script>
+ <title>Loading ...</title>
+</head>
+</html>\`
+      type = "application/x-httpd-php; charset=UTF-8"
+      break
+     case "/README.md":
+      type = "text/markdown; charset=UTF-8"
+      body = \`<!--- \${boilerplate} --->
+# About core_parts
+This project aims to meet a large number of requirements which we will detail later.
+Every app has a host (domain name) where it can be publically reached.
+Domains beginning with the "dev." subdomain are dedicated to an unstable (but still publically available) version of the app used for staging changes.\`
+      break
+     case "/server.js":
+     case "/client.js":
+      body = \`// \${boilerplate}\n\n\${core_parts}\n\${server_core_parts}\n\${client_core_parts}\n\${boot_core_parts}\nnew boot_core_parts().enter()\`
+      type = "text/javascript; charset=UTF-8"
+      break
+     case "/manifest.json":
+      const manifest = {
+       name: host,
+       short_name: shortname,
+       start_url: ".",
+       display: "standalone",
+       theme_color: "#faf9f8",
+       background_color: "#faf9f8",
+       description: "This app is under development.",
+       display_override: ["window-controls-overlay"],
+       icons: [
+        {
+         src: "favicon.svg",
+         sizes: "144x144",
+         type: "image/svg+xml",
+        },
+        {
+         src: "favicon.svg",
+         sizes: "any",
+         type: "image/svg+xml",
+        },
+        {
+         src: "/android-chrome-192x192.png",
+         sizes: "192x192",
+         type: "image/svg+xml",
+        },
+        {
+         src: "/android-chrome-512x512.png",
+         sizes: "512x512",
+         type: "image/svg+xml",
+        },
+       ],
+       categories: ["entertainment", "games", "utilities"] /*
+       protocol_handlers: [
+        {
+         protocol: "web+core_parts",
+         url: "/core_parts?pathname=%s",
+        },
+       ],
+       shortcuts: [
+        {
+         name: "New Item...",
+         short_name: "New...",
+         icons: [
+          {
+           src: "favicon.svg",
+           sizes: "any",
+           type: "image/svg+xml",
+          },
+         ],
+         url: "/new",
+         description: "This is just a placeholder/hint for future development.",
+        },
+       ],
+       screenshots: [
+        {
+         src: "desktop-screenshot.svg",
+         sizes: "640x480",
+         type: "image/svg+xml",
+         form_factor: "wide",
+         label: "This is a placeholder for the image of the app.",
+        },
+        {
+         src: "mobile-screenshot.svg",
+         sizes: "640x360",
+         type: "image/svg+xml",
+         form_factor: "narrow",
+         label: "This is a placeholder for the image of the app.",
+        },
+       ],*/,
+      }
+      body = JSON.stringify(manifest, null, 1)
+      type = "application/json; charset=UTf-8"
+      break
+      type = "image/svg+xml"
+      break
+     case "/favicon.svg":
+     case "/favicon.ico":
+     case "/apple-touch-icon.png":
+     case "/mobile-screenshot.svg":
+     case "/desktop-screenshot.svg":
+     case "/android-chrome-192x192.png":
+     case "/android-chrome-512x512.png":
+      type = "image/svg+xml"
+      body = \`<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<style>
+ svg { background: white }
+ text { fill: #333445 }
+ @media (prefers-color-scheme = dark) {
+  svg { background: #333445 }
+  text { fill: white }
+ }
+</style>
+<text x="12" y="12" dominant-baseline="central" text-anchor="middle">\${shortname[0]}</text>  
+</svg>\`
+      break
+     default:
+      body = \`<!DOCTYPE html>
+<html lang=en>
+<head>
+ <!-- \${boilerplate} -->
+ <link rel=manifest href="\${origin}/manifest.json">
+ <meta name=robots content=noindex>
+ <meta name=viewport content="width=device-width,initial-scale=1">
+ <script defer src="\${origin}/client.js"></script>
+ <title>Loading ...</title>
+</head>
+</html>\`
+      type = "text/html; charset=UTF-8"
+    }
+    cache[cacheKey] = new Response(body, {
+     headers: {
+      "content-type": type,
+      expires: "Sun, 20 Jul 1969 20:17:00 UTC",
+      server: "kireji",
+     },
+    })
+   }
+   e.respondWith(cache[cacheKey].clone())
+  }
+  globalThis.oninstall = e => globalThis.skipWaiting()
+  globalThis.onactivate = e => globalThis.clients.claim()
+  globalThis.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()`,
+
+   "https://client.core.parts/core.txt": "decision.core.parts",
+   "https://client.core.parts/constructor.js": `super(["empty", new (Part("common.core.parts"))()])`,
+   "https://client.core.parts/enter.js": `await super.enter()
+
+const 
+ n = navigator,
+ a = n.userAgent,
+ c = n.serviceWorker,
+ g = n.gpu,
+ isMac = a.indexOf("Mac") > -1,
+ alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
+ throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
+
+if (c) {
+ const reg = await c.register(location.origin + "/server.js"),
+  sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
+ c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
+ c.oncontrollerchange = c.onmessage = () => location.reload()
+ document.querySelector('[rel="manifest"]').href = location.origin + "/manifest.json"
+ addEventListener("focus", () => reg.update().catch(() => location.reload()))
+}
+
+if (g) {
+ GPU = await (await g.requestAdapter()).requestDevice()
+}
+
+this.stylesheet = new CSSStyleSheet()
+document.adoptedStyleSheets.push(this.stylesheet)
+
+let
+ fps = 1,
+ addressbarIndex,
+ throttleStartTime,
+ meanFrameTime = 1000,
+ time = performance.now(),
+ contextKeysDown = 0,
+ shiftKeysDown = 0
+
+onblur = e => {
+ contextKeysDown = shiftKeysDown = 0
+}
+
+onkeyup = e => {
+ if (isMac) {
+  if (e.key === "Meta") contextKeysDown = Math.max(0, contextKeysDown - 1)
+ } else if (e.key === "Control") contextKeysDown = Math.max(0, contextKeysDown - 1)
+ if (e.key === "Shift") shiftKeysDown = Math.max(0, shiftKeysDown - 1)
+ e.preventDefault()
+}
+
+onkeydown = e => {
+ if (isMac) {
+  if (e.key === "Meta") contextKeysDown++
+ } else if (e.key === "Control") contextKeysDown++
+ if (e.key === "Shift") shiftKeysDown++
+ if (contextKeysDown === 1 && !shiftKeysDown && e.key === "z") history.back()
+ if (contextKeysDown === 1 && !shiftKeysDown && e.key === "y") history.forward()
+ if (contextKeysDown === 1 && shiftKeysDown && e.key === "z") history.forward()
+ e.preventDefault()
+}
+
+onhashchange = () => {
+ let { pathname, search, hash, origin } = location
+ if (pathname !== "/" || search || !hash || hash.length <= 1) history.replaceState({}, null, \`\${origin}/\${(hash ||= "#1")}\`)
+ let binaryString = "0b"
+ for (let i = 1; i < hash.length; i++) binaryString += alphabet.indexOf(hash[i]).toString(2).padStart(6, 0)
+ addressbarIndex = this.documentIndex = BigInt(binaryString)
+ throttleStartTime = time
+}
+
+const loop = now => {
+ fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
+ time = now
+ if (time - throttleStartTime >= throttleDuration && addressbarIndex !== this.documentIndex) {
+  const hexads = [],
+   binaryString = this.documentIndex.toString(2),
+   newLength = Math.ceil(binaryString.length / 6),
+   fullbin = binaryString.padStart(newLength * 6, 0)
+  for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
+  const hash = "#" + hexads.reduce((hash, hexad) => hash + alphabet[parseInt(hexad, 2)], "")
+  history.pushState({}, null, hash)
+  addressbarIndex = this.documentIndex
+  throttleStartTime = time
+ }
+ if (this.index !== this.documentIndex) this.populate(this.documentIndex).then(() => this.controller?.notify(this.host))
+ requestAnimationFrame(loop)
+}
+
+onhashchange()
+loop()`,
+   "https://client.core.parts/notify.js": `super.notify(from)
+this.documentIndex = this.index`,
+  },
+  cache = {}
+
+ function Part(host) {
+  if (host in cache) return cache[host]
+  return (cache[host] = eval(`(class ${host.replaceAll(".", "_")}${host === "core.parts" ? "" : ` extends Part("${everything[`https://${host}/core.txt`] || "core.parts"}")`} {
+host = "${host}"
+${[["constructor", (everything[`https://${host}/inputs.txt`] ?? "").replaceAll(/\s+/g, ", "), 1], ["notify", "from", 1], ["enter"], ["populate", "index"], ["leave"]]
+ .map(([fn, sig = "", sync = false], i) => {
+  const custom = everything[`https://${host}/${fn}.js`]
+  if (!custom && !VERBOSE) return ""
+  return `${sync ? "" : "async "}${fn}(${sig}) {${
+   VERBOSE
+    ? `
+ console.group(\`\${EN}::${host}[0].${fn}(${[sig, "from", "", "index", ""][i]})\`)`
+    : ""
+  }
+ ${(custom ?? (host === "core.parts" ? "" : `${sync ? "" : "await "}super${i === 0 ? "" : "." + fn}(${sig})`)).split("\n").join("\n  ")}${
+   VERBOSE
+    ? `
+ console.groupEnd()`
+    : ""
+  }
+}`
+ })
+ .join("\n ")}
+})`))
+ }
+
+ console.log(Part("decision.core.parts"))
+}
+boot()
