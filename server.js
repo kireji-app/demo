@@ -661,7 +661,7 @@ this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
 
    // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.88.0",
+   "https://core.parts/version.txt": "0.88.1",
    "https://core.parts/logging.txt": "false",
    "https://core.parts/verbose.txt": "false",
    "https://core.parts/light.color": "#faf9f8",
@@ -842,6 +842,7 @@ Options -Indexes\`
 <head>
  <!-- \${boilerplate} -->
  <link rel=manifest>
+ <link rel="me" href="https://universeodon.com/@kireji" />
  <meta name=robots content=noindex>
  <meta name=viewport content="width=device-width,initial-scale=1">
  <script defer src="https://<?=$_SERVER["HTTP_HOST"]?>/server.js"></script>
@@ -970,6 +971,7 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
 <head>
  <!-- \${boilerplate} -->
  <link rel=manifest href="\${origin}/manifest.json">
+ <link rel="me" href="https://universeodon.com/@kireji" />
  <meta name=robots content=noindex>
  <meta name=viewport content="width=device-width,initial-scale=1">
  <script defer src="\${origin}/client.js"></script>
