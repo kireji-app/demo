@@ -21,8 +21,8 @@ Parts pull together many notions into one simple structure, including the notion
 1. file type specification
 1. file compression
 
-The platform has surprising and interesting behavior. For example, if I create an image-editing application using kireji, then every possible state (including the images, the layers, their names, brush settings and window layout) was always available on the server. This is similar to websites that claim to list "every phone number," "every book in the Library of Babel," etc.
+The platform has surprising and interesting behavior: information is seemingly provided by the user and uploaded, but the application is actually offline. There is already a permalink to anything the user could submit, so the user is not submitting data, but finding states that I've already encoded into the offline configuration space.
 
-There is no way for users to upload any personal information to a Kireji application. Instead, there is already a permalink to every possible application state. This paradigm can be teased into facilitating peer-to-peer interactions that are surprisingly similar to other social platforms.
+There is no way for users to upload any personal information to a Kireji application. The dat the user creates is stored in the addressbar as the URL's hash, a part of the URL that the browser does not submit to the server.
 
 If you would like to learn more, check out the [documentation which uses the library](https://ejaugust.github.io/).
