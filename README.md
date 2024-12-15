@@ -23,6 +23,6 @@ Parts pull together many notions into one simple structure, including the notion
 
 The platform has surprising and interesting behavior. For example, if I create an image-editing application using kireji, then every possible state (including the images, the layers, their names, brush settings and window layout) was always available on the server. This is similar to websites that claim to list "every phone number," "every book in the Library of Babel," etc.
 
-There is no way for users to upload any personal information to a Kireji application. Instead, there is already a permalink to every possible application state. This paradigm can be teased into facilitating peer-to-peer interactions that are surprisingly similar to other social platforms, given a large enough configuration space and a mature enough
+There is no way for users to upload any personal information to a Kireji application. Instead, there is already a permalink to every possible application state. This paradigm can be teased into facilitating peer-to-peer interactions that are surprisingly similar to other social platforms.
 
 If you would like to learn more, check out the [documentation which uses the library](https://ejaugust.github.io/).
