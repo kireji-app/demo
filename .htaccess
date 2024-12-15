@@ -1,5 +1,7 @@
 # © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 AddCharset utf-8 .js
-ErrorDocument 404 /index.php
-ErrorDocument 403 /index.php
+ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
+RewriteEngine On
+RewriteRule ^(?:[^/]*/)+(.*)$ /$1 [L,NC,R=301]
 Options -Indexes

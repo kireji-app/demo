@@ -661,7 +661,7 @@ this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
 
    // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.88.1",
+   "https://core.parts/version.txt": "0.89.0",
    "https://core.parts/logging.txt": "false",
    "https://core.parts/verbose.txt": "false",
    "https://core.parts/light.color": "#faf9f8",
@@ -832,24 +832,9 @@ favicon.ico\`
       type = "text/plain"
       body = \`# \${boilerplate}
 AddCharset utf-8 .js
-ErrorDocument 404 /index.php
-ErrorDocument 403 /index.php
+ErrorDocument 404 /index.html
+ErrorDocument 403 /index.html
 Options -Indexes\`
-      break
-     case "/index.php":
-      body = \`<!DOCTYPE html>
-<html lang=en>
-<head>
- <!-- \${boilerplate} -->
- <link rel=manifest>
- <link rel="me" href="https://universeodon.com/@kireji" />
- <meta name=robots content=noindex>
- <meta name=viewport content="width=device-width,initial-scale=1">
- <script defer src="https://<?=$_SERVER["HTTP_HOST"]?>/server.js"></script>
- <title>Loading ...</title>
-</head>
-</html>\`
-      type = "application/x-httpd-php; charset=UTF-8"
       break
      case "/README.md":
       type = "text/markdown; charset=UTF-8"
@@ -1111,7 +1096,7 @@ this.documentIndex = this.option.part.index`,
    "https://menu.core.parts/inputs.txt": "application",
    "https://menu.core.parts/constructor.js": `
 super(["https://sidebar.menu.core.parts", "https://colormode.core.parts", application])
-this.apps = ["kireji.io", "core.parts", "orenjinari.com", "ejaugust.com", "fallback.cloud", "glowstick.click"]`,
+this.apps = ["kireji.io", "core.parts", "orenjinari.com", "ejaugust.com", "fallback.cloud", "glowstick.click", "ejaugust.github.io"]`,
    "https://menu.core.parts/enter.js": `const 
  containerHost = document.body.appendChild(document.createElement("main")),
  toolbar = document.body.appendChild(document.createElement("nav")),
@@ -1249,10 +1234,9 @@ for (let i = 0; i < this.apps.length; i++) {
  appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${shortName}</span>\`
  this.appNodes[appname] = appNode
  appNode.onclick = () => {
-  const host = this.apps[i]
-  if (APP_HOST !== host) {
+  if (APP_HOST !== appname) {
    const
-    origin = "https://" + host,
+    origin = "https://" + appname,
     isFallback = !(origin in this.controller.options),
     TOrigin = T([origin]),
     partPerSe = isFallback ? this.controller.parts[0] : this.controller.options[origin].part
@@ -1265,9 +1249,11 @@ for (let i = 0; i < this.apps.length; i++) {
       { unit: remoteUnit } = partPerSe.factors[origin]
      index += localIndex * remoteUnit
     }
-    location = "https://" + HOST_PREFIX + host + encode(index)
+    if (appname === "ejaugust.github.com") location = "https://" + appname + encode(index)
+    else location = "https://" + HOST_PREFIX + appname + encode(index)
    } else {
-    location = "https://" + HOST_PREFIX + host
+    if (appname === "ejaugust.github.com") location = "https://" + appname
+    else location = "https://" + HOST_PREFIX + appname
    }
   }
  }
