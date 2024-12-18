@@ -39,17 +39,38 @@ this.index = applicationOption.offset
 this.option = applicationOption
 
 await applicationOption.part.create()
-loop()
-// await applicationOption.part.goto(applicationOption.part.documentIndex)
-info("Process ends here.", this)`,
+loop()`,
    // =============================================================================================================================================================================
    "https://kireji.io/base.uri": "https://menu.core.parts",
-   "https://kireji.io/constructor.js": `super("editor")`,
+   "https://kireji.io/constructor.js": `super("lander")`,
+   // =============================================================================================================================================================================
+   "https://lander.kireji.io/base.uri": "https://decision.core.parts",
+   "https://lander.kireji.io/constructor.js": `super(["https://welcome.kireji.io", "https://editor.kireji.io"])`,
+   "https://lander.kireji.io/create.js": `await super.create()
+this.container = this.controller.container
+this.controller.styleSheet.replaceSync(\`:host {
+ display: flex;
+ flex-flow: row wrap;
+ gap: 1ch;
+ font-size: min(5vw, 5vh);
+ justify-content: center;
+ align-content: center;
+}
+:host > p {
+ width: 55%;
+ text-align: center;
+ margin: 0;
+}\`)`,
+   // =============================================================================================================================================================================
+   "https://welcome.kireji.io/create.js": `await super.create()
+this.controller.container.innerHTML = \`<div style="font-size:13px"><h2>Welcome to kireji.io</h2><p>This app is in alpha. The API is subject to change.<p>This app creates a permalink to every valid expression in a given grammer.<p>Compose a message to see it's permalink.<p>Share the message without uploading anything.<p>Try it out <a href=#1>here.</a></div>\``,
+   "https://welcome.kireji.io/destroy.js": `await super.destroy()
+this.controller.container.innerHTML = ""`,
    // =============================================================================================================================================================================
    "https://model.editor.kireji.io/base.uri": "https://decision.core.parts",
    "https://model.editor.kireji.io/constructor.js": `super(["b1", "b2", "b3", "k1"])`,
-   "https://model.editor.kireji.io/destroy.js": `this.container.innerHTML = ""
-await super.destroy()`,
+   "https://model.editor.kireji.io/destroy.js": `await super.destroy()
+this.container.innerHTML = ""`,
    "https://model.editor.kireji.io/create.js": `this.toolbar = this.controller.toolbar
 this.container = this.controller.container
 this.label = this.toolbar.appendChild(document.createElement("label"))
@@ -163,8 +184,7 @@ super(model.map((row, i) => new T\`https://topic\${{
  "base.uri": "https://decision.core.parts",
  "constructor.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
 }}.choice.k1.model.editor.kireji.io\`()))
-this.model = model
-console.log(this)`,
+this.model = model`,
    // =============================================================================================================================================================================
    "https://thingdo.k1.model.editor.kireji.io/base.uri": "https://decision.core.parts",
    "https://thingdo.k1.model.editor.kireji.io/constructor.js": `super(new Array(10).fill(0).map((_, i) => new T\`https://a\${{
@@ -443,28 +463,17 @@ await super.destroy()`,
    // =============================================================================================================================================================================
    "https://editor.kireji.io/base.uri": "https://composite.core.parts",
    "https://editor.kireji.io/constructor.js": `super(["model"])`,
+   "https://editor.kireji.io/destroy.js": `delete this.nodes
+this.controller.controller.destroyNestedToolbar()
+await super.destroy()`,
    "https://editor.kireji.io/create.js": `this.nodes = {}
-this.toolbar = this.controller.getNestedToolbar()
+this.toolbar = this.controller.controller.getNestedToolbar()
 this.toolbar.styleSheet.replaceSync(\`@media (width < 650px) {
  label {
   display: none;
  }
 }\`)
-this.controller.styleSheet.replaceSync(\`:host {
- background: silver;
- display: flex;
- flex-flow: row wrap;
- gap: 1ch;
- font-size: min(5vw, 5vh);
- justify-content: center;
- align-content: center;
-}
-:host > p {
- width: 55%;
- text-align: center;
- margin: 0;
-}\`)
-this.container = this.controller.container`,
+this.container = this.controller.controller.container`,
    // =============================================================================================================================================================================
    "https://ejaugust.com/base.uri": "https://menu.core.parts",
    "https://ejaugust.com/constructor.js": `super("error404")`,
@@ -992,7 +1001,7 @@ this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
 
    // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.90.0",
+   "https://core.parts/version.txt": "0.90.2",
    "https://core.parts/logging.txt": "false",
    "https://core.parts/verbose.txt": "false",
    "https://core.parts/light.color": "#faf9f8",
@@ -1091,10 +1100,6 @@ const cache = {},
    // TODO: detect and throw error on any cross-deployment-stage resource fetches.
    const { pathname, host, origin } = new URL(e.request.url),
     isDevHost = host.startsWith("dev.") || host === "ejaugust.github.io",
-    shortname = host
-     .split(".")
-     .slice(isDevHost ? 1 : 0, -1)
-     .join("."),
     cacheKey = host + pathname
    if (isDevHost !== IS_DEV_HOST) throw new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`)
    if (!(cacheKey in cache)) {
@@ -1137,7 +1142,7 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
      case "/manifest.json":
       const manifest = {
        name: host,
-       short_name: shortname,
+       short_name: host,
        start_url: ".",
        display: "standalone",
        theme_color: "#faf9f8",
@@ -1232,7 +1237,7 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
    text { fill: white }
   }
  </style>
- <text x="12" y="12" dominant-baseline="central" text-anchor="middle">\${shortname[0]}</text>
+ <text x="12" y="12" dominant-baseline="central" text-anchor="middle">\${host[isDevHost ? 4 : 0]}</text>
 </svg>\`
       break
      default:
@@ -1425,7 +1430,7 @@ this.toolbar = toolbar
 let nestedToolbar, shadow
 this.getNestedToolbar = () => {
  if (!nestedToolbar) {
-  nestedToolbar ??= document.createElement("nested-toolbar")
+  nestedToolbar = document.createElement("nested-toolbar")
   spacer.before(nestedToolbar)
   nestedToolbar.setAttribute("id", "nested")
   shadow = nestedToolbar.attachShadow({ mode: "open" })
@@ -1434,12 +1439,14 @@ this.getNestedToolbar = () => {
  }
  return shadow
 }
+this.destroyNestedToolbar = () => {
+ nestedToolbar.remove()
+ nestedToolbar = shadow = undefined
+}
 spacer.setAttribute("class", "spacer")
 toolbar.setAttribute("id", "toolbar")
-homeButton.innerHTML = \`<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg /><span class=label>\${APP_SHORT_NAME}</span>\`
-homeButton.onclick = () => {
- this.goto(0n)
-}
+homeButton.innerHTML = \`<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg /><span class=label>\${APP_HOST}</span>\`
+homeButton.onclick = () => this.documentIndex = 0n
 
 if (navigator.share) {
  shareButton.onclick = () =>
@@ -1453,7 +1460,7 @@ this.styleSheet = new CSSStyleSheet()
 this.sidebar = document.body.appendChild(document.createElement("menu"))
 this.sidebar.setAttribute("id", "sidebar")
 const sidebarHeading = this.sidebar.appendChild(document.createElement("h2"))
-sidebarHeading.innerHTML = \`<span id=logo>Kireji</span><span class=label>\${APP_SHORT_NAME}</span><span id=version>\${D["https://core.parts/version.txt"]}</span>\`
+sidebarHeading.innerHTML = \`<span class=label>\${APP_HOST}</span><span id=version>\${D["https://core.parts/version.txt"]}</span>\`
 const appsModule = this.sidebar.appendChild(document.createElement("section")),
  appsTitle = appsModule.appendChild(document.createElement("h3")),
  appList = appsModule.appendChild(document.createElement("ul"))
@@ -1532,7 +1539,6 @@ const TMenu = T\`https://menu.core.parts\`
 for (let i = 0; i < this.apps.length; i++) {
  const appname = this.apps[i],
   appParts = appname.split(".").slice(0, -1),
-  shortName = appParts.join(" "),
   appNode = appList.appendChild(document.createElement("li"))
  appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${appname}</span>\`
  this.appNodes[appname] = appNode
@@ -1565,7 +1571,7 @@ this.appNodes[APP_HOST]?.setAttribute("data-selected", "true")
 this.sidebar.tabIndex = 1
 this.container = containerHost.attachShadow({ mode: "closed" })
 this.container.adoptedStyleSheets.push(this.styleSheet)
-document.title = APP_SHORT_NAME`,
+document.title = APP_HOST`,
    // "https://menu.core.parts/...": `this.pin()`,
    "https://menu.core.parts/destroy.js": `await super.destroy()
 document.body.innerHTML = ""`,
@@ -1679,7 +1685,7 @@ img {
 this.container = this.controller.container
 this.container.innerHTML = \`<h1>503</h1>
 <span id=float>
-<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg><span class=thin>\${APP_SHORT_NAME}</span><span>is coming soon.</span>
+<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg><span class=thin>\${APP_HOST}</span><span>is coming soon.</span>
 </span>\``,
    "https://error503.fallback.cloud/destroy.js": `await super.destroy()
    this.container.innerHTML = ""
@@ -1991,7 +1997,6 @@ body > main {
   IS_DEV_HOST = HAS_DEV_PREFIX || IS_GITHUB,
   APP_HOST = location.host.slice(4 * HAS_DEV_PREFIX),
   HOST_PREFIX = IS_DEV_HOST ? "dev." : "",
-  APP_SHORT_NAME = APP_HOST.slice(0, -1 - APP_HOST.split(".").at(-1).length),
   ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
   encode = index => {
    const hexads = [],
