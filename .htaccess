@@ -1,5 +1,5 @@
 # © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
-AddCharset utf-8 .js
+AddDefaultCharset utf-8
 ErrorDocument 404 /index.html
 ErrorDocument 403 /index.html
 RewriteEngine On

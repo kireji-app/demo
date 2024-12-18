@@ -1,132 +1,460 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 function boot() {
- // #8JSvzLw2yyT0iw0w2pksjw021d2USWo1fdi0f
  const D = {
-   "https://kireji.io/words.array":
-    "DUH <br> we must merely name every subset Jason of prime factor The powerset poem the primes p a b c d e f g h Lets look at these aaaaaaab bbbbbbbb bbbbbccd ddefhhhh hhhh aaaaaaabbbbbbbbbbbbbbccdddefhhhhhhhh website menu is currently pre-origin meaning that generated for all origins state be stored in hash which thematically post-origin problem everything after also This means origin too redundant since an always accompanies There added wherein some won't have I was going to perform removal on those domains but component doesn't subtract it's information from Thus decided change singleton reusable results not it empty document hash-stored yet sites rest because Yet technically dead moment started booting client Thematically makes more sense make home implicit But wait should forget critical goal accomplished us being able step off one leave order another enter That accomplishment preserved new Will still accomplish what explicit does Yes reason this so dies start We can never certain things once we've stepped onto them like landmines At least are desirable design question whether and how acknowledge criticality time recognize as real complete transition away represents prior introduction content contrast non-empty For matter add one-liner our list straight facts about bootstrap isn't minimum includes intent executive context So originally concieved when felt necessary first regardless states between required environment intended non-zero number instructions greater than static AppSelection class extends Core Decision constructor app apps console group EN Client Fallback n super showStatus async function const appname index selectedNode removeAttribute data-selected appNodes setAttribute true title core parts groupEnd assert await controller defaultNode populate if warn A part either or has taking arbitrary arguments constructed exactly startup construct subparts during its own construction Potential task branch by maintain in-app bug compute offset coefficient each pass event object through control signal Allow stop propagation mask only repopulate anchor changes Double check consider modifying setting subpart inverting data flow integegrate working IDE despite current sharing paradigm clone stringify classes use old fx-net method etc remove onfocus check-for updates callout scheme whereupon crafts potential harvest cloned used jig provide with resulting indices update quick successive made such changing various serialTest https txt inputs uri untitled js return cardinality throw RangeError out range create typename slice replace extend base null T eval log large integer appears no structure without knowing will support unique inherent including factorization gain upon physical representation example due rendered radix partial computation earlier versions entirely separate Imagine were sequence analyzed via Fourier analysis imagine continues thus providing further structural aspect many integers Here's idea application locked can't do anything show page URL adjusting starting user sees person perspective showing me develop beginning By see different Some pages become apparent they switching myself Version TODO Get D viwer Create overall ServiceWorker GPU viewport size other factors affect output unlike settable aspects measured environmental properties independant designer interface In essence configuration space representing single although could conceive hybrid approach no-client entire-factor per-non client-space extent obligated client-side error serviceworker gpu may want tap into included where needed Add abstraction layer Part node population manifest css setters Node someDocumentAbstraction set style html body HASH someHashAbstraction explorer filename Consider native cache serviceWorker why Fix just oldCore Organize initialization lines bit When determining future hashes consequential choices erased Given decision two composites composite retained both s weren't changed To reset outgoing choice assume already incoming Alternate concept callbacks actions don't instead Then consequence url addressbar Motivation specific feels jumping flaming hoop right now engine byte CLIENT HAS innerHTML WebGPU supported allow redirect really need experience side Utils foundation classObj pane createElement div id classId addPart type config appendChild key addToClass str hasAttribute getAttribute else addTable heading struct key-value innerText headerProperties Object getOwnPropertyDescriptors let element undefined get label input value oninput addSurround surround addToggle toggle button false open onclick updateCache utils chars abcdefghijklmnopqrstuvwxyz length getBased int while m Math floor getColorKey rgb reduce sum char i indexOf toString padStart match map parseInt fallback No parse Missing cached localStorage typeof linkCache scene push encode x onstatechanged forEach callback pull decode parseFloat toggleFullscreen fullscreenElement documentElement requestFullscreen webkitRequestFullscreen msRequestFullscreen exitFullscreen webkitExitFullscreen msExitFullscreen same DECODER TextDecoder var W S SPACE Preview Group mode shade children filter child getter flat xyz rgba Prime createFoundation prim code keys pi max Mesh Shape cube Debug early ready debug oundation previousFrameRate previousTime frameRateElement updateFrameRate newTime newFrameRate round fps toggleView menua watch watchElement variable transform Matrix mtx cos sin rx ry rz t y z w shape r point he tags points edges tris faces getTaggedPoint result tag getEdge getEdgePair pair getRenderTri values O getRenderTris getEdgePoints serialize wire sx sy sz fx fy fz Text width bitDepth logName text view Integer signed nameRoot Ui nt un u readView setView yteCount terminalBytePredicate byteCount cast write countBytes source DataView byteLength isLast getUint string exceeded expected terminator found Struct struc views ttach isEnabled View GetSet defineProperty File file uffer signature buffer instanceof ArrayBuffer requires signatureSize skip count addStruct args Woff woffb header tableDirectory ollectionDirectory ompressedFontData xtendedMetaData privateData src UINT UINTBASE accum UIntBase leading zeros top bits Variable-length FLAGS join table cmap head hhea hmtx maxp OS post cvt fpgm glyf loca prep CFF VORG EBDT EBLC gasp hdmx kern LTSH PCLT VDMX vhea vmtx BASE GDEF GPOS GSUB EBSC JSTF MATH CBDT CBLC COLR CPAL SVG sbix acnt avar bdat bloc bsln cvar fdsc feat fmtx fvar gvar hsty lcar mort morx opbd prop trak Zapf Silf Glat Gloc Feat Sill cust flavor numTables reserved totalSfntSize totalCompressedSize majorVersion minorVersion metaOffset metaLength metaOrigLength privOffset privLength flags origLength transformLength hasTransform switch case default inside cursor wOF Invalid collectionDirectory compressedFontData extendedMetaData toFontFace family FontFace Font font fnt afont initialized selectedFont woff Kireji Sans linkToDocs href www org TR WOFF woffl target blank Type Spec installed loading install then successfully loaded inspect catch failed load entry parsed Eventually hierarchy types Their foundations built styled according wrappers visualization inheriting their fonts delete reader FileReader blob fetch res Promise resolve reject onloadend onerror readAsArrayBuffer mesh register Map override btoa Float Array fill Camera lens NO ID noFocus ocus eyedrop mouseX mouseY fov near far setFocus focus tapFocus scopeIn scope scopeOut walk yAngle PI speed velocityU velocityV directionU directionV tx ty tz tapHover hover split pixelRatio v Date startTime proj fovy tan Infinity nf Scene irty uffers mera rame start-time render RenderPass beauty requestAnimationFrame cancelAnimationFrame drawIdPass pipeline getPipeline triangle-list setPipeline setBindGroup getUniformBindGroup hangeBuffer uniform B buffers setIndexBuffer uint setVertexBuffer drawIndexed drawBeautyPass drawWirePass line-list reateBuffers createBuffer Uint GPUBufferUsage INDEX COPY DST Int UNIFORM topology universalShaderModule createShaderModule UBO vec mat pos binding uniforms fragment fn wireF builtin position inPos location inColor idF VSOut Position color half project vertex idV wireV beautyV beautyF inHalf attributes shaderLocation format float arrayStride stepMode createRenderPipeline layout auto module entryPoint V F targets bgra unorm primitive frontFace cw cullMode none depthStencil depthWriteEnabled depthCompare less depth plus-stencil createBindGroup getBindGroupLayout entries resource arr encoder createCommandEncoder queue writeBuffer submit finish camera height selected rpass offscreen onscreen attachments colorAttachments getCurrentTexture createView clearValue loadOp clear storeOp store depthStencilAttachment createTexture dimension usage GPUTextureUsage RENDER ATTACHMENT SRC depthClearValue depthLoadOp depthStoreOp stencilClearValue stencilLoadOp stencilStoreOp commandEncoder beginRenderPass setViewport setScissorRect break beauty-wire Unknown renderpass identifier end clearRect drawImage canvas getImageData querySelector root background-color silver box-sizing border-box text-overflow ellipsis font-family sans-serif border background padding text-align left white-space pre monospace panel ug border-radius px box-shadow black margin font-size em ore sidebar-width vw canvas-color vh overflow hidden absolute calc display flex flex-flow column nowrap max-width min-content min-height row justify-content stretch white solid border-top margin-left margin-right margin-top margin-bottom last-of first-child attr padding-left important image-rendering pixelated pointer VERTEX desc mappedAtCreation ceil writeArray getMappedRange unmap OffscreenCanvas getContext webgpu willReadFrequently globalThis MyScene grid rect getBoundingClientRect pointerState camSpeed onwheel preventDefault sign deltaY onmousedown click onmouseup onmousemove offsetX offsetY sqrt movementX movementY min onkeydown KeyW repeat KeyA KeyS KeyD Space Enter KeyF mt onkeyup ondblclick configure device alphaMode premultiplied resizeObserver ResizeObserver resize setTimeout offsetWidth offsetHeight getClientRects observe nothing destroy memory closely ensure completely destroyed linear-gradient deg Arial system-ui Segoe UI Roboto Helvetica Apple Color Emoji Symbol ile-list list-style gap li font-weight file-icon onclickAttr stopPropagation data-hash selectAttr directory Empty Document htaccess php server data-filename span Explorer ul file-list fileNodes querySelectorAll selectItem deselectAll selection Selecting randomIndexFromCORE bitdepth CORE bitstring trunc random randomIndex BigInt Pagination possible Let say there items If consumes subspace However unless small screen discarding scroll precision even significant portion corresponding best scenario solution exponentially increase domain separating web special very massive meta examine critically much origin's transitions representative examples units reduceRight unshift Like quantum physics particle go uncertain journey mathematically givens ability analyze unfathomably present exact wide clearings winding creative journeys users include few tiny spaces singularities well heart predictable access motion consume your All grains flour there's enough pizza Only any randomly pepperoni probably belong larger Unlike people travel It exploring smaller lead discovered Use differently breaking apart progresses determine Example know returns simple Now try As detect option choosing three alternates employ takes performs action simply methodology local nodes act destroying parent shows doesnt outer causes inner defaults take extract matches previous move terminal down next property otherwise run needs propose infinite array time-rdered representable indexed mutually exclusive options implicitly answered except explicity noted THE PRINCIPAL OF DEFAULT FUTURE FOR ALL TIMELINES given four An iterate process allows modify cont modification proceeds comparison existing updating later numbers lost mean anymore guaranteed valid back until been evaluated binaryLiteral bigint subdata names unit subindex stack planes addend alternate TypeError called binary literal lastkey dimensions Set duplicate plane overhang Lock interaction Virtual Objects virtual objects detached entire booted framerate version Even though package belongs would creates populating feel system deletes depopulating Different similar object's namespacing Does represent actual DOM creation retention runtime These better remake per frame How you lesson learned Perhaps think layers Or perhaps automation organ organs removed unremoved themselves viable purposes words treated whose up along most informative studying manually instruction sets traveling waste Each hand-simplified interesting species study simplified share resources Any created way ideal authoring encoding human-readable non-human readable hashing conversion form indexing methods before returned Let's attempt reindexing converted forms AND two-digit digit destination address always-offline stores app's comprises following infrastructure apache collection DNS directing subdomains encryption certificates files server's directs traffic affects requests paths besides ataccess disabling utf javascript template serves minimal responsibilities declare placeholder link progressive ii cannot script fetches reference reached ensures script's uses request embedded directly quoted contain copies additional rules handle defines constraints describe defining defined subspaces known global hierarchical said together separately relationship dimensionality here refer roughly notion finite polynomial expresses master coresponding containing produce determines uniquely ceiling sixth quantifies degrees freedom archival comes browser retain performance session window Archival randomized fuzzing boot hard-coded client-provided broken subdimensions cartesian product leaf subdimension Dimensions constraint dimension's namespace under contains exlusive thought ordered member dependant constrained others entangled Entangled codependant amount Every bijective expressing tightly linked yields within giving avtual expression appended bit-per character largest reliable available url-safe well-chosen addressed conservative limit causality graph place causal linkage driver driven datum cause zero E effects addition movement precludes inhabiting downstream dimensional rebuild gives boots parses define Maintains always-constraint consistent across non-undefined bijectively maps part's documents prefixed path engine's truth corresponds iii Renders generating secondary iv references trace document's elements attribute Permits workflows Boot creating provided outset awaiting provides familiar route friend outside network opening browser's bookmarks favorites history entering refreshed forcing visits lacks convered prepare prepared requested jump Move After sources specifies presents varous moving constraint-defined navigate forward backward popstate listens interacts firing composes who's explicitly specify toward passed state-setting clones causally-ordered involving one's iterates over replaces collects document-updating compared causally named attempts obtain enqueued throttler logged private git repo automatic deployment main third-party hosting provider registrar above updated entity folder wish model visiting isolating instance requesting Instances entities examination individual folders Instead specification making dictate common law instances subtypes cleanly express self-reference limited property's adding k quantify limits equal contributes logical depends sc l Simplify impact line bottom corner slope reflects n-having ratio ks kn forming linear fine let's associating second Because converge converging members excluded everywhere comment block shot dark hopes cancel prevent blowing infinity Can verify consistency simplify Since anchored became below again becomes allowed MUST description Which concieve came magical Once complicated fractions describing WHICH looking Take indeed referring mv refers groups suggests self-referential expressions self-referenced expressible self longer anyways brings mind kit actually referencing solved recall picture neatly organized LEGO ever giant manual assembly assembled cloning tool permits fascinating recover having seem images whole finally simpy child-like thing itself contained appropriately room constituents masked reduction masking alters something differ Discrete building blocks expressed behavior detail raster image scaled-down copy placed loss theoretically worth full-sized recovered compact note Our theorem policy former latter seeing infinitely-nested self-referencing proprties OR fewer resampling reconstitution considered Images reconstituted subsets indicate distinguish represented indistinguishable assuming original perfectly compressed self-contained using lossy compression algorithm what's appropriate level devised clusters mapped Another possibility associates temperature rapidly resolved picking droste potentially good steadily introduce Crucially previously among yielding reflect variables One Should Keep destinations third pairs arise demanding fourth fifth et cetera ad infinitum MAJOR questions ask regarding presented begin dev shown Clicking item deselects demonstration sincere associated explored encoded spacetime navigates relates G del circular certainly certesian themes light therefore places discrete space's presume cardinalities equals solutions variation S's exceed nametags nametag occupy nonoverlapping written inhabits Observe volume give lay spreadsheet acts cell occupied continue explore arrangements m-dimensional independent axes two-dimensional nametages columns likes rows cells tables haven't power sub-points am Table left-hand my right-hand might metatable answer yes explain reasoning alongside sibling lists C metatype subtype Subtype Subtyle Here bunch occurance events happened fact point's They call kinds ways organize achieved selectible oddly letting query strings tweak query-string reachable variant selecting extreme contents Wouldn't recursive Normally additive subtractive considering superset cropping invalid final arbitrarily cut confident completeness observable sure observation operating equation replaced counted Multiplying joining differently-named coexist assign systems While extra Meaning machine drive readme icon png library feature assets collectively packages imported interleved Packages collections coexisting multiply file's ones Options sums depicting basics encodes basic multiplied multi-file domain-specific mix Q Where not-currently system's read-only factory UPDATE thinking reconstruct configured fantasy world tree combine syntax highlighting separation underly correspond inferface vice-versa mere readonly recombined script-sourced joined interface's cardinality-based factory's outputs file-system modified largely permitted processing generate close newest expect cardinality-computing parsing kilobit begs combined calling gathering chart done legacy require somewhere already-file based range-of pieces all-important combines discern convert big definition terms depending believe fundamental boundary within-universe realm computing upstream instantiation remain configiuration author alternative server-side account allowing publish custom publically subdomain Is everybody's somehow user's work MVP bedrock firmware Therefore articulated referenced AFTER introduced kind positive Without introducing problematic notions improved however simpler complex composed seven twelve singles MIGHT variants What dependent appear total accepts wider widescreen interpret identification spec poteeeeeentially series getters setter proxy territory getting assigned fileSystem configSpace word strand nested hard Points exist co-exist rely bring dedicated viewed introduces carefully manage maybe instantiating whereas verbatim Beautifully host measurement Such happens instantiated quality observations usefulness promotes exists centered around outputting constructors depedant performing operation constructor's determined chance simplification nullary lies behave browsing details play clicked preview separated running Along hosts bigger addresses quickly swiss-army knife point-independant reduces depicts Why depict possibly functions exhibit rendering mentioned course parents node's Creates finishes May shadow stylesheet Never Attaches perminently powering navigation Collapses point-collapser collapsed Hosts multiple well-suited described virtue operate satisfy handful constant arrangement delimiter elsewhere flipping forth arrays multiplying understand isolation You God's repository forgive branches edits babel orders past repositories absolutely travelling unlocks dom definitions visit backwards rather What's Well Popping Having reordering commit That's annoying Allowing duplicates slightly gigantic numerical thousand commits fills Wow lot seems explodes storing square Finally come full circle commiting repeatedly Everything correct thanks brute guess whatever soon repare Think printer prints Somehow stacking assignments truly decisions combinations dependency variable's relationships ten meaningful naively letter valued scv lv nv scvln raise activated excludes missing plus friendliness bitmask Right divide Pa Pb Due restriction Ga Gb compatable paired Both hasShadow boolean leaves assignment inluding doing math untenable L smallest L-bit P easier eachother pilot wrapper holding coercable raw returning treating constructs parent's carry easily occupying flexibility schemes sounds hood especially variations lets isOpen isClosed closed universal observer describes tell trivial responsible increasing agebraically ok pattern checking relative urls commenced checked nature kept plant nesting nest Remember utmost importance aren't packs existences vice versa Actually freeness Please restrictive narrow comfort anywhere security safe Young care free innocent From Naively generator extension DOCTYPE constrain tie theory maker prototype obtained friendly constituting involves general extremely formed plane's selects ultimately Before desire Would collected It's permitting perception indepndent indicating computed BACK losslessly cs formula retaining repair shake goes csv combination listed qustion disparate descriptions easy guarantee firstly exclusions friends aim tree-like syncronized back-transform gray maroon red purple fuchsia green lime olive yellow navy blue teal aqua aliceblue antiquewhite aquamarine azure beige bisque blanchedalmond blueviolet brown burlywood cadetblue chartreuse chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite forestgreen gainsboro ghostwhite gold goldenrod greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan lightgoldenrodyellow lightgray lightgreen lightgrey lightpink lightsalmon lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue lightyellow limegreen linen magenta mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin navajowhite oldlace olivedrab orange orangered orchid palegoldenrod palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum powderblue rebeccapurple rosybrown royalblue saddlebrown salmon sandybrown seagreen seashell sienna skyblue slateblue slategray slategrey snow springgreen steelblue thistle tomato transparent turquoise violet wheat whitesmoke yellowgreen shadowtag ARTICLE ASIDE BLOCKQUOTE BODY DIV FOOTER H HEADER MAIN NAV SECTION SPAN HTML HEAD TITLE ADDRESS HR PRE CITE DFN EM STRONG SMALL SUB SUP ABBR TIME MARK DEL INS OL UL LI DL DT DD TABLE CAPTION THEAD TBODY TFOOT TH TD FORM LABEL INPUT BUTTON SELECT OPTION TEXTAREA FIELDSET LEGEND IMG AUDIO SOURCE VIDEO IFRAME EMBED OBJECT FIGURE FIGCAPTION DETAILS SUMMARY DATALIST OUTPUT concat Hello independently divides visualize distribution five summarized Subset proves effect wrap select nth transforms Break Insert splice Compute Return variableNames variableCount visualizing symmetries establish little measure we're measuring summing keyed million pick hint focused parameters tucked vision Engine container rawdata shadowTags colors lightTags nodeType omment THEN vocabulary reconcile commonly accessed lowest seeking incorperate arithmetic ids binary-minded direct portal Two I'm editing essentially sake birthday-theta birthday birth month year None theta logic respects imposed remaining unused minus volumes payload space-sniff visually comparing Number saves hexad began hexads shove bothered Heck high beyond chose kilohexads overabundance caution addressable venture implement implementation protocol pathname search alphabet angle sphere time-sequence follows remainder dots projected rectangle displays visited turn K hostname interval regions particles evenly distributed translates particle's q qubit preceed levels deep characters aiming goals stretched cone cosmological horizon billion years trading coverage passing breaks moments canonical non-canonical specified turned game prefab recieves delta inheritance triggers net searched dirty retrieval regenerate pathnames asset reminiscent unity's edited unity gameplay wants PWAs looked fxnet built-in components ends diffences designed differences vy viewer objective reality pool instancing imply overconstraining inevitable user-defined CAD overconstrained designer-defined Anything imagination multiversal designer-provided departing universe metaverse countably universes positions placetimes maximum locally-encoded evaluates k-sized tuple imagery surjective mapping produces applied placetime necessarily practice redistribution yield Ideally read short Prior altered timelines in-universe dictates leads led unobservable owing nondestructive trapped sub-network skills My somewhat flawed human sort rocketship bravely fly copied pasted latest save keep cateloging saving reach pretty Server receives Universe Address response User interact detects claimed runs evaluating Primary State Phase coordinates multiverse editor syntax-aware inherits hosted accessible connected intrapart mechanics long enters server-hosted user-account locally saved internals Profit sub unchanging proximity nearest neighbor supply vs maintaining generators trim uris Pros Cons Are Vert verts eyeball Perform vert's populates setInterval pupil Proxy CDATA serverLogs Suddenly clientLogs Despite struggles performed report br had tough week Done Todo overlapping DAGs modifcations non-existing steps init inputVerts vert Perez Zerah remember waking brother announcing He him exhausted talking Woah hell Did existence heard today hearing speak searchParams searchParam prefabs skipped URI ASSETS ASSET COMPONENT CHOICES interactions APIs decide webpage responsively viewers webpages displaying vastly preferred delivered SERVER FILE CHOICE MIME PAGE yielded outcomes atomized aware basically programmatic sequential timeline rendeirng saying THIS uri's deliver modifies followed tracable naviagates rapid throttled reflected endpoint irregardless processes argument iteratively procedure put functionality merge pruning unified arrive arrived who arrives pruned tight rope balance syncronization fix mandatory communication channel finished altering my-app ejaugust com artwork orenjinari portfolio looks lookup subfolders subcomponents alteration clicking duplicating pipelines modifications import disabled enabling renders component's appending re-evaluate organization organizing prefix high-level structures compliment sometimes times solve everyone hasn't neither falsish Error unreachable n-bit maximally compress consuming likely unsatisfiable vanishes couple land satisfying worst-case worst last perfeclty fixed-length cases Reordering natural validity Clearly booleans Red Green Blue Fig identity primary inverse incredibly insightful archive equations assigments Mutually weakly monotonic strongly maximimum orderings homogenous heterogenous B-SAT periodically sieve decimal expansions ratios sieves odd-numbered truncate perofrm bitwise operations frustrating spawned aside minor cdata major structuring executing conditional rebuilt rebuilding removes decides applies abcdef ab bc abc cd bcd abcd de cde bcde abcde ef def cdef bcdef PWA efficiently relating virtually tokenize token tokens reasons nice kbit categories find geospacial addressing kbits uri-safe fits comfortably plenty enhanced permit squashes field Still reserve investigating word-based filenames selections individually substates substrings subsequences trees Again r-tree UNLESS slash days day HARD LIMIT HERE captured triple EVERYTHING BUT bad geolocate onload sw navigator registration waiting installing active onstatechange onclaimed removeEventListener controllerchange addEventListener postMessage reload onvisibilitychange twoPi external handler internal addends META discernable features independantly posess ORIGIN Identifies TYPE PATHNAME Describes TOKEN STATE TREE TOKENS NATIVE Stores UNIQUE TYPES Provides Visible Has CACHE Recieves COMPARES Calls COMPARISON Defines REFERS URIS Y PATHNAME-keyed X recieve STATES SUBX YS Uses injective Doesn't Cannot simulate Belongs TYPE'S forever recursively Input pathOf isFile subpoint isDirectory subpath pointAt constructFile subobject redundancy NewInput numerals abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ fromIndex bin newLength fullbin hx detected incorrectly formatted mark fromData throttleTime chrome android safari test userAgent timeLastSet pausedAction clearTimeout engineIndex replaceState protopart todo getPrototypeOf cacheindex weightedRandom weightedRandomIndex controlledRandomIndex averageFrameTime onhashchange setIndexFromAddressbar loop deltaTime setValue setIndex previousview currentview Element tagName shadowRoot replaceWith textContent createTextNode nodeValue Comment createComment attachShadow sheet CSSStyleSheet adoptedStyleSheets replaceSync stats prettyBigNumber owner msg statview fuzzbtn JSON lastFuzzing kheb online cloud kireji io stargate startsWith ascii R U J Z j-z M N o manifests interestingly manages presentation Although offer coercion exploit directory-coerced non-coerced HTMLElement content-type stringifiers element's transformed visual non-shadow constructing Response success hello headers onfetch respondWith fxdom fxneg fxall getfx seen moveToStart getprio imagined Skip toPrimitive fx's issue encorperate stringifiable specifically affected subfolder fxset listened param connectors oncontextmenu onpointerdown onpointerup onpointermove ondragstart oninstall skipWaiting SET FROM TO GET SORT fxlist KICK grid-template fr areas enforce naming convention effective related gleaned eventually database program employs regular you've distills loads unloaded previewing grid-area center min-width vellum-white fixed Ariel opacity pointer-events z-index canvas-width canvas-height ui-fill background-position webkit-scrollbar ms-overflow scrollbar-width overflow-y background-attachment tooltip part-tool data-dragging data-subdragging line-height rel json Equation Editor http-equiv Content-Type charset UTF color-scheme line-gutter backdrop autocomplete line-wrap Line checkbox aria-label tbody tr td line-number line-content html-doctype lt gt html-tag requestAdapter requestDevice dataset bg newBuffer data-index dt Render BUFFERS amp html-attribute data-bg html-end of-file windows preconnect html-resource googleapis noreferrer noopener gstatic crossorigin device-width initial-scale minimum-scale atou decodeURIComponent escape atob utoa unescape encodeURIComponent INTERFACE Field touching ontouchstart touches onDown ontouchmove changedTouches touch onOver ray clientX clientY ontouchend onUp track el scrollTo offsetTop smooth insert elementFromPoint Keyboards lowerCase qwertyuiopasdfghjklzxcvbnm upperCase shiftCase Interface shift scopes Backspace Cap Shift Unshift background-repeat no-repeat k-break kbreak unset unitw inherit align-items translateY cubic-bezier padding-top vmin padding-bottom flex-basis background-image background-size svg xml k-space k-tab k-cursor emh visible align-content flex-start emw Work keyframes cursor-blinker animation Particle held drop isChar exit esc Escape onblur focusVisible onenter pop onexit whitespace className tabs CURSOR k-control CSS Scope tabIndex onkeypress rawValue PARTICLE cover setProperty childElementCount onreflect insertBefore nextChar cur prev previousElementSibling nextElementSibling Tab ArrowLeft ArrowRight ArrowUp ArrowDown kcursor customElements toBase convertBase STR getItem setItem removeItem ARR VIEWS getElementById NODES CHANNEL BroadcastChannel fromBase DIGITS xi yi zi multiplyByNumber num parseToDigitsArray digits outArray viewBranch shelf showHistory scrollTop onbeforeunload downloadKernel download kernel removeButton checkoutButton checkout myDiv viewCommit newBranch Added viewScope revert branchId commitId execute newCommit toggleHistory hideHistory branchIndex openKernel onchange replaceAll newLocalStorage latin-ext font-face Oxygen Mono font-style normal font-display swap oxygenmono GsssGg FxgDgCjLeAd hjWx tPUUvkdU unicode-range EFF AB AD CF FF latin hjYx tPUUv BB BC DA DC AC FEFF FFFD vietnamese worksans QGY wNahGAdqQ RhVcIgYT Xz nXBiAJpo ZKyHaQfhf AF EA EF nXBiEJpo nXBi Jpo ZKyHaQQ shelf-height hover-color xp tip Tooltip Edit Name Show Tree Save Kernel Open New Item Hide Remove Switch Branch Delete ields pre-wrap space-between align-self newItem predicate period Re Im drift age sleep periods seed fromEntries delay onfig tick append tile regex a-z ico wasm a-zA AlphaError extras entrySize vnd microsoft uri-list car-part cork drink-stopper balloon toy zit blemish defineProperties plain core-part beta onset nodeset coresetlock whom unix stamp watching specifier lineage entitites begat envision stream chunks repeats divided xy repeated entirety draw draws isolate drawing seek composition kick computational biproducts recomputing biproduct per-arg per-composition sitting inform blocked stuff core-parts glyph Word Maker title-bar v-rule edge r-split h-rule code-explorer tool-h h-split uh tool-w v-split uw code-w tbar vbar rbar hbar logs iframe media display-mode window-controls overlay t-x env titlebar-area t-width t-minus tab default-explorer combos combo j operator powerstack triggered refresh compressor MAX CALLS clients strcount onmessage powersplit rank atomic valueset optimized dupe premature observes Function needspace waitkey CALL endsWith dot ini charCodeAt Blob hr Sorry maximum-scale user-scalable robots noindex favicon apple-touch gmod oracle desmos standalone theme icons sizes purpose dis my-tools huw huh hhuw hhuh hhhuw hhhuh hw u-hw hu-hw hhu-hw hhhu-hw white-fill blue-grid blue-dots white-grid white-dots approval-green inset paper-shadow vp-corners c-tl c-tr c-br c-bl inner-corners sans overscroll-behavior user-select appearance left-radius border-bottom Track Handle thumb text-decoration split-bar row-resize col-resize removeProperty sun hh info selected-item app-name tab-w emptyslot model-explorer scale version-pill setTab storage kireji-io bootstrap-editor json-editor grid-dot outline lazy listeners eager dictionary DELIM PATTERN toQueryId autoq delim subscribe queries onresult unsubscribe onfound spool powercall fake-id wi ri vi announce checkAgainstPreviousValue dependencies resolver Setting post-transform quietly primative programs inundated magic ambiguous sparse ports infix hello-world NOTES Inverse kinematics requirements kinematic chain User-ineraction answers Information forced obligatory passageway microscope flip flowing crucially distinction Unless halts roles pipe melted liquid dissolve melt pipes chamber reform closest metaphor cooking meal oven hour cooked relational aught direction coming Rather ambiguously stating gotten evaluation plumbing Changing sends strange happen rule disallow products constantly listen moves impossible propegate machines trying faithful alerting institute naturally labelling counter productive labels mutating equilibrium continued fail value's truer approaches pathways engages pathway Value passes says handled asked Rock paper scissors Subscriber Used correctly wrong crock recursion codependent flows watershed uniformly term siblings ultimate two-pronged tells subscribes subscribed retroactively codependency established change-time dedicating command recieved Whichever marked Picture splitting middle equality symbol assignable And odds difference Altogether equivelant multivalued choose Essentially literally symbolic representations six symbols short-term memories trick believing statement gets tempting symantics arguemnt solver generalizing calculate Likewise respectively We'll se diverge grouped explosm comic generation handy lock unlocked panels clicks behoove categorize categorization developer meta-authoring utilities behaviors Explosm randomization chosen user-locked Hot gas dice rolled Ranged Restricts Random crawl simulation Thanks Those Further impliment finding locking immediately notation whereby computer chooses aob deterministic Really symbolized solving combinatorial mth bit's treat arguemnts Related examining twice equates aoben Whatever movements permutatorial permutation permutations factoradic enables told platform Select reevaluate mistakes mentioning frequency regenerating diametrically opposed probabilitiy amounts amplitude proportion frames probability bytes Halflife Amplitude Permutation fully animated eternity Composition boilerplate suffix howdy ma'am fish ORIGINAL BOOK transformation book books BOOK's Sets ALWAYS executable cursor-pointed increases secret sauce bun crock-recursive convolute tried sneakily advantage differentiate desync lie checks functionally Easy Tokenization tokenized tokenization ostensibly rhealm utter itslef navigating asking Index interrupts you'd phone Bob asks Bob's achieve ranging Unicode generously grab fetched exectued HOW tokenizer assignProperties ahh Stacking deltas ball popular variable-length octet eight did Examples endpoints sub-categories multi-character ascertained notwithstanding halfing wu wei highlight implicated Tony Hawk shouldn't vacuum non-sequitor often imbue Arabic Numerals confused we'd gained api computer's optional useful feed puts singular indicator execution computers criteria fulfilled Computer record arbitrary-length Meta executed embue exibit wasn't joking occasion numbersWe extending unicode assigning symantic incomplete sequences equally located particular indicative validation Bc yc Byc whos OK byte-sized bascially equivelent shorter matching Next drill alternatives transmission enquiry bell backspace carriage datalink negative adknowledge synchtronize idle medium substitute separator esclamation quotation dollar percent ampersand apostrophe parenthesis asterisk comma hyphen solidus numeral colon semi bracket reverse carot underscore backtick curly vertical tilde removing odd repeating controls capital letters A-O P-Z lowercase a-o pairing literals semantically ARE fulfil upset Many possibilities ANY queued language offspring begins unlimited wrapped budding becoming dying bearing freeze clearly supposed life surely hold juggle taught Halo gun press weapon pickup cycle gone whilst incorrect impression emerges periodic Over With born putting Say adef I'd sampled inserted sub-samples clash requiring piece ambiguity inserting ambiguities pre-symbolicated limiting machine's nearly legitimate glyphs predict full-unicode Notably glyph's fit violating shadowy pack capabilities fulfill downloads Grid snap metadata endings middles Incredibly unlikely DELTA I've merging peers Applying category understandable Delta falls Making CHANGE self-described LAVA MAGMA Magma emerge ground Lava surface compiled Put apsect leveraged SHALL follow WILL standpoint guide whats Besides Steven Wright DO DELTAs Presume UNICODE beforehand meant streams unambiguously decoded SPEC Extending trinary enjoyable connotations shrink help pad completed narrowed categorical summary enjoy gathered historical helpful imaginary figure pump realize conveniently dissolved uncertainty slot precise extracted categorized predicates shall rotates dial nonfunctioning activating swaps Dec Char NUL SOH STX ETX EOT ENQ ACK BEL BS TAB horizontal LF NL VT NP CR SO SI DLE NAK SYN synchronous ETB trans CAN ESC FS GS RS US uppercase ABCDEFGHIJKLMNOPQRSTUVWXYZ arabic indexes Furthermore that's danger moved competitors throne TRULY matters capable billions selves personalities Must adjacent apparently discerners discerning cognizant band knowledge spectrum suffer communicate Observation attempting ascertain affirmative Considered proof disregard carries force proofs ANYTHING self-evident met extraordinary militant skepticism wasted Whether th symptoms experiences TRUE loosely Stating observing occuring arranged perplexing estute ponder passage demonstrate conclusively frozen IF scary Though pondered surprising Of Ponder russel's paradox truest readily thorough circles Placing ht carrying contextual FALSE evaluted proving judged successful Attempting implicationthat ascertains implications BECAUSE DEPENDENCY IS INATE inate Inately Upon observed playing God pays incredible bridges works God-like approve disapprove designing living smart depart libel erase Causal loops departed energy reversed incidentally coincidental cycles avoid Especially Oh hey I'll crazy occurs realities experienced illusion Hopefully terrible Better non-determinisitic non-deterministic helps entitity trigger immediate cyclic suggest non-determinism ascertaining honest negated undecided gears spark Incidentally discard subsequent tackle perpetuity interruption awaits insertion successor asynchronous distinct carried deterministically skeptic Trust dam turning perfect asserts statements contradiction endian interger charm initial iteration doubling notice undoes got infinitely Interestingly wise dividing whichever generative segment halt coprime trade forwarding traded INIT stand swapped connects OH code-point SIGMA summation Half estimated subatomic photons bar Do fear hz isNaN observers operators waitUntil FUNCTIONS INDEPENDANT nullish DEPENDANT brackets VARIABLES mouse vt pxiKyp ihIEF isfFJXUdVNF norobots doctype metaname Path vvvvvvvvvvvv userPath updatePath resourcePath will-will ClientResources clientId blueprints bootstrap-fill TAG onpopstate unload delegates fofx assemble preload blueprint lient usersOf resourceLinks updateResource triggeringResource destroyResource destroyPath notify resultingClientId message Runtime service exec getProxy applyProxy setProxy matchAll includeUncontrolled Significant efforts undertaken elucidate paradoxes wind fruit labor game's preventExtensions valueOf greeting ReferenceError protected keyword health doc promise cheating bill ted build lack thusly Success simulated choice-agnostic manipulation instant reflection avoided hands swapping definitely secular measurable transcend Simultaneously instantly role depend toolset agnostic Don't stuck implimented natively indescriminately anti-part prepended falling resolution identified pairings well-known myStory proto tests my-story delegate antipart quote escaping pro-part interacted Parts double proxies simulating manifested typical incumbent ifos inward-focused MIMELookup binaryMIMEs defaultMIME isBinary TextEncoder expires Sun Jul UTC Self-reference mathematics mathematical encompasses discussing refering hypothetical amalgamation pluralis modestiae OMEGA DATABASE handles BETA ALPHA SUPPORTED handlers acquired NATIVELY sensative desktop isParent isOwn isCore isRelated disk multi-disk installation fun games expressive satisfiability intertwined agrees contribute flickering whenever looping tell-tale disagreement over-constrained agreement-induced halting unhalting richly interdependent react identical agreement flickers benefit consideration ever-deepen pinched triangle opposite meet Oops typo parellel intersect Pythagorean Euclidean Newtonian Guassian lose sight Not Maybe TYPO EARLIER point-based exercises excercises GOD Keyboard acting lately rock dubious dive axiom Adam Cain Abel axioms isomorphic interchangeable Until axiomatic single-axiom modulated unable numbering episode unpacked sorted alphabetically cryptographic producing Assign Push undo Pop nexus modulations invoke front-line understanding word's tend oportunities sentactic hints conflict Famously inflamable synonymous flamable Parkways driveways parked Etc never-changing dictionary's alphabetical safety peer-to peer applications published peer-review computationally infeasible actor authorized millions alone flatten viewing hovering interacting Session Root Sub per-part affords significantly sessions sub-parts user-session client-id one-per user-per Classes Deleting deleting peripheral networks bounding box instantiate keyboard OG WIN os HOST toTags toLowerCase onpointer contentRect interpreting Note author's inconsistent illegal judgement English grammar spot mother believes great brambles bramble sky She spirit afflicted flockus brambilus violate fast varbo groymie Bramble seventeen bloop payoff unrecoverable dictated hand-written hand-write mistake guiding violated difficult transferred scratch opportunity optimize outbox send props HIT-BOX parentNode setPointerCapture pointerId releasePointerCapture Hyper-simple Navigate operationl paradigms pointer-transform dragging accesses receive attached sourced externally Classic matrix lengths Discuss pros cons classic provisional one-to Among varying tiers Check membership simulaneously presence partains indicates replacing consequences welcome-folder resize-top Resource Paths Option Stick Transition Pro tier deal Con Multiple teirs technology occupies Less intuitive Very Raw gather transistor CPU See collect deleted launch timed exception forbidding his valuables freely relies preserve dignity someone ownership varies regards creator regard rental car renting unlawful creator's die platforms mine qualified creators functioning theirs replacement offered adopted facto overruling tht respect laws establishing distance difficulty oserved traversing sit lots in-between whatever's cheap practically interestin signposts computations trivially accept untold solidify spent vast distances manufacturing arriving Principals contactual protection ethics suddenly permission Problem Inquiry banned activity opened problems respond Inquery principals lift ban reopen invalidate abuser tools desires harm adds slots final-junk stuffsome morestuff test-request mime matrices ownproperties valuekey expand-handle nine solidus-reverse vertical-align my-glyph desktop-explorer inline-block cursor-blink word-item my-word padb selected-glyph a-glyph selected-word a-word timeout host-glyph host-word fallbackIn actualIn task-item scrollbar axis overflow-x rootword sub-model flex-shrink nth-child code-editor textarea snippet test-model test-word Test Title hostcss progress test-infix test-spreadsheet dont myTests section Got Lorem ipsum doler amet Ummm priori cogito ergo Testing test-title test-template test-hostcss test-notes test-equation test-table test-indirect sub-part part-menu proto-model Proto folder-explorer moment-explorer time-index model-item setWord desktop-item file-item buffername example-item offset-y followMouse debounce reorder-handle collapse-handle delete-btn MutationObserver attributeFilter ejaugust-com Eric Augustinowicz Buffer websafe alt Template forEachTag insertRow insertCell Style unmark JS code-welcome watermark brightness depths drag-x drag-y old-x old-y enabled enableDrag enableSelf kireji-app island-of mispronounciation thoughts nows chat live-action lance Litany Live Action Lance beautiful village music beans sang bopped strobing motions hypnotic Across peered gaze almost meeting eyes tempted trance-like bopping scurge guy flew overhead coulds Ha HAHAHAHAH guys rediculous dumb Had bean taken realized inappropriate popping bumping Larry fearless grin entertainment stack-recurring refetch-btn chat-header chat-keyboard raised chat-input keyboard-panel text-input nodesToWipe ON send-btn hungry-orbs Hungry Orbs Chapter disappointed orb knew grow eat Yoink grew ate fate disappointing realization chapter self-eating Just mortified cried booming voice There's becaming enraged Gathering strength exploded orb's biggest dissapointing disspointed gravity-tiles Hi cursor-trap legend cursor-field vector echo arrow mx cursorField mw mh abs complex-input keyboard-key Esc Point marks ax ay bx stroke magnitude rotate transform-origin coord sinister border-right doStyle deltaX atan rad glpyh console-message warning success-color log-color warning-color error-color stat-pill success-count log-count warning-count error-count messages counters te obj shelfBtns sender serializer unchanged Unhandled driveBool setType first-of inline-flex isPart show-tip multi-word kinda multi bug-item Am crock-model crock-a crock-b sending sent bug-list zeno-stick BUG bugs Bug buglist task-list tasks TASK Make Understand Tasks old-toolbar flex-end refresh-btn Refresh shelf-btn refetch Fetch search-bar sticky World Welcome isArray backlinks meditation self-expression viewBox stroke-width stroke-dasharray curve textPath alignment-baseline text-after xlink urve nbsp one-platform space-guy SPACE-GUY On meets fellow traveller Act Lonely cold wizzed pluto lap brisk orbit keeps young Space-guy pulling towards planets saw somebody flaoting Marco screamed expecting hear Polo floating didn't zoomed noticed man suit alive shocking Floating Man searching spce glad Traveller pointed pale squinted Earth Go you'll you're Going Care miss went about-lake mead Lake Mead lake storm-surge Wind matchstick weaker bundle air molecules matchsticks vaccuum occupation Storm surges collective humanity storm surge change-membrane Membrane-based membrane cross crossed electricity regularity higher rate unpleasant frame-rate knows acknowledged faster slower produced cpu jobs cylce hrz vary nectar-haiku sweet smell nectar drown Thoughts notes coherent isolated onsetword img Download hue-rotate dd Working Draft June More dl Latest Editor's draft History Feedback mailto public subject kbd topic Archive Abstract Status protect institutes mandate harsh penalty Contents Introduction Creating Maintaining Penalty Appendix non-normative formalized formalizations maintained penalize anyone MAY Users SHOULD NOT formalization precisely fomalizations violates VERY normative urge international copyright downloading html's companies Google Facebook Instagram guilt mad shame permanent scar stealing robbing liquor selling crack school kids pro account's Read license Click site red-button recommended text-cursor temp right-radius disposable assumptions cheaply prime-rho d-structure BYTE RANGE ZERO SUM MIN DOUBLE WORD FRAC Data fromArrayBuffer fromString Letter greek observables fromObserver fromObservable Observations recorded pletter dletter Wait unregister oncompute Property validate unary bigints Properties parseable Entity crypto subtle digest SHA preserveAspectRatio vector-effect non-scaling run-time Observable operational unordered Observer Dimension unicode-list scroll-bar page-ratio ta patch statechange Bootstrap playground oncalculate chat-box max-content max-height tabgroup welcome newTab closebtn remove-button closeTab saveTabs saveTab custom-part border-collapse collapse last-child Storage drop-down padding-right scroll-snap dispatchEvent InputEvent frameUp Drop finalValue word-crock empty-test Events expression-types wordtag hasType extensions isWord typeName dblClickTime selectedNodes saveSelection doubleClickTarget amongSelected keydown keyup html-part Snippet landing-page shorts RegExp calls statics cssMarks unmarked glossary cmd fallbackSet native-extensions GROUP TAGWORD KEY LANGUAGE CONTENT LANG uri-language ROOT toOperator toVariable makeTable powerSplit bitsplit powerSet String endT naked unwrap escaped nodash isLetter toUpperCase perObservable dualize expand boundaryOnly parseDefinition unhandled preparse attributeName oldValue attributeOldValue topHeavy aa bb adjusted padEnd findings serve localRTC RTCPeerConnection remoteRTC sendChannel createDataChannel onsubmit onopen onclose readyState ondatachannel onicecandidate candidate addIceCandidate err ICE createOffer setLocalDescription setRemoteDescription localDescription createAnswer Unable PART PJS tagname Constructor onstructed connectedCallback owncss GlobalStyleSheet handling reroot part-script ABC AJS publisher rerender real-recurring ss gss waiter unitWidth unitHeight gridWidth gridHeight unitRatio initialize WIDTH HEIGHT tl bl unitize counter-reset width-px height-px recenter innerWidth innerHeight listener client-channel Be packet news FoxChannel restyle isExact blur server-fetch parseURI arrayBuffer intArray vr Mopf static-selector subword picked Primative oldheight onscroll Establish Criteria Practice edit Server-side detection Graceful interfaced errors Cross-origin issues communications builds multimedia models worker cross-origin gracefully diff momo-the cat Notes fields efficient test-variable About indirected reading comments warrant Wild context-item nodeIndex Time Need direct-to scrolling renderer fakeword died zoom groupCollapsed Directory tld crumb parseURL eduardo compositions onactivate claim godel stack-based del-based Asyncrynous programming covered sync Begin Shouldn't consumed Async no-go depended reads BYTES MEANING Formulas url-friendly turns navigational sub-object stacks A-Za momo Body some-prop Basic alphanumeric interpreted referred fetching replay dependnency commands naviate Identity Recursion urlese wouldn't defend scriptURL protobody advanced Therein periodicity perioditiy flat-rate symbol-sets increased oldu decodeURI askwed engage ba wizard disable questioning notification functional combining post-fix slot-based specially-named apply begun varieties appends notifying pretending front writing my-file my-third Kiss sport Periodically Sometimes formulation eons refactoring ix gifts love Freedom inclusion highly Love insensative headed Binary future-proof backing closer stay gaining esoteric plan practical double-decision wavelength offers declaring back-out engaged deeper user-facing backout quit prototypical presumption PERIODIC BIT climb Bth partain translate edition PERHAPS simplest implimentation guard against unwarranted visitations bury behind continuously obscure unwanted undesirable understands human-oriented typing exceptionally challening technical properly cool seeds creats human-focused intend responding self-production abcdefghijklmnopqrstuvwyzABCDEFGHIJKLMNOPQRSTUVWYZ generally speaking dense appearing forces Additionally terminators ignoring supersize fries COPYRIGHT CHARACTER DATA languages tokenizable bit-by FIND SATISFYING THREE MACHINE INTERNAL ACTION USER transfers Turing cassette tape deck turing tapedeck presuming freebie one-threaded shortest diagonally radius coordinate lending off-axis diagonal alley optimal abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYZ clipboard Goodbye Direction Picker Dashboard Tadr paste Resizer Utf Choice TRANSLATE EXECUTE learn Plot Multiversal Workplace Your MY ahead bonus vaguely quite offices entrance cafe drink research desk roof heaven multibyte continuation two-byte three-byte four-byte hope evaluator hardest relation steering parking Parking parkinglot Other Interesting flattened turtles turtle ac ca cb cc worlds peacefully contunnuum nearly-identical connuum wrecked survive brought Everyone travelled involved rearranged Somewhere FINITE PERFECTION depsite inifinity perfection protocols enacted Protocols Ultimately encodings thereby exhibited potentials liklihood pushing advances Infinite advance effectively usable finite-length twofold constitutes twin towers hanoi tower placing pins oooooh popcorn non sorts paint eyedropping heads repositioning reposition ELIMINATING Answewring Answering unrelated fourteen twenty fifty hundred eighteen thirty seventy splitter compilation stage htmltag jst hcss Reflection symbolicate indice singelton valu ll utoquery leted ranches intervention rgument ompressionAsync pendants promises late emit arg rootpreference roots onrootsupdate rootnames customElement ontagsupdate oldtag dependOn rootname onnected rror disconnectedCallback disconnecting resetError setError rebuildElement removeAttributeNode oops childNodes attrs ondelta re pointermove highest interpretation Kristina decentralized WebRTC exchange Machine Character grapheme Off release mac-style manby cancellation maximization drag maximized Possible trap Could identify capability Feel finessed boxes whwat scrolled comparisons digs betweenm oh Whne enclosing yourself leaving dropping taskbar soap resetting NOTE diagrams powerpoint-style team slide automatically workslide Workslides laid Cre Cur Curate Deb Debate Don Donate Equ Equate Ide Ideate Loc Locate Mut Mutate Neg Negate Notate Pir Pirate Rel Relate Rot Rotate Sen Senate Upd Update Vac Vacate hierarchies Domain Filesystem filesystem Programmatic indicated Causality cuasality identifiers co Things envelopes Envelope violation envelope effectual enveloping enveloped principle envelop enforced witness relativity absence pleasure painful scope-based dignifiity participants establishment procuedure permiter island lenth perimeter grain sand twitsts merciful plight prilideged upwards excercising talent inspiration rare transitionary pure deception Inspiration strictest fiction mispercetion reintroduction expansive faith unethically evil inpsiration inspired inspiring muse essentually herring bridge deceptive undeceptive influences preception unbiased percieve evidence lc dc Installing ServiceWorkers cts client-to topics currency calendar RECIPES Recipes software engineering capture recipe determinism Programming recipes alluminum yeast hops barley beer engineer ingredients RFS conflicts core's occludes illiminate Additional Similarly RM ns-resize s-resize bottom-left nesw-resize sw-resize bottom-right nwse-resize se-resize ew-resize w-resize left-right headerOf transformer north south pan east west n-resize e-resize ne-resize nw-resize rw rh top-bottom top-left top-right window-close window-focus alpha restart onclickjs down-fx do-nothing timer Stop directions nesw dir clip getEmbedTag getOwnPropertyDescriptor isExtensible ownKeys rootsOf nodePool eventKireji findIndex poolNode isConnected hadPoolNode attempted HTMLElement's subproxy deprecated subquery deprecate flex-spacer lastCall configurable enumerable writable Beta upsilon kernelActionLocation kernelActionKey metaKernel metaKernelKey rootIndex protocore caller demo noun persons verb ending ing mood phrasal stopped stranger poppable pnghttps apple-touhttps champaign appps ps le-touch forehead party context-menu core-item debate locate relate horizontal-line open-fx application-json application-wasm domain-icon folder-icon image-png image-vnd microsoft-icon kireji-icon bgr bgg bgb bga ext rgb-bg physical-blemish physical-car part-icon physical-drink stopper-icon physical-toy protocol-icon text-css text-html text-javascript text-plain text-uri list-icon css-height capital-f lowercase-e lowercase-i lowercase-l minimized start-menu app-icon app-label Answer Call connection exit-button minimize-button urlSet btns invite buttons remote oniceconnectionstatechange connectionState onicegatheringstatechange ice iceGatheringState onsignalingstatechange signaling signalingState garbage Copy writeText pointing Paste readText onstatus status restore maximize maximize-button restore-button titlebar fit-content contacts explorer-view offline Offline Online toolbar Place ringing bold dotted address-fx column-fx grid-auto name-button size-button type-button browse urlbase fileurlbase icontag keyurl filler Size manifest-fx keyplace tool-bar toggle-kireji sort-order go-up Enclosing Folder inactive readdress anode electrode cathode core-node graphX graphY graph-y graph-x focus-color crumbs collapse-button xmlns http paper-color halftone-a halftone-b halftone-size halftone core-wire ew Pilot tips next-tip Tip radial-gradient candle fire ago erases re-downloads privacy connections socialize multiplayer browsers devices in-network websites downloaded kb Lightning flashes sparks shower blink missed Kheb Great enlightened freed start-button tray reselect wasOn isX Start writing-mode tb-rl save-computer restart-computer restart-server network-folder Network Load Last Factory Reset clock date ourl createObjectURL revokeObjectURL Quick toLocaleString en-US numeric minute hourCycle factory-reset fullscreen windows-fx ACME TEST Indexes MultiViews FollowSymlinks AddDefaultCharset ServerSignature FileETag Header ETag RewriteEngine RewriteCond REMOTE ADDR RewriteRule REQUEST WebAssembly instantiateStreaming exports compound surname generations subroutine agent inherited discards wa wb peeps pookie house peep todd's architecture ltd houses thouse seaside encompases girl gender female occur aA FA FASDSDFg qrASD gFASDo suh oASlADSF SD fjFxergij sarah slashes colons implies bed futon priority material cotton polyester my-furnature bedroom hemp primitives storable Bigint Boolean Undefined Null peaking march depthy simple-item bool all-scroll graphs ctrlKey dampen wheel dampened wheeling copy-from regraph subjects onexpand expanded RAW renode rezoom gravity xx xw xh yx yy yw yh mag mult gravityConstant repulsive forceConstant nodeCon con onplay arrange-graph loopFreq clear-graph cleanup graph-using graph-connections graph-users test-graph identities bob jane erfgsr asdfwefrw argf srt manifesting designated pre-form baseline preform dst tmp specials partaining jf thru iff spelled glossaries Self entity's ALPHABET HEY YOU xxxxxxx strung haiku xxxxxx xxxxx xxx xxxx expansion obvious embed embedding unembedded alternatively spatial heavy smalls soda dog mediums larges sodas cars dogs lucky inefficient mutate interactively keeping eye indicator's efficiency demonstrating requirement learning patterns circumstances integer-indexed cha-ching integer-index about-ism grrrrr rings greg petco tabby jim salman eating sandwiches sally frank weird clashes gregs links poinst anybody traversed he's sandwhich employee sandwich coherently tom cindy pam bible genesis whatis sentence looped encountering navigated restrict lattice intuitively aliased numbered afforded higher-dimensional generalization vectors Real Imaginary pen drifting wanted rational irrational Irrational increasingly dyadic single-character concatenate xabgh qw refines Absolutely multidimensional Tool Execute getNextHighestInteger getNextLowestInteger ownname xproperty yproperty Standalone Alpha implemented oncover URLSearchParams writeSoon pending pushState live partKey partDef defKey unknown onready PARTS FILES SUBPARTS basecss preparing UNIT parseContent APP reg appendHTML nodeStyle initial-width initial-height initial-unit roadcast touched layerIn ultKey isRoot ontainer pth basecase inTags defaultKey finalDef execContent execDepth execLimit execStack exp nconst LAYER buildin subexpressions getLayerData fin localCode hoose defaultDepth vars lear propagate childKey childDef layerData short-w gap-w shim-w hu short-h gap-h webkit-app region app-region shelfbtn no-drag WIP Sent part-editor width'x part-crock css-sets nothing-sets script-sets Clicked headings THEME Complex Timeline Navigator CTN WGSL PNG Application delivers previews modifiable played interactible area prompt took Undo reverses recently Redo Predo context-sensative chaotic user-indexed risk Prompt undone Grey offering destruction expensive scrub Existential waveform audio sound wav aequus quadratic Quadratic quadratus greatest satisfies predecessor predecessor's place's assumed reminding Staying Keeping avoiding expectations Attract Billions souls bought sold Give yours trust Engage earn betrayals burn clean Utilize Demonstrate commitment attract Share glory mission Now's shared bubble bubbles entered popularity Membership antibubble Bubble starts Leave stops non-bubble buy Amount optonally stock market disconnectedness caused wrote ellipse prove predicated Zeno's athlete crazier iterative approximations Agonists Provided Receptors Available Source Destination switches Actual dual First galactic shock unfamiliar creations helped adapt community Intrastellar flight ecosystem death organic earth Humans panic Shipments neighboring star materials seemingly earth's empire showed filled Cells reproduce reproduction mutated Ordinal Sum lim Characters formation outerHTML currentScript Groups responds protofunctions exucuted Que sera que user-provided schema needn't primarily concerned program's artifact degree bias concern satisfaction benifit pidgeonhole miniature manifestations iterating discover failure non-existant bringing seeminly denotes ideas denote employed judge avalable owns comprehends manifestation manipulates conceptual perminence conceptualization unusual pretend sill sub-J distinguishable Effectively J's syncronicity statistical certainty quanta programmer Jack writes gains curated plans yank environemnt indication baked acquires proved wishes acquire Simply purely coincidence outcome coincidences clustered Priveledge monkeys typed clustering shakespear priveledged monkey deepest lays story Applications inadvertently eachother's adversarial swath amounting typable beat temporal funnel proven multi-layered musn't Nobody disqualify ourselves mirrored oldName titlecase decomposition planeLimit fromCharCode preprocess isNan cluster stick Stacks workspace Showing Views outline-bar workspace-bar Inspect Perturbations defs patternUnits userSpaceOnUse STYLE outline-width outline-heading menu-height vmax webkit-slider runnable-track shape-rendering geometricPrecision SCRIPT caches addAll onintall WORKER ICON use-credentials kireji-spin cloneNode spin ring-border no-border button-border inside-border outside-border ring conic-gradient st depositphotos stock-photo clock-face with-a spiral jpg cdn picsart crop webp facer uploads ff dbb grabbing visibility getPropertyValue clientY-r clientX-r old-theta Window exposed attending Using positional base-n improper Improper several digit's restricted pascal's pascal Leading Repeat mod division b-b mostly tall derived notations transcendental shiftKey getComputedStyle Something detailed like-functioning non-trivial bound obviously bounded rich Herein simplifying nebulous utilize complications unsimplifying convoluting convolution differentiable shattered fragments smash heavily packed erasable Erasable quantity non-erasable modifiers reprisentation real-number tally losing convolutions tallying laborious stopping function's input-output astronomically delve regional geometry pixel sample exlude NAME postload addEvent addEventlogistener gesturestart qsa scales removeEventlogistener Menlo Monaco Courier print II auto-change elseif sequencing explode gram alterations Unity Forms AXIOMS decay describable discreet decays Decay approximates interior exterior novelties occasions introducees introducers novelty Introducees timestamp introducer introducee pinimg af Interactive transition-timing k-char kchar scop axe legnth kkeyboard XML KString k-string justify-items serif text-anchor dominant-baseline hanging Base shadowRootInit delegatesFocus ppendTemplate templateContent k-base Characteristic Characteristics markup Markup Delegates symbolism enforces user-written characteristic end-user exporting non-private partially private-use parser unnest characteristics encompassing Writing Opening Argument pointers Delimiter Zero Arguments delimeter Closing Always basename PHP PATH journal x-icon coms COMS Creation Celebrety face matcher totally celebreties Typically portrait player clickable tappable celebrities celebrity photos accuracy taps DONE unlock race freezes pause runner guesses learns similar-looking famous prevents tapping percentage unlocking Message Bot bot gamifies inboxes inbox RPG-like dialog call-to RBG-style speech remark relevant servey reduced slowly digested interrupt feeding typically connecting refactored reworked digesting reveals codebase desired developer-facing publishing Terms App Apps Editors Publish editors sufficient being's traditional concepts Possibly iframes dynamic unity-style builder Features Release manager mobile snippets Unicode-powered arbitrary-precision floating-point hypercomplex calculator Graphing Cryptographic Proof academic Custom mainly astral Regular Expressions Syntax per-language impacts WHATWG Wiki-style streaming non-profit tie-ins Tie organizations Link Noun regexr placekitten parties thtml ru qwertyuiop asdfghjkl zxcvbnm coverKernel isTree showTree toggleTree hideTree browseForKernel importKernel goUp ontent HTTP Found Resort WARNING getContentType Alphabet lib Cursor habitability zone anti upload strike BIRTH RETURN receptor substance stike reminder selectionStart selectionEnd Form newPast god Menu Appears passive FORMATION Event changer CN LIM CUR enclosure half-receptor half-thing unpaired non-bidirectional passthrough indirectly receptor's recepor guessed lostorage storageKey viewKey symmetrical second-to pile k-entity k-output counter-increment k-reference maxlength Sufficient Good arrange demand social barriers boundaries boundries sustain rabbit hole demands overpowers sooner humans apes rhythem interpretations explaination miniscule fraction mass perceieve nobody percieving arent happening obscurely classify discuss panning screen-sized Curious compares Doggy doTest func Tes consciousness telling overlaps soft gradient turnover Within scroll-y ter ursor logError ov ox oy CHILD Graph graphed piTo setMax mid mid-start end-mid ONE omes addAuthor BACKUP ny nx fo throw'x throw'o ho hy equip equipment hasOwnProperty peanut Peanut butter Butter injetive hp arbitrary-dimensional oo xo rhizome scalar truthiness cause-g terminating chp featured un-evaluated turing-complete free-will evalute responsibility unseen executes incorperated choose-g codomain evalutions conclusion gateway constants isosceles triange PRIME PRIMES batch recompute Renderer parameter forEachVar frac marker ramp pow rampGraph els rampd createElementNS verse viewQuery safeQuery folderView icon-size nvas contentEditable inspector ontext justify-self only-child webkit-details ranch getBranch forEachBit hammingWeight reduceBits fileView OPEN labelView handleClick makeClickHandler showContextMenu makeDeselectHandler rename editLabel hide CONTEXT TARGET MENU BLOCK CLICK DOC SHIFT CANVAS LOG DOWN DRAG PAN DBL deselectFiles hideContextMenu renderCanvas oldLabel sel getSelection createRange selectNodeContents removeAllRanges addRange createTextRange moveToElementText updateInspector registerCanvasPoint setCanvasPan dragCanvas makeCanvas onmouseleave onmouseout renderTree updateRange updateWidth Min Max Rename showAll onmouseover Send Nowhere Also nowhere opens closes quotes delims dash lb Untitled Project newdoc pwa Progressive Web standard usertitle Fonts Stylesheet Preset Browser btn title-height body-width orientation flex-direction hsl hue mix-blend lighten optimizeSpeed Gui Controller addGraphic prepend bake oldLayer cx cy setRange Precision Theta Limit Eddie PO Box Crane Brook Road Langdon Popularity Graphs Under Construction getOffset offsetLeft scrollLeft offsetParent onresize snapping ageOfUniverse hart vertical-rl text-orientation sideways ropdown dashed Usage Year dropdown yeah her she okay gonna she's sorry please thank talk night they're Mr hi mom we'll dad baby father woman money tonight son um hmm happy sir job honey couldn't ah hurt boy gotta excuse kill wanna morning worry business wife bye Dr married anyway damn tomorrow town ha hate gave afraid kid sister minutes everybody whoa Mrs feeling daughter wow door hand doctor trouble killed hospital Sam alright wedding shut police hit ya mm dinner funny husband stupid pay office where's men sonny hours serious Leo shit wonderful fight he'll sick it'll lives worried Theresa Carly Ethan loved hot how's daddy Paul David bet blood ain't kidding dear coffee fault water fuck women John months lady Jen thinks Christmas hang worse company ooh spend here's marriage president sex girls scared talked Jake Al ass boys Michael loves fucking hair lying luck she'll Luis kiss wonder pain Grace Natalie food feelings they'll worked marry Frank city dream Lucy surprise sweetheart poor y'know dance appreciate situation weeks himself Sheridan amazing Ben Julian swear busy Joey movie Antonio country fall darling Ms win honor personal till admit murder strong he'd broke dollars tired Jason George evening Ross trip Brooke club Niles suppose calm Todd fair caught blame street favor apartment court Alison Rick Rose Frasier relax York charity accident wake Danny forgot interested Craig mouth pregnant Billy careful dude ride figured wear shoot Ray Bo angry buddy Angel Nick ran war standing jail wearing Miguel ladies lunch Cristian Greenlee hoping Phoebe ridge Luke Emily college boyfriend proud agree they've Timmy hurry ow feet wondering herself Chris would've Kay mess deserve cute Jerry dress Richard Jesus James hotel Ryan Lindsay quiet road Eve staying sweetie mention clothes fell mmm Victor prison attention surprised Beth gift hadn't owe Nora helping bitch aunt lawyer Jax girlfriend everything's Jessica Dawson upstairs Alexis Shawn mommy Big Bang URLs customizable customized accessing locator explores preg PREG SPLIT EMPTY CAPTURE twigs ElementBase addStyle Expression code-block addTextArea onselectionchange activeElement LEN Win js-window NEW COMPUTATION firstMatrix gpuBufferFirstMatrix STORAGE arrayBufferFirstMatrix Second secondMatrix gpuBufferSecondMatrix arrayBufferSecondMatrix Result resultMatrixBufferSize PER ELEMENT resultMatrixBuffer shader shaderModule readfile wgsl Pipeline setup computePipeline createComputePipeline Bind bindGroup Commands submission commandEncoderB passEncoderB beginComputePass workgroupCountX workgroupCountY dispatchWorkgroups unmapped gpuReadBuffer MAP READ Encode copying copyBufferToBuffer Submit gpuCommands mapAsync GPUMapMode resultMatrix workgroup invocation Guard out-of bounds resultCell pointerLockElement exitPointerLock requestPointerLock unadjustedMovement onpointerlockchange clickInto Cube frame-w frame-h Tahoma Geneva Verdana ullscreen Fullscreen Exit Play Game MDN matrixArrayToCssMatrix multiplyPoint multiplyMatrices explanation github toji gl-matrix Cache multiplyArrayOfMatrices inputMatrix normalMatrix Calculate determinant det rotateXMatrix rotateYMatrix rotateZMatrix translateMatrix scaleMatrix perspectiveMatrix fieldOfViewInRadians aspectRatio Construct rangeInv orthographicMatrix lr bt col normalize utility invertMatrix Adapted mrdoob Performance Try allocate ease samples Can't invert Simple setCam STENCIL DEVICE CAM SPEED POINTER BUFFER CAMERA updateCam changeBuffer WRITE COMMON SHADER ATTACHMENTS MODEL Enable nable-unsafe flag adapter Failed txUsage Colors inGui vsOut uniformBindGroup passEncoder Translate Clip Near Far Sensativity KEYWORDS vertexOut sint interpolates Geometry shapes ount VertexIn getPrimary Model expectedLength Extra model's toTypedArray ds Attribute isVector isMatrix omponents dict parseComponents Wrong comp stride ody ttrs odies addBody vo outs FragmentIn getBody params encodeAll getDescription interpolate Uniform ict indGroups indGroup Parser TAttribute kgame getDevice cam cursorX cursorY BEGIN END viewMatrix perspMatrix near-far k-game Uni isOne Vortex Stella ACCIDENTAL COLOR WHEEL ges getRenderFaces renderMesh vcolors pointGroups CUBE START py pz x-s y-s nz z-s testCube meshes SAFE INTEGER pascalPosition binaryReversed binr refl sections sect sec floorLog fl origin-trial CODE abcdefghijklmnopqrstuvwxyzABCDEFGHIJJLMNOPQRSTUVWXYZ ltrim dec bcmod bcdiv bccomp strlen strpos bcmul bcadd Skipped fam Enoch Irad Mehujael Methushael Lamech Jabal Jubal Tubal-Cain Naamah Seth younger return'Adam bine PlaceValue SYMBOLS NUMBER BINARY PLACES fromURI fromBinaryString shad addButton Cancel k-set k-el System NumeralSystem harset intOf charOf unpack bigInt Compressor ObjectBuilder numeralSystem ompressor Builder overexitement imbalance motivation undesired Ideas fittest specimen precipitating interrelated specs implimenting japanese Haiku cutting-word profitable project's management intelligence monitize advertisers advertise they'd willing producer influencer Who advertisements Content mediate uploading video paid accounts advertising afford promote person's blockchain's free-er WWWWWWWWWWWWAIT so-called WEB wild claims world's sell cryptocurrency securely blockchain regularly cash loses centralized amazon costs real-estate Delayed sacrifice negotiated buyer delayed price deployes seller counter-intuitively in-demand profit accordingly Components cost tracked Questions visitors audience acknowledges completion Existence Defect economy grows opportunities accross diverse inseperable marketing branding Summary Branding BMA Optimum economical activities Either high-quality of-life prevails voluntary well-thought villainizable victorious villain engaging transparancy concerning elliminate accurate consonant vowels enable Letters spelling conventions meanings Words brevity simplicity smile jpeg gif bitmap smiling association trio convey remembered segments neighbors scarce scarcity invoked powerful Combined morph Nothing resemble zero-bit generic invokation deemed presently remains moment's forgotten presumed applicable occured commited duty explaining applying storign invoking strongest collecting widely exceeds catalog weaknesses casts Replacing sequentially deviation increasily reciept actively broadcasts weights involve forgetting temporarily lengthy recollect brief relatively recalling percieved needle haystack stands needles haystacks Feeings linearly scenarios unstable forver invokes feedback stronger intervene usually credit conscious vicariously justice burned unimaginable ultimatum Woman errenous utterers disgusting eve conspire exlusively exluded nor belonging lest encounter unpredictable contradictions vantage angles director cameras tandem enumerating pseudo-set muddy reliably agreed-upon contradicting colelctively descriptive featuring brain albiet elicited spoken stuctures elicted togetherness compete disagreements demise cherish elongate tempation catelog curating unwelcome routinely translated inherently traumatizing shortage continually accelleration advancement riptide pulls resolves promising endeavor Jumping unnecessarily uncomfortable curation breakneck discovery stumble utterly familliar accomplishes associate misunderstandings de-escelated moral abused cohesion telomeres verses ethically stare conflicting relied elicit identifiable destructure conveyed ill-formed destructuring absense chaz Chester Bennington March July radioGroup radio-group currentClass changeSide checkedRadio showClass classList transform-style translateZ show-front rotateY show-right show-back show-left show-top rotateX show-bottom line-break radio rotate-cube HOME IP LIBRARY PORTFOLIO isPublic isPortfolio wolf diffuse spheres AnalyticalSpheres ORM gltf glb gltf-binary octet-stream Normal BaseColor transpose translation radians Aspect Ratio clipped resultside PRIM PointView MESH POINTS Types inType oldt oldrate frameel html-comment grandchild equate generalizations reversibly one-way reversable decompose classified".split(
-     " ",
-    ),
+   // =============================================================================================================================================================================
+   "https://base.core.parts/constructor.js": `this.index = -1n
+this.size = 1n`,
+   "https://base.core.parts/create.js": "",
+   "https://base.core.parts/checkout.js": `if (index < -1n || index >= this.size) throw new RangeError(\`index \${index} out of range (size \${this.size}): \${this.origin}\`)
+const oldIndex = this.index
+this.index = index
+if (oldIndex === -1n) await this.create()`,
+   "https://base.core.parts/destroy.js": `this.index = -1n`,
+   "https://base.core.parts/notify.js": `await this.controller?.notify(this.origin)`,
+   "https://base.core.parts/goto.js": `await this.checkout(index)
+await this.controller?.notify(this.origin)`,
+   // =============================================================================================================================================================================
+   "https://boot.core.parts/base.uri": "https://decision.core.parts",
+   "https://boot.core.parts/constructor.js": `
+info("Nothing exists. Dividing empty space into two areas: server and client.")
+super(["https://server.core.parts", "https://client.core.parts"])
+info("Space exists but nothing is in it. Creating an environment.")
+const environmentOption = this.options[\`https://\${E}.core.parts\`]
+this.index = environmentOption.offset
+this.option = environmentOption
+environmentOption.part.create()`,
+   // =============================================================================================================================================================================
+   "https://client.core.parts/base.uri": "https://decision.core.parts",
+   "https://client.core.parts/constructor.js": `super(["https://fallback.cloud", "https://orenjinari.com", "https://ejaugust.com", "https://kireji.io"])`,
+   "https://client.core.parts/create.js": `
+info("The client exists but there is no application. Creating an application.")
+
+const
+ appOrigin = \`https://\${APP_HOST}\`,
+ isKnown = appOrigin in this.options,
+ trueOrigin = isKnown ? appOrigin : "https://fallback.cloud",
+ applicationOption = this.options[trueOrigin]
+
+this.index = applicationOption.offset
+this.option = applicationOption
+
+await applicationOption.part.create()
+loop()
+// await applicationOption.part.goto(applicationOption.part.documentIndex)
+info("Process ends here.", this)`,
    // =============================================================================================================================================================================
    "https://kireji.io/base.uri": "https://menu.core.parts",
    "https://kireji.io/constructor.js": `super("editor")`,
-   "https://picker.editor.kireji.io/base.uri": "",
+   // =============================================================================================================================================================================
+   "https://model.editor.kireji.io/base.uri": "https://decision.core.parts",
+   "https://model.editor.kireji.io/constructor.js": `super(["b1", "b2", "b3", "k1"])`,
+   "https://model.editor.kireji.io/create.js": `this.toolbar = this.controller.toolbar
+this.container = this.controller.container
+this.label = this.toolbar.appendChild(document.createElement("label"))
+this.select = this.toolbar.appendChild(document.createElement("select"))
+this.label.innerHTML = "Grammar model:"
+for (const model of this.parts) {
+ const option = this.select.appendChild(document.createElement("option"))
+ option.innerHTML = model.polynomial
+}
+this.select.onchange = () => {
+ this.goto(this.options[this.parts[this.select.selectedIndex].origin].offset)
+}
+this.randomButton = this.toolbar.appendChild(document.createElement("button"))
+this.randomButton.innerHTML = "🍀 Random"
+this.randomButton.onclick = () => {
+ let i = this.option.part.size.toString(2).length, bin = "0b"
+ while (i--) bin += Math.trunc(Math.random() * 2)
+ this.option.part.goto(BigInt(bin) % this.option.part.size).then(() => {
+  info(this)
+ })
+}`,
+   // =============================================================================================================================================================================
+   "https://option.model.editor.kireji.io/base.uri": "https://composite.core.parts",
+   "https://option.model.editor.kireji.io/inputs.txt": "name polynomial parts",
+   "https://option.model.editor.kireji.io/constructor.js": `super(parts)
+this.name = name
+this.polynomial = polynomial`,
+   "https://option.model.editor.kireji.io/create.js": `this.container = this.controller.container
+this.controller.select.selectedIndex = this.i`,
+   // =============================================================================================================================================================================
+   "https://b1.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
+   "https://b1.model.editor.kireji.io/constructor.js": `super("demo-001", "𝑛𝑣", ["nouns", "verbs"])`,
+   // =============================================================================================================================================================================
+   "https://b2.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
+   "https://b2.model.editor.kireji.io/constructor.js": `super("demo-002", "𝑎𝑛𝑣", [
+ "adjectives",
+ "https://nouns.b1.model.editor.kireji.io",
+ "https://verbs.b1.model.editor.kireji.io"
+])`,
+   // =============================================================================================================================================================================
+   "https://b3.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
+   "https://b3.model.editor.kireji.io/constructor.js": `super("demo-003", "(1 + 𝑎 + 𝑎² + 𝑎³)𝑣𝑛", [
+ "adjectives",
+ "https://nouns.b1.model.editor.kireji.io",
+ "https://verbs.b1.model.editor.kireji.io"
+])`,
+   // =============================================================================================================================================================================
+   "https://k1.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
+   "https://k1.model.editor.kireji.io/create.js": `await super.create()
+this.populate = () => {
+ const
+  choice = this.parts[0],
+  row = choice.model[choice.option.i],
+  observation = row[4 + choice.option.part.option.i],
+  [ ba, bb, aa, ab ] = row
+ this.container.innerHTML = \`<p>\${aa} \${ab} and there is \${observation.join(" ")}</p><p>what is the \${observation.at(-1)} of one \${ba} \${bb}?</p>\`
+}`,
+   "https://k1.model.editor.kireji.io/constructor.js": `super("koan-001", "??? koan 1", ["choice"])`,
+   "https://k1.model.editor.kireji.io/checkout.js": `await super.checkout(index)
+this.populate()`,
+   "https://k1.model.editor.kireji.io/notify.js": `await super.notify(...sources)
+this.populate()`,
+   // =============================================================================================================================================================================
+   "https://choice.k1.model.editor.kireji.io/base.uri": "https://decision.core.parts",
+   "https://choice.k1.model.editor.kireji.io/constructor.js": `const model = [
+ ["hand", "clapping", "hands", "clap", ["a", "sound"], ["a", "rhythm"], ["an", "echo"], ["a", "beat"], ["a", "pulse"], ["a", "motion"], ["a", "gesture"], ["a", "signal"], ["a", "wave"], ["a", "sign"]],
+ ["foot", "standing", "feet", "stand", ["a", "foundation"], ["a", "stance"], ["a", "base"], ["a", "support"], ["a", "position"], ["a", "grounding"], ["a", "posture"], ["a", "bearing"], ["a", "rest"], ["a", "halt"]],
+ ["eye", "seeing", "eyes", "see", ["a", "view"], ["vision"], ["a", "perspective"], ["a", "glimpse"], ["a", "sight"], ["an", "image"], ["a", "look"], ["a", "stare"], ["a", "gaze"], ["an", "observation"]],
+ ["voice", "speaking", "voices", "speak", ["a", "chorus"], ["silence"], ["a", "whisper"], ["a", "tone"], ["a", "sound"], ["an", "utterance"], ["a", "declaration"], ["a", "pronouncement"], ["a", "speech"], ["a", "conversation"]],
+ ["seed", "growing", "seeds", "grow", ["a", "field"], ["potential"], ["a", "sprout"], ["a", "plant"], ["a", "forest"], ["a", "garden"], ["a", "harvest"], ["a", "yield"], ["a", "crop"], ["a", "tree"]],
+ ["drop", "falling", "drops", "fall", ["a", "rainstorm"], ["emptiness"], ["a", "splash"], ["a", "drizzle"], ["a", "torrent"], ["a", "downpour"], ["a", "shower"], ["a", "trickle"], ["a", "leak"], ["a", "cascade"]],
+ ["note", "sounding", "notes", "sound", ["a", "melody"], ["harmony"], ["a", "tone"], ["a", "chord"], ["a", "resonance"], ["a", "vibration"], ["a", "frequency"], ["a", "pitch"], ["a", "scale"], ["a", "composition"]],
+ ["breath", "exhaling", "breaths", "exhale", ["a", "wind"], ["emptiness"], ["a", "sigh"], ["a", "gasp"], ["a", "whiff"], ["a", "puff"], ["a", "draft"], ["an", "inspiration"], ["an", "expiration"], ["a", "respiration"]],
+ ["shadow", "lengthening", "shadows", "lengthen", ["a", "dusk"], ["absence"], ["a", "shade"], ["a", "darkness"], ["a", "silhouette"], ["a", "phantom"], ["a", "specter"], ["a", "trace"], ["a", "vestige"], ["a", "reminder"]],
+ ["tear", "falling", "tears", "fall", ["a", "flood"], ["sorrow"], ["a", "drop"], ["a", "stream"], ["a", "river"], ["a", "flow"], ["an", "outpouring"], ["a", "weeping"], ["a", "lament"], ["a", "cry"]],
+ ["wave", "breaking", "waves", "break", ["a", "shore"], ["power"], ["a", "crest"], ["a", "trough"], ["a", "swell"], ["a", "surge"], ["a", "rip"], ["a", "current"], ["a", "tide"], ["a", "sea"]],
+ ["spark", "igniting", "sparks", "ignite", ["a", "fire"], ["potential"], ["a", "flame"], ["an", "explosion"], ["a", "conflagration"], ["an", "outburst"], ["an", "eruption"], ["an", "ignition"], ["an", "incandescence"], ["a", "glow"]],
+ ["word", "spoken", "words", "speak", ["a", "message"], ["meaning"], ["a", "sentence"], ["a", "story"], ["a", "poem"], ["a", "novel"], ["a", "conversation"], ["a", "dialogue"], ["a", "narrative"], ["a", "discourse"]],
+ ["star", "twinkling", "stars", "twinkle", ["a", "sky"], ["distance"], ["a", "glimmer"], ["a", "sparkle"], ["a", "shine"], ["a", "brightness"], ["a", "constellation"], ["a", "galaxy"], ["a", "universe"], ["a", "cosmos"]],
+ ["leaf", "rustling", "leaves", "rustle", ["a", "breeze"], ["wind"], ["a", "whisper"], ["a", "sound"], ["a", "noise"], ["a", "murmur"], ["a", "crackle"], ["a", "stirring"], ["a", "movement"], ["a", "shiver"]],
+ ["bell", "ringing", "bells", "ring", ["a", "sound"], ["resonance"], ["a", "peal"], ["a", "chime"], ["a", "toll"], ["a", "clang"], ["a", "gong"], ["a", "carillon"], ["a", "knell"], ["a", "ding"]],
+ ["clock", "ticking", "clocks", "tick", ["time", "passage"], ["precision"], ["a", "rhythm"], ["a", "beat"], ["a", "pulse"], ["a", "cadence"], ["a", "tempo"], ["a", "measure"], ["a", "movement"], ["a", "duration"]],
+ ["drop", "dripping", "drops", "drip", ["a", "leak"], ["persistence"], ["a", "trickle"], ["a", "flow"], ["a", "stream"], ["a", "drizzle"], ["a", "rain"], ["a", "waterfall"], ["a", "source"], ["a", "moisture"]],
+ ["flame", "flickering", "flames", "flicker", ["a", "fire"], ["light"], ["a", "glow"], ["a", "dance"], ["a", "movement"], ["a", "heat"], ["an", "ember"], ["an", "illumination"], ["an", "ignition"], ["a", "blaze"]],
+ ["wave", "lapping", "waves", "lap", ["a", "shore"], ["water"], ["a", "beach"], ["a", "coastline"], ["a", "seashore"], ["a", "bank"], ["an", "edge"], ["a", "border"], ["a", "margin"], ["a", "rim"]],
+ ["mind", "wandering", "you", "try to focus", ["a", "distraction"], ["a", "constant", "noise"], ["an", "endless", "loop"], ["a", "fleeting", "thought"], ["a", "persistent", "worry"], ["a", "quiet", "moment"]],
+ ["soul", "searching", "you", "seek enlightenment", ["a", "mystery"], ["an", "eternal", "question"], ["a", "lifelong", "journey"], ["a", "divine", "spark"], ["a", "cosmic", "dance"], ["a", "silent", "knowing"]],
+ ["heart", "aching", "you", "feel sorrow", ["a", "pain"], ["a", "heavy", "burden"], ["a", "deep", "wound"], ["a", "bitter", "memory"], ["a", "lingering", "sadness"], ["a", "gentle", "grief"]],
+ ["body", "aging", "you", "experience time", ["a", "limitation"], ["a", "constant", "decay"], ["an", "inevitable", "end"], ["a", "fleeting", "moment"], ["an", "aging", "process"], ["an", "eternal", "now"]],
+ ["dream", "fading", "you", "wake up", ["a", "reality"], ["a", "fleeting", "moment"], ["an", "illusion"], ["a", "nightmarish", "vision"], ["a", "peaceful", "slumber"], ["a", "dreamlike", "state"]],
+ ["word", "spoken", "you", "express yourself", ["a", "meaning"], ["a", "power"], ["a", "limitation"], ["a", "misunderstanding"], ["a", "truthful", "statement"], ["a", "poetic", "expression"]],
+ ["eye", "seeing", "you", "perceive the world", ["an", "illusion"], ["a", "reality"], ["a", "mystery"], ["an", "optical", "illusion"], ["a", "vivid", "image"], ["a", "blurred", "vision"]],
+ ["ear", "hearing", "you", "listen to the silence", ["a", "sound"], ["a", "noise"], ["a", "music"], ["a", "whisper"], ["a", "shout"], ["a", "heartbeat"]],
+ ["nose", "smelling", "you", "experience the aroma", ["a", "fragrance"], ["a", "stench"], ["a", "memory"], ["a", "pungent", "odor"], ["a", "delicate", "scent"], ["a", "fresh", "air"]],
+ ["tongue", "tasting", "you", "savor the flavor", ["a", "delight"], ["a", "disgust"], ["a", "craving"], ["a", "sweetness"], ["a", "bitterness"], ["a", "spiciness"]],
+ ["hand", "touching", "you", "feel the texture", ["a", "connection"], ["a", "separation"], ["empathy"], ["a", "warmth"], ["a", "coldness"], ["a", "roughness"]],
+ ["foot", "stepping", "you", "walk the path", ["a", "journey"], ["a", "destination"], ["a", "direction"], ["a", "step"], ["a", "stride"], ["a", "dance"]],
+ ["breath", "inhaling", "you", "draw in life", ["a", "cycle"], ["a", "moment"], ["eternity"], ["a", "sigh"], ["a", "gasp"], ["a", "pant"]],
+ ["thought", "arising", "you", "ponder the unknown", ["a", "question"], ["an", "answer"], ["a", "doubt"], ["a", "curiosity"], ["a", "confusion"], ["a", "certainty"]],
+ ["feeling", "emerging", "you", "experience emotion", ["a", "joy"], ["a", "sorrow"], ["a", "peace"], ["anger"], ["a", "fear"], ["a", "love"]],
+ ["desire", "growing", "you", "seek fulfillment", ["a", "want"], ["a", "need"], ["a", "greed"], ["a", "longing"], ["a", "craving"], ["a", "satisfaction"]],
+ ["fear", "creeping", "you", "face uncertainty", ["a", "doubt"], ["a", "panic"], ["a", "courage"], ["anxiety"], ["a", "terror"], ["a", "bravery"]],
+ ["love", "blooming", "you", "connect with others", ["a", "compassion"], ["empathy"], ["an", "understanding"], ["a", "kindness"], ["a", "care"], ["affection"]],
+ ["anger", "flaming", "you", "confront frustration", ["a", "rage"], ["a", "resentment"], ["a", "forgiveness"], ["an", "irritation"], ["a", "fury"], ["a", "calm"]],
+ ["peace", "settling", "you", "find tranquility", ["a", "calm"], ["a", "serenity"], ["a", "harmony"], ["a", "silence"], ["a", "stillness"], ["a", "contentment"]]
+]
+super(model.map((row, i) => new T\`https://topic\${{
+ "index.txt": "" + i,
+ "base.uri": "https://decision.core.parts",
+ "constructor.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
+}}.choice.k1.model.editor.kireji.io\`()))
+this.model = model
+console.log(this)`,
+   // =============================================================================================================================================================================
+   "https://thingdo.k1.model.editor.kireji.io/base.uri": "https://decision.core.parts",
+   "https://thingdo.k1.model.editor.kireji.io/constructor.js": `super(new Array(10).fill(0).map((_, i) => new T\`https://a\${{
+ "index.txt": "" + i,
+ "base.uri": "https://adjectives.b2.model.editor.kireji.io"
+}}.b3.model.editor.kireji.io\`())))`,
+   // =============================================================================================================================================================================
+   "https://adjectives.b3.model.editor.kireji.io/base.uri": "https://decision.core.parts",
+   "https://adjectives.b3.model.editor.kireji.io/constructor.js": `super(["empty", "https://adjectives.b2.model.editor.kireji.io", "a2", "a3"])`,
+   "https://adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
+this.container = this.controller.container`,
+   // =============================================================================================================================================================================
+   "https://a2.adjectives.b3.model.editor.kireji.io/base.uri": "https://composite.core.parts",
+   "https://a2.adjectives.b3.model.editor.kireji.io/constructor.js": `super(new Array(2).fill(0).map((_, i) => new T\`https://a\${{
+ "index.txt": "" + i,
+ "base.uri": "https://adjectives.b2.model.editor.kireji.io"
+}}.b3.model.editor.kireji.io\`()))`,
+   "https://a2.adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
+this.container = this.controller.container`,
+   // =============================================================================================================================================================================
+   "https://a3.adjectives.b3.model.editor.kireji.io/base.uri": "https://composite.core.parts",
+   "https://a3.adjectives.b3.model.editor.kireji.io/constructor.js": `super(new Array(3).fill(0).map((_, i) => new T\`https://a\${{
+"index.txt": "" + i,
+"base.uri": "https://adjectives.b2.model.editor.kireji.io"
+}}.b3.model.editor.kireji.io\`()))`,
+   "https://a3.adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
+this.container = this.controller.container`,
+   // =============================================================================================================================================================================
+   "https://word.model.editor.kireji.io/base.uri": "https://decision.core.parts",
+   "https://word.model.editor.kireji.io/create.js": `console.log(this.controller)
+this.container = this.controller.container.appendChild(document.createElement("span"))
+this.container.setAttribute("data-origin", this.origin)
+this.populate = () => {
+ this.container.innerHTML = this.option.part.origin.slice(8).split(".")[0]
+}`,
+   "https://word.model.editor.kireji.io/checkout.js": `await super.checkout(index)
+this.populate()`,
+   "https://word.model.editor.kireji.io/notify.js": `await super.notify(...sources)
+this.populate()`,
+   "https://word.model.editor.kireji.io/destroy.js": `this.container.remove()`,
+   // =============================================================================================================================================================================
+   "https://adjectives.b2.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
+   "https://adjectives.b2.model.editor.kireji.io/constructor.js": `super([
+ "prime",
+ "pre-origin",
+ "post-origin",
+ "redundant",
+ "added",
+ "reusable",
+ "empty",
+ "hash-stored",
+ "dead",
+ "implicit",
+ "critical",
+ "new",
+ "explicit",
+ "certain",
+ "desirable",
+ "real",
+ "complete",
+ "prior",
+ "non-empty",
+ "straight",
+ "minimum",
+ "executive",
+ "necessary",
+ "required",
+ "intended",
+ "non-zero",
+ "static",
+ "arbitrary",
+ "constructed",
+ "potential",
+ "current",
+ "old",
+ "potential",
+ "cloned",
+ "resulting",
+ "quick",
+ "successive",
+ "various",
+ "large",
+ "unique",
+ "inherent",
+ "physical",
+ "rendered",
+ "partial",
+ "separate",
+ "structural",
+ "locked",
+ "different",
+ "apparent",
+ "overall",
+ "settable",
+ "environmental",
+ "independent",
+ "single",
+ "hybrid",
+ "no-client",
+ "entire-factor",
+ "per-non",
+ "client-side",
+ "initial",
+ "future",
+ "consequential",
+ "outgoing",
+ "incoming",
+ "alternate",
+ "specific",
+ "flaming",
+ "supported",
+ "key-value",
+ "false",
+ "open",
+ "cached",
+ "Missing",
+ "same",
+ "flat",
+ "early",
+ "ready",
+ "previous",
+ "new",
+ "tagged",
+ "signed",
+ "expected",
+ "leading",
+ "Variable-length",
+ "Invalid",
+ "compressed",
+ "extended",
+ "private",
+ "total",
+ "major",
+ "minor",
+ "orig",
+ "hasTransform",
+ "installed",
+ "parsed",
+ "built",
+ "styled",
+ "inheriting",
+ "loaded",
+ "selected",
+ "woff",
+ "noFocus"
+])`,
+   // =============================================================================================================================================================================
+   "https://nouns.b1.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
+   "https://nouns.b1.model.editor.kireji.io/constructor.js": `super([
+ "cars", 
+ "cats", 
+ "dogs", 
+ "birds",
+ "subsets",
+ "factors",
+ "powersets",
+ "poems",
+ "primes",
+ "websites",
+ "menus",
+ "origins",
+ "states",
+ "problems",
+ "components",
+ "results",
+ "documents",
+ "sites",
+ "moments",
+ "goals",
+ "things",
+ "landmines",
+ "designs",
+ "questions",
+ "times",
+ "introductions",
+ "contents",
+ "contrasts",
+ "matters",
+ "facts",
+ "intents",
+ "contexts",
+ "environments",
+ "numbers",
+ "instructions",
+ "classes",
+ "apps",
+ "parts",
+ "arguments",
+ "subparts",
+ "tasks",
+ "branches",
+ "bugs",
+ "offsets",
+ "coefficients",
+ "events",
+ "objects",
+ "signals",
+ "changes",
+ "settings",
+ "data",
+ "flows",
+ "methods",
+ "updates",
+ "schemes",
+ "indices",
+ "inputs",
+ "uris",
+ "RangeErrors",
+ "typenames",
+ "integers",
+ "structures",
+ "representations",
+ "examples",
+ "versions",
+ "computations"
+])`,
+   // =============================================================================================================================================================================
+   "https://verbs.b1.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
+   "https://verbs.b1.model.editor.kireji.io/constructor.js": `super([
+ "jump",
+ "run",
+ "eat",
+ "smile",
+ "must",
+ "look",
+ "perform",
+ "subtract",
+ "change",
+ "rest",
+ "wait",
+ "forget",
+ "step",
+ "leave",
+ "enter",
+ "start",
+ "extend",
+ "showStatus",
+ "assert",
+ "await",
+ "populate",
+ "warn",
+ "have",
+ "construct",
+ "maintain",
+ "compute",
+ "pass",
+ "control",
+ "stop",
+ "repopulate",
+ "check",
+ "consider",
+ "modify",
+ "set",
+ "invert",
+ "integrate",
+ "use",
+ "remove",
+ "craft",
+ "harvest",
+ "provide",
+ "update",
+ "return",
+ "throw",
+ "create",
+ "slice",
+ "replace",
+ "extend",
+ "eval",
+ "log",
+ "appear",
+ "support",
+ "gain",
+ "imagine",
+])`,
    // =============================================================================================================================================================================
    "https://editor.kireji.io/base.uri": "https://composite.core.parts",
-   "https://editor.kireji.io/constructor.js": `super(["picker", ...new Array(17).fill(0).map((_, i) => new T\`https://usage\${{
- "index.txt": "" + i,
- "base.uri": "https://bitmask.core.parts",
- "constructor.js": "super(13)",
-}}.editor.kireji.io\`())])
-this.words = ["", ...D["https://kireji.io/words.array"]]
-this.maxLength = this.words.length
-globalThis.lookup = async haiku => {
- const words = haiku.split(" "), wordParts = this.parts.slice(1)
- for (let i = 0; i < wordParts.length - 1; i++) {
-  const
-   word = words[i] ?? "",
-   index = BigInt(this.words.indexOf(word))
-
-  if (index === -1n) {
-   console.warn('missing word "' + word)
-   continue
-  }
-  await this.parts[i + 1].populate(index)
- }
- this.notify(...wordParts.map(part=>part.origin))
-}`,
-   "https://editor.kireji.io/enter.js": `
-await super.enter()
-this.nodes = {}
+   "https://editor.kireji.io/constructor.js": `super(["model"])`,
+   "https://editor.kireji.io/create.js": `this.nodes = {}
+this.toolbar = this.controller.getNestedToolbar()
 this.controller.styleSheet.replaceSync(\`:host {
  background: silver;
  display: flex;
  flex-flow: row wrap;
  gap: 1ch;
+ font-size: min(5vw, 5vh);
  justify-content: center;
  align-content: center;
- padding: min(5vh, 5vw);
- box-sizing: border-box;
- font-size: 24px;
 }
-#controls {
- position: fixed;
- display: flex;
- box-shadow: 0px 2px 7px #0002;
- font-size: 18px;
- line-height: 36px;
- border-radius: 24px;
- touch-action: manipulation;
- padding: 10px;
- width: fit-content;
- height: fit-content;
-}
-#controls > button {
- border: none;
- border-radius: 16px;
- background: #11aa34;
- padding: 0 10px;
- color: white;
- cursor: pointer;
-}
-#controls > button:after {
- content: "";
- position: absolute;
- top: -5vw;
- bottom: -5vw;
- left: -5vw;
- right: -5vw;
-}
-#controls > button:hover {
- transform: scale(1.2);
-}
-@media only screen and (max-width: 600px) {
- #controls {
-  top: unset;
-  left: unset;
-  bottom: 5vw;
-  left: 5vw;
- }
-}
-div:empty:not(.line-break) {
- display: none;
-}
-.line-break {
- min-width: 100vw;
+:host > p {
+ width: 55%;
+ text-align: center;
+ margin: 0;
 }\`)
-for (const part of this.parts) this.nodes[part.origin] = this.controller.container.appendChild(document.createElement(\`div\`))
-const
- controlBar = this.controller.container.appendChild(document.createElement("menu")),
- randomButton = controlBar.appendChild(document.createElement("button")),
- sizeString = this.size.toString(2),
- bitDepth = sizeString.length
-controlBar.setAttribute("id", "controls")
-randomButton.innerHTML = "🍀 Random"
-randomButton.onclick = () => {
- let i = bitDepth, bin = "0b"
- while (i--) bin += Math.trunc(Math.random() * 2)
- this.goto(BigInt(bin) % this.size)
-}`,
-   "https://editor.kireji.io/populate.js": `
-await super.populate(index)
-for (const origin in this.factors) {
- const node = this.nodes[origin], part = this.factors[origin].part
- if (node.indexCache !== part.index) {
-  node.indexCache = part.index
-  if (part.index > this.maxLength) {
-   node.textContent = \`\`
-   console.warn('goto the coming soon page! - via an ultimate empty partition of space!')
-   continue
-  }
-  const word = this.words[Number(part.index)]
-  if (word === "<br>") {
-   node.setAttribute("class", "line-break")
-   node.innerHTML = ""
-  } else {
-   if (node.hasAttribute("class")) node.removeAttribute("class")
-   node.innerHTML = word
-  }
- }
-}`,
+this.container = this.controller.container`,
    // =============================================================================================================================================================================
    "https://ejaugust.com/base.uri": "https://menu.core.parts",
    "https://ejaugust.com/constructor.js": `super("error404")`,
@@ -137,9 +465,9 @@ for (const origin in this.factors) {
 #toolbar > h1 {
  display: none
 }`,
-   "https://graph.error404.ejaugust.com/inputs.txt": `asciiGraph`,
-   "https://graph.error404.ejaugust.com/base.uri": `https://decision.core.parts`,
-   "https://graph.error404.ejaugust.com/populate.js": `await super.populate(index)
+   "https://graph.error404.ejaugust.com/inputs.txt": "asciiGraph",
+   "https://graph.error404.ejaugust.com/base.uri": "https://decision.core.parts",
+   "https://graph.error404.ejaugust.com/render.js": `await super.render()
 const
  ln = this.option.i,
  col = this.option.part.option.i
@@ -162,7 +490,7 @@ this.controller.graphNode.innerHTML = lines.join("\\n")`,
  "base.uri": "https://decision.core.parts",
  "constructor.js": \`super(new Array(80).fill(0).map((_, i) => "char" + i))\`,
 }}.graph.error404.ejaugust.com\`()))`,
-   "https://graph.error404.ejaugust.com/enter.js": `if (!this.ascii) {
+   "https://graph.error404.ejaugust.com/create.js": `if (!this.ascii) {
  this.ascii ??= D[this.origin + "/ascii.txt"]
  this.oldOrigin ??= this.controller.parts[(this.i || this.controller.parts.length) - 1].origin
  this.oldAscii ??= D[this.oldOrigin + "/ascii.txt"]
@@ -496,7 +824,7 @@ this.controller.graphNode.innerHTML = lines.join("\\n")`,
                 ╭Thus,┄I┄have┄decided┄to┄change┄empty┄from┄a┄p╮                 
                 │But wait ... we should not forget that the em│                 
                 │The goal the empty document accomplished for │                 
-                │1. We leave the empty state the moment we boo│                 
+                │1. We destroy the empty state the moment we b│                 
                 │2. The "empty" state isn't empty; at a minimu│                 
                 │The reason this is so is because the empty st│                 
                 │We can *never* undo certain things once we've│                 
@@ -564,7 +892,7 @@ this.controller.graphNode.innerHTML = lines.join("\\n")`,
    // =============================================================================================================================================================================
    "https://error404.ejaugust.com/base.uri": "https://decision.core.parts",
    "https://error404.ejaugust.com/constructor.js": `super(new Array(15).fill(0).map((_, i) => "graph" + i))`,
-   "https://error404.ejaugust.com/enter.js": `const
+   "https://error404.ejaugust.com/create.js": `const
  lightColor = D["https://core.parts/light.color"],
  darkColor = D["https://core.parts/dark.color"]
 
@@ -603,17 +931,12 @@ this.controller.container.innerHTML = \`<h1>404</h1><p>Not found.</p>\`
 this.graphNode = this.controller.container.appendChild(document.createElement("pre"))
 
 const loop = () => {
- // const phase = BigInt(Math.trunc(Date.now())), bigFactor = BigInt(((Math.sin(Date.now() / 100000) + 1) / 2).toFixed(32).slice(2))
- // this.goto(phase % this.size)
- // this.goto((bigFactor * this.size) / (10n ** 32n))
  const x = BigInt(Date.now()), q = this.parts[0].size, p = 10n, max = (...args) => args.reduce((m, e) => e > m ? e : m)
  this.goto(((x/q)*q+max(0n,(x%q)*p-q*(p-1n))) % this.size)
  requestAnimationFrame(loop)
 }
-requestAnimationFrame(loop)
-
-await super.enter()`,
-   "https://error404.ejaugust.com/leave.js": `await super.leave()
+requestAnimationFrame(loop)`,
+   "https://error404.ejaugust.com/destroy.js": `await super.destroy()
    this.container.innerHTML = ""
    this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
@@ -627,7 +950,7 @@ await super.enter()`,
  display: none
 }`,
    // =============================================================================================================================================================================
-   "https://error404.orenjinari.com/enter.js": `const
+   "https://error404.orenjinari.com/create.js": `const
  lightColor = D["https://core.parts/light.color"],
  darkColor = D["https://core.parts/dark.color"]
 
@@ -652,44 +975,25 @@ h1, p {
 
 this.controller.container.innerHTML = \`<h1>404</h1>
 <p>Page not found... perhaps elsewhere</p>
-<img id=img404 src="404.png">\`
-
-await super.enter()`,
-   "https://error404.orenjinari.com/leave.js": `await super.leave()
+<img id=img404 src="404.png">\``,
+   "https://error404.orenjinari.com/destroy.js": `await super.destroy()
    this.container.innerHTML = ""
 this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
 
    // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.89.3",
+   "https://core.parts/version.txt": "0.90.0",
    "https://core.parts/logging.txt": "false",
    "https://core.parts/verbose.txt": "false",
    "https://core.parts/light.color": "#faf9f8",
    "https://core.parts/dark.color": "#1f2023",
    // =============================================================================================================================================================================
-   "https://base.core.parts/constructor.js": `this.index = -1n
-this.size = 1n`,
-   "https://base.core.parts/enter.js": "",
-   "https://base.core.parts/populate.js": `if (this.index !== index) {
- if (index < -1n || index >= this.size) {
-  halt()
-  console.error(new RangeError(\`index \${index} out of range (size \${this.size}): \${this.origin}\`))
-  index = 0n
- }
- if (this.index === -1n) await this.enter()
- this.index = index
-}`,
-   "https://base.core.parts/leave.js": `this.index = -1n`,
-   "https://base.core.parts/notify.js": `this.controller?.notify(this.origin)`,
-   "https://base.core.parts/goto.js": `
-await this.populate(index)
-this.controller?.notify(this.origin)`,
-   // =============================================================================================================================================================================
-   "https://composite.core.parts/inputs.txt": `parts`,
+   "https://composite.core.parts/inputs.txt": `factors`,
    "https://composite.core.parts/constructor.js": `super()
-const units = (this.units = [1n])
+if (!factors) throw new RangeError(\`missing constructor input: "factors" (\${this.origin})\`)
+const units = this.units = [1n]
 this.factors = {}
-this.parts = parts.reduceRight((parts, part, i) => {
+this.parts = factors.reduceRight((parts, part, i) => {
  if (typeof part === "string") part = part.startsWith("https://") ? new (T([part]))() : new (T([\`https://\${part}.\${this.origin.slice(8)}\`]))()
  if (!(part instanceof T\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of composite \${this.origin}\`)
  if (part.origin in this.factors) throw new RangeError(\`duplicate part \${part.origin} in composite \${this.origin}\`)
@@ -701,24 +1005,24 @@ this.parts = parts.reduceRight((parts, part, i) => {
  return parts
 }, [])
 this.size = this.units.shift()`,
-   "https://composite.core.parts/populate.js": `await super.populate(index)
-for (let x = 0; x < this.units.length; x++) {
-const
- part = this.parts[x],
- factor = this.factors[part.origin],
- unit = factor.unit,
- subindex = index / unit
-await part.populate(subindex)
-factor.indexCache = subindex
-index %= unit
+   "https://composite.core.parts/checkout.js": `if (this.index !== index) {
+ await super.checkout(index)
+ for (let x = 0; x < this.units.length; x++) {
+  const
+   part = this.parts[x],
+   factor = this.factors[part.origin],
+   unit = factor.unit,
+   subindex = index / unit
+  await part.checkout(subindex)
+  factor.indexCache = subindex
+  index %= unit
+ }
 }`,
-   "https://composite.core.parts/leave.js": `await super.leave()
-for (const part of this.parts) await part.leave()`,
+   "https://composite.core.parts/destroy.js": `this.index = -1n
+for (const part of this.parts) await part.destroy()`,
    "https://composite.core.parts/notify.js": `for (const source of sources) {
  const
-  factor = this.factors[source]
- if (!factor) console.trace(this, source)
- const
+  factor = this.factors[source],
   { part, indexCache } = factor,
   { index: subindex } = part,
   unit = factor.unit,
@@ -728,17 +1032,18 @@ for (const part of this.parts) await part.leave()`,
  this.index = this.index + deltaIndex
  factor.indexCache = subindex
 }
-super.notify(...sources)`,
+await super.notify(...sources)`,
    // =============================================================================================================================================================================
-   "https://bitmask.core.parts/inputs.txt": `length`,
+   "https://bitmask.core.parts/inputs.txt": "length",
    "https://bitmask.core.parts/constructor.js": `super()
 this.size = 2n ** BigInt(length)`,
    // =============================================================================================================================================================================
-   "https://decision.core.parts/inputs.txt": `parts`,
+   "https://decision.core.parts/inputs.txt": "parts",
    "https://decision.core.parts/constructor.js": `super()
 let offset = 0n
 this.size = 0n
 this.options = {}
+if (!parts || !parts.length) throw new RangeError(\`a decision must have at least 1 option (\${this.origin})\`)
 this.parts = parts.map((part, i) => {
  if (typeof part === "string") part = part.startsWith("https://") ? new (T([part]))() : new (T([\`https://\${part}.\${this.origin.slice(8)}\`]))()
  if (!(part instanceof T\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof e} encountered at part = \${i} of decision \${this.origin}\`)
@@ -749,60 +1054,30 @@ this.parts = parts.map((part, i) => {
  part.i = i
  return part
 })`,
-   "https://decision.core.parts/populate.js": `if (this.index !== index || this.repopulate) {
- await super.populate(index)
+   "https://decision.core.parts/checkout.js": `if (this.index !== index) {
+ await super.checkout(index)
  for (const part of this.parts) {
   if (index < part.size) {
    if (this.option?.part !== part) {
-    await this.option?.part?.leave()
+    await this.option?.part?.destroy()
     this.option = this.options[part.origin]
-    // await part.enter()
-    await part.populate(index)
-   } else await part.populate(index)
+    await part.checkout(index)
+   } else await part.checkout(index)
    break
   }
   index -= part.size
  }
 }`,
-   "https://decision.core.parts/leave.js": `await super.leave()
-await this.option?.part?.leave()
+   "https://decision.core.parts/destroy.js": `await super.destroy()
+await this.option?.part?.destroy()
 delete this.option`,
-   "https://decision.core.parts/notify.js": `console.log("notified decision", this.option)
-this.index = this.option.offset + this.option.part.index
-super.notify(...sources)`,
+   "https://decision.core.parts/notify.js": `this.index = this.option.offset + this.option.part.index
+await super.notify(...sources)`,
    // =============================================================================================================================================================================
-   "https://boot.core.parts/base.uri": "https://decision.core.parts",
-   "https://boot.core.parts/constructor.js": `const _ = globalThis
-
-_.IS_DEV_HOST = location.host.startsWith("dev.")
-_.APP_HOST = location.host.slice(4 * IS_DEV_HOST)
-_.HOST_PREFIX = IS_DEV_HOST ? "dev." : ""
-_.APP_SHORT_NAME = APP_HOST.slice(0, -1 - APP_HOST.split(".").at(-1).length)
-_.E = _.constructor === _.Window ? "client" : "server"
-_.ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_"
-_.encode = index => {
- const hexads = [],
-  binaryString = index.toString(2),
-  newLength = Math.ceil(binaryString.length / 6),
-  fullbin = binaryString.padStart(newLength * 6, 0)
- for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
- return "#" + hexads.reduce((hash, hexad) => hash + ALPHABET[parseInt(hexad, 2)], "")
-}
-_.decode = hash => {
- let binaryString = "0b"
- for (let i = 1; i < hash.length; i++) binaryString += ALPHABET.indexOf(hash[i]).toString(2).padStart(6, 0)
- return BigInt(binaryString)
-}
-
-super(["server", "client"])
-this.option = this.options[\`https://\${E}.boot.core.parts\`]
-this.index = this.option.offset
-this.option.part.enter()`,
-   // =============================================================================================================================================================================
-   "https://server.boot.core.parts/enter.js": `
+   "https://server.core.parts/create.js": `
 const cache = {},
    boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
-  globalThis.onfetch = e => {
+  _.onfetch = e => {
    // TODO: detect and throw error on any cross-deployment-stage resource fetches.
    const { pathname, host, origin } = new URL(e.request.url),
     isDevHost = host.startsWith("dev."),
@@ -982,16 +1257,14 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
    }
    e.respondWith(cache[cacheKey].clone())
   }
-  globalThis.oninstall = e => globalThis.skipWaiting()
-  globalThis.onactivate = e => globalThis.clients.claim()
-  globalThis.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()`,
+  _.oninstall = e => _.skipWaiting()
+  _.onactivate = e => _.clients.claim()
+  _.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()`,
    // =============================================================================================================================================================================
-   "https://client.boot.core.parts/base.uri": "https://decision.core.parts",
-   "https://client.boot.core.parts/constructor.js": `super(["https://fallback.cloud", "https://orenjinari.com", "https://ejaugust.com", "https://kireji.io"])`,
-   "https://client.boot.core.parts/enter.js": `// await super.enter()
-
-console.log(this.option)
-const 
+   "https://app.core.parts/base.uri": "https://composite.core.parts",
+   "https://app.core.parts/create.js": `
+info("An application exists but it doesn't do anything. Setting up universal application events and variables.")
+const
  n = navigator,
  a = n.userAgent,
  c = n.serviceWorker,
@@ -999,22 +1272,28 @@ const
  isMac = a.indexOf("Mac") > -1,
  throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
 
-if (c) {
+ if (c) {
+ info("Installing serviceworker...")
  const reg = await c.register(location.origin + "/server.js"),
   sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
  c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
  c.oncontrollerchange = c.onmessage = () => location.reload()
  document.querySelector('[rel="manifest"]').href = location.origin + "/manifest.json"
  addEventListener("focus", () => reg.update().catch(() => location.reload()))
+ info("Installing serviceworker... Done.")
 }
 
 if (g) {
- GPU = await (await g.requestAdapter()).requestDevice()
+ info("Installing GPU...")
+ _.GPU = await (await g.requestAdapter()).requestDevice()
+ info("Installing GPU... Done.")
 }
 
-this.styleSheet = new CSSStyleSheet()
-document.adoptedStyleSheets.push(this.styleSheet)
+info("Creating global style sheet.")
+this.globalStyleSheet = new CSSStyleSheet()
+document.adoptedStyleSheets.push(this.globalStyleSheet)
 
+info("Adding undo/redo keyboard shortcuts.")
 let
  contextKeysDown = 0,
  shiftKeysDown = 0
@@ -1042,15 +1321,14 @@ onkeydown = e => {
  e.preventDefault()
 }
 
-let 
- fps = 1,
+info("Listening for externally-triggered navigation.")
+
+let
  addressbarIndex,
- animationFrameID,
  throttleStartTime,
- meanFrameTime = 1000,
  time = performance.now()
 
-onhashchange = () => {
+_.onhashchange = () => {
  let { pathname, search, hash, origin } = location
  if (pathname !== "/" || search || !hash || hash.length <= 1) history.replaceState({}, null, \`\${origin}/\${hash ||= "#0"}\`)
  this.documentIndex = decode(hash)
@@ -1059,45 +1337,47 @@ onhashchange = () => {
  throttleStartTime = time
 }
 
-const loop = now => {
+info("Creating the game loop.")
+let
+ animationFrameID,
+ meanFrameTime = 1000,
+ fps = 1
+
+_.halt = () => {
+ cancelAnimationFrame(animationFrameID)
+}
+
+_.loop = now => {
  fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
  time = now
  if (time - throttleStartTime >= throttleDuration && addressbarIndex !== this.documentIndex) {
   const hash = encode(this.documentIndex)
   history.pushState({}, null, hash)
-
   addressbarIndex = this.documentIndex
   throttleStartTime = time
  }
- if(this.option.part.index !== this.documentIndex) {
-  this.option.part.goto(this.documentIndex)
- }
+ if(this.index !== this.documentIndex) this.goto(this.documentIndex)
  animationFrameID = requestAnimationFrame(loop)
 }
 
+info("Retroactively handling initial navigation.")
 onhashchange()
-this.index = Infinity
-this.appOrigin = \`https://\${APP_HOST}\`
-globalThis.halt = () => cancelAnimationFrame(animationFrameID)
-if (this.appOrigin in this.options) {
- const { part: originPart, offset: originOffset, i: originPartIndex } = this.options[this.appOrigin]
- if (originPart.paths) {
-   const { part: pathPart, offset: pathOffset } = originPart.paths[location.pathname]
-   await this.populate(originOffset + pathOffset + this.documentIndex)
- } else await this.populate(originOffset + this.documentIndex)
-} else {
- await this.populate(this.options["https://fallback.cloud"].offset)
-}
-loop()`,
-   "https://client.boot.core.parts/notify.js": `super.notify(...sources)
-this.documentIndex = this.option.part.index`,
+this.index = Infinity`,
+   "https://app.core.parts/destroy.js": `throw new Error("a client application cannot be destroyed")`,
+   "https://app.core.parts/notify.js": `await super.notify(...sources)
+this.documentIndex = this.index`,
    // =============================================================================================================================================================================
-   "https://menu.core.parts/base.uri": "https://composite.core.parts",
+   "https://menu.core.parts/base.uri": "https://app.core.parts",
    "https://menu.core.parts/inputs.txt": "application",
    "https://menu.core.parts/constructor.js": `
 super(["https://sidebar.menu.core.parts", "https://colormode.core.parts", application])
 this.apps = ["kireji.io", "core.parts", "orenjinari.com", "ejaugust.com", "fallback.cloud", "glowstick.click", "ejaugust.github.io"]`,
-   "https://menu.core.parts/enter.js": `const 
+   "https://menu.core.parts/create.js": `
+info("A menu-based application now exists but it lacks the core application functionality. Creating the base behavior.")
+await super.create()
+
+info("A menu-based application now exists but it is displaying a blank document. Rendering the persistent menu.")
+const
  containerHost = document.body.appendChild(document.createElement("main")),
  toolbar = document.body.appendChild(document.createElement("nav")),
  menuButton = toolbar.appendChild(document.createElement("button")),
@@ -1108,7 +1388,16 @@ this.apps = ["kireji.io", "core.parts", "orenjinari.com", "ejaugust.com", "fallb
 containerHost.tabIndex = 1
 menuButton.innerText = "≡"
 this.menuButton = menuButton
-this.clientStyleSheet = this.controller.styleSheet
+this.toolbar = toolbar
+this.getNestedToolbar = () => {
+ if (!this.nestedToolbar) {
+  this.nestedToolbar ??= document.createElement("menu")
+  spacer.before(this.nestedToolbar)
+  this.nestedToolbar.setAttribute("id", "nested")
+  this.getNestedToolbar = () => this.nestedToolbar
+ }
+ return this.nestedToolbar
+}
 spacer.setAttribute("class", "spacer")
 toolbar.setAttribute("id", "toolbar")
 homeButton.innerHTML = \`<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg /><span class=label>\${APP_SHORT_NAME}</span>\`
@@ -1231,7 +1520,7 @@ for (let i = 0; i < this.apps.length; i++) {
   appParts = appname.split(".").slice(0, -1),
   shortName = appParts.join(" "),
   appNode = appList.appendChild(document.createElement("li"))
- appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${shortName}</span>\`
+ appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${appname}</span>\`
  this.appNodes[appname] = appNode
  appNode.onclick = () => {
   if (APP_HOST !== appname) {
@@ -1249,10 +1538,10 @@ for (let i = 0; i < this.apps.length; i++) {
       { unit: remoteUnit } = partPerSe.factors[origin]
      index += localIndex * remoteUnit
     }
-    if (appname === "ejaugust.github.com") location = "https://" + appname + encode(index)
+    if (appname === "ejaugust.github.io") location = "https://" + appname + encode(index)
     else location = "https://" + HOST_PREFIX + appname + encode(index)
    } else {
-    if (appname === "ejaugust.github.com") location = "https://" + appname
+    if (appname === "ejaugust.github.io") location = "https://" + appname
     else location = "https://" + HOST_PREFIX + appname
    }
   }
@@ -1262,71 +1551,60 @@ this.appNodes[APP_HOST]?.setAttribute("data-selected", "true")
 this.sidebar.tabIndex = 1
 this.container = containerHost.attachShadow({ mode: "closed" })
 this.container.adoptedStyleSheets.push(this.styleSheet)
-document.title = APP_SHORT_NAME
-/*await super.enter()*/`,
-   "https://menu.core.parts/populate.js": `await super.populate(index)
-this.pin()`,
-   "https://menu.core.parts/leave.js": `await super.leave()
+document.title = APP_SHORT_NAME`,
+   // "https://menu.core.parts/...": `this.pin()`,
+   "https://menu.core.parts/destroy.js": `await super.destroy()
 document.body.innerHTML = ""`,
-   "https://menu.core.parts/notify.js": `super.notify(...sources)
-this.pin()`,
    // =============================================================================================================================================================================
    "https://sidebar.menu.core.parts/base.uri": "https://decision.core.parts",
    "https://sidebar.menu.core.parts/constructor.js": `super(["closed", "introduce", "open", "dismiss"])`,
-   "https://sidebar.menu.core.parts/enter.js": `this.button = this.controller.menuButton
-this.sidebar = this.controller.sidebar
-await super.enter()`,
+   "https://sidebar.menu.core.parts/create.js": `this.button = this.controller.menuButton
+this.sidebar = this.controller.sidebar`,
    // =============================================================================================================================================================================
-   "https://closed.sidebar.menu.core.parts/enter.js": `this.sidebar = this.controller.sidebar
+   "https://closed.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
 this.button = this.controller.button
 this.button.onclick = async () => {
  await this.controller.goto(1n)
 }
-this.sidebar.setAttribute("style", "--sidebar-tween: 0")
-await super.enter()`,
-   "https://closed.sidebar.menu.core.parts/leave.js": `await super.leave()
+this.sidebar.setAttribute("style", "--sidebar-tween: 0")`,
+   "https://closed.sidebar.menu.core.parts/destroy.js": `await super.destroy()
 if (document.activeElement === this.sidebar) this.sidebar.blur()
 this.button.onclick = undefined
 this.sidebar.removeAttribute("style")`,
    // =============================================================================================================================================================================
    "https://introduce.sidebar.menu.core.parts/base.uri": "https://decision.core.parts",
    "https://introduce.sidebar.menu.core.parts/constructor.js": `super(["half"])`,
-   "https://introduce.sidebar.menu.core.parts/enter.js": `this.sidebar = this.controller.sidebar
+   "https://introduce.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
 this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
 requestAnimationFrame(() => {
  this.controller.goto(2n)
-})
-await super.enter()`,
-   "https://introduce.sidebar.menu.core.parts/leave.js": `await super.leave()
+})`,
+   "https://introduce.sidebar.menu.core.parts/destroy.js": `await super.destroy()
 this.sidebar.removeAttribute("style")`,
    // =============================================================================================================================================================================
-   "https://open.sidebar.menu.core.parts/enter.js": `this.sidebar = this.controller.sidebar
+   "https://open.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
 this.sidebar.focus()
 this.sidebar.onblur = () => {
  this.controller?.goto(3n)
 }
-this.sidebar.setAttribute("style", "--sidebar-tween: 1")
-await super.enter()`,
-   "https://open.sidebar.menu.core.parts/leave.js": `await super.leave()
+this.sidebar.setAttribute("style", "--sidebar-tween: 1")`,
+   "https://open.sidebar.menu.core.parts/destroy.js": `await super.destroy()
 if (document.activeElement === this.sidebar) this.sidebar.blur()
 this.sidebar.onblur = undefined
 this.sidebar.removeAttribute("style")`,
    // =============================================================================================================================================================================
    "https://dismiss.sidebar.menu.core.parts/base.uri": "https://decision.core.parts",
    "https://dismiss.sidebar.menu.core.parts/constructor.js": `super(["half"])`,
-   "https://dismiss.sidebar.menu.core.parts/enter.js": `this.sidebar = this.controller.sidebar
+   "https://dismiss.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
 this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
-// this is how one animation frame plays into the next
-requestAnimationFrame(() => this.controller.goto(0n))
-await super.enter()`,
-   "https://dismiss.sidebar.menu.core.parts/leave.js": `await super.leave()
+requestAnimationFrame(() => this.controller.goto(0n))`,
+   "https://dismiss.sidebar.menu.core.parts/destroy.js": `await super.destroy()
 this.sidebar.removeAttribute("style")`,
    // =============================================================================================================================================================================
    "https://fallback.cloud/base.uri": "https://menu.core.parts",
    "https://fallback.cloud/constructor.js": `super("error503")`,
    // =============================================================================================================================================================================
-   "https://error503.fallback.cloud/enter.js": `this.styleSheet = this.controller.styleSheet
-
+   "https://error503.fallback.cloud/create.js": `this.styleSheet = this.controller.styleSheet
 const
  lightColor = D["https://core.parts/light.color"],
  darkColor = D["https://core.parts/dark.color"],
@@ -1388,24 +1666,26 @@ this.container = this.controller.container
 this.container.innerHTML = \`<h1>503</h1>
 <span id=float>
 <img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg><span class=thin>\${APP_SHORT_NAME}</span><span>is coming soon.</span>
-</span>\`
-await super.enter()`,
-   "https://error503.fallback.cloud/leave.js": `await super.leave()
+</span>\``,
+   "https://error503.fallback.cloud/destroy.js": `await super.destroy()
    this.container.innerHTML = ""
    this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
    "https://colormode.core.parts/base.uri": "https://decision.core.parts",
    "https://colormode.core.parts/constructor.js": `super(["device", "light", "dark"])`,
-   "https://colormode.core.parts/populate.js": `await super.populate(index)
-const
+   "https://colormode.core.parts/create.js": "this.styleSheet = this.controller.globalStyleSheet",
+   "https://device.colormode.core.parts/base.uri": "https://option.colormode.core.parts",
+   "https://light.colormode.core.parts/base.uri": "https://option.colormode.core.parts",
+   "https://dark.colormode.core.parts/base.uri": "https://option.colormode.core.parts",
+   // =============================================================================================================================================================================
+   "https://option.colormode.core.parts/create.js": `const
  lightColor = D["https://core.parts/light.color"],
  darkColor = D["https://core.parts/dark.color"],
- isLight = this.option.origin !== "https://dark.colormode.core.parts",
+ isLight = this.origin !== "https://dark.colormode.core.parts",
  background = isLight ? lightColor : darkColor,
  color = isLight ? darkColor : lightColor,
  custom = D[\`\${this.controller.origin}/style.css\`] ?? ""
-
-this.controller.clientStyleSheet.replaceSync(\`html, body {
+this.controller.styleSheet.replaceSync(\`html, body {
   position: relative;
  --sidebar-tween: 0;
  --sidebar-width: 256px;
@@ -1515,6 +1795,9 @@ body > main {
 #apps {
  flex: 0 !important;
  min-height: min-content !important;
+}
+#pins {
+ display: none;
 }
 #pins li {
  display: flex;
@@ -1644,6 +1927,12 @@ body > main {
 #toolbar > .spacer {
  flex: 1;
 }
+#nested {
+ line-height: 29px;
+ margin: 16px;
+ display: flex;
+ gap: 6px;
+}
 @media (display-mode: window-controls-overlay) {
  #toolbar {
   padding-left: env(titlebar-area-x, 0);
@@ -1662,31 +1951,50 @@ body > main {
 }
 \${custom}\`)`,
   },
+  _ = globalThis,
+  IS_DEV_HOST = location.host.startsWith("dev."),
+  APP_HOST = location.host.slice(4 * IS_DEV_HOST),
+  HOST_PREFIX = IS_DEV_HOST ? "dev." : "",
+  APP_SHORT_NAME = APP_HOST.slice(0, -1 - APP_HOST.split(".").at(-1).length),
+  ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
+  encode = index => {
+   const hexads = [],
+    binaryString = index.toString(2),
+    newLength = Math.ceil(binaryString.length / 6),
+    fullbin = binaryString.padStart(newLength * 6, 0)
+   for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
+   return "#" + hexads.reduce((hash, hexad) => hash + ALPHABET[parseInt(hexad, 2)], "")
+  },
+  decode = hash => {
+   let binaryString = "0b"
+   for (let i = 1; i < hash.length; i++) binaryString += ALPHABET.indexOf(hash[i]).toString(2).padStart(6, 0)
+   return BigInt(binaryString)
+  },
+  info = (...args) => (L ? console.info(`[${E}]`, ...args) : null),
   L = D["https://core.parts/logging.txt"] === "true",
   V = D["https://core.parts/verbose.txt"] === "true",
+  E = _.constructor === _.Window ? "client" : "server",
   𝕋 = {},
   T = (a, b, origin = b ? a.join(b["index.txt"] ?? "") : a[0]) =>
    (𝕋[origin] ??= eval(
-    `(class ${origin.slice(8).replaceAll(".", "_")}${
+    `(class ${origin.slice(8).replaceAll(".", "_").replaceAll("-", "___")}${
      origin === "https://base.core.parts" ? "" : ` extends T\`${b?.["base.uri"] ?? (D[`${origin}/base.uri`] || "https://base.core.parts")}\``
     } {\n get origin() { return "${origin}" }\n ${[
      ["constructor", (b?.[`inputs.txt`] ?? D[`${origin}/inputs.txt`] ?? "").replaceAll(/\s+/g, ", "), 1],
-     ["notify", "...sources", 1],
-     ["enter"],
-     ["populate", "index"],
-     ["leave"],
+     ["notify", "...sources"],
+     ["create"],
+     ["checkout", "index"],
+     ["destroy"],
      ["goto", "index"],
     ]
-     .map(([ƒ, x = "", s], i) =>
+     .map(([ƒ, x = ""], i) =>
       b?.[`${ƒ}.js`] || `${origin}/${ƒ}.js` in D || (L && V)
-       ? `${s ? "" : "async "}${ƒ}(${x}) {${
-          L && (V || origin !== "https://base.core.parts")
-           ? `\n  console.group(\`\${globalThis.E??"empty"}${i === 0 ? `` : ` | \${this.origin} | \${this.index}`} | ${origin} --> ${ƒ}(${
-              [3, 5].includes(i) ? "${index}" : x
-             })\`);\n  `
+       ? `${i === 0 ? "" : "async "}${ƒ}(${x}) {${
+          L && (V || i !== 0)
+           ? `\n  console.group(\`[${E}] ${i === 0 ? `` : ` | \${this.origin} | \${this.index}`} | ${origin} --> ${ƒ}(${[3, 5].includes(i) ? "${index}" : x})\`);\n  `
            : ""
-         }${b?.[`${ƒ}.js`] ?? D[`${origin}/${ƒ}.js`] ?? `${s ? "" : "await "}super${i === 0 ? "" : "." + ƒ}(${x})`}${
-          L && (V || origin !== "https://base.core.parts") ? `\n  ;console.groupEnd()` : ""
+         }${b?.[`${ƒ}.js`] ?? D[`${origin}/${ƒ}.js`] ?? `${i === 0 ? "" : "await "}super${i === 0 ? "" : "." + ƒ}(${x})`}${
+          L && (V || i !== 0) ? `\n  ;console.groupEnd()` : ""
          }\n }`
        : "",
      )
