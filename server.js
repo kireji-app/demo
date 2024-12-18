@@ -48,6 +48,8 @@ info("Process ends here.", this)`,
    // =============================================================================================================================================================================
    "https://model.editor.kireji.io/base.uri": "https://decision.core.parts",
    "https://model.editor.kireji.io/constructor.js": `super(["b1", "b2", "b3", "k1"])`,
+   "https://model.editor.kireji.io/destroy.js": `this.container.innerHTML = ""
+await super.destroy()`,
    "https://model.editor.kireji.io/create.js": `this.toolbar = this.controller.toolbar
 this.container = this.controller.container
 this.label = this.toolbar.appendChild(document.createElement("label"))
@@ -55,7 +57,7 @@ this.select = this.toolbar.appendChild(document.createElement("select"))
 this.label.innerHTML = "Grammar model:"
 for (const model of this.parts) {
  const option = this.select.appendChild(document.createElement("option"))
- option.innerHTML = model.polynomial
+ option.innerHTML = model.name
 }
 this.select.onchange = () => {
  this.goto(this.options[this.parts[this.select.selectedIndex].origin].offset)
@@ -105,6 +107,8 @@ this.populate = () => {
   [ ba, bb, aa, ab ] = row
  this.container.innerHTML = \`<p>\${aa} \${ab} and there is \${observation.join(" ")}</p><p>what is the \${observation.at(-1)} of one \${ba} \${bb}?</p>\`
 }`,
+   "https://k1.model.editor.kireji.io/destroy.js": `await super.destroy()
+this.container.innerHTML = ""`,
    "https://k1.model.editor.kireji.io/constructor.js": `super("koan-001", "??? koan 1", ["choice"])`,
    "https://k1.model.editor.kireji.io/checkout.js": `await super.checkout(index)
 this.populate()`,
@@ -179,7 +183,7 @@ this.container = this.controller.container`,
  "base.uri": "https://adjectives.b2.model.editor.kireji.io"
 }}.b3.model.editor.kireji.io\`()))`,
    "https://a2.adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
-this.container = this.controller.container`,
+this.container = this.controller.container.appendChild(document.createElement("span"))`,
    // =============================================================================================================================================================================
    "https://a3.adjectives.b3.model.editor.kireji.io/base.uri": "https://composite.core.parts",
    "https://a3.adjectives.b3.model.editor.kireji.io/constructor.js": `super(new Array(3).fill(0).map((_, i) => new T\`https://a\${{
@@ -190,7 +194,7 @@ this.container = this.controller.container`,
 this.container = this.controller.container`,
    // =============================================================================================================================================================================
    "https://word.model.editor.kireji.io/base.uri": "https://decision.core.parts",
-   "https://word.model.editor.kireji.io/create.js": `console.log(this.controller)
+   "https://word.model.editor.kireji.io/create.js": `
 this.container = this.controller.container.appendChild(document.createElement("span"))
 this.container.setAttribute("data-origin", this.origin)
 this.populate = () => {
@@ -200,7 +204,8 @@ this.populate = () => {
 this.populate()`,
    "https://word.model.editor.kireji.io/notify.js": `await super.notify(...sources)
 this.populate()`,
-   "https://word.model.editor.kireji.io/destroy.js": `this.container.remove()`,
+   "https://word.model.editor.kireji.io/destroy.js": `this.container.remove()
+await super.destroy()`,
    // =============================================================================================================================================================================
    "https://adjectives.b2.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
    "https://adjectives.b2.model.editor.kireji.io/constructor.js": `super([
@@ -440,6 +445,11 @@ this.populate()`,
    "https://editor.kireji.io/constructor.js": `super(["model"])`,
    "https://editor.kireji.io/create.js": `this.nodes = {}
 this.toolbar = this.controller.getNestedToolbar()
+this.toolbar.styleSheet.replaceSync(\`@media (width < 650px) {
+ label {
+  display: none;
+ }
+}\`)
 this.controller.styleSheet.replaceSync(\`:host {
  background: silver;
  display: flex;
@@ -1018,7 +1028,7 @@ this.size = this.units.shift()`,
   index %= unit
  }
 }`,
-   "https://composite.core.parts/destroy.js": `this.index = -1n
+   "https://composite.core.parts/destroy.js": `await super.destroy()
 for (const part of this.parts) await part.destroy()`,
    "https://composite.core.parts/notify.js": `for (const source of sources) {
  const
@@ -1080,7 +1090,7 @@ const cache = {},
   _.onfetch = e => {
    // TODO: detect and throw error on any cross-deployment-stage resource fetches.
    const { pathname, host, origin } = new URL(e.request.url),
-    isDevHost = host.startsWith("dev."),
+    isDevHost = host.startsWith("dev.") || host === "ejaugust.github.io",
     shortname = host
      .split(".")
      .slice(isDevHost ? 1 : 0, -1)
@@ -1383,20 +1393,46 @@ const
  menuButton = toolbar.appendChild(document.createElement("button")),
  homeButton = toolbar.appendChild(document.createElement("h1")),
  spacer = toolbar.appendChild(document.createElement("span")),
- shareButton = toolbar.appendChild(document.createElement("button")),
- fullscreenButton = toolbar.appendChild(document.createElement("button"))
+ shareButton = toolbar.appendChild(document.createElement("button"));
+if (document.fullscreenEnabled) {
+ const fullscreenButton = toolbar.appendChild(document.createElement("button"))
+ fullscreenButton.onclick = () => {
+  if (!document.fullscreenElement) {
+   if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen()
+   } else if (document.documentElement.webkitRequestFullscreen) {
+    document.documentElement.webkitRequestFullscreen()
+   } else if (document.documentElement.msRequestFullscreen) {
+    document.documentElement.msRequestFullscreen()
+   }
+  } else {
+   if (document.exitFullscreen) {
+    document.exitFullscreen()
+   } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen()
+   } else if (document.msExitFullscreen) {
+    document.msExitFullscreen()
+   }
+  }
+ }
+
+ fullscreenButton.innerText = "⛶"
+}
 containerHost.tabIndex = 1
 menuButton.innerText = "≡"
 this.menuButton = menuButton
 this.toolbar = toolbar
+let nestedToolbar, shadow
 this.getNestedToolbar = () => {
- if (!this.nestedToolbar) {
-  this.nestedToolbar ??= document.createElement("menu")
-  spacer.before(this.nestedToolbar)
-  this.nestedToolbar.setAttribute("id", "nested")
-  this.getNestedToolbar = () => this.nestedToolbar
+ if (!nestedToolbar) {
+  nestedToolbar ??= document.createElement("nested-toolbar")
+  spacer.before(nestedToolbar)
+  nestedToolbar.setAttribute("id", "nested")
+  shadow = nestedToolbar.attachShadow({ mode: "open" })
+  shadow.styleSheet = new CSSStyleSheet()
+  shadow.adoptedStyleSheets.push(shadow.styleSheet)
  }
- return this.nestedToolbar
+ return shadow
 }
 spacer.setAttribute("class", "spacer")
 toolbar.setAttribute("id", "toolbar")
@@ -1412,28 +1448,6 @@ if (navigator.share) {
   })
  shareButton.innerText = "➦"
 }
-
-fullscreenButton.onclick = () => {
- if (!document.fullscreenElement) {
-  if (document.documentElement.requestFullscreen) {
-   document.documentElement.requestFullscreen()
-  } else if (document.documentElement.webkitRequestFullscreen) {
-   document.documentElement.webkitRequestFullscreen()
-  } else if (document.documentElement.msRequestFullscreen) {
-   document.documentElement.msRequestFullscreen()
-  }
- } else {
-  if (document.exitFullscreen) {
-   document.exitFullscreen()
-  } else if (document.webkitExitFullscreen) {
-   document.webkitExitFullscreen()
-  } else if (document.msExitFullscreen) {
-   document.msExitFullscreen()
-  }
- }
-}
-
-fullscreenButton.innerText = "⛶"
 
 this.styleSheet = new CSSStyleSheet()
 this.sidebar = document.body.appendChild(document.createElement("menu"))
@@ -1681,15 +1695,11 @@ this.container.innerHTML = \`<h1>503</h1>
    "https://option.colormode.core.parts/create.js": `const
  lightColor = D["https://core.parts/light.color"],
  darkColor = D["https://core.parts/dark.color"],
- isLight = this.origin !== "https://dark.colormode.core.parts",
+ isLight = this.origin === "https://light.colormode.core.parts",
  background = isLight ? lightColor : darkColor,
  color = isLight ? darkColor : lightColor,
  custom = D[\`\${this.controller.origin}/style.css\`] ?? ""
 this.controller.styleSheet.replaceSync(\`html, body {
-  position: relative;
- --sidebar-tween: 0;
- --sidebar-width: 256px;
- --bottom-accent: 0 1.5px \${color}2f;
  --system-ui:
   system-ui,
   "Segoe UI",
@@ -1717,10 +1727,16 @@ this.controller.styleSheet.replaceSync(\`html, body {
   "Courier New",
   monospace;
 
+  --sidebar-tween: 0;
+  --sidebar-width: 256px;
+  --bottom-accent: 0 1.5px \${color}2f;
+
  font: 13px var(--system-ui);
- overflow: hidden;
  height: 100vh;
- width: 100vw;
+ width: 300vw;
+ position: fixed;
+ left: -100vw;
+ right: -100vw;
  margin: 0;
  overscroll-behavior: contain !important;
  color: \${color};
@@ -1728,14 +1744,15 @@ this.controller.styleSheet.replaceSync(\`html, body {
  -webkit-user-select: none;
  -ms-user-select: none;
  user-select: none;
-}
-html {
- padding-top: 61px;
+ overflow: hidden;
 }
 body > main {
- position: relative;
+ position: absolute;
+ top: 61px;
+ left: 0;
+ right: 0;
+ padding: 0 100vw;
  height: calc(100vh - 61px);
- width: 100vw;
 }
 #version {
  text-align: center;
@@ -1793,8 +1810,7 @@ body > main {
  box-shadow: var(--bottom-accent);
 }
 #apps {
- flex: 0 !important;
- min-height: min-content !important;
+ min-height: 128px !important;
 }
 #pins {
  display: none;
@@ -1872,16 +1888,17 @@ body > main {
  font-weight: 700;
 }
 #toolbar {
- position: fixed;
+ position: absolute;
  top: 0;
- width: 100vw;
+ left: 0;
+ right: 0;
+ height: 61px;
  background: \${background};
  margin: 0;
- padding: 0;
+ padding: 0 100vw;
  line-height: 61px;
  display: flex;
  color: \${color};
- height: 61px;
  box-sizing: border-box;
  box-shadow: \${isLight ? "0px 2px 7px #0002" : "var(--bottom-accent)"};
 }
@@ -1915,9 +1932,9 @@ body > main {
  height: 39px;
  width: 39px;
  margin: -5px;
+ margin-right: 1ch;
 }
 #toolbar > h1 > .label {
- margin-left: 1.5ch;
  flex: 1;
  line-height: 29px;
 }
@@ -1929,9 +1946,26 @@ body > main {
 }
 #nested {
  line-height: 29px;
- margin: 16px;
+ padding: 16px;
  display: flex;
+ box-sizing: border-box
+ height: 61px;
  gap: 6px;
+}
+@media (width < 400px) {
+ #toolbar > h1 > img {
+  display: none;
+ }
+}
+@media (width < 500px) {
+ #nested {
+  position: fixed;
+  top: 61px;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  box-shadow: \${isLight ? "0px 2px 7px #0002" : "var(--bottom-accent)"};
+ }
 }
 @media (display-mode: window-controls-overlay) {
  #toolbar {
@@ -1952,8 +1986,10 @@ body > main {
 \${custom}\`)`,
   },
   _ = globalThis,
-  IS_DEV_HOST = location.host.startsWith("dev."),
-  APP_HOST = location.host.slice(4 * IS_DEV_HOST),
+  HAS_DEV_PREFIX = location.host.startsWith("dev."),
+  IS_GITHUB = location.host === "ejaugust.github.io",
+  IS_DEV_HOST = HAS_DEV_PREFIX || IS_GITHUB,
+  APP_HOST = location.host.slice(4 * HAS_DEV_PREFIX),
   HOST_PREFIX = IS_DEV_HOST ? "dev." : "",
   APP_SHORT_NAME = APP_HOST.slice(0, -1 - APP_HOST.split(".").at(-1).length),
   ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
