@@ -1001,7 +1001,7 @@ this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
 
    // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.90.2",
+   "https://core.parts/version.txt": "0.90.3",
    "https://core.parts/logging.txt": "false",
    "https://core.parts/verbose.txt": "false",
    "https://core.parts/light.color": "#faf9f8",
@@ -1101,7 +1101,7 @@ const cache = {},
    const { pathname, host, origin } = new URL(e.request.url),
     isDevHost = host.startsWith("dev.") || host === "ejaugust.github.io",
     cacheKey = host + pathname
-   if (isDevHost !== IS_DEV_HOST) throw new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`)
+   if (isDevHost !== IS_DEV_HOST && host !== "ejaugust.github.io") console.warn(new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`))
    if (!(cacheKey in cache)) {
     let body, type, base64Encoded
     switch (pathname) {
