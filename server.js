@@ -60,6 +60,9 @@ this.controller.styleSheet.replaceSync(\`:host {
  width: 55%;
  text-align: center;
  margin: 0;
+}
+a, a:visited {
+ color: unset;
 }\`)`,
    // =============================================================================================================================================================================
    "https://welcome.kireji.io/create.js": `await super.create()
@@ -83,15 +86,8 @@ for (const model of this.parts) {
 this.select.onchange = () => {
  this.goto(this.options[this.parts[this.select.selectedIndex].origin].offset)
 }
-this.randomButton = this.toolbar.appendChild(document.createElement("button"))
-this.randomButton.innerHTML = "🍀 Random"
-this.randomButton.onclick = () => {
- let i = this.option.part.size.toString(2).length, bin = "0b"
- while (i--) bin += Math.trunc(Math.random() * 2)
- this.option.part.goto(BigInt(bin) % this.option.part.size).then(() => {
-  info(this)
- })
-}`,
+this.randomAnchor = this.toolbar.appendChild(document.createElement("a"))
+this.randomAnchor.innerHTML = "🍀 Random"`,
    // =============================================================================================================================================================================
    "https://option.model.editor.kireji.io/base.uri": "https://composite.core.parts",
    "https://option.model.editor.kireji.io/inputs.txt": "name polynomial parts",
@@ -99,7 +95,19 @@ this.randomButton.onclick = () => {
 this.name = name
 this.polynomial = polynomial`,
    "https://option.model.editor.kireji.io/create.js": `this.container = this.controller.container
-this.controller.select.selectedIndex = this.i`,
+this.controller.select.selectedIndex = this.i
+this.nextPseudoRandom = () => {
+ // const offset = this.controller.offset
+ // const i = ((this.controller.controller.index * 1664525n + 1013904223n) % 2n ** 64n) % this.size
+ console.log('determine the offset', this)
+ let k = this.size.toString(2).length, bin = "0b"
+ while (k--) bin += Math.trunc(Math.random() * 2)
+ this.controller.randomAnchor.setAttribute("href", encode(BigInt(bin) % this.size))
+}`,
+   "https://option.model.editor.kireji.io/notify.js": `await super.notify(...sources)
+this.nextPseudoRandom()`,
+   "https://option.model.editor.kireji.io/checkout.js": `await super.checkout(index)
+this.nextPseudoRandom()`,
    // =============================================================================================================================================================================
    "https://b1.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
    "https://b1.model.editor.kireji.io/constructor.js": `super("demo-001", "𝑛𝑣", ["nouns", "verbs"])`,
@@ -468,7 +476,12 @@ this.controller.controller.destroyNestedToolbar()
 await super.destroy()`,
    "https://editor.kireji.io/create.js": `this.nodes = {}
 this.toolbar = this.controller.controller.getNestedToolbar()
-this.toolbar.styleSheet.replaceSync(\`@media (width < 650px) {
+this.toolbar.styleSheet.replaceSync(\`
+a,
+a:visited {
+ color: unset;
+}
+@media (width < 650px) {
  label {
   display: none;
  }
@@ -944,6 +957,11 @@ h1, p {
 }
 pre {
  width: 80ch;
+}
+a, a:visited {
+ color: unset;
+ padding: 0;
+ margin: 0;
 }\`)
 
 this.controller.container.innerHTML = \`<h1>404</h1><p>Not found.</p>\`
@@ -1001,7 +1019,7 @@ this.styleSheet.replaceSync("")`,
    // =============================================================================================================================================================================
 
    // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.90.3",
+   "https://core.parts/version.txt": "0.90.4",
    "https://core.parts/logging.txt": "false",
    "https://core.parts/verbose.txt": "false",
    "https://core.parts/light.color": "#faf9f8",
@@ -1020,7 +1038,11 @@ this.parts = factors.reduceRight((parts, part, i) => {
  parts.unshift(part)
  units.unshift(units[0] * part.size)
  part.controller = this
- part.i = i
+ Object.defineProperties(part, {
+  i: { get(){ return i } },
+  unit: { get(){ return unit } },
+  indexCache: { value: part.index, writable: true }
+ })
  return parts
 }, [])
 this.size = this.units.shift()`,
@@ -1099,9 +1121,9 @@ const cache = {},
   _.onfetch = e => {
    // TODO: detect and throw error on any cross-deployment-stage resource fetches.
    const { pathname, host, origin } = new URL(e.request.url),
-    isDevHost = host.startsWith("dev.") || host === "ejaugust.github.io",
+    isDevHost = host.startsWith("dev.") || host === GITHUB_HOST,
     cacheKey = host + pathname
-   if (isDevHost !== IS_DEV_HOST && host !== "ejaugust.github.io") console.warn(new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`))
+   if (isDevHost !== IS_DEV_HOST && host !== GITHUB_HOST) console.warn(new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`))
    if (!(cacheKey in cache)) {
     let body, type, base64Encoded
     switch (pathname) {
@@ -1386,7 +1408,7 @@ this.documentIndex = this.index`,
    "https://menu.core.parts/inputs.txt": "application",
    "https://menu.core.parts/constructor.js": `
 super(["https://sidebar.menu.core.parts", "https://colormode.core.parts", application])
-this.apps = ["kireji.io", "core.parts", "orenjinari.com", "ejaugust.com", "fallback.cloud", "glowstick.click", "ejaugust.github.io"]`,
+this.apps = ["kireji.io", "kireji.app", "core.parts", "orenjinari.com", "ejaugust.com", "fallback.cloud", "glowstick.click", ...(IS_DEV_HOST ? [GITHUB_HOST] : [])]`,
    "https://menu.core.parts/create.js": `
 info("A menu-based application now exists but it lacks the core application functionality. Creating the base behavior.")
 await super.create()
@@ -1396,7 +1418,7 @@ const
  containerHost = document.body.appendChild(document.createElement("main")),
  toolbar = document.body.appendChild(document.createElement("nav")),
  menuButton = toolbar.appendChild(document.createElement("button")),
- homeButton = toolbar.appendChild(document.createElement("h1")),
+ homeButton = toolbar.appendChild(document.createElement("a")),
  spacer = toolbar.appendChild(document.createElement("span")),
  shareButton = toolbar.appendChild(document.createElement("button"));
 if (document.fullscreenEnabled) {
@@ -1445,8 +1467,9 @@ this.destroyNestedToolbar = () => {
 }
 spacer.setAttribute("class", "spacer")
 toolbar.setAttribute("id", "toolbar")
-homeButton.innerHTML = \`<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg /><span class=label>\${APP_HOST}</span>\`
-homeButton.onclick = () => this.documentIndex = 0n
+homeButton.setAttribute("href", "#0")
+homeButton.setAttribute("id", "home")
+homeButton.innerHTML = \`<h1><img id=appicon src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg /><span class=label>\${APP_HOST}</span></h1>\`
 
 if (navigator.share) {
  shareButton.onclick = () =>
@@ -1536,40 +1559,47 @@ this.pin = () => {
 }
 
 const TMenu = T\`https://menu.core.parts\`
+
 for (let i = 0; i < this.apps.length; i++) {
  const appname = this.apps[i],
   appParts = appname.split(".").slice(0, -1),
-  appNode = appList.appendChild(document.createElement("li"))
- appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${appname}</span>\`
- this.appNodes[appname] = appNode
- appNode.onclick = () => {
-  if (APP_HOST !== appname) {
-   const
-    origin = "https://" + appname,
-    isFallback = !(origin in this.controller.options),
-    TOrigin = T([origin]),
-    partPerSe = isFallback ? this.controller.parts[0] : this.controller.options[origin].part
+  appNode = appList.appendChild(document.createElement("li")),
+  optionOrigin = "https://" + appname,
+  isFallback = !(optionOrigin in this.controller.options),
+  TOrigin = T([optionOrigin]),
+  partPerSe = isFallback ? this.controller.parts[0] : this.controller.options[optionOrigin].part;
+
+
+ if (appname !== APP_HOST) {
+  appNode.onclick = e => {
+   e.preventDefault()
+
+   let url = "https://" + (appname === GITHUB_HOST ? "" : HOST_PREFIX) + appname
 
    if (isFallback || TOrigin.prototype instanceof TMenu) {
+
     let index = 0n
     for (const origin of menuFactorOrigins) {
      const 
       { indexCache: localIndex } = this.factors[origin],
       { unit: remoteUnit } = partPerSe.factors[origin]
+     console.log(url, origin, localIndex, remoteUnit)
      index += localIndex * remoteUnit
     }
-    if (appname === "ejaugust.github.io") location = "https://" + appname + encode(index)
-    else location = "https://" + HOST_PREFIX + appname + encode(index)
-   } else {
-    if (appname === "ejaugust.github.io") location = "https://" + appname
-    else location = "https://" + HOST_PREFIX + appname
+
+    url += encode(index)
    }
+
+   location = url
   }
  }
+ appNode.setAttribute("class", "applink")
+ appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${appname}</span>\`
+ this.appNodes[appname] = appNode
 }
 this.appNodes[APP_HOST]?.setAttribute("data-selected", "true")
 this.sidebar.tabIndex = 1
-this.container = containerHost.attachShadow({ mode: "closed" })
+this.container = containerHost.attachShadow({ mode: "open" })
 this.container.adoptedStyleSheets.push(this.styleSheet)
 document.title = APP_HOST`,
    // "https://menu.core.parts/...": `this.pin()`,
@@ -1583,9 +1613,7 @@ this.sidebar = this.controller.sidebar`,
    // =============================================================================================================================================================================
    "https://closed.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
 this.button = this.controller.button
-this.button.onclick = async () => {
- await this.controller.goto(1n)
-}
+this.button.onclick = () => this.controller.goto(1n)
 this.sidebar.setAttribute("style", "--sidebar-tween: 0")`,
    "https://closed.sidebar.menu.core.parts/destroy.js": `await super.destroy()
 if (document.activeElement === this.sidebar) this.sidebar.blur()
@@ -1604,7 +1632,7 @@ this.sidebar.removeAttribute("style")`,
    // =============================================================================================================================================================================
    "https://open.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
 this.sidebar.focus()
-this.sidebar.onblur = () => {
+this.sidebar.onblur = e => {
  this.controller?.goto(3n)
 }
 this.sidebar.setAttribute("style", "--sidebar-tween: 1")`,
@@ -1739,10 +1767,10 @@ this.controller.styleSheet.replaceSync(\`html, body {
 
  font: 13px var(--system-ui);
  height: 100vh;
- width: 300vw;
+ width: 100vw;
  position: fixed;
- left: -100vw;
- right: -100vw;
+ left: 0;
+ right: 0;
  margin: 0;
  overscroll-behavior: contain !important;
  color: \${color};
@@ -1757,7 +1785,7 @@ body > main {
  top: 61px;
  left: 0;
  right: 0;
- padding: 0 100vw;
+ padding: 0;
  height: calc(100vh - 61px);
 }
 #version {
@@ -1860,8 +1888,7 @@ body > main {
  padding: 0;
  min-height: 32px;
 }
-#sidebar .module > ul > li {
- list-style-type: none;
+.applink {
  display: flex;
  gap: 1.5ch;
  padding: 4px 13px;
@@ -1872,11 +1899,11 @@ body > main {
  margin: -1px;
  line-height: 25px;
 }
-#sidebar .module > ul > li > img {
+.applink > img {
  height: 25px;
  width: 25px;
 }
-#sidebar .module > ul > li > .label {
+.applink > .label {
  overflow-y: visible;
  overflow-x: clip;
  text-overflow: ellipsis;
@@ -1901,7 +1928,7 @@ body > main {
  height: 61px;
  background: \${background};
  margin: 0;
- padding: 0 100vw;
+ padding: 0;
  line-height: 61px;
  display: flex;
  color: \${color};
@@ -1925,27 +1952,32 @@ body > main {
 #toolbar > button:hover {
  background: #fff5;
 }
-#toolbar > h1 {
- cursor: pointer;
- margin: 16px 0;
+a,
+a:visited {
+ color: unset;
  padding: 0;
+ margin: 0;
+}
+#nested a {
+ font-size: 100px;
+}
+#home > h1 {
+ padding: 0;
+ margin: 16px 0;
+ display: flex;
  font-size: 21px;
  line-height: 29px;
  font-weight: 400;
- display: flex;
 }
-#toolbar > h1 > img {
+#appicon {
  height: 39px;
  width: 39px;
  margin: -5px;
  margin-right: 1ch;
 }
-#toolbar > h1 > .label {
+#home > .label {
  flex: 1;
  line-height: 29px;
-}
-#toolbar > h1:hover {
- text-decoration: underline;
 }
 #toolbar > .spacer {
  flex: 1;
@@ -1959,7 +1991,7 @@ body > main {
  gap: 6px;
 }
 @media (width < 400px) {
- #toolbar > h1 > img {
+ #appicon {
   display: none;
  }
 }
@@ -1983,8 +2015,7 @@ body > main {
   -webkit-app-region: drag;
   app-region: drag;
  }
- #toolbar > h1,
- #toolbar > button {
+ #toolbar > a {
   -webkit-app-region: no-drag;
   app-region: no-drag;
  }
@@ -1992,8 +2023,9 @@ body > main {
 \${custom}\`)`,
   },
   _ = globalThis,
+  GITHUB_HOST = "ejaugust.github.io",
   HAS_DEV_PREFIX = location.host.startsWith("dev."),
-  IS_GITHUB = location.host === "ejaugust.github.io",
+  IS_GITHUB = location.host === GITHUB_HOST,
   IS_DEV_HOST = HAS_DEV_PREFIX || IS_GITHUB,
   APP_HOST = location.host.slice(4 * HAS_DEV_PREFIX),
   HOST_PREFIX = IS_DEV_HOST ? "dev." : "",
