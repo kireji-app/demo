@@ -1,54 +1,113 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 function boot() {
  const D = {
-   // =============================================================================================================================================================================
-   "https://base.core.parts/constructor.js": `this.index = -1n
-this.size = 1n`,
-   "https://base.core.parts/create.js": "",
-   "https://base.core.parts/checkout.js": `if (index < -1n || index >= this.size) throw new RangeError(\`index \${index} out of range (size \${this.size}): \${this.origin}\`)
-const oldIndex = this.index
+   "https://core.parts/version.txt": "0.91.0",
+   "https://core.parts/theme.color": "#488adc",
+   "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
+   // ========================================================================= //
+   "https://base.core.parts/install.js": `
+super()
+
+this.index = -1n
+
+this.size = 1n
+
+Object.defineProperties(this, {
+ inject: {
+  value(part) {
+   if (typeof part === "string") part = part.startsWith("https://") ? new (T([part]))() : new (T([\`https://\${part}.\${this.host}\`]))()
+   if (!(part instanceof T\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of \${this.origin}\`)
+   if (part.origin in this) throw new TypeError(\`duplicate origin \${part.origin} in \${this.origin}\`)
+   if (part.controller) throw new TypeError(\`cannot inject part twice (injecting \${part.origin} from \${this.origin})\`)
+   part.controller = this
+   this[part.origin] = part
+   return part
+  }
+ },
+ host: {
+  get() {
+   return this.origin.slice(8)
+  }
+ },
+ hostPath: {
+  get() {
+   return this.host.split(".")
+  }
+ },
+ subdomain: {
+  get() {
+   return this.hostPath[0]
+  }
+ }
+})
+`,
+   "https://base.core.parts/open.js": `
+
+`,
+   "https://base.core.parts/absorb.js": `
+if (index < -1n || index >= this.size) throw new RangeError(\`index \${index} out of range (size \${this.size}): \${this.origin}\`)
+
+const indexCache = this.index
 this.index = index
-if (oldIndex === -1n) await this.create()`,
-   "https://base.core.parts/destroy.js": `this.index = -1n`,
-   "https://base.core.parts/notify.js": `await this.controller?.notify(this.origin)`,
-   "https://base.core.parts/goto.js": `await this.checkout(index)
-await this.controller?.notify(this.origin)`,
-   // =============================================================================================================================================================================
+
+if (indexCache === -1n) await this.open()
+`,
+   "https://base.core.parts/close.js": `
+this.index = -1n
+`,
+   "https://base.core.parts/emit.js": `
+await this.controller?.emit(this)
+`,
+   "https://base.core.parts/goto.js": `
+await this.absorb(index)
+await this.controller?.emit(this)
+`,
+   // ========================================================================= //
    "https://boot.core.parts/base.uri": "https://decision.core.parts",
-   "https://boot.core.parts/constructor.js": `
-info("Nothing exists. Dividing empty space into two areas: server and client.")
-super(["https://server.core.parts", "https://client.core.parts"])
-info("Space exists but nothing is in it. Creating an environment.")
-const environmentOption = this.options[\`https://\${E}.core.parts\`]
-this.index = environmentOption.offset
-this.option = environmentOption
-environmentOption.part.create()`,
-   // =============================================================================================================================================================================
+   "https://boot.core.parts/install.js": `
+super([
+ "https://server.core.parts",
+ "https://client.core.parts"
+])
+
+this.choice = this[\`https://\${environment}.core.parts\`]
+this.index = this.choice.offset
+this.choice.open()
+`,
+   // ========================================================================= //
    "https://client.core.parts/base.uri": "https://decision.core.parts",
-   "https://client.core.parts/constructor.js": `super(["https://fallback.cloud", "https://orenjinari.com", "https://ejaugust.com", "https://kireji.io"])`,
-   "https://client.core.parts/create.js": `
-info("The client exists but there is no application. Creating an application.")
+   "https://client.core.parts/install.js": `
+super([
+ "https://fallback.cloud",
+ "https://orenjinari.com",
+ "https://kireji.io"
+])
+`,
+   "https://client.core.parts/open.js": `
+this.choice = this[\`https://\${APP_HOST}\`] ?? this[0]
+this.index = this.choice.offset
+await this.choice.open()
 
-const
- appOrigin = \`https://\${APP_HOST}\`,
- isKnown = appOrigin in this.options,
- trueOrigin = isKnown ? appOrigin : "https://fallback.cloud",
- applicationOption = this.options[trueOrigin]
-
-this.index = applicationOption.offset
-this.option = applicationOption
-
-await applicationOption.part.create()
-loop()`,
-   // =============================================================================================================================================================================
+loop()
+`,
+   // ========================================================================= //
+   "https://ejaugust.com/theme.color": "#188afc",
+   // ========================================================================= //
+   "https://kireji.io/theme.color": "#8accaf",
    "https://kireji.io/base.uri": "https://menu.core.parts",
-   "https://kireji.io/constructor.js": `super("lander")`,
-   // =============================================================================================================================================================================
+   "https://kireji.io/install.js": `
+super("lander")
+`,
+   // ========================================================================= //
    "https://lander.kireji.io/base.uri": "https://decision.core.parts",
-   "https://lander.kireji.io/constructor.js": `super(["https://welcome.kireji.io", "https://editor.kireji.io"])`,
-   "https://lander.kireji.io/create.js": `await super.create()
-this.container = this.controller.container
-this.controller.styleSheet.replaceSync(\`:host {
+   "https://lander.kireji.io/install.js": `
+super([
+ "https://welcome.kireji.io",
+ "https://editor.kireji.io"
+])
+`,
+   "https://lander.kireji.io/app.css": `
+:host {
  display: flex;
  flex-flow: row wrap;
  gap: 1ch;
@@ -56,427 +115,326 @@ this.controller.styleSheet.replaceSync(\`:host {
  justify-content: center;
  align-content: center;
 }
+
 :host > p {
  width: 55%;
  text-align: center;
  margin: 0;
 }
-a, a:visited {
+
+a,
+a:visited {
  color: unset;
-}\`)`,
-   // =============================================================================================================================================================================
-   "https://welcome.kireji.io/create.js": `await super.create()
-this.controller.container.innerHTML = \`<div style="font-size:13px"><h2>Welcome to kireji.io</h2><p>This app is in alpha. The API is subject to change.<p>This app creates a permalink to every valid expression in a given grammer.<p>Compose a message to see it's permalink.<p>Share the message without uploading anything.<p>Try it out <a href=#1>here.</a></div>\``,
-   "https://welcome.kireji.io/destroy.js": `await super.destroy()
-this.controller.container.innerHTML = ""`,
-   // =============================================================================================================================================================================
-   "https://model.editor.kireji.io/base.uri": "https://decision.core.parts",
-   "https://model.editor.kireji.io/constructor.js": `super(["b1", "b2", "b3", "k1"])`,
-   "https://model.editor.kireji.io/destroy.js": `await super.destroy()
-this.container.innerHTML = ""`,
-   "https://model.editor.kireji.io/create.js": `this.toolbar = this.controller.toolbar
+}
+a:hover {
+ color: var(--theme);
+}
+
+@media (pointer: coarse) {
+ a,
+ a:visited {
+  text-decoration: none;
+  color: var(--theme);
+ }
+}
+`,
+   "https://lander.kireji.io/open.js": `
+await super.open()
+
 this.container = this.controller.container
-this.label = this.toolbar.appendChild(document.createElement("label"))
-this.select = this.toolbar.appendChild(document.createElement("select"))
+
+this.controller.styleSheet.replaceSync(D["https://lander.kireji.io/app.css"])
+`,
+   // ========================================================================= //
+   "https://welcome.kireji.io/body.html": `
+<div style="font-size:13px">
+ <h2>Welcome to kireji.io</h2>
+ <p>This app is in alpha. The API is subject to change.
+ <p>This app creates a permalink to every valid expression in a given grammer.
+ <p>Compose a message to see it's permalink.
+ <p>Share the message without uploading anything.
+ <p><a href=#1>Click here</a> to try it.
+</div>
+`,
+   "https://welcome.kireji.io/open.js": `
+await super.open()
+
+this.controller.container.innerHTML = D["https://welcome.kireji.io/body.html"]
+`,
+   "https://welcome.kireji.io/close.js": `
+await super.close()
+
+this.controller.container.innerHTML = ""
+`,
+   // ========================================================================= //
+   "https://model.editor.kireji.io/base.uri": "https://decision.core.parts",
+   "https://model.editor.kireji.io/install.js": `
+super([
+ "https://demo-001.kireji.io",
+ "https://demo-002.kireji.io",
+ "https://demo-003.kireji.io",
+ "https://koan-001.kireji.io"
+])
+`,
+   "https://model.editor.kireji.io/open.js": `
+this.toolbar = this.controller.toolbar
+this.container = this.controller.container
+
+this.label = element(this.toolbar, "label")
 this.label.innerHTML = "Grammar model:"
-for (const model of this.parts) {
- const option = this.select.appendChild(document.createElement("option"))
- option.innerHTML = model.name
+
+this.select = element(this.toolbar, "select")
+this.select.onchange = () => this.goto(this[this.select.selectedIndex].offset)
+for (const part of this) element(this.select, "option").innerHTML = part.subdomain
+
+this.randomAnchor = element(this.toolbar, "a")
+this.randomAnchor.innerHTML = "🍀 Random"
+`,
+   "https://model.editor.kireji.io/close.js": `
+await super.close()
+
+this.randomAnchor.innerHTML = ""
+this.randomAnchor.remove()
+delete this.randomAnchor
+
+this.select.innerHTML = ""
+this.select.onchange = undefined
+this.select.remove()
+delete this.select
+
+this.label.innerHTML = ""
+this.label.remove()
+delete this.label
+
+delete this.container
+delete this.toolbar
+`,
+   // ========================================================================= //
+   "https://shuffle.composite.core.parts/base.uri": "https://composite.core.parts",
+   "https://shuffle.composite.core.parts/inputs.txt": "factors",
+   "https://shuffle.composite.core.parts/install.js": `
+super(factors)
+
+this.nextRandomNumber = () => {
+ const offset = this.offset, index = ((this.index * 1664525n + 1013904223n) % this.size)
+ console.log('determine the next random index', offset, index)
+ if (typeof this.onshuffle === "function") this.onshuffle(offset + index)
 }
-this.select.onchange = () => {
- this.goto(this.options[this.parts[this.select.selectedIndex].origin].offset)
-}
-this.randomAnchor = this.toolbar.appendChild(document.createElement("a"))
-this.randomAnchor.innerHTML = "🍀 Random"`,
-   // =============================================================================================================================================================================
-   "https://option.model.editor.kireji.io/base.uri": "https://composite.core.parts",
-   "https://option.model.editor.kireji.io/inputs.txt": "name polynomial parts",
-   "https://option.model.editor.kireji.io/constructor.js": `super(parts)
-this.name = name
-this.polynomial = polynomial`,
-   "https://option.model.editor.kireji.io/create.js": `this.container = this.controller.container
-this.controller.select.selectedIndex = this.i
-this.nextPseudoRandom = () => {
- // const offset = this.controller.offset
- // const i = ((this.controller.controller.index * 1664525n + 1013904223n) % 2n ** 64n) % this.size
- console.log('determine the offset', this)
- let k = this.size.toString(2).length, bin = "0b"
- while (k--) bin += Math.trunc(Math.random() * 2)
- this.controller.randomAnchor.setAttribute("href", encode(BigInt(bin) % this.size))
-}`,
-   "https://option.model.editor.kireji.io/notify.js": `await super.notify(...sources)
-this.nextPseudoRandom()`,
-   "https://option.model.editor.kireji.io/checkout.js": `await super.checkout(index)
-this.nextPseudoRandom()`,
-   // =============================================================================================================================================================================
-   "https://b1.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
-   "https://b1.model.editor.kireji.io/constructor.js": `super("demo-001", "𝑛𝑣", ["nouns", "verbs"])`,
-   // =============================================================================================================================================================================
-   "https://b2.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
-   "https://b2.model.editor.kireji.io/constructor.js": `super("demo-002", "𝑎𝑛𝑣", [
+`,
+   "https://shuffle.composite.core.parts/absorb.js": `
+await super.absorb(index)
+this.nextRandomNumber()
+`,
+   "https://shuffle.composite.core.parts/emit.js": `
+await super.emit(...parts)
+this.nextRandomNumber()
+`,
+   // ========================================================================= //
+   "https://model.kireji.io/base.uri": "https://shuffle.composite.core.parts",
+   "https://model.kireji.io/open.js": `
+this.onshuffle = index => this.randomAnchor.href = encode(index)
+
+this.randomAnchor = this.controller.randomAnchor
+
+this.container = this.controller.container
+
+this.select = this.controller.select
+this.select.selectedIndex = this.i
+
+await super.open()
+`,
+   "https://model.kireji.io/close.js": `
+await super.close()
+
+this.select.selectedIndex = -1
+delete this.select
+
+delete this.container
+
+delete this.randomAnchor
+
+this.onshuffle = undefined
+`,
+   // ========================================================================= //
+   "https://demo-001.kireji.io/base.uri": "https://model.kireji.io",
+   "https://demo-001.kireji.io/install.js": `
+super([
+ "https://nouns.dict-001.kireji.io",
+ "https://verbs.dict-001.kireji.io"
+])
+`,
+   // ========================================================================= //
+   "https://demo-002.kireji.io/base.uri": "https://model.kireji.io",
+   "https://demo-002.kireji.io/install.js": `
+super([
+ "https://adjectives.dict-001.kireji.io",
+ "https://nouns.dict-001.kireji.io",
+ "https://verbs.dict-001.kireji.io"
+])
+`,
+   // ========================================================================= //
+   "https://demo-003.kireji.io/base.uri": "https://model.kireji.io",
+   "https://demo-003.kireji.io/install.js": `
+super([
  "adjectives",
- "https://nouns.b1.model.editor.kireji.io",
- "https://verbs.b1.model.editor.kireji.io"
+ "https://nouns.dict-001.kireji.io",
+ "https://verbs.dict-001.kireji.io"
 ])`,
-   // =============================================================================================================================================================================
-   "https://b3.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
-   "https://b3.model.editor.kireji.io/constructor.js": `super("demo-003", "(1 + 𝑎 + 𝑎² + 𝑎³)𝑣𝑛", [
- "adjectives",
- "https://nouns.b1.model.editor.kireji.io",
- "https://verbs.b1.model.editor.kireji.io"
-])`,
-   // =============================================================================================================================================================================
-   "https://k1.model.editor.kireji.io/base.uri": "https://option.model.editor.kireji.io",
-   "https://k1.model.editor.kireji.io/create.js": `await super.create()
+   // ========================================================================= //
+   "https://adjectives.demo-003.kireji.io/base.uri": "https://decision.core.parts",
+   "https://adjectives.demo-003.kireji.io/install.js": `
+super([
+ "empty",
+ "https://adjectives.dict-001.kireji.io",
+ "a2",
+ "a3"
+])
+`,
+   "https://adjectives.demo-003.kireji.io/open.js": `
+await super.open()
+this.container = this.controller.container
+`,
+   "https://adjectives.demo-003.kireji.io/close.js": `
+await super.close()
+delete this.container
+`,
+   // ========================================================================= //
+   "https://a2.adjectives.demo-003.kireji.io/base.uri": "https://composite.core.parts",
+   "https://a2.adjectives.demo-003.kireji.io/install.js": `
+super(new Array(2).fill(0).map((_, i) => new T\`https://a\${{
+"index.txt": "" + i,
+"base.uri": "https://adjectives.dict-001.kireji.io"
+}}.demo-003.kireji.io\`()))
+`,
+   "https://a2.adjectives.demo-003.kireji.io/open.js": `
+await super.open()
+this.container = element(this.controller.container, "span")
+`,
+   "https://a2.adjectives.demo-003.kireji.io/close.js": `
+await super.close()
+this.container.remove()
+delete this.container
+`,
+   // ========================================================================= //
+   "https://a3.adjectives.demo-003.kireji.io/base.uri": "https://composite.core.parts",
+   "https://a3.adjectives.demo-003.kireji.io/install.js": `
+super(new Array(3).fill(0).map((_, i) => new T\`https://a\${{
+"index.txt": "" + i,
+"base.uri": "https://adjectives.dict-001.kireji.io"
+}}.demo-003.kireji.io\`()))
+`,
+   "https://a3.adjectives.demo-003.kireji.io/open.js": `
+await super.open()
+this.container = this.controller.container
+`,
+   "https://a3.adjectives.demo-003.kireji.io/close.js": `
+await super.close()
+delete this.container
+`,
+   // ========================================================================= //
+   "https://word.kireji.io/base.uri": "https://decision.core.parts",
+   "https://word.kireji.io/inputs.txt": "addends",
+   "https://word.kireji.io/install.js": `
+super(addends)
+this.populate = () => this.container.innerHTML = this.choice.subdomain
+`,
+   "https://word.kireji.io/open.js": `
+this.container = element(this.controller.container, "span")
+`,
+   "https://word.kireji.io/close.js": `
+await super.close()
+this.container.remove()
+delete this.container
+`,
+   "https://word.kireji.io/absorb.js": `
+await super.absorb(index)
+this.populate()
+`,
+   "https://word.kireji.io/emit.js": `
+await super.emit(...parts)
+this.populate()
+`,
+   // ========================================================================= //
+   "https://adjectives.dict-001.kireji.io/base.uri": "https://word.kireji.io",
+   "https://adjectives.dict-001.kireji.io/install.js": `
+super(["prime", "pre-origin", "post-origin", "redundant", "added", "reusable", "empty", "hash-stored", "dead", "implicit", "critical", "new", "explicit", "certain", "desirable", "real", "complete", "prior", "non-empty", "straight", "minimum", "executive", "necessary", "required", "intended", "non-zero", "static", "arbitrary", "constructed", "potential", "current", "old", "cloned", "resulting", "quick", "successive", "various", "large", "unique", "inherent", "physical", "rendered", "partial", "separate", "structural", "locked", "different", "apparent", "overall", "settable", "environmental", "independent", "single", "hybrid", "no-client", "entire-factor", "per-non", "client-side", "initial", "future", "consequential", "outgoing", "incoming", "alternate", "specific", "flaming", "supported", "key-value", "false", "open", "cached", "Missing", "same", "flat", "early", "ready", "previous", "tagged", "signed", "expected", "leading", "Variable-length", "Invalid", "compressed", "extended", "private", "total", "major", "minor", "orig", "hasTransform", "installed", "parsed", "built", "styled", "inheriting", "loaded", "selected", "woff", "noFocus"])
+`,
+   // ========================================================================= //
+   "https://nouns.dict-001.kireji.io/base.uri": "https://word.kireji.io",
+   "https://nouns.dict-001.kireji.io/install.js": `
+super(["cars",  "cats",  "dogs",  "birds", "subsets", "factors", "powersets", "poems", "primes", "websites", "menus", "origins", "states", "problems", "components", "results", "documents", "sites", "moments", "goals", "things", "landmines", "designs", "questions", "times", "introductions", "contents", "contrasts", "matters", "facts", "intents", "contexts", "environments", "numbers", "instructions", "classes", "apps", "parts", "arguments", "subparts", "tasks", "branches", "bugs", "offsets", "coefficients", "events", "objects", "signals", "changes", "settings", "data", "flows", "methods", "updates", "schemes", "indices", "inputs", "uris", "RangeErrors", "typenames", "integers", "structures", "representations", "examples", "versions", "computations"])
+`,
+   // ========================================================================= //
+   "https://verbs.dict-001.kireji.io/base.uri": "https://word.kireji.io",
+   "https://verbs.dict-001.kireji.io/install.js": `
+super(["jump", "run", "eat", "smile", "must", "look", "perform", "subtract", "change", "rest", "wait", "forget", "step", "leave", "enter", "start", "extend", "showStatus", "assert", "await", "populate", "warn", "have", "construct", "maintain", "compute", "pass", "control", "stop", "repopulate", "check", "consider", "modify", "set", "invert", "integrate", "use", "remove", "craft", "harvest", "provide", "update", "return", "throw", "create", "slice", "replace", "eval", "log", "appear", "support", "gain", "imagine"])
+`,
+   // ========================================================================= //
+   "https://koan-001.kireji.io/base.uri": "https://model.kireji.io",
+   "https://koan-001.kireji.io/install.js": `
+super(["choice"])
+
 this.populate = () => {
  const
-  choice = this.parts[0],
-  row = choice.model[choice.option.i],
-  observation = row[4 + choice.option.part.option.i],
+  row = this[0].model[this[0].choice.i],
+  observation = row[4 + this[0].choice.choice.i],
   [ ba, bb, aa, ab ] = row
- this.container.innerHTML = \`<p>\${aa} \${ab} and there is \${observation.join(" ")}</p><p>what is the \${observation.at(-1)} of one \${ba} \${bb}?</p>\`
-}`,
-   "https://k1.model.editor.kireji.io/destroy.js": `await super.destroy()
-this.container.innerHTML = ""`,
-   "https://k1.model.editor.kireji.io/constructor.js": `super("koan-001", "??? koan 1", ["choice"])`,
-   "https://k1.model.editor.kireji.io/checkout.js": `await super.checkout(index)
-this.populate()`,
-   "https://k1.model.editor.kireji.io/notify.js": `await super.notify(...sources)
-this.populate()`,
-   // =============================================================================================================================================================================
-   "https://choice.k1.model.editor.kireji.io/base.uri": "https://decision.core.parts",
-   "https://choice.k1.model.editor.kireji.io/constructor.js": `const model = [
- ["hand", "clapping", "hands", "clap", ["a", "sound"], ["a", "rhythm"], ["an", "echo"], ["a", "beat"], ["a", "pulse"], ["a", "motion"], ["a", "gesture"], ["a", "signal"], ["a", "wave"], ["a", "sign"]],
- ["foot", "standing", "feet", "stand", ["a", "foundation"], ["a", "stance"], ["a", "base"], ["a", "support"], ["a", "position"], ["a", "grounding"], ["a", "posture"], ["a", "bearing"], ["a", "rest"], ["a", "halt"]],
- ["eye", "seeing", "eyes", "see", ["a", "view"], ["vision"], ["a", "perspective"], ["a", "glimpse"], ["a", "sight"], ["an", "image"], ["a", "look"], ["a", "stare"], ["a", "gaze"], ["an", "observation"]],
- ["voice", "speaking", "voices", "speak", ["a", "chorus"], ["silence"], ["a", "whisper"], ["a", "tone"], ["a", "sound"], ["an", "utterance"], ["a", "declaration"], ["a", "pronouncement"], ["a", "speech"], ["a", "conversation"]],
- ["seed", "growing", "seeds", "grow", ["a", "field"], ["potential"], ["a", "sprout"], ["a", "plant"], ["a", "forest"], ["a", "garden"], ["a", "harvest"], ["a", "yield"], ["a", "crop"], ["a", "tree"]],
- ["drop", "falling", "drops", "fall", ["a", "rainstorm"], ["emptiness"], ["a", "splash"], ["a", "drizzle"], ["a", "torrent"], ["a", "downpour"], ["a", "shower"], ["a", "trickle"], ["a", "leak"], ["a", "cascade"]],
- ["note", "sounding", "notes", "sound", ["a", "melody"], ["harmony"], ["a", "tone"], ["a", "chord"], ["a", "resonance"], ["a", "vibration"], ["a", "frequency"], ["a", "pitch"], ["a", "scale"], ["a", "composition"]],
- ["breath", "exhaling", "breaths", "exhale", ["a", "wind"], ["emptiness"], ["a", "sigh"], ["a", "gasp"], ["a", "whiff"], ["a", "puff"], ["a", "draft"], ["an", "inspiration"], ["an", "expiration"], ["a", "respiration"]],
- ["shadow", "lengthening", "shadows", "lengthen", ["a", "dusk"], ["absence"], ["a", "shade"], ["a", "darkness"], ["a", "silhouette"], ["a", "phantom"], ["a", "specter"], ["a", "trace"], ["a", "vestige"], ["a", "reminder"]],
- ["tear", "falling", "tears", "fall", ["a", "flood"], ["sorrow"], ["a", "drop"], ["a", "stream"], ["a", "river"], ["a", "flow"], ["an", "outpouring"], ["a", "weeping"], ["a", "lament"], ["a", "cry"]],
- ["wave", "breaking", "waves", "break", ["a", "shore"], ["power"], ["a", "crest"], ["a", "trough"], ["a", "swell"], ["a", "surge"], ["a", "rip"], ["a", "current"], ["a", "tide"], ["a", "sea"]],
- ["spark", "igniting", "sparks", "ignite", ["a", "fire"], ["potential"], ["a", "flame"], ["an", "explosion"], ["a", "conflagration"], ["an", "outburst"], ["an", "eruption"], ["an", "ignition"], ["an", "incandescence"], ["a", "glow"]],
- ["word", "spoken", "words", "speak", ["a", "message"], ["meaning"], ["a", "sentence"], ["a", "story"], ["a", "poem"], ["a", "novel"], ["a", "conversation"], ["a", "dialogue"], ["a", "narrative"], ["a", "discourse"]],
- ["star", "twinkling", "stars", "twinkle", ["a", "sky"], ["distance"], ["a", "glimmer"], ["a", "sparkle"], ["a", "shine"], ["a", "brightness"], ["a", "constellation"], ["a", "galaxy"], ["a", "universe"], ["a", "cosmos"]],
- ["leaf", "rustling", "leaves", "rustle", ["a", "breeze"], ["wind"], ["a", "whisper"], ["a", "sound"], ["a", "noise"], ["a", "murmur"], ["a", "crackle"], ["a", "stirring"], ["a", "movement"], ["a", "shiver"]],
- ["bell", "ringing", "bells", "ring", ["a", "sound"], ["resonance"], ["a", "peal"], ["a", "chime"], ["a", "toll"], ["a", "clang"], ["a", "gong"], ["a", "carillon"], ["a", "knell"], ["a", "ding"]],
- ["clock", "ticking", "clocks", "tick", ["time", "passage"], ["precision"], ["a", "rhythm"], ["a", "beat"], ["a", "pulse"], ["a", "cadence"], ["a", "tempo"], ["a", "measure"], ["a", "movement"], ["a", "duration"]],
- ["drop", "dripping", "drops", "drip", ["a", "leak"], ["persistence"], ["a", "trickle"], ["a", "flow"], ["a", "stream"], ["a", "drizzle"], ["a", "rain"], ["a", "waterfall"], ["a", "source"], ["a", "moisture"]],
- ["flame", "flickering", "flames", "flicker", ["a", "fire"], ["light"], ["a", "glow"], ["a", "dance"], ["a", "movement"], ["a", "heat"], ["an", "ember"], ["an", "illumination"], ["an", "ignition"], ["a", "blaze"]],
- ["wave", "lapping", "waves", "lap", ["a", "shore"], ["water"], ["a", "beach"], ["a", "coastline"], ["a", "seashore"], ["a", "bank"], ["an", "edge"], ["a", "border"], ["a", "margin"], ["a", "rim"]],
- ["mind", "wandering", "you", "try to focus", ["a", "distraction"], ["a", "constant", "noise"], ["an", "endless", "loop"], ["a", "fleeting", "thought"], ["a", "persistent", "worry"], ["a", "quiet", "moment"]],
- ["soul", "searching", "you", "seek enlightenment", ["a", "mystery"], ["an", "eternal", "question"], ["a", "lifelong", "journey"], ["a", "divine", "spark"], ["a", "cosmic", "dance"], ["a", "silent", "knowing"]],
- ["heart", "aching", "you", "feel sorrow", ["a", "pain"], ["a", "heavy", "burden"], ["a", "deep", "wound"], ["a", "bitter", "memory"], ["a", "lingering", "sadness"], ["a", "gentle", "grief"]],
- ["body", "aging", "you", "experience time", ["a", "limitation"], ["a", "constant", "decay"], ["an", "inevitable", "end"], ["a", "fleeting", "moment"], ["an", "aging", "process"], ["an", "eternal", "now"]],
- ["dream", "fading", "you", "wake up", ["a", "reality"], ["a", "fleeting", "moment"], ["an", "illusion"], ["a", "nightmarish", "vision"], ["a", "peaceful", "slumber"], ["a", "dreamlike", "state"]],
- ["word", "spoken", "you", "express yourself", ["a", "meaning"], ["a", "power"], ["a", "limitation"], ["a", "misunderstanding"], ["a", "truthful", "statement"], ["a", "poetic", "expression"]],
- ["eye", "seeing", "you", "perceive the world", ["an", "illusion"], ["a", "reality"], ["a", "mystery"], ["an", "optical", "illusion"], ["a", "vivid", "image"], ["a", "blurred", "vision"]],
- ["ear", "hearing", "you", "listen to the silence", ["a", "sound"], ["a", "noise"], ["a", "music"], ["a", "whisper"], ["a", "shout"], ["a", "heartbeat"]],
- ["nose", "smelling", "you", "experience the aroma", ["a", "fragrance"], ["a", "stench"], ["a", "memory"], ["a", "pungent", "odor"], ["a", "delicate", "scent"], ["a", "fresh", "air"]],
- ["tongue", "tasting", "you", "savor the flavor", ["a", "delight"], ["a", "disgust"], ["a", "craving"], ["a", "sweetness"], ["a", "bitterness"], ["a", "spiciness"]],
- ["hand", "touching", "you", "feel the texture", ["a", "connection"], ["a", "separation"], ["empathy"], ["a", "warmth"], ["a", "coldness"], ["a", "roughness"]],
- ["foot", "stepping", "you", "walk the path", ["a", "journey"], ["a", "destination"], ["a", "direction"], ["a", "step"], ["a", "stride"], ["a", "dance"]],
- ["breath", "inhaling", "you", "draw in life", ["a", "cycle"], ["a", "moment"], ["eternity"], ["a", "sigh"], ["a", "gasp"], ["a", "pant"]],
- ["thought", "arising", "you", "ponder the unknown", ["a", "question"], ["an", "answer"], ["a", "doubt"], ["a", "curiosity"], ["a", "confusion"], ["a", "certainty"]],
- ["feeling", "emerging", "you", "experience emotion", ["a", "joy"], ["a", "sorrow"], ["a", "peace"], ["anger"], ["a", "fear"], ["a", "love"]],
- ["desire", "growing", "you", "seek fulfillment", ["a", "want"], ["a", "need"], ["a", "greed"], ["a", "longing"], ["a", "craving"], ["a", "satisfaction"]],
- ["fear", "creeping", "you", "face uncertainty", ["a", "doubt"], ["a", "panic"], ["a", "courage"], ["anxiety"], ["a", "terror"], ["a", "bravery"]],
- ["love", "blooming", "you", "connect with others", ["a", "compassion"], ["empathy"], ["an", "understanding"], ["a", "kindness"], ["a", "care"], ["affection"]],
- ["anger", "flaming", "you", "confront frustration", ["a", "rage"], ["a", "resentment"], ["a", "forgiveness"], ["an", "irritation"], ["a", "fury"], ["a", "calm"]],
- ["peace", "settling", "you", "find tranquility", ["a", "calm"], ["a", "serenity"], ["a", "harmony"], ["a", "silence"], ["a", "stillness"], ["a", "contentment"]]
+ this.container.innerHTML = \`<p>\${aa} \${ab} and there is \${observation.join(" ")}. what is the \${observation.at(-1)} of one \${ba} \${bb}?</p>\`
+}
+`,
+   "https://koan-001.kireji.io/close.js": `
+this.container.innerHTML = ""
+
+await super.close()
+`,
+   "https://koan-001.kireji.io/absorb.js": `
+await super.absorb(index)
+this.populate()
+`,
+   "https://koan-001.kireji.io/emit.js": `
+await super.emit(...parts)
+this.populate()
+`,
+   // ========================================================================= //
+   "https://choice.koan-001.kireji.io/base.uri": "https://decision.core.parts",
+   "https://choice.koan-001.kireji.io/install.js": `
+const model = [
+ ["hand", "clapping", "hands", "clap", ["a", "sound"]],
+ ["foot", "standing", "feet", "stand", ["a", "stance"], ["a", "posture"]],
+ ["eye", "seeing", "eyes", "see", ["a", "perspective"], ["a", "parallax"]],
+ ["voice", "speaking", "voices", "speak", ["a", "chorus"], ["a", "conversation"], ["an", "exchange"], ["a", "meeting"], ["an", "argument"], ["a", "debate"], ["an", "agreement"], ["an", "accompanyment"], ["harmony"]],
+ ["seed", "growing", "seeds", "grow", ["a", "field"], ["a", "forest"], ["a", "garden"], ["a", "harvest"], ["a", "yield"], ["a", "crop"]],
+ ["drop", "falling", "drops", "fall", ["white", "noise"], ["a", "rainstorm"], ["a", "torrent"], ["a", "downpour"], ["a", "shower"], ["a", "cascade"]],
+ ["note", "sounding", "notes", "sound", ["a", "melody"], ["harmony"], ["a", "chord"], ["a", "composition"]],
+ ["dude", "clapping", "the audience", "claps", ["a", "standing", "ovation"], ["an", "applause"]],
+ ["leaf", "shadow", "leaves", "cast shadows", ["shade"]],
+ ["word", "spoken", "words", "speak", ["a", "story"], ["a", "poem"], ["a", "novel"], ["a", "conversation"], ["a", "dialogue"], ["a", "narrative"], ["a", "discourse"]],
+ ["star", "shining", "stars", "shine", ["a", "constellation"], ["a", "galaxy"], ["a", "universe"], ["a", "cosmos"]]
 ]
+
 super(model.map((row, i) => new T\`https://topic\${{
  "index.txt": "" + i,
  "base.uri": "https://decision.core.parts",
- "constructor.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
-}}.choice.k1.model.editor.kireji.io\`()))
-this.model = model`,
-   // =============================================================================================================================================================================
-   "https://thingdo.k1.model.editor.kireji.io/base.uri": "https://decision.core.parts",
-   "https://thingdo.k1.model.editor.kireji.io/constructor.js": `super(new Array(10).fill(0).map((_, i) => new T\`https://a\${{
+ "install.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
+}}.choice.koan-001.kireji.io\`()))
+
+this.model = model
+`,
+   // ========================================================================= //
+   "https://thingdo.koan-001.kireji.io/base.uri": "https://decision.core.parts",
+   "https://thingdo.koan-001.kireji.io/install.js": `
+super(new Array(10).fill(0).map((_, i) => new T\`https://a\${{
  "index.txt": "" + i,
- "base.uri": "https://adjectives.b2.model.editor.kireji.io"
-}}.b3.model.editor.kireji.io\`())))`,
-   // =============================================================================================================================================================================
-   "https://adjectives.b3.model.editor.kireji.io/base.uri": "https://decision.core.parts",
-   "https://adjectives.b3.model.editor.kireji.io/constructor.js": `super(["empty", "https://adjectives.b2.model.editor.kireji.io", "a2", "a3"])`,
-   "https://adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
-this.container = this.controller.container`,
-   // =============================================================================================================================================================================
-   "https://a2.adjectives.b3.model.editor.kireji.io/base.uri": "https://composite.core.parts",
-   "https://a2.adjectives.b3.model.editor.kireji.io/constructor.js": `super(new Array(2).fill(0).map((_, i) => new T\`https://a\${{
- "index.txt": "" + i,
- "base.uri": "https://adjectives.b2.model.editor.kireji.io"
-}}.b3.model.editor.kireji.io\`()))`,
-   "https://a2.adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
-this.container = this.controller.container.appendChild(document.createElement("span"))`,
-   // =============================================================================================================================================================================
-   "https://a3.adjectives.b3.model.editor.kireji.io/base.uri": "https://composite.core.parts",
-   "https://a3.adjectives.b3.model.editor.kireji.io/constructor.js": `super(new Array(3).fill(0).map((_, i) => new T\`https://a\${{
-"index.txt": "" + i,
-"base.uri": "https://adjectives.b2.model.editor.kireji.io"
-}}.b3.model.editor.kireji.io\`()))`,
-   "https://a3.adjectives.b3.model.editor.kireji.io/create.js": `await super.create()
-this.container = this.controller.container`,
-   // =============================================================================================================================================================================
-   "https://word.model.editor.kireji.io/base.uri": "https://decision.core.parts",
-   "https://word.model.editor.kireji.io/create.js": `
-this.container = this.controller.container.appendChild(document.createElement("span"))
-this.container.setAttribute("data-origin", this.origin)
-this.populate = () => {
- this.container.innerHTML = this.option.part.origin.slice(8).split(".")[0]
-}`,
-   "https://word.model.editor.kireji.io/checkout.js": `await super.checkout(index)
-this.populate()`,
-   "https://word.model.editor.kireji.io/notify.js": `await super.notify(...sources)
-this.populate()`,
-   "https://word.model.editor.kireji.io/destroy.js": `this.container.remove()
-await super.destroy()`,
-   // =============================================================================================================================================================================
-   "https://adjectives.b2.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
-   "https://adjectives.b2.model.editor.kireji.io/constructor.js": `super([
- "prime",
- "pre-origin",
- "post-origin",
- "redundant",
- "added",
- "reusable",
- "empty",
- "hash-stored",
- "dead",
- "implicit",
- "critical",
- "new",
- "explicit",
- "certain",
- "desirable",
- "real",
- "complete",
- "prior",
- "non-empty",
- "straight",
- "minimum",
- "executive",
- "necessary",
- "required",
- "intended",
- "non-zero",
- "static",
- "arbitrary",
- "constructed",
- "potential",
- "current",
- "old",
- "potential",
- "cloned",
- "resulting",
- "quick",
- "successive",
- "various",
- "large",
- "unique",
- "inherent",
- "physical",
- "rendered",
- "partial",
- "separate",
- "structural",
- "locked",
- "different",
- "apparent",
- "overall",
- "settable",
- "environmental",
- "independent",
- "single",
- "hybrid",
- "no-client",
- "entire-factor",
- "per-non",
- "client-side",
- "initial",
- "future",
- "consequential",
- "outgoing",
- "incoming",
- "alternate",
- "specific",
- "flaming",
- "supported",
- "key-value",
- "false",
- "open",
- "cached",
- "Missing",
- "same",
- "flat",
- "early",
- "ready",
- "previous",
- "new",
- "tagged",
- "signed",
- "expected",
- "leading",
- "Variable-length",
- "Invalid",
- "compressed",
- "extended",
- "private",
- "total",
- "major",
- "minor",
- "orig",
- "hasTransform",
- "installed",
- "parsed",
- "built",
- "styled",
- "inheriting",
- "loaded",
- "selected",
- "woff",
- "noFocus"
-])`,
-   // =============================================================================================================================================================================
-   "https://nouns.b1.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
-   "https://nouns.b1.model.editor.kireji.io/constructor.js": `super([
- "cars", 
- "cats", 
- "dogs", 
- "birds",
- "subsets",
- "factors",
- "powersets",
- "poems",
- "primes",
- "websites",
- "menus",
- "origins",
- "states",
- "problems",
- "components",
- "results",
- "documents",
- "sites",
- "moments",
- "goals",
- "things",
- "landmines",
- "designs",
- "questions",
- "times",
- "introductions",
- "contents",
- "contrasts",
- "matters",
- "facts",
- "intents",
- "contexts",
- "environments",
- "numbers",
- "instructions",
- "classes",
- "apps",
- "parts",
- "arguments",
- "subparts",
- "tasks",
- "branches",
- "bugs",
- "offsets",
- "coefficients",
- "events",
- "objects",
- "signals",
- "changes",
- "settings",
- "data",
- "flows",
- "methods",
- "updates",
- "schemes",
- "indices",
- "inputs",
- "uris",
- "RangeErrors",
- "typenames",
- "integers",
- "structures",
- "representations",
- "examples",
- "versions",
- "computations"
-])`,
-   // =============================================================================================================================================================================
-   "https://verbs.b1.model.editor.kireji.io/base.uri": "https://word.model.editor.kireji.io",
-   "https://verbs.b1.model.editor.kireji.io/constructor.js": `super([
- "jump",
- "run",
- "eat",
- "smile",
- "must",
- "look",
- "perform",
- "subtract",
- "change",
- "rest",
- "wait",
- "forget",
- "step",
- "leave",
- "enter",
- "start",
- "extend",
- "showStatus",
- "assert",
- "await",
- "populate",
- "warn",
- "have",
- "construct",
- "maintain",
- "compute",
- "pass",
- "control",
- "stop",
- "repopulate",
- "check",
- "consider",
- "modify",
- "set",
- "invert",
- "integrate",
- "use",
- "remove",
- "craft",
- "harvest",
- "provide",
- "update",
- "return",
- "throw",
- "create",
- "slice",
- "replace",
- "extend",
- "eval",
- "log",
- "appear",
- "support",
- "gain",
- "imagine",
-])`,
-   // =============================================================================================================================================================================
+ "base.uri": "https://adjectives.dict-001.kireji.io"
+}}.demo-003.kireji.io\`())))
+`,
+   // ========================================================================= //
+   // ========================================================================= //
    "https://editor.kireji.io/base.uri": "https://composite.core.parts",
-   "https://editor.kireji.io/constructor.js": `super(["model"])`,
-   "https://editor.kireji.io/destroy.js": `delete this.nodes
-this.controller.controller.destroyNestedToolbar()
-await super.destroy()`,
-   "https://editor.kireji.io/create.js": `this.nodes = {}
-this.toolbar = this.controller.controller.getNestedToolbar()
-this.toolbar.styleSheet.replaceSync(\`
+   "https://editor.kireji.io/install.js": `
+super(["model"])
+`,
+   "https://editor.kireji.io/toolbar.css": `
 a,
 a:visited {
  color: unset;
@@ -485,515 +443,67 @@ a:visited {
  label {
   display: none;
  }
-}\`)
-this.container = this.controller.controller.container`,
-   // =============================================================================================================================================================================
-   "https://ejaugust.com/base.uri": "https://menu.core.parts",
-   "https://ejaugust.com/constructor.js": `super("error404")`,
-   "https://ejaugust.com/style.css": `#toolbar {
- background: transparent;
- box-shadow: none;
 }
-#toolbar > h1 {
- display: none
-}`,
-   "https://graph.error404.ejaugust.com/inputs.txt": "asciiGraph",
-   "https://graph.error404.ejaugust.com/base.uri": "https://decision.core.parts",
-   "https://graph.error404.ejaugust.com/render.js": `await super.render()
-const
- ln = this.option.i,
- col = this.option.part.option.i
+`,
+   "https://editor.kireji.io/open.js": `
+await super.open()
 
-const
- lastLine = this.lines[ln],
- firstOldLine = this.oldLines[ln],
- lastChar = lastLine[col],
- firstOldChar = firstOldLine[col],
- lines = this.lines.slice(0, ln).map(line => \`<span class=newLine>\${line}</span>\`),
- oldLines = this.oldLines.slice(ln + 1).map(line => \`<span class=oldLine>\${line}</span>\`),
- segment = lastLine.slice(0, col),
- oldSegment = firstOldLine.slice(col + 1)
+this.nodes = {}
 
-lines.push(\`<span id=ln><span class=newLine>\${segment}<span id=col>\${lastChar}</span></span><span class=oldLine>\${oldSegment}</span></span>\`, ...oldLines)
+this.toolbar = this.controller.controller.getNestedToolbar()
+this.toolbar.styleSheet.replaceSync(D["https://editor.kireji.io/toolbar.css"])
 
-this.controller.graphNode.innerHTML = lines.join("\\n")`,
-   "https://graph.error404.ejaugust.com/constructor.js": `super(new Array(24).fill(0).map((_, i) => new T\`https://line\${{
- "index.txt": "" + i,
- "base.uri": "https://decision.core.parts",
- "constructor.js": \`super(new Array(80).fill(0).map((_, i) => "char" + i))\`,
-}}.graph.error404.ejaugust.com\`()))`,
-   "https://graph.error404.ejaugust.com/create.js": `if (!this.ascii) {
- this.ascii ??= D[this.origin + "/ascii.txt"]
- this.oldOrigin ??= this.controller.parts[(this.i || this.controller.parts.length) - 1].origin
- this.oldAscii ??= D[this.oldOrigin + "/ascii.txt"]
- this.lines ??= this.ascii.split("\\n").slice(1, 25)
- this.oldLines ??= this.oldAscii.split("\\n").slice(1, 25)
- while(this.oldLines.length < 24) this.oldLines.push("".padEnd(80, " "))
- while(this.lines.length < 24) this.lines.push("".padEnd(80, " "))
-}`,
-   "https://graph0.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph0.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-           The location hash                                                    
-           1. is a base64-encoded integer up to 12 kilobits long.               
-           2. determines how to render the page.                                
-           3. encodes data across various categories.                           
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph1.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph1.error404.ejaugust.com/ascii.txt": `
-                                   URL x ASCII                                  
-                            +-------------------------+                         
-                              0   0   1   1   1   1                             
-                              1   1   0   0   1   1                             
-                              0   1   0   1   0   1                             
-                            +-------------------------+                         
-                     0000   |     0●  @●  P●  \`○  p●                            
-                     0001   | !●  1●  A●  Q●  a●  q●                            
-                     0010   | "○  2●  B●  R●  b●  r●                            
-                     0011   | #●  3●  C●  S●  c●  s●                            
-                     0100   | $●  4●  D●  T●  d●  t●                            
-                     0101   | %○  5●  E●  U●  e●  u●                            
-                     0110   | &●  6●  F●  V●  f●  v●                            
-                     0111   | '●  7●  G●  W●  g●  w●                            
-                     1000   | (●  8●  H●  X●  h●  x●                            
-                     1001   | )●  9●  I●  Y●  i●  y●                            
-                     1010   | *●  :●  J●  Z●  j●  z●                            
-                     1011   | +●  ;●  K●  [●  k●  {○                            
-                     1100   | ,●  <○  L●  \\○  l●  |○                            
-                     1101   | -●  =●  M●  ]●  m●  }○                            
-                     1110   | .●  >○  N●  ^○  n●  ~●                            
-                     1111   | /●  ?●  O●  _●  o●                                
-                                                                                
-                                                                                `,
-   "https://graph2.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph2.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-           "\\u{100000}": "\\u{10000a}\\u{f0000}\\u{e005}",                         
-           "\\u{100001}": "\\u{e010}\\u{f0001}\\u{e005}",                           
-           "\\u{100002}": "\\u{100001}\\u{100009}\\u{e007}",                        
-           "\\u{100003}": "\\u{e010}\\u{100002}\\u{e008}",                          
-           "\\u{100004}": "\\u{e00e}\\u{e00f}\\u{e006}",                            
-           "\\u{100006}": "\\u{e00d}\\u{f0004}\\u{100007}\\u{e00b}",                 
-           "\\u{100007}": "\\u{e011}\\u{f0003}\\u{e005}",                           
-           "\\u{100008}": "\\u{e003}",                                            
-           "\\u{100009}": "\\u{e004}",                                            
-           "\\u{10000a}": "\\u{e000}\\u{f0000}\\u{e005}                             
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph3.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph3.error404.ejaugust.com/ascii.txt": `
-     ○○○○○  =>  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○     
-     ○○○○●  =>  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○                 
-     ○○○●○  =>  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○             ○ ○ ○ ○ ○ ○     
-     ○○○●●  =>  ○ ○ ○ ○ ○   ○ ○ ○ ○ ○   ○ ○ ○ ○ ○                               
-     ○○●○○  =>  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○             ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○     
-     ○○●○●  =>  ○ ○ ○   ○ ○ ○ ○ ○   ○ ○             ○ ○ ○ ○ ○                   
-     ○○●●○  =>  ○   ○ ○ ○ ○ ○   ○ ○ ○ ○                         ○ ○ ○ ○ ○       
-     ○○●●●  =>  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○           ●           ●           ●     
-     ○●○○○  =>  ○ ○ ○ ○ ○ ○             ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○     
-     ○●○○●  =>  ○ ○ ○ ○   ○             ○ ○ ○ ○ ○ ○ ○ ○ ○   ○ ○                 
-     ○●○●○  =>  ○ ○   ○ ○ ○             ○ ○ ○ ○ ○ ○             ○ ○ ○   ○ ○     
-     ○●○●●  =>  ○ ○ ○ ○ ○ ○           ● ○ ○ ○ ○ ○ ○       ●           ●         
-     ○●●○○  =>    ○ ○ ○ ○ ○                         ○   ○ ○ ○ ○ ○   ○ ○ ○ ○     
-     ○●●○●  =>  ○ ○ ○ ○ ○ ○       ●           ●     ○ ○ ○ ○ ○ ○   ●             
-     ○●●●○  =>  ○ ○ ○ ○ ○ ○   ●           ●           ●         ○ ○ ○ ○ ○ ○     
-     ○●●●●  =>  ○ ○ ○ ○ ○ ○                                                     
-     ●○○○○  =>              ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○     
-     ●○○○●  =>              ○ ○ ○ ○   ○ ○ ○ ○ ○   ○ ○ ○ ○ ○   ○                 
-     ●○○●○  =>              ○ ○   ○ ○ ○ ○ ○   ○ ○ ○             ○ ○ ○ ○   ○     
-     ●○○●●  =>            ● ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○         ●           ●       
-     ●○●○○  =>              ○ ○ ○ ○ ○ ○             ○ ○   ○ ○ ○ ○ ○   ○ ○ ○     
-     ●○●○●  =>        ●     ○ ○ ○ ○ ○ ○         ●   ○ ○ ○ ○ ○ ○     ●           
-     ●○●●○  =>    ●         ○ ○ ○ ○ ○ ○     ●           ●       ○ ○ ○ ○ ○ ○     
-     ●○●●●  =>              ○ ○ ○ ○ ○ ○                                         `,
-   "https://graph4.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph4.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                                                                
-                              1    1    1    1                                  
-                    1    1    0    0    1    1                                  
-               1    0    1    0    1    0    1                                  
-          0╶───┬────┬────┬───────────────────╮                                  
-          ┃    ╎    ╎    ╎                   │                                  
-        1 ┗━━━━┓╶╶╶╶╎╶╶╶╶╎╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶│╴╴╴╴╴╴╴╴Red╴╴╴╴╴╴╴╴╴╴╴╴╴╴> valid  
-          │    ┃    ╎    ╎                   │                                  
-     1  0 ├╶╶╶╶┗━━━━┓╶╶╶╶╎╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶│╴╴╴╴╴╴╴╴╴╴╴╴╴Green╴╴╴╴╴╴╴> valid  
-          │    ╎    ┃    ╎                   │                                  
-     1  1 │    ╎    ┃    ╎                   │        Red  Green                
-          │    ╎    ┃    ╎                   │                                  
-  1  0  0 ├╶╶╶╶╎╴╴╴╴┗━━━━┓╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶│╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴╴Blue╴> valid  
-          │    ╎    ╎    ┃                   │                                  
-  1  0  1 │    ╎    ╎    ┃                   │        Red         Blue          
-          │    ╎    ╎    ┃                   │                                  
-  1  1  0 │    ╎    ╎    ┃                   │             Green  Blue          
-          │    ╎    ╎    ┃                   │                                  
-  1  1  1 ╰────┴────┴───╴╹╶──────────────────╯        Red  Green  Blue          
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph5.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph5.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-      100                                  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸      
-       11                   ┏━━━━━━━━━━━━━━┛                                    
-       10           ┏━━━━━━━┛              ╎                                    
-        1       ┏━━━┛       ╎              ╎                                    
-        0 ╺━━━━━┛   ╎       ╎              ╎                                    
-                ╎   ╎       ╎              ╎                                    
-                0   0       0              1                                    
-                1   1       1              0                                    
-                1   0       0              0                                    
-                0   1       0              0                                    
-                0   0       1              0                                    
-                0   0       0              1                                    
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph6.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph6.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-                                                                                
-                                                                                
-                                                                                
-                    n | k                         k                             
-                    0 | 2970                      │      /                      
-                    1 | 2975                2980 ┄┼┄┄┄┄┄●                       
-                    2 | 2980                      │    /┆                       
-                    3 | 2985                2975 ┄┼┄┄┄● ┆                       
-                    4 | 2990                      │  /┆ ┆                       
-                    5 | 2995            k = 2970 ┄┼┄● ┆ ┆                       
-                    6 | 3000                      ╰─┼─┼─┼─ n                    
-                    ...                             0 1 2                       
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph7.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph7.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-╭┄┄┄┄┄┄┄┄┄┄┄┄┬○┄┄┄┄┄┄┄┄┄┄┄┬●┄┄┄┄┄┄┄┄┄┄┄╮╭○━●┄┄┄┄┄┄┄┄┄○━○━●┄┄┄┄┄┄┄┄┬○━○━●━●┄┄┄┄┄╮
-╎ ○          ┊○           ○━●          ╎┊●━○         ○━○━○━●      ┊●━○━○━●     ╎
-╎ ● ○        ┊○           ○ ○━●        ╎┊○━●         ○ ○━○━●━●    ┊●━●━○━○     ╎
-╎   ● ○      ┊○           ╎ ○ ○━●      ╎┊●━○         ╎ ○ ○━○━●━●  ┊○━●━●━○     ╎
-╎     ● ○    ┊○           ╎   ○ ○━●    ╎┊○━●         ╎   ○ ○━○━●━●┊○━○━●━●     ╎
-╎       ● ○  ┊○           ╎     ○ ○━●  ╎┊●━○         ╎     ○ ○━○━●┥●━○━○━●     ╎
-╎         ● ○┊○           ╎       ○ ○━●╎┊○━●         ╎       ○ ○━○┥●━●━○━○     ╎
-╎           ●┊○           ╎         ○ ○┥╎●━○         ╎         ○ ○┥○━●━●━○     ╎
-╎            ┊● ○         ╎           ○╎╎○━●         ╎           ○┊○━○━●━●     ╎
-╎            ┊  ● ○       ╎            ╎╎○ ○━●       ╎            ┊○ ○━○━●━●   ╎
-╎            ┊    ● ○     ╎            ╎╎  ○ ○━●     ╎            ┊  ○ ○━○━●━● ╎
-╎            ┊      ● ○   ╎            ╎╎    ○ ○━●   ╎            ┊    ○ ○━○━●━●
-╎            ┊        ● ○ ╎            ╎╎      ○ ○━● ╎            ┊      ○ ○━○━●
-╎            ┊          ● ╎            ╎╎        ○ ○━●            ┊        ○ ○━○
-╎            ┊            ╎            ╎╎          ○ ○            ┊          ○ ○
-╰┄┄┄┄┄┄┄┄┄┄┄┄┴┄┄┄┄┄┄┄┄┄┄┄┄┴┄┄┄┄┄┄┄┄┄┄┄┄╯╰┄┄┄┄┄┄┄┄┄┄┄┄○┄┄┄┄┄┄┄┄┄┄┄┄┴┄┄┄┄┄┄┄┄┄┄┄○╯
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph8.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph8.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄ v ┄┄┄┬ c ╮╭┄ t ┄┬┄ n ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄╮
-│                            / | \\  │   ││ / \\ │ / \\                           │
-│                           ●       │ ● ││ ●   │   ●                           │
-│                           ●       │   ││   ● │   ●                           │
-│                              ●    │ ● ││ ●   │   ●                           │
-│                              ●    │   ││   ● │   ●                           │
-│                              ●    │   ││     │ ●                             │
-╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄●┄┴┄┄┄╯╰┄┄┄┄┄┴┄●┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄╯
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph9.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph9.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-      comment ╶╮╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╮                         
-      text     ⎬╴ characters ╶╮                       ⎬╴ 1 of 4 minor types     
-      cdata   ╶╯              ⎬╴ 1 of 2 major types   │                         
-      element  }╴ container  ╶╯╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╶╯                         
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph10.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph10.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                    404                                         
-                                 Not found                                      
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                ╭one┄of┄your┄user┄states┄is┄only┄100┄grains┄of╮                 
-                │y randomly added pepperoni, all of the flour │                 
-                │ pepperoni, people do travel to random points│                 
-                │entirely possible for 100% of users exploring│                 
-                │ smaller space is the "default space" and doe│                 
-                │Use Part.get() differently for the core ... a│                 
-                │e... the first index is always 0 which we kno│                 
-                ╰et┄us┄try┄to┄go┄to┄index┄5┄-┄where┄"."┄is┄sel╯                 
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph11.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph11.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                   404                                          
-                                Not found                                       
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                ╭collection┄of┄always-constraint-consistent┄va╮                 
-                │tively maps to a point in the core part's con│                 
-                │sents the cache of all values which are neede│                 
-                │ins the state of every core part with each of│                 
-                │tively maps to an integer address which is sa│                 
-                │e changed only if the new state also correspo│                 
-                │the document according to the values cached o│                 
-                ╰┄all┄the┄references┄needed┄to┄trace┄the┄relat╯                 
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph12.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph12.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                                                                
-                                 404                                            
-                              Not found                                         
-                                                                                
-                                                                                
-                                                                                
-                ╭Thus,┄I┄have┄decided┄to┄change┄empty┄from┄a┄p╮                 
-                │But wait ... we should not forget that the em│                 
-                │The goal the empty document accomplished for │                 
-                │1. We destroy the empty state the moment we b│                 
-                │2. The "empty" state isn't empty; at a minimu│                 
-                │The reason this is so is because the empty st│                 
-                │We can *never* undo certain things once we've│                 
-                ╰At┄least┄some┄of┄those┄things┄are┄desirable.┄╯                 
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph13.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph13.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                    404                                         
-                                 Not found                                      
-                                                                                
-                                                                                
-                                                                                
-                               3n, 100n, 5n                                     
-                                |     |   |  1n   <-- start                     
-                                |     |    \\ /|                                 
-                                |     |     * |                                 
-                                |     |    /  |                                 
-                                |     |  5n, 1n                                 
-                                |      \\ /|   |                                 
-                                |       * |   |                                 
-                                |      /  |   |                                 
-                                |  500n, 5n, 1n                                 
-                                 \\   /|   |   |                                 
-                                  \\ / |   |   |                                 
-                                   *  |   |   |                                 
-                                  /   |   |   |                                 
-                            1500n, 500n, 5n, 1n                                 
-                                                                                
-                                                                                
-                                                                                `,
-   "https://graph14.error404.ejaugust.com/base.uri": "https://graph.error404.ejaugust.com",
-   "https://graph14.error404.ejaugust.com/ascii.txt": `
-                                                                                
-                                                                                
-                                                                                
-                                         404                                    
-                                      Not found                                 
-                                                                                
-                                                                                
-               00000 can add one:                                               
-               00001 }----- first                                               
-               00010 \\                                                          
-               00100 |___ these four variants of the first                      
-               01000 |                                                          
-               10000 /                                                          
-              00001 can add one: }                                              
-               00011             }                                              
-               00101             }---- first                                    
-               01001             }                                              
-               10001             }                                              
-              00010 can add one: \\                                              
-               00011              \\                                             
-               ...                 \\_____ four more variants of the first       
-                                                                                
-                                                                                
-                                                                                `,
-   // =============================================================================================================================================================================
-   "https://error404.ejaugust.com/base.uri": "https://decision.core.parts",
-   "https://error404.ejaugust.com/constructor.js": `super(new Array(15).fill(0).map((_, i) => "graph" + i))`,
-   "https://error404.ejaugust.com/create.js": `const
- lightColor = D["https://core.parts/light.color"],
- darkColor = D["https://core.parts/dark.color"]
+this.container = this.controller.controller.container
+`,
+   "https://editor.kireji.io/close.js": `
+await super.close()
 
-this.controller.styleSheet.replaceSync(\`:host {
- background: \${lightColor};
- color: \${darkColor};
- display: flex;
- flex-flow: column;
- align-items: center;
- justify-content: center;
- top: 0;
- font-size: min(4vh, 3vw);
- box-sizing: border-box;
- border-radius: 18px;
- overflow: hidden;
- background-color: rgb(0, calc(1 * 63), 0, 0.1);
- background-image: radial-gradient(#0004 min(0.09vh, 0.06vw), transparent 0);
- line-height: min(3vh, 2vw);
- background-size: 1ch min(3vh, 2vw);
- /* letter-spacing: min(3vh, 2vw); */
- transform: scale(.75);
- box-shadow: 1.5px 6px 7px #0007;
- font-size: min(2vh, 1.5vw);
- color: rgb(0, calc(1 * 63), 0);
-}
-h1, p {
- margin: 0;
- padding: 0;
- color: rgb(0, calc(1 * 63), 0);
-}
-pre {
- width: 80ch;
-}
-a, a:visited {
- color: unset;
- padding: 0;
- margin: 0;
-}\`)
+delete this.container
 
-this.controller.container.innerHTML = \`<h1>404</h1><p>Not found.</p>\`
-this.graphNode = this.controller.container.appendChild(document.createElement("pre"))
+this.toolbar.styleSheet.replaceSync("")
+this.controller.controller.destroyNestedToolbar()
+delete this.toolbar
 
-const loop = () => {
- const x = BigInt(Date.now()), q = this.parts[0].size, p = 10n, max = (...args) => args.reduce((m, e) => e > m ? e : m)
- this.goto(((x/q)*q+max(0n,(x%q)*p-q*(p-1n))) % this.size)
- requestAnimationFrame(loop)
-}
-requestAnimationFrame(loop)`,
-   "https://error404.ejaugust.com/destroy.js": `await super.destroy()
-   this.container.innerHTML = ""
-   this.styleSheet.replaceSync("")`,
-   // =============================================================================================================================================================================
+delete this.nodes
+`,
+   // ========================================================================= //
    "https://orenjinari.com/base.uri": "https://menu.core.parts",
-   "https://orenjinari.com/constructor.js": `super("error404")`,
-   "https://orenjinari.com/style.css": `#toolbar {
+   "https://orenjinari.com/install.js": `
+super("error404")
+`,
+   "https://orenjinari.com/theme.color": "#d8aa1c",
+   "https://orenjinari.com/menu.css": `
+#toolbar {
  background: transparent;
  box-shadow: none;
 }
 #toolbar > h1 {
  display: none
-}`,
-   // =============================================================================================================================================================================
-   "https://error404.orenjinari.com/create.js": `const
- lightColor = D["https://core.parts/light.color"],
- darkColor = D["https://core.parts/dark.color"]
+}
+`,
+   // ========================================================================= //
+   "https://static-website.core.parts/open.js": `
+await super.open()
 
-this.controller.styleSheet.replaceSync(\`:host {
- background: \${lightColor};
- color: \${darkColor};
+this.styleSheet = this.controller.styleSheet
+this.styleSheet.replaceSync(D[this.origin + "/style.css"])
+
+this.container = this.controller.container
+this.container.innerHTML = D[this.origin + "/body.html"]
+`,
+   "https://static-website.core.parts/close.js": `
+await super.close()
+
+this.container.innerHTML = ""
+delete this.container
+
+this.styleSheet.replaceSync("")
+delete this.styleSheet
+`,
+   // ========================================================================= //
+   "https://error404.orenjinari.com/base.uri": "https://static-website.core.parts",
+   "https://error404.orenjinari.com/style.css": `
+:host {
  display: flex;
  flex-flow: column;
  align-items: center;
@@ -1006,157 +516,125 @@ h1, p {
  padding: 0;
 }
 #img404 {
+ margin-top: min(4vh, 3vw);
  max-width: 75vw;
  max-height: 50vh;
-}\`)
-
-this.controller.container.innerHTML = \`<h1>404</h1>
+ filter: invert(0.7);
+}
+`,
+   "https://error404.orenjinari.com/body.html": `
+<h1>404</h1>
 <p>Page not found... perhaps elsewhere</p>
-<img id=img404 src="404.png">\``,
-   "https://error404.orenjinari.com/destroy.js": `await super.destroy()
-   this.container.innerHTML = ""
-this.styleSheet.replaceSync("")`,
-   // =============================================================================================================================================================================
+<img id=img404 src="404.png">
+`,
+   // ========================================================================= //
+   "https://composite.core.parts/inputs.txt": "factors",
+   "https://composite.core.parts/install.js": `
+super()
 
-   // =============================================================================================================================================================================
-   "https://core.parts/version.txt": "0.90.4",
-   "https://core.parts/logging.txt": "false",
-   "https://core.parts/verbose.txt": "false",
-   "https://core.parts/light.color": "#faf9f8",
-   "https://core.parts/dark.color": "#1f2023",
-   // =============================================================================================================================================================================
-   "https://composite.core.parts/inputs.txt": `factors`,
-   "https://composite.core.parts/constructor.js": `super()
-if (!factors) throw new RangeError(\`missing constructor input: "factors" (\${this.origin})\`)
-const units = this.units = [1n]
-this.factors = {}
-this.parts = factors.reduceRight((parts, part, i) => {
- if (typeof part === "string") part = part.startsWith("https://") ? new (T([part]))() : new (T([\`https://\${part}.\${this.origin.slice(8)}\`]))()
- if (!(part instanceof T\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of composite \${this.origin}\`)
- if (part.origin in this.factors) throw new RangeError(\`duplicate part \${part.origin} in composite \${this.origin}\`)
- this.factors[part.origin] = { part, i, indexCache: part.index, get unit() { return units[i] } }
- parts.unshift(part)
- units.unshift(units[0] * part.size)
- part.controller = this
+if (!Array.isArray(factors))
+ throw new RangeError(\`composite constructor expected array of factors (got \${typeof factors}) (\${this.origin})\`)
+
+this.size = factors.reduceRight((units, factor, i) => {
+ const part = this.inject(factor)
+
+ this.unshift(part)
+
  Object.defineProperties(part, {
   i: { get(){ return i } },
-  unit: { get(){ return unit } },
+  unit: { get(){ return units[i] } },
   indexCache: { value: part.index, writable: true }
  })
- return parts
-}, [])
-this.size = this.units.shift()`,
-   "https://composite.core.parts/checkout.js": `if (this.index !== index) {
- await super.checkout(index)
- for (let x = 0; x < this.units.length; x++) {
-  const
-   part = this.parts[x],
-   factor = this.factors[part.origin],
-   unit = factor.unit,
-   subindex = index / unit
-  await part.checkout(subindex)
-  factor.indexCache = subindex
-  index %= unit
- }
-}`,
-   "https://composite.core.parts/destroy.js": `await super.destroy()
-for (const part of this.parts) await part.destroy()`,
-   "https://composite.core.parts/notify.js": `for (const source of sources) {
- const
-  factor = this.factors[source],
-  { part, indexCache } = factor,
-  { index: subindex } = part,
-  unit = factor.unit,
-  difference = subindex - indexCache,
-  deltaIndex = difference * unit
 
- this.index = this.index + deltaIndex
- factor.indexCache = subindex
+ units.unshift(units[0] * part.size)
+
+ return units
+}, [1n]).shift()
+`,
+   "https://composite.core.parts/absorb.js": `
+if (this.index !== index) {
+ await super.absorb(index)
+ for (const part of this) {
+  await part.absorb(part.indexCache = index / part.unit)
+  index %= part.unit
+ }
 }
-await super.notify(...sources)`,
-   // =============================================================================================================================================================================
+`,
+   "https://composite.core.parts/close.js": `
+await super.close()
+
+for (const part of this)
+ await part.close()
+`,
+   "https://composite.core.parts/emit.js": `
+for (const part of parts) {
+ this.index += (part.index - part.indexCache) * part.unit
+ part.indexCache = part.index
+}
+
+await super.emit(...parts)
+`,
+   // ========================================================================= //
    "https://bitmask.core.parts/inputs.txt": "length",
-   "https://bitmask.core.parts/constructor.js": `super()
-this.size = 2n ** BigInt(length)`,
-   // =============================================================================================================================================================================
-   "https://decision.core.parts/inputs.txt": "parts",
-   "https://decision.core.parts/constructor.js": `super()
-let offset = 0n
-this.size = 0n
-this.options = {}
-if (!parts || !parts.length) throw new RangeError(\`a decision must have at least 1 option (\${this.origin})\`)
-this.parts = parts.map((part, i) => {
- if (typeof part === "string") part = part.startsWith("https://") ? new (T([part]))() : new (T([\`https://\${part}.\${this.origin.slice(8)}\`]))()
- if (!(part instanceof T\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof e} encountered at part = \${i} of decision \${this.origin}\`)
- this.options[part.origin] = { part, i, offset }
- offset += part.size
- this.size += part.size
- part.controller = this
+   "https://bitmask.core.parts/install.js": `
+super()
+this.size = 2n ** BigInt(length)
+console.warn("using bitmask? we need to talk... (it's not usable as an array yet)")
+`,
+   // ========================================================================= //
+   "https://decision.core.parts/inputs.txt": "addends",
+   "https://decision.core.parts/install.js": `
+super()
+
+if (!Array.isArray(addends))
+ throw new RangeError(\`decision constructor expected array of addends (got \${typeof addends}) (\${this.origin})\`)
+
+this.size = addends.reduce((size, addend, i) => {
+ const part = this.inject(addend)
+ this.push(part)
  part.i = i
- return part
-})`,
-   "https://decision.core.parts/checkout.js": `if (this.index !== index) {
- await super.checkout(index)
- for (const part of this.parts) {
+ part.offset = size
+ return size + part.size
+}, 0n)
+`,
+   "https://decision.core.parts/absorb.js": `
+if (this.index !== index) {
+ await super.absorb(index)
+ for (const part of this) {
   if (index < part.size) {
-   if (this.option?.part !== part) {
-    await this.option?.part?.destroy()
-    this.option = this.options[part.origin]
-    await part.checkout(index)
-   } else await part.checkout(index)
+   if (this.choice !== part) {
+    await this.choice?.close()
+    this.choice = part
+   }
+   await part.absorb(index)
    break
   }
   index -= part.size
  }
-}`,
-   "https://decision.core.parts/destroy.js": `await super.destroy()
-await this.option?.part?.destroy()
-delete this.option`,
-   "https://decision.core.parts/notify.js": `this.index = this.option.offset + this.option.part.index
-await super.notify(...sources)`,
-   // =============================================================================================================================================================================
-   "https://server.core.parts/create.js": `
+}
+`,
+   "https://decision.core.parts/close.js": `
+await super.close()
+await this.choice?.close()
+delete this.choice
+`,
+   "https://decision.core.parts/emit.js": `
+this.index = this.choice.offset + this.choice.index
+await super.emit(...parts)
+`,
+   // ========================================================================= //
+   "https://server.core.parts/open.js": `
 const cache = {},
    boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
   _.onfetch = e => {
    // TODO: detect and throw error on any cross-deployment-stage resource fetches.
    const { pathname, host, origin } = new URL(e.request.url),
-    isDevHost = host.startsWith("dev.") || host === GITHUB_HOST,
+    isDevHost = host.startsWith("dev.") || origin === GITHUB_ORIGIN,
     cacheKey = host + pathname
-   if (isDevHost !== IS_DEV_HOST && host !== GITHUB_HOST) console.warn(new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`))
+   if (isDevHost !== IS_DEV_HOST && origin !== GITHUB_ORIGIN) console.warn(new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`))
    if (!(cacheKey in cache)) {
     let body, type, base64Encoded
     switch (pathname) {
-     case "/.gitignore":
-      type = "text/plain"
-      body = \`# \${boilerplate}
-**/.DS_Store
-**/Icon
-**/.well-known
-**/.tmp.driveupload
-**/.tmp.drivedownload
-**/*.gdoc
-.vscode/scratch/*
-favicon.gif
-favicon.ico\`
-      break
-     case "/.htaccess":
-      type = "text/plain"
-      body = \`# \${boilerplate}
-AddCharset utf-8 .js
-ErrorDocument 404 /index.html
-ErrorDocument 403 /index.html
-Options -Indexes\`
-      break
-     case "/README.md":
-      type = "text/markdown; charset=UTF-8"
-      body = \`<!--- \${boilerplate} --->
-# About core_parts
-This project aims to meet a large number of requirements which we will detail later.
-Every app has a host (domain name) where it can be publically reached.
-Domains beginning with the "dev." subdomain are dedicated to an unstable (but still publically available) version of the app used for staging changes.\`
-      break
-     case "/server.js":
      case "/client.js":
        body = \`// \${boilerplate}\n\${boot}\nboot()\`
       type = "text/javascript; charset=UTF-8"
@@ -1167,8 +645,8 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
        short_name: host,
        start_url: ".",
        display: "standalone",
-       theme_color: "#faf9f8",
-       background_color: "#faf9f8",
+       theme_color: "#1f2023",
+       background_color: "#1f2023",
        description: "This app is under development.",
        display_override: ["window-controls-overlay"],
        icons: [
@@ -1253,9 +731,9 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
       body = \`<svg width="144px" height="144px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
  <style>
   svg { background: white }
-  text { fill: #333445 }
+  text { fill: \${D[\`https://\${host.slice(isDevHost ? 4 : 0)}/theme.color\`]} }
   @media (prefers-color-scheme = dark) {
-   svg { background: #333445 }
+   svg { background: \${D[\`https://\${host.slice(isDevHost ? 4 : 0)}/theme.color\`]} }
    text { fill: white }
   }
  </style>
@@ -1267,7 +745,7 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
 <html lang=en>
 <head>
  <!-- \${boilerplate} -->
- <link rel=manifest href="\${origin}/manifest.json">
+ <link rel=manifest href=manifest.json>
  <link rel="me" href="https://universeodon.com/@kireji" />
  <meta name=robots content=noindex>
  <meta name=viewport content="width=device-width,initial-scale=1">
@@ -1297,10 +775,9 @@ Domains beginning with the "dev." subdomain are dedicated to an unstable (but st
   _.oninstall = e => _.skipWaiting()
   _.onactivate = e => _.clients.claim()
   _.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()`,
-   // =============================================================================================================================================================================
+   // ========================================================================= //
    "https://app.core.parts/base.uri": "https://composite.core.parts",
-   "https://app.core.parts/create.js": `
-info("An application exists but it doesn't do anything. Setting up universal application events and variables.")
+   "https://app.core.parts/open.js": `
 const
  n = navigator,
  a = n.userAgent,
@@ -1309,28 +786,22 @@ const
  isMac = a.indexOf("Mac") > -1,
  throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
 
- if (c) {
- info("Installing serviceworker...")
- const reg = await c.register(location.origin + "/server.js"),
+if (c) {
+ const reg = await c.register("server.js"),
   sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
  c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
  c.oncontrollerchange = c.onmessage = () => location.reload()
- document.querySelector('[rel="manifest"]').href = location.origin + "/manifest.json"
- addEventListener("focus", () => reg.update().catch(() => location.reload()))
- info("Installing serviceworker... Done.")
+ document.querySelector('[rel="manifest"]').href = "manifest.json"
+ addEventListener("focus", () => reg.update().catch(c.onmessage))
 }
 
 if (g) {
- info("Installing GPU...")
  _.GPU = await (await g.requestAdapter()).requestDevice()
- info("Installing GPU... Done.")
 }
 
-info("Creating global style sheet.")
 this.globalStyleSheet = new CSSStyleSheet()
 document.adoptedStyleSheets.push(this.globalStyleSheet)
 
-info("Adding undo/redo keyboard shortcuts.")
 let
  contextKeysDown = 0,
  shiftKeysDown = 0
@@ -1358,8 +829,6 @@ onkeydown = e => {
  e.preventDefault()
 }
 
-info("Listening for externally-triggered navigation.")
-
 let
  addressbarIndex,
  throttleStartTime,
@@ -1374,7 +843,6 @@ _.onhashchange = () => {
  throttleStartTime = time
 }
 
-info("Creating the game loop.")
 let
  animationFrameID,
  meanFrameTime = 1000,
@@ -1397,33 +865,324 @@ _.loop = now => {
  animationFrameID = requestAnimationFrame(loop)
 }
 
-info("Retroactively handling initial navigation.")
 onhashchange()
-this.index = Infinity`,
-   "https://app.core.parts/destroy.js": `throw new Error("a client application cannot be destroyed")`,
-   "https://app.core.parts/notify.js": `await super.notify(...sources)
-this.documentIndex = this.index`,
-   // =============================================================================================================================================================================
+
+this.index = Infinity
+`,
+   "https://app.core.parts/close.js": `
+throw new Error("a client application cannot be destroyed (thankfully)")
+`,
+   "https://app.core.parts/emit.js": `
+await super.emit(...parts)
+this.documentIndex = this.index
+`,
+   // ========================================================================= //
    "https://menu.core.parts/base.uri": "https://app.core.parts",
    "https://menu.core.parts/inputs.txt": "application",
-   "https://menu.core.parts/constructor.js": `
-super(["https://sidebar.menu.core.parts", "https://colormode.core.parts", application])
-this.apps = ["kireji.io", "kireji.app", "core.parts", "orenjinari.com", "ejaugust.com", "fallback.cloud", "glowstick.click", ...(IS_DEV_HOST ? [GITHUB_HOST] : [])]`,
-   "https://menu.core.parts/create.js": `
-info("A menu-based application now exists but it lacks the core application functionality. Creating the base behavior.")
-await super.create()
+   "https://menu.core.parts/style.css": `
+html,
+body {
+ --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+ --system-ui-mono: ui-monospace,  Menlo, Monaco,  "Cascadia Mono", "Segoe UI Mono",  "Roboto Mono",  "Oxygen Mono",  "Ubuntu Mono",  "Source Code Pro", "Fira Mono",  "Droid Sans Mono",  "Consolas", "Courier New", monospace;
+ --sidebar-tween: 0;
+ --sidebar-width: 256px;
+ --bottom-accent: 0 1.5px var(--accent-color);
+ --bottom-shadow: 0 2px 7px #0002;
 
-info("A menu-based application now exists but it is displaying a blank document. Rendering the persistent menu.")
-const
- containerHost = document.body.appendChild(document.createElement("main")),
- toolbar = document.body.appendChild(document.createElement("nav")),
- menuButton = toolbar.appendChild(document.createElement("button")),
- homeButton = toolbar.appendChild(document.createElement("a")),
- spacer = toolbar.appendChild(document.createElement("span")),
- shareButton = toolbar.appendChild(document.createElement("button"));
+ --icon-size: 29px;
+ --spacing: 19px;
+ --toolbar-height: calc(var(--icon-size) + 2 * var(--spacing));
+ font: 13px var(--system-ui);
+ height: 100vh;
+ width: 100vw;
+ position: fixed;
+ left: 0;
+ right: 0;
+ margin: 0;
+ overscroll-behavior: contain !important;
+ color: var(--color);
+ background: var(--bg);
+ -webkit-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ overflow: hidden;
+}
+body > main {
+ position: absolute;
+ top: var(--toolbar-height);
+ left: 0;
+ right: 0;
+ padding: 0;
+ height: calc(100vh - var(--toolbar-height));
+}
+#version {
+ text-align: center;
+ padding: 0 8px;
+ font-family: var(--system-ui-mono);
+ font-size: 10px;
+ line-height: 18px;
+ color: var(--color);
+ background-color: var(--bg);
+ box-sizing: border-box;
+ border-radius: calc(var(--spacing) / 2);
+ font-weight: 900;
+ margin: auto;
+ box-shadow: 0 0 1px var(--color);
+}
+#sidebar {
+ position: fixed;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ margin: 0;
+ padding: 0;
+ background: #0003;
+ opacity: var(--sidebar-tween);
+ color: var(--color);
+ outline: none;
+ pointer-events: none;
+}
+
+#sidebar .module {
+ padding: 0;
+ margin: 0;
+ position: fixed;
+ overflow: hidden;
+ border-radius: calc(var(--spacing) / 2);
+ display: flex;
+ flex-flow: column;
+ box-shadow: 0px 0px 22px var(--spacing) #0001;
+ gap: var(--spacing);
+ right: calc(var(--spacing) + (var(--sidebar-tween) - 1) * 256px);
+ top: calc(var(--toolbar-height) - var(--spacing) / 2);
+ height: auto;
+ width: auto;
+ background: var(--light-bg);
+ padding: var(--spacing);
+ box-sizing: border-box;
+ pointer-events: all;
+}
+#sidebar .module > h2 {
+ margin: 0;
+ padding: 0;
+ font-size: 13px;
+ font-weight: 600;
+}
+#sidebar .module > ul {
+ margin: 0;
+ display: flex;
+ flex-flow: column;
+ gap: var(--spacing);
+ counter-reset: item;
+ flex: 0 1 auto;
+ box-sizing: border-box;
+ line-height: var(--icon-size);
+ padding: 0;
+}
+.applink {
+ display: flex;
+ gap: 0.75ch;
+ padding: 0;
+ flex: 0;
+ font-weight: 500;
+ margin: -1px;
+ line-height: 25px;
+}
+.applink > img {
+ height: var(--icon-size);
+ width: var(--icon-size);
+}
+.applink > .label {
+ text-decoration: none;
+ flex: 1 1;
+}
+.applink[data-here="true"] {
+ position: relative;
+ color: var(--theme);
+}
+.applink[data-here="true"]::before {
+ content: "";
+ position: absolute;
+ width: 1ch;
+ left: calc(var(--spacing) * -1);
+ top: 0;
+ bottom: 0;
+ width: 8px;
+ background: var(--theme);
+}
+.applink:not([data-here="true"]):hover {
+ color: var(--theme);
+ cursor: pointer;
+}
+#logo {
+ font-weight: 700;
+}
+#toolbar {
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: var(--toolbar-height);
+ background: var(--bg);
+ margin: 0;
+ padding: var(--spacing);
+ line-height: var(--toolbar-height);
+ display: flex;
+ color: var(--color);
+ box-sizing: border-box;
+ box-shadow: var(--toolbar-accent);
+ gap: var(--spacing);
+}
+#toolbar > button {
+ height: var(--icon-size);
+ width: var(--icon-size);
+ cursor: pointer;
+ border: none;
+ color: inherit;
+ background: transparent;
+ font-size: calc(var(--icon-size) * 1.2);
+ line-height: var(--icon-size);
+ padding: 0;
+ margin: 0;
+}
+#toolbar > button:hover {
+ color: var(--theme);
+}
+a,
+a:visited {
+ text-decoration: none;
+ color: unset;
+ padding: 0;
+ margin: 0;
+}
+a:hover {
+ color: var(--theme);
+}
+#nested a {
+ font-size: 100px;
+}
+#home > h1 {
+ padding: 0;
+ margin: 0;
+ display: flex;
+ font-size: 21px;
+ line-height: var(--icon-size);
+ font-weight: 400;
+ gap: var(--spacing);
+}
+#appicon {
+ height: var(--icon-size);
+ width: var(--icon-size);
+}
+#home > .label {
+ flex: 1;
+ line-height: var(--icon-size);
+}
+#toolbar > .spacer {
+ flex: 1;
+}
+#nested {
+ line-height: var(--icon-size);
+ padding: 0;
+ display: flex;
+ box-sizing: border-box
+ height: var(--toolbar-height);
+ gap: 6px;
+}
+@media (width < 400px) {
+ #appicon,
+ #version {
+  display: none;
+ }
+}
+@media (width < 500px) {
+ #nested {
+  position: fixed;
+  top: var(--toolbar-height);
+  left: 0;
+  right: 0;
+  width: 100vw;
+  box-shadow: var(--toolbar-accent);
+ }
+}
+@media (display-mode: window-controls-overlay) {
+ #toolbar {
+  padding-left: env(titlebar-area-x, 0);
+  top: env(titlebar-area-y, 0);
+  padding-right: calc(100% - env(titlebar-area-width, 100%) - env(titlebar-area-x, 0));
+  height: var(--toolbar-height);
+  width: 100%;
+  -webkit-app-region: drag;
+  app-region: drag;
+ }
+ #toolbar > a {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+ }
+}
+`,
+   "https://menu.core.parts/install.js": `
+super([
+ "https://sidebar.menu.core.parts",
+ "https://colormode.core.parts",
+ application
+])
+
+this.appOrigins = [
+ "https://kireji.io",
+ "https://kireji.app",
+ "https://core.parts",
+ "https://orenjinari.com",
+ "https://ejaugust.com",
+ "https://fallback.cloud",
+ "https://glowstick.click"
+]
+
+if (IS_DEV_HOST) this.appOrigins.push(GITHUB_ORIGIN)
+`,
+   "https://menu.core.parts/open.js": `
+await super.open()
+
+document.title = APP_ORIGIN
+
+this.containerHost = element(document.body, "main")
+this.containerHost.tabIndex = 1
+this.container = this.containerHost.attachShadow({ mode: "open" })
+
+this.styleSheet = new CSSStyleSheet()
+this.container.adoptedStyleSheets.push(this.styleSheet)
+
+this.toolbar = element(document.body, "nav")
+this.toolbar.setAttribute("id", "toolbar")
+
+this.homeButton = element(this.toolbar, "a")
+this.homeButton.innerHTML = \`<h1><img id=appicon src=favicon.svg /><span class=label>\${APP_HOST}</span></h1>\`
+this.homeButton.setAttribute("href", "#0")
+this.homeButton.setAttribute("id", "home")
+
+this.spacer = element(this.toolbar, "span")
+this.spacer.setAttribute("class", "spacer")
+
+this.version = element(this.toolbar, "span")
+this.version.setAttribute("id", "version")
+this.version.innerHTML = D["https://core.parts/version.txt"]
+
+if (navigator.share) {
+ this.shareButton = element(this.toolbar, "button")
+ this.shareButton.innerText = "➦"
+ this.shareButton.setAttribute("id", "share")
+ this.shareButton.onclick = () => navigator.share({ title: document.title, url: location.href }).catch(e => e.name == "AbortError" || console.error(e))
+}
+
+this.menuButton = element(this.toolbar, "button")
+this.menuButton.innerText = "≡"
+
 if (document.fullscreenEnabled) {
- const fullscreenButton = toolbar.appendChild(document.createElement("button"))
- fullscreenButton.onclick = () => {
+ this.fullscreenButton = element(this.toolbar, "button")
+ this.fullscreenButton.innerText = "⛶"
+ this.fullscreenButton.setAttribute("id", "fullscreen")
+ this.fullscreenButton.onclick = () => {
   if (!document.fullscreenElement) {
    if (document.documentElement.requestFullscreen) {
     document.documentElement.requestFullscreen()
@@ -1442,18 +1201,13 @@ if (document.fullscreenEnabled) {
    }
   }
  }
-
- fullscreenButton.innerText = "⛶"
 }
-containerHost.tabIndex = 1
-menuButton.innerText = "≡"
-this.menuButton = menuButton
-this.toolbar = toolbar
+
 let nestedToolbar, shadow
 this.getNestedToolbar = () => {
  if (!nestedToolbar) {
   nestedToolbar = document.createElement("nested-toolbar")
-  spacer.before(nestedToolbar)
+  this.spacer.before(nestedToolbar)
   nestedToolbar.setAttribute("id", "nested")
   shadow = nestedToolbar.attachShadow({ mode: "open" })
   shadow.styleSheet = new CSSStyleSheet()
@@ -1465,215 +1219,168 @@ this.destroyNestedToolbar = () => {
  nestedToolbar.remove()
  nestedToolbar = shadow = undefined
 }
-spacer.setAttribute("class", "spacer")
-toolbar.setAttribute("id", "toolbar")
-homeButton.setAttribute("href", "#0")
-homeButton.setAttribute("id", "home")
-homeButton.innerHTML = \`<h1><img id=appicon src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg /><span class=label>\${APP_HOST}</span></h1>\`
 
-if (navigator.share) {
- shareButton.onclick = () =>
-  navigator.share({ title: document.title, url: location.href }).catch(error => {
-   if (error.name !== "AbortError") console.error("Error sharing:", error)
-  })
- shareButton.innerText = "➦"
-}
-
-this.styleSheet = new CSSStyleSheet()
-this.sidebar = document.body.appendChild(document.createElement("menu"))
+this.sidebar = element(document.body, "menu")
 this.sidebar.setAttribute("id", "sidebar")
-const sidebarHeading = this.sidebar.appendChild(document.createElement("h2"))
-sidebarHeading.innerHTML = \`<span class=label>\${APP_HOST}</span><span id=version>\${D["https://core.parts/version.txt"]}</span>\`
-const appsModule = this.sidebar.appendChild(document.createElement("section")),
- appsTitle = appsModule.appendChild(document.createElement("h3")),
- appList = appsModule.appendChild(document.createElement("ul"))
-appsTitle.innerText = "Apps"
-appsModule.setAttribute("class", "module")
-appsModule.setAttribute("id", "apps")
-const pinsModule = this.sidebar.appendChild(document.createElement("section")),
-pinsTitle = pinsModule.appendChild(document.createElement("h3")),
-pinList = pinsModule.appendChild(document.createElement("ul"))
-pinsTitle.innerText = "Recent"
-pinsModule.setAttribute("class", "module")
-pinsModule.setAttribute("id", "pins")
-this.appNodes = {}
-this.pinNodes = {}
-
-function timeAgo(timestamp) {
-  const now = Date.now();
-  const diff = now - timestamp;
-
-  const seconds = Math.floor(diff / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-  const years = Math.floor(days / 365);
-
-  if (years > 0) {
-    return \`\${years}y ago\`;
-  } else if (days > 0) {
-    return \`\${days}d ago\`;
-  } else if (hours > 0) {
-    return \`\${hours}h ago\`;
-  } else if (minutes > 0) {
-    return \`\${minutes}m ago\`;
-  } else {
-    return \`\${seconds}s ago\`;
-  }
-}
-
-const
- menuFactorOrigins = this.parts.slice(0, 2).map(part => part.origin),
- makePin = (hash, timestamp) => {
-  const
-   node = pinList.appendChild(document.createElement("li")),
-   date = new Date(timestamp),
-   isLong = hash.length >= 13
-
-  node.innerHTML = \`<span class=hash>\${isLong ? hash.slice(0, 10) + "..." : hash}</span><span class=date>\${timeAgo(timestamp)}</span>\`
-  this.pinNodes[hash] = node
-
-  node.onclick = () => {
-   let index = decode(hash)
-   for (const origin of menuFactorOrigins) {
-    const factor = this.factors[origin]
-    index += factor.indexCache * factor.unit
-   }
-   this.goto(index)
-  }
- }
- 
-for (let i = 0; i < localStorage.length; i++) {
- const hash = localStorage.key(i)
- makePin(hash, parseInt(localStorage.getItem(hash)))
-}
-
-this.pin = () => {
- const
-  hash = encode(this.parts[2].index),
-  now = Date.now(),
-  isNew = localStorage.getItem(hash) === null
-
- localStorage.setItem(hash, now)
- if (isNew) makePin(hash, now)
-}
-
-const TMenu = T\`https://menu.core.parts\`
-
-for (let i = 0; i < this.apps.length; i++) {
- const appname = this.apps[i],
-  appParts = appname.split(".").slice(0, -1),
-  appNode = appList.appendChild(document.createElement("li")),
-  optionOrigin = "https://" + appname,
-  isFallback = !(optionOrigin in this.controller.options),
-  TOrigin = T([optionOrigin]),
-  partPerSe = isFallback ? this.controller.parts[0] : this.controller.options[optionOrigin].part;
-
-
- if (appname !== APP_HOST) {
-  appNode.onclick = e => {
-   e.preventDefault()
-
-   let url = "https://" + (appname === GITHUB_HOST ? "" : HOST_PREFIX) + appname
-
-   if (isFallback || TOrigin.prototype instanceof TMenu) {
-
-    let index = 0n
-    for (const origin of menuFactorOrigins) {
-     const 
-      { indexCache: localIndex } = this.factors[origin],
-      { unit: remoteUnit } = partPerSe.factors[origin]
-     console.log(url, origin, localIndex, remoteUnit)
-     index += localIndex * remoteUnit
-    }
-
-    url += encode(index)
-   }
-
-   location = url
-  }
- }
- appNode.setAttribute("class", "applink")
- appNode.innerHTML = \`<img src=https://\${HOST_PREFIX}\${appname}/favicon.svg /><span class=label>\${appname}</span>\`
- this.appNodes[appname] = appNode
-}
-this.appNodes[APP_HOST]?.setAttribute("data-selected", "true")
 this.sidebar.tabIndex = 1
-this.container = containerHost.attachShadow({ mode: "open" })
-this.container.adoptedStyleSheets.push(this.styleSheet)
-document.title = APP_HOST`,
-   // "https://menu.core.parts/...": `this.pin()`,
-   "https://menu.core.parts/destroy.js": `await super.destroy()
-document.body.innerHTML = ""`,
-   // =============================================================================================================================================================================
+
+this.appsModule = element(this.sidebar, "section")
+this.appsModule.setAttribute("class", "module")
+this.appsModule.setAttribute("id", "apps")
+
+// this.appsTitle = element(this.appsModule, "h2")
+// this.appsTitle.innerText = "Applications"
+
+this.appList = element(this.appsModule, "ul")
+this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
+ const
+  that = this.controller[appOrigin in this.controller ? appOrigin : 0],
+  targetOrigin = IS_DEV_HOST && appOrigin !== GITHUB_ORIGIN ? appOrigin.replace("//", "//dev.") : appOrigin
+
+ nodes[appOrigin] = element(this.appList, "li")
+ nodes[appOrigin].setAttribute("class", "applink")
+ nodes[appOrigin].innerHTML = \`<span class=label>\${appOrigin.slice(8)}</span><img src=\${targetOrigin}/favicon.svg />\`
+ if (appOrigin === APP_ORIGIN) nodes[appOrigin].setAttribute("data-here", "true")
+ else nodes[appOrigin].onclick = e => {
+  e.preventDefault()
+  let thatIndex = 0n
+  for (const origin of D["https://core.parts/preferences.uri"].split(" ")) {
+   if (origin in this && origin in that) thatIndex += this[origin].index * that[origin].unit
+  }
+  location = targetOrigin + encode(thatIndex)
+ }
+ return nodes
+}, {})
+`,
+   // ========================================================================= //
    "https://sidebar.menu.core.parts/base.uri": "https://decision.core.parts",
-   "https://sidebar.menu.core.parts/constructor.js": `super(["closed", "introduce", "open", "dismiss"])`,
-   "https://sidebar.menu.core.parts/create.js": `this.button = this.controller.menuButton
-this.sidebar = this.controller.sidebar`,
-   // =============================================================================================================================================================================
-   "https://closed.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
-this.button = this.controller.button
-this.button.onclick = () => this.controller.goto(1n)
-this.sidebar.setAttribute("style", "--sidebar-tween: 0")`,
-   "https://closed.sidebar.menu.core.parts/destroy.js": `await super.destroy()
+   "https://sidebar.menu.core.parts/install.js": `
+super([
+ "closed",
+ "introduce",
+ "open",
+ "dismiss"
+])
+`,
+   "https://sidebar.menu.core.parts/open.js": `
+this.menuButton = this.controller.menuButton
+this.sidebar = this.controller.sidebar
+`,
+   "https://sidebar.menu.core.parts/close.js": `
+delete this.menuButton
+delete this.sidebar
+`,
+   // ========================================================================= //
+   "https://closed.sidebar.menu.core.parts/open.js": `
+await super.open()
+
+this.sidebar = this.controller.sidebar
+this.sidebar.setAttribute("style", "--sidebar-tween: 0")
+
+this.menuButton = this.controller.menuButton
+this.menuButton.onclick = () => this.controller.goto(1n)
+`,
+   "https://closed.sidebar.menu.core.parts/close.js": `
+await super.close()
+
 if (document.activeElement === this.sidebar) this.sidebar.blur()
-this.button.onclick = undefined
-this.sidebar.removeAttribute("style")`,
-   // =============================================================================================================================================================================
+
+this.menuButton.onclick = undefined
+delete this.menuButton
+
+this.sidebar.removeAttribute("style")
+delete this.sidebar
+`,
+   // ========================================================================= //
    "https://introduce.sidebar.menu.core.parts/base.uri": "https://decision.core.parts",
-   "https://introduce.sidebar.menu.core.parts/constructor.js": `super(["half"])`,
-   "https://introduce.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
+   "https://introduce.sidebar.menu.core.parts/install.js": `
+super([
+ "half"
+])
+`,
+   "https://introduce.sidebar.menu.core.parts/open.js": `
+this.sidebar = this.controller.sidebar
 this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
-requestAnimationFrame(() => {
+
+this.pendingFrame = requestAnimationFrame(() => {
+ delete this.pendingFrame
  this.controller.goto(2n)
-})`,
-   "https://introduce.sidebar.menu.core.parts/destroy.js": `await super.destroy()
-this.sidebar.removeAttribute("style")`,
-   // =============================================================================================================================================================================
-   "https://open.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
-this.sidebar.focus()
-this.sidebar.onblur = e => {
- this.controller?.goto(3n)
+})
+`,
+   "https://introduce.sidebar.menu.core.parts/close.js": `
+await super.close()
+
+if (this.pendingFrame) {
+ cancelAnimationFrame(this.pendingFrame)
+ delete this.pendingFrame
 }
-this.sidebar.setAttribute("style", "--sidebar-tween: 1")`,
-   "https://open.sidebar.menu.core.parts/destroy.js": `await super.destroy()
+
+this.sidebar.removeAttribute("style")
+delete this.sidebar
+`,
+   // ========================================================================= //
+   "https://open.sidebar.menu.core.parts/open.js": `
+await super.open()
+
+this.sidebar = this.controller.sidebar
+this.sidebar.setAttribute("style", "--sidebar-tween: 1")
+this.sidebar.onblur = () => this.controller.goto(3n)
+this.sidebar.focus()
+`,
+   "https://open.sidebar.menu.core.parts/close.js": `
+await super.close()
+
 if (document.activeElement === this.sidebar) this.sidebar.blur()
 this.sidebar.onblur = undefined
-this.sidebar.removeAttribute("style")`,
-   // =============================================================================================================================================================================
+this.sidebar.removeAttribute("style")
+delete this.sidebar
+`,
+   // ========================================================================= //
    "https://dismiss.sidebar.menu.core.parts/base.uri": "https://decision.core.parts",
-   "https://dismiss.sidebar.menu.core.parts/constructor.js": `super(["half"])`,
-   "https://dismiss.sidebar.menu.core.parts/create.js": `this.sidebar = this.controller.sidebar
-this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
-requestAnimationFrame(() => this.controller.goto(0n))`,
-   "https://dismiss.sidebar.menu.core.parts/destroy.js": `await super.destroy()
-this.sidebar.removeAttribute("style")`,
-   // =============================================================================================================================================================================
-   "https://fallback.cloud/base.uri": "https://menu.core.parts",
-   "https://fallback.cloud/constructor.js": `super("error503")`,
-   // =============================================================================================================================================================================
-   "https://error503.fallback.cloud/create.js": `this.styleSheet = this.controller.styleSheet
-const
- lightColor = D["https://core.parts/light.color"],
- darkColor = D["https://core.parts/dark.color"],
- isLight = this.controller.factors["https://colormode.core.parts"].part.option.origin !== "https://dark.colormode.core.parts",
- background = isLight ? lightColor : darkColor,
- color = isLight ? darkColor : lightColor
+   "https://dismiss.sidebar.menu.core.parts/install.js": `
+super([
+ "half"
+])
+`,
+   "https://dismiss.sidebar.menu.core.parts/open.js": `
+await super.open()
 
-this.styleSheet.replaceSync(\`
+this.sidebar = this.controller.sidebar
+this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
+
+this.pendingFrame = requestAnimationFrame(() => {
+ delete this.pendingFrame
+ this.controller.goto(0n)
+})
+`,
+   "https://dismiss.sidebar.menu.core.parts/close.js": `
+await super.close()
+
+if (this.pendingFrame) {
+ cancelAnimationFrame(this.pendingFrame)
+ delete this.pendingFrame
+}
+
+this.sidebar.removeAttribute("style")
+delete this.sidebar
+`,
+   // ========================================================================= //
+   "https://fallback.cloud/base.uri": "https://menu.core.parts",
+   "https://fallback.cloud/install.js": `
+super("error503")
+`,
+   // ========================================================================= //
+   "https://error503.fallback.cloud/style.css": `
 :host {
  display: block;
- color: \${color};
- background: \${background};
  overflow: clip;
  box-sizing: border-box;
  padding: 15px;
- font: 18px system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 h1 {
  text-align: center;
- line-height: calc(100vh - 61px);
+ line-height: calc(100vh - var(--toolbar-height));
  height: 100%;
  position: absolute;
  width: 100%;
@@ -1685,7 +1392,7 @@ h1 {
 
 h1 {
  font-size: 35vw;
- color: \${color}0f;
+ color: var(--faint-color);
 }
 
 .thin {
@@ -1709,370 +1416,173 @@ img {
 
 #host {
  font-weight: 600;
-}\`)
+}
+`,
+   "https://error503.fallback.cloud/open.js": `
+await super.open()
+
 this.container = this.controller.container
-this.container.innerHTML = \`<h1>503</h1>
-<span id=float>
-<img src=https://\${HOST_PREFIX}\${APP_HOST}/favicon.svg><span class=thin>\${APP_HOST}</span><span>is coming soon.</span>
-</span>\``,
-   "https://error503.fallback.cloud/destroy.js": `await super.destroy()
-   this.container.innerHTML = ""
-   this.styleSheet.replaceSync("")`,
-   // =============================================================================================================================================================================
+this.container.innerHTML = \`<h1>503</h1><span id=float><img src=favicon.svg><span class=thin>\${APP_HOST}</span><span>is coming soon.</span></span>\`
+
+this.styleSheet = this.controller.styleSheet
+this.styleSheet.replaceSync(D["https://error503.fallback.cloud/style.css"])
+`,
+   "https://error503.fallback.cloud/close.js": `
+await super.close()
+
+this.styleSheet.replaceSync("")
+delete this.styleSheet
+
+this.container.innerHTML = ""
+delete this.container
+`,
+   // ========================================================================= //
    "https://colormode.core.parts/base.uri": "https://decision.core.parts",
-   "https://colormode.core.parts/constructor.js": `super(["device", "light", "dark"])`,
-   "https://colormode.core.parts/create.js": "this.styleSheet = this.controller.globalStyleSheet",
-   "https://device.colormode.core.parts/base.uri": "https://option.colormode.core.parts",
-   "https://light.colormode.core.parts/base.uri": "https://option.colormode.core.parts",
-   "https://dark.colormode.core.parts/base.uri": "https://option.colormode.core.parts",
-   // =============================================================================================================================================================================
-   "https://option.colormode.core.parts/create.js": `const
- lightColor = D["https://core.parts/light.color"],
- darkColor = D["https://core.parts/dark.color"],
- isLight = this.origin === "https://light.colormode.core.parts",
- background = isLight ? lightColor : darkColor,
- color = isLight ? darkColor : lightColor,
- custom = D[\`\${this.controller.origin}/style.css\`] ?? ""
-this.controller.styleSheet.replaceSync(\`html, body {
- --system-ui:
-  system-ui,
-  "Segoe UI",
-  Roboto,
-  Helvetica,
-  Arial,
-  sans-serif,
-  "Apple Color Emoji",
-  "Segoe UI Emoji",
-  "Segoe UI Symbol";
+   "https://colormode.core.parts/install.js": `
+super([
+ "device",
+ "light",
+ "dark"
+])
+`,
+   "https://colormode.core.parts/open.js": `
+this.styleSheet = this.controller.globalStyleSheet
+`,
+   "https://colormode.core.parts/close.js": `
+delete this.styleSheet
+`,
+   // ========================================================================= //
+   "https://device.colormode.core.parts/base.uri": "https://choice.colormode.core.parts",
+   // ========================================================================= //
+   "https://light.colormode.core.parts/base.uri": "https://choice.colormode.core.parts",
+   // ========================================================================= //
+   "https://dark.colormode.core.parts/base.uri": "https://choice.colormode.core.parts",
+   // ========================================================================= //
+   "https://choice.colormode.core.parts/open.js": `
+const
+ palette = ["1f2023", "faf9f8"],
+ isLight = this.subdomain === "light",
+ origin = this.controller.controller.origin
 
- --system-ui-mono:
-  ui-monospace, 
-  Menlo,
-  Monaco, 
-  "Cascadia Mono",
-  "Segoe UI Mono", 
-  "Roboto Mono", 
-  "Oxygen Mono", 
-  "Ubuntu Mono", 
-  "Source Code Pro",
-  "Fira Mono", 
-  "Droid Sans Mono", 
-  "Consolas",
-  "Courier New",
-  monospace;
+if (isLight) palette.reverse()
+else palette[1] = (parseInt(palette[1], 16) - 0x101010).toString(16)
 
-  --sidebar-tween: 0;
-  --sidebar-width: 256px;
-  --bottom-accent: 0 1.5px \${color}2f;
-
- font: 13px var(--system-ui);
- height: 100vh;
- width: 100vw;
- position: fixed;
- left: 0;
- right: 0;
- margin: 0;
- overscroll-behavior: contain !important;
- color: \${color};
- background: \${background};
- -webkit-user-select: none;
- -ms-user-select: none;
- user-select: none;
- overflow: hidden;
-}
-body > main {
- position: absolute;
- top: 61px;
- left: 0;
- right: 0;
- padding: 0;
- height: calc(100vh - 61px);
-}
-#version {
- text-align: center;
- padding: 0 8px;
- font-family: var(--system-ui-mono);
- font-size: 10px;
- line-height: 18px;
- color: \${color};
- background-color: \${background};
- box-sizing: border-box;
- border-radius: 7px;
- font-weight: 900;
- margin: auto;
- box-shadow: 0 0 1px \${color};
-}
-#sidebar {
- margin: 0;
- padding: 0;
- position: fixed;
- left: calc((var(--sidebar-tween) - 1) * var(--sidebar-width));
- top: 0;
- height: 100vh;
- width: var(--sidebar-width);
- background: \${background};
- opacity: var(--sidebar-tween);
- box-shadow: 0px 0px 22px 8px #0001;
- display: flex;
- flex-flow: column;
- margin: 0;
- box-sizing: border-box;
- flex: 2;
- min-width: 64px;
- color: \${color};
- outline: none;
+function hex2rgb(hex) {
+ hex = hex.replace("#", "")
+ return [
+  parseInt(hex.slice(0, 2), 16),
+  parseInt(hex.slice(2, 4), 16),
+  parseInt(hex.slice(4, 6), 16)
+ ]
 }
 
-#sidebar > .tagline {
- font-weight: 300;
- opacity: 60%;
- max-height: 100%;
- margin: 0;
+function rgb2hex(r, g, b) {
+ return "#" + [r, g, b].map(x => {
+  const hex = Math.round(x).toString(16);
+  return hex.length === 1 ? "0" + hex : hex;
+ }).join("");
 }
-#sidebar > h2 {
- display: flex;
- margin: 0;
- gap: 0.5ch;
- padding: 21px 21px 27px 21px;
- box-sizing: border-box;
- font-weight: 400;
+
+function blend(a, b, c = "screen") {
+ b = hex2rgb(b)
+
+ return rgb2hex(...hex2rgb(a).map((n, i) => {
+  const m = b[i], k = 255
+  switch (c) {
+   case "average": return (n + m) / 2;
+   case "multiply": return (n * m) / k;
+   case "screen": return k - (((k - n) * (k - m)) / k);
+   default: throw new RangeError("unsupported blend mode " + c);
+  }
+ }))
 }
-#sidebar > h2 > .label {
- flex: 1;
-}
-#sidebar > * {
- box-shadow: var(--bottom-accent);
-}
-#apps {
- min-height: 128px !important;
-}
-#pins {
- display: none;
-}
-#pins li {
- display: flex;
-}
-#pins h3 {
- background: \${background};
-}
-#pins .hash {
- flex: 1;
-}
-#pins .date {
- font-size: 10px;
-}
-#sidebar .module {
- padding: 1px 16px;
- overflow: hidden;
- overflow-y: auto;
- flex: 1 1 0;
- min-height: 64px;
-}
-#sidebar .module > h3 {
- margin: 0;
- padding: 8px 0;
- margin-bottom: 12px;
- position: sticky;
- top: 0;
-}
-#sidebar .module > ul {
- margin: 0;
- display: flex;
- flex-flow: column;
- gap: 1px;
- counter-reset: item;
- overflow: hidden;
- flex: 0 1 auto;
- box-sizing: border-box;
- line-height: 29px;
- padding: 0;
- min-height: 32px;
-}
-.applink {
- display: flex;
- gap: 1.5ch;
- padding: 4px 13px;
- font-size: 13.5px;
- border-radius: 3px;
- flex: 0;
- font-weight: 500;
- margin: -1px;
- line-height: 25px;
-}
-.applink > img {
- height: 25px;
- width: 25px;
-}
-.applink > .label {
- overflow-y: visible;
- overflow-x: clip;
- text-overflow: ellipsis;
- min-width: 0;
- flex: 1 1;
-}
-#sidebar .module > ul > [data-selected="true"] {
- color: rgba(12,103,192,1);
-}
-#sidebar .module > ul > li:not([data-selected="true"]):hover {
- color: rgba(12,103,192,1);
- cursor: pointer;
-}
-#logo {
- font-weight: 700;
-}
-#toolbar {
- position: absolute;
- top: 0;
- left: 0;
- right: 0;
- height: 61px;
- background: \${background};
- margin: 0;
- padding: 0;
- line-height: 61px;
- display: flex;
- color: \${color};
- box-sizing: border-box;
- box-shadow: \${isLight ? "0px 2px 7px #0002" : "var(--bottom-accent)"};
-}
-#toolbar > button {
- height: 29px;
- width: 29px;
- cursor: pointer;
- margin: 16px;
- border-radius: 5px;
- border: none;
- color: inherit;
- background: transparent;
- font-size: 29px;
- line-height: 29px;
- padding: 0;
- margin: 16px;
-}
-#toolbar > button:hover {
- background: #fff5;
-}
-a,
-a:visited {
- color: unset;
- padding: 0;
- margin: 0;
-}
-#nested a {
- font-size: 100px;
-}
-#home > h1 {
- padding: 0;
- margin: 16px 0;
- display: flex;
- font-size: 21px;
- line-height: 29px;
- font-weight: 400;
-}
-#appicon {
- height: 39px;
- width: 39px;
- margin: -5px;
- margin-right: 1ch;
-}
-#home > .label {
- flex: 1;
- line-height: 29px;
-}
-#toolbar > .spacer {
- flex: 1;
-}
-#nested {
- line-height: 29px;
- padding: 16px;
- display: flex;
- box-sizing: border-box
- height: 61px;
- gap: 6px;
-}
-@media (width < 400px) {
- #appicon {
-  display: none;
- }
-}
-@media (width < 500px) {
- #nested {
-  position: fixed;
-  top: 61px;
-  left: 0;
-  right: 0;
-  width: 100vw;
-  box-shadow: \${isLight ? "0px 2px 7px #0002" : "var(--bottom-accent)"};
- }
-}
-@media (display-mode: window-controls-overlay) {
- #toolbar {
-  padding-left: env(titlebar-area-x, 0);
-  top: env(titlebar-area-y, 0);
-  padding-right: calc(100% - env(titlebar-area-width, 100%) - env(titlebar-area-x, 0));
-  height: 61px;
-  width: 100%;
-  -webkit-app-region: drag;
-  app-region: drag;
- }
- #toolbar > a {
-  -webkit-app-region: no-drag;
-  app-region: no-drag;
- }
-}
-\${custom}\`)`,
+
+const
+ globalCSS = D["https://menu.core.parts/style.css"],
+ customCSS = D[\`\${origin}/menu.css\`] ?? "",
+ themeColor = D[\`\${origin}/theme.color\`] ?? "ffffff",
+ themeBG = blend(themeColor, "171717", "multiply"),
+ lightBG = blend(themeColor, "2f2f2f", "multiply"),
+ scriptCSS = \`
+html,
+body {
+ --color: #\${palette[1]};
+ --bg: \${themeBG};
+ --faint-color: #\${palette[1]}0f;
+ --light-bg: \${lightBG};
+ --accent-color: #\${palette[1]}2f;
+ --toolbar-accent: var(--bottom-\${isLight ? "shadow" : "accent"});
+ --theme: \${themeColor};
+}\`
+
+this.controller.styleSheet.replaceSync(globalCSS + scriptCSS + customCSS)
+`,
   },
   _ = globalThis,
-  GITHUB_HOST = "ejaugust.github.io",
+  GITHUB_ORIGIN = "https://ejaugust.github.io",
   HAS_DEV_PREFIX = location.host.startsWith("dev."),
-  IS_GITHUB = location.host === GITHUB_HOST,
+  IS_GITHUB = location.host === GITHUB_ORIGIN,
   IS_DEV_HOST = HAS_DEV_PREFIX || IS_GITHUB,
   APP_HOST = location.host.slice(4 * HAS_DEV_PREFIX),
+  APP_ORIGIN = "https://" + APP_HOST,
   HOST_PREFIX = IS_DEV_HOST ? "dev." : "",
-  ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
+  alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
   encode = index => {
    const hexads = [],
     binaryString = index.toString(2),
     newLength = Math.ceil(binaryString.length / 6),
     fullbin = binaryString.padStart(newLength * 6, 0)
    for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
-   return "#" + hexads.reduce((hash, hexad) => hash + ALPHABET[parseInt(hexad, 2)], "")
+   return "#" + hexads.reduce((hash, hexad) => hash + alphabet[parseInt(hexad, 2)], "")
   },
   decode = hash => {
    let binaryString = "0b"
-   for (let i = 1; i < hash.length; i++) binaryString += ALPHABET.indexOf(hash[i]).toString(2).padStart(6, 0)
+   for (let i = 1; i < hash.length; i++) binaryString += alphabet.indexOf(hash[i]).toString(2).padStart(6, 0)
    return BigInt(binaryString)
   },
-  info = (...args) => (L ? console.info(`[${E}]`, ...args) : null),
-  L = D["https://core.parts/logging.txt"] === "true",
-  V = D["https://core.parts/verbose.txt"] === "true",
-  E = _.constructor === _.Window ? "client" : "server",
-  𝕋 = {},
-  T = (a, b, origin = b ? a.join(b["index.txt"] ?? "") : a[0]) =>
-   (𝕋[origin] ??= eval(
-    `(class ${origin.slice(8).replaceAll(".", "_").replaceAll("-", "___")}${
-     origin === "https://base.core.parts" ? "" : ` extends T\`${b?.["base.uri"] ?? (D[`${origin}/base.uri`] || "https://base.core.parts")}\``
-    } {\n get origin() { return "${origin}" }\n ${[
-     ["constructor", (b?.[`inputs.txt`] ?? D[`${origin}/inputs.txt`] ?? "").replaceAll(/\s+/g, ", "), 1],
-     ["notify", "...sources"],
-     ["create"],
-     ["checkout", "index"],
-     ["destroy"],
-     ["goto", "index"],
-    ]
-     .map(([ƒ, x = ""], i) =>
-      b?.[`${ƒ}.js`] || `${origin}/${ƒ}.js` in D || (L && V)
-       ? `${i === 0 ? "" : "async "}${ƒ}(${x}) {${
-          L && (V || i !== 0)
-           ? `\n  console.group(\`[${E}] ${i === 0 ? `` : ` | \${this.origin} | \${this.index}`} | ${origin} --> ${ƒ}(${[3, 5].includes(i) ? "${index}" : x})\`);\n  `
-           : ""
-         }${b?.[`${ƒ}.js`] ?? D[`${origin}/${ƒ}.js`] ?? `${i === 0 ? "" : "await "}super${i === 0 ? "" : "." + ƒ}(${x})`}${
-          L && (V || i !== 0) ? `\n  ;console.groupEnd()` : ""
-         }\n }`
-       : "",
-     )
-     .join("\n ")}\n})`,
-   ))
+  element = (node, tagname) => node.appendChild(document.createElement(tagname)),
+  logging = false,
+  environment = _.constructor === _.Window ? "client" : "server",
+  standardMethods = [["install"], ["emit", "...parts"], ["open"], ["absorb", "index"], ["close"], ["goto", "index"]],
+  baseOrigin = "https://base.core.parts",
+  types = {},
+  T = (originSegments, override) => {
+   const origin = override ? originSegments.join(override["index.txt"] ?? "") : originSegments[0],
+    name = origin.slice(8).replaceAll(".", "_").replaceAll("-", "__"),
+    base = origin === baseOrigin ? "Array" : `T\`${override?.["base.uri"] ?? (D[`${origin}/base.uri`] || baseOrigin)}\``,
+    resolve = filename => {
+     let has = false,
+      result = undefined
+     if (override && filename in override) {
+      has = true
+      result = override[filename]
+     } else {
+      const url = `${origin}/${filename}`
+      if (url in D) {
+       has = true
+       result = D[url]
+      }
+     }
+     return [has, result]
+    },
+    methods = standardMethods.map(([name, args = ""]) => {
+     const installs = name === "install",
+      logsMethod = !installs && logging,
+      [overridesMethod, resolvedBody] = resolve(`${name}.js`)
+
+     if (!(overridesMethod || logsMethod)) return ""
+     if (installs) return `constructor(${resolve("inputs.txt")[1] ?? ""}) {\n  ${resolvedBody}\n }`
+     let body = resolvedBody
+     if (logsMethod) {
+      const logSignature = args == "index" ? "${index}" : args,
+       logOpen = `console.group(\`[${environment}] | \${this.origin} | \${this.index} | ${origin} --> ${name}(${logSignature})\`);\n  `
+      body = `${logOpen}${overridesMethod ? body : `await super.${name}(${args})`}\n  ;console.groupEnd()`
+     }
+     return `async ${name}(${args}) {\n  ${body}\n }`
+    })
+
+   return (types[origin] ??= eval(`(class ${name} extends ${base} {\n get origin() { return "${origin}" }\n ${methods.join("\n ")}\n})`))
+  }
 
  new T`https://boot.core.parts`()
 }
