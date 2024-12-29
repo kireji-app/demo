@@ -133,8 +133,6 @@ for (const title of this[0].slice(1).reverse()) {
  if (recents.length < 10) recents.push(title)
 }
 
-console.log("get the proper url of this", tvShows[0])
-
 this.container.innerHTML = \`
 <div id=scroller>
  <section id=promo>
@@ -598,7 +596,7 @@ super(["scene-001", "scene-002", "scene-003"])
  },
 `,*/
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.4",
+   "https://core.parts/version.txt": "0.92.5",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -984,7 +982,7 @@ super("lander")
  display: flex;
  flex-flow: column nowrap;
  gap: 1ch;
- font-size: max(min(2vh, 2vw), 12px);
+ font-size: max(min(3vh, 3vw), 12px);
  place-content: center;
  place-items: center;
 }
@@ -1029,10 +1027,8 @@ await super.open()
 `,
    "https://lander.kireji.io/close.js": `
 await super.close()
-this.controller.styleSheet.replaceSync("")
 
 delete this.styleSheet
-
 delete this.container
 `,
    // ========================================================================= //
@@ -1051,6 +1047,7 @@ this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
 await super.close()
 
 this.controller.container.innerHTML = ""
+this.controller.styleSheet.replaceSync("")
 `,
    // ========================================================================= //
    "https://model.editor.kireji.io/base.uri": "https://disjunction.core.parts",
@@ -1332,6 +1329,16 @@ a:visited {
  }
 }
 `,
+   "https://editor.kireji.io/preview.css": `
+:host {
+ display: flex;
+ flex-flow: row wrap;
+ gap: 1ch;
+ place-items: center;
+ place-content: center;
+ font-size: max(min(3vh, 3vw), 12px);
+}
+`,
    "https://editor.kireji.io/open.js": `
 await super.open()
 
@@ -1339,6 +1346,7 @@ this.nodes = {}
 
 this.toolbar = this.controller.controller.getNestedToolbar()
 this.toolbar.styleSheet.replaceSync(D["https://editor.kireji.io/toolbar.css"])
+this.controller.styleSheet.replaceSync(D["https://editor.kireji.io/preview.css"])
 
 this.container = this.controller.controller.container
 `,
@@ -1348,6 +1356,7 @@ await super.close()
 delete this.container
 
 this.toolbar.styleSheet.replaceSync("")
+this.container.styleSheet.replaceSync("")
 this.controller.controller.destroyNestedToolbar()
 delete this.toolbar
 
@@ -1775,7 +1784,7 @@ this.appOrigins = [
  
 ]
 
-if (IS_DEV_HOST) this.appOrigins.push(GITHUB_ORIGIN)
+if (IS_DEV_HOST || IS_GITHUB) this.appOrigins.push(GITHUB_ORIGIN)
 `,
    "https://menu.core.parts/open.js": `
 await super.open()
