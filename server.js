@@ -598,7 +598,7 @@ super(["scene-001", "scene-002", "scene-003"])
  },
 `,*/
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.3",
+   "https://core.parts/version.txt": "0.92.4",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -749,6 +749,8 @@ this.index = this.choice.offset + this.choice.index
 await super.emit(...parts)
 `,
    // ========================================================================= //
+   "https://core.parts/base.uri": "https://fallback.cloud",
+   // ========================================================================= //
    "https://boot.core.parts/base.uri": "https://disjunction.core.parts",
    "https://boot.core.parts/install.js": `
 super([
@@ -767,6 +769,7 @@ super([
  "https://fallback.cloud",
  "https://orenjinari.com",
  "https://kireji.io",
+ "https://core.parts",
  "https://glowstick.click"
 ])
 `,
@@ -2000,7 +2003,7 @@ delete this.sidebar
    // ========================================================================= //
    "https://fallback.cloud/base.uri": "https://menu.core.parts",
    "https://fallback.cloud/install.js": `
-super("error503")
+super("https://error503.fallback.cloud")
 `,
    // ========================================================================= //
    "https://error503.fallback.cloud/style.css": `
