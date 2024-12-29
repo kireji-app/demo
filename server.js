@@ -596,7 +596,7 @@ super(["scene-001", "scene-002", "scene-003"])
  },
 `,*/
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.0",
+   "https://core.parts/version.txt": "0.92.2",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
