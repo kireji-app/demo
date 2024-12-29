@@ -596,7 +596,7 @@ super(["scene-001", "scene-002", "scene-003"])
  },
 `,*/
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.5",
+   "https://core.parts/version.txt": "0.92.6",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -2060,6 +2060,12 @@ img {
 
 #host {
  font-weight: 600;
+}
+
+@media (width < 500px) {
+ #float {
+  font-size: max(min(5vw, 5vh), 16px);
+ }
 }
 `,
    "https://error503.fallback.cloud/open.js": `
