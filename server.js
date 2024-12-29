@@ -89,8 +89,12 @@ await super.open()
 
 this.container = this.controller.container
 this.styleSheet = this.controller.styleSheet
+`,
+   "https://lander.glowstick.click/close.js": `
+delete this.styleSheet
+delete this.container
 
-this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
+await super.close()
 `,
    // ========================================================================= //
    "https://welcome.glowstick.click/body.html": `
@@ -98,14 +102,16 @@ this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
 <p>This app is in pre-alpha. The content library is still mostly empty. It is a video streaming platform with a permalink to every subset (clip) of every video in the library. The engine is exactly the same as <a href=https://${HOST_PREFIX}kireji.io>kireji.io</a> but this model renders movies and TV shows instead of words.
 <p><a href=#1>Click here</a> to try it.
 `,
-   "https://welcome.glowstick.click/open.js": `
-await super.open()
-
+   "https://welcome.glowstick.click/open.js": ` 
 this.controller.container.innerHTML = D["https://welcome.glowstick.click/body.html"]
+this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
+
+await super.open()
 `,
    "https://welcome.glowstick.click/close.js": `
 await super.close()
 
+this.controller.styleSheet.replaceSync("")
 this.controller.container.innerHTML = ""
 `,
    // ========================================================================= //
@@ -120,7 +126,7 @@ super([
    "https://library.glowstick.click/open.js": `
 this.container = this.controller.container
 
-const tvShows = [], movies = [], recents = [], promoOrigins = D[\`\${this.origin}/promo.uri\`].split(" "), promo = this[0][promoOrigins[1]]
+const tvShows = [], movies = [], recents = [], promos = D[\`\${this.origin}/promo.uri\`].split(" ").map(origin => this[0][origin])
 
 for (const title of this[0].slice(1).reverse()) {
  (title.isShow ? tvShows : movies).push(title)
@@ -132,7 +138,9 @@ console.log("get the proper url of this", tvShows[0])
 this.container.innerHTML = \`
 <div id=scroller>
  <section id=promo>
-  <img src="\${promo.subdomain}-promo.png" alt="Promotional banner of \${promo.niceName}">
+  <a href=#\${encode(promos[0].offset + promos[0].controller.offset + promos[0].controller.controller.offset)}>
+   <img src="\${promos[0].subdomain}-promo.png" alt="Promotional banner of \${promos[0].niceName}">
+  </a>
  </section>
  <section>
   <h2>TV Shows</h2>
@@ -287,11 +295,13 @@ dialog > div > h3 {
  font-size: 23px;
  padding: 0 16px;
 }
-dialog > div > a,
-dialog > div > a:visited {
+.cta,
+.cta:visited {
  padding: 16px;
  color: var(--bg);
- background: var(--theme);
+ background: silver;
+ cursor: default;
+ pointer-events: none;
  width: calc(100vw - var(--spacing) * 2);
  display: block;
  font-size: 18px;
@@ -349,7 +359,7 @@ dialog > div > button {
 }
 #promo {
  width: 100vw;
- height: calc(900vw / (32 + 16));
+ height: fit-content;
  overflow: hidden;
  position: relative;
 }
@@ -360,8 +370,11 @@ dialog > div > button {
  height: 100%;
  left: 0;
  top: 0;
+ pointer-events: none;
 }
-#promo > img {
+#promo > a,
+#promo > a > img {
+ display: block;
  width: 100%;
 }
 \`)
@@ -409,11 +422,18 @@ this.container = this.controller.container
 
 this.popup = element(this.container, "dialog")
 this.popup.tabIndex = 0
-this.popup.innerHTML = \`<div><button>‹</button><img src="\${this.subdomain}-still.png" alt="Still image captured from \${this.niceName}"></img><h3>\${this.niceName}</h3><p id=release-date>Released on \${new Date(this.releaseDate).toLocaleDateString("en-US", {
+this.popup.innerHTML = \`
+<div>
+ <button>‹</button>
+ <img src="\${this.subdomain}-still.png" alt="Still image captured from \${this.niceName}">
+ <h3>\${this.niceName}</h3>
+ <p id=release-date>Released on \${new Date(this.releaseDate).toLocaleDateString("en-US", {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
-})}</p><a href=#0 class=cta>Watch Now</a><p>\${this.description}</p></div>\`
+})}</p>
+ <a href=#0 class=cta>Coming soon</a><p>\${this.description}</p>
+</div>\`
 
 this.backButton = this.popup.querySelector("button")
 this.backButton.onclick = async e => {
@@ -486,7 +506,7 @@ super(["season-0"], "12/24/2024", "Space Guy", "Travel the stars with the galaxy
    // ========================================================================= //
    "https://sample.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
    "https://sample.title.glowstick.click/install.js": `
-super(["season-0"], "12/28/2024", "Sample", "The life and times of a blood spatter analyst.")
+super(["season-0"], "12/28/2024", "Sample", "This fake documentary follows a fake blood sample through a fake lab procedure.")
 `,
    // ========================================================================= //
    "https://season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
@@ -996,11 +1016,18 @@ super([
 ])
 `,
    "https://lander.kireji.io/open.js": `
-await super.open()
-
 this.container = this.controller.container
+this.styleSheet = this.controller.styleSheet
 
-this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
+await super.open()
+`,
+   "https://lander.kireji.io/close.js": `
+await super.close()
+this.controller.styleSheet.replaceSync("")
+
+delete this.styleSheet
+
+delete this.container
 `,
    // ========================================================================= //
    "https://welcome.kireji.io/body.html": `
@@ -1012,6 +1039,7 @@ this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
 await super.open()
 
 this.controller.container.innerHTML = D["https://welcome.kireji.io/body.html"]
+this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
 `,
    "https://welcome.kireji.io/close.js": `
 await super.close()
