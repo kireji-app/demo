@@ -596,7 +596,10 @@ super(["scene-001", "scene-002", "scene-003"])
  },
 `,*/
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.6",
+   "https://ejaugust.github.io/theme.color": "#2dba4e",
+   "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
+   // ========================================================================= //
+   "https://core.parts/version.txt": "0.92.7",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1776,15 +1779,18 @@ super([
 this.appOrigins = [
  "https://kireji.io",
  "https://glowstick.click",
- // "https://kireji.app",
  "https://core.parts",
+ // "https://kireji.app",
  // "https://orenjinari.com",
  // "https://ejaugust.com",
  // "https://fallback.cloud",
- 
 ]
 
-if (IS_DEV_HOST || IS_GITHUB) this.appOrigins.push(GITHUB_ORIGIN)
+console.log(IS_DEV_HOST, this)
+
+if (IS_DEV_HOST) {
+ this.appOrigins.push(GITHUB_ORIGIN)
+}
 `,
    "https://menu.core.parts/open.js": `
 await super.open()
