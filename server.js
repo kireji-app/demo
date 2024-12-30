@@ -252,8 +252,8 @@ a, a:visited {
  outline-offset: 6px;
 }
 .topic > a > figure > img {
- width: 256px;
- height: 150px;
+ width: 32vmin;
+ height: 18vmin;
  display: block;
 }
 dialog {
@@ -596,10 +596,13 @@ super(["scene-001", "scene-002", "scene-003"])
  },
 `,*/
    // ========================================================================= //
+   "https://ejaugust.com/theme.color": "#afada9",
+   "https://ejaugust.com/base.uri": "https://fallback.cloud",
+   // ========================================================================= //
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.11",
+   "https://core.parts/version.txt": "0.92.12",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -772,7 +775,8 @@ super([
  "https://kireji.io",
  "https://core.parts",
  "https://glowstick.click",
- "https://ejaugust.github.io"
+ "https://ejaugust.github.io",
+ "https://ejaugust.com"
 ])
 `,
    "https://client.core.parts/open.js": `
@@ -972,8 +976,6 @@ _.oninstall = e => _.skipWaiting()
 _.onactivate = e => _.clients.claim()
 _.onmessage = e => [onactivate, () => registration.unregister().then(() => e.source.postMessage({ code: 0 }))][e.data.code]()
 `,
-   // ========================================================================= //
-   "https://ejaugust.com/theme.color": "#188afc",
    // ========================================================================= //
    "https://kireji.io/theme.color": "#8accaf",
    "https://kireji.io/base.uri": "https://menu.core.parts",
@@ -1577,11 +1579,8 @@ body > main {
  font-size: 10px;
  line-height: 18px;
  color: var(--color);
- background-color: var(--bg);
- border-radius: calc(var(--spacing) / 2);
  font-weight: 900;
  margin: auto;
- box-shadow: 0 0 1px var(--color);
 }
 #sidebar {
  position: fixed;
@@ -1634,7 +1633,7 @@ body > main {
 }
 .applink {
  display: flex;
- gap: 0.75ch;
+ gap: 1.75ch;
  padding: 0;
  flex: 0;
  font-weight: 500;
@@ -1781,6 +1780,7 @@ this.appOrigins = [
  "https://kireji.io",
  "https://glowstick.click",
  "https://core.parts",
+ "https://ejaugust.com",
  // "https://kireji.app",
  // "https://orenjinari.com",
  // "https://ejaugust.com",
@@ -1826,7 +1826,9 @@ if (navigator.share) {
 this.menuButton = element(this.toolbar, "button")
 this.menuButton.innerText = "≡"
 
-if (document.fullscreenEnabled) {
+const showButton = false
+
+if (showButton && document.fullscreenEnabled) {
  this.fullscreenButton = element(this.toolbar, "button")
  this.fullscreenButton.innerText = "⛶"
  this.fullscreenButton.setAttribute("id", "fullscreen")
@@ -1887,7 +1889,7 @@ this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
 
  nodes[appOrigin] = element(this.appList, "li")
  nodes[appOrigin].setAttribute("class", "applink")
- nodes[appOrigin].innerHTML = \`<span class=label>\${appOrigin.slice(8)}</span><img src=\${targetOrigin}/favicon.svg />\`
+ nodes[appOrigin].innerHTML = \`<span class=label>\${appOrigin.slice(appOrigin === GITHUB_ORIGIN ? 17 : 8)}</span><img src=\${targetOrigin}/favicon.svg />\`
  if (appOrigin === APP_ORIGIN) nodes[appOrigin].setAttribute("data-here", "true")
  else nodes[appOrigin].onclick = e => {
   e.preventDefault()
