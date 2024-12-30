@@ -602,7 +602,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.12",
+   "https://core.parts/version.txt": "0.93.0",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1044,10 +1044,10 @@ delete this.container
 <p><a href=#1>Click here</a> to try it.
 `,
    "https://welcome.kireji.io/open.js": `
-await super.open()
-
 this.controller.container.innerHTML = D["https://welcome.kireji.io/body.html"]
 this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
+
+await super.open()
 `,
    "https://welcome.kireji.io/close.js": `
 await super.close()
@@ -1071,8 +1071,10 @@ this.container = this.controller.container
 
 this.label = element(this.toolbar, "label")
 this.label.innerHTML = "Grammar model:"
+this.label.setAttribute("for", "pick-model")
 
 this.select = element(this.toolbar, "select")
+this.select.setAttribute("name", "pick-model")
 this.select.onchange = () => this.goto(this[this.select.selectedIndex].offset)
 for (const part of this) element(this.select, "option").innerHTML = part.subdomain
 
@@ -1247,17 +1249,17 @@ this.populate()
    // ========================================================================= //
    "https://adjectives.dict-001.kireji.io/base.uri": "https://word.kireji.io",
    "https://adjectives.dict-001.kireji.io/install.js": `
-super(["prime", "pre-origin", "post-origin", "redundant", "added", "reusable", "empty", "hash-stored", "dead", "implicit", "critical", "new", "explicit", "certain", "desirable", "real", "complete", "prior", "non-empty", "straight", "minimum", "executive", "necessary", "required", "intended", "non-zero", "static", "arbitrary", "constructed", "potential", "current", "old", "cloned", "resulting", "quick", "successive", "various", "large", "unique", "inherent", "physical", "rendered", "partial", "separate", "structural", "locked", "different", "apparent", "overall", "settable", "environmental", "independent", "single", "hybrid", "no-client", "entire-factor", "per-non", "client-side", "initial", "future", "consequential", "outgoing", "incoming", "alternate", "specific", "flaming", "supported", "key-value", "false", "open", "cached", "Missing", "same", "flat", "early", "ready", "previous", "tagged", "signed", "expected", "leading", "Variable-length", "Invalid", "compressed", "extended", "private", "total", "major", "minor", "orig", "hasTransform", "installed", "parsed", "built", "styled", "inheriting", "loaded", "selected", "woff", "noFocus"])
+super(["intended", "prime", "pre-origin", "post-origin", "redundant", "added", "reusable", "empty", "hash-stored", "dead", "implicit", "critical", "new", "explicit", "certain", "desirable", "real", "complete", "prior", "non-empty", "straight", "minimum", "executive", "necessary", "required", "non-zero", "static", "arbitrary", "constructed", "potential", "current", "old", "cloned", "resulting", "quick", "successive", "various", "large", "unique", "inherent", "physical", "rendered", "partial", "separate", "structural", "locked", "different", "apparent", "overall", "settable", "environmental", "independent", "single", "hybrid", "no-client", "entire-factor", "per-non", "client-side", "initial", "future", "consequential", "outgoing", "incoming", "alternate", "specific", "flaming", "supported", "key-value", "false", "open", "cached", "Missing", "same", "flat", "early", "ready", "previous", "tagged", "signed", "expected", "leading", "Variable-length", "Invalid", "compressed", "extended", "private", "total", "major", "minor", "orig", "hasTransform", "installed", "parsed", "built", "styled", "inheriting", "loaded", "selected", "woff", "noFocus"])
 `,
    // ========================================================================= //
    "https://nouns.dict-001.kireji.io/base.uri": "https://word.kireji.io",
    "https://nouns.dict-001.kireji.io/install.js": `
-super(["cars",  "cats",  "dogs",  "birds", "subsets", "factors", "powersets", "poems", "primes", "websites", "menus", "origins", "states", "problems", "components", "results", "documents", "sites", "moments", "goals", "things", "landmines", "designs", "questions", "times", "introductions", "contents", "contrasts", "matters", "facts", "intents", "contexts", "environments", "numbers", "instructions", "classes", "apps", "parts", "arguments", "subparts", "tasks", "branches", "bugs", "offsets", "coefficients", "events", "objects", "signals", "changes", "settings", "data", "flows", "methods", "updates", "schemes", "indices", "inputs", "uris", "RangeErrors", "typenames", "integers", "structures", "representations", "examples", "versions", "computations"])
+super(["words", "objects", "facts", "cars",  "cats",  "dogs",  "birds", "subsets", "factors", "powersets", "poems", "primes", "websites", "menus", "origins", "states", "problems", "components", "results", "documents", "sites", "moments", "goals", "things", "landmines", "designs", "questions", "times", "introductions", "contents", "contrasts", "matters", "intents", "contexts", "environments", "numbers", "instructions", "classes", "apps", "parts", "arguments", "subparts", "tasks", "branches", "bugs", "offsets", "coefficients", "events", "signals", "changes", "settings", "data", "flows", "methods", "updates", "schemes", "indices", "inputs", "uris", "RangeErrors", "typenames", "integers", "structures", "representations", "examples", "versions", "computations"])
 `,
    // ========================================================================= //
    "https://verbs.dict-001.kireji.io/base.uri": "https://word.kireji.io",
    "https://verbs.dict-001.kireji.io/install.js": `
-super(["jump", "run", "eat", "smile", "must", "look", "perform", "subtract", "change", "rest", "wait", "forget", "step", "leave", "enter", "start", "extend", "showStatus", "assert", "await", "populate", "warn", "have", "construct", "maintain", "compute", "pass", "control", "stop", "repopulate", "check", "consider", "modify", "set", "invert", "integrate", "use", "remove", "craft", "harvest", "provide", "update", "return", "throw", "create", "slice", "replace", "eval", "log", "appear", "support", "gain", "imagine"])
+super(["appear", "jump", "run", "eat", "smile", "must", "look", "perform", "subtract", "change", "rest", "wait", "forget", "step", "leave", "enter", "start", "extend", "showStatus", "assert", "await", "populate", "warn", "have", "construct", "maintain", "compute", "pass", "control", "stop", "repopulate", "check", "consider", "modify", "set", "invert", "integrate", "use", "remove", "craft", "harvest", "provide", "update", "return", "throw", "create", "slice", "replace", "eval", "log", "support", "gain", "imagine"])
 `,
    // ========================================================================= //
    "https://koan-001.kireji.io/base.uri": "https://model.kireji.io",
@@ -1362,7 +1364,7 @@ await super.close()
 delete this.container
 
 this.toolbar.styleSheet.replaceSync("")
-this.container.styleSheet.replaceSync("")
+this.controller.styleSheet.replaceSync("")
 this.controller.controller.destroyNestedToolbar()
 delete this.toolbar
 
@@ -1816,7 +1818,9 @@ this.version = element(this.toolbar, "span")
 this.version.setAttribute("id", "version")
 this.version.innerHTML = D["https://core.parts/version.txt"]
 
-if (navigator.share) {
+const showExpirimentalButtons = false
+
+if (showExpirimentalButtons && navigator.share) {
  this.shareButton = element(this.toolbar, "button")
  this.shareButton.innerText = "➦"
  this.shareButton.setAttribute("id", "share")
@@ -1826,9 +1830,8 @@ if (navigator.share) {
 this.menuButton = element(this.toolbar, "button")
 this.menuButton.innerText = "≡"
 
-const showButton = false
 
-if (showButton && document.fullscreenEnabled) {
+if (showExpirimentalButtons && document.fullscreenEnabled) {
  this.fullscreenButton = element(this.toolbar, "button")
  this.fullscreenButton.innerText = "⛶"
  this.fullscreenButton.setAttribute("id", "fullscreen")
