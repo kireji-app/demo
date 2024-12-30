@@ -599,7 +599,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.9",
+   "https://core.parts/version.txt": "0.92.10",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -771,7 +771,8 @@ super([
  "https://orenjinari.com",
  "https://kireji.io",
  "https://core.parts",
- "https://glowstick.click"
+ "https://glowstick.click",
+ "https://ejaugust.github.io"
 ])
 `,
    "https://client.core.parts/open.js": `
