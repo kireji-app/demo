@@ -3,7 +3,7 @@ function boot() {
  const _ = globalThis,
   GITHUB_ORIGIN = "https://ejaugust.github.io",
   HAS_DEV_PREFIX = location.host.startsWith("dev."),
-  IS_GITHUB = location.host === GITHUB_ORIGIN,
+  IS_GITHUB = location.origin === GITHUB_ORIGIN,
   IS_DEV_HOST = HAS_DEV_PREFIX || IS_GITHUB,
   APP_HOST = location.host.slice(4 * HAS_DEV_PREFIX),
   APP_ORIGIN = "https://" + APP_HOST,
@@ -599,7 +599,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.8",
+   "https://core.parts/version.txt": "0.92.9",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1786,12 +1786,7 @@ this.appOrigins = [
  // "https://fallback.cloud",
 ]
 
-console.log(IS_DEV_HOST, this)
-console.log("https://ejaugust.github.io", location.host === GITHUB_ORIGIN, HAS_DEV_PREFIX || IS_GITHUB)
-
-if (IS_DEV_HOST) {
- this.appOrigins.push(GITHUB_ORIGIN)
-}
+if (IS_DEV_HOST) this.appOrigins.push(GITHUB_ORIGIN)
 `,
    "https://menu.core.parts/open.js": `
 await super.open()
