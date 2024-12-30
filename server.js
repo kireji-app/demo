@@ -599,7 +599,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.10",
+   "https://core.parts/version.txt": "0.92.11",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1439,7 +1439,7 @@ const
  throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
 
 if (c) {
- const reg = await c.register("server.js"),
+ const reg = await c.getRegistration() ?? await c.register("server.js"),
   sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
  c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
  c.oncontrollerchange = c.onmessage = () => location.reload()
@@ -1448,7 +1448,7 @@ if (c) {
 }
 
 if (g) {
- _.GPU = await (await g.requestAdapter()).requestDevice()
+  _.GPU = await (await g.requestAdapter()).requestDevice()
 }
 
 this.globalStyleSheet = new CSSStyleSheet()
