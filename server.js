@@ -599,7 +599,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.92.7",
+   "https://core.parts/version.txt": "0.92.8",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1787,6 +1787,7 @@ this.appOrigins = [
 ]
 
 console.log(IS_DEV_HOST, this)
+console.log("https://ejaugust.github.io", location.host === GITHUB_ORIGIN, HAS_DEV_PREFIX || IS_GITHUB)
 
 if (IS_DEV_HOST) {
  this.appOrigins.push(GITHUB_ORIGIN)
