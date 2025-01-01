@@ -602,7 +602,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.93.1",
+   "https://core.parts/version.txt": "0.93.2",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
