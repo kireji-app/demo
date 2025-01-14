@@ -220,6 +220,7 @@ dialog,
  line-height: 19px;
  font-weight: 400;
  padding: 0 var(--spacing);
+ display: flex;
 }
 .topic > a {
  border-radius: calc(var(--spacing) / 2);
@@ -309,6 +310,12 @@ dialog > div > h3 {
  border-radius: calc(var(--spacing) / 2);
  text-decoration: none;
  text-align: center;
+}
+.cta.released,
+.cta.released:visited {
+ background: var(--theme);
+ cursor: pointer;
+ pointer-events: all;
 }
 dialog > div > p {
  position: relative;
@@ -411,14 +418,17 @@ delete this.container
 `,
    // ========================================================================= //
    "https://title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://title.glowstick.click/inputs.csv": "content, date",
+   "https://title.glowstick.click/inputs.csv": "content, date, title, description, released",
    "https://title.glowstick.click/install.js": `
 super(content)
 this.releaseDate = date
+this.niceName = title
+this.description = description
+this.released = released
 `,
    "https://title.glowstick.click/open.js": `
 this.container = this.controller.container
-
+const releaseDate = new Date(this.releaseDate)
 this.popup = element(this.container, "dialog")
 this.popup.tabIndex = 0
 this.popup.innerHTML = \`
@@ -426,12 +436,12 @@ this.popup.innerHTML = \`
  <button>‹</button>
  <img src="\${this.subdomain}-still.png" alt="Still image captured from \${this.niceName}">
  <h3>\${this.niceName}</h3>
- <p id=release-date>Released on \${new Date(this.releaseDate).toLocaleDateString("en-US", {
+ <p id=release-date>\${releaseDate > Date.now() ? "Coming" : "Released on"} \${releaseDate.toLocaleDateString("en-US", {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 })}</p>
- <p><a href=#0 class=cta>Coming soon</a>
+ <p><a href=#0 class="cta \${this.released ? "released": "upcoming"}">\${this.released ? "Watch Now": "Coming soon"}</a>
  <p>\${this.description}
 </div>\`
 
@@ -457,33 +467,29 @@ delete this.container
 `,
    // ========================================================================= //
    "https://tv-show.glowstick.click/base.uri": "https://title.glowstick.click",
-   "https://tv-show.glowstick.click/inputs.csv": "seasons, date, title, description",
+   "https://tv-show.glowstick.click/inputs.csv": "seasons, date, title, description, released",
    "https://tv-show.glowstick.click/install.js": `
-super(seasons, date)
-this.niceName = title
-this.description = description
+super(seasons, date, title, description, released)
 this.isShow = true
 `,
    // ========================================================================= //
    "https://movie.glowstick.click/base.uri": "https://title.glowstick.click",
-   "https://movie.glowstick.click/inputs.csv": "acts, date, title, description",
+   "https://movie.glowstick.click/inputs.csv": "acts, date, title, description, released",
    "https://movie.glowstick.click/install.js": `
-super(acts, date)
-this.niceName = title
-this.description = description
+super(acts, date, title, description, released)
 this.isShow = false
 `,
    // ========================================================================= //
    "https://live-action-larry.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
    "https://live-action-larry.title.glowstick.click/install.js": `
-super(["season-0"], "05/20/2023", "The Litany of Live Action Larry", "Larry is just a regular guy, except more annoying.")
+super(["season-0"], "01/20/2025", "The Litany of Live Action Larry", "Larry is just a regular guy, except more annoying.")
 `,
    // ========================================================================= //
    "https://my-fake-movie-2.title.glowstick.click/base.uri": "https://movie.glowstick.click",
    "https://my-fake-movie-2.title.glowstick.click/install.js": `
 super(
  ["act-0", "act-1", "act-2"],
- "12/26/2024",
+ "12/26/2026",
  "My Fake Movie 2",
  "Having just been resurrected by God, David can not rest until he tracks down the demon that escaped the first movie."
 )
@@ -493,7 +499,7 @@ super(
    "https://my-fake-movie.title.glowstick.click/install.js": `
 super(
  ["act-0", "act-1", "act-2"],
- "12/25/2024",
+ "12/25/2025",
  "My Fake Movie",
  "David was a stoner and a loser who accidentally made a fake movie. This is that fake movie."
 )
@@ -501,12 +507,12 @@ super(
    // ========================================================================= //
    "https://space-guy.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
    "https://space-guy.title.glowstick.click/install.js": `
-super(["season-0"], "12/24/2024", "Space Guy", "Travel the stars with the galaxy's original hero.")
+super(["season-0"], "1/13/2025", "Space Guy", "Travel the stars with the galaxy's original hero.", true)
 `,
    // ========================================================================= //
    "https://sample.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
    "https://sample.title.glowstick.click/install.js": `
-super(["season-0"], "12/28/2024", "Sample", "This fake documentary follows a fake blood sample through a fake lab procedure.")
+super(["season-0"], "09/28/2025", "Sample", "This fake documentary follows a fake blood sample through a fake lab procedure.")
 `,
    // ========================================================================= //
    "https://season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
@@ -601,9 +607,9 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.93.3",
+   "https://core.parts/version.txt": "0.93.4",
    "https://core.parts/theme.color": "#488adc",
-   "https://core.parts/preferences.uri": "https://sidebar.menu.core.parts https://colormode.core.parts",
+   "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
    "https://base.core.parts/install.js": `
 super()
@@ -1542,7 +1548,7 @@ html,
 body {
  --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
  --system-ui-mono: ui-monospace,  Menlo, Monaco,  "Cascadia Mono", "Segoe UI Mono",  "Roboto Mono",  "Oxygen Mono",  "Ubuntu Mono",  "Source Code Pro", "Fira Mono",  "Droid Sans Mono",  "Consolas", "Courier New", monospace;
- --sidebar-tween: 0;
+ --overlay-tween: 0;
  --sidebar-width: 256px;
  --bottom-accent: 0 1.5px var(--accent-color);
  --bottom-shadow: 0 2px 7px #0002;
@@ -1574,16 +1580,12 @@ body > main {
  height: calc(100vh - var(--toolbar-height));
 }
 #version {
- text-align: center;
- padding: 0 8px;
- font-family: var(--system-ui-mono);
  font-size: 10px;
  line-height: 18px;
  color: var(--color);
  font-weight: 900;
- margin: auto;
 }
-#sidebar {
+#overlay {
  position: fixed;
  top: 0;
  bottom: 0;
@@ -1592,13 +1594,12 @@ body > main {
  margin: 0;
  padding: 0;
  background: #0003;
- opacity: var(--sidebar-tween);
+ opacity: var(--overlay-tween);
  color: var(--color);
  outline: none;
  pointer-events: none;
 }
-
-#sidebar .module {
+#sidebar {
  padding: 0;
  margin: 0;
  position: fixed;
@@ -1607,22 +1608,24 @@ body > main {
  display: flex;
  flex-flow: column;
  box-shadow: 0px 0px 22px var(--spacing) #0001;
- gap: var(--spacing);
- right: calc(var(--spacing) + (var(--sidebar-tween) - 1) * 256px);
+ right: calc(var(--spacing) + (var(--overlay-tween) - 1) * 256px);
  top: calc(var(--toolbar-height) - var(--spacing) / 2);
  height: auto;
  width: auto;
  background: var(--light-bg);
- padding: var(--spacing);
  pointer-events: all;
 }
-#sidebar .module > h2 {
- margin: 0;
- padding: 0;
- font-size: 13px;
- font-weight: 600;
+#apps,
+#settings {
+ padding: var(--spacing);
+ display: flex;
+ flex-flow: column;
+ gap: var(--spacing);
 }
-#sidebar .module > ul {
+#apps {
+ background: var(--lighter-bg);
+}
+#apps > ul {
  margin: 0;
  display: flex;
  flex-flow: column;
@@ -1631,6 +1634,16 @@ body > main {
  flex: 0 1 auto;
  line-height: var(--icon-size);
  padding: 0;
+}
+#settings {
+ display: flex;
+ flex-flow: row;
+}
+#colormode {
+ border-radius: var(--spacing);
+ height: var(--spacing);
+ width: calc(var(--spacing) * 3);
+ background: var(--lighter-bg);
 }
 .applink {
  display: flex;
@@ -1730,7 +1743,7 @@ a:hover {
  flex: 1;
  line-height: var(--icon-size);
 }
-#toolbar > .spacer {
+.spacer {
  flex: 1;
 }
 #nested {
@@ -1749,8 +1762,7 @@ a:hover {
   width: 100vw;
   box-shadow: var(--toolbar-accent);
  }
- #appicon,
- #version {
+ #appicon {
   display: none;
  }
 }
@@ -1772,7 +1784,7 @@ a:hover {
 `,
    "https://menu.core.parts/install.js": `
 super([
- "https://sidebar.menu.core.parts",
+ "https://overlay.menu.core.parts",
  "https://colormode.core.parts",
  application
 ])
@@ -1812,10 +1824,6 @@ this.homeButton.setAttribute("id", "home")
 
 this.spacer = element(this.toolbar, "span")
 this.spacer.setAttribute("class", "spacer")
-
-this.version = element(this.toolbar, "span")
-this.version.setAttribute("id", "version")
-this.version.innerHTML = D["https://core.parts/version.txt"]
 
 const showExpirimentalButtons = false
 
@@ -1872,18 +1880,18 @@ this.destroyNestedToolbar = () => {
  nestedToolbar = shadow = undefined
 }
 
-this.sidebar = element(document.body, "menu")
+this.overlay = element(document.body, "menu")
+this.overlay.setAttribute("id", "overlay")
+this.overlay.tabIndex = 1
+
+this.sidebar = element(this.overlay, "div")
 this.sidebar.setAttribute("id", "sidebar")
-this.sidebar.tabIndex = 1
 
-this.appsModule = element(this.sidebar, "section")
-this.appsModule.setAttribute("class", "module")
-this.appsModule.setAttribute("id", "apps")
-
-// this.appsTitle = element(this.appsModule, "h2")
+this.appsSection = element(this.sidebar, "section")
+this.appsSection.setAttribute("id", "apps")
+// this.appsTitle = element(this.appsSection, "h2")
 // this.appsTitle.innerText = "Applications"
-
-this.appList = element(this.appsModule, "ul")
+this.appList = element(this.appsSection, "ul")
 this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
  const
   that = this.controller[appOrigin in this.controller ? appOrigin : 0],
@@ -1903,10 +1911,20 @@ this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
  }
  return nodes
 }, {})
+
+
+this.settingsSection = element(this.sidebar, "section")
+this.settingsSection.setAttribute("id", "settings")
+
+this.version = element(this.settingsSection, "span")
+this.version.setAttribute("id", "version")
+this.version.innerHTML = D["https://core.parts/version.txt"]
+this.colorModeButton = element(this.settingsSection, "a")
+this.colorModeButton.setAttribute("id", "colormode")
 `,
    // ========================================================================= //
-   "https://sidebar.menu.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://sidebar.menu.core.parts/install.js": `
+   "https://overlay.menu.core.parts/base.uri": "https://disjunction.core.parts",
+   "https://overlay.menu.core.parts/install.js": `
 super([
  "closed",
  "introduce",
@@ -1914,52 +1932,52 @@ super([
  "dismiss"
 ])
 `,
-   "https://sidebar.menu.core.parts/open.js": `
+   "https://overlay.menu.core.parts/open.js": `
 this.menuButton = this.controller.menuButton
-this.sidebar = this.controller.sidebar
+this.overlay = this.controller.overlay
 `,
-   "https://sidebar.menu.core.parts/close.js": `
+   "https://overlay.menu.core.parts/close.js": `
 delete this.menuButton
-delete this.sidebar
+delete this.overlay
 `,
    // ========================================================================= //
-   "https://closed.sidebar.menu.core.parts/open.js": `
+   "https://closed.overlay.menu.core.parts/open.js": `
 await super.open()
 
-this.sidebar = this.controller.sidebar
-this.sidebar.setAttribute("style", "--sidebar-tween: 0")
+this.overlay = this.controller.overlay
+this.overlay.setAttribute("style", "--overlay-tween: 0")
 
 this.menuButton = this.controller.menuButton
 this.menuButton.onclick = () => this.controller.goto(1n)
 `,
-   "https://closed.sidebar.menu.core.parts/close.js": `
+   "https://closed.overlay.menu.core.parts/close.js": `
 await super.close()
 
-if (document.activeElement === this.sidebar) this.sidebar.blur()
+if (document.activeElement === this.overlay) this.overlay.blur()
 
 this.menuButton.onclick = undefined
 delete this.menuButton
 
-this.sidebar.removeAttribute("style")
-delete this.sidebar
+this.overlay.removeAttribute("style")
+delete this.overlay
 `,
    // ========================================================================= //
-   "https://introduce.sidebar.menu.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://introduce.sidebar.menu.core.parts/install.js": `
+   "https://introduce.overlay.menu.core.parts/base.uri": "https://disjunction.core.parts",
+   "https://introduce.overlay.menu.core.parts/install.js": `
 super([
  "half"
 ])
 `,
-   "https://introduce.sidebar.menu.core.parts/open.js": `
-this.sidebar = this.controller.sidebar
-this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
+   "https://introduce.overlay.menu.core.parts/open.js": `
+this.overlay = this.controller.overlay
+this.overlay.setAttribute("style", "--overlay-tween: 0.5")
 
 this.pendingFrame = requestAnimationFrame(() => {
  delete this.pendingFrame
  this.controller.goto(2n)
 })
 `,
-   "https://introduce.sidebar.menu.core.parts/close.js": `
+   "https://introduce.overlay.menu.core.parts/close.js": `
 await super.close()
 
 if (this.pendingFrame) {
@@ -1967,45 +1985,45 @@ if (this.pendingFrame) {
  delete this.pendingFrame
 }
 
-this.sidebar.removeAttribute("style")
-delete this.sidebar
+this.overlay.removeAttribute("style")
+delete this.overlay
 `,
    // ========================================================================= //
-   "https://open.sidebar.menu.core.parts/open.js": `
+   "https://open.overlay.menu.core.parts/open.js": `
 await super.open()
 
-this.sidebar = this.controller.sidebar
-this.sidebar.setAttribute("style", "--sidebar-tween: 1")
-this.sidebar.onblur = () => this.controller.goto(3n)
-this.sidebar.focus()
+this.overlay = this.controller.overlay
+this.overlay.setAttribute("style", "--overlay-tween: 1")
+this.overlay.onblur = () => this.controller.goto(3n)
+this.overlay.focus()
 `,
-   "https://open.sidebar.menu.core.parts/close.js": `
+   "https://open.overlay.menu.core.parts/close.js": `
 await super.close()
 
-if (document.activeElement === this.sidebar) this.sidebar.blur()
-this.sidebar.onblur = undefined
-this.sidebar.removeAttribute("style")
-delete this.sidebar
+if (document.activeElement === this.overlay) this.overlay.blur()
+this.overlay.onblur = undefined
+this.overlay.removeAttribute("style")
+delete this.overlay
 `,
    // ========================================================================= //
-   "https://dismiss.sidebar.menu.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://dismiss.sidebar.menu.core.parts/install.js": `
+   "https://dismiss.overlay.menu.core.parts/base.uri": "https://disjunction.core.parts",
+   "https://dismiss.overlay.menu.core.parts/install.js": `
 super([
  "half"
 ])
 `,
-   "https://dismiss.sidebar.menu.core.parts/open.js": `
+   "https://dismiss.overlay.menu.core.parts/open.js": `
 await super.open()
 
-this.sidebar = this.controller.sidebar
-this.sidebar.setAttribute("style", "--sidebar-tween: 0.5")
+this.overlay = this.controller.overlay
+this.overlay.setAttribute("style", "--overlay-tween: 0.5")
 
 this.pendingFrame = requestAnimationFrame(() => {
  delete this.pendingFrame
  this.controller.goto(0n)
 })
 `,
-   "https://dismiss.sidebar.menu.core.parts/close.js": `
+   "https://dismiss.overlay.menu.core.parts/close.js": `
 await super.close()
 
 if (this.pendingFrame) {
@@ -2013,8 +2031,8 @@ if (this.pendingFrame) {
  delete this.pendingFrame
 }
 
-this.sidebar.removeAttribute("style")
-delete this.sidebar
+this.overlay.removeAttribute("style")
+delete this.overlay
 `,
    // ========================================================================= //
    "https://fallback.cloud/base.uri": "https://menu.core.parts",
@@ -2160,6 +2178,7 @@ const
  themeColor = D[\`\${origin}/theme.color\`] ?? "ffffff",
  themeBG = blend(themeColor, "171717", "multiply"),
  lightBG = blend(themeColor, "2f2f2f", "multiply"),
+ lighterBG = blend(themeColor, "4f4f4f", "multiply"),
  scriptCSS = \`
 html,
 body {
@@ -2167,6 +2186,7 @@ body {
  --bg: \${themeBG};
  --faint-color: #\${palette[1]}0f;
  --light-bg: \${lightBG};
+ --lighter-bg: \${lighterBG};
  --accent-color: #\${palette[1]}2f;
  --toolbar-accent: var(--bottom-\${isLight ? "shadow" : "accent"});
  --theme: \${themeColor};
