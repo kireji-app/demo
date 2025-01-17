@@ -1,7 +1,0 @@
-# © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
-AddDefaultCharset utf-8
-ErrorDocument 404 /index.html
-ErrorDocument 403 /index.html
-RewriteEngine On
-RewriteRule ^(?:[^/]*/)+(.*)$ /$1 [L,NC,R=301]
-Options -Indexes

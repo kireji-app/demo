@@ -607,7 +607,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.93.4",
+   "https://core.parts/version.txt": "0.94.0",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1453,7 +1453,8 @@ if (c) {
  c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
  c.oncontrollerchange = c.onmessage = () => location.reload()
  document.querySelector('[rel="manifest"]').href = "manifest.json"
- addEventListener("focus", () => reg.update().catch(c.onmessage))
+ // DEBUG REFRESH
+ // addEventListener("focus", () => reg.update().catch(c.onmessage))
 }
 
 if (g) {
@@ -1791,13 +1792,14 @@ super([
 
 this.appOrigins = [
  "https://kireji.io",
- "https://glowstick.click",
+ "https://kireji.app",
  "https://core.parts",
+ "https://fallback.cloud",
+ "https://glowstick.click",
  "https://ejaugust.com",
- // "https://kireji.app",
- // "https://orenjinari.com",
- // "https://ejaugust.com",
- // "https://fallback.cloud",
+ "https://orenjinari.com",
+ "https://kireji.vercel.app",
+ "https://orenjinari.vercel.app",
 ]
 
 if (IS_DEV_HOST) this.appOrigins.push(GITHUB_ORIGIN)
