@@ -1,13 +1,9 @@
 // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
 function boot() {
+ // TODO: set user preferences when going home and to other origins and treat menu open or closed as one of those preferences (instead of going to #0 or to another apex domain with no hash)
  const _ = globalThis,
-  GITHUB_ORIGIN = "https://ejaugust.github.io",
-  HAS_DEV_PREFIX = location.host.startsWith("dev."),
-  IS_GITHUB = location.origin === GITHUB_ORIGIN,
-  IS_DEV_HOST = HAS_DEV_PREFIX || IS_GITHUB,
-  APP_HOST = location.host.slice(4 * HAS_DEV_PREFIX),
+  APP_HOST = location.host,
   APP_ORIGIN = "https://" + APP_HOST,
-  HOST_PREFIX = IS_DEV_HOST ? "dev." : "",
   alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
   encode = index => {
    const hexads = [],
@@ -99,7 +95,7 @@ await super.close()
    // ========================================================================= //
    "https://welcome.glowstick.click/body.html": `
 <h2>Welcome to glowstick.click</h2>
-<p>This app is in pre-alpha. The content library is still mostly empty. It is a video streaming platform with a permalink to every subset (clip) of every video in the library. The engine is exactly the same as <a href=https://${HOST_PREFIX}kireji.io>kireji.io</a> but this model renders movies and TV shows instead of words.
+<p>This app is in pre-alpha. The content library is still mostly empty. It is a video streaming platform with a permalink to every subset (clip) of every video in the library. The engine is exactly the same as <a href=//kireji.io>kireji.io</a> but this model renders movies and TV shows instead of words.
 <p><a href=#1>Click here</a> to try it.
 `,
    "https://welcome.glowstick.click/open.js": ` 
@@ -607,7 +603,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.94.0",
+   "https://core.parts/version.txt": "0.94.1",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -798,9 +794,7 @@ boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Right
 _.onfetch = e => {
 // TODO: detect and throw error on any cross-deployment-stage resource fetches.
 const { pathname, host, origin } = new URL(e.request.url),
- isDevHost = host.startsWith("dev.") || origin === GITHUB_ORIGIN,
  cacheKey = host + pathname
-if (isDevHost !== IS_DEV_HOST && origin !== GITHUB_ORIGIN) console.warn(new ReferenceError(\`cannot request assets across deployment stages (\${e.request.url})\`))
 if (!(cacheKey in cache)) {
  let body, type, base64Encoded
  switch (pathname) {
@@ -936,13 +930,13 @@ if (!(cacheKey in cache)) {
    body = \`<svg width="144px" height="144px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <style>
 svg { background: white }
-text { fill: \${D[\`https://\${host.slice(isDevHost ? 4 : 0)}/theme.color\`]} }
+text { fill: \${D[\`https://\${host}/theme.color\`]} }
 @media (prefers-color-scheme = dark) {
-svg { background: \${D[\`https://\${host.slice(isDevHost ? 4 : 0)}/theme.color\`]} }
+svg { background: \${D[\`https://\${host}/theme.color\`]} }
 text { fill: white }
 }
 </style>
-<text x="12" y="12" dominant-baseline="central" text-anchor="middle">\${host[isDevHost ? 4 : 0]}</text>
+<text x="12" y="12" dominant-baseline="central" text-anchor="middle">\${host[0]}</text>
 </svg>\`
    break
   default:
@@ -1793,16 +1787,21 @@ super([
 this.appOrigins = [
  "https://kireji.io",
  "https://kireji.app",
- "https://core.parts",
- "https://fallback.cloud",
- "https://glowstick.click",
- "https://ejaugust.com",
- "https://orenjinari.com",
  "https://kireji.vercel.app",
+
+ "https://core.parts",
+
+ "https://fallback.cloud",
+
+ "https://glowstick.click",
+
+ "https://ejaugust.com",
+ "https://ejaugust.github.io",
+ "https://ejaugust.vercel.app",
+
+ "https://orenjinari.com",
  "https://orenjinari.vercel.app",
 ]
-
-if (IS_DEV_HOST) this.appOrigins.push(GITHUB_ORIGIN)
 `,
    "https://menu.core.parts/open.js": `
 await super.open()
