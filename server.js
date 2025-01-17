@@ -603,7 +603,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.94.1",
+   "https://core.parts/version.txt": "0.94.2",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -1894,13 +1894,10 @@ this.appsSection.setAttribute("id", "apps")
 // this.appsTitle.innerText = "Applications"
 this.appList = element(this.appsSection, "ul")
 this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
- const
-  that = this.controller[appOrigin in this.controller ? appOrigin : 0],
-  targetOrigin = IS_DEV_HOST && appOrigin !== GITHUB_ORIGIN ? appOrigin.replace("//", "//dev.") : appOrigin
-
+ const that = this.controller[appOrigin in this.controller ? appOrigin : 0]
  nodes[appOrigin] = element(this.appList, "li")
  nodes[appOrigin].setAttribute("class", "applink")
- nodes[appOrigin].innerHTML = \`<span class=label>\${appOrigin.slice(appOrigin === GITHUB_ORIGIN ? 17 : 8)}</span><img src=\${targetOrigin}/favicon.svg />\`
+ nodes[appOrigin].innerHTML = \`<span class=label>\${appOrigin.slice(8)}</span><img src=\${appOrigin}/favicon.svg />\`
  if (appOrigin === APP_ORIGIN) nodes[appOrigin].setAttribute("data-here", "true")
  else nodes[appOrigin].onclick = e => {
   e.preventDefault()
@@ -1908,7 +1905,7 @@ this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
   for (const origin of D["https://core.parts/preferences.uri"].split(" ")) {
    if (origin in this && origin in that) thatIndex += this[origin].index * that[origin].unit
   }
-  location = targetOrigin + "#" + encode(thatIndex)
+  location = appOrigin + "#" + encode(thatIndex)
  }
  return nodes
 }, {})
