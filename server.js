@@ -603,7 +603,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "0.94.2",
+   "https://core.parts/version.txt": "0.94.3",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -2034,6 +2034,7 @@ delete this.overlay
 `,
    // ========================================================================= //
    "https://fallback.cloud/base.uri": "https://menu.core.parts",
+   "https://fallback.cloud/theme.color": "#999aab",
    "https://fallback.cloud/install.js": `
 super("https://error503.fallback.cloud")
 `,
