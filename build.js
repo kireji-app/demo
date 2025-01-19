@@ -2190,4 +2190,20 @@ this.controller.styleSheet.replaceSync(globalCSS + scriptCSS + customCSS)
  console.debug(new T`https://boot.core.parts`())
 }
 
-fs.writeFileSync(path.join('public', 'server.js'), `${boot}\nboot()`)
+fs.mkdirSync('public')
+
+const
+ serverHTML = `<!DOCTYPE html>
+<html lang=en>
+ <head>
+  <link rel=manifest />
+  <link rel=icon href="data:image/png;base64,iVBORw0KGgo=">
+  <meta name=robots content=noindex />
+  <meta name=viewport content="width=device-width, initial-scale=1" />
+  <script defer src=server.js></script>
+ </head>
+</html>`,
+ clientHTML = serverHTML.replace("server.js", "client.js")
+
+fs.writeFileSync(path.join('public', 'index.html'), serverHTML)
+fs.writeFileSync(path.join('public', 'server.js'), `${boot}\nboot()`.replaceAll(/\$INDEX/g, clientHTML).replaceAll(/\$BRANCH/g, process.env.VERCEL_GIT_COMMIT_REF))
