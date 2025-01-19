@@ -603,7 +603,7 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.github.io/theme.color": "#2dba4e",
    "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/version.txt": "$VERSION",
+   "https://core.parts/branch.txt": "$BRANCH",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -940,18 +940,7 @@ text { fill: white }
 </svg>\`
    break
   default:
-   body = \`<!DOCTYPE html>
-<html lang=en>
-<head>
-<!-- \${boilerplate} -->
-<link rel=manifest href=manifest.json>
-<link rel="me" href="https://universeodon.com/@kireji" />
-<meta name=robots content=noindex>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<script defer src="\${origin}/client.js"></script>
-<title>Loading ...</title>
-</head>
-</html>\`
+   body = \`$INDEX\`
    type = "text/html; charset=UTF-8"
  }
  
@@ -1574,7 +1563,7 @@ body > main {
  padding: 0;
  height: calc(100vh - var(--toolbar-height));
 }
-#version {
+#branch {
  font-size: 10px;
  line-height: 18px;
  color: var(--color);
@@ -1914,9 +1903,9 @@ this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
 this.settingsSection = element(this.sidebar, "section")
 this.settingsSection.setAttribute("id", "settings")
 
-this.version = element(this.settingsSection, "span")
-this.version.setAttribute("id", "version")
-this.version.innerHTML = D["https://core.parts/version.txt"]
+this.branch = element(this.settingsSection, "span")
+this.branch.setAttribute("id", "branch")
+this.branch.innerHTML = D["https://core.parts/branch.txt"]
 this.colorModeButton = element(this.settingsSection, "a")
 this.colorModeButton.setAttribute("id", "colormode")
 `,
