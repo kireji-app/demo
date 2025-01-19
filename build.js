@@ -603,9 +603,6 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.com/theme.color": "#afada9",
    "https://ejaugust.com/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://ejaugust.github.io/theme.color": "#2dba4e",
-   "https://ejaugust.github.io/base.uri": "https://fallback.cloud",
-   // ========================================================================= //
    "https://core.parts/branch.txt": "$BRANCH",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
@@ -775,12 +772,8 @@ this.choice.open()
    "https://client.core.parts/install.js": `
 super([
  "https://fallback.cloud",
- "https://orenjinari.com",
- "https://kireji.io",
- "https://core.parts",
  "https://glowstick.click",
- "https://ejaugust.github.io",
- "https://ejaugust.com"
+ "https://kireji.io",
 ])
 `,
    "https://client.core.parts/open.js": `
@@ -1726,22 +1719,9 @@ super([
 ])
 
 this.appOrigins = [
- "https://kireji.io",
- "https://kireji.app",
- "https://kireji.vercel.app",
-
- "https://core.parts",
-
  "https://fallback.cloud",
-
  "https://glowstick.click",
-
- "https://ejaugust.com",
- "https://ejaugust.github.io",
- "https://ejaugust.vercel.app",
-
- "https://orenjinari.com",
- "https://orenjinari.vercel.app",
+ "https://kireji.io",
 ]
 `,
    "https://menu.core.parts/open.js": `
