@@ -815,28 +815,6 @@ if (!(cacheKey in cache)) {
     background_color: "#1f2023",
     description: "This app is under development.",
     display_override: ["window-controls-overlay"],
-    icons: [
-     {
-      src: "favicon.svg",
-      sizes: "144x144",
-      type: "image/svg+xml",
-     },
-     {
-      src: "favicon.svg",
-      sizes: "any",
-      type: "image/svg+xml",
-     },
-     {
-      src: "/android-chrome-192x192.png",
-      sizes: "192x192",
-      type: "image/svg+xml",
-     },
-     {
-      src: "/android-chrome-512x512.png",
-      sizes: "512x512",
-      type: "image/svg+xml",
-     },
-    ],
     categories: ["entertainment", "games", "utilities"] /*
     protocol_handlers: [
      {
@@ -848,31 +826,8 @@ if (!(cacheKey in cache)) {
      {
       name: "New Item...",
       short_name: "New...",
-      icons: [
-       {
-        src: "favicon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-       },
-      ],
       url: "/new",
       description: "This is just a placeholder/hint for future development.",
-     },
-    ],
-    screenshots: [
-     {
-      src: "desktop-screenshot.svg",
-      sizes: "640x480",
-      type: "image/svg+xml",
-      form_factor: "wide",
-      label: "This is a placeholder for the image of the app.",
-     },
-     {
-      src: "mobile-screenshot.svg",
-      sizes: "640x360",
-      type: "image/svg+xml",
-      form_factor: "narrow",
-      label: "This is a placeholder for the image of the app.",
      },
     ],*/,
    }
