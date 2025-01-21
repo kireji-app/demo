@@ -792,7 +792,7 @@ const
  path = require("path"),
  { execSync: $ } = require('child_process'),
  isLocal = process.env.__VERCEL_DEV_RUNNING,
- versionNumber = isLocal ? $('git log -1 --pretty=%s').toString().trim() : process.env.VERCEL_GIT_COMMIT_MESSAGE.slice(0, commitMessage.indexOf("\\n")),
+ versionNumber = isLocal ? $('git log -1 --pretty=%s').toString().trim() : process.env.VERCEL_GIT_COMMIT_MESSAGE.slice(0, process.env.VERCEL_GIT_COMMIT_MESSAGE.indexOf("\\n")),
  branchName = isLocal ? $('git branch --show-current').toString().trim() : process.env.VERCEL_GIT_COMMIT_REF,
  version = [versionNumber, branchName, ...(isLocal ? ["local"] : [])].join("-"),
  js = boot.toString().replace(/(?<=\\$VER\\$ = ")[^"]*(?=",)/, version) + "\\nboot()",
