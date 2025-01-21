@@ -1,27 +1,30 @@
-## [About This Repository](https://github.com/EJAugust/EJAugust#about-this-repository---) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/your-username/your-repo) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+## [About This Repository](https://github.com/EJAugust/EJAugust) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/your-username/your-repo) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 This repo unites all my personal projects using a frontend framework that I have been developing for years.
 
 Every web app built in this framework offers a permalink to every valid client state, generated automatically. That URL achieves maxmimal compression storing the state of the client application.
 
 This allows offline browsing, editing and sharing.
 
-## [Components](https://github.com/EJAugust/EJAugust#components)
-Each web application - and, separately, each datum that makes up the application's state - is a reusable component. Each component is defined as a type. Types and their instances follow the *type lifecycle* and type instances store their state in a maximally compressed way.
+## Web Components as Nested State Machines
+Each web application - and each branch and leaf that makes up the application's model - is a reusable component. Each component is a state machine in it's own right. Each machine maintains it's state as an integer with the maximum possible compression.
 
-## [Type lifecycle](https://github.com/EJAugust/EJAugust#type-lifecycle)
-A type is defined by three pairs of lifecycle callbacks:
-|Event name|Event trigger
+### Lifecycle
+Every machine is defined by these lifecycle methods:
+|Name|Purpose
 |-|-
-|**`install`** and **`uninstall`** (*static*)|called when adding or removing a type
-|**`create`** and **`destroy`**|called when adding or removing an instance
-|**`emit`** and **`absorb`**|called when propagating changes across instances
+|**`install`**|given arbitrary inputs, instantiate the machine and any dependant machines
+|**`open`**|bind the machine to user interface components
+|**`close`**|unbind the machine from user interface components
+|**`goto`**|change the state of the machine and propagate it both rootward and leafward
+|**`emit`**|react to and propagate rootward a state change that happened in the leaf direction
+|**`absorb`**|react to and propagate leafward a state change that happened in the root direction
 
 Native javascript events interface with these lifecycle events, and the client application is the type whose name is `location.host`.
 
-## [Change propagation](https://github.com/EJAugust/EJAugust#change-propagation)
-Using the type lifecycle, a change in any datum propagates to the global state - every datum is an endpoint that drives its dependant data. A polynomial expression gives  hierarchy of types. Every level of the hierarchy is both a single datum and an array of 0 or more data.
+### Change Propagation
+Using the type lifecycle, a change in any datum propagates to the global state - every datum is an endpoint that drives its dependant data. A polynomial expression gives a hierarchy of types. Every level of the hierarchy is both a single datum and an array of 0 or more data.
 
-## [Project Roadmap](https://github.com/EJAugust/EJAugust#project-roadmap)
+## Project Roadmap
 |Status|Phase|Description
 |-|-|-
 |✅ Done|**Core framework**|Philosophy, functionality and algorithm
