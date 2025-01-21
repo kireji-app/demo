@@ -1,12 +1,8 @@
-// © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
-import fs from "fs"
-import path from "path"
-
 function boot() {
+ // © 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.
  // TODO: set user preferences when going home and to other origins and treat menu open or closed as one of those preferences (instead of going to #0 or to another apex domain with no hash)
  const _ = globalThis,
-  APP_HOST = location.host,
-  APP_ORIGIN = "https://" + APP_HOST,
+  $VER$ = "0.0.0",
   alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
   encode = index => {
    const hexads = [],
@@ -23,11 +19,14 @@ function boot() {
   },
   element = (node, tagname) => node.appendChild(document.createElement(tagname)),
   logging = false,
-  environment = _.constructor === _.Window ? "client" : "server",
-  standardMethods = [["install"], ["emit", "...parts"], ["open"], ["absorb", "index"], ["close"], ["goto", "index"]],
+  isNode = _.process?.release?.name === "node",
+  environment = isNode ? "cloud" : (_.constructor === _.Window ? "client" : "worker"),
+  APP_HOST = isNode ? undefined : location.host,
+  APP_ORIGIN = isNode ? undefined : "https://" + APP_HOST,
+  lifecycleMethods = [["install"], ["emit", "...parts"], ["open"], ["absorb", "index"], ["close"], ["goto", "index"]],
   baseOrigin = "https://base.core.parts",
   types = {},
-  T = (originSegments, override) => {
+  Part = (originSegments, override) => {
    const origin = override ? originSegments.join(override["index.txt"] ?? "") : originSegments[0],
     name = origin
      .slice(8)
@@ -35,7 +34,7 @@ function boot() {
      .split("-")
      .map(n => n.charAt(0).toUpperCase() + n.slice(1).toLowerCase())
      .join(""),
-    base = origin === baseOrigin ? "Array" : `T\`${override?.["base.uri"] ?? (D[`${origin}/base.uri`] || baseOrigin)}\``,
+    base = origin === baseOrigin ? "Array" : `Part\`${override?.["base.uri"] ?? (D[`${origin}/base.uri`] || baseOrigin)}\``,
     resolve = filename => {
      let has = false,
       result = undefined
@@ -51,7 +50,7 @@ function boot() {
      }
      return [has, result]
     },
-    methods = standardMethods.map(([name, args = ""]) => {
+    methods = lifecycleMethods.map(([name, args = ""]) => {
      const installs = name === "install",
       logsMethod = !installs && logging,
       [overridesMethod, resolvedBody] = resolve(`${name}.js`)
@@ -603,7 +602,6 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://ejaugust.com/theme.color": "#afada9",
    "https://ejaugust.com/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://core.parts/branch.txt": "$BRANCH",
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
@@ -617,8 +615,8 @@ this.size = 1n
 Object.defineProperties(this, {
  inject: {
   value(part) {
-   if (typeof part === "string") part = part.startsWith("https://") ? new (T([part]))() : new (T([\`https://\${part}.\${this.host}\`]))()
-   if (!(part instanceof T\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of \${this.origin}\`)
+   if (typeof part === "string") part = part.startsWith("https://") ? new (Part([part]))() : new (Part([\`https://\${part}.\${this.host}\`]))()
+   if (!(part instanceof Part\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of \${this.origin}\`)
    if (part.origin in this) throw new TypeError(\`duplicate origin \${part.origin} in \${this.origin}\`)
    if (part.controller) throw new TypeError(\`cannot inject part twice (injecting \${part.origin} from \${this.origin})\`)
    part.controller = this
@@ -756,10 +754,11 @@ await super.emit(...parts)
    // ========================================================================= //
    "https://core.parts/base.uri": "https://fallback.cloud",
    // ========================================================================= //
-   "https://boot.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://boot.core.parts/install.js": `
+   "https://root.core.parts/base.uri": "https://disjunction.core.parts",
+   "https://root.core.parts/install.js": `
 super([
- "https://server.core.parts",
+ "https://cloud.core.parts",
+ "https://worker.core.parts",
  "https://client.core.parts"
 ])
 
@@ -783,8 +782,44 @@ await this.choice.open()
 
 loop()
 `,
+// ========================================================================= //
+   "https://cloud.core.parts/open.js": `
+
+// HERE clientHTML = D["https://cloud.core.parts/index.html"].replace("worker", "client")
+
+const
+ fs = require("fs"),
+ path = require("path"),
+ { execSync: $ } = require('child_process'),
+ isLocal = process.env.__VERCEL_DEV_RUNNING,
+ versionNumber = isLocal ? $('git log -1 --pretty=%s').toString().trim() : process.env.VERCEL_GIT_COMMIT_MESSAGE.slice(0, commitMessage.indexOf("\\n")),
+ branchName = isLocal ? $('git branch --show-current').toString().trim() : process.env.VERCEL_GIT_COMMIT_REF,
+ version = [versionNumber, branchName, ...(isLocal ? ["local"] : [])].join("-"),
+ js = boot.toString().replace(/(?<=\\$VER\\$ = ")[^"]*(?=",)/, version) + "\\nboot()",
+ html = D["https://cloud.core.parts/index.html"],
+ dir = "public",
+ jsPath = path.join(dir, 'sw.js'),
+ htmlPath = path.join(dir, 'index.html')
+
+fs.existsSync(dir) || fs.mkdirSync(dir)
+fs.writeFileSync(htmlPath, html)
+fs.writeFileSync(jsPath, js)
+`,
+   "https://cloud.core.parts/index.html": `
+<!DOCTYPE html>
+<html lang=en>
+ <head>
+  <link rel=manifest />
+  <link rel=icon href="data:image/png;base64,iVBORw0KGgo=">
+  <link rel="apple-touch-icon" href=""data:image/png;base64,iVBORw0KGgo=">
+  <meta name=robots content=noindex />
+  <meta name=viewport content="width=device-width,initial-scale=1" />
+  <script defer src=sw.js></script>
+ </head>
+</html>
+`,
    // ========================================================================= //
-   "https://server.core.parts/open.js": `
+   "https://worker.core.parts/open.js": `
 const cache = {},
 boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
 _.onfetch = e => {
@@ -795,7 +830,7 @@ if (!(cacheKey in cache)) {
  let body, type, base64Encoded
  switch (pathname) {
   case "/client.js":
-    body = \`// \${boilerplate}\n\${boot}\nboot()\`
+    body = \`// \${boilerplate}\\n\${boot}\\nboot()\`
    type = "text/javascript; charset=UTF-8"
    break
   case "/manifest.json":
@@ -885,7 +920,7 @@ text { fill: white }
 </svg>\`
    break
   default:
-   body = \`$INDEX\`
+   body = D["https://cloud.core.parts/index.html"].replace("sw.js", "client.js")
    type = "text/html; charset=UTF-8"
  }
  
@@ -1126,7 +1161,7 @@ delete this.container
    // ========================================================================= //
    "https://a2.adjectives.demo-003.kireji.io/base.uri": "https://conjunction.core.parts",
    "https://a2.adjectives.demo-003.kireji.io/install.js": `
-super(new Array(2).fill(0).map((_, i) => new T\`https://a\${{
+super(new Array(2).fill(0).map((_, i) => new Part\`https://a\${{
 "index.txt": "" + i,
 "base.uri": "https://adjectives.dict-001.kireji.io"
 }}.demo-003.kireji.io\`()))
@@ -1143,7 +1178,7 @@ delete this.container
    // ========================================================================= //
    "https://a3.adjectives.demo-003.kireji.io/base.uri": "https://conjunction.core.parts",
    "https://a3.adjectives.demo-003.kireji.io/install.js": `
-super(new Array(3).fill(0).map((_, i) => new T\`https://a\${{
+super(new Array(3).fill(0).map((_, i) => new Part\`https://a\${{
 "index.txt": "" + i,
 "base.uri": "https://adjectives.dict-001.kireji.io"
 }}.demo-003.kireji.io\`()))
@@ -1237,7 +1272,7 @@ const model = [
  ["star", "shining", "stars", "shine", ["a", "constellation"], ["a", "galaxy"], ["a", "universe"], ["a", "cosmos"]]
 ]
 
-super(model.map((row, i) => new T\`https://topic\${{
+super(model.map((row, i) => new Part\`https://topic\${{
  "index.txt": "" + i,
  "base.uri": "https://disjunction.core.parts",
  "install.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
@@ -1248,7 +1283,7 @@ this.model = model
    // ========================================================================= //
    "https://thingdo.koan-001.kireji.io/base.uri": "https://disjunction.core.parts",
    "https://thingdo.koan-001.kireji.io/install.js": `
-super(new Array(10).fill(0).map((_, i) => new T\`https://a\${{
+super(new Array(10).fill(0).map((_, i) => new Part\`https://a\${{
  "index.txt": "" + i,
  "base.uri": "https://adjectives.dict-001.kireji.io"
 }}.demo-003.kireji.io\`())))
@@ -1376,7 +1411,7 @@ const
  throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
 
 if (c) {
- const reg = await c.getRegistration() ?? await c.register("server.js"),
+ const reg = await c.getRegistration() ?? await c.register("sw.js"),
   sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
  c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
  c.oncontrollerchange = c.onmessage = () => location.reload()
@@ -1508,7 +1543,7 @@ body > main {
  padding: 0;
  height: calc(100vh - var(--toolbar-height));
 }
-#branch {
+#version {
  font-size: 10px;
  line-height: 18px;
  color: var(--color);
@@ -1835,9 +1870,9 @@ this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
 this.settingsSection = element(this.sidebar, "section")
 this.settingsSection.setAttribute("id", "settings")
 
-this.branch = element(this.settingsSection, "span")
-this.branch.setAttribute("id", "branch")
-this.branch.innerHTML = D["https://core.parts/branch.txt"]
+this.version = element(this.settingsSection, "span")
+this.version.setAttribute("id", "version")
+this.version.innerHTML = $VER$
 this.colorModeButton = element(this.settingsSection, "a")
 this.colorModeButton.setAttribute("id", "colormode")
 `,
@@ -2114,26 +2149,7 @@ body {
 
 this.controller.styleSheet.replaceSync(globalCSS + scriptCSS + customCSS)
 `,
-  }
-
- console.debug(new T`https://boot.core.parts`())
+  },
+  CORE = new Part`https://root.core.parts`()
 }
-
-fs.mkdirSync('public')
-
-const
- serverHTML = `<!DOCTYPE html>
-<html lang=en>
- <head>
-  <link rel=manifest />
-  <link rel=icon href="data:image/png;base64,iVBORw0KGgo=">
-  <link rel="apple-touch-icon" href=""data:image/png;base64,iVBORw0KGgo=">
-  <meta name=robots content=noindex />
-  <meta name=viewport content="width=device-width, initial-scale=1" />
-  <script defer src=server.js></script>
- </head>
-</html>`,
- clientHTML = serverHTML.replace("server.js", "client.js")
-
-fs.writeFileSync(path.join('public', 'index.html'), serverHTML)
-fs.writeFileSync(path.join('public', 'server.js'), `${boot}\nboot()`.replaceAll(/\$INDEX/g, clientHTML).replaceAll(/\$BRANCH/g, process.env.VERCEL_GIT_COMMIT_REF))
+boot()

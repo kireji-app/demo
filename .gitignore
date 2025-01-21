@@ -4,3 +4,4 @@
 .vercel
 package-lock.json
 public/*
+.env*.local
