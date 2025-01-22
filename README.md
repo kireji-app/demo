@@ -6,12 +6,18 @@ Every web app built in this framework offers a permalink to every valid client s
 This allows offline browsing, editing and sharing.
 
 ## Web Components as Units
-Each web application - and every datum that makes up the application's data model - is measured and tracked by a reusable component called a unit. All units form tree structure with a single root unit.
+Each web application - and every datum that makes up the application's data model - is measured and tracked by a reusable component called a unit.
 
 Units are implimented at runtime as class instances that track an integer which maximally compresses the global state as measured by that unit.
 
+Together, all the units form a tree structure with a single root. Instantiating that root unit (using `new`) bootstraps the framework, irregardless of the environment.
+
 ### Unit Domain Names
-Every unit has it's own dedicated apex domain or subdomain. This serves as the name of the unit. The hierarchy of subdomain names does not relate to the hierarchy of units. This allows us to organize units into meaningful groups without affecting their behavior. After adding an A type DNS record for a domain, the unit at that domain becomes a published client application. Cross-unit content is merged at deploy time into one root unit so the client does not engage in cross-origin resource sharing (CORS).
+Every unit has it's own dedicated apex domain or subdomain. This serves as the name of the unit. The hierarchy of subdomain names does not relate to the hierarchy of units. This allows us to organize units into meaningful groups without affecting their behavior.
+
+After adding an A type DNS record for a domain, the unit at that domain becomes a published client application.
+
+Cross-unit content is merged at deploy time into one root unit so the client does not engage in cross-origin resource sharing (CORS).
 
 #### Common Units
 
