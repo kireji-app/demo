@@ -31,12 +31,12 @@ Cross-unit content is merged at deploy time into one root unit so the client doe
 ### Defining a Unit
 A unit is defined by a handful of optional source files, each of which overrides a base unit's behavior. These source files are used whenever the framework launches (e.g. on deploy in node.js, on window load on the client, or on serviceWorker install). Native javascript events interface with these source files and vice versa.
 
-These source files are distributed across three kinds of unit behavior. In addition, each unit can have additional source files. Units always have cross-origin access and can read all other units' source files.
+These source files are distributed across three kinds of unit behavior. Units can have additional source files. Units always have cross-origin access and can read all other units' source files.
 
 #### Core Structure
 A unit's value is automatically recomputed when the value(s) assigned to its derived units change. The reverse is also true: all affected derived unit(s)' are automatically assigned values whenever this unit's own value is assigned.
 
-These files are evaluated when a unit comes into existence existence and serve to define their relationship to other rootward and leafward units.
+These files are evaluated when a unit comes into existence and serve to define their relationship to other rootward and leafward units.
 |File|Purpose
 |-|-
 |**`base.uri`**|gives the origin of the base unit the unit extends<br>*The keyword "super" is used to call on the functionality of the base unit.*
