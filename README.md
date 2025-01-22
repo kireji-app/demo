@@ -41,6 +41,7 @@ These files allow each unit to control propagation:
 |-|-
 |**`setState.js`**|change the value assigned to the unit and propagate that change both rootward and leafward
 |**`propagateRootward.js`**<br>**`propagateLeafward.js`**|react to and pass along changes made elsewhere in the system
+
 This allows every datum to act as a controller that drives the rest of the system.
 
 #### Document Interaction
