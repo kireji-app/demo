@@ -14,6 +14,7 @@ Units are implimented at runtime as class instances that track an integer which 
 Every unit has it's own dedicated apex domain or subdomain. This serves as the name of the unit. The hierarchy of subdomain names does not relate to the hierarchy of units. This allows us to organize units into meaningful groups without affecting their behavior. After adding an A type DNS record for a domain, the unit at that domain becomes a published client application. Cross-unit content is merged at deploy time into one root unit so the client does not engage in cross-origin resource sharing (CORS).
 
 #### Common Units
+
 |Unit Name|Unit Description
 |-|-
 |**`root.core.parts`**|the root unit; all other units are downstream from this one; this unit is derived from all other units; this unit measures the combined behavior of the deployment pipeline, the client window, and the client serviceWorker.
@@ -22,7 +23,9 @@ Every unit has it's own dedicated apex domain or subdomain. This serves as the n
 |**`conjunction.core.parts`**|the base unit of all cartesian products
 
 ### Defining a Unit
-A unit is defined by a handful of optional source files, each of which overrides a base unit's behavior. These source files are distributed across three kinds of unit behavior. In addition, each unit can have additional source files. Units always have cross-origin access and can read all other units' source files.
+A unit is defined by a handful of optional source files, each of which overrides a base unit's behavior. These source files are used whenever the framework launches (e.g. on deploy in node.js, on window load on the client, or on serviceWorker install). Native javascript events interface with these source files and vice versa.
+
+These source files are distributed across three kinds of unit behavior. In addition, each unit can have additional source files. Units always have cross-origin access and can read all other units' source files.
 
 #### Core Functionality
 |File|Purpose
@@ -49,8 +52,6 @@ This allows every datum to act as a controller that drives the rest of the syste
 |-|-
 |**`install.js`**|bind the unit to existing document elements and create dedicated elements
 |**`uninstall.js`**|unbind the unit from existing document elements and destroy dedicated elements
-
-Native javascript events interface with these lifecycle scripts.
 
 #### Analysis
 A unit can be expressed as a polynomial equal to the cardinality of the set of unique measurements the unit can observe, according to its design. The root unit defines a polynomial expression equal to the cardinality of the set of valid code paths for the entire system. Every level of the hierarchy is both a single unit and the constituent units from which it derives.
