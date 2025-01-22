@@ -20,16 +20,18 @@ After adding an A type DNS record for a domain, the unit at that domain becomes 
 Cross-unit content is merged at deploy time into one root unit so the client does not engage in cross-origin resource sharing (CORS).
 
 #### Common Units
-
+These are the most commonly used units.
 |Unit Name|Unit Description
 |-|-
-|**`root.core.parts`**|the root unit; all other units are downstream from this one; this unit is derived from all other units; this unit measures the combined behavior of the deployment pipeline, the client window, and the client serviceWorker.
-|**`unit.core.parts`**|the base unit; all other units extend from this one
+|**`root.core.parts`**|the root of all units; all other units are downstream from this one; this unit is derived from all other units; this unit measures the combined behavior of the deployment pipeline, the client window, and the client serviceWorker.
+|**`unit.core.parts`**|the base of all units; all other units extend from this one
 |**`disjunction.core.parts`**|the base unit of all disjoint unions
 |**`conjunction.core.parts`**|the base unit of all cartesian products
 
 ### Defining a Unit
-A unit is defined by a handful of optional source files, each of which overrides a base unit's behavior. These source files are used whenever the framework launches (e.g. on deploy in node.js, on window load on the client, or on serviceWorker install). Native javascript events interface with these source files and vice versa.
+A unit is defined by a handful of source files which override its base unit's behavior. 
+
+These source files are used whenever the framework launches (e.g. on deploy in node.js, on window load on the client, or on serviceWorker install). Native javascript events interface with these source files and vice versa.
 
 These source files are distributed across three kinds of unit behavior. Units can have additional source files. Units always have cross-origin access and can read all other units' source files.
 
