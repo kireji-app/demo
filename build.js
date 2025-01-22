@@ -18,7 +18,7 @@ function boot() {
    return BigInt(binaryString)
   },
   element = (node, tagname) => node.appendChild(document.createElement(tagname)),
-  logging = true,
+  logging = false,
   isNode = _.process?.release?.name === "node",
   environment = isNode ? "cloud" : (_.constructor === _.Window ? "client" : "worker"),
   lifecycleMethods = [["define"], ["propagateRootward", "...units"], ["propagateLeafward", "state"], ["install"], ["uninstall"], ["setState", "state"]],
