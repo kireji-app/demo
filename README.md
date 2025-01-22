@@ -39,7 +39,7 @@ A unit's value is automatically recomputed when the value(s) assigned to its der
 These files are evaluated when a unit comes into existence and serve to define their relationship to other rootward and leafward units.
 |File|Purpose
 |-|-
-|**`base.uri`**|gives the origin of the base unit the unit extends<br>*The keyword "super" is used to call on the functionality of the base unit.*
+|**`base.uri`**|the domain of the base unit from which this unit extends<br>*The keyword "super" is used to call on the functionality of the base unit.*
 |**`.env`**|environment variable keys (with optional values) made available to `define.js`
 |**`define.js`**|runs when instantiating a unit; used to instantiate dependant units
 
