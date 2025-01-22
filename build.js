@@ -4,9 +4,9 @@ function boot() {
  const _ = globalThis,
   $VER$ = "0.0.0",
   alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_",
-  encode = index => {
+  encode = state => {
    const hexads = [],
-    binaryString = index.toString(2),
+    binaryString = state.toString(2),
     newLength = Math.ceil(binaryString.length / 6),
     fullbin = binaryString.padStart(newLength * 6, 0)
    for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
@@ -18,15 +18,13 @@ function boot() {
    return BigInt(binaryString)
   },
   element = (node, tagname) => node.appendChild(document.createElement(tagname)),
-  logging = false,
+  logging = true,
   isNode = _.process?.release?.name === "node",
   environment = isNode ? "cloud" : (_.constructor === _.Window ? "client" : "worker"),
-  APP_HOST = isNode ? undefined : location.host,
-  APP_ORIGIN = isNode ? undefined : "https://" + APP_HOST,
-  lifecycleMethods = [["install"], ["emit", "...parts"], ["open"], ["absorb", "index"], ["close"], ["goto", "index"]],
-  baseOrigin = "https://base.core.parts",
+  lifecycleMethods = [["define"], ["propagateRootward", "...units"], ["propagateLeafward", "state"], ["install"], ["uninstall"], ["setState", "state"]],
+  baseOrigin = "https://unit.core.parts",
   types = {},
-  Part = (originSegments, override) => {
+  TUnit = (originSegments, override) => {
    const origin = override ? originSegments.join(override["index.txt"] ?? "") : originSegments[0],
     name = origin
      .slice(8)
@@ -34,7 +32,7 @@ function boot() {
      .split("-")
      .map(n => n.charAt(0).toUpperCase() + n.slice(1).toLowerCase())
      .join(""),
-    base = origin === baseOrigin ? "Array" : `Part\`${override?.["base.uri"] ?? (D[`${origin}/base.uri`] || baseOrigin)}\``,
+    base = origin === baseOrigin ? "Array" : `TUnit\`${override?.["base.uri"] ?? (D[`${origin}/base.uri`] || baseOrigin)}\``,
     resolve = filename => {
      let has = false,
       result = undefined
@@ -51,16 +49,21 @@ function boot() {
      return [has, result]
     },
     methods = lifecycleMethods.map(([name, args = ""]) => {
-     const installs = name === "install",
-      logsMethod = !installs && logging,
+     const defines = name === "define",
+      logsMethod = !defines && logging,
       [overridesMethod, resolvedBody] = resolve(`${name}.js`)
 
      if (!(overridesMethod || logsMethod)) return ""
-     if (installs) return `constructor(${resolve("inputs.csv")[1] ?? ""}) {\n  ${resolvedBody}\n }`
+     if (defines) {
+      const
+       [overridesVariables, variablesBody] = resolve(".env"),
+       variables = overridesVariables ? variablesBody.match(/^[A-Z][A-Z0-9_-]*/gm) : origin === baseOrigin ? [] : eval(base).variables
+      return `static variables = [${variables.length > 1 ? "\n  '" + variables.join("',\n  '") + "'\n " : variables.length ? "'" + variables + "'" : ""}]\n constructor(${variables.length > 1 ? "\n  " + variables.join(",\n  ") + "\n " : variables.join("")}) {\n  ${resolvedBody}\n }`
+     }
      let body = resolvedBody
      if (logsMethod) {
-      const logSignature = args == "index" ? "${index}" : args,
-       logOpen = `console.group(\`[${environment}] | \${this.origin} | \${this.index} | ${origin} --> ${name}(${logSignature})\`);\n  `
+      const logSignature = args == "state" ? "${state}" : args,
+       logOpen = `console.group(\`[${environment}] | \${this.origin} | \${this.state} | ${origin} --> ${name}(${logSignature})\`);\n  `
       body = `${logOpen}${overridesMethod ? body : `await super.${name}(${args})`}\n  ;console.groupEnd()`
      }
      return `async ${name}(${args}) {\n  ${body}\n }`
@@ -71,28 +74,28 @@ function boot() {
   D = {
    "https://glowstick.click/base.uri": "https://menu.core.parts",
    "https://glowstick.click/theme.color": "#85e787",
-   "https://glowstick.click/install.js": `
+   "https://glowstick.click/define.js": `
 super("lander")
 `,
    // ========================================================================= //
    "https://lander.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://lander.glowstick.click/install.js": `
+   "https://lander.glowstick.click/define.js": `
 super([
  "https://welcome.glowstick.click",
  "https://library.glowstick.click"
 ])
 `,
-   "https://lander.glowstick.click/open.js": `
-await super.open()
+   "https://lander.glowstick.click/install.js": `
+await super.install()
 
-this.container = this.controller.container
-this.styleSheet = this.controller.styleSheet
+this.container = this.parent.container
+this.styleSheet = this.parent.styleSheet
 `,
-   "https://lander.glowstick.click/close.js": `
+   "https://lander.glowstick.click/uninstall.js": `
 delete this.styleSheet
 delete this.container
 
-await super.close()
+await super.uninstall()
 `,
    // ========================================================================= //
    "https://welcome.glowstick.click/body.html": `
@@ -100,29 +103,29 @@ await super.close()
 <p>This app is in pre-alpha. The content library is still mostly empty. It is a video streaming platform with a permalink to every subset (clip) of every video in the library. The engine is exactly the same as <a href=//kireji.io>kireji.io</a> but this model renders movies and TV shows instead of words.
 <p><a href=#1>Click here</a> to try it.
 `,
-   "https://welcome.glowstick.click/open.js": ` 
-this.controller.container.innerHTML = D["https://welcome.glowstick.click/body.html"]
-this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
+   "https://welcome.glowstick.click/install.js": ` 
+this.parent.container.innerHTML = D["https://welcome.glowstick.click/body.html"]
+this.parent.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
 
-await super.open()
+await super.install()
 `,
-   "https://welcome.glowstick.click/close.js": `
-await super.close()
+   "https://welcome.glowstick.click/uninstall.js": `
+await super.uninstall()
 
-this.controller.styleSheet.replaceSync("")
-this.controller.container.innerHTML = ""
+this.parent.styleSheet.replaceSync("")
+this.parent.container.innerHTML = ""
 `,
    // ========================================================================= //
    "https://library.glowstick.click/promo.uri":
     "https://space-guy.title.glowstick.click https://sample.title.glowstick.click https://it-formed.title.glowstick.click https://my-fake-movie.title.glowstick.click",
    "https://library.glowstick.click/base.uri": "https://conjunction.core.parts",
-   "https://library.glowstick.click/install.js": `
+   "https://library.glowstick.click/define.js": `
 super([
  "https://now-playing.glowstick.click"
 ])
 `,
-   "https://library.glowstick.click/open.js": `
-this.container = this.controller.container
+   "https://library.glowstick.click/install.js": `
+this.container = this.parent.container
 
 const tvShows = [], movies = [], recents = [], promos = D[\`\${this.origin}/promo.uri\`].split(" ").map(origin => this[0][origin])
 
@@ -134,14 +137,14 @@ for (const title of this[0].slice(1).reverse()) {
 this.container.innerHTML = \`
 <div id=scroller>
  <section id=promo>
-  <a href=#\${encode(promos[0].offset + promos[0].controller.offset + promos[0].controller.controller.offset)}>
+  <a href=#\${encode(promos[0].offset + promos[0].parent.offset + promos[0].parent.parent.offset)}>
    <img src="\${promos[0].subdomain}-promo.png" alt="Promotional banner of \${promos[0].niceName}">
   </a>
  </section>
  <section>
   <h2>TV Shows</h2>
   <div class=topic>
-   \${tvShows.map(title => \`<a href=#\${encode(title.offset + title.controller.offset + title.controller.controller.offset)}>
+   \${tvShows.map(title => \`<a href=#\${encode(title.offset + title.parent.offset + title.parent.parent.offset)}>
     <figure>
      <img src="\${title.subdomain}.png" alt="Thumbnail of \${title.niceName}">
      <figcaption>\${title.niceName} (\${title.releaseDate.slice(-4)})</figcaption>
@@ -153,7 +156,7 @@ this.container.innerHTML = \`
  <section>
   <h2>Movies</h2>
   <div class=topic>
-   \${movies.map(title => \`<a href=#\${encode(title.offset + title.controller.offset + title.controller.controller.offset)}>
+   \${movies.map(title => \`<a href=#\${encode(title.offset + title.parent.offset + title.parent.parent.offset)}>
     <figure>
      <img src="\${title.subdomain}.png" alt="Thumbnail of \${title.niceName}">
      <figcaption>\${title.niceName} (\${title.releaseDate.slice(-4)})</figcaption>
@@ -165,7 +168,7 @@ this.container.innerHTML = \`
  <section>
   <h2>Recently Added</h2>
   <div class=topic>
-   \${recents.map(title => \`<a href=#\${encode(title.offset + title.controller.offset + title.controller.controller.offset)}>
+   \${recents.map(title => \`<a href=#\${encode(title.offset + title.parent.offset + title.parent.parent.offset)}>
     <figure>
      <img src="\${title.subdomain}.png" alt="Thumbnail of \${title.niceName}">
      <figcaption>\${title.niceName} (\${title.releaseDate.slice(-4)})</figcaption>
@@ -176,7 +179,7 @@ this.container.innerHTML = \`
  </section>
 </div>\`
 
-this.styleSheet = this.controller.styleSheet
+this.styleSheet = this.parent.styleSheet
 this.styleSheet.replaceSync(\`
 * {
  box-sizing: border-box;
@@ -383,10 +386,10 @@ dialog > div > button {
 }
 \`)
 
-await super.open()
+await super.install()
 `,
-   "https://library.glowstick.click/close.js": `
-await super.close()
+   "https://library.glowstick.click/uninstall.js": `
+await super.uninstall()
 
 this.container.innerHTML = ""
 
@@ -396,7 +399,7 @@ delete this.styleSheet
 `,
    // ========================================================================= //
    "https://now-playing.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://now-playing.glowstick.click/install.js": `
+   "https://now-playing.glowstick.click/define.js": `
 super([
  "none",
  "https://space-guy.title.glowstick.click",
@@ -404,28 +407,34 @@ super([
  "https://sample.title.glowstick.click",
 ])
 `,
-   "https://now-playing.glowstick.click/open.js": `
-this.container = this.controller.container
+   "https://now-playing.glowstick.click/install.js": `
+this.container = this.parent.container
 
-await super.open()
+await super.install()
 `,
-   "https://now-playing.glowstick.click/close.js": `
-await super.close()
+   "https://now-playing.glowstick.click/uninstall.js": `
+await super.uninstall()
 
 delete this.container
 `,
    // ========================================================================= //
    "https://title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://title.glowstick.click/inputs.csv": "content, date, title, description, released",
-   "https://title.glowstick.click/install.js": `
-super(content)
-this.releaseDate = date
-this.niceName = title
-this.description = description
-this.released = released
+   "https://title.glowstick.click/.env": `
+CONTENT
+DATE
+TITLE
+DESCRIPTION
+IS_RELEASED
 `,
-   "https://title.glowstick.click/open.js": `
-this.container = this.controller.container
+   "https://title.glowstick.click/define.js": `
+super(CONTENT)
+this.releaseDate = DATE
+this.niceName = TITLE
+this.description = DESCRIPTION
+this.released = IS_RELEASED
+`,
+   "https://title.glowstick.click/install.js": `
+this.container = this.parent.container
 const releaseDate = new Date(this.releaseDate)
 this.popup = element(this.container, "dialog")
 this.popup.tabIndex = 0
@@ -445,14 +454,14 @@ this.popup.innerHTML = \`
 
 this.backButton = this.popup.querySelector("button")
 this.backButton.onclick = async e => {
- await this.controller.goto(0n)
+ await this.parent.setState(0n)
 }
 
-await super.open()
+await super.install()
 this.popup.focus()
 `,
-   "https://title.glowstick.click/close.js": `
-await super.close()
+   "https://title.glowstick.click/uninstall.js": `
+await super.uninstall()
 
 this.backButton.onclick = undefined
 this.backButton.remove()
@@ -465,26 +474,38 @@ delete this.container
 `,
    // ========================================================================= //
    "https://tv-show.glowstick.click/base.uri": "https://title.glowstick.click",
-   "https://tv-show.glowstick.click/inputs.csv": "seasons, date, title, description, released",
-   "https://tv-show.glowstick.click/install.js": `
-super(seasons, date, title, description, released)
+   "https://tv-show.glowstick.click/.env": `
+SEASONS
+DATE
+TITLE
+DESCRIPTION
+IS_RELEASED
+`,
+   "https://tv-show.glowstick.click/define.js": `
+super(SEASONS, DATE, TITLE, DESCRIPTION, IS_RELEASED)
 this.isShow = true
 `,
    // ========================================================================= //
    "https://movie.glowstick.click/base.uri": "https://title.glowstick.click",
-   "https://movie.glowstick.click/inputs.csv": "acts, date, title, description, released",
-   "https://movie.glowstick.click/install.js": `
-super(acts, date, title, description, released)
+   "https://movie.glowstick.click/.env": `
+ACTS
+DATE
+TITLE
+DESCRIPTION
+IS_RELEASED
+`,
+   "https://movie.glowstick.click/define.js": `
+super(ACTS, DATE, TITLE, DESCRIPTION, IS_RELEASED)
 this.isShow = false
 `,
    // ========================================================================= //
    "https://live-action-larry.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
-   "https://live-action-larry.title.glowstick.click/install.js": `
+   "https://live-action-larry.title.glowstick.click/define.js": `
 super(["season-0"], "01/20/2025", "The Litany of Live Action Larry", "Larry is just a regular guy, except more annoying.")
 `,
    // ========================================================================= //
    "https://my-fake-movie-2.title.glowstick.click/base.uri": "https://movie.glowstick.click",
-   "https://my-fake-movie-2.title.glowstick.click/install.js": `
+   "https://my-fake-movie-2.title.glowstick.click/define.js": `
 super(
  ["act-0", "act-1", "act-2"],
  "12/26/2026",
@@ -494,7 +515,7 @@ super(
 `,
    // ========================================================================= //
    "https://my-fake-movie.title.glowstick.click/base.uri": "https://movie.glowstick.click",
-   "https://my-fake-movie.title.glowstick.click/install.js": `
+   "https://my-fake-movie.title.glowstick.click/define.js": `
 super(
  ["act-0", "act-1", "act-2"],
  "12/25/2025",
@@ -504,32 +525,32 @@ super(
 `,
    // ========================================================================= //
    "https://space-guy.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
-   "https://space-guy.title.glowstick.click/install.js": `
+   "https://space-guy.title.glowstick.click/define.js": `
 super(["season-0"], "1/13/2025", "Space Guy", "Travel the stars with the galaxy's original hero.", true)
 `,
    // ========================================================================= //
    "https://sample.title.glowstick.click/base.uri": "https://tv-show.glowstick.click",
-   "https://sample.title.glowstick.click/install.js": `
+   "https://sample.title.glowstick.click/define.js": `
 super(["season-0"], "09/28/2025", "Sample", "This fake documentary follows a fake blood sample through a fake lab procedure.")
 `,
    // ========================================================================= //
    "https://season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://season-0.space-guy.title.glowstick.click/install.js": `
+   "https://season-0.space-guy.title.glowstick.click/define.js": `
 super(["episode-0"])
 `,
    // ========================================================================= //
    "https://episode-0.season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://episode-0.season-0.space-guy.title.glowstick.click/install.js": `
+   "https://episode-0.season-0.space-guy.title.glowstick.click/define.js": `
 super(["act-0", "act-1", "act-2"])
 `,
    // ========================================================================= //
    "https://act-0.episode-0.season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://act-0.episode-0.season-0.space-guy.title.glowstick.click/install.js": `
+   "https://act-0.episode-0.season-0.space-guy.title.glowstick.click/define.js": `
 super(["splash", "scene-0", "scene-1", "scene-2"])
 `,
    // ========================================================================= //
    "https://scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/install.js": `
+   "https://scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/define.js": `
 super([
  "shot-0",
  "shot-1",
@@ -539,7 +560,7 @@ super([
 `,
    // ========================================================================= //
    "https://shot-0.scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/base.uri": "https://disjunction.core.parts",
-   "https://shot-0.scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/install.js": `
+   "https://shot-0.scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/define.js": `
 super([
 "keyframe-0",
 "keyframe-1",
@@ -549,14 +570,14 @@ super([
 `,
    // ========================================================================= //
    "https://keyframe-0.shot-0.scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/base.uri": "https://conjunction.core.parts",
-   "https://keyframe-0.shot-0.scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/install.js": `
+   "https://keyframe-0.shot-0.scene-0.act-0.episode-0.season-0.space-guy.title.glowstick.click/define.js": `
 super([
  "pose",
  "transition"
 ])
 `,
    // ========================================================================= //
-   /*"https://movie-001.title.glowstick.click/install.js": `
+   /*"https://movie-001.title.glowstick.click/define.js": `
 super(["scene-001", "scene-002", "scene-003"])
 /* episode 1: Space Guy
 <h1>SPACE-GUY!</h1>
@@ -605,23 +626,23 @@ super(["scene-001", "scene-002", "scene-003"])
    "https://core.parts/theme.color": "#488adc",
    "https://core.parts/preferences.uri": "https://overlay.menu.core.parts https://colormode.core.parts",
    // ========================================================================= //
-   "https://base.core.parts/install.js": `
+   "https://unit.core.parts/define.js": `
 super()
 
-this.index = -1n
+this.state = -1n
 
 this.size = 1n
 
 Object.defineProperties(this, {
- inject: {
-  value(part) {
-   if (typeof part === "string") part = part.startsWith("https://") ? new (Part([part]))() : new (Part([\`https://\${part}.\${this.host}\`]))()
-   if (!(part instanceof Part\`https://base.core.parts\`)) throw new TypeError(\`unexpected \${typeof part} encountered as factor of \${this.origin}\`)
-   if (part.origin in this) throw new TypeError(\`duplicate origin \${part.origin} in \${this.origin}\`)
-   if (part.controller) throw new TypeError(\`cannot inject part twice (injecting \${part.origin} from \${this.origin})\`)
-   part.controller = this
-   this[part.origin] = part
-   return part
+ addConstituentUnit: {
+  value(unit) {
+   if (typeof unit === "string") unit = unit.startsWith("https://") ? new (TUnit([unit]))() : new (TUnit([\`https://\${unit}.\${this.host}\`]))()
+   if (!(unit instanceof TUnit\`https://unit.core.parts\`)) throw new TypeError(\`unexpected \${typeof unit} encountered as factor of \${this.origin}\`)
+   if (unit.origin in this) throw new TypeError(\`duplicate origin \${unit.origin} in \${this.origin}\`)
+   if (unit.parent) throw new TypeError(\`cannot add the same constituent unit twice (adding \${unit.origin} to \${this.origin})\`)
+   unit.parent = this
+   this[unit.origin] = unit
+   return unit
   }
  },
  host: {
@@ -641,121 +662,124 @@ Object.defineProperties(this, {
  }
 })
 `,
-   "https://base.core.parts/open.js": `
+   "https://unit.core.parts/install.js": `
 
 `,
-   "https://base.core.parts/absorb.js": `
-if (index < -1n || index >= this.size) throw new RangeError(\`index \${index} out of range (size \${this.size}): \${this.origin}\`)
-
-const indexCache = this.index
-this.index = index
-
-if (indexCache === -1n) await this.open()
+   "https://unit.core.parts/uninstall.js": `
+this.state = -1n
 `,
-   "https://base.core.parts/close.js": `
-this.index = -1n
+   "https://unit.core.parts/propagateLeafward.js": `
+if (state < -1n) throw new RangeError(\`state (\${state}) is too small (min = -1). \${this.origin}\`)
+if (state >= this.size) throw new RangeError(\`state (\${state}) is too large (max = \${this.size}). \${this.origin}\`)
+const uninstalled = this.state === -1n
+this.state = state
+if (uninstalled) await this.install()
 `,
-   "https://base.core.parts/emit.js": `
-await this.controller?.emit(this)
+   "https://unit.core.parts/propagateRootward.js": `
+await this.parent?.propagateRootward(this)
 `,
-   "https://base.core.parts/goto.js": `
-await this.absorb(index)
-await this.controller?.emit(this)
+   "https://unit.core.parts/setState.js": `
+await this.propagateLeafward(state)
+await this.propagateRootward()
 `,
    // ========================================================================= //
-   "https://conjunction.core.parts/inputs.csv": "factors",
-   "https://conjunction.core.parts/install.js": `
+   "https://conjunction.core.parts/.env": `
+FACTORS
+`,
+   "https://conjunction.core.parts/define.js": `
 super()
 
-if (!Array.isArray(factors))
-throw new RangeError(\`conjunction expects array of factors (got \${typeof factors}) (\${this.origin})\`)
+if (!Array.isArray(FACTORS))
+throw new RangeError(\`conjunction expects array of factors (got \${typeof FACTORS}) (\${this.origin})\`)
 
-this.size = factors.reduceRight((units, factor, i) => {
-const part = this.inject(factor)
+this.size = FACTORS.reduceRight((divisors, factor, i) => {
+ const unit = this.addConstituentUnit(factor)
 
-this.unshift(part)
+ this.unshift(unit)
 
-Object.defineProperties(part, {
- i: { get(){ return i } },
- unit: { get(){ return units[i] } },
- indexCache: { value: part.index, writable: true },
- offset: { value: 0n },
-})
+ Object.defineProperties(unit, {
+  i: { get(){ return i } },
+  conjunctionDivisor: { get(){ return divisors[i] } },
+  stateCache: { value: unit.state, writable: true },
+  offset: { value: 0n },
+ })
 
-units.unshift(units[0] * part.size)
+ divisors.unshift(divisors[0] * unit.size)
 
-return units
+ return divisors
 }, [1n]).shift()
 `,
-   "https://conjunction.core.parts/absorb.js": `
-if (this.index !== index) {
-await super.absorb(index)
-for (const part of this) {
-await part.absorb(part.indexCache = index / part.unit)
-index %= part.unit
-}
+   "https://conjunction.core.parts/propagateLeafward.js": `
+if (this.state !== state) {
+ await super.propagateLeafward(state)
+ for (const unit of this) {
+  await unit.propagateLeafward(unit.stateCache = state / unit.conjunctionDivisor)
+  state %= unit.conjunctionDivisor
+ }
 }
 `,
-   "https://conjunction.core.parts/close.js": `
-await super.close()
+   "https://conjunction.core.parts/uninstall.js": `
+await super.uninstall()
 
-for (const part of this)
-await part.close()
+for (const unit of this)
+await unit.uninstall()
 `,
-   "https://conjunction.core.parts/emit.js": `
-for (const part of parts) {
-this.index += (part.index - part.indexCache) * part.unit
-part.indexCache = part.index
+   "https://conjunction.core.parts/propagateRootward.js": `
+for (const unit of units) {
+ this.state += (unit.state - unit.stateCache) * unit.conjunctionDivisor
+ unit.stateCache = unit.state
 }
 
-await super.emit(...parts)
+await super.propagateRootward(...units)
 `,
    // ========================================================================= //
-   "https://disjunction.core.parts/inputs.csv": "addends",
-   "https://disjunction.core.parts/install.js": `
+   "https://disjunction.core.parts/.env": `
+ADDENDS
+`,
+   "https://disjunction.core.parts/define.js": `
 super()
 
-if (!Array.isArray(addends))
-throw new RangeError(\`disjunction expected array of addends (got \${typeof addends}) (\${this.origin})\`)
+if (!Array.isArray(ADDENDS))
+throw new RangeError(\`disjunction expected array of addends (got \${typeof ADDENDS}) (\${this.origin})\`)
 
-this.size = addends.reduce((size, addend, i) => {
-const part = this.inject(addend)
-this.push(part)
-part.i = i
-part.offset = size
-return size + part.size
+this.size = ADDENDS.reduce((size, addend, i) => {
+const unit = this.addConstituentUnit(addend)
+this.push(unit)
+unit.i = i
+unit.offset = size
+return size + unit.size
 }, 0n)
 `,
-   "https://disjunction.core.parts/absorb.js": `
-if (this.index !== index) {
-await super.absorb(index)
-for (const part of this) {
-if (index < part.size) {
-if (this.choice !== part) {
- await this.choice?.close()
- this.choice = part
-}
-await part.absorb(index)
-break
-}
-index -= part.size
-}
+   "https://disjunction.core.parts/propagateLeafward.js": `
+if (this.state !== state) {
+ await super.propagateLeafward(state)
+ for (const unit of this) {
+  if (state < unit.size) {
+   if (this.choice !== unit) {
+    await this.choice?.uninstall()
+    this.choice = unit
+   }
+   await unit.propagateLeafward(state)
+   break
+  }
+  state -= unit.size
+ }
 }
 `,
-   "https://disjunction.core.parts/close.js": `
-await super.close()
-await this.choice?.close()
+   "https://disjunction.core.parts/uninstall.js": `
+await super.uninstall()
+await this.choice?.uninstall()
 delete this.choice
 `,
-   "https://disjunction.core.parts/emit.js": `
-this.index = this.choice.offset + this.choice.index
-await super.emit(...parts)
+   "https://disjunction.core.parts/propagateRootward.js": `
+if (units.length) this.state = this.choice.offset + this.choice.state
+await super.propagateRootward(...units)
 `,
    // ========================================================================= //
    "https://core.parts/base.uri": "https://fallback.cloud",
    // ========================================================================= //
    "https://root.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://root.core.parts/install.js": `
+   "https://root.core.parts/define.js": `
 super([
  "https://cloud.core.parts",
  "https://worker.core.parts",
@@ -763,27 +787,31 @@ super([
 ])
 
 this.choice = this[\`https://\${environment}.core.parts\`]
-this.index = this.choice.offset
-this.choice.open()
+this.state = this.choice.offset
+this.choice.install()
 `,
    // ========================================================================= //
    "https://client.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://client.core.parts/install.js": `
+   "https://client.core.parts/define.js": `
 super([
  "https://fallback.cloud",
  "https://glowstick.click",
  "https://kireji.io",
 ])
 `,
-   "https://client.core.parts/open.js": `
+   "https://client.core.parts/install.js": `
+
+_.APP_HOST = location.host
+_.APP_ORIGIN = "https://" + APP_HOST
+
 this.choice = this[\`https://\${APP_HOST}\`] ?? this[0]
-this.index = this.choice.offset
-await this.choice.open()
+this.state = this.choice.offset
+await this.choice.install()
 
 loop()
 `,
 // ========================================================================= //
-   "https://cloud.core.parts/open.js": `
+   "https://cloud.core.parts/install.js": `
 
 // HERE clientHTML = D["https://cloud.core.parts/index.html"].replace("worker", "client")
 
@@ -819,7 +847,7 @@ fs.writeFileSync(jsPath, js)
 </html>
 `,
    // ========================================================================= //
-   "https://worker.core.parts/open.js": `
+   "https://worker.core.parts/install.js": `
 const cache = {},
 boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
 _.onfetch = e => {
@@ -843,21 +871,7 @@ if (!(cacheKey in cache)) {
     background_color: "#1f2023",
     description: "This app is under development.",
     display_override: ["window-controls-overlay"],
-    categories: ["entertainment", "games", "utilities"] /*
-    protocol_handlers: [
-     {
-      protocol: "web+core_parts",
-      url: "/core_parts?pathname=%s",
-     },
-    ],
-    shortcuts: [
-     {
-      name: "New Item...",
-      short_name: "New...",
-      url: "/new",
-      description: "This is just a placeholder/hint for future development.",
-     },
-    ],*/,
+    categories: ["entertainment", "games", "utilities"],
    }
    body = JSON.stringify(manifest, null, 1)
    type = "application/json; charset=UTf-8"
@@ -947,7 +961,7 @@ _.onmessage = e => [onactivate, () => registration.unregister().then(() => e.sou
    // ========================================================================= //
    "https://kireji.io/theme.color": "#8accaf",
    "https://kireji.io/base.uri": "https://menu.core.parts",
-   "https://kireji.io/install.js": `
+   "https://kireji.io/define.js": `
 super("lander")
 `,
    // ========================================================================= //
@@ -987,20 +1001,20 @@ a:hover {
 `,
    // ========================================================================= //
    "https://lander.kireji.io/base.uri": "https://disjunction.core.parts",
-   "https://lander.kireji.io/install.js": `
+   "https://lander.kireji.io/define.js": `
 super([
  "https://welcome.kireji.io",
  "https://editor.kireji.io"
 ])
 `,
-   "https://lander.kireji.io/open.js": `
-this.container = this.controller.container
-this.styleSheet = this.controller.styleSheet
+   "https://lander.kireji.io/install.js": `
+this.container = this.parent.container
+this.styleSheet = this.parent.styleSheet
 
-await super.open()
+await super.install()
 `,
-   "https://lander.kireji.io/close.js": `
-await super.close()
+   "https://lander.kireji.io/uninstall.js": `
+await super.uninstall()
 
 delete this.styleSheet
 delete this.container
@@ -1011,21 +1025,21 @@ delete this.container
 <p>This app is in pre-alpha. The API will break a lot. This app creates a permalink to every valid expression in a given grammer. Right now, the grammar models are exceedingly simple and not very useful. Compose a message to see it's permalink. Share the message without uploading anything.
 <p><a href=#1>Click here</a> to try it.
 `,
-   "https://welcome.kireji.io/open.js": `
-this.controller.container.innerHTML = D["https://welcome.kireji.io/body.html"]
-this.controller.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
+   "https://welcome.kireji.io/install.js": `
+this.parent.container.innerHTML = D["https://welcome.kireji.io/body.html"]
+this.parent.styleSheet.replaceSync(D["https://lander.core.parts/app.css"])
 
-await super.open()
+await super.install()
 `,
-   "https://welcome.kireji.io/close.js": `
-await super.close()
+   "https://welcome.kireji.io/uninstall.js": `
+await super.uninstall()
 
-this.controller.container.innerHTML = ""
-this.controller.styleSheet.replaceSync("")
+this.parent.container.innerHTML = ""
+this.parent.styleSheet.replaceSync("")
 `,
    // ========================================================================= //
    "https://model.editor.kireji.io/base.uri": "https://disjunction.core.parts",
-   "https://model.editor.kireji.io/install.js": `
+   "https://model.editor.kireji.io/define.js": `
 super([
  "https://demo-001.kireji.io",
  "https://demo-002.kireji.io",
@@ -1033,9 +1047,9 @@ super([
  // "https://koan-001.kireji.io"
 ])
 `,
-   "https://model.editor.kireji.io/open.js": `
-this.toolbar = this.controller.toolbar
-this.container = this.controller.container
+   "https://model.editor.kireji.io/install.js": `
+this.toolbar = this.parent.toolbar
+this.container = this.parent.container
 
 this.label = element(this.toolbar, "label")
 this.label.innerHTML = "Grammar model:"
@@ -1043,14 +1057,14 @@ this.label.setAttribute("for", "pick-model")
 
 this.select = element(this.toolbar, "select")
 this.select.setAttribute("name", "pick-model")
-this.select.onchange = () => this.goto(this[this.select.selectedIndex].offset)
-for (const part of this) element(this.select, "option").innerHTML = part.subdomain
+this.select.onchange = () => this.setState(this[this.select.selectedIndex].offset)
+for (const unit of this) element(this.select, "option").innerHTML = unit.subdomain
 
 this.randomAnchor = element(this.toolbar, "a")
 this.randomAnchor.innerHTML = "🍀 Random"
 `,
-   "https://model.editor.kireji.io/close.js": `
-await super.close()
+   "https://model.editor.kireji.io/uninstall.js": `
+await super.uninstall()
 
 this.randomAnchor.innerHTML = ""
 this.randomAnchor.remove()
@@ -1070,41 +1084,43 @@ delete this.toolbar
 `,
    // ========================================================================= //
    "https://shuffle.conjunction.core.parts/base.uri": "https://conjunction.core.parts",
-   "https://shuffle.conjunction.core.parts/inputs.csv": "factors",
-   "https://shuffle.conjunction.core.parts/install.js": `
-super(factors)
+   "https://shuffle.conjunction.core.parts/.env": `
+FACTORS
+`,
+   "https://shuffle.conjunction.core.parts/define.js": `
+super(FACTORS)
 
-this.nextRandomNumber = () => {
+this.computeShuffle = () => {
  const
   offset = this.offset,
-  index = ((this.index * 1664525n + 1013904223n) % this.size)
- if (typeof this.onshuffle === "function") this.onshuffle(offset + index)
+  state = ((this.state * 1664525n + 1013904223n) % this.size)
+ if (typeof this.onshuffle === "function") this.onshuffle(offset + state)
 }
 `,
-   "https://shuffle.conjunction.core.parts/absorb.js": `
-await super.absorb(index)
-this.nextRandomNumber()
+   "https://shuffle.conjunction.core.parts/propagateLeafward.js": `
+await super.propagateLeafward(state)
+this.computeShuffle()
 `,
-   "https://shuffle.conjunction.core.parts/emit.js": `
-await super.emit(...parts)
-this.nextRandomNumber()
+   "https://shuffle.conjunction.core.parts/propagateRootward.js": `
+if (units.length) this.computeShuffle()
+await super.propagateRootward(...units)
 `,
    // ========================================================================= //
    "https://model.kireji.io/base.uri": "https://shuffle.conjunction.core.parts",
-   "https://model.kireji.io/open.js": `
-this.onshuffle = index => this.randomAnchor.href = "#" + encode(index)
+   "https://model.kireji.io/install.js": `
+this.onshuffle = state => this.randomAnchor.href = "#" + encode(state)
 
-this.randomAnchor = this.controller.randomAnchor
+this.randomAnchor = this.parent.randomAnchor
 
-this.container = this.controller.container
+this.container = this.parent.container
 
-this.select = this.controller.select
+this.select = this.parent.select
 this.select.selectedIndex = this.i
 
-await super.open()
+await super.install()
 `,
-   "https://model.kireji.io/close.js": `
-await super.close()
+   "https://model.kireji.io/uninstall.js": `
+await super.uninstall()
 
 this.select.selectedIndex = -1
 delete this.select
@@ -1117,7 +1133,7 @@ this.onshuffle = undefined
 `,
    // ========================================================================= //
    "https://demo-001.kireji.io/base.uri": "https://model.kireji.io",
-   "https://demo-001.kireji.io/install.js": `
+   "https://demo-001.kireji.io/define.js": `
 super([
  "https://nouns.dict-001.kireji.io",
  "https://verbs.dict-001.kireji.io"
@@ -1125,7 +1141,7 @@ super([
 `,
    // ========================================================================= //
    "https://demo-002.kireji.io/base.uri": "https://model.kireji.io",
-   "https://demo-002.kireji.io/install.js": `
+   "https://demo-002.kireji.io/define.js": `
 super([
  "https://adjectives.dict-001.kireji.io",
  "https://nouns.dict-001.kireji.io",
@@ -1134,7 +1150,7 @@ super([
 `,
    // ========================================================================= //
    "https://demo-003.kireji.io/base.uri": "https://model.kireji.io",
-   "https://demo-003.kireji.io/install.js": `
+   "https://demo-003.kireji.io/define.js": `
 super([
  "adjectives",
  "https://nouns.dict-001.kireji.io",
@@ -1142,7 +1158,7 @@ super([
 ])`,
    // ========================================================================= //
    "https://adjectives.demo-003.kireji.io/base.uri": "https://disjunction.core.parts",
-   "https://adjectives.demo-003.kireji.io/install.js": `
+   "https://adjectives.demo-003.kireji.io/define.js": `
 super([
  "empty",
  "https://adjectives.dict-001.kireji.io",
@@ -1150,88 +1166,90 @@ super([
  "a3"
 ])
 `,
-   "https://adjectives.demo-003.kireji.io/open.js": `
-await super.open()
-this.container = this.controller.container
+   "https://adjectives.demo-003.kireji.io/install.js": `
+await super.install()
+this.container = this.parent.container
 `,
-   "https://adjectives.demo-003.kireji.io/close.js": `
-await super.close()
+   "https://adjectives.demo-003.kireji.io/uninstall.js": `
+await super.uninstall()
 delete this.container
 `,
    // ========================================================================= //
    "https://a2.adjectives.demo-003.kireji.io/base.uri": "https://conjunction.core.parts",
-   "https://a2.adjectives.demo-003.kireji.io/install.js": `
-super(new Array(2).fill(0).map((_, i) => new Part\`https://a\${{
-"index.txt": "" + i,
-"base.uri": "https://adjectives.dict-001.kireji.io"
+   "https://a2.adjectives.demo-003.kireji.io/define.js": `
+super(new Array(2).fill(0).map((_, i) => new TUnit\`https://a\${{
+ "index.txt": "" + i,
+ "base.uri": "https://adjectives.dict-001.kireji.io"
 }}.demo-003.kireji.io\`()))
 `,
-   "https://a2.adjectives.demo-003.kireji.io/open.js": `
-await super.open()
-this.container = element(this.controller.container, "span")
+   "https://a2.adjectives.demo-003.kireji.io/install.js": `
+await super.install()
+this.container = element(this.parent.container, "span")
 `,
-   "https://a2.adjectives.demo-003.kireji.io/close.js": `
-await super.close()
+   "https://a2.adjectives.demo-003.kireji.io/uninstall.js": `
+await super.uninstall()
 this.container.remove()
 delete this.container
 `,
    // ========================================================================= //
    "https://a3.adjectives.demo-003.kireji.io/base.uri": "https://conjunction.core.parts",
-   "https://a3.adjectives.demo-003.kireji.io/install.js": `
-super(new Array(3).fill(0).map((_, i) => new Part\`https://a\${{
-"index.txt": "" + i,
-"base.uri": "https://adjectives.dict-001.kireji.io"
+   "https://a3.adjectives.demo-003.kireji.io/define.js": `
+super(new Array(3).fill(0).map((_, i) => new TUnit\`https://a\${{
+ "index.txt": "" + i,
+ "base.uri": "https://adjectives.dict-001.kireji.io"
 }}.demo-003.kireji.io\`()))
 `,
-   "https://a3.adjectives.demo-003.kireji.io/open.js": `
-await super.open()
-this.container = this.controller.container
+   "https://a3.adjectives.demo-003.kireji.io/install.js": `
+await super.install()
+this.container = this.parent.container
 `,
-   "https://a3.adjectives.demo-003.kireji.io/close.js": `
-await super.close()
+   "https://a3.adjectives.demo-003.kireji.io/uninstall.js": `
+await super.uninstall()
 delete this.container
 `,
    // ========================================================================= //
    "https://word.kireji.io/base.uri": "https://disjunction.core.parts",
-   "https://word.kireji.io/inputs.csv": "addends",
-   "https://word.kireji.io/install.js": `
-super(addends)
+   "https://word.kireji.io/.env": `
+ADDENDS
+`,
+   "https://word.kireji.io/define.js": `
+super(ADDENDS)
 this.populate = () => this.container.innerHTML = this.choice.subdomain
 `,
-   "https://word.kireji.io/open.js": `
-this.container = element(this.controller.container, "span")
+   "https://word.kireji.io/install.js": `
+this.container = element(this.parent.container, "span")
 `,
-   "https://word.kireji.io/close.js": `
-await super.close()
+   "https://word.kireji.io/uninstall.js": `
+await super.uninstall()
 this.container.remove()
 delete this.container
 `,
-   "https://word.kireji.io/absorb.js": `
-await super.absorb(index)
+   "https://word.kireji.io/propagateLeafward.js": `
+await super.propagateLeafward(state)
 this.populate()
 `,
-   "https://word.kireji.io/emit.js": `
-await super.emit(...parts)
-this.populate()
+   "https://word.kireji.io/propagateRootward.js": `
+if (units.length) this.populate()
+await super.propagateRootward(...units)
 `,
    // ========================================================================= //
    "https://adjectives.dict-001.kireji.io/base.uri": "https://word.kireji.io",
-   "https://adjectives.dict-001.kireji.io/install.js": `
+   "https://adjectives.dict-001.kireji.io/define.js": `
 super(["intended", "prime", "pre-origin", "post-origin", "redundant", "added", "reusable", "empty", "hash-stored", "dead", "implicit", "critical", "new", "explicit", "certain", "desirable", "real", "complete", "prior", "non-empty", "straight", "minimum", "executive", "necessary", "required", "non-zero", "static", "arbitrary", "constructed", "potential", "current", "old", "cloned", "resulting", "quick", "successive", "various", "large", "unique", "inherent", "physical", "rendered", "partial", "separate", "structural", "locked", "different", "apparent", "overall", "settable", "environmental", "independent", "single", "hybrid", "no-client", "entire-factor", "per-non", "client-side", "initial", "future", "consequential", "outgoing", "incoming", "alternate", "specific", "flaming", "supported", "key-value", "false", "open", "cached", "Missing", "same", "flat", "early", "ready", "previous", "tagged", "signed", "expected", "leading", "Variable-length", "Invalid", "compressed", "extended", "private", "total", "major", "minor", "orig", "hasTransform", "installed", "parsed", "built", "styled", "inheriting", "loaded", "selected", "woff", "noFocus"])
 `,
    // ========================================================================= //
    "https://nouns.dict-001.kireji.io/base.uri": "https://word.kireji.io",
-   "https://nouns.dict-001.kireji.io/install.js": `
+   "https://nouns.dict-001.kireji.io/define.js": `
 super(["words", "objects", "facts", "cars",  "cats",  "dogs",  "birds", "subsets", "factors", "powersets", "poems", "primes", "websites", "menus", "origins", "states", "problems", "components", "results", "documents", "sites", "moments", "goals", "things", "landmines", "designs", "questions", "times", "introductions", "contents", "contrasts", "matters", "intents", "contexts", "environments", "numbers", "instructions", "classes", "apps", "parts", "arguments", "subparts", "tasks", "branches", "bugs", "offsets", "coefficients", "events", "signals", "changes", "settings", "data", "flows", "methods", "updates", "schemes", "indices", "inputs", "uris", "RangeErrors", "typenames", "integers", "structures", "representations", "examples", "versions", "computations"])
 `,
    // ========================================================================= //
    "https://verbs.dict-001.kireji.io/base.uri": "https://word.kireji.io",
-   "https://verbs.dict-001.kireji.io/install.js": `
+   "https://verbs.dict-001.kireji.io/define.js": `
 super(["appear", "jump", "run", "eat", "smile", "must", "look", "perform", "subtract", "change", "rest", "wait", "forget", "step", "leave", "enter", "start", "extend", "showStatus", "assert", "await", "populate", "warn", "have", "construct", "maintain", "compute", "pass", "control", "stop", "repopulate", "check", "consider", "modify", "set", "invert", "integrate", "use", "remove", "craft", "harvest", "provide", "update", "return", "throw", "create", "slice", "replace", "eval", "log", "support", "gain", "imagine"])
 `,
    // ========================================================================= //
    "https://koan-001.kireji.io/base.uri": "https://model.kireji.io",
-   "https://koan-001.kireji.io/install.js": `
+   "https://koan-001.kireji.io/define.js": `
 super(["choice"])
 
 this.populate = () => {
@@ -1242,22 +1260,22 @@ this.populate = () => {
  this.container.innerHTML = \`<p>\${aa} \${ab} and there is \${observation.join(" ")}. what is the \${observation.at(-1)} of one \${ba} \${bb}?</p>\`
 }
 `,
-   "https://koan-001.kireji.io/close.js": `
+   "https://koan-001.kireji.io/uninstall.js": `
 this.container.innerHTML = ""
 
-await super.close()
+await super.uninstall()
 `,
-   "https://koan-001.kireji.io/absorb.js": `
-await super.absorb(index)
+   "https://koan-001.kireji.io/propagateLeafward.js": `
+await super.propagateLeafward(state)
 this.populate()
 `,
-   "https://koan-001.kireji.io/emit.js": `
-await super.emit(...parts)
-this.populate()
+   "https://koan-001.kireji.io/propagateRootward.js": `
+if (units.length) this.populate()
+await super.propagateRootward(...units)
 `,
    // ========================================================================= //
    "https://choice.koan-001.kireji.io/base.uri": "https://disjunction.core.parts",
-   "https://choice.koan-001.kireji.io/install.js": `
+   "https://choice.koan-001.kireji.io/define.js": `
 const model = [
  ["hand", "clapping", "hands", "clap", ["a", "sound"]],
  ["foot", "standing", "feet", "stand", ["a", "stance"], ["a", "posture"]],
@@ -1272,18 +1290,18 @@ const model = [
  ["star", "shining", "stars", "shine", ["a", "constellation"], ["a", "galaxy"], ["a", "universe"], ["a", "cosmos"]]
 ]
 
-super(model.map((row, i) => new Part\`https://topic\${{
+super(model.map((row, i) => new TUnit\`https://topic\${{
  "index.txt": "" + i,
  "base.uri": "https://disjunction.core.parts",
- "install.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
+ "define.js": \`super(new Array(\${row.length - 4}).fill(0).map((_, i) => "observation" + i))\`,
 }}.choice.koan-001.kireji.io\`()))
 
 this.model = model
 `,
    // ========================================================================= //
    "https://thingdo.koan-001.kireji.io/base.uri": "https://disjunction.core.parts",
-   "https://thingdo.koan-001.kireji.io/install.js": `
-super(new Array(10).fill(0).map((_, i) => new Part\`https://a\${{
+   "https://thingdo.koan-001.kireji.io/define.js": `
+super(new Array(10).fill(0).map((_, i) => new TUnit\`https://a\${{
  "index.txt": "" + i,
  "base.uri": "https://adjectives.dict-001.kireji.io"
 }}.demo-003.kireji.io\`())))
@@ -1291,7 +1309,7 @@ super(new Array(10).fill(0).map((_, i) => new Part\`https://a\${{
    // ========================================================================= //
    // ========================================================================= //
    "https://editor.kireji.io/base.uri": "https://conjunction.core.parts",
-   "https://editor.kireji.io/install.js": `
+   "https://editor.kireji.io/define.js": `
 super(["model"])
 `,
    "https://editor.kireji.io/toolbar.css": `
@@ -1315,32 +1333,32 @@ a:visited {
  font-size: max(min(3vh, 3vw), 12px);
 }
 `,
-   "https://editor.kireji.io/open.js": `
-await super.open()
+   "https://editor.kireji.io/install.js": `
+await super.install()
 
 this.nodes = {}
 
-this.toolbar = this.controller.controller.getNestedToolbar()
+this.toolbar = this.parent.parent.getNestedToolbar()
 this.toolbar.styleSheet.replaceSync(D["https://editor.kireji.io/toolbar.css"])
-this.controller.styleSheet.replaceSync(D["https://editor.kireji.io/preview.css"])
+this.parent.styleSheet.replaceSync(D["https://editor.kireji.io/preview.css"])
 
-this.container = this.controller.controller.container
+this.container = this.parent.parent.container
 `,
-   "https://editor.kireji.io/close.js": `
-await super.close()
+   "https://editor.kireji.io/uninstall.js": `
+await super.uninstall()
 
 delete this.container
 
 this.toolbar.styleSheet.replaceSync("")
-this.controller.styleSheet.replaceSync("")
-this.controller.controller.destroyNestedToolbar()
+this.parent.styleSheet.replaceSync("")
+this.parent.parent.destroyNestedToolbar()
 delete this.toolbar
 
 delete this.nodes
 `,
    // ========================================================================= //
    "https://orenjinari.com/base.uri": "https://menu.core.parts",
-   "https://orenjinari.com/install.js": `
+   "https://orenjinari.com/define.js": `
 super("error404")
 `,
    "https://orenjinari.com/theme.color": "#d87f1c",
@@ -1354,17 +1372,17 @@ super("error404")
 }
 `,
    // ========================================================================= //
-   "https://static-website.core.parts/open.js": `
-await super.open()
+   "https://static-website.core.parts/install.js": `
+await super.install()
 
-this.styleSheet = this.controller.styleSheet
+this.styleSheet = this.parent.styleSheet
 this.styleSheet.replaceSync(D[this.origin + "/style.css"])
 
-this.container = this.controller.container
+this.container = this.parent.container
 this.container.innerHTML = D[this.origin + "/body.html"]
 `,
-   "https://static-website.core.parts/close.js": `
-await super.close()
+   "https://static-website.core.parts/uninstall.js": `
+await super.uninstall()
 
 this.container.innerHTML = ""
 delete this.container
@@ -1401,7 +1419,7 @@ h1, p {
 `,
    // ========================================================================= //
    "https://app.core.parts/base.uri": "https://conjunction.core.parts",
-   "https://app.core.parts/open.js": `
+   "https://app.core.parts/install.js": `
 const
  n = navigator,
  a = n.userAgent,
@@ -1455,16 +1473,16 @@ onkeydown = e => {
 }
 
 let
- addressbarIndex,
+ addressbarState,
  throttleStartTime,
  time = performance.now()
 
 _.onhashchange = () => {
  let { pathname, search, hash, origin } = location
  if (pathname !== "/" || search || !hash || hash.length <= 1) history.replaceState({}, null, \`\${origin}/\${hash ||= "#0"}\`)
- this.documentIndex = decode(hash)
+ this.documentState = decode(hash)
 
- addressbarIndex = this.documentIndex
+ addressbarState = this.documentState
  throttleStartTime = time
 }
 
@@ -1480,30 +1498,32 @@ _.halt = () => {
 _.loop = now => {
  fps = Math.round(1000 / (meanFrameTime += (now - time - meanFrameTime) / 20))
  time = now
- if (time - throttleStartTime >= throttleDuration && addressbarIndex !== this.documentIndex) {
-  const hash = "#" + encode(this.documentIndex)
+ if (time - throttleStartTime >= throttleDuration && addressbarState !== this.documentState) {
+  const hash = "#" + encode(this.documentState)
   history.pushState({}, null, hash)
-  addressbarIndex = this.documentIndex
+  addressbarState = this.documentState
   throttleStartTime = time
  }
- if(this.index !== this.documentIndex) this.goto(this.documentIndex)
+ if(this.state !== this.documentState) this.setState(this.documentState)
  animationFrameID = requestAnimationFrame(loop)
 }
 
 onhashchange()
 
-this.index = Infinity
+this.state = Infinity
 `,
-   "https://app.core.parts/close.js": `
-throw new Error("a client application cannot be destroyed (thankfully)")
+   "https://app.core.parts/uninstall.js": `
+throw new Error("a client application cannot be unbound")
 `,
-   "https://app.core.parts/emit.js": `
-await super.emit(...parts)
-this.documentIndex = this.index
+   "https://app.core.parts/propagateRootward.js": `
+await super.propagateRootward(...units)
+if (units.length) this.documentState = this.state
 `,
    // ========================================================================= //
    "https://menu.core.parts/base.uri": "https://app.core.parts",
-   "https://menu.core.parts/inputs.csv": "application",
+   "https://menu.core.parts/.env": `
+APPLICATION
+`,
    "https://menu.core.parts/style.css": `
 * {
  box-sizing: border-box;
@@ -1746,11 +1766,11 @@ a:hover {
  }
 }
 `,
-   "https://menu.core.parts/install.js": `
+   "https://menu.core.parts/define.js": `
 super([
  "https://overlay.menu.core.parts",
  "https://colormode.core.parts",
- application
+ APPLICATION
 ])
 
 this.appOrigins = [
@@ -1759,8 +1779,8 @@ this.appOrigins = [
  "https://kireji.io",
 ]
 `,
-   "https://menu.core.parts/open.js": `
-await super.open()
+   "https://menu.core.parts/install.js": `
+await super.install()
 
 document.title = APP_ORIGIN
 
@@ -1850,18 +1870,18 @@ this.appsSection.setAttribute("id", "apps")
 // this.appsTitle.innerText = "Applications"
 this.appList = element(this.appsSection, "ul")
 this.appNodes = this.appOrigins.reduce((nodes, appOrigin) => {
- const that = this.controller[appOrigin in this.controller ? appOrigin : 0]
+ const that = this.parent[appOrigin in this.parent ? appOrigin : 0]
  nodes[appOrigin] = element(this.appList, "li")
  nodes[appOrigin].setAttribute("class", "applink")
  nodes[appOrigin].innerHTML = \`<span class=label>\${appOrigin.slice(8)}</span><img src=\${appOrigin}/icon.svg />\`
  if (appOrigin === APP_ORIGIN) nodes[appOrigin].setAttribute("data-here", "true")
  else nodes[appOrigin].onclick = e => {
   e.preventDefault()
-  let thatIndex = 0n
+  let thatState = 0n
   for (const origin of D["https://core.parts/preferences.uri"].split(" ")) {
-   if (origin in this && origin in that) thatIndex += this[origin].index * that[origin].unit
+   if (origin in this && origin in that) thatState += this[origin].state * that[origin].conjunctionDivisor
   }
-  location = appOrigin + "#" + encode(thatIndex)
+  location = appOrigin + "#" + encode(thatState)
  }
  return nodes
 }, {})
@@ -1878,7 +1898,7 @@ this.colorModeButton.setAttribute("id", "colormode")
 `,
    // ========================================================================= //
    "https://overlay.menu.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://overlay.menu.core.parts/install.js": `
+   "https://overlay.menu.core.parts/define.js": `
 super([
  "closed",
  "introduce",
@@ -1886,26 +1906,26 @@ super([
  "dismiss"
 ])
 `,
-   "https://overlay.menu.core.parts/open.js": `
-this.menuButton = this.controller.menuButton
-this.overlay = this.controller.overlay
+   "https://overlay.menu.core.parts/install.js": `
+this.menuButton = this.parent.menuButton
+this.overlay = this.parent.overlay
 `,
-   "https://overlay.menu.core.parts/close.js": `
+   "https://overlay.menu.core.parts/uninstall.js": `
 delete this.menuButton
 delete this.overlay
 `,
    // ========================================================================= //
-   "https://closed.overlay.menu.core.parts/open.js": `
-await super.open()
+   "https://closed.overlay.menu.core.parts/install.js": `
+await super.install()
 
-this.overlay = this.controller.overlay
+this.overlay = this.parent.overlay
 this.overlay.setAttribute("style", "--overlay-tween: 0")
 
-this.menuButton = this.controller.menuButton
-this.menuButton.onclick = () => this.controller.goto(1n)
+this.menuButton = this.parent.menuButton
+this.menuButton.onclick = () => this.parent.setState(1n)
 `,
-   "https://closed.overlay.menu.core.parts/close.js": `
-await super.close()
+   "https://closed.overlay.menu.core.parts/uninstall.js": `
+await super.uninstall()
 
 if (document.activeElement === this.overlay) this.overlay.blur()
 
@@ -1917,22 +1937,22 @@ delete this.overlay
 `,
    // ========================================================================= //
    "https://introduce.overlay.menu.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://introduce.overlay.menu.core.parts/install.js": `
+   "https://introduce.overlay.menu.core.parts/define.js": `
 super([
  "half"
 ])
 `,
-   "https://introduce.overlay.menu.core.parts/open.js": `
-this.overlay = this.controller.overlay
+   "https://introduce.overlay.menu.core.parts/install.js": `
+this.overlay = this.parent.overlay
 this.overlay.setAttribute("style", "--overlay-tween: 0.5")
 
 this.pendingFrame = requestAnimationFrame(() => {
  delete this.pendingFrame
- this.controller.goto(2n)
+ this.parent.setState(2n)
 })
 `,
-   "https://introduce.overlay.menu.core.parts/close.js": `
-await super.close()
+   "https://introduce.overlay.menu.core.parts/uninstall.js": `
+await super.uninstall()
 
 if (this.pendingFrame) {
  cancelAnimationFrame(this.pendingFrame)
@@ -1943,16 +1963,16 @@ this.overlay.removeAttribute("style")
 delete this.overlay
 `,
    // ========================================================================= //
-   "https://open.overlay.menu.core.parts/open.js": `
-await super.open()
+   "https://open.overlay.menu.core.parts/install.js": `
+await super.install()
 
-this.overlay = this.controller.overlay
+this.overlay = this.parent.overlay
 this.overlay.setAttribute("style", "--overlay-tween: 1")
-this.overlay.onblur = () => this.controller.goto(3n)
+this.overlay.onblur = () => this.parent.setState(3n)
 this.overlay.focus()
 `,
-   "https://open.overlay.menu.core.parts/close.js": `
-await super.close()
+   "https://open.overlay.menu.core.parts/uninstall.js": `
+await super.uninstall()
 
 if (document.activeElement === this.overlay) this.overlay.blur()
 this.overlay.onblur = undefined
@@ -1961,24 +1981,24 @@ delete this.overlay
 `,
    // ========================================================================= //
    "https://dismiss.overlay.menu.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://dismiss.overlay.menu.core.parts/install.js": `
+   "https://dismiss.overlay.menu.core.parts/define.js": `
 super([
  "half"
 ])
 `,
-   "https://dismiss.overlay.menu.core.parts/open.js": `
-await super.open()
+   "https://dismiss.overlay.menu.core.parts/install.js": `
+await super.install()
 
-this.overlay = this.controller.overlay
+this.overlay = this.parent.overlay
 this.overlay.setAttribute("style", "--overlay-tween: 0.5")
 
 this.pendingFrame = requestAnimationFrame(() => {
  delete this.pendingFrame
- this.controller.goto(0n)
+ this.parent.setState(0n)
 })
 `,
-   "https://dismiss.overlay.menu.core.parts/close.js": `
-await super.close()
+   "https://dismiss.overlay.menu.core.parts/uninstall.js": `
+await super.uninstall()
 
 if (this.pendingFrame) {
  cancelAnimationFrame(this.pendingFrame)
@@ -1991,7 +2011,7 @@ delete this.overlay
    // ========================================================================= //
    "https://fallback.cloud/base.uri": "https://menu.core.parts",
    "https://fallback.cloud/theme.color": "#999aab",
-   "https://fallback.cloud/install.js": `
+   "https://fallback.cloud/define.js": `
 super("https://error503.fallback.cloud")
 `,
    // ========================================================================= //
@@ -2048,17 +2068,17 @@ img {
  }
 }
 `,
-   "https://error503.fallback.cloud/open.js": `
-await super.open()
+   "https://error503.fallback.cloud/install.js": `
+await super.install()
 
-this.container = this.controller.container
+this.container = this.parent.container
 this.container.innerHTML = \`<h1>503</h1><span id=float><img src=icon.svg><span class=thin>\${APP_HOST}</span><span>is coming soon.</span></span>\`
 
-this.styleSheet = this.controller.styleSheet
+this.styleSheet = this.parent.styleSheet
 this.styleSheet.replaceSync(D["https://error503.fallback.cloud/style.css"])
 `,
-   "https://error503.fallback.cloud/close.js": `
-await super.close()
+   "https://error503.fallback.cloud/uninstall.js": `
+await super.uninstall()
 
 this.styleSheet.replaceSync("")
 delete this.styleSheet
@@ -2068,17 +2088,17 @@ delete this.container
 `,
    // ========================================================================= //
    "https://colormode.core.parts/base.uri": "https://disjunction.core.parts",
-   "https://colormode.core.parts/install.js": `
+   "https://colormode.core.parts/define.js": `
 super([
  "device",
  "light",
  "dark"
 ])
 `,
-   "https://colormode.core.parts/open.js": `
-this.styleSheet = this.controller.globalStyleSheet
+   "https://colormode.core.parts/install.js": `
+this.styleSheet = this.parent.globalStyleSheet
 `,
-   "https://colormode.core.parts/close.js": `
+   "https://colormode.core.parts/uninstall.js": `
 delete this.styleSheet
 `,
    // ========================================================================= //
@@ -2088,11 +2108,11 @@ delete this.styleSheet
    // ========================================================================= //
    "https://dark.colormode.core.parts/base.uri": "https://choice.colormode.core.parts",
    // ========================================================================= //
-   "https://choice.colormode.core.parts/open.js": `
+   "https://choice.colormode.core.parts/install.js": `
 const
  palette = ["1f2023", "faf9f8"],
  isLight = this.subdomain === "light",
- origin = this.controller.controller.origin
+ origin = this.parent.parent.origin
 
 if (isLight) palette.reverse()
 else palette[1] = (parseInt(palette[1], 16) - 0x101010).toString(16)
@@ -2147,9 +2167,9 @@ body {
  --theme: \${themeColor};
 }\`
 
-this.controller.styleSheet.replaceSync(globalCSS + scriptCSS + customCSS)
+this.parent.styleSheet.replaceSync(globalCSS + scriptCSS + customCSS)
 `,
   },
-  CORE = new Part`https://root.core.parts`()
+  CORE = new TUnit`https://root.core.parts`()
 }
 boot()
