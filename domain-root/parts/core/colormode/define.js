@@ -1,0 +1,5 @@
+super([
+ "device",
+ "light",
+ "dark"
+])

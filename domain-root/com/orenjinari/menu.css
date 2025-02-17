@@ -1,0 +1,7 @@
+#toolbar {
+ background: transparent;
+ box-shadow: none;
+}
+#toolbar > h1 {
+ display: none
+}

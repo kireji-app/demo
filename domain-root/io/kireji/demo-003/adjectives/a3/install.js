@@ -1,0 +1,1 @@
+this.container = this.parent.container

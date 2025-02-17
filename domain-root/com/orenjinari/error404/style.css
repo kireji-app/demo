@@ -1,0 +1,18 @@
+:host {
+ display: flex;
+ flex-flow: column;
+ align-items: center;
+ justify-content: center;
+ top: 0;
+ font-size: min(4vh, 3vw);
+}
+h1, p {
+ margin: 0;
+ padding: 0;
+}
+#img404 {
+ margin-top: min(4vh, 3vw);
+ max-width: 75vw;
+ max-height: 50vh;
+ filter: invert(0.7);
+}

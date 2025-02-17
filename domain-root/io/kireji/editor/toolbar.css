@@ -1,0 +1,9 @@
+a,
+a:visited {
+ color: unset;
+}
+@media (width < 650px) {
+ label {
+  display: none;
+ }
+}

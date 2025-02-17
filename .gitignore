@@ -4,4 +4,7 @@
 .vercel
 package-lock.json
 public/*
+stats/*
+archive.js
 .env*.local
+.vscode/*
