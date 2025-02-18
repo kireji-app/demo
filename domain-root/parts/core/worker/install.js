@@ -54,9 +54,12 @@ text { fill: white }
   }
 
   if (base64Encoded) {
-   const B = atob(body), k = B.length, A = new ArrayBuffer(k), I = new Uint8Array(A);
-   for (var i = 0; i < k; i++) I[i] = B.charCodeAt(i);
-   body = new Blob([I], { type });
+   if (!body) body = new Blob([], { type })
+   else {
+    const B = atob(body), k = B.length, A = new ArrayBuffer(k), I = new Uint8Array(A)
+    for (var i = 0; i < k; i++) I[i] = B.charCodeAt(i)
+    body = new Blob([I], { type })
+   }
   }
 
   cache[cacheKey] = new Response(body, {

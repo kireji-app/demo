@@ -1,5 +1,5 @@
 globalThis.RADIX = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.~?#&/=!$*".slice(0, 64)
-globalThis.APP_UID = location.host === "localhost:3000" ? "core.parts" : location.host
+globalThis.APP_UID = location.host === "localhost:3000" ? "glowstick.click" : location.host
 globalThis.encode = state => {
  const
   hexads = [],

@@ -137,10 +137,10 @@ a, a:visited {
 }
 dialog {
  display: flex;
- top: 0;
- bottom: 0;
- left: 0;
- right: 0;
+ top: calc(var(--toolbar-height) / 3);
+ bottom: calc(var(--toolbar-height) / 3);
+ left: calc(var(--toolbar-height) / 3);
+ right: calc(var(--toolbar-height) / 3);
  background-color: #000a;
  width: unset;
  height: unset;
@@ -151,12 +151,13 @@ dialog {
  justify-content: stretch;
  position: fixed;
  z-index: 1;
+ box-shadow: 0 0 calc(var(--toolbar-height) / 3) #000, 0 0 0 calc(var(--toolbar-height) / 1.9) var(--bg);
 }
 dialog > div {
- top: var(--toolbar-height);
- right: 0;
- left: 0;
- bottom: 0;
+ top: calc(var(--toolbar-height) * (4 / 3));
+ right: calc(var(--toolbar-height) / 3);
+ left: calc(var(--toolbar-height) / 3);
+ bottom: calc(var(--toolbar-height) / 3);
  flex: 1;
  color: var(--color);
  background: var(--bg);
@@ -201,9 +202,9 @@ dialog > div > p {
 }
 dialog > div > button {
  position: fixed;
- top: 0;
- left: 0;
- right: 0;
+ top: calc(var(--toolbar-height) / 3);
+ left: calc(var(--toolbar-height) / 3);
+ right: calc(var(--toolbar-height) / 3);
  height: var(--toolbar-height);
  cursor: pointer;
  border: none;

@@ -84,7 +84,7 @@ this.appsSection = element(this.sidebar, "ul")
 this.appsSection.setAttribute("id", "apps")
 // this.appsTitle = element(this.appsSection, "h2")
 // this.appsTitle.innerText = "Applications"
-this.appNodes = this.appUids.reduce((nodes, appUid) => {
+this.appNodes = this.parent.reduce((nodes, { uid: appUid }) => {
  const that = this.parent[appUid in this.parent ? appUid : 0]
  nodes[appUid] = element(this.appsSection, "li")
  nodes[appUid].setAttribute("class", "applink")
