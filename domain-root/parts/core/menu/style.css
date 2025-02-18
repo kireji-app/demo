@@ -123,6 +123,10 @@ body>main {
  border-radius: 0 8px 8px 0;
 }
 
+#tags> :only-child {
+ border-radius: 8px;
+}
+
 #colormode {
  cursor: pointer;
  position: relative;
