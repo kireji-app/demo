@@ -1,2 +1,2 @@
-for (const part of this)
- await part.uninstall()
+for (const instance of this)
+ await instance.uninstall()

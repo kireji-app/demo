@@ -5,7 +5,7 @@ if (state >= this.size)
  throw new RangeError(`state (${state}) is too large (max = ${this.size}). ${this.uid}`)
 
 if (this.state === state)
- throw new ReferenceError(`state (${state}) was reassigned. ${this.uid}`)
+ console.warn(`state (${state}) was reassigned. ${this.uid}`)
 
 const uninstalled = this.state === -1n
 this.state = state

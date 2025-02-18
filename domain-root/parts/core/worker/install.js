@@ -1,16 +1,13 @@
-const cache = {},
- boilerplate = "© 2013 - 2024 Eric Augustinowicz and Kristina Soriano. All Rights Reserved."
+const cache = {}
 globalThis.onfetch = e => {
- // TODO: detect and throw error on any cross-deployment-stage resource fetches.
  const { pathname, host: uid } = new URL(e.request.url),
   cacheKey = uid + pathname,
   filename = pathname.split("/").pop()
-
  if (!(cacheKey in cache)) {
   let body, type, base64Encoded
   switch (pathname) {
-   case "/client.js":
-    body = `// ${boilerplate}\n${boot}\nboot()`
+   case "/" + Build.src:
+    body = Build.script()
     type = "text/javascript; charset=UTF-8"
     break
    case "/manifest.json":
@@ -35,16 +32,16 @@ globalThis.onfetch = e => {
    case "/promo.png":
     type = "image/png"
     base64Encoded = true
-    body = archive[uid][filename]
+    body = Build.archive[uid][filename]
     break
    case "/icon.svg":
     type = "image/svg+xml"
     body = `<svg width="144px" height="144px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <style>
 svg { background: white }
-text { fill: ${archive[uid]?.["theme.color"] ?? "#222334"} }
+text { fill: ${Build.archive[uid]?.["theme.color"] ?? "#222334"} }
 @media (prefers-color-scheme = dark) {
-svg { background: ${archive[uid]?.["theme.color"] ?? "#222334"} }
+svg { background: ${Build.archive[uid]?.["theme.color"] ?? "#222334"} }
 text { fill: white }
 }
 </style>
@@ -52,7 +49,7 @@ text { fill: white }
 </svg>`
     break
    default:
-    body = indexHTML
+    body = Build.indexHTML
     type = "text/html; charset=UTF-8"
   }
 

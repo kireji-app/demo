@@ -1,7 +1,7 @@
 if (this.state !== state) {
  super(state)
- for (const part of this) {
-  await part.propagateLeafward(part.stateCache = state / part.conjunctionDivisor)
-  state %= part.conjunctionDivisor
+ for (const instance of this) {
+  await instance.propagateLeafward(instance.stateCache = state / instance.conjunctionDivisor)
+  state %= instance.conjunctionDivisor
  }
 }

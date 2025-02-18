@@ -1,2 +1,2 @@
-super(...parts)
-if (parts.length) this.documentState = this.state
+super(...instances)
+if (instances.length) this.documentState = this.state

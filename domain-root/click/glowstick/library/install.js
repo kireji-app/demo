@@ -4,7 +4,7 @@ const
  tvShows = [],
  movies = [],
  recents = [],
- promos = archive[this.uid]["promo.uri"].match(/(?<=^s*).+?(?=s*$)/gm).map(x => this[0][x])
+ promos = Build.archive[this.uid]["promo.uri"].match(/(?<=^s*).+?(?=s*$)/gm).map(x => this[0][x])
 
 for (const title of this[0].slice(1).reverse()) {
  (title.isShow ? tvShows : movies).push(title)

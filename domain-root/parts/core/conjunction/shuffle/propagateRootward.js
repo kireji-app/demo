@@ -1,2 +1,2 @@
-if (parts.length) this.computeShuffle()
-super(...parts)
+if (instances.length) this.computeShuffle()
+super(...instances)

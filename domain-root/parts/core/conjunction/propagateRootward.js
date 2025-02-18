@@ -1,6 +1,6 @@
-for (const part of parts) {
- this.state += (part.state - part.stateCache) * part.conjunctionDivisor
- part.stateCache = part.state
+for (const instance of instances) {
+ this.state += (instance.state - instance.stateCache) * instance.conjunctionDivisor
+ instance.stateCache = instance.state
 }
 
-super(...parts)
+super(...instances)

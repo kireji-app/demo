@@ -10,6 +10,11 @@ globalThis.encode = state => {
  return hexads.reduce((hash, hexad) => hash + RADIX[parseInt(hexad, 2)], "")
 }
 globalThis.element = (node, tagname) => node.appendChild(document.createElement(tagname))
+globalThis.spacer = node => {
+ const spacer = element(node, "")
+ spacer.setAttribute("class", "spacer")
+ return spacer
+}
 
 this.choice = this[APP_UID] ?? this[0]
 this.state = this.choice.offset

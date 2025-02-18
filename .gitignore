@@ -2,9 +2,6 @@
 **/Icon
 **/.well-known
 .vercel
-package-lock.json
-public/*
-stats/*
-archive.js
+.vscode
+public
 .env*.local
-.vscode/*

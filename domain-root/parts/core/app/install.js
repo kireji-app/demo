@@ -7,18 +7,16 @@ const
  throttleDuration = /^((?!chrome|android).)*safari/i.test(a) ? 350 : 75
 
 if (c) {
- const reg = await c.getRegistration() ?? await c.register(scriptSource),
+ const reg = await c.getRegistration() ?? await c.register(Build.src),
   sw = reg.active ?? (await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t))))
  c.controller || (await new Promise(r => ((c.oncontrollerchange = r), sw.postMessage({ code: 0 }))))
  c.oncontrollerchange = c.onmessage = () => location.reload()
  document.querySelector('[rel="manifest"]').href = "manifest.json"
- // DEBUG REFRESH
- // addEventListener("focus", () => reg.update().catch(c.onmessage))
+ if (Build.tags.includes("dev")) addEventListener("focus", () => reg.update().catch(c.onmessage))
 }
 
-if (g) {
+if (g)
  globalThis.GPU = await(await g.requestAdapter()).requestDevice()
-}
 
 this.globalStyleSheet = new CSSStyleSheet()
 document.adoptedStyleSheets.push(this.globalStyleSheet)

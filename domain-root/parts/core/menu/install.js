@@ -15,8 +15,8 @@ this.homeButton.innerHTML = `<h1><img id=appicon src=icon.svg /><span class=labe
 this.homeButton.setAttribute("href", "#0")
 this.homeButton.setAttribute("id", "home")
 
-this.spacer = element(this.toolbar, "span")
-this.spacer.setAttribute("class", "spacer")
+this.toolbarSpacer = element(this.toolbar, "span")
+this.toolbarSpacer.setAttribute("class", "spacer")
 
 const showExpirimentalButtons = false
 
@@ -60,7 +60,7 @@ let nestedToolbar, shadow
 this.getNestedToolbar = () => {
  if (!nestedToolbar) {
   nestedToolbar = document.createElement("nested-toolbar")
-  this.spacer.before(nestedToolbar)
+  this.toolbarSpacer.before(nestedToolbar)
   nestedToolbar.setAttribute("id", "nested")
   shadow = nestedToolbar.attachShadow({ mode: "open" })
   shadow.styleSheet = new CSSStyleSheet()
@@ -80,21 +80,21 @@ this.overlay.tabIndex = 1
 this.sidebar = element(this.overlay, "div")
 this.sidebar.setAttribute("id", "sidebar")
 
-this.appsSection = element(this.sidebar, "section")
+this.appsSection = element(this.sidebar, "ul")
 this.appsSection.setAttribute("id", "apps")
 // this.appsTitle = element(this.appsSection, "h2")
 // this.appsTitle.innerText = "Applications"
-this.appList = element(this.appsSection, "ul")
 this.appNodes = this.appUids.reduce((nodes, appUid) => {
  const that = this.parent[appUid in this.parent ? appUid : 0]
- nodes[appUid] = element(this.appList, "li")
+ nodes[appUid] = element(this.appsSection, "li")
  nodes[appUid].setAttribute("class", "applink")
  nodes[appUid].innerHTML = `<span class=label>${appUid}</span><img src=https://${appUid}/icon.svg />`
  if (appUid === APP_UID) nodes[appUid].setAttribute("data-here", "true")
  else nodes[appUid].onclick = e => {
   e.preventDefault()
   let thatState = 0n
-  for (const uid of archive["core.parts"]["preferences.uri"].split(" ")) {
+  // TODO: Extend this technique for all cross-origin links.
+  for (const uid of Build.archive["core.parts"]["preferences.uri"].split(" ")) {
    if (uid in this && uid in that) thatState += this[uid].state * that[uid].conjunctionDivisor
   }
   location = "https://" + appUid + "#" + encode(thatState)
@@ -102,12 +102,25 @@ this.appNodes = this.appUids.reduce((nodes, appUid) => {
  return nodes
 }, {})
 
-
 this.settingsSection = element(this.sidebar, "section")
 this.settingsSection.setAttribute("id", "settings")
+this.tagsLine = element(this.settingsSection, "span")
+this.tagsLabel = element(this.tagsLine, "span")
+this.tagsLabel.innerText = "Version"
+this.tags = element(this.tagsLine, "span")
+this.tags.setAttribute("id", "tags")
+this.tagElements = []
+for (const tag of Build.tags) {
+ const tagElement = element(this.tags, "span")
+ this.tagElements.push(tagElement)
+ tagElement.innerHTML = tag
+}
 
-this.buildName = element(this.settingsSection, "span")
-this.buildName.setAttribute("id", "buildName")
-this.buildName.innerHTML = buildName
-this.colorModeButton = element(this.settingsSection, "a")
+this.colorModeButton = element(this.settingsSection, "span")
 this.colorModeButton.setAttribute("id", "colormode")
+this.colorModeLabel = element(this.colorModeButton, "span")
+this.colorModeLabel.innerText = "Color Mode"
+this.colorModeBase = element(this.colorModeButton, "span")
+this.colorModeBase.setAttribute("class", "base")
+this.colorModeHandle = element(this.colorModeBase, "span")
+this.colorModeHandle.setAttribute("class", "handle")

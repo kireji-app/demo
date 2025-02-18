@@ -1,14 +1,14 @@
 if (this.state !== state) {
  super(state)
- for (const part of this) {
-  if (state < part.size) {
-   if (this.choice !== part) {
+ for (const instance of this) {
+  if (state < instance.size) {
+   if (this.choice !== instance) {
     await this.choice?.uninstall()
-    this.choice = part
+    this.choice = instance
    }
-   await part.propagateLeafward(state)
+   await instance.propagateLeafward(state)
    break
   }
-  state -= part.size
+  state -= instance.size
  }
 }

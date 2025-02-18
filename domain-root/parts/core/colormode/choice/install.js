@@ -37,9 +37,9 @@ function blend(a, b, c = "screen") {
 }
 
 const
- globalCSS = archive["menu.core.parts"]["style.css"],
- customCSS = archive[uid]["menu.css"] ?? "",
- themeColor = archive[uid]["theme.color"] ?? "ffffff",
+ globalCSS = Build.archive["menu.core.parts"]["style.css"],
+ customCSS = Build.archive[uid]["menu.css"] ?? "",
+ themeColor = Build.archive[uid]["theme.color"] ?? "ffffff",
  themeBG = blend(themeColor, "171717", "multiply"),
  lightBG = blend(themeColor, "2f2f2f", "multiply"),
  lighterBG = blend(themeColor, "4f4f4f", "multiply"),

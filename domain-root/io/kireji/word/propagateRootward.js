@@ -1,2 +1,2 @@
-if (parts.length) this.populate()
-super(...parts)
+if (instances.length) this.populate()
+super(...instances)

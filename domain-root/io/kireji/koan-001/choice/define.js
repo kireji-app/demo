@@ -12,9 +12,9 @@ const m = [
  ["star", "shining", "stars", "shine", ["a", "constellation"], ["a", "galaxy"], ["a", "universe"], ["a", "cosmos"]]
 ]
 
-super(m.map((row, i) => new getPartConstructor`topic${{
+super(m.map((row, i) => new Build.type`topic${{
  "index.txt": "" + i,
- ".unit": "disjunction.core.parts",
+ "type.uid": "disjunction.core.parts",
  "define.js": `super(new Array(${row.length - 4}).fill(0).map((_, i) => "observation" + i))`,
 }}.choice.koan-001.kireji.io`()))
 
