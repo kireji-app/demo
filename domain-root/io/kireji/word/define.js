@@ -1,2 +1,6 @@
 super(ADDENDS)
-this.populate = () => this.container.innerHTML = this.choice.uid
+
+this.populate = layer => {
+ if (layer === Build.documentLayer)
+  this.container.innerHTML = this.choice[layer].uid
+}

@@ -1,6 +1,7 @@
-for (const instance of instances) {
- this.state += (instance.state - instance.stateCache) * instance.conjunctionDivisor
- instance.stateCache = instance.state
-}
+if (instances)
+ for (const instance of instances) {
+  this.layer[layer] += (instance.layer[layer] - instance.layerCache[layer]) * instance.conjunctionDivisor
+  instance.layerCache[layer] = instance.layer[layer]
+ }
 
-super(...instances)
+super(instances)

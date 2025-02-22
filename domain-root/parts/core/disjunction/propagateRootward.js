@@ -1,2 +1,2 @@
-if (instances.length) this.state = this.choice.offset + this.choice.state
-super(...instances)
+if (instances.length) this.layer[layer] = this.choice[layer].offset + this.choice[layer].layer[layer]
+super(instances)

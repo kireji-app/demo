@@ -9,7 +9,7 @@ this.size = FACTORS.reduceRight((divisors, factor, i) => {
  Object.defineProperties(instance, {
   i: { get() { return i } },
   conjunctionDivisor: { get() { return divisors[i] } },
-  stateCache: { value: instance.state, writable: true },
+  layerCache: { value: [...instance.layer], writable: true },
   offset: { value: 0n },
  })
 

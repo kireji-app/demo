@@ -7,7 +7,7 @@ this.label.setAttribute("for", "pick-model")
 
 this.select = element(this.toolbar, "select")
 this.select.setAttribute("name", "pick-model")
-this.select.onchange = () => this.setState(this[this.select.selectedIndex].offset)
+this.select.onchange = () => this.setLayer(layer, this[this.select.selectedIndex].offset)
 for (const instance of this) element(this.select, "option").innerHTML = instance.name
 
 this.randomAnchor = element(this.toolbar, "a")

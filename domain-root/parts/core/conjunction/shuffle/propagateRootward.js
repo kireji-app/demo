@@ -1,2 +1,2 @@
-if (instances.length) this.computeShuffle()
-super(...instances)
+if (instances.length) this.computeShuffle(layer)
+super(instances)

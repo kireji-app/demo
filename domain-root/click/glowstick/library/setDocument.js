@@ -11,8 +11,7 @@ for (const title of this[0].slice(1).reverse()) {
  if (recents.length < 10) recents.push(title)
 }
 
-this.container.innerHTML = `
-<div id=scroller>
+this.container.innerHTML = `<div id=scroller>
  <section id=promo>
   <a href=#${encode(promos[0].offset + promos[0].parent.offset + promos[0].parent.parent.offset)}>
    <img src="https://${promos[0].uid}/promo.png" alt="Promotional banner of ${promos[0].niceName}">

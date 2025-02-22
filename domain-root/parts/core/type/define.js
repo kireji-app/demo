@@ -1,6 +1,6 @@
 super()
 
-this.state = -1n
+this.layer = [-1n]
 this.size = 1n
 
 Object.defineProperties(this, {
@@ -53,6 +53,14 @@ Object.defineProperties(this, {
    this.unshift(instance)
    return instance
   }
+ },
+ stagedState: {
+  set(state) {
+   Build.resetStagingLayer()
+   this.setLayer(Build.stagingLayer, state)
+  },
+  get() {
+   return this.layer[Build.stagingLayer]
+  }
  }
-
 })

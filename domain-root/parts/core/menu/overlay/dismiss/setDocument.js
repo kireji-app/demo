@@ -3,5 +3,5 @@ this.overlay.setAttribute("style", "--overlay-tween: 0.5")
 
 this.pendingFrame = requestAnimationFrame(() => {
  delete this.pendingFrame
- this.parent.setState(2n)
+ this.parent.setLayer(layer, 0n)
 })

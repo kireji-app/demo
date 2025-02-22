@@ -79,10 +79,10 @@ globalThis.loop = now => {
   addressbarState = this.documentState
   throttleStartTime = time
  }
- if (this.state !== this.documentState) this.setState(this.documentState)
+ if (this.layer[layer] !== this.documentState) this.setLayer(layer, this.documentState)
  animationFrameID = requestAnimationFrame(loop)
 }
 
 onhashchange()
 
-this.state = Infinity
+this.layer[layer] = Infinity

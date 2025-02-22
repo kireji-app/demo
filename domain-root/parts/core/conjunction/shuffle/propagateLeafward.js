@@ -1,2 +1,2 @@
 super(state)
-this.computeShuffle()
+this.computeShuffle(layer)

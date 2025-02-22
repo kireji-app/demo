@@ -1,2 +1,2 @@
-if (instances.length) this.populate()
-super(...instances)
+if (instances.length) this.populate(layer)
+super(instances)

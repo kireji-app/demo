@@ -1,2 +1,2 @@
 super(state)
-this.populate()
+this.populate(layer)

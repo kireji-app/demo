@@ -9,3 +9,5 @@ this.size = ADDENDS.reduce((size, addend, i) => {
  instance.offset = size
  return size + instance.size
 }, 0n)
+
+this.choice = []

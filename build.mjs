@@ -12,11 +12,17 @@ import {
 class Build {
  static src = "sw.js"
  static types = {}
- static baseUID = "type.core.parts"
- static domainRoot = "domain-root"
  static vlqBase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
- static isVerbose = false
+ static baseUID = "type.core.parts"
  static indexHTML = `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=0.8" /><script defer src=${this.src}></script></head></html>`
+ static isVerbose = false
+ static domainRoot = "domain-root"
+ static root = undefined
+ static get documentLayer() { return 0 }
+ static get stagingLayer() { return 1 }
+ static resetStaginglayer() {
+  this.root.setState(this.stagingLayer, this.root.layer[this.documentLayer])
+ }
  static log(...data) {
   if (this.tags.includes("dev") && this.isVerbose) console.log(...data)
  }
@@ -63,11 +69,11 @@ class Build {
    mappedFile.addLine(`}`, buildSource, 65, 24, " ")
   }
   for (const [methodName, methodArguments = []] of [
-   ["propagateRootward", ["...instances"]],
-   ["propagateLeafward", ["state"]],
-   ["install"],
-   ["uninstall"],
-   ["setState", ["state"]]
+   ["propagateRootward", ["layer", "instances"]],
+   ["propagateLeafward", ["layer", "state"]],
+   ["setDocument", ["layer"]],
+   ["unsetDocument", ["layer"]],
+   ["setLayer", ["layer", "state"]]
   ]) {
    const [overridesMethod, methodContent] = resolve(`${methodName}.js`)
    if (!overridesMethod) continue
@@ -80,8 +86,8 @@ class Build {
    if (isBase)
     mappedFile.addLines(methodLines, methodSource, 0, 0, "  ")
    else {
-    if (methodName === "uninstall" || methodName === "install") {
-     mappedFile.addLine(`await super.${methodName}();`, buildSource, 86, 25, "  ", false)
+    if (methodName === "unsetDocument" || methodName === "setDocument") {
+     mappedFile.addLine(`await super.${methodName}(layer);`, buildSource, 86, 25, "  ", false)
      mappedFile.addLines(methodLines, methodSource, 0, 0, "  ")
     } else {
      let hasSuper = false
@@ -89,7 +95,7 @@ class Build {
       const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
       if (firstMatch) {
        hasSuper = true
-       methodLine = methodLine.slice(0, firstMatch.index) + `await super.${methodName}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
+       methodLine = methodLine.slice(0, firstMatch.index) + `await super.${methodName}(layer, ` + methodLine.slice(firstMatch.index + firstMatch[0].length)
        mappedFile.addLine(methodLine, methodSource, ln, 0, "  ", false)
       } else
        mappedFile.addLine(methodLine, methodSource, ln, 0, "  ")
@@ -156,8 +162,9 @@ class Build {
   mappedFile.addLines([
    `Build.tags = ${JSON.stringify(this.tags)}`,
    `Build.archive = ${JSON.stringify(this.archive)}`,
-   `Build.instance("root.core.parts").install()`,
-  ], buildSource, 159, 4, "", false)
+   `Build.root = Build.instance("root.core.parts")`,
+   `Build.root.setDocument(Build.documentLayer)`,
+  ], buildSource, 161, 4, "", false)
   return mappedFile.packAndMap()
  }
  static #encodeSourceMap(decodedMappings) {

@@ -4,11 +4,11 @@ if (state < -1n)
 if (state >= this.size)
  throw new RangeError(`state (${state}) is too large (max = ${this.size}). ${this.uid}`)
 
-if (this.state === state)
- console.warn(`state (${state}) was reassigned. ${this.uid}`)
+if (this.layer[layer] === state)
+ console.warn(`state (${state}) reassigned to layer ${layer}. ${this.uid}`)
 
-const uninstalled = this.state === -1n
-this.state = state
+const previousState = this.layer[layer]
+this.layer[layer] = state
 
-if (uninstalled)
- await this.install()
+if (layer === Build.documentLayer && previousState === -1n)
+ await this.setDocument(layer)

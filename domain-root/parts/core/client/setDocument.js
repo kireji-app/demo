@@ -16,8 +16,8 @@ globalThis.spacer = node => {
  return spacer
 }
 
-this.choice = this[APP_UID] ?? this[0]
-this.state = this.choice.offset
-await this.choice.install()
+this.choice[layer] = this[APP_UID] ?? this[0]
+this.layer[layer] = this.choice[layer].offset
+await this.choice[layer].setDocument(layer)
 
 loop()

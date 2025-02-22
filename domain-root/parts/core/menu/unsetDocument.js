@@ -95,7 +95,7 @@ this.appNodes = this.parent.reduce((nodes, { uid: appUid }) => {
   let thatState = 0n
   // TODO: Extend this technique for all cross-origin links.
   for (const uid of Build.archive["core.parts"]["preferences.uri"].split(" ")) {
-   if (uid in this && uid in that) thatState += this[uid].state * that[uid].conjunctionDivisor
+   if (uid in this && uid in that) thatState += this[uid].layer[layer] * that[uid].conjunctionDivisor
   }
   location = "https://" + appUid + "#" + encode(thatState)
  }
