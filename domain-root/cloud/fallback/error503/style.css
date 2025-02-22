@@ -18,7 +18,7 @@ h1 {
 
 h1 {
  font-size: 35vw;
- color: var(--faint-color);
+ color: var(--fg-fade3);
 }
 
 .thin {

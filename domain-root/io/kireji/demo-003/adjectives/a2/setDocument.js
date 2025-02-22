@@ -1,1 +1,0 @@
-this.container = element(this.parent.container, "span")

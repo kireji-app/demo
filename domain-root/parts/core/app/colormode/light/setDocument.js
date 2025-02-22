@@ -1,0 +1,1 @@
+part.parent.setColorMode(true)

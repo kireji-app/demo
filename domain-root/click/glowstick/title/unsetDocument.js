@@ -1,8 +1,8 @@
-this.backButton.onclick = undefined
-this.backButton.remove()
-delete this.backButton
+part.backButton.onclick = undefined
+part.backButton.remove()
+delete part.backButton
 
-this.popup.remove()
-delete this.popup
+part.popup.remove()
+delete part.popup
 
-delete this.container
+delete part.container

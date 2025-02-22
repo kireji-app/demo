@@ -1,5 +1,5 @@
-this.container.innerHTML = ""
+part.container.innerHTML = ""
 
-delete this.container
+delete part.container
 
-delete this.styleSheet
+delete part.styleSheet

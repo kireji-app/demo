@@ -1,7 +1,6 @@
-if (instances)
- for (const instance of instances) {
-  this.layer[layer] += (instance.layer[layer] - instance.layerCache[layer]) * instance.conjunctionDivisor
-  instance.layerCache[layer] = instance.layer[layer]
- }
+for (const subpart of subparts ?? []) {
+ part.state[layer] += (subpart.state[layer] - subpart.stateCache[layer]) * subpart.conjunctionDivisor
+ subpart.stateCache[layer] = subpart.state[layer]
+}
 
-super(instances)
+super(subparts)

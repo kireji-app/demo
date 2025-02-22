@@ -1,5 +1,5 @@
-this.styleSheet.replaceSync("")
-delete this.styleSheet
+part.styleSheet.replaceSync("")
+delete part.styleSheet
 
-this.container.innerHTML = ""
-delete this.container
+part.container.innerHTML = ""
+delete part.container

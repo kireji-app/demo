@@ -1,10 +1,3 @@
-this.parent.container.innerHTML = Build.archive[this.uid]["body.html"]
- .replace("$1", 0)
- .replace("$2", 0)
-/*
-console.log(this.parent.linkTo({
- "library.glowstick.click": {
-
- }
-}))*/
-this.parent.styleSheet.replaceSync(Build.archive["lander.core.parts"]["app.css"])
+const href = await app.stageState(part.parent, part.parent["library.glowstick.click"].offset, true)
+inherit.container.innerHTML = read("body.html").replace("$1", href).replace("$2", href)
+inherit.styleSheet.replaceSync(Core.createType("lander.core.parts").read("app.css"))

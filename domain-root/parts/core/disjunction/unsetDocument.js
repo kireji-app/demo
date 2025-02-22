@@ -1,2 +1,2 @@
-await this.choice[layer]?.unsetDocument(layer)
-delete this.choice[layer]
+await part.choice[layer]?.unsetDocument(layer)
+part.choice[layer] = undefined

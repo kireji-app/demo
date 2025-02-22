@@ -1,15 +1,15 @@
-this.randomAnchor.innerHTML = ""
-this.randomAnchor.remove()
-delete this.randomAnchor
+part.randomAnchor.innerHTML = ""
+part.randomAnchor.remove()
+delete part.randomAnchor
 
-this.select.innerHTML = ""
-this.select.onchange = undefined
-this.select.remove()
-delete this.select
+part.select.innerHTML = ""
+part.select.onchange = undefined
+part.select.remove()
+delete part.select
 
-this.label.innerHTML = ""
-this.label.remove()
-delete this.label
+part.label.innerHTML = ""
+part.label.remove()
+delete part.label
 
-delete this.container
-delete this.toolbar
+delete part.container
+delete part.toolbar

@@ -1,2 +1,2 @@
-delete this.styleSheet
-delete this.container
+delete part.styleSheet
+delete part.container

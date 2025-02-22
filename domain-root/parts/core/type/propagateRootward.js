@@ -1,1 +1,1 @@
-await this.parent?.propagateRootward(layer, [this])
+await part.parent?.propagateRootward(layer, [part])

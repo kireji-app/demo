@@ -1,2 +1,2 @@
-if (instances.length) this.populate(layer)
-super(instances)
+if (subparts.length) part.populate(layer)
+super(subparts)

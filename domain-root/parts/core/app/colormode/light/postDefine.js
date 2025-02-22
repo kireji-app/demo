@@ -1,0 +1,1 @@
+part.niceName = "Light Mode"

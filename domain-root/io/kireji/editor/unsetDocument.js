@@ -1,8 +1,8 @@
-delete this.container
+delete part.container
 
-this.toolbar.styleSheet.replaceSync("")
-this.parent.styleSheet.replaceSync("")
-this.parent.parent.destroyNestedToolbar()
-delete this.toolbar
+part.toolbar.styleSheet.replaceSync("")
+part.parent.styleSheet.replaceSync("")
+part.parent.parent.destroyNestedToolbar()
+delete part.toolbar
 
-delete this.nodes
+delete part.nodes

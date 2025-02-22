@@ -1,4 +1,2 @@
-super(instances)
-
-if (layer === Build.documentLayer && instances?.length)
- this.documentState = this.layer[layer]
+super(subparts)
+if (layer === root.primaryLayer) part.documentState = part.state[layer]

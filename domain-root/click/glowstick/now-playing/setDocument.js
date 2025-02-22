@@ -1,1 +1,1 @@
-this.container = this.parent.container
+inherit.container

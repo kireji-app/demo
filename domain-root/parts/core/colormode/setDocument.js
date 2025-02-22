@@ -1,1 +1,0 @@
-this.styleSheet = this.parent.globalStyleSheet

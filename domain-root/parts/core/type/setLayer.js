@@ -1,2 +1,2 @@
-await this.propagateLeafward(layer, state)
-await this.propagateRootward(layer)
+await part.propagateLeafward(layer, newState)
+await part.propagateRootward(layer)

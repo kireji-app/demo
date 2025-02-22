@@ -1,14 +1,14 @@
-if (state < -1n)
- throw new RangeError(`state (${state}) is too small (min = -1). ${this.uid}`)
+if (newState < -1n)
+ throw new RangeError(`state (${newState}) is too small (min = -1). ${part.host}`)
 
-if (state >= this.size)
- throw new RangeError(`state (${state}) is too large (max = ${this.size}). ${this.uid}`)
+if (newState >= part.size)
+ throw new RangeError(`state (${newState}) is too large (max = ${part.size}). ${part.host}`)
 
-if (this.layer[layer] === state)
- console.warn(`state (${state}) reassigned to layer ${layer}. ${this.uid}`)
+if (newState === part.state[layer])
+ console.warn(`state (${newState}) reassigned to layer ${layer}. ${part.host}`)
 
-const previousState = this.layer[layer]
-this.layer[layer] = state
+const previousState = part.state[layer]
+part.state[layer] = newState
 
-if (layer === Build.documentLayer && previousState === -1n)
- await this.setDocument(layer)
+if (layer === root.primaryLayer && previousState === -1n)
+ await part.setDocument(layer)

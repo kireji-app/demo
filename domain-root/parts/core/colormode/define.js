@@ -1,5 +1,0 @@
-super([
- "device",
- "light",
- "dark"
-])

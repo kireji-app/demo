@@ -1,15 +1,14 @@
-if (this.layer[layer] !== state) {
- super(state)
- for (const instance of this) {
-  if (state < instance.size) {
-   if (this.choice[layer] !== instance) {
-    if (layer === Build.documentLayer)
-     await this.choice[layer]?.unsetDocument(layer)
-    this.choice[layer] = instance
+if (part.state[layer] !== newState) {
+ super(newState)
+ for (const subpart of part) {
+  if (newState < subpart.size) {
+   if (part.choice[layer] !== subpart) {
+    if (layer === root.primaryLayer) await part.choice[layer]?.unsetDocument(layer)
+    part.choice[layer] = part[subpart.index]
    }
-   await instance.propagateLeafward(layer, state)
+   await subpart.propagateLeafward(layer, newState)
    break
   }
-  state -= instance.size
+  newState -= subpart.size
  }
 }

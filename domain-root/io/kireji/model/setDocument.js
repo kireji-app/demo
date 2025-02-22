@@ -1,8 +1,5 @@
-this.onshuffle = state => this.randomAnchor.href = "#" + encode(state)
+part.onshuffle = state => part.randomAnchor.href = "#" + app.encodeState(state)
 
-this.randomAnchor = this.parent.randomAnchor
-
-this.container = this.parent.container
-
-this.select = this.parent.select
-this.select.selectedIndex = this.i
+inherit.randomAnchor
+inherit.container
+inherit.select.selectedIndex = part.index

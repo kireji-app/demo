@@ -1,1 +1,1 @@
-delete this.container
+delete part.container

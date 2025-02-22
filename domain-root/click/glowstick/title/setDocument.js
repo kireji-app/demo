@@ -1,23 +1,22 @@
-this.container = this.parent.container
-const releaseDate = new Date(this.releaseDate)
-this.popup = element(this.container, "dialog")
-this.popup.tabIndex = 0
-this.popup.innerHTML = `<div>
+inherit.container
+inherit.gotHome
+const releaseDate = new Date(part.releaseDate)
+part.popup = element(part.container, "dialog")
+part.popup.tabIndex = 0
+part.popup.innerHTML = `<div>
  <button>‹</button>
- <img src="https://${this.uid}/still.png" alt="Still image captured from ${this.niceName}">
- <h3>${this.niceName}</h3>
+ <img src="https://${part.host}/still.png" alt="Still image captured from ${part.niceName}">
+ <h3>${part.niceName}</h3>
  <p id=release-date>${releaseDate > Date.now() ? "Coming" : "Released on"} ${releaseDate.toLocaleDateString("en-US", {
  year: 'numeric',
  month: 'long',
  day: 'numeric',
 })}</p>
- <p><a href=#${0} class="cta ${this.released ? "released" : "upcoming"}">${this.released ? "Watch Now" : "Coming soon"}</a>
- <p>${this.description}
+ <p><a href=#${0} class="cta ${part.released ? "released" : "upcoming"}">${part.released ? "Watch Now" : "Coming soon"}</a>
+ <p>${part.description}
 </div>`
 
-this.backButton = this.popup.querySelector("button")
-this.backButton.onclick = async e => {
- await this.parent.setLayer(layer, 0n)
-}
+part.backButton = part.popup.querySelector("button")
+part.backButton.onclick = e => part.parent.goHome()
 
-this.popup.focus()
+part.popup.focus()

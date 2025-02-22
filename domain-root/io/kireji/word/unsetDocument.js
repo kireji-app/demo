@@ -1,2 +1,2 @@
-this.container.remove()
-delete this.container
+part.container.remove()
+delete part.container

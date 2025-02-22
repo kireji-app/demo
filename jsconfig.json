@@ -1,0 +1,10 @@
+{
+ "compilerOptions": {
+  "target": "esnext", // Or your preferred target
+  "module": "esnext",
+  "checkJs": true
+ },
+ "exclude": [
+  "core.mjs"
+ ]
+}

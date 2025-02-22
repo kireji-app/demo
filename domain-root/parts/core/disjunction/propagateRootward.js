@@ -1,2 +1,2 @@
-if (instances.length) this.layer[layer] = this.choice[layer].offset + this.choice[layer].layer[layer]
-super(instances)
+part.state[layer] = part.choice[layer].offset + part.choice[layer].state[layer]
+super(subparts)

@@ -1,8 +1,8 @@
-this.select.selectedIndex = -1
-delete this.select
+part.select.selectedIndex = -1
+delete part.select
 
-delete this.container
+delete part.container
 
-delete this.randomAnchor
+delete part.randomAnchor
 
-this.onshuffle = undefined
+part.onshuffle = undefined
