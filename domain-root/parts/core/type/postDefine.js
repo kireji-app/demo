@@ -1,3 +1,4 @@
+// throw "here"
 part.size = 1n
 part.index = 0
 part.state = [-1n, -1n]

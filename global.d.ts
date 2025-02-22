@@ -97,8 +97,10 @@ declare interface AsyncMethodData {
  readonly unsetDocument?: string
 }
 declare class Core {
- static Type: typeof Part
- static BaseType?: typeof Part
+ static Type: typeof Part | null
+ static BaseType: typeof Part | null
+ static archive: {} | null
+ static tags: string[] | null
  static vlqBase: string
  static baseHost: string
  static indexHTML: string

@@ -2,11 +2,11 @@ Object.assign(globalThis, {
  server: part,
  cache: {},
  onfetch: e => {
-  const { pathname, host } = new URL(e.request.url),
-   host = host.startsWith("localhost:") ? "glowstick.click" : host,
+  const { pathname, host: requestedHost } = new URL(e.request.url),
+   host = requestedHost.startsWith("localhost:") ? "glowstick.click" : requestedHost,
    cacheKey = host + pathname,
    filename = pathname.split("/").pop(),
-   { Type } = new this(host)
+   { Type } = new Core(host)
 
   if (!(cacheKey in cache)) {
    let body, type, base64Encoded

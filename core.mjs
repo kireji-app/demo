@@ -14,10 +14,9 @@ class Core {
  static baseHost = "type.core.parts"
  static rootHost = "root.core.parts"
  static isVerbose = false
- static instances = {}
  static clientRoot = "public"
  static domainRoot = "domain-root"
- static typeURL = "type.host"
+ static typeURL = "base.host"
  static contextURL = "context.js"
  static constructorURL = "define.js"
  static cloudScriptURL = "core.mjs"
@@ -26,9 +25,9 @@ class Core {
  static postConstructorURL = "postDefine.js"
  static constructorArgumentsURL = "define.args"
  static indexHTML = `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=0.8" /><script defer src=${this.clientScriptURL}></script></head></html>`
- static BaseType
- static archive
- static tags
+ static BaseType = null
+ static archive = null
+ static tags = null
  static asyncMethodArguments = {
   setLayer: ["layer", "newState"],
   propagateRootward: ["layer", "subparts"],
@@ -40,14 +39,14 @@ class Core {
  static log(...data) {
   if (this.tags.includes("dev") && this.isVerbose) console.log(...data)
  }
- static createFile() {
+ static createFile(pathFromRoot, pathToRoot) {
   return {
    lines: [],
    sources: [],
    scripts: [],
    mappings: [],
-   pathToRoot: arguments[0],
-   pathFromRoot: arguments[1],
+   pathToRoot,
+   pathFromRoot,
    addSource(source, script = null) {
     let srcIndex = this.sources.indexOf(source)
     if (srcIndex === -1) {
@@ -77,6 +76,7 @@ class Core {
     const mappings = Core.encodeSourceMap(this.mappings)
     return JSON.stringify({
      version: 3,
+     file: "file.js",
      sourceRoot: this.pathFromRoot,
      sources: this.sources,
      names: [],
@@ -87,10 +87,13 @@ class Core {
   }
  }
  static createType(host, options) {
+  if (!host) throw "undefined host"
   return new this(host, options).Type
  }
  static createPart(host, options) {
-  return new (this.createType(host, options))()
+  if (!host) throw "undefined host"
+  const T = this.createType(host, options)
+  return new T()
  }
  static async initialize() {
   this.root = this.createPart(this.rootHost)
@@ -99,11 +102,11 @@ class Core {
  static compile() {
   this.file = this.createFile("../")
   this.buildSource = this.file.addSource(this.cloudScriptURL, null)
-  this.file.addLines(this.toString().split("\n"), this.buildSource, 12, 0, " ")
+  this.file.addLines(this.toString().split("\n"), this.buildSource, 11/* here */, 0, " ")
   this.file.addSection(`
 Core.tags = ${JSON.stringify(this.tags)}
 Core.archive = ${JSON.stringify(this.archive)}
-Core.initialize()`.slice(1), this.buildSource, 101, 0, "", false)
+Core.initialize()`.slice(1), this.buildSource, 105/* here */, 0, "", false)
   return this.file.packAndMap()
  }
  static encodeSourceMap(decodedMappings) {
@@ -134,15 +137,19 @@ Core.initialize()`.slice(1), this.buildSource, 101, 0, "", false)
  }
  asyncMethods = {}
  get archive() { return Core.archive[this.host] }
- constructor() {
-  this.host = arguments[0]
-  this.options = arguments[1]
+ constructor(host, options) {
+  if (!host) throw "undefined host"
+  this.host = host
+  this.options = options
   if (this.host in Core) return Core[this.host]
   Core[this.host] = this
   this.isBase = this.host === Core.baseHost
-  this.domains = this.host.split(".")
-  this.pathFromRoot = this.domains.concat(Core.domainRoot).reverse().join("/")
-  this.base = this.isBase ? Array : Core.createType(this.read(Core.typeURL, Core.baseHost))
+  this.domains = this.host.split(".").concat(Core.domainRoot)
+  this.pathFromRoot = this.domains.reverse().join("/")
+  if (!this.isBase) {
+   this.baseHost = this.read(Core.typeURL, Core.baseHost)
+  }
+  this.BaseType = this.isBase ? Array : Core.createType(this.baseHost)
   this.pathToRoot = new Array(this.domains.length).fill("..").join("/")
   this.compile()
  }
@@ -155,28 +162,31 @@ Core.initialize()`.slice(1), this.buildSource, 101, 0, "", false)
   this.compileMethods()
   this.closeClass()
   this.script = this.file.packAndMap()
+  const core = this
+  const read = (filename, fallback) => this.read(filename, fallback)
   this.Type = eval(this.script)
+  this.Type.core = this
   if (this.isBase) Core.BaseType = this.Type
  }
  openClass() {
-  this.file.addLine(`(class extends ${this.isBase ? "Array" : `Core.createType("${Core.baseHost}")`} {`, this.buildSource, 150, 27, "", false)
+  this.file.addLine(`(class extends this.BaseType {`, this.buildSource, 171/* here */, 21)
  }
  compileConstructor() {
   if (this.has(Core.constructorURL) || this.has(Core.postConstructorURL)) {
-   this.constructorArguments = this.has(Core.constructorArgumentsURL) ? this.read(Core.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) : this.isBase ? [] : this.base.core.constructorArguments
-   this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 154, 28, " ", false)
+   this.constructorArguments = this.has(Core.constructorArgumentsURL) ? this.read(Core.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) : this.isBase ? [] : this.BaseType.core.constructorArguments
+   this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 176/* here */, 28, " ", false)
    if (this.has(Core.constructorURL)) {
     this.constructorBody = this.read(Core.constructorURL)
-    this.constructorSource = this.file.addSource(Core.constructorURL, this.constructorBody)
+    this.constructorSource = this.file.addSource(Core.constructorURL)
     this.file.addLines(this.constructorBody.split("\n"), this.constructorSource, 0, 0, "  ")
-   } else this.file.addLine(`super(${this.constructorArguments.slice(0, this.base.core.constructorArguments?.length ?? 0)})`, this.buildSource, 159, 35, "  ", false)
+   } else this.file.addLine(`super(${this.isBase ? "" : this.constructorArguments.join(", ")})`, this.buildSource, 181/* here */, 35, "  ", false)
    if (this.has(Core.postConstructorURL)) {
     this.addContext()
     this.postConstructorBody = this.read(Core.postConstructorURL)
-    this.postConstructorSource = this.file.addSource(Core.postConstructorURL, this.postConstructorBody)
+    this.postConstructorSource = this.file.addSource(Core.postConstructorURL)
     this.file.addLines(this.postConstructorBody.split("\n"), this.postConstructorSource, 0, 0, "  ")
    }
-   this.file.addLine(`}`, this.buildSource, 166, 28, " ")
+   this.file.addLine(`}`, this.buildSource, /* here */188, 28, " ")
   }
  }
  compileMethods() {
@@ -188,16 +198,17 @@ Core.initialize()`.slice(1), this.buildSource, 101, 0, "", false)
     content: undefined
    }
    if (!this.has(methodData.url)) continue
-   this.file.addLine(`async ${name}(${methodData.arguments.join(", ")}) {`, this.buildSource, 76, 23, " ", false)
+   this.file.addLine(`async ${name}(${methodData.arguments.join(", ")}) {`, this.buildSource, 200/* here */, 23, " ", false)
    if (Core.isVerbose)
-    this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 78, 24, "  ", false)
+    this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 202/* here */, 24, "  ", false)
+   this.addContext(true)
    methodData.content = this.read(methodData.url)
-   methodData.source = this.file.addSource(methodData.url, methodData.content)
-   const methodLines = methodData.source.split("\n")
+   methodData.source = this.file.addSource(methodData.url)
+   const methodLines = methodData.content.split("\n")
    if (this.isBase) this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
    else {
     if (name === "unsetDocument" || name === "setDocument") {
-     this.file.addLine(`await super.${name}(layer);`, this.buildSource, 86, 25, "  ", false)
+     this.file.addLine(`await super.${name}(layer);`, this.buildSource, 210/* here */, 24, "  ", false)
      this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
     } else {
      let hasSuper = false
@@ -210,12 +221,12 @@ Core.initialize()`.slice(1), this.buildSource, 101, 0, "", false)
       } else
        this.file.addLine(methodLine, methodData.source, ln, 0, "  ")
      })
-     if (!hasSuper) console.warn(`\x1b[38;5;100mwarning \x1b[38;5;226m${this.host} => ${name}()\x1b[38;5;100m doesn't call super.\x1b[0m`)
+     if (!hasSuper && name !== "initialize") console.warn(`\x1b[38;5;100mwarning \x1b[38;5;226m${this.host} => ${name}()\x1b[38;5;100m doesn't call super.\x1b[0m`)
     }
    }
    if (Core.isVerbose)
-    this.file.addLine(`;console.groupEnd()`, this.buildSource, 103, 24, "  ")
-   this.file.addLine(`}`, this.buildSource, 104, 23, " ")
+    this.file.addLine(`;console.groupEnd()`, this.buildSource, 227/* here */, 24, "  ")
+   this.file.addLine(`}`, this.buildSource, 228/* here */, 23, " ")
   }
  }
  closeClass() {
@@ -228,16 +239,16 @@ Core.initialize()`.slice(1), this.buildSource, 101, 0, "", false)
   return (this.getSourceObject(filename) ?? { [filename]: fallback })[filename]
  }
  getSourceObject(filename) {
-  return this.options && filename in this.options ? this.options : this.archive
+  return this.options && (filename in this.options) ? this.options : this.archive && (filename in this.archive) ? this.archive : undefined
  }
  addContext(isAsync = false, file = this.file) {
-  this.base.core.addContext?.(isAsync, file)
+  this.BaseType.core?.addContext(isAsync, file)
   const locallySourced = file === this.file
-  const pathPrefix = locallySourced ? "" : file.pathToRoot + "/" + this.pathFromRoot
+  const pathPrefix = locallySourced ? "" : file.pathToRoot + "/" + this.pathFromRoot + "/"
   if (this.has(Core.contextURL))
-   file.addSection(this.read(Core.contextURL), file.addSource(file.addSource(pathPrefix + "/" + Core.contextURL)), 0, 0, "  ")
+   file.addSection(this.read(Core.contextURL), file.addSource(pathPrefix + Core.contextURL), 0, 0, "  ")
   if (isAsync && this.has(Core.asyncContextURL))
-   file.addSection(this.read(Core.asyncContextURL), file.addSource(file.addSource(pathPrefix + "/" + Core.asyncContextURL)), 0, 0, "  ")
+   file.addSection(this.read(Core.asyncContextURL), file.addSource(pathPrefix + Core.asyncContextURL), 0, 0, "  ")
  }
 }
 Core.tags = (() => {

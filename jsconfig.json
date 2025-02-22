@@ -2,7 +2,7 @@
  "compilerOptions": {
   "target": "esnext", // Or your preferred target
   "module": "esnext",
-  "checkJs": true
+  "checkJs": false
  },
  "exclude": [
   "core.mjs"
