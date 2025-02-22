@@ -13,7 +13,9 @@ part.toolbar.setAttribute("id", "toolbar")
 
 part.homeButton = element(part.toolbar, "a")
 part.homeButton.innerHTML = `<h1><img id=appicon src=icon.svg /><span class=label>${app.host}</span></h1>`
-part.homeButton.setAttribute("href", "#0")
+app.listen(part.id, async () => {
+ part.homeButton.setAttribute("href", await app.stageState(part[0], 0n, true))
+})
 part.homeButton.setAttribute("id", "home")
 
 part.toolbarSpacer = element(part.toolbar, "span")
@@ -28,7 +30,8 @@ if (showExpirimentalButtons && navigator.share) {
  part.shareButton.onclick = () => navigator.share({ title: document.title, url: location.href }).catch(e => e.name == "AbortError" || console.error(e))
 }
 
-part.menuButton = element(part.toolbar, "button")
+part.menuButton = element(part.toolbar, "a")
+part.menuButton.setAttribute("class", "btn")
 part.menuButton.innerText = "≡"
 
 if (showExpirimentalButtons && document.fullscreenEnabled) {
@@ -75,11 +78,11 @@ part.destroyNestedToolbar = () => {
  nestedToolbar = shadow = undefined
 }
 
-part.overlay = element(document.body, "menu")
-part.overlay.setAttribute("id", "overlay")
-part.overlay.tabIndex = 1
+part.menu = element(document.body, "menu")
+part.menu.setAttribute("id", "menu")
+part.menu.tabIndex = 1
 
-part.sidebar = element(part.overlay, "div")
+part.sidebar = element(part.menu, "div")
 part.sidebar.setAttribute("id", "sidebar")
 
 part.appsSection = element(part.sidebar, "ul")

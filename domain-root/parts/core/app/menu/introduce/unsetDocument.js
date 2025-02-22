@@ -3,5 +3,5 @@ if (part.pendingFrame) {
  delete part.pendingFrame
 }
 
-part.overlay.removeAttribute("style")
-delete part.overlay
+part.menu.removeAttribute("style")
+delete part.menu

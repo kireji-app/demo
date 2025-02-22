@@ -1,3 +1,5 @@
+app.unlisten(part.id)
+
 part.styleSheet.replaceSync("")
 delete part.styleSheet
 

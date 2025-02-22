@@ -1,9 +1,9 @@
-// throw "here"
 part.size = 1n
 part.index = 0
 part.state = [-1n, -1n]
-
+part.id = Core.parts.push(part) - 1
 Object.assign(part, {
+ host,
  insert(subpart, index, offset = 0n) {
   if (typeof subpart === "string") {
    if (/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/g.test(subpart)) subpart += "." + this.host

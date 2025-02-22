@@ -162,8 +162,10 @@ dialog>div>p {
  padding: 0 16px;
 }
 
-dialog>div>button {
+#back-btn {
  position: fixed;
+ display: block;
+ text-decoration: none;
  top: calc(var(--toolbar-height) / 3);
  left: calc(var(--toolbar-height) / 3);
  right: calc(var(--toolbar-height) / 3);

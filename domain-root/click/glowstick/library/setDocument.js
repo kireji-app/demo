@@ -2,6 +2,7 @@ inherit.styleSheet.replaceSync(read("library.css"))
 
 const scroller = element(inherit.container, "div")
 scroller.setAttribute("id", "scroller")
+const callbacks = []
 
 const promo = part[0][read("promo.uri").match(/(?<=^s*).+?(?=s*$)/gm)[0]]
 if (promo) {
@@ -9,7 +10,7 @@ if (promo) {
  promoBanner.setAttribute("id", "promo")
 
  const promoLink = element(promoBanner, "a")
- promoLink.setAttribute("href", await app.stageState(part[0], promo.offset, true))
+ callbacks.push(async () => promoLink.setAttribute("href", await app.stageState(part[0], promo.offset, true)))
  promoLink.innerHTML = `<img src="https://${promo.host}/promo.png" alt="Promotional banner of ${promo.niceName}"></img>`
 }
 
@@ -33,10 +34,25 @@ recentsTopic.setAttribute("class", "topic")
 
 for (const title of part[0].slice(1).reverse()) {
  const titleLink = element(title.isShow ? tvShowTopic : moviesTopic, "a")
- titleLink.setAttribute("href", await app.stageState(part[0], title.offset, true))
+ callbacks.push(async () => {
+  titleLink.setAttribute("href", await app.stageState(part[0], title.offset, true))
+ })
  titleLink.innerHTML = `<figure>
  <img src="https://${title.host}/tile.png" alt="Thumbnail of ${title.niceName}"/>
  <figcaption>${title.niceName} (${title.releaseDate.slice(-4)})</figcaption>
 </figure>`
- recentsTopic.appendChild(titleLink.cloneNode(true))
+ if (true/* is recent */) {
+  const titleLink = element(recentsTopic, "a")
+  callbacks.push(async () => {
+   titleLink.setAttribute("href", await app.stageState(part[0], title.offset, true))
+  })
+  titleLink.innerHTML = `<figure>
+ <img src="https://${title.host}/tile.png" alt="Thumbnail of ${title.niceName}"/>
+ <figcaption>${title.niceName} (${title.releaseDate.slice(-4)})</figcaption>
+</figure>`
+ }
 }
+
+app.listen(part.id, async () => {
+ for (const callback of callbacks) await callback()
+})

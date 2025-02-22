@@ -4,7 +4,7 @@ const releaseDate = new Date(part.releaseDate)
 part.popup = element(part.container, "dialog")
 part.popup.tabIndex = 0
 part.popup.innerHTML = `<div>
- <button>‹</button>
+ <a id=back-btn>‹</a>
  <img src="https://${part.host}/still.png" alt="Still image captured from ${part.niceName}">
  <h3>${part.niceName}</h3>
  <p id=release-date>${releaseDate > Date.now() ? "Coming" : "Released on"} ${releaseDate.toLocaleDateString("en-US", {
@@ -16,7 +16,9 @@ part.popup.innerHTML = `<div>
  <p>${part.description}
 </div>`
 
-part.backButton = part.popup.querySelector("button")
-part.backButton.onclick = e => part.parent.goHome()
+part.backButton = part.popup.querySelector("#back-btn")
+app.listen(part.id, async () => {
+ part.backButton.setAttribute("href", await app.stageState(part.parent, 0n, true))
+})
 
 part.popup.focus()

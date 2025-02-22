@@ -1,2 +1,2 @@
-if (subparts.length) part.computeShuffle(layer)
+if (subparts.length) computeShuffle(layer)
 super(subparts)

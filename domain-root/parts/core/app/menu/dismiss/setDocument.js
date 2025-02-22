@@ -1,4 +1,4 @@
-inherit.overlay.setAttribute("style", "--overlay-tween: 0.5")
+inherit.menu.setAttribute("style", "--menu-tween: 0.5")
 
 part.pendingFrame = requestAnimationFrame(() => {
  delete part.pendingFrame

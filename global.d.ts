@@ -9,6 +9,7 @@ declare const root: Root
 declare const client: Client
 declare const server: Server
 declare class Part extends Array<Part> {
+ readonly id: number
  readonly host: string
  readonly size: bigint
  readonly index: number

@@ -1,6 +1,6 @@
 Object.assign(globalThis, {
  client: Object.assign(part, {
-  requestedAppHost: location.host === "localhost:3000" ? "glowstick.click" : location.host,
+  requestedAppHost: location.host === "localhost:3000" ? Core.debugHost : location.host,
   fallbackAppHost: "fallback.cloud"
  }),
  element: (parent, tagname) => parent.appendChild(document.createElement(tagname)),
@@ -10,7 +10,6 @@ Object.assign(globalThis, {
   return spacer
  }
 })
-
 client.choice[root.primaryLayer] = client[client.requestedAppHost] ?? client[client.fallbackAppHost]
 client.state[root.primaryLayer] = client.choice[root.primaryLayer].offset
 await client.choice[root.primaryLayer].initialize()

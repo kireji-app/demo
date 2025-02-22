@@ -1,2 +1,2 @@
 super(newState)
-part.computeShuffle(layer)
+computeShuffle(layer)

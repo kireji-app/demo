@@ -11,7 +11,14 @@ Object.assign(globalThis, {
   animationFrameID: undefined,
   throttleDuration: /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 350 : 75,
   throttleStartTime: undefined,
-  requestFrame(now) {
+  callbacks: {},
+  listen(id, callback) {
+   this.callbacks[id] = callback
+  },
+  unlisten(id) {
+   delete this.callbacks[id]
+  },
+  async requestFrame(now) {
    app.fps = Math.round(1000 / (app.meanFrameTime += (now - app.time - app.meanFrameTime) / 20))
    app.time = now
    if (app.time - app.throttleStartTime >= app.throttleDuration && app.addressbarState !== app.documentState) {
@@ -20,7 +27,11 @@ Object.assign(globalThis, {
     app.addressbarState = app.documentState
     app.throttleStartTime = app.time
    }
-   if (app.state[root.primaryLayer] !== app.documentState) app.setLayer(root.primaryLayer, app.documentState)
+   if (app.state[root.primaryLayer] !== app.documentState) {
+    await app.setLayer(root.primaryLayer, app.documentState)
+    for (const id in app.callbacks) await app.callbacks[id]()
+   }
+
    app.animationFrameID = requestAnimationFrame(now => app.requestFrame(now))
   },
   parseStateFromAddressbar() {
@@ -80,7 +91,7 @@ Object.assign(globalThis, {
 app.gpu = navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
 
 if (navigator.serviceWorker) {
- const $ = navigator.serviceWorker, reg = await $.getRegistration() ?? await $.register(Core.clientBuildURL)
+ const $ = navigator.serviceWorker, reg = await $.getRegistration() ?? await $.register(Core.clientScriptURL)
  reg.active ?? await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t)))
  app.worker = $.controller || (await new Promise(r => (($.oncontrollerchange = r), $.postMessage({ code: 0 }))))
  $.oncontrollerchange = $.onmessage = () => location.reload()
@@ -91,4 +102,4 @@ if (navigator.serviceWorker) {
 app.adoptedStyleSheets = document.adoptedStyleSheets
 
 app.parseStateFromAddressbar()
-app.requestFrame(app.now)
+await app.requestFrame(app.now)

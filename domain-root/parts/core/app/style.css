@@ -6,7 +6,7 @@ html,
 body {
  --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
  --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
- --overlay-tween: 0;
+ --menu-tween: 0;
  --sidebar-width: 256px;
  --bottom-accent: 0 1.5px var(--fg-fade1);
  --bottom-shadow: 0 2px 7px #0002;
@@ -39,7 +39,7 @@ body>main {
  height: calc(100vh - var(--toolbar-height));
 }
 
-#overlay {
+#menu {
  position: fixed;
  top: 0;
  bottom: 0;
@@ -48,7 +48,7 @@ body>main {
  margin: 0;
  padding: 0;
  background: #0003;
- opacity: var(--overlay-tween);
+ opacity: var(--menu-tween);
  color: var(--fg-fade1);
  outline: none;
  pointer-events: none;
@@ -63,7 +63,7 @@ body>main {
  display: flex;
  flex-flow: column;
  box-shadow: 0px 0px 22px var(--spacing) #0001;
- right: calc(var(--spacing) + (var(--overlay-tween) - 1) * 256px);
+ right: calc(var(--spacing) + (var(--menu-tween) - 1) * 256px);
  top: calc(var(--toolbar-height) - var(--spacing) / 2);
  height: auto;
  width: auto;
@@ -226,20 +226,21 @@ body>main {
  gap: var(--spacing);
 }
 
-#toolbar>button {
+#toolbar>.btn {
  height: var(--icon-size);
  width: var(--icon-size);
  cursor: pointer;
  border: none;
  color: inherit;
  background: transparent;
+ text-decoration: none;
  font-size: calc(var(--icon-size) * 1.2);
  line-height: var(--icon-size);
  padding: 0;
  margin: 0;
 }
 
-#toolbar>button:hover {
+#toolbar>.btn:hover {
  color: var(--theme);
 }
 

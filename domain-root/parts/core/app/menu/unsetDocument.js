@@ -1,2 +1,2 @@
 delete part.menuButton
-delete part.overlay
+delete part.menu

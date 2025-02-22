@@ -36,15 +36,16 @@ part.labelTimeout
 part.setColorMode = light => {
  const bgColor = palette[+light]
  const fgColor = palette[+!light]
- const bgShade1 = blend(bgColor, "171717", "multiply")
- const bgShade2 = blend(bgColor, "2f2f2f", "multiply")
- const bgShade3 = blend(bgColor, "4f4f4f", "multiply")
+ const bgShade1 = blend(bgColor, "7f7f7f", "multiply")
+ const bgShade2 = blend(bgColor, "afafaf", "multiply")
+ const bgShade3 = blend(bgColor, "cfcfcf", "multiply")
  part.colorModeLabel.innerText = part.choice[layer].niceName
  if (part.labelTimeout) clearTimeout(part.labelTimeout)
  part.labelTimeout = setTimeout(() => {
   part.colorModeLabel.innerText = "Color Mode"
   part.labelTimeout = undefined
  }, 1750)
+ console.log({ fgColor, bgShade1, bgShade2, bgShade3 })
  part.colorModeStyleSheet.replaceSync(`html, body {
  --fg-fade1: #${fgColor};
  --fg-fade2: #${fgColor}2f;

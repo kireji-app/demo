@@ -3,10 +3,10 @@ Object.assign(globalThis, {
  cache: {},
  onfetch: e => {
   const { pathname, host: requestedHost } = new URL(e.request.url),
-   host = requestedHost.startsWith("localhost:") ? "glowstick.click" : requestedHost,
+   host = requestedHost.startsWith("localhost:") ? Core.debugHost : requestedHost,
    cacheKey = host + pathname,
    filename = pathname.split("/").pop(),
-   { Type } = new Core(host)
+   core = new Core(host)
 
   if (!(cacheKey in cache)) {
    let body, type, base64Encoded
@@ -37,16 +37,16 @@ Object.assign(globalThis, {
     case "/promo.png":
      type = "image/png"
      base64Encoded = true
-     body = Type.read(filename)
+     body = core.read(filename)
      break
     case "/icon.svg":
      type = "image/svg+xml"
      body = `<svg width="144px" height="144px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <style>
 svg { background: white }
-text { fill: ${Type.read("theme.color") ?? "#222334"} }
+text { fill: ${core.read("theme.color") ?? "#222334"} }
 @media (prefers-color-scheme = dark) {
-svg { background: ${Type.read("theme.color") ?? "#222334"} }
+svg { background: ${core.read("theme.color") ?? "#222334"} }
 text { fill: white }
 }
 </style>

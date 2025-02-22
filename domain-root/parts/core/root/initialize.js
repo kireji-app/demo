@@ -3,7 +3,9 @@ Object.assign(globalThis, {
   environment: (globalThis.constructor === globalThis.Window ? "client" : "worker") + ".core.parts",
   primaryLayer: 0,
   stagingLayer: 1,
-  resetStagingLayer: async () => await root.setLayer(root.stagingLayer, root.state[root.primaryLayer])
+  resetStagingLayer: async () => {
+   await root.setLayer(root.stagingLayer, root.state[root.primaryLayer])
+  }
  })
 })
 

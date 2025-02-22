@@ -1,2 +1,2 @@
 super(newState)
-part.populate(layer)
+populate(layer)

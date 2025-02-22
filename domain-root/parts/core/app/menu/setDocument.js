@@ -1,2 +1,2 @@
 inherit.menuButton
-inherit.overlay
+inherit.menu

@@ -1,4 +1,4 @@
-part.computeShuffle = layer => {
+const computeShuffle = layer => {
  if (layer !== root.primaryLayer) return
 
  const

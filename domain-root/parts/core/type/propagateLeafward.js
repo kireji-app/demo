@@ -4,8 +4,8 @@ if (newState < -1n)
 if (newState >= part.size)
  throw new RangeError(`state (${newState}) is too large (max = ${part.size}). ${part.host}`)
 
-if (newState === part.state[layer])
- console.warn(`state (${newState}) reassigned to layer ${layer}. ${part.host}`)
+// if (newState === part.state[layer])
+//  console.warn(`state (${newState}) reassigned to layer ${layer}. ${part.host}`)
 
 const previousState = part.state[layer]
 part.state[layer] = newState

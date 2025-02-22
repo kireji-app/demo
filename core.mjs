@@ -10,9 +10,11 @@ import {
  writeFileSync as writeFile
 } from 'fs'
 class Core {
+ static parts = []
  static vlqBase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
  static baseHost = "type.core.parts"
  static rootHost = "root.core.parts"
+ static debugHost = "glowstick.click"
  static isVerbose = false
  static clientRoot = "public"
  static domainRoot = "domain-root"
@@ -145,7 +147,7 @@ Core.initialize()`.slice(1), this.buildSource, 105/* here */, 0, "", false)
   Core[this.host] = this
   this.isBase = this.host === Core.baseHost
   this.domains = this.host.split(".").concat(Core.domainRoot)
-  this.pathFromRoot = this.domains.reverse().join("/")
+  this.pathFromRoot = [...this.domains].reverse().join("/")
   if (!this.isBase) {
    this.baseHost = this.read(Core.typeURL, Core.baseHost)
   }
@@ -169,11 +171,11 @@ Core.initialize()`.slice(1), this.buildSource, 105/* here */, 0, "", false)
   if (this.isBase) Core.BaseType = this.Type
  }
  openClass() {
-  this.file.addLine(`(class extends this.BaseType {`, this.buildSource, 171/* here */, 21)
+  this.file.addLine(`(class ${this.domains[0].replaceAll(/[-](.)|^(.)/g, ([...c]) => c.pop().toUpperCase())} extends this.BaseType {`, this.buildSource, 171/* here */, 21, "", false)
  }
  compileConstructor() {
+  this.constructorArguments = this.has(Core.constructorArgumentsURL) ? this.read(Core.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) : this.isBase ? [] : this.BaseType.core.constructorArguments
   if (this.has(Core.constructorURL) || this.has(Core.postConstructorURL)) {
-   this.constructorArguments = this.has(Core.constructorArgumentsURL) ? this.read(Core.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) : this.isBase ? [] : this.BaseType.core.constructorArguments
    this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 176/* here */, 28, " ", false)
    if (this.has(Core.constructorURL)) {
     this.constructorBody = this.read(Core.constructorURL)

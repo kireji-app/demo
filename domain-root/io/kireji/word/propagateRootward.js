@@ -1,2 +1,2 @@
-if (subparts.length) part.populate(layer)
+if (subparts.length) populate(layer)
 super(subparts)
