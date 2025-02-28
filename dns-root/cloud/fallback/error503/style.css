@@ -6,7 +6,7 @@
 
 h1 {
  text-align: center;
- line-height: 100vh;
+ line-height: var(--h);
  height: 100%;
  position: absolute;
  width: 100%;
@@ -50,6 +50,6 @@ img {
 
 @media (width < 500px) {
  #float {
-  font-size: max(min(5vw, 5vh), 16px);
+  font-size: max(min(5vw, 5% * var(--h)), 16px);
  }
 }

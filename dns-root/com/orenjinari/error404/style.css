@@ -4,15 +4,18 @@
  align-items: center;
  justify-content: center;
  top: 0;
- font-size: min(4vh, 3vw);
+ font-size: min(calc(4% * var(--h)), 3vw);
 }
-h1, p {
+
+h1,
+p {
  margin: 0;
  padding: 0;
 }
+
 #img404 {
- margin-top: min(4vh, 3vw);
+ margin-top: min(calc(4% * var(--h)), 3vw);
  max-width: 75vw;
- max-height: 50vh;
+ max-height: calc(50% * var(--h));
  filter: invert(0.7);
 }

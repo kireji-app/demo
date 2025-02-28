@@ -3,7 +3,7 @@
  --section-gap: 128px;
  background:
   url("https://home.orenjinari.com/signature.png") 36.5vw 8vw/27vw 7.78vw no-repeat,
-  url("https://home.orenjinari.com/ground.png") 12.5vw calc(239vh / 3)/75vw 3.75vw no-repeat,
+  url("https://home.orenjinari.com/ground.png") 12.5vw calc(80% * var(--h))/75vw 3.75vw no-repeat,
   radial-gradient(ellipse 17.597vw 20.968vw at 7.735vw 5.433vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 12.477vw 20.968vw at 28.291vw 2.626vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
@@ -14,7 +14,7 @@
  display: flex;
  flex-flow: column;
  gap: var(--section-gap);
- padding-top: calc(100vh + var(--section-gap)) !important;
+ padding-top: calc(var(--h) + var(--section-gap)) !important;
 }
 
 .bunny {
@@ -24,31 +24,31 @@
 
 #connect {
  left: calc(75vw - 3.7vw);
- top: calc(239vh / 3 - 7.6vw);
+ top: calc(calc(80% * var(--h)) - 7.6vw);
  width: 7.4vw;
 }
 
 #others {
  left: calc(57.5vw - 4vw);
- top: calc(239vh / 3 - 9.3vw);
+ top: calc(calc(80% * var(--h)) - 9.3vw);
  width: 8vw;
 }
 
 #portfolio {
  left: calc(42.5vw - 5vw);
- top: calc(239vh / 3 - 11vw);
+ top: calc(calc(80% * var(--h)) - 11vw);
  width: 10vw;
 }
 
 #about {
  left: calc(25vw - 4vw);
- top: calc(239vh / 3 - 8vw);
+ top: calc(80% * var(--h) - 8vw);
  width: 8vw;
 }
 
 .placeholder {
  width: 100vw;
- height: 100vh;
+ height: var(--h);
  box-shadow: inset 0 0 0 8vw var(--fg-fade3);
  position: relative;
 }
@@ -59,7 +59,7 @@
 
 .placeholder h1 {
  text-align: center;
- line-height: calc(100vh - var(--toolbar-height));
+ line-height: calc(var(--h) - var(--toolbar-height));
  height: 100%;
  position: absolute;
  width: 100%;
@@ -88,6 +88,6 @@
 
 @media (width < 500px) {
  #float {
-  font-size: max(min(5vw, 5vh), 16px);
+  font-size: max(min(5vw, calc(5% * var(--h))), 16px);
  }
 }

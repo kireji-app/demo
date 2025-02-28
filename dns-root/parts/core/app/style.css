@@ -13,6 +13,7 @@ body {
  --icon-size: 29px;
  --spacing: 19px;
  --toolbar-height: calc(var(--icon-size) + 2 * var(--spacing));
+ --h: 100vh;
  font: 13px var(--system-ui);
  overscroll-behavior: none !important;
  color: var(--fg-fade1);
@@ -21,7 +22,15 @@ body {
  -ms-user-select: none;
  user-select: none;
  margin: 0;
- height: 100vh;
+ height: var(--h);
+}
+
+@supports (height: 100svh) {
+
+ html,
+ body {
+  --h: 100svh;
+ }
 }
 
 #menu {
