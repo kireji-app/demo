@@ -1,0 +1,18 @@
+#toolbar {
+ background: transparent;
+ box-shadow: none;
+ color: black;
+}
+
+#toolbar>h1 {
+ display: none
+}
+
+body {
+ overflow-y: scroll;
+ background-color: white;
+}
+
+body>main {
+ top: 0;
+}

@@ -5,6 +5,6 @@
   "checkJs": false
  },
  "exclude": [
-  "core.mjs"
+  "framework.mjs"
  ]
 }

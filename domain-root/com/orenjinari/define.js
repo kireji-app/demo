@@ -1,1 +1,0 @@
-super("error404")

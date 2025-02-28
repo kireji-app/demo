@@ -1,0 +1,1 @@
+part.size = BigInt(part.parent.framework.resolve("length.number"))

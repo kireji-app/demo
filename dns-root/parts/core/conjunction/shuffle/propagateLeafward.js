@@ -1,0 +1,2 @@
+super(STATE)
+computeShuffle(LAYER)

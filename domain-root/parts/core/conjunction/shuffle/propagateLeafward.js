@@ -1,2 +1,0 @@
-super(newState)
-computeShuffle(layer)
