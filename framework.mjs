@@ -30,7 +30,7 @@ class Framework {
  static BaseType = null
  static archive = null
  static tags = null
- static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=0.8,minimum-scale=0.8,maximum-scale=0.8" /> <script defer src=/${this.clientScriptURL}></script></head></html>` }
+ static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.8,minimum-scale=1.8,maximum-scale=1.8" /> <script defer src=/${this.clientScriptURL}></script></head></html>` }
  static asyncMethodArguments = {
   setLayer: ["LAYER", "STATE"],
   propagateRootward: ["LAYER", "LEAVES"],
