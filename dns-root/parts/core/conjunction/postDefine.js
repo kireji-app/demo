@@ -1,5 +1,5 @@
 if (!Array.isArray(FACTORS))
- throw new RangeError(`conjunction expects array of factors (got ${typeof FACTORS}) (${part.host})`)
+ throw new RangeError(`conjunction expects array of factors (got ${typeof FACTORS} = ${FACTORS}) (${part.host})`)
 
 part.factors = FACTORS
 part.size = FACTORS.reduceRight((divisors, factor, index) => {

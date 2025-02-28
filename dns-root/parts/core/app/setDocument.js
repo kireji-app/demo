@@ -12,7 +12,7 @@ app.toolbar = element(document.body, "nav")
 app.toolbar.setAttribute("id", "toolbar")
 
 app.homeButton = element(app.toolbar, "button")
-app.homeButton.innerHTML = `<h1><img id=appicon src=icon.svg /><span class=label>${app.host}</span></h1>`
+app.homeButton.innerHTML = `<h1><img id=appicon src="${app.resolve("icon.uri", "fallback-icon.svg")}" /><span class=label>${app.host}</span></h1>`
 
 app.homeButton.setAttribute("id", "home")
 app.homeButton.onclick = () => app[0].setLayer(LAYER, 0n)
@@ -89,25 +89,24 @@ app.sidebar.setAttribute("id", "sidebar")
 
 app.appsSection = element(app.sidebar, "ul")
 app.appsSection.setAttribute("id", "apps")
-// app.appsTitle = element(app.appsSection, "h2")
-// app.appsTitle.innerText = "Applications"
+
 app.appNodes = app.parent.reduce((nodes, { host: appHost }) => {
- const that = app.parent[appHost in app.parent ? appHost : 0]
+ const destinationApp = app.parent[appHost in app.parent ? appHost : 0]
  nodes[appHost] = element(app.appsSection, "li")
  nodes[appHost].setAttribute("class", "applink")
- nodes[appHost].innerHTML = `<span class=label>${appHost}</span><img src=https://${appHost}/icon.svg />`
+ nodes[appHost].innerHTML = `<span class=label>${appHost.slice(appHost.startsWith("www.") ? 4 : 0)}</span><img src="https://${appHost}/${destinationApp.resolve("icon.uri", "fallback-icon.svg")}" />`
  if (appHost === app.host) nodes[appHost].setAttribute("data-here", "true")
  else nodes[appHost].onclick = e => {
   e.preventDefault()
   let thatState = 0n
   for (const host of read("preferences.host").split(/\s+/g)) {
-   if (host in app && host in that) thatState += app[host].state[LAYER] * that[host].conjunctionDivisor
+   if (host in app && host in destinationApp) thatState += app[host].state[LAYER] * destinationApp[host].conjunctionDivisor
   }
-  if (root.isLocal) {
-   localStorage.setItem("app", appHost)
-   location.hash = app.encodeState(thatState)
-   location.reload()
-  } else location = "https://" + appHost + "#" + app.encodeState(thatState)
+  const hash = app.encodeState(thatState)
+  if (root.isDebug) {
+   location.hash = hash
+   worker.postMessage({ code: "setDebugHost", host: appHost })
+  } else location = "https://" + appHost + "#" + hash
  }
  return nodes
 }, {})

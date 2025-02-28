@@ -1,4 +1,4 @@
 super([
- "welcome.kireji.io",
+ "readme.kireji.io",
  "editor.kireji.io"
 ])

@@ -27,12 +27,10 @@ class Framework {
  static asyncContextURL = "asyncContext.js"
  static postConstructorURL = "postDefine.js"
  static constructorArgumentsURL = "define.args"
- // static docsFooterMD = ``
  static BaseType = null
  static archive = null
  static tags = null
  static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=0.8" /> <script defer src=/${this.clientScriptURL}></script></head></html>` }
- // static get docsHeaderMD() { return `` }
  static asyncMethodArguments = {
   setLayer: ["LAYER", "STATE"],
   propagateRootward: ["LAYER", "LEAVES"],
@@ -53,12 +51,12 @@ class Framework {
    mappings: [],
    pathToRoot,
    pathFromRoot,
-   addSource(source, script = null) {
+   addSource(source, script) {
     let srcIndex = this.sources.indexOf(source)
     if (srcIndex === -1) {
      srcIndex = this.sources.length
      this.sources.push(source)
-     this.scripts.push(null)//script)
+     this.scripts.push(script)
     }
     return srcIndex
    },
@@ -74,8 +72,13 @@ class Framework {
     this.addLines(string.split("\n"), srcIndex, ogLn, ogCol, indent, mapTokens)
    },
    packAndMap(url) {
+    function base64EncodeUnicode(str) {
+     return btoa(new TextEncoder('utf-8').encode(str)
+      .reduce((data, byte) => data + String.fromCharCode(byte), '')
+     )
+    }
     return this.lines.join("\n") + (Framework.tags.includes("dev") ? `
-//${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoa(this.getMap())}${url ? `
+//${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${base64EncodeUnicode(this.getMap())}${url ? `
 //${"#"} sourceURL=${url}` : ""}` : "")
    },
    getMap() {
@@ -107,7 +110,7 @@ class Framework {
  }
  static compile() {
   this.file = this.createFile("../")
-  this.buildSource = this.file.addSource(this.cloudScriptURL, null)
+  this.buildSource = this.file.addSource(this.cloudScriptURL, Array(11).fill("\n").join("") + this.toString())
   this.file.addLines(this.toString().split("\n"), this.buildSource, 11/* here */, 0, " ")
   this.file.addSection(`
 Framework.tags = ${JSON.stringify(this.tags)}
@@ -161,7 +164,7 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
  }
  compile() {
   this.file = Framework.createFile(this.pathFromRoot, this.pathToRoot)
-  this.buildSource = this.file.addSource(this.pathToRoot + "/" + Framework.cloudScriptURL)
+  this.buildSource = this.file.addSource(this.pathToRoot + "/" + Framework.cloudScriptURL, Array(11).fill("\n").join("") + this.toString())
   this.file.framework = this
   this.openClass()
   this.compileConstructor()
@@ -193,13 +196,13 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
    this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 193/* here */, 28, " ", false)
    if (this.has(Framework.constructorURL)) {
     this.constructorBody = this.read(Framework.constructorURL)
-    this.constructorSource = this.file.addSource(Framework.constructorURL)
+    this.constructorSource = this.file.addSource(Framework.constructorURL, this.constructorBody)
     this.file.addLines(this.constructorBody.split("\n"), this.constructorSource, 0, 0, "  ")
    } else this.file.addLine(`super(${this.isBase ? "" : this.constructorArguments.join(", ")})`, this.buildSource, 198/* here */, 35, "  ", false)
    if (this.has(Framework.postConstructorURL)) {
     this.addContext()
     this.postConstructorBody = this.read(Framework.postConstructorURL)
-    this.postConstructorSource = this.file.addSource(Framework.postConstructorURL)
+    this.postConstructorSource = this.file.addSource(Framework.postConstructorURL, this.postConstructorBody)
     this.file.addLines(this.postConstructorBody.split("\n"), this.postConstructorSource, 0, 0, "  ")
    }
    this.file.addLine(`}`, this.buildSource, /* here */205, 28, " ")
@@ -219,7 +222,7 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
     this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 219/* here */, 24, "  ", false)
    this.addContext(true)
    methodData.content = this.read(methodData.url)
-   methodData.source = this.file.addSource(methodData.url)
+   methodData.source = this.file.addSource(methodData.url, methodData.content)
    const methodLines = methodData.content.split("\n")
    if (this.isBase) this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
    else {
@@ -272,12 +275,17 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
   this.BaseType.framework?.addContext(isAsync, file)
   const locallySourced = file === this.file
   const pathPrefix = locallySourced ? "" : file.pathToRoot + "/" + this.pathFromRoot + "/"
-  if (this.has(Framework.contextURL))
-   file.addSection(this.read(Framework.contextURL), file.addSource(pathPrefix + Framework.contextURL), 0, 0, "  ")
-  if (isAsync && this.has(Framework.asyncContextURL))
-   file.addSection(this.read(Framework.asyncContextURL), file.addSource(pathPrefix + Framework.asyncContextURL), 0, 0, "  ")
+  if (this.has(Framework.contextURL)) {
+   const body = this.read(Framework.contextURL)
+   file.addSection(body, file.addSource(pathPrefix + Framework.contextURL, body), 0, 0, "  ")
+  }
+  if (isAsync && this.has(Framework.asyncContextURL)) {
+   const body = this.read(Framework.asyncContextURL)
+   file.addSection(body, file.addSource(pathPrefix + Framework.asyncContextURL, body), 0, 0, "  ")
+  }
  }
 }
+
 
 Framework.tags = (() => {
  const result = []
@@ -286,7 +294,7 @@ Framework.tags = (() => {
   branchName = $('git branch --show-current').toString().trim()
   commitMessage = $('git log -1').toString()
   commitTag = $('git log -1 --pretty=%s').toString().trim()
-  result.push("dev")
+  result.push("local")
  } else {
   branchName = process.env.VERCEL_GIT_COMMIT_REF
   commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
@@ -296,6 +304,8 @@ Framework.tags = (() => {
  result.unshift(commitTag)
  return result
 })()
+
+console.log("Building " + Framework.tags.join("-"))
 
 Framework.archive = (() => {
  const result = {}
@@ -355,21 +365,9 @@ Framework.archive = (() => {
  */
  return result
 })()
-
 if (itemExists(Framework.clientRoot))
  removeItem(Framework.clientRoot, { recursive: true, force: true })
 
 makeFolder(Framework.clientRoot)
 writeFile(Framework.clientRoot + "/index.html", Framework.indexHTML)
 writeFile(Framework.clientRoot + "/" + Framework.clientScriptURL, Framework.compile())
-
-// let docsMD = "## Documentation\nThese docs are generated by the framework.\n```javascript\n// Coming soon.\n```"
-
-/*
-Pseudo-code:
- Framework.initialize()
- */
-
-// writeFile('README.md', `${Framework.docsHeaderMD}
-// ${docsMD}
-// ${Framework.docsFooterMD}`)

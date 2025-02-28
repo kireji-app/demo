@@ -3,6 +3,7 @@ part.index = 0
 part.state = [-1n, -1n]
 part.id = Framework.parts.push(part) - 1
 part.framework = part.constructor.framework
+part.resolve = (...args) => part.framework.resolve(...args)
 part.host = part.framework.host
 Object.assign(part, {
  insert(subpart, index, offset = 0n) {

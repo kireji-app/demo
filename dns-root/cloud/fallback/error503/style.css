@@ -6,7 +6,7 @@
 
 h1 {
  text-align: center;
- line-height: calc(100vh - var(--toolbar-height));
+ line-height: 100vh;
  height: 100%;
  position: absolute;
  width: 100%;
@@ -26,8 +26,12 @@ h1 {
 }
 
 #float {
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
  font-size: 32px;
- height: 100%;
  align-items: center;
  justify-content: center;
  display: flex;

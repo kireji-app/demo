@@ -5,10 +5,11 @@
  font-size: max(min(3vh, 3vw), 12px);
  place-content: center;
  place-items: center;
+ height: 100%;
 }
 
-:host > p,
-:host > h2 {
+:host>p,
+:host>h2 {
  width: min(80vw, 512px);
  padding: 1ch;
  text-align: center;
@@ -19,11 +20,13 @@ a,
 a:visited {
  color: unset;
 }
+
 a:hover {
  color: var(--theme);
 }
 
 @media (pointer: coarse) {
+
  a,
  a:visited {
   text-decoration: none;

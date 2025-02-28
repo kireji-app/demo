@@ -1,4 +1,4 @@
 super([
- "welcome.glowstick.click",
+ "readme.glowstick.click",
  "library.glowstick.click"
 ])

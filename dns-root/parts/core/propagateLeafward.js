@@ -4,6 +4,7 @@ if (STATE < -1n)
 if (STATE >= part.size)
  throw new RangeError(`state (${STATE}) is too large (max = ${part.size}). ${part.host}`)
 
+
 // if (STATE === part.state[LAYER])
 //  console.warn(`state (${STATE}) reassigned to LAYER ${LAYER}. ${part.host}`)
 

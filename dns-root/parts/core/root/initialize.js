@@ -3,9 +3,9 @@ Object.assign(globalThis, {
   environment: (globalThis.constructor === globalThis.Window ? "client" : "worker") + ".core.parts",
   primaryLayer: 0,
   stagingLayer: 1,
-  // todo: change debugHost when client host changes; update all apps?
   debugHost: Framework.fallbackHost,
   isLocal: location.host.startsWith("localhost:"),
+  isDebug: location.host.startsWith("localhost:") || location.host.endsWith(".vercel.app"),
   resetStagingLayer: async () => {
    await root.setLayer(root.stagingLayer, root.state[root.primaryLayer])
   }

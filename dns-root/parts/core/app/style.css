@@ -24,15 +24,6 @@ body {
  height: 100vh;
 }
 
-body>main {
- position: relative;
- top: var(--toolbar-height);
- left: 0;
- right: 0;
- padding: 0;
- bottom: 0;
-}
-
 #menu {
  position: fixed;
  top: 0;

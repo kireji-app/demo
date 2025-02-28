@@ -91,17 +91,6 @@ Object.assign(globalThis, {
  }
 })
 
-app.gpu = navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
-
-if (navigator.serviceWorker) {
- const $ = navigator.serviceWorker, reg = await $.getRegistration() ?? await $.register("/" + Framework.clientScriptURL)
- reg.active ?? await new Promise(r => ((reg.waiting ?? reg.installing).onstatechange = ({ target: t }) => t.state == "activated" && r(t)))
- app.worker = $.controller || (await new Promise(r => (($.oncontrollerchange = r), $.postMessage({ code: 0 }))))
- $.oncontrollerchange = $.onmessage = () => location.reload()
- document.querySelector('[rel="manifest"]').href = "manifest.json"
- if (Framework.tags.includes("dev")) addEventListener("focus", () => reg.update().catch($.onmessage))
-}
-
 app.adoptedStyleSheets = document.adoptedStyleSheets
 
 app.parseStateFromAddressbar()

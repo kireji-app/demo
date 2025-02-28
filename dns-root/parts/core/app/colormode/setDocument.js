@@ -52,7 +52,7 @@ part.setColorMode = light => {
  --bg-shade2: #${bgShade2};
  --bg-shade3: #${bgShade3};
 
- --toolbar-accent: var(--bottom-${light ? "shadow" : "accent"});
+ --toolbar-accent: var(--bottom-shadow);
  --theme: ${themeColor};
 }`)
 }
