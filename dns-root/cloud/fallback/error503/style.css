@@ -50,6 +50,6 @@ img {
 
 @media (width < 500px) {
  #float {
-  font-size: max(min(5vw, 5% * var(--h)), 16px);
+  font-size: max(min(5vw, .05 * var(--h)), 16px);
  }
 }

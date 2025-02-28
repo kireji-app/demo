@@ -12,7 +12,3 @@ body {
  overflow-y: scroll;
  background-color: white;
 }
-
-body>main {
- top: 0;
-}

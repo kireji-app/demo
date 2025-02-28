@@ -25,11 +25,11 @@ body {
  height: var(--h);
 }
 
-@supports (height: 100svh) {
+@supports (height: 100dvh) {
 
  html,
  body {
-  --h: 100svh;
+  --h: 100dvh;
  }
 }
 

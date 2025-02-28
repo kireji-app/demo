@@ -74,8 +74,3 @@ body:hover #toolbar {
  background: transparent;
  box-shadow: none;
 }
-
-body>main {
- top: 0;
- bottom: 0;
-}

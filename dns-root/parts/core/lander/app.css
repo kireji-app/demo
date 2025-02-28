@@ -2,7 +2,7 @@
  display: flex;
  flex-flow: column nowrap;
  gap: 1ch;
- font-size: max(min(calc(3% * var(--h)), 3vw), 12px);
+ font-size: max(min(calc(.03 * var(--h)), 3vw), 12px);
  place-content: center;
  place-items: center;
  height: 100%;
