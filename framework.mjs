@@ -43,6 +43,11 @@ class Framework {
  static log(...data) {
   if (this.tags.includes("dev") && this.isVerbose) console.log(...data)
  }
+ static btoaUnicode(str) {
+  return btoa(new TextEncoder('utf-8').encode(str)
+   .reduce((data, byte) => data + String.fromCharCode(byte), '')
+  )
+ }
  static createFile(pathFromRoot, pathToRoot) {
   return {
    lines: [],
@@ -72,13 +77,8 @@ class Framework {
     this.addLines(string.split("\n"), srcIndex, ogLn, ogCol, indent, mapTokens)
    },
    packAndMap(url) {
-    function base64EncodeUnicode(str) {
-     return btoa(new TextEncoder('utf-8').encode(str)
-      .reduce((data, byte) => data + String.fromCharCode(byte), '')
-     )
-    }
     return this.lines.join("\n") + (Framework.tags.includes("dev") ? `
-//${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${base64EncodeUnicode(this.getMap())}${url ? `
+//${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${Framework.btoaUnicode(this.getMap())}${url ? `
 //${"#"} sourceURL=${url}` : ""}` : "")
    },
    getMap() {

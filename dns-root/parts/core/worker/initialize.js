@@ -81,13 +81,13 @@ text {
        background_color: "#1f2023",
        icons: [
         {
-         src: `data:${icon_type};base64,${extname === "png" ? framework.resolve(icon_uri) : btoa(getFallbackIcon(192))}`,
+         src: `data:${icon_type};base64,${extname === "png" ? framework.resolve(icon_uri) : Framework.btoaUnicode(getFallbackIcon(192))}`,
          sizes: "192x192",
          type: icon_type,
          purpose: "any maskable"
         },
         {
-         src: `data:${icon_type};base64,${extname === "png" ? framework.resolve(icon_uri) : btoa(getFallbackIcon(512))}`,
+         src: `data:${icon_type};base64,${extname === "png" ? framework.resolve(icon_uri) : Framework.btoaUnicode(getFallbackIcon(512))}`,
          sizes: "512x512",
          type: icon_type,
          purpose: "any maskable"
