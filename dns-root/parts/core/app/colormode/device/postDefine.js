@@ -1,2 +1,2 @@
 part.niceName = "Device Mode"
-part.symbol = "⚙️📲"
+part.symbol = "✱"

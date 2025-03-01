@@ -37,16 +37,21 @@ part.labelTimeout
 part.setColorMode = light => {
  const bgColor = palette[+light]
  const fgColor = palette[+!light]
- const bgShade1 = blend(bgColor, "7f7f7f", "multiply")
- const bgShade2 = blend(bgColor, "afafaf", "multiply")
- const bgShade3 = blend(bgColor, "cfcfcf", "multiply")
+ const bgShade1 = blend(bgColor, "1f1f1f", "multiply")
+ const bgShade2 = blend(bgColor, "5f5f5f", "multiply")
+ const bgShade3 = blend(bgColor, "afafaf", "multiply")
  part.colorModeLabel2.innerText = part.choice[LAYER].niceName
  part.colorModeHandle.innerText = part.choice[LAYER].symbol
- part.colorModeStyleSheet.replaceSync(`html, body {
+ part.colorModeStyleSheet.replaceSync(`img {
+ fill: var(--fg-fade1);
+}
+html, body {
  --color-mode: ${part.state[LAYER]};
- --fg-fade1: ${light ? "black" : "white"};
- --fg-fade2: #${fgColor}6f;
- --fg-fade3: #${fgColor}3f;
+ --fg-fade1: #${light ? "000000" : "ffffff"}EF;
+ --fg-fade2: #${light ? "000000" : "ffffff"}Bf;
+ --fg-fade3: #${light ? "000000" : "ffffff"}7f;
+ --fg-fade4: #${light ? "000000" : "ffffff"}3f;
+ --fg-fade5: #${light ? "000000" : "ffffff"}0f;
 
  --bg-shade1: #${light ? "d9dcdf" : bgShade1};
  --bg-shade2: #${bgShade2};

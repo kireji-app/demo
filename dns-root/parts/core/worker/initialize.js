@@ -33,53 +33,96 @@ Object.assign(globalThis, {
 
   } else {
    if (!(cacheKey in cache)) {
+    const getFallbackIcon = size => {
+     function getCursiveMath(letter) {
+      if (letter.length !== 1 || letter < 'a' || letter > 'z') {
+       return letter;
+      }
+
+      const baseCodePoint = 0x1D482; // Unicode for '𝒶'
+      const letterCodePoint = letter.charCodeAt(0);
+      const offset = letterCodePoint - 'a'.charCodeAt(0);
+
+      const cursiveCodePoint = baseCodePoint + offset;
+
+      return String.fromCodePoint(cursiveCodePoint);
+     }
+
+     return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<style>
+circle {
+ fill: ${framework.resolve("theme.color", "#222334")};
+}
+text {
+ fill: "#fff";
+}
+</style>
+<circle cx="12" cy="12" r="12" />
+<text x="12" y="12" text-anchor="middle" dominant-baseline="central">${getCursiveMath(host[host.startsWith("www.") ? 4 : 0])}</text>
+</svg>`}
     let body, type, base64Encoded
     switch (pathname) {
-     case "/" + Framework.clientScriptURL:
+     case "/" + Framework.clientScriptURL: {
       body = Framework.compile()
       type = "text/javascript; charset=UTF-8"
       break
-     case "/manifest.json":
+     }
+     case "/manifest.json": {
+      const app = client[host] ?? client[Framework.fallbackHost]
+      const icon_uri = framework.resolve("icon.uri", "fallback-icon.svg")
+      const extname = icon_uri.split(".").pop()
+      const icon_type = extname === "png" ? "image/png" : "image/svg+xml;charset=UTF-8"
       const manifest = {
-       name: host,
-       short_name: host,
-       start_url: ".",
+       name: app.niceName ?? host,
+       short_name: app.niceName ?? host,
+       start_url: "#0",
        display: "standalone",
-       theme_color: "#1f2023",
+       theme_color: framework.resolve("theme.color"),
        background_color: "#1f2023",
+       icons: [
+        {
+         src: `data:${icon_type};base64,${extname === "png" ? framework.resolve(icon_uri) : btoa(getFallbackIcon(192))}`,
+         sizes: "192x192",
+         type: icon_type,
+         purpose: "any maskable"
+        },
+        {
+         src: `data:${icon_type};base64,${extname === "png" ? framework.resolve(icon_uri) : btoa(getFallbackIcon(512))}`,
+         sizes: "512x512",
+         type: icon_type,
+         purpose: "any maskable"
+        }
+       ],
        description: "This app is under development.",
        display_override: ["window-controls-overlay"],
        categories: ["entertainment", "games", "utilities"],
       }
       body = JSON.stringify(manifest, null, 1)
-      type = "application/json; charset=UTf-8"
+      type = "application/json; charset=UTF-8"
       break
-     case "/fallback-icon.svg":
+     }
+     case "/fallback-icon.svg": {
       type = "image/svg+xml"
-      body = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<style>
-circle{fill:${framework.read("theme.color") ?? "#222334"}}
-text{fill:${framework.read("theme.color-text-light") ?? "#fff"}}
-@media(prefers-color-scheme:dark){
-circle{fill:${framework.read("theme.color") ?? "#222334"}}
-text{fill:${framework.read("theme.color-text-dark") ?? "#fff"}}
-}
-</style>
-<circle cx="12" cy="12" r="12"/>
-<text x="12" y="12" text-anchor="middle" dominant-baseline="central">${host[host.startsWith("www.") ? 4 : 0]}</text>
-</svg>`
+      body = getFallbackIcon(512)
       break
-     default:
-      if (filename.endsWith(".png")) {
-       base64Encoded = true
-       type = "image/png"
-       body = framework.resolve(filename)
-       if (!body) console.warn('404 ' + e.request.url)
-      } else {
-       body = Framework.indexHTML
-       type = "text/html; charset=UTF-8"
-      }
+     }
+     case "/": {
+      body = Framework.indexHTML
+      type = "text/html; charset=UTF-8"
       break
+     }
+     default: {
+      const extname = filename.split(".").pop()
+      type = {
+       get "png"() { base64Encoded = true; return "image/png" },
+       "svg": "image/svg+xml; charset=UTF-8",
+       "js": "text/javascript; charset=UTF-8",
+       "json": "application/json; charset=UTF-8"
+      }[extname]
+      body = framework.resolve(filename)
+      if (!body) console.warn('404 ' + e.request.url)
+      break
+     }
     }
 
     if (base64Encoded) {

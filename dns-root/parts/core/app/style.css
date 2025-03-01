@@ -269,17 +269,17 @@ button:hover {
  font-size: 100px;
 }
 
-#home>h1 {
+#home {
  padding: 0;
  margin: 0;
  display: flex;
  font-size: 21px;
  line-height: var(--icon-size);
  font-weight: 400;
- gap: var(--spacing);
+ gap: calc(var(--spacing) / 3);
 }
 
-#appicon {
+#home-icon {
  height: var(--icon-size);
  width: var(--icon-size);
 }
@@ -309,10 +309,6 @@ button:hover {
   right: 0;
   width: 100vw;
   box-shadow: var(--toolbar-accent);
- }
-
- #appicon {
-  display: none;
  }
 }
 

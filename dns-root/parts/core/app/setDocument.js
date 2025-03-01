@@ -12,10 +12,15 @@ app.toolbar = element(document.body, "nav")
 app.toolbar.setAttribute("id", "toolbar")
 
 app.homeButton = element(app.toolbar, "button")
-app.homeButton.innerHTML = `<h1><img id=appicon src="${app.resolve("icon.uri", "fallback-icon.svg")}" /><span class=label>${app.host}</span></h1>`
-
 app.homeButton.setAttribute("id", "home")
 app.homeButton.onclick = () => app[0].setLayer(LAYER, 0n)
+app.homeIcon = element(app.homeButton, "img")
+app.homeIcon.setAttribute("id", "home-icon")
+app.homeIcon.setAttribute("src", app.resolve("icon.uri", "fallback-icon.svg"))
+app.homeLabel = element(app.homeButton, "span")
+app.homeLabel.setAttribute("id", "home-label")
+app.homeLabel.textContent = app.niceName ?? app.host
+
 
 app.toolbarSpacer = element(app.toolbar, "span")
 app.toolbarSpacer.setAttribute("class", "spacer")
@@ -94,7 +99,7 @@ app.appNodes = app.parent.reduce((nodes, { host: appHost }) => {
  const destinationApp = app.parent[appHost in app.parent ? appHost : 0]
  nodes[appHost] = element(app.appsSection, "li")
  nodes[appHost].setAttribute("class", "applink")
- nodes[appHost].innerHTML = `<span class=label>${appHost.slice(appHost.startsWith("www.") ? 4 : 0)}</span><img src="https://${appHost}/${destinationApp.resolve("icon.uri", "fallback-icon.svg")}" />`
+ nodes[appHost].innerHTML = `<img src="https://${appHost}/${destinationApp.resolve("icon.uri", "fallback-icon.svg")}" /><span class=label>${destinationApp.niceName ?? appHost}</span>`
  if (appHost === app.host) nodes[appHost].setAttribute("data-here", "true")
  else nodes[appHost].onclick = e => {
   e.preventDefault()

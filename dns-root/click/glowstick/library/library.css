@@ -47,19 +47,19 @@ dialog,
  display: flex;
 }
 
-.topic>a {
+.topic>button {
  border-radius: calc(var(--spacing) / 2);
  flex: 0 0 auto;
  overflow: hidden;
 }
 
-.topic>a>figure {
+.topic>button>figure {
  padding: 0;
  margin: 0;
  background: #fff1;
 }
 
-.topic>a>figure>figcaption {
+.topic>button>figure>figcaption {
  padding: 6px;
  background: #0007;
  position: absolute;
@@ -69,65 +69,57 @@ dialog,
  pointer-events: none;
 }
 
-a,
-a:visited {
- color: unset;
+button {
+ color: inherit;
+ background-color: transparent;
+ padding: 0;
+ border: none;
+ cursor: pointer;
 }
 
-.topic>a:not(:hover)>figure>figcaption {
+.topic>button:not(:hover)>figure>figcaption {
  opacity: 0%;
 }
 
-.topic>a:hover {
+.topic>button:hover {
  transform: scale(1.05);
  outline: 4px solid var(--fg-fade1);
  outline-offset: 6px;
 }
 
-.topic>a>figure>img {
- width: 32vmin;
- height: 18vmin;
+.topic>button>figure>img {
+ width: max(250px, 45vmin);
  display: block;
 }
 
 dialog {
  display: flex;
- top: calc(var(--toolbar-height) / 3);
- bottom: calc(var(--toolbar-height) / 3);
- left: calc(var(--toolbar-height) / 3);
- right: calc(var(--toolbar-height) / 3);
- background-color: #000a;
+ flex-flow: column;
+ top: var(--toolbar-height);
+ bottom: 0;
+ left: 0;
+ right: 0;
+ background: var(--bg-shade1);
  width: unset;
  height: unset;
  min-width: unset;
  min-height: unset;
  padding: 0;
  margin: 0;
- justify-content: stretch;
- position: fixed;
- z-index: 1;
- box-shadow: 0 0 calc(var(--toolbar-height) / 3) #000, 0 0 0 calc(var(--toolbar-height) / 1.9) var(--bg-shade1);
-}
-
-dialog>div {
- top: calc(var(--toolbar-height) * (4 / 3));
- right: calc(var(--toolbar-height) / 3);
- left: calc(var(--toolbar-height) / 3);
- bottom: calc(var(--toolbar-height) / 3);
- flex: 1;
  color: var(--fg-fade1);
- background: var(--bg-shade1);
  position: fixed;
  overflow: hidden;
  overflow-y: auto;
+ outline: none;
+ border: none;
 }
 
-dialog>div>img {
+dialog>img {
  width: 100vw;
  height: calc(100vw / 16 * 9);
 }
 
-dialog>div>h3 {
+dialog>h3 {
  font-size: 23px;
  padding: 0 16px;
 }
@@ -157,7 +149,7 @@ dialog>div>h3 {
  pointer-events: all;
 }
 
-dialog>div>p {
+dialog>p {
  position: relative;
  padding: 0 16px;
 }
@@ -166,9 +158,9 @@ dialog>div>p {
  position: fixed;
  display: block;
  text-decoration: none;
- top: calc(var(--toolbar-height) / 3);
- left: calc(var(--toolbar-height) / 3);
- right: calc(var(--toolbar-height) / 3);
+ top: 0;
+ left: 0;
+ right: 0;
  height: var(--toolbar-height);
  cursor: pointer;
  border: none;
@@ -186,17 +178,16 @@ dialog>div>p {
   --info-width: min(40vw, 365px);
  }
 
- dialog>div {
+ dialog {
   padding-right: calc(100vw - var(--info-width));
  }
 
- dialog>div>a,
- dialog>div>a:visited {
+ dialog>button {
   width: calc(var(--info-width) - var(--spacing) * 2);
  }
 
- dialog>div>img,
- dialog>div::after {
+ dialog>img,
+ dialog::after {
   position: absolute;
   z-index: -1;
   width: calc(100vw - var(--info-width));
@@ -206,7 +197,7 @@ dialog>div>p {
   height: calc((100vw - var(--info-width)) / 16 * 9);
  }
 
- dialog>div::after {
+ dialog::after {
   content: "";
   background: linear-gradient(to right, var(--bg-shade1), transparent 25%);
  }
@@ -229,8 +220,8 @@ dialog>div>p {
  pointer-events: none;
 }
 
-#promo>a,
-#promo>a>img {
+#promo>button,
+#promo>button>img {
  display: block;
  width: 100%;
 }

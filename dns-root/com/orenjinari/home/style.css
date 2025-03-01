@@ -49,7 +49,7 @@
 .placeholder {
  width: 100vw;
  height: var(--h);
- box-shadow: inset 0 0 0 8vw var(--fg-fade3);
+ box-shadow: inset 0 0 0 8vw var(--fg-fade4);
  position: relative;
 }
 
@@ -68,7 +68,7 @@
  margin: 0;
  padding: 0;
  font-size: 25vw;
- color: var(--fg-fade3);
+ color: var(--fg-fade5);
 }
 
 .placeholder .thin {

@@ -1,2 +1,2 @@
-inherit.container.innerHTML = `<h1>503</h1><span id=float><img src="${app.resolve("icon.uri", "fallback-icon.svg")}"><span class=thin>${app.host}</span><span>is coming soon.</span></span>`
+inherit.container.innerHTML = `<h1>503</h1><span id=float><img src="${app.resolve("icon.uri", "fallback-icon.svg")}"><span class=thin>${app.niceName ?? app.host}</span><span>is coming soon.</span></span>`
 inherit.styleSheet.replaceSync(part.framework.resolve("style.css"))

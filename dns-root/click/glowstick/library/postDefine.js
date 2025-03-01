@@ -1,0 +1,1 @@
+part.nowPlaying = part["now-playing.glowstick.click"]

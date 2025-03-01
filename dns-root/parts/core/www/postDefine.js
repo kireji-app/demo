@@ -1,0 +1,1 @@
+part.niceName = "parts ⊃ core"

@@ -1,2 +1,2 @@
 part.niceName = "Light Mode"
-part.symbol = "☀️🔆"
+part.symbol = "☀️"

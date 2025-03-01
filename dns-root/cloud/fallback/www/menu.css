@@ -1,3 +1,12 @@
 body>main {
  height: var(--h);
 }
+
+#toolbar {
+ box-shadow: none;
+ background: transparent;
+}
+
+#home {
+ display: none
+}

@@ -11,16 +11,17 @@ if (Framework.tags.includes("dev")) addEventListener("focus", () => reg.update()
 
 Object.assign(globalThis, {
  worker,
- client: Object.assign(part, {
-  requestedAppHost: root.isDebug ? await(await fetch("https://core.parts/debug.host")).text() : location.host,
-  gpu: navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
- }),
  element: (parent, tagname) => parent.appendChild(document.createElement(tagname)),
  spacer: parent => {
   const spacer = element(parent, "")
   spacer.setAttribute("class", "spacer")
   return spacer
  }
+})
+
+Object.assign(client, {
+ requestedAppHost: root.isDebug ? await(await fetch("https://core.parts/debug.host")).text() : location.host,
+ gpu: navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
 })
 
 client.choice[root.primaryLayer] = client[client.requestedAppHost] ?? client[Framework.fallbackHost]

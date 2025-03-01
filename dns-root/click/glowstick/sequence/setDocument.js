@@ -46,3 +46,10 @@ part.styleSheet.replaceSync(read("player.css"))
 part.oldThrottleDuration = app.throttleDuration
 app.throttleDuration = part.oldThrottleDuration // 5000
 document.adoptedStyleSheets.push(part.styleSheet, part.animatedStyleSheet)
+
+part.oldonclick = app.homeButton.onclick
+app.homeButton.onclick = () => title.setLayer(LAYER, 0n)
+part.oldicon = app.homeIcon
+app.homeIcon.remove()
+part.oldhomelabel = app.homeLabel.textContent
+app.homeLabel.innerHTML = "❮&nbsp;&nbsp;" + title.niceName

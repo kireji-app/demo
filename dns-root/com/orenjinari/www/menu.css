@@ -4,11 +4,10 @@
  color: black;
 }
 
-#home .label {
+#home-label {
  display: none
 }
 
 body {
  overflow-y: scroll;
- background-color: white;
 }
