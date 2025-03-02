@@ -10,6 +10,10 @@ import {
  writeFileSync as writeFile
 } from 'fs'
 class Framework {
+ static change = {
+  breaksAPI: false,
+  extendsAPI: false
+ }
  static parts = []
  static cores = []
  static vlqBase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -302,6 +306,26 @@ Framework.tags = (() => {
  }
  if (branchName !== "main") result.push(branchName)
  result.unshift(commitTag)
+ result.versionTags = result[0].split(".").map(n => parseInt(n))
+  ; ([result.major, result.minor, result.patch] = result.versionTags)
+ result.getNextVersion = () => {
+  const cloneTags = [...result.versionTags]
+  if (result.major === 0) {
+   if (Framework.change.breaksAPI) {
+    cloneTags[1]++
+    cloneTags[2] = 0
+   } else cloneTags[2]++
+  } else {
+   if (Framework.change.breaksAPI) {
+    cloneTags[0]++
+    cloneTags[1] = cloneTags[2] = 0
+   } else if (Framework.change.extendsAPI) {
+    cloneTags[1]++
+    cloneTags[2] = 0
+   } else cloneTags[2]++
+  }
+  return cloneTags.join(".")
+ }
  return result
 })()
 
@@ -371,3 +395,9 @@ if (itemExists(Framework.clientRoot))
 makeFolder(Framework.clientRoot)
 writeFile(Framework.clientRoot + "/index.html", Framework.indexHTML)
 writeFile(Framework.clientRoot + "/" + Framework.clientScriptURL, Framework.compile())
+
+const readmeURL = "README.md"
+const readmeBody = readFile("README.md", "utf-8")
+const nextVersionNumber = Framework.tags.major + Framework.tags.minor + Framework.tags.patch
+const readmeVersionBody = readmeBody.replace(/version-\d+\.\d+\.\d+/, "version-" + Framework.tags.getNextVersion())
+writeFile('README.md', readmeVersionBody)
