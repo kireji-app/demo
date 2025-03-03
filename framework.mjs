@@ -30,6 +30,7 @@ class Framework {
  static clientScriptURL = "framework.js"
  static asyncContextURL = "asyncContext.js"
  static postConstructorURL = "postDefine.js"
+ static templateContextURL = "templateContext.js"
  static constructorArgumentsURL = "define.args"
  static BaseType = null
  static archive = null
@@ -42,7 +43,7 @@ class Framework {
   setDocument: ["LAYER"],
   unsetDocument: ["LAYER"],
   updateDocument: ["LAYER"],
-  initialize: [],
+  initialize: []
  }
  static log(...data) {
   if (this.tags.includes("dev") && this.isVerbose) console.log(...data)
@@ -81,7 +82,7 @@ class Framework {
     this.addLines(string.split("\n"), srcIndex, ogLn, ogCol, indent, mapTokens)
    },
    packAndMap(url) {
-    return this.lines.join("\n") + (Framework.tags.includes("dev") ? `
+    return this.lines.join("\n") + (Framework.isDebug ? `
 //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${Framework.btoaUnicode(this.getMap())}${url ? `
 //${"#"} sourceURL=${url}` : ""}` : "")
    },
@@ -119,7 +120,7 @@ class Framework {
   this.file.addSection(`
 Framework.tags = ${JSON.stringify(this.tags)}
 Framework.archive = ${JSON.stringify(this.archive)}
-Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
+Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
   return this.file.packAndMap()
  }
  static encodeSourceMap(decodedMappings) {
@@ -148,8 +149,12 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
    }).join('')
   }).join(","))).join(";")
  }
+ static get isDebug() {
+  return this.tags.includes("dev") || this.tags.includes("local")
+ }
  asyncMethods = {}
  get archive() { return Framework.archive[this.host] }
+ generatedFileCache = {}
  constructor(host, options) {
   if (!host) throw "undefined host"
   this.host = host
@@ -192,65 +197,73 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
   this.file.addSection(`(
     class Type // is ${this.host}
   extends Base // is ${this.isBase ? "Native Array" : this.baseHost}
-{`, this.buildSource, 185/* here */)
+{`, this.buildSource, 193/* here */)
  }
  compileConstructor() {
   this.constructorArguments = this.has(Framework.constructorArgumentsURL) ? this.read(Framework.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) : this.isBase ? [] : this.BaseType.framework.constructorArguments
   if (this.has(Framework.constructorURL) || this.has(Framework.postConstructorURL)) {
-   this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 193/* here */, 28, " ", false)
+   this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 201/* here */, 28, " ", false)
    if (this.has(Framework.constructorURL)) {
     this.constructorBody = this.read(Framework.constructorURL)
     this.constructorSource = this.file.addSource(Framework.constructorURL, this.constructorBody)
     this.file.addLines(this.constructorBody.split("\n"), this.constructorSource, 0, 0, "  ")
-   } else this.file.addLine(`super(${this.isBase ? "" : this.constructorArguments.join(", ")})`, this.buildSource, 198/* here */, 35, "  ", false)
+   } else this.file.addLine(`super(${this.isBase ? "" : this.constructorArguments.join(", ")})`, this.buildSource, 206/* here */, 35, "  ", false)
    if (this.has(Framework.postConstructorURL)) {
     this.addContext()
     this.postConstructorBody = this.read(Framework.postConstructorURL)
     this.postConstructorSource = this.file.addSource(Framework.postConstructorURL, this.postConstructorBody)
     this.file.addLines(this.postConstructorBody.split("\n"), this.postConstructorSource, 0, 0, "  ")
    }
-   this.file.addLine(`}`, this.buildSource, /* here */205, 28, " ")
+   this.file.addLine(`}`, this.buildSource, /* here */213, 28, " ")
   }
  }
  compileMethods() {
-  for (const name in Framework.asyncMethodArguments) {
-   const methodData = this.asyncMethods[name] = {
-    url: `${name}.js`,
-    arguments: Framework.asyncMethodArguments[name],
-    source: undefined,
-    content: undefined
-   }
-   if (!this.has(methodData.url)) continue
-   this.file.addLine(`async ${name}(${methodData.arguments.join(", ")}) {`, this.buildSource, 217/* here */, 23, " ", false)
-   if (Framework.isVerbose)
-    this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 219/* here */, 24, "  ", false)
-   this.addContext(true)
-   methodData.content = this.read(methodData.url)
-   methodData.source = this.file.addSource(methodData.url, methodData.content)
-   const methodLines = methodData.content.split("\n")
-   if (this.isBase) this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
-   else {
-    if (["setDocument", "unsetDocument", "updateDocument"].includes(name)) {
-     this.file.addLine(`await super.${name}(LAYER);`, this.buildSource, 227/* here */, 24, "  ", false)
-     this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
-    } else {
-     let hasSuper = false
-     methodLines.forEach((methodLine, ln) => {
-      const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
-      if (firstMatch) {
-       hasSuper = true
-       methodLine = methodLine.slice(0, firstMatch.index) + `await super.${name}(LAYER, ` + methodLine.slice(firstMatch.index + firstMatch[0].length)
-       this.file.addLine(methodLine, methodData.source, ln, 0, "  ", false)
-      } else
-       this.file.addLine(methodLine, methodData.source, ln, 0, "  ")
-     })
-     if (!hasSuper && name !== "initialize") console.warn(`\x1b[38;5;100mwarning \x1b[38;5;226m${this.host} => ${name}()\x1b[38;5;100m doesn't call super.\x1b[0m`)
-    }
-   }
-   if (Framework.isVerbose)
-    this.file.addLine(`;console.groupEnd()`, this.buildSource, 244/* here */, 24, "  ")
-   this.file.addLine(`}`, this.buildSource, 245/* here */, 23, " ")
+  const templateFilenames = Object.keys(this.archive ?? {}).concat(Object.keys(this.options ?? {})).filter(k => k.endsWith(".js") && k.split('.').length > 2)
+  for (const name of templateFilenames) {
+   this.compileMethod(name, true)
   }
+  for (const name in Framework.asyncMethodArguments) {
+   this.compileMethod(name)
+  }
+ }
+ compileMethod(name, isTemplate) {
+  if (isTemplate) name = name.slice(0, -3)
+  const methodData = this.asyncMethods[name] = {
+   url: `${name}.js`,
+   arguments: isTemplate ? ["REQUEST"] : Framework.asyncMethodArguments[name],
+   source: undefined,
+   content: undefined
+  }
+  if (!isTemplate && !this.has(methodData.url)) return
+  this.file.addLine(`async ["${name}"](${methodData.arguments.join(", ")}) {`, this.buildSource, 234/* here */, 23, " ", false)
+  if (Framework.isVerbose)
+   this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 236/* here */, 24, "  ", false)
+  this.addContext(true, isTemplate)
+  methodData.content = this.read(methodData.url)
+  methodData.source = this.file.addSource(methodData.url, methodData.content)
+  const methodLines = methodData.content.split("\n")
+  if (this.isBase) this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
+  else {
+   if (["setDocument", "unsetDocument", "updateDocument"].includes(name)) {
+    this.file.addLine(`await super["${name}"](LAYER);`, this.buildSource, 244/* here */, 24, "  ", false)
+    this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
+   } else {
+    let hasSuper = false
+    methodLines.forEach((methodLine, ln) => {
+     const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
+     if (firstMatch) {
+      hasSuper = true
+      methodLine = methodLine.slice(0, firstMatch.index) + `await super["${name}"](LAYER, ` + methodLine.slice(firstMatch.index + firstMatch[0].length)
+      this.file.addLine(methodLine, methodData.source, ln, 0, "  ", false)
+     } else
+      this.file.addLine(methodLine, methodData.source, ln, 0, "  ")
+    })
+    if (!hasSuper && name !== "initialize" && !isTemplate) console.warn(`\x1b[38;5;100mwarning \x1b[38;5;226m${this.host} => ${name}()\x1b[38;5;100m doesn't call super.\x1b[0m`)
+   }
+  }
+  if (Framework.isVerbose)
+   this.file.addLine(`;console.groupEnd()`, this.buildSource, 261/* here */, 24, "  ")
+  this.file.addLine(`}`, this.buildSource, 262/* here */, 23, " ")
  }
  closeClass() {
   this.file.addLine("})", this.buildSource, 155, 22)
@@ -259,24 +272,43 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
   return !!this.getSourceObject(filename)
  }
  read(filename, fallback) {
-  return (this.getSourceObject(filename) ?? { [filename]: fallback })[filename]
+  const sourceObject = this.getSourceObject(filename)
+  if (sourceObject) {
+   if (filename in sourceObject) return sourceObject[filename]
+   if ((filename + ".js") in sourceObject) throw new Error(`Cannot use Framework.prototype.read on templated file https://${this.host}/${filename}`)
+  }
+  return fallback
  }
- resolve(filename, fallback) {
+ async resolve(request, fallback, part, url = new URL(request, "https://" + this.host)) {
+  if (url.href in this.generatedFileCache)
+   return this.generatedFileCache[url.href]
+
+  const filename = url.pathname.split("/").pop()
+
   const sourceObject = this.getSourceObject(filename)
 
-  if (sourceObject)
-   return sourceObject[filename]
+  if (sourceObject) {
+   if (filename in sourceObject)
+    return sourceObject[filename]
+
+   if (!part)
+    throw new Error(`Request ${url.href} requires a part instance to resolve templated file on ${this.host}.`)
+
+   return this.generatedFileCache[url.href] = await part[filename](url)
+  }
 
   if ("framework" in this.BaseType)
-   return this.BaseType.framework.resolve(filename, fallback)
+   return await this.BaseType.framework.resolve(filename, fallback, part, url)
 
   return fallback
  }
  getSourceObject(filename) {
-  return this.options && (filename in this.options) ? this.options : this.archive && (filename in this.archive) ? this.archive : undefined
+  const { options = {}, archive } = this
+  if (options && (filename in options || (filename + ".js") in options)) return this.options
+  if (archive && (filename in archive || (filename + ".js") in archive)) return this.archive
  }
- addContext(isAsync = false, file = this.file) {
-  this.BaseType.framework?.addContext(isAsync, file)
+ addContext(isAsync = false, isTemplate = false, file = this.file) {
+  this.BaseType.framework?.addContext(isAsync, isTemplate, file)
   const locallySourced = file === this.file
   const pathPrefix = locallySourced ? "" : file.pathToRoot + "/" + this.pathFromRoot + "/"
   if (this.has(Framework.contextURL)) {
@@ -286,10 +318,13 @@ Framework.initialize()`.slice(1), this.buildSource, 114/* here */, 0, "", false)
   if (isAsync && this.has(Framework.asyncContextURL)) {
    const body = this.read(Framework.asyncContextURL)
    file.addSection(body, file.addSource(pathPrefix + Framework.asyncContextURL, body), 0, 0, "  ")
+   if (isTemplate) {
+    const body = this.read(Framework.templateContextURL)
+    file.addSection(body, file.addSource(pathPrefix + Framework.templateContextURL, body), 0, 0, "  ")
+   }
   }
  }
 }
-
 
 Framework.tags = (() => {
  const result = []
@@ -305,27 +340,22 @@ Framework.tags = (() => {
   commitTag = commitMessage.slice(0, commitMessage.indexOf("\n"))
  }
  if (branchName !== "main") result.push(branchName)
- result.unshift(commitTag)
- result.versionTags = result[0].split(".").map(n => parseInt(n))
-  ; ([result.major, result.minor, result.patch] = result.versionTags)
- result.getNextVersion = () => {
-  const cloneTags = [...result.versionTags]
-  if (result.major === 0) {
-   if (Framework.change.breaksAPI) {
-    cloneTags[1]++
-    cloneTags[2] = 0
-   } else cloneTags[2]++
-  } else {
-   if (Framework.change.breaksAPI) {
-    cloneTags[0]++
-    cloneTags[1] = cloneTags[2] = 0
-   } else if (Framework.change.extendsAPI) {
-    cloneTags[1]++
-    cloneTags[2] = 0
-   } else cloneTags[2]++
-  }
-  return cloneTags.join(".")
+ const semanticVersion = commitTag.split(".").map(x => parseInt(x))
+ if (semanticVersion[0] === 0) {
+  if (Framework.change.breaksAPI) {
+   semanticVersion[1]++
+   semanticVersion[2] = 0
+  } else semanticVersion[2]++
+ } else {
+  if (Framework.change.breaksAPI) {
+   semanticVersion[0]++
+   semanticVersion[1] = semanticVersion[2] = 0
+  } else if (Framework.change.extendsAPI) {
+   semanticVersion[1]++
+   semanticVersion[2] = 0
+  } else semanticVersion[2]++
  }
+ result.unshift(semanticVersion.join("."))
  return result
 })()
 
@@ -369,7 +399,7 @@ Framework.archive = (() => {
  readRecursive("", Framework.domainRoot)
  /*
   const { resolveTxt } = require('dns')
-  const txt = host => new Promise(resolve => resolveTxt(host, (e, TXT) => e ? (console.error(e), process.exit(21)) : resolve(TXT)))
+  const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (console.error(e), process.exit(21)) : give(TXT)))
   const targetHost = "root.core.parts"
   txt(targetHost).then(TXT => {
    for (const txt of TXT) {
@@ -397,7 +427,6 @@ writeFile(Framework.clientRoot + "/index.html", Framework.indexHTML)
 writeFile(Framework.clientRoot + "/" + Framework.clientScriptURL, Framework.compile())
 
 const readmeURL = "README.md"
-const readmeBody = readFile("README.md", "utf-8")
-const nextVersionNumber = Framework.tags.major + Framework.tags.minor + Framework.tags.patch
-const readmeVersionBody = readmeBody.replace(/version-\d+\.\d+\.\d+/, "version-" + Framework.tags.getNextVersion())
-writeFile('README.md', readmeVersionBody)
+const readmeBody = readFile(readmeURL, "utf-8")
+const readmeVersionBody = readmeBody.replace(/version-\d+\.\d+\.\d+/, "version-" + Framework.tags.join("-"))
+writeFile(readmeURL, readmeVersionBody)

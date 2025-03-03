@@ -1,10 +1,12 @@
+part.framework = part.constructor.framework
+part.host = part.framework.host
 part.size = 1n
 part.index = 0
 part.state = [-1n, -1n]
 part.id = Framework.parts.push(part) - 1
-part.framework = part.constructor.framework
-part.resolve = (...args) => part.framework.resolve(...args)
-part.host = part.framework.host
+part.resolve = async (filename, fallback) => await part.framework.resolve(filename, fallback, part)
+part.createResponse = async filename => await root.createResponse(filename, part.host)
+part.createDataURI = async filename => await root.createDataURI(filename, part.host)
 Object.assign(part, {
  insert(subpart, index, offset = 0n) {
   if (typeof subpart === "string") {

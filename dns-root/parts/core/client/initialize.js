@@ -7,21 +7,20 @@ const channel = new BroadcastChannel("debug-reload")
 channel.onmessage = navigator.serviceWorker.oncontrollerchange = () => location.reload()
 
 document.querySelector('[rel="manifest"]').href = "manifest.json"
-if (Framework.tags.includes("dev")) addEventListener("focus", () => reg.update().catch(navigator.serviceWorker.onmessage))
+if (Framework.isDebug) addEventListener("focus", () => reg.update().catch(navigator.serviceWorker.onmessage))
 
 Object.assign(globalThis, {
  worker,
+ client: Object.assign(part, {
+  requestedAppHost: Framework.isDebug ? await(await fetch("https://core.parts/debug.host")).text() : location.host,
+  gpu: navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
+ }),
  element: (parent, tagname) => parent.appendChild(document.createElement(tagname)),
  spacer: parent => {
   const spacer = element(parent, "")
   spacer.setAttribute("class", "spacer")
   return spacer
  }
-})
-
-Object.assign(client, {
- requestedAppHost: root.isDebug ? await(await fetch("https://core.parts/debug.host")).text() : location.host,
- gpu: navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
 })
 
 client.choice[root.primaryLayer] = client[client.requestedAppHost] ?? client[Framework.fallbackHost]

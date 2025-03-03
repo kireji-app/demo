@@ -23,10 +23,7 @@ part.popup.innerHTML = `
 //  await part.parent.parent.setLayer(LAYER, 0n)
 // }
 part.oldonclick = app.homeButton.onclick
-app.homeButton.onclick = () => {
- console.log(part.parent)
- part.parent.parent.setLayer(LAYER, 0n)
-}
+app.homeButton.onclick = () => part.parent.parent.setLayer(LAYER, 0n)
 part.oldicon = app.homeIcon
 app.homeIcon.remove()
 part.oldhomelabel = app.homeLabel.textContent

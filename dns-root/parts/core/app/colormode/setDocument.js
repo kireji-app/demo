@@ -25,7 +25,7 @@ const blend = (a, b, c = "screen") => {
   }
  }))
 }
-const themeColor = part.parent.framework.resolve("theme.color") ?? "#1f2025"
+const themeColor = await part.parent.resolve("theme.color", "#1f2025")
 const palette = [themeColor.slice(1), "faf9f8"]
 
 inherit.colorModeStyleSheet

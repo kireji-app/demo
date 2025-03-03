@@ -13,7 +13,7 @@ part.bunnies = part.bunnyNames.map((bunnyName, bunnyIndex) => {
  img.onclick = () => part.scroll.setLayer(LAYER, (BigInt(area) * 25000n - 1n))
  const placeholder = element(part.container, "div")
  placeholder.setAttribute("class", "placeholder")
- placeholder.innerHTML = `${root.isDebug ? `<h1>Area ${area}</h1>` : ""}<span id=float><img src="https://${scriptHost}/${bunnyName}.png"><span class=thin>is </span><span>coming soon.</span></span>`
+ placeholder.innerHTML = `${Framework.isDebug ? `<h1>Area ${area}</h1>` : ""}<span id=float><img src="https://${scriptHost}/${bunnyName}.png"><span class=thin>is </span><span>coming soon.</span></span>`
  return img
 })
 

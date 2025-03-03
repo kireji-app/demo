@@ -144,7 +144,7 @@ declare const root: Disjunction & {
  readonly environment: string
  /** The integer that identifies the primary layer, which controls all document rendering. */
  readonly primaryLayer: number
- /** The integer that identifies the staging layer, which doesn't affect document rendering layer. */
+ /** The integer that identifies the staging layer, which doesn't affect document rendering. */
  readonly stagingLayer: number
  /** Sets the staging layer to be a clone of the primary layer. */
  resetStagingLayer(): Promise<void>
