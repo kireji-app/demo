@@ -46,7 +46,7 @@ class Framework {
   initialize: []
  }
  static log(...data) {
-  if (this.tags.includes("dev") && this.isVerbose) console.log(...data)
+  if (this.isDebug && this.isVerbose) console.log(...data)
  }
  static btoaUnicode(str) {
   return btoa(new TextEncoder('utf-8').encode(str)
@@ -341,25 +341,27 @@ Framework.tags = (() => {
  }
  if (branchName !== "main") result.push(branchName)
  const semanticVersion = commitTag.split(".").map(x => parseInt(x))
- if (semanticVersion[0] === 0) {
-  if (Framework.change.breaksAPI) {
-   semanticVersion[1]++
-   semanticVersion[2] = 0
-  } else semanticVersion[2]++
- } else {
-  if (Framework.change.breaksAPI) {
-   semanticVersion[0]++
-   semanticVersion[1] = semanticVersion[2] = 0
-  } else if (Framework.change.extendsAPI) {
-   semanticVersion[1]++
-   semanticVersion[2] = 0
-  } else semanticVersion[2]++
+ if (result.includes("local")) {
+  if (semanticVersion[0] === 0) {
+   if (Framework.change.breaksAPI) {
+    semanticVersion[1]++
+    semanticVersion[2] = 0
+   } else semanticVersion[2]++
+  } else {
+   if (Framework.change.breaksAPI) {
+    semanticVersion[0]++
+    semanticVersion[1] = semanticVersion[2] = 0
+   } else if (Framework.change.extendsAPI) {
+    semanticVersion[1]++
+    semanticVersion[2] = 0
+   } else semanticVersion[2]++
+  }
  }
  result.unshift(semanticVersion.join("."))
  return result
 })()
 
-console.log("Building " + Framework.tags.join("-"))
+console.log("Archiving " + Framework.tags.join("-"))
 
 Framework.archive = (() => {
  const result = {}
@@ -419,6 +421,8 @@ Framework.archive = (() => {
  */
  return result
 })()
+
+console.log("Publishing " + Framework.tags.join("-"))
 if (itemExists(Framework.clientRoot))
  removeItem(Framework.clientRoot, { recursive: true, force: true })
 
@@ -428,5 +432,5 @@ writeFile(Framework.clientRoot + "/" + Framework.clientScriptURL, Framework.comp
 
 const readmeURL = "README.md"
 const readmeBody = readFile(readmeURL, "utf-8")
-const readmeVersionBody = readmeBody.replace(/version-\d+\.\d+\.\d+/, "version-" + Framework.tags.join("-"))
+const readmeVersionBody = readmeBody.replace(/version-\d+\.\d+\.\d+/, "version-" + Framework.tags[0])
 writeFile(readmeURL, readmeVersionBody)
