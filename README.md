@@ -20,7 +20,7 @@ This project is currently in alpha.
 ## Method
 As an array of characters, a URL hash can be considered a [numeral](https://en.wikipedia.org/wiki/Positional_notation) representing integer $`n < k_{\text{max}}`$ in some base $`b`$. This framework uses an alphabet of $`b = 64`$ characters and allows all hashes up to 2000 characters long. This provides a hash cardinality of $`k_{\text{max}} = (64^{2001}-64)/63 ≈ 2.3 * 10^{3612} ≈ 2^{12000}`$, or about 1500 bytes of storage space.
 
-In the same way that a hash is an array of characters, object types in this framework are an array of simpler types. Just like a hash, an object $`O`$ of type $`T_O`$ exists in one of $`k_{T_O}`$ states and represents a positive integer $`n < k_{T_O}`$. When $`O`$'s properties change, so will $`n`$.
+In the same way that a hash is an array of characters, object types in this framework are an array of simpler types. Just like a hash, an object $`O`$ of type $`T_O`$ exists in one of $`k_{T_O}`$ states and represents a positive integer $`n < k_{T_O}`$. When $`O`$'s properties change, so does $`n`$.
 
 We are then able to compute $`\text{hash} \xleftrightarrow{} \text{object state}`$ as a [base conversion](https://en.wikipedia.org/wiki/Positional_notation#Base_conversion). The result is a [perfect hash function](https://en.wikipedia.org/wiki/Perfect_hash_function) for object states.
 
@@ -32,7 +32,7 @@ $`\begin{alignat}{3} &{\text{url}_T}_n &\xleftrightarrow{} &{O_{\text{T}}}_n \\ 
 
 $`\begin{alignat}{3} &{\text{url}_T}_n &\xleftrightarrow{} &\{\;{\text{url}_{T}}_{n_0}, {\text{url}_{T}}_{n_1}, \ldots \} \\ \textcolor{gray}{\text{e.g., }}&\textcolor{#AA8866}{\text{"https://www.example.com\#1u"}} & &\text{\textcolor{#AAAA44}{[}} \\ & & &\quad \textcolor{#AA8866}{\text{"https://subtype.example.com\#9"}}, \\ & & &\quad \textcolor{#AA8866}{\text{"https://subtype.example.com\#4"}} \\ & & &\texttt{\textcolor{#AAAA44}{]}} \end{alignat}`$
 
-All types extend from the same base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array) and has cardinality $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$, meaning it has only one state. The `bigint` value of that state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
+All types exist in a hierarchy where each node ultimately extends from a common base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array) and has cardinality $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$, meaning it has only one state. The `bigint` value of that state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
 
 All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, extend $`\textcolor{#AA8866}{\text{"app.core.parts"}}`$ and have DNS records. Those records point to a server where the static output files `./public/index.html` and `./public/framework.js` are served.
 
@@ -43,7 +43,7 @@ All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, 
 * [glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.2-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.3-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 Version `1.0.0` is under development.
 |Phase|Status
 |-|-
