@@ -54,7 +54,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.22-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.23-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -149,4 +149,5 @@ Version `1.0.0` is under development.
 <br><sub>- The above use cases used in tandem with a search-result style list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.</sub>
 <br><sub>- The above use cases used in tandem with the express purpose of creating a self-hosted self-editing application whether it needs to be rebuilt to reflect changes or updates itself in real-time in response to source code or art asset modifications.</sub>
 <br><sub>- The above use cases used in tandem with a git-like staging and committing system.</sub>
+<br><sub>- The above use cases used in tandem with intentional constraints like no writing with the letter e or painting with restrictions on color palettes especially when these limitations offer an appealing means of reframing a limit on the cardinality of a data type as a desirable feature.</sub>
 <br><sub>- etc.</sub>
