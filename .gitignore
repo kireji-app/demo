@@ -1,10 +1,17 @@
+# This file not only prevents unwanted files from appearing in the git repo,
+#  it prevents them from being packed during the build process.
+
+# Ignore operating system clutter.
 **/.DS_Store
 **/Icon
-**/.well-known
+
+# Ignore cloud build files.
 .env*.local
-.vercel
-.vercel/**
-.vscode
-.vscode/**
-public
-public/**
+.vercel/
+
+# Ignore IDE workspace preferences and plugins.
+.vscode/
+.cspell/
+
+# Don't commit the output directory.
+.public/

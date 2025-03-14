@@ -21,7 +21,7 @@ class Framework {
  static rootHost = "root.core.parts"
  static fallbackHost = "www.fallback.cloud"
  static verbosity = 0
- static clientRoot = "public"
+ static clientRoot = ".public"
  static domainRoot = "dns-root"
  static typeURL = "base.host"
  static contextURL = "context.js"
@@ -305,7 +305,7 @@ get host() { return scriptHost }`.slice(1), this.buildSource, 264/* here */, 0, 
      } else
       this.file.addLine(methodLine, methodData.source, ln, 0, "  ")
     })
-    if (!hasSuper && name !== "initialize" && !isTemplate) console.warn(`\x1b[38;5;100mwarning \x1b[38;5;226m${this.host} => ${name}()\x1b[38;5;100m doesn't call super.\x1b[0m`)
+    if (!hasSuper && name !== "initialize" && !isTemplate) console.warn("\x1b[38;5;100m" + 'warning ' + '\x1b[38;5;226m' + `${this.host} => ${name}()` + "\x1b[38;5;100m" + " doesn't call super." + "\x1b[0m")
    }
   }
   if (Framework.verbosity >= 3)
@@ -468,25 +468,25 @@ Framework.DNSRoot = (() => {
    Framework.log(2, `\x1b[38;5;27m<hosts>\x1b[0m`)
   }
   if (!itemExists(folderPath)) throw new ReferenceError("can't pack nonexistent folder " + folderPath)
-  for (const itemname of readFolder(folderPath)) {
+  for (const itemName of readFolder(folderPath)) {
    const
     folderPath = [Framework.domainRoot, ...(host ? host.split(".").reverse() : [])].join('/'),
-    filePath = folderPath + "/" + itemname
+    filePath = folderPath + "/" + itemName
    if (itemExists(filePath)) {
     const stats = getItemStats(filePath)
     if (stats.isDirectory()) {
-     readRecursive(host ? itemname ? itemname + "." + host : host : itemname ?? "", filePath, indent + tab, tab, directory[itemname] = {})
+     readRecursive(host ? itemName ? itemName + "." + host : host : itemName ?? "", filePath, indent + tab, tab, directory[itemName] = {})
     }
     else if (stats.isFile()) {
      try {
       if (!$(`git check-ignore -v ${filePath}`).includes('.gitignore:')) throw 1
-      Framework.log(2, `\x1b[38;5;239m${indent}${tab}<file name="${itemname}" ignored />\x1b[0m`)
+      Framework.log(2, `\x1b[38;5;239m${indent}${tab}<file name="${itemName}" ignored />\x1b[0m`)
      } catch {
       const
        extension = extname(filePath),
        content = readFile(filePath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
-      Framework.log(2, `\x1b[38;5;28m${indent}${tab}<file name="\x1b[38;5;76m${itemname}\x1b[38;5;28m" />\x1b[0m`)
-      directory[itemname] = content
+      Framework.log(2, `\x1b[38;5;28m${indent}${tab}<file name="\x1b[38;5;76m${itemName}\x1b[38;5;28m" />\x1b[0m`)
+      directory[itemName] = content
      }
     }
    }

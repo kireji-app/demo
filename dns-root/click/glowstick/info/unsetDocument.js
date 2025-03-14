@@ -4,13 +4,13 @@ delete part.backButton
 part.popup.remove()
 delete part.popup
 
-app.homeButton.onclick = part.oldonclick
-delete part.oldonclick
-app.homeIcon = part.oldicon
+app.homeButton.onclick = part.onclickBackup
+delete part.onclickBackup
+app.homeIcon = part.homeIconBackup
 app.homeLabel.before(app.homeIcon)
-delete part.oldicon
-app.homeLabel.textContent = part.oldhomelabel
-delete part.oldhomelabel
+delete part.homeIconBackup
+app.homeLabel.textContent = part.homeLabelBackup
+delete part.homeLabelBackup
 
 delete part.container
 delete part.releaseDate

@@ -22,11 +22,11 @@ part.popup.innerHTML = `
 // part.backButton.onclick = async () => {
 //  await part.parent.parent.setLayer(LAYER, 0n)
 // }
-part.oldonclick = app.homeButton.onclick
+part.onclickBackup = app.homeButton.onclick
 app.homeButton.onclick = () => part.parent.parent.setLayer(LAYER, 0n)
-part.oldicon = app.homeIcon
+part.homeIconBackup = app.homeIcon
 app.homeIcon.remove()
-part.oldhomelabel = app.homeLabel.textContent
+part.homeLabelBackup = app.homeLabel.textContent
 app.homeLabel.innerHTML = "❮&nbsp;&nbsp;Library"
 
 part.playButton = part.popup.querySelector("#play-btn")

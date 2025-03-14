@@ -6,13 +6,13 @@ document.adoptedStyleSheets.pop()
 app.throttleDuration = part.oldThrottleDuration
 part.container.replaceWith(part.oldMain)
 
-app.homeButton.onclick = part.oldonclick
-delete part.oldonclick
-app.homeIcon = part.oldicon
+app.homeButton.onclick = part.onclickBackup
+delete part.onclickBackup
+app.homeIcon = part.homeIconBackup
 app.homeLabel.before(app.homeIcon)
-delete part.oldicon
-app.homeLabel.textContent = part.oldhomelabel
-delete part.oldhomelabel
+delete part.homeIconBackup
+app.homeLabel.textContent = part.homeLabelBackup
+delete part.homeLabelBackup
 
 delete part.frameRequest
 delete part.styleSheet

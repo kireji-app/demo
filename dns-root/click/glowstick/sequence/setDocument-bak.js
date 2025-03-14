@@ -47,9 +47,9 @@ part.oldThrottleDuration = app.throttleDuration
 app.throttleDuration = part.oldThrottleDuration // 5000
 document.adoptedStyleSheets.push(part.styleSheet, part.animatedStyleSheet)
 
-part.oldonclick = app.homeButton.onclick
+part.onclickBackup = app.homeButton.onclick
 app.homeButton.onclick = () => title.setLayer(LAYER, 0n)
-part.oldicon = app.homeIcon
+part.homeIconBackup = app.homeIcon
 app.homeIcon.remove()
-part.oldhomelabel = app.homeLabel.textContent
+part.homeLabelBackup = app.homeLabel.textContent
 app.homeLabel.innerHTML = "❮&nbsp;&nbsp;" + title.niceName
