@@ -14,13 +14,13 @@ This framework can build small-scale, feature-rich applications (such as a short
 
 This project is currently in alpha. See below for the [roadmap](#roadmap) and [live demos](#live-demos).
 ## Method
-As an array of characters, a URL hash can be considered a [numeral](https://en.wikipedia.org/wiki/Positional_notation) representing an integer $`n < k_{\text{max}}`$ in some base $`b`$. This framework uses an alphabet of $`b = 64`$ characters and allows all hashes up to 2000 characters long. This provides a hash cardinality of $`k_{\text{max}} = (64^{2001}-64)/63 ≈ 2.3 * 10^{3612} ≈ 2^{12000}`$, or about 1500 bytes of storage space.
+As an array of characters, a URL hash can be considered a [numeral](https://en.wikipedia.org/wiki/Positional_notation) representing integer $`n < k_{\text{max}}`$ in some base $`b`$. This framework uses an alphabet of $`b = 64`$ characters and allows all hashes up to 2000 characters long. This provides a hash cardinality of $`k_{\text{max}} = (64^{2001}-64)/63 ≈ 2.3 * 10^{3612} ≈ 2^{12000}`$, or about 1500 bytes of storage space.
 
-In the same way that a hash is an array of characters, object types in this framework are an array of simpler types. Just like a hash, an object $`O`$ of type $`T_O`$ exists in one of $`k_{T_O}`$ states and so can represent a positive integer $`n < k_{T_O}`$ which changes when $`O`$'s properties change.
+In the same way that a hash is an array of characters, object types in this framework are an array of simpler types. Just like a hash, an object $`O`$ of type $`T_O`$ exists in one of $`k_{T_O}`$ states and represents a positive integer $`n < k_{T_O}`$. When $`O`$'s properties change, so does $`n`$.
 
 We compute the [perfect hash function](https://en.wikipedia.org/wiki/Perfect_hash_function) $`\text{hash} \xleftrightarrow{} \text{object state}`$ using the same techniques we would use to compute a [base conversion](https://en.wikipedia.org/wiki/Positional_notation#Base_conversion).
 
-Every type is identified by a unique domain name which, combined with a hash, provides a URL for every instance of every data type. This gives us the bijections needed to recover independant type and state information:
+Every type is identified by a unique domain name which, combined with a hash, provides a URL for every instance of every data type. This gives us the bijections needed to recover independent type and state information:
 
 $`\begin{alignat}{3} &{\text{url}_T}_n &\xleftrightarrow{} &(\;\text{host}_{\text{T}}, \text{hash}_n\;) \\ \textcolor{grey}{\text{e.g., }}&\textcolor{#AA8866}{\text{"https://two-digit.example.com\#1u"}} & &\textcolor{#AAAA44}{[\textcolor{#AA8866}{\text{"two-digit.example.com"}}\textcolor{grey}{,} \textcolor{#AA8866}{\text{"1u"}}]}\\\;\\\;\\\;\\\;\\&\text{host}_{\text{T}} &\xleftrightarrow{} &\text{T} = \{\;{O_T}_0,\;{O_T}_1,\;{O_T}_2,\;\ldots,\;{O_T}_{k-1}\;\} \\ \textcolor{gray}{\text{e.g., }}&\textcolor{#AA8866}{\text{"two-digit.example.com"}} & &\textcolor{grey}{\textcolor{#4466AA}{\texttt{const}}\;\textcolor{#88AAEE}{\texttt{part}}\texttt{ = }\textcolor{#4466AA}{\texttt{new class}}\;\textcolor{#33AA88}{\texttt{TwoDigit}}\;\textcolor{#4466AA}{\texttt{extends}}\;\textcolor{#33AA88}{\texttt{Conjunction}}\;\textcolor{#AAAA44}{\texttt{\{}}} \\ & & &\texttt{\textcolor{#BFBFBF}{\quad state} \textcolor{grey}{=} \textcolor{#88AAEE}{-1}\textcolor{#4466AA}{n}} \\ & & &\texttt{\textcolor{#448833}{\quad// compiled from dns-root/com/example/two-digit }} \\ & & &\texttt{\textcolor{#AAAA44}{\}()}}\\\;\\\;\\\;\\\;\\&\text{hash}_n &\xleftrightarrow{} &n \\ \textcolor{gray}{\text{e.g., }}&\texttt{\textcolor{#AA8866}{"1u"}} & &\texttt{\textcolor{#88AAEE}{94}\textcolor{#4466AA}{n}} \end{alignat}`$
 
@@ -37,15 +37,17 @@ All types exist in a hierarchy with each one ultimately extending from a common 
 
 All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$ and extend $`\textcolor{#AA8866}{\text{"app.core.parts"}}`$. These types have associated DNS records pointing to a server hosting the output directory `./public`.
 
-The framework packs all type definitions into `./public/framework.js` which on first visit registers itself as a service worker to serve `manifest.json` and become an offline installable PWA. On window load, it serves itself as the client rumtime framework and recovers its initial state from the window location. On native event (where attached), it updates the client state and window location together.
+The framework packs all type definitions into `./public/framework.js` which on first visit registers itself as a service worker to serve `manifest.json` and become an offline installable PWA. On window load, it serves itself as the client runtime framework and recovers its initial state from the window location. On native event (where attached), it updates the client state and window location together.
 
-Using domain names enables future configuration of type information via DNS. Using the hash instead of query parameters or a pathname enables the user to engage with the app without sending activity to a server which is useful both for user privacy and for reducing the burdon on cloud services. Furthermore, the [URI fragment](https://datatracker.ietf.org/doc/html/rfc3986#section-3.5) is the most appropriate segment for this kind of information.
+Using domain names enables future configuration of type information via DNS. Using the hash instead of query parameters or a pathname enables the user to engage with the app without sending activity to a server which is useful both for user privacy and for reducing the burden on cloud services. Furthermore, the [URI fragment](https://datatracker.ietf.org/doc/html/rfc3986#section-3.5) is the most appropriate segment for this kind of information.
 
-Hashes should not be hard-coded anywhere in an application's source. Instead, a staging layer allows parts to stage an arbitrary number of operations on the current state in order to obtain a URL to another state without affecting the current data model and URL. This enables anchor links like $`\text{\textcolor{grey}{<\textcolor{#4466AA}{a} \textcolor{#88AAEE}{href}=\textcolor{#AA8866}{"\#1u"}>}}`$ to be generated at runtime.
+Hashes should not be hard-coded anywhere in an application's source. Instead, a staging layer allows parts to stage an arbitrary number of operations on the current state in order to obtain a URL to another state without affecting the current data model and URL. This enables anchor links like `<a href=#1u>` to be generated at runtime.
 
-Semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. However, this will not be put into practice until the project is in beta.
+Finally, semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. However, as the project is in alpha, this feature has not been implemented.
 
 ## Live Demos
+These projects aren't just live demos, they are standalone projects. Some of them I have been trying to build since before I created this framework, and they inspired the creation of this framework.
+
 * [www.kireji.io](https://www.kireji.io) A short-form document editor.
 * [www.core.parts](https://www.core.parts) Interactive documentation for the project.
 * [www.ejaugust.com](https://www.ejaugust.com) My portfolio and blog.
@@ -62,3 +64,78 @@ Version `1.0.0` is under development.
 |**Debug tools, docs**|In progress
 |**Live demos**|In progress
 |**LTS plan**|In progress
+|**Advanced DNS integration**|Planned
+|**Community-curated content**|Planned
+
+## License and Extensions
+<p><sub>I am still selecting a license for this project. As a result, you do not have permission to use, modify, redistribute, etc. this project or any of its methods or parts except for using the live demos and looking through the repo.</sub>
+<p><sub>There is more than one unique feature in this project. It introduces or otherwise brings together for the first time multiple features, including</sub>
+<br><sub>- its integration with DNS</sub>
+<br><sub>- its efficient coding methods</sub>
+<br><sub>- its base-conversion algorithm</sub>
+<br><sub>- its formalized 'part' concept</sub>
+<br><sub>- its single global type schema</sub>
+<br><sub>- its unique social sharing paradigm</sub>
+<br><sub>- its cloud build capabilities</sub>
+<br><sub>- its offline interaction capabilities</sub>
+<br><sub>- its permalink-assigning capabilities</sub>
+<br><sub>- its <a href="https://en.wikipedia.org/wiki/Quine_(computing)">quine-like</a> ability to output itself, a modified version of itself, and/or components and routines used by it.</sub>
+<br><sub>- its live example applications which are meaningful tools and experiences of their own</sub>
+<p><sub>In addition, this document has a project roadmap and list of extensions discussing plans for additional unique features not yet implemented.</sub></p>
+<p><sub>This document and repository serve to establish prior art for these inventions, the obvious extensions that these features inspire, and the upcoming plans for the project. For example,</sub>
+<br><sub>- Storing a type schema or some or all information about one (including but not limited to global type schema like that used in this project) on the DNS.</sub>
+<br><sub>- Storing a framework or some or all information about one (including but not limited to a framework like that used in this project) on the DNS, such as:</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- cloud building capabilities and data</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- source mapping capabilities and data</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- quine-like self-outputting capabilities</sub>
+<br><sub>- Storing any of the aforementioned information in a database.</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- for example, to allow users to curate it.</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- for example, to offer domain name services alongside it.</sub>
+<br><sub>- Resolving some or all information from the DNS at build time.</sub>
+<br><sub>- Resolving some or all information from the DNS at run time.</sub>
+<br><sub>- Using its coding methods to offer services in combination with normal DNS registry or registrar services.</sub>
+<br><sub>- Using the same or similar methods to compress:</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- files or configuration information for DNS</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- files or configuration information for transport</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- Source files like code</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- Other files like multimedia</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- entire applications (such as the examples provided in this repository)</sub>
+<br><sub>- Using the same or similar methods within a stand-alone application, such as:</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that doesn't require a browser</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that is a browser</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that looks or feels like a browser</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that renders information stored on the DNS</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that only requires a small bootstrap and the DNS to begin browsing.</sub>
+<br><sub>- A system in which each domain owner curates type definitions associated with the domain they own.</sub>
+<br><sub>- A video library or video streaming platform that, like `www.glowstick.click`, assigns a URL to every</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- subset (clip)</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- scene</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- act</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- episode</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- frame</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- details page</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- title sorting order</sub>
+<br><sub>- A document editor and/or library that, like `www.kireji.io`, assigns a URL to and optionally allows the direct editing of every</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- word</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- haiku</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- multi-word expression (MWE)</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- linguistic pattern such as</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- every word x depicted in every color y</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- every poem x depicted in every font y</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- every phrasal template x populated with the given expressions Y</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- every phrasal template x along with the opportunity for a user to populate it with words, haikus, MWEs, or phrasal templates such as those</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- selected from a pre-defined list or dictionary</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- user-submitted as an appendix to a pre-defined list or dictionary</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- user-submitted as a a "staged change" to a pre-defined list or dictionary</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- user-submitted as plain text for the purpose of populating a phrasal template</sub>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
+<br><sub>- An IDE-like app that, like `www.core.parts`, can 'look at itself' by assigning a URL and/or state for every component and data type in its type schema or runtime model or which assigns a URL to the meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).</sub>
+<br><sub>- Any of the many other obvious application inspired by the principles that enable this project to work, such as</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every SHA-256 hash</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every SVG with a given path structure</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every outfit possible with a given collection of clothing items</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every possible arrangement of a given collection of interior decorations and furniture</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
+<br><sub>- A blog or editorial website that, like `www.ejaugust.com`, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.</sub>
+<br><sub>- Any one of these examples but with a list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.</sub>
+<br><sub>- etc.</sub>
