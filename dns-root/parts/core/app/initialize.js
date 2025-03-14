@@ -37,7 +37,7 @@ Object.assign(globalThis, {
   parseStateFromAddressbar() {
    let { pathname, search, hash, host } = location
    if (pathname !== "/" || search || !hash || hash.length <= 1) {
-    console.warn('context', location.href)
+    console.warn('lost context', location.href)
     history.replaceState({}, null, `//${host}/${hash ||= "#0"}`)
    }
    let binaryString = "0b"

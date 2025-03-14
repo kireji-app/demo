@@ -11,8 +11,8 @@ import {
 } from 'fs'
 class Framework {
  static change = {
-  breaksAPI: true,
-  extendsAPI: true
+  breaksAPI: false,
+  extendsAPI: false
  }
  static parts = []
  static cores = []
@@ -354,7 +354,7 @@ get host() { return scriptHost }`.slice(1), this.buildSource, 264/* here */, 0, 
   let body = await this.resolve(filename, null, part)
   if (!body) {
 
-   console.warn('404 ' + this.host + "/" + filename)
+   console.warn('404 @' + this.host + "/" + filename)
    body = ""
   }
   return `data:${type};base64,${binary ? body : Framework.btoaUnicode(body)}`

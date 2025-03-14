@@ -1,5 +1,3 @@
-console.log("SET " + part.host)
-
 inherit.menu.setAttribute("style", "--menu-tween: 0")
 inherit.menuButton
 

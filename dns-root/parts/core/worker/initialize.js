@@ -1,5 +1,5 @@
 const id = Date.now().toString(32).slice(-3)
-console.log(id, 'evaluating', root.debugHost)
+
 Object.assign(globalThis, {
  server: part,
  cache: {},

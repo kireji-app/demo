@@ -7,5 +7,7 @@ if (STATE >= part.size)
 // if (STATE === part.state[LAYER])
 //  console.warn(`existing state (${STATE}) reassigned to LAYER ${LAYER}. ${part.host}`)
 
-part.previousPrimaryState = part.state[LAYER]
+if (LAYER === root.primaryLayer)
+ part.previousPrimaryState = part.state[LAYER]
+
 part.state[LAYER] = STATE
