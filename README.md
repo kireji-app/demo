@@ -52,7 +52,9 @@ Semantic versioning can be used to associate a hash with the version of the type
    - For example, new apps and non-breaking increases to the cardinality of existing web apps
 2. Whether any breaking changes were made to any published apps since the last commit
    - For example, any moved or removed resources that were once published to public URLs
-However, as the project is in alpha, LTS for more than the most current version of the schema has not been implemented.
+
+
+The project is still in alpha and there will be no LTS until version 1.0.0 or later.
 
 ## Live Demos
 These projects aren't just live demos, they are standalone projects. Some of them I have been trying to build since before I created this framework, and they inspired the creation of this framework.
@@ -64,7 +66,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.orenjinari.com](https://www.orenjinari.com) An artist portfolio which includes images, animations, interaction and video streaming.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.31-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.32-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
