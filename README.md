@@ -63,7 +63,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.26-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.27-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -121,7 +121,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that only requires a small bootstrap and the DNS to begin browsing.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br><sub>- A system in which each domain owner curates type definitions associated with the domain(s) they own.</sub>
-<br><sub>- A video library or video streaming platform that, like $`\textcolor{#AA8866}{\text{"www.glowstick.click"}}`$, assigns a URL to and optionally allows the direct editing of every</sub>
+<br><sub>- A video library or video streaming platform that, like </sub>$`\textcolor{#AA8866}{\text{"www.glowstick.click"}}`$<sub>, assigns a URL to and optionally allows the direct editing of every</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- segment ("subset" or "clip") of every video</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- scene of every title</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- act of every movie</sub>
@@ -130,7 +130,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- details page of every episode, show, title, etc.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- way of sorting and viewing the library items</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- A document editor and/or library that, like $`\textcolor{#AA8866}{\text{"www.kireji.io"}}`$, assigns a URL to and optionally allows the direct editing of every</sub>
+<br><sub>- A document editor and/or library that, like </sub>$`\textcolor{#AA8866}{\text{"www.kireji.io"}}`$<sub>, assigns a URL to and optionally allows the direct editing of every</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- word</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- haiku</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- multi-word expression (MWE)</sub>
@@ -146,7 +146,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- etc</sub>
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- An IDE-like app that, like $`\textcolor{#AA8866}{\text{"www.core.parts"}}`$, can 'look at itself' by assigning a URL to and optionally allowing the direct editing of every state of every data type and component defined by a repo, database, or the DNS including a URL to every piece of meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).</sub>
+<br><sub>- A development environment app that, like </sub>$`\textcolor{#AA8866}{\text{"www.core.parts"}}`$<sub>, can 'look at itself' by assigning a URL to and optionally allowing the direct editing of every state of every data type and component defined by a repo, database, or the DNS including a URL to every piece of meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).</sub>
 <br><sub>- Any of the many other obvious applications inspired by the principles that enable this project to work, such as</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every SHA-256 hash</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every SVG with a given path structure</sub>
@@ -154,7 +154,8 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every possible arrangement of a given collection of interior decorations and furniture</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to enumerate (such as to find, index, compare and contrast) a collection of approaches to solving the same computational problem</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- A blog or editorial website that, like $`\textcolor{#AA8866}{\text{"www.ejaugust.com"}}`$, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.</sub>
+<br><sub>- A blog or editorial website that, like </sub>$`\textcolor{#AA8866}{\text{"www.ejaugust.com"}}`$<sub>, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.</sub>
+<br><sub>- A static website that, like </sub>$`\textcolor{#AA8866}{\text{"www.orenjinari.com"}}`$<sub>, presents a third party's own design at their own domain by incorporating it into the global type schema. This gives it access to all other types in the schema and makes all of its content openly available to all other types in the schema, as long as the type graph remains acyclic.</sub>
 <br><sub>- The above use cases used in tandem with a search-result style list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.</sub>
 <br><sub>- The above use cases used in tandem with the express purpose of creating a self-hosted self-editing application whether it needs to be rebuilt to reflect changes or updates itself in real-time in response to source code or art asset modifications.</sub>
 <br><sub>- The above use cases used in tandem with a git-like staging and committing system.</sub>
