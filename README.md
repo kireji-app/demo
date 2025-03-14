@@ -54,7 +54,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.14-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.16-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -79,10 +79,11 @@ Version `1.0.0` is under development.
 <br><sub>- its cloud build capabilities</sub>
 <br><sub>- its offline interaction capabilities</sub>
 <br><sub>- its permalink-assigning capabilities</sub>
-<br><sub>- its <a href="https://en.wikipedia.org/wiki/Quine_(computing)">quine-like</a> ability to output itself, a modified version of itself, and/or components and routines used by it.</sub>
-<br><sub>- its live example applications which are meaningful tools and experiences of their own</sub>
+<br><sub>- its mathematically formalizing and automatically incremented <a href="https://en.wikipedia.org/wiki/Software_versioning#Semantic_versioning">semantic versioning</a> scheme</sub>
+<br><sub>- its <a href="https://en.wikipedia.org/wiki/Quine_(computing)">quine-like</a> ability to output itself, a modified version of itself, and/or a subset of itself including individual components and assets.</sub>
+<br><sub>- its live example applications which are each separate, meaningful tools and experiences of their own</sub>
 <p><sub>In addition, this document has a project roadmap and list of extensions discussing plans for additional unique features not yet implemented.</sub></p>
-<p><sub>This document and repository serve to establish prior art for these inventions, the obvious extensions that these features inspire, and the upcoming plans for the project. For example,</sub>
+<p><sub>This document and repository serve to establish prior art for these inventions, the obvious extensions that these features inspire, my upcoming plans for the project, and my intent to continue to research and develop these lines of inquiry. Among the considered features are the following:</sub>
 <br><sub>- Storing a type schema or some or all information about one (including but not limited to global type schema like that used in this project) on the DNS.</sub>
 <br><sub>- Storing a framework or some or all information about one (including but not limited to a framework like that used in this project) on the DNS, such as:</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- cloud building capabilities and data</sub>
@@ -137,5 +138,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every possible arrangement of a given collection of interior decorations and furniture</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br><sub>- A blog or editorial website that, like `www.ejaugust.com`, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.</sub>
-<br><sub>- Any one of these examples but with a list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.</sub>
+<br><sub>- The above use cases used in tandem with a search-result style list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.</sub>
+<br><sub>- The above use cases used in tandem with the express purpose of creating a self-hosted self-editing application whether it needs to be rebuilt to reflect changes or updates itself in real-time in response to source code or art asset modifications.</sub>
+<br><sub>- The above use cases used in tandem with a git-like staging and committing system.</sub>
 <br><sub>- etc.</sub>
