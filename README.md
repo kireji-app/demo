@@ -64,7 +64,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.orenjinari.com](https://www.orenjinari.com) An artist portfolio which includes images, animations, interaction and video streaming.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.29-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.30-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -85,13 +85,13 @@ Version `1.0.0` is under development.
 <br><sub>- its integration with DNS</sub>
 <br><sub>- its efficient coding methods</sub>
 <br><sub>- its base-conversion algorithm</sub>
-<br><sub>- its formalized 'part' concept</sub>
+<br><sub>- its formal 'part' concept</sub>
 <br><sub>- its single global type schema</sub>
 <br><sub>- its unique social sharing paradigm</sub>
 <br><sub>- its cloud build capabilities</sub>
 <br><sub>- its offline interaction capabilities</sub>
 <br><sub>- its permalink-assigning capabilities</sub>
-<br><sub>- its mathematically formalizing and automatically incremented <a href="https://en.wikipedia.org/wiki/Software_versioning#Semantic_versioning">semantic versioning</a> scheme</sub>
+<br><sub>- its formal automatic <a href="https://en.wikipedia.org/wiki/Software_versioning#Semantic_versioning">semantic versioning</a> concept</sub>
 <br><sub>- its <a href="https://en.wikipedia.org/wiki/Quine_(computing)">quine-like</a> ability to output itself, a modified version of itself, and/or a subset of itself including individual components and assets.</sub>
 <br><sub>- its live example applications which are each separate, meaningful tools and experiences of their own</sub>
 
