@@ -32,7 +32,7 @@ $`\begin{alignat}{3} &{\text{url}_T}_n &\xleftrightarrow{} &{O_{\text{T}}}_n \\ 
 
 $`\begin{alignat}{3} &{\text{url}_T}_n &\xleftrightarrow{} &\{\;{\text{url}_{T}}_{n_0}, {\text{url}_{T}}_{n_1}, \ldots \} \\ \textcolor{gray}{\text{e.g., }}&\textcolor{#AA8866}{\text{"https://www.example.com\#1u"}} & &\text{\textcolor{#AAAA44}{[}} \\ & & &\quad \textcolor{#AA8866}{\text{"https://subtype.example.com\#9"}}, \\ & & &\quad \textcolor{#AA8866}{\text{"https://subtype.example.com\#4"}} \\ & & &\texttt{\textcolor{#AAAA44}{]}} \end{alignat}`$
 
-All types exist in a hierarchy where each node ultimately extends from a common base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array) and has cardinality $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$, meaning it has only one state. The `bigint` value of that state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
+All types exist in a hierarchy with each one ultimately extending from a common base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array) and has cardinality $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$, meaning it has only one state. The `bigint` value of that state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
 
 All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, extend $`\textcolor{#AA8866}{\text{"app.core.parts"}}`$ and have DNS records. Those records point to a server where the static output files `./public/index.html` and `./public/framework.js` are served.
 
@@ -43,7 +43,7 @@ All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, 
 * [glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.3-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.4-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 Version `1.0.0` is under development.
 |Phase|Status
 |-|-
