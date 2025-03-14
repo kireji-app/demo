@@ -54,7 +54,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.20-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.21-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -96,13 +96,13 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br><sub>- Resolving some or all information from the DNS at build time.</sub>
 <br><sub>- Resolving some or all information from the DNS at run time.</sub>
-<br><sub>- Using its coding methods to offer services in combination with normal DNS registry or registrar services.</sub>
-<br><sub>- Using the same or similar methods to compress:</sub>
+<br><sub>- Using these methods in combination with normal DNS registry or registrar services.</sub>
+<br><sub>- Using these methods to compress:</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- files or configuration information for DNS</sub>
-<br>&nbsp;&nbsp;&nbsp;<sub>- files or configuration information for transport</sub>
-<br>&nbsp;&nbsp;&nbsp;<sub>- Source files like code</sub>
-<br>&nbsp;&nbsp;&nbsp;<sub>- Other files like multimedia</sub>
-<br>&nbsp;&nbsp;&nbsp;<sub>- entire applications (such as the examples provided in this repository)</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- files or configuration information for HTTP/S</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- It's own source files or other plain text files</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- Binary files like multimedia</sub>
+<br>&nbsp;&nbsp;&nbsp;<sub>- Entire applications and schemas (such as the applications and global schema of this project)</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br><sub>- Using the same or similar methods within a stand-alone application, such as:</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that doesn't require a browser</sub>
