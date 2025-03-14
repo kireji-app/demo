@@ -33,17 +33,26 @@ URLs can now act as file literals which readily break down into smaller componen
 $`\begin{alignat}{3} &{\text{url}_T}_n &\xleftrightarrow{} &\{\;{\text{url}_{T}}_{n_0}, {\text{url}_{T}}_{n_1}, \ldots \} \\ \textcolor{gray}{\text{e.g., }}&\textcolor{#AA8866}{\text{"https://two-digit.example.com\#1u"}} & &\text{\textcolor{#AAAA44}{[}} \\ & & &\quad \textcolor{#AA8866}{\text{"https://one-digit.example.com\#9"}}, \\ & & &\quad \textcolor{#AA8866}{\text{"https://one-digit.example.com\#4"}} \\ & & &\texttt{\textcolor{#AAAA44}{]}} \end{alignat}`$
 
 
-All types exist in a hierarchy with each one ultimately extending from a common base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array). A type's cardinality and state are [bigints](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt). The base type has a cardinality of $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$ and its one state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
+All types exist in a hierarchy with each one ultimately extending from a common base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array). A type's cardinality and state are [bigint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) primitives. The base type has a cardinality of $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$ and its one state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
 
 All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$ and extend $`\textcolor{#AA8866}{\text{"app.core.parts"}}`$. These types have associated DNS records pointing to a server hosting the output directory `./public`.
 
 The framework packs all type definitions into `./public/framework.js` which on first visit registers itself as a service worker to serve `manifest.json` and become an offline installable PWA. On window load, it serves itself as the client runtime framework and recovers its initial state from the window location. On native event (where attached), it updates the client state and window location together.
 
-Using domain names enables future configuration of type information via DNS. Using the hash instead of query parameters or a pathname enables the user to engage with the app without sending activity to a server which is useful both for user privacy and for reducing the burden on cloud services. Furthermore, the [URI fragment](https://datatracker.ietf.org/doc/html/rfc3986#section-3.5) is the most appropriate segment for this kind of information.
+The root part ($`\textcolor{#AA8866}{\texttt{"root.core.parts"}}`$) is instantiated explicitly by `framework.js` at start up. All other parts are instantiated by their parent part when the application launches. This creates a global uniform data structure representing the state of the entire runtime. It's subparts represent the state of various aspects of the runtime.
+
+Using the hash instead of query parameters or a pathname enables the user to engage with the app without sending activity to a server which is useful both for user privacy and for reducing the burden on cloud services. Furthermore, the [URI fragment](https://datatracker.ietf.org/doc/html/rfc3986#section-3.5) is the most appropriate segment for this kind of information.
 
 Hashes should not be hard-coded anywhere in an application's source. Instead, a staging layer allows parts to stage an arbitrary number of operations on the current state in order to obtain a URL to another state without affecting the current data model and URL. This enables anchor links like `<a href=#1u>` to be generated at runtime.
 
-Finally, semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. However, as the project is in alpha, this feature has not been implemented.
+Using domain names for all types enables configuration of type information via DNS.
+
+Semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. This project does implement a per-commit automatic semantic versioning method which relies on indicating two booleans about the API at commit time.
+1. whether any new apps were published or new end points were added to the existing published apps since the last commit
+   - For example, new apps and non-breaking increases to the cardinality of existing web apps
+2. whether any breaking changes were made to any published apps since the last commit
+   - For example, any moved or removed resources that were once published to public URLs
+However, as the project is in alpha, LTS for more than the most current version of the schema has not been implemented.
 
 ## Live Demos
 These projects aren't just live demos, they are standalone projects. Some of them I have been trying to build since before I created this framework, and they inspired the creation of this framework.
@@ -54,7 +63,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.25-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.26-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -112,7 +121,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that only requires a small bootstrap and the DNS to begin browsing.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br><sub>- A system in which each domain owner curates type definitions associated with the domain(s) they own.</sub>
-<br><sub>- A video library or video streaming platform that, like `www.glowstick.click`, assigns a URL to and optionally allows the direct editing of every</sub>
+<br><sub>- A video library or video streaming platform that, like $`\textcolor{#AA8866}{\text{"www.glowstick.click"}}`$, assigns a URL to and optionally allows the direct editing of every</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- segment ("subset" or "clip") of every video</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- scene of every title</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- act of every movie</sub>
@@ -121,7 +130,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- details page of every episode, show, title, etc.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- way of sorting and viewing the library items</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- A document editor and/or library that, like `www.kireji.io`, assigns a URL to and optionally allows the direct editing of every</sub>
+<br><sub>- A document editor and/or library that, like $`\textcolor{#AA8866}{\text{"www.kireji.io"}}`$, assigns a URL to and optionally allows the direct editing of every</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- word</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- haiku</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- multi-word expression (MWE)</sub>
@@ -137,7 +146,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- etc</sub>
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- An IDE-like app that, like `www.core.parts`, can 'look at itself' by assigning a URL to and optionally allowing the direct editing of every state of every data type and component defined by a repo, database, or the DNS including a URL to every piece of meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).</sub>
+<br><sub>- An IDE-like app that, like $`\textcolor{#AA8866}{\text{"www.core.parts"}}`$, can 'look at itself' by assigning a URL to and optionally allowing the direct editing of every state of every data type and component defined by a repo, database, or the DNS including a URL to every piece of meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).</sub>
 <br><sub>- Any of the many other obvious applications inspired by the principles that enable this project to work, such as</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every SHA-256 hash</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every SVG with a given path structure</sub>
@@ -145,7 +154,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to browse or link to every possible arrangement of a given collection of interior decorations and furniture</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a way to enumerate (such as to find, index, compare and contrast) a collection of approaches to solving the same computational problem</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- A blog or editorial website that, like `www.ejaugust.com`, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.</sub>
+<br><sub>- A blog or editorial website that, like $`\textcolor{#AA8866}{\text{"www.ejaugust.com"}}`$, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.</sub>
 <br><sub>- The above use cases used in tandem with a search-result style list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.</sub>
 <br><sub>- The above use cases used in tandem with the express purpose of creating a self-hosted self-editing application whether it needs to be rebuilt to reflect changes or updates itself in real-time in response to source code or art asset modifications.</sub>
 <br><sub>- The above use cases used in tandem with a git-like staging and committing system.</sub>
