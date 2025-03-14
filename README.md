@@ -12,7 +12,11 @@ Using a straightforward approach, all user-configurable state information is com
 
 This framework can build small-scale, feature-rich applications (such as a short-form document editor or an icon painting utility) that let users create something offline and share a public link to it without uploading anything.
 
-This project is currently in alpha. See below for links to live demos.
+This project is currently in alpha.
+
+[Click here](#roadmap) to see the roadmap.
+
+[Click here](#examples) for links to live demos.
 ## Method
 As an array of characters, a URL hash can be considered a [numeral](https://en.wikipedia.org/wiki/Positional_notation) representing integer $`n < k_{\text{max}}`$ in some base $`b`$. This framework uses an alphabet of $`b = 64`$ characters and allows all hashes up to 2000 characters long. This provides a hash cardinality of $`k_{\text{max}} = (64^{2001}-64)/63 ≈ 2.3 * 10^{3612} ≈ 2^{12000}`$, or about 1500 bytes of storage space.
 
@@ -38,7 +42,8 @@ All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, 
 * [ejaugust.com](https://www.ejaugust.com) My portfolio and blog.
 * [glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
-## Roadmap<br>![version](https://img.shields.io/badge/version-0.100.1-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+## Roadmap
+![version](https://img.shields.io/badge/version-0.100.2-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 Version `1.0.0` is under development.
 |Phase|Status
 |-|-
