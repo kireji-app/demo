@@ -42,6 +42,7 @@ h1 {
 img {
  width: 64px;
  height: 64px;
+ border-radius: calc(64px * 0.2);
 }
 
 #host {

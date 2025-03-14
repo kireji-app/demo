@@ -55,16 +55,6 @@ Object.assign(globalThis, {
    return hexads.reduce((hash, hexad) => hash + app.radix[parseInt(hexad, 2)], "")
   },
   async stageState(target, state, resetStagingLayer = false) {
-   /*
-    // if the staged state is in a different app...
-    e.preventDefault()
-    let thatState = 0n
-    for (const host of read("preferences.host").split(/\s+/g)) {
-     if (host in app && host in that) thatState += app[host].state[LAYER] * that[host].conjunctionDivisor
-    }
-    location = "https://" + appHost + "#" + app.encodeState(thatState)
-   */
-   // TODO: a preferences event space. For any staged state user, we are attaching to preferences. There should be a callback list ...
    if (resetStagingLayer) await root.resetStagingLayer()
    await target.setLayer(root.stagingLayer, state)
    return "#" + app.encodeState(app.state[root.stagingLayer])

@@ -1,0 +1,8 @@
+body>main {
+ height: var(--h);
+}
+
+app-toolbar {
+ box-shadow: none;
+ background: transparent;
+}

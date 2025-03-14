@@ -1,1 +1,3 @@
-super(["scroll"])
+super({
+ scroll: "scroll"
+})

@@ -5,4 +5,4 @@ const {
  hash: HASH
 } = REQUEST
 const FILENAME = PATH.split('/').pop()
-const [TYPE, ENCODED] = root.headerOf(FILENAME)
+const [TYPE, ENCODED] = Framework.headerOf(FILENAME)

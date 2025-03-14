@@ -1,4 +1,4 @@
-super([
- "readme.kireji.io",
- "editor.kireji.io"
-])
+super({
+ readme: "readme.kireji.io",
+ editor: "editor.kireji.io"
+})

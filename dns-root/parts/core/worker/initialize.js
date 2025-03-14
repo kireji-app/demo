@@ -1,3 +1,5 @@
+const id = Date.now().toString(32).slice(-3)
+console.log(id, 'evaluating', root.debugHost)
 Object.assign(globalThis, {
  server: part,
  cache: {},
@@ -5,27 +7,27 @@ Object.assign(globalThis, {
   const { pathname, host: requestedHost } = new URL(e.request.url)
   const host = requestedHost.startsWith("localhost:") || requestedHost.endsWith(".vercel.app") ? root.debugHost : requestedHost
   const filename = pathname.split("/").pop() || "index.html"
-  if (filename === "debug.host") return await root.createResponse(filename, host)
-  return (cache[host + pathname] ??= await root.createResponse(filename, host)).clone()
+  if (filename === "debug.host") return new Response(root.debugHost, { headers: { "content-type": "text/plain" } })
+  const cacheKey = host + pathname
+
+  if (!(cacheKey in cache)) {
+   const part = await Framework.getPartFromRoot(host)
+   if (part) cache[cacheKey] = await part.createResponse(filename)
+   else console.warn("404 @ " + host)
+  }
+
+  return cache[cacheKey]?.clone()
  })()),
- oninstall: e => {
-  globalThis.skipWaiting()
- },
  onactivate: e => globalThis.clients.claim(),
  onmessage: e => ({
-  claim: onactivate,
-  "debug-host"() {
-   root.debugHost = e.data.host
+  claim() {
+   globalThis.clients.claim()
   },
-  reinstall() {
-   registration.unregister().then(() => {
-    const channel = new BroadcastChannel("debug-reload")
-    channel.postMessage(1)
-    channel.close()
-   })
+  handOff() {
+   root.debugHost = e.data.host
+   globalThis.skipWaiting()
   },
   setDebugHost: () => {
-   console.log("settingDebugHost", e.data)
    root.debugHost = e.data.host
    const channel = new BroadcastChannel("debug-reload")
    channel.postMessage(1)
@@ -33,12 +35,12 @@ Object.assign(globalThis, {
   }
  })[e.data.code]()
 })
+
 registration.onupdatefound = () => {
- if (registration.installing === serviceWorker) return
- const data = {
-  code: 'debug-host',
-  host: root.debugHost
- }
- registration.installing?.postMessage(data)
+ if (registration.installing !== serviceWorker)
+  registration.installing?.postMessage({
+   code: 'handOff',
+   host: root.debugHost
+  })
 }
 server.state[root.primaryLayer] = 0n

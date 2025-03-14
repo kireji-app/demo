@@ -1,1 +1,3 @@
-super(["season-0"], "09/28/2025", "Sample", "This fake documentary follows a fake blood sample through a fake lab procedure.")
+super({
+ season0: "season-0"
+})

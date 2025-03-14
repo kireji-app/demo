@@ -1,6 +1,6 @@
-super([
- "none.now-playing.glowstick.click",
- "space-guy.title.glowstick.click",
- "my-fake-movie.title.glowstick.click",
- "sample.title.glowstick.click",
-])
+super({
+ none: "none.now-playing.glowstick.click",
+ spaceGuy: "space-guy.title.glowstick.click",
+ myFakeMovie: "my-fake-movie.title.glowstick.click",
+ sample: "sample.title.glowstick.click",
+})

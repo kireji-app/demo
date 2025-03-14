@@ -26,8 +26,8 @@ declare const Type: typeof Part
 declare const Base: typeof Part
 /** Available only in `propagateRootward.js`.
 * 
-* The subparts of `part` whose values have changed.*/
-declare var LEAVES: Part[]
+* The key for the subpart (if any) of this part whose value change is propagating.*/
+declare var KEY: string
 /** The integer index of the layer on which propagation is currently taking place.
  * |Filename|Availability
  * |-|-
@@ -39,6 +39,8 @@ declare var LEAVES: Part[]
  * |`setLayer.js`|Some positive integer.
  * |`propagateRootward.js`|Some positive integer.
  * |`propagateLeafward.js`|Some positive integer.
+ * |`updateRootward.js`|Equal to `root.primaryLayer`
+ * |`updateLeafward.js`|Equal to `root.primaryLayer`
  * |`setDocument.js`|Equal to `root.primaryLayer`
  * |`updateDocument.js`|Equal to `root.primaryLayer`
  * |`unsetDocument.js`|Equal to `root.primaryLayer`*/
@@ -166,6 +168,8 @@ declare class Part extends Array<Part> {
  readonly id: number
  /** The domain name used to identify this part's type. */
  readonly host: string
+ /** The child name used to identify this part on its parent. */
+ readonly key: string
  /** The number of states this part can be in. */
  readonly size: bigint
  /** This part's index in it's parent. */
@@ -190,11 +194,13 @@ declare class Part extends Array<Part> {
  readonly stateCache: bigint[]
  /** When parent type is `conjunction.core.parts`, a divisor which the parent conjunction uses to encode and decode substate properties.*/
  readonly conjunctionDivisor: bigint
- insert(value: string | Part, unshift?: boolean): Part
+ insert(key: string, subpart: string, index: number, offset?: bigint): Part
  initialize?(): Promise<void>
  setLayer(LAYER: number, STATE: bigint): Promise<void>
  propagateLeafward(LAYER: number, STATE: bigint): Promise<void>
- propagateRootward(LAYER: number, LEAVES?: Part[]): Promise<void>
+ propagateRootward(LAYER: number, KEY?: string): Promise<void>
+ updateLeafward(LAYER: number,): Promise<void>
+ updateRootward(LAYER: number, KEY?: string): Promise<void>
  setDocument(LAYER: number): Promise<void>
  unsetDocument(LAYER: number): Promise<void>
 }
@@ -242,13 +248,13 @@ declare interface AsyncMethodData {
 declare class Framework {
  static Type: typeof Part | null
  static BaseType: typeof Part | null
- static archive: {} | null
+ static DNSRoot: {} | null
  static tags: string[] | null
  static vlqBase: string
  static baseHost: string
  static indexHTML: string
  static instances: object
- static isVerbose: boolean
+ static verbosity: number
  static clientRoot: string
  static domainRoot: string
  static asyncMethodArguments: AsyncMethodData
@@ -263,13 +269,13 @@ declare class Framework {
  static log(...data: any[]): void
  static createFile(sourceRoot: string): SourceFile
  static createType(host: string, options: SourceDirectory): typeof Part
- static createPart(host: string): Part
+ static createPart(host: string, options: SourceDirectory, parent?: Part): Part
  static initialize(host: string): Promise<void>
  static compile(): string
  static encodeSourceMap(decodedMappings: [[[number]]]): string
  readonly host: string
  readonly asyncMethods: AsyncMethodData
- readonly get archive(): SourceDirectory
+ readonly directory: SourceDirectory
  compile(): void
  openClass(): void
  compileConstructor(): void

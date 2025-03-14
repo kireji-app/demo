@@ -11,8 +11,8 @@ import {
 } from 'fs'
 class Framework {
  static change = {
-  breaksAPI: false,
-  extendsAPI: false
+  breaksAPI: true,
+  extendsAPI: true
  }
  static parts = []
  static cores = []
@@ -20,7 +20,7 @@ class Framework {
  static baseHost = "core.parts"
  static rootHost = "root.core.parts"
  static fallbackHost = "www.fallback.cloud"
- static isVerbose = false
+ static verbosity = 0
  static clientRoot = "public"
  static domainRoot = "dns-root"
  static typeURL = "base.host"
@@ -33,25 +33,36 @@ class Framework {
  static templateContextURL = "templateContext.js"
  static constructorArgumentsURL = "define.args"
  static BaseType = null
- static archive = null
+ static DNSRoot = null
  static tags = null
  static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> <script defer src=/${this.clientScriptURL}></script></head></html>` }
  static asyncMethodArguments = {
+  initialize: [],
   setLayer: ["LAYER", "STATE"],
-  propagateRootward: ["LAYER", "LEAVES"],
   propagateLeafward: ["LAYER", "STATE"],
+  propagateRootward: ["LAYER", "KEY"],
   setDocument: ["LAYER"],
   unsetDocument: ["LAYER"],
   updateDocument: ["LAYER"],
-  initialize: []
+  updateLeafward: ["LAYER"],
+  updateRootward: ["LAYER", "KEY"],
  }
- static log(...data) {
-  if (this.isDebug && this.isVerbose) console.log(...data)
+ static log(verbosity, ...data) {
+  if (this.isDebug && verbosity <= this.verbosity) console.log(...data)
  }
  static btoaUnicode(str) {
   return btoa(new TextEncoder('utf-8').encode(str)
    .reduce((data, byte) => data + String.fromCharCode(byte), '')
   )
+ }
+ static atobUnicode(str) {
+  return btoa(new TextEncoder('utf-8').encode(str)
+   .reduce((data, byte) => data + String.fromCharCode(byte), '')
+  )
+ }
+ static getDirectory(host) {
+  if (!host) return Framework.DNSRoot
+  return host.split(".").reduceRight((dir, subdomainName) => dir?.[subdomainName], Framework.DNSRoot)
  }
  static createFile(pathFromRoot, pathToRoot) {
   return {
@@ -104,10 +115,22 @@ class Framework {
   if (!host) throw "undefined host"
   return new this(host, options).Type
  }
- static createPart(host, options) {
+ static register(part) {
+  part.id = this.parts.push(part) - 1
+  this.parts[part.host] ??= []
+  this.parts[part.host].push(part)
+ }
+ static getPartFromRoot(host) {
+  const part = this.parts[host]?.[0]
+  if (part) return part
+  console.warn('Cannot get part from root which isn\'t in root - ' + host)
+ }
+ static createPart(host, options, parent) {
   if (!host) throw "undefined host"
+  if (typeof host !== "string") throw "invalid host"
+  if (!parent && host !== this.rootHost) throw `non-root part '${host}' must be created with a parent.`
   const T = this.createType(host, options)
-  return new T()
+  return new T(parent)
  }
  static async initialize() {
   this.root = this.createPart(this.rootHost)
@@ -118,9 +141,9 @@ class Framework {
   this.buildSource = this.file.addSource(this.cloudScriptURL, Array(11).fill("\n").join("") + this.toString())
   this.file.addLines(this.toString().split("\n"), this.buildSource, 11/* here */, 0, " ")
   this.file.addSection(`
-Framework.tags = ${JSON.stringify(this.tags)}
-Framework.archive = ${JSON.stringify(this.archive)}
-Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
+  Framework.tags = ${JSON.stringify(this.tags)}
+  Framework.DNSRoot = ${JSON.stringify(this.DNSRoot)}
+  Framework.initialize()`.slice(1), this.buildSource, 122/* here */, 0, "", false)
   return this.file.packAndMap()
  }
  static encodeSourceMap(decodedMappings) {
@@ -149,18 +172,32 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
    }).join('')
   }).join(","))).join(";")
  }
+ static headerOf(filename) {
+  let binary = false
+  const extension = filename.split(".").pop()
+  return [{
+   get "png"() { binary = true; return "image/png" },
+   get "gif"() { binary = true; return "image/gif" },
+   "svg": "image/svg+xml;charset=UTF-8",
+   "js": "text/javascript;charset=UTF-8",
+   "json": "application/json;charset=UTF-8",
+   "html": "text/html;charset=UTF-8",
+   "host": "text/plain"
+  }[extension], binary, extension]
+ }
  static get isDebug() {
   return this.tags.includes("dev") || this.tags.includes("local")
  }
  asyncMethods = {}
- get archive() { return Framework.archive[this.host] }
  generatedFileCache = {}
  constructor(host, options) {
   if (!host) throw "undefined host"
+  if (typeof host !== "string") throw "invalid host"
   this.host = host
   this.options = options
-  if (this.host in Framework.cores) return Framework.cores[this.host]
+  if (!this.options && this.host in Framework.cores) return Framework.cores[this.host]
   Framework.cores[this.host] = this
+  this.directory = Framework.getDirectory(this.host)
   this.isBase = this.host === Framework.baseHost
   this.domains = this.host.split(".").concat(Framework.domainRoot)
   this.pathFromRoot = [...this.domains].reverse().join("/")
@@ -168,6 +205,7 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
    this.baseHost = this.read(Framework.typeURL, Framework.baseHost)
   }
   this.BaseType = this.isBase ? Array : Framework.createType(this.baseHost)
+  if (!this.BaseType) throw "error creating base type " + this.baseHost + " on type " + this.host
   this.pathToRoot = new Array(this.domains.length).fill("..").join("/")
   this.compile()
  }
@@ -180,6 +218,7 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
   this.compileMethods()
   this.closeClass()
   this.script = this.file.packAndMap()
+  // These "unused" constants are available in scope of the eval'd script below.
   const framework = this
   const read = (filename, fallback) => this.read(filename, fallback)
   const scriptHost = this.host
@@ -195,36 +234,43 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
  }
  openClass() {
   this.file.addSection(`(
-    class Type // is ${this.host}
-  extends Base // is ${this.isBase ? "Native Array" : this.baseHost}
-{`, this.buildSource, 193/* here */)
+   class ${this.host.split(".")[0].split("-").map(name => name[0].toUpperCase() + name.slice(1)).join("")} // is ${this.host}
+    extends Base // is ${this.isBase ? "Native Array" : this.baseHost}
+   {`, this.buildSource, 199/* here */)
  }
  compileConstructor() {
-  this.constructorArguments = this.has(Framework.constructorArgumentsURL) ? this.read(Framework.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) : this.isBase ? [] : this.BaseType.framework.constructorArguments
+  this.constructorArguments = this.has(Framework.constructorArgumentsURL) || this.isBase ? ["PARENT", ...(this.isBase ? [] : this.read(Framework.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm))] : this.BaseType.framework.constructorArguments
   if (this.has(Framework.constructorURL) || this.has(Framework.postConstructorURL)) {
-   this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 201/* here */, 28, " ", false)
+   this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 207/* here */, 28, " ", false)
    if (this.has(Framework.constructorURL)) {
     this.constructorBody = this.read(Framework.constructorURL)
     this.constructorSource = this.file.addSource(Framework.constructorURL, this.constructorBody)
-    this.file.addLines(this.constructorBody.split("\n"), this.constructorSource, 0, 0, "  ")
-   } else this.file.addLine(`super(${this.isBase ? "" : this.constructorArguments.join(", ")})`, this.buildSource, 206/* here */, 35, "  ", false)
+    const lines = this.constructorBody.split("\n")
+    const firstLine = lines.shift()
+    if (!firstLine.startsWith("super(")) throw "define.js doesn't start with 'super(' ... " + this.host
+    this.file.addLine(firstLine.replace(/(?<=^super\()/, "PARENT, "), this.constructorSource, 0, 0, "  ", false)
+    if (lines.length)
+     this.file.addLines(lines, this.constructorSource, 1, 0, "  ")
+   } else this.file.addLine(`super(${this.isBase ? "" : this.constructorArguments.join(", ")})`, this.buildSource, 217/* here */, 35, "  ", false)
    if (this.has(Framework.postConstructorURL)) {
     this.addContext()
     this.postConstructorBody = this.read(Framework.postConstructorURL)
     this.postConstructorSource = this.file.addSource(Framework.postConstructorURL, this.postConstructorBody)
     this.file.addLines(this.postConstructorBody.split("\n"), this.postConstructorSource, 0, 0, "  ")
    }
-   this.file.addLine(`}`, this.buildSource, /* here */213, 28, " ")
+   this.file.addLine(`}`, this.buildSource, /* here */224, 28, " ")
   }
  }
  compileMethods() {
-  const templateFilenames = Object.keys(this.archive ?? {}).concat(Object.keys(this.options ?? {})).filter(k => k.endsWith(".js") && k.split('.').length > 2)
-  for (const name of templateFilenames) {
-   this.compileMethod(name, true)
-  }
-  for (const name in Framework.asyncMethodArguments) {
-   this.compileMethod(name)
-  }
+  const templateFilenames = Object.keys(this.directory ?? {}).concat(Object.keys(this.options ?? {})).filter(k => k.endsWith(".js") && k.split('.').length > 2)
+  this.file.addSection(`
+async createResponse(filename) { return await framework.createResponse(filename, this) }
+async createDataURI(filename) { return await framework.createDataURI(filename, this) }
+async resolve(filename, fallback) { return await framework.resolve(filename, fallback, this) }
+get framework() { return framework }
+get host() { return scriptHost }`.slice(1), this.buildSource, 264/* here */, 0, " ", false)
+  for (const name in Framework.asyncMethodArguments) this.compileMethod(name)
+  for (const name of templateFilenames) this.compileMethod(name, true)
  }
  compileMethod(name, isTemplate) {
   if (isTemplate) name = name.slice(0, -3)
@@ -235,9 +281,10 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
    content: undefined
   }
   if (!isTemplate && !this.has(methodData.url)) return
-  this.file.addLine(`async ["${name}"](${methodData.arguments.join(", ")}) {`, this.buildSource, 234/* here */, 23, " ", false)
-  if (Framework.isVerbose)
-   this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 236/* here */, 24, "  ", false)
+  this.file.addLine(`async["${name}"](${methodData.arguments.join(", ")}) {
+ `, this.buildSource, 245/* here */, 23, " ", false)
+  if (Framework.verbosity >= 3)
+   this.file.addLine(`console.groupCollapsed(\`\x1b[38;5;158m${this.host} => ${name}()\x1b[0m\`);`, this.buildSource, 247/* here */, 24, "  ", false)
   this.addContext(true, isTemplate)
   methodData.content = this.read(methodData.url)
   methodData.source = this.file.addSource(methodData.url, methodData.content)
@@ -245,7 +292,7 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
   if (this.isBase) this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
   else {
    if (["setDocument", "unsetDocument", "updateDocument"].includes(name)) {
-    this.file.addLine(`await super["${name}"](LAYER);`, this.buildSource, 244/* here */, 24, "  ", false)
+    this.file.addLine(`await super["${name}"](LAYER);`, this.buildSource, 255/* here */, 24, "  ", false)
     this.file.addLines(methodLines, methodData.source, 0, 0, "  ")
    } else {
     let hasSuper = false
@@ -253,7 +300,7 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
      const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
      if (firstMatch) {
       hasSuper = true
-      methodLine = methodLine.slice(0, firstMatch.index) + `await super["${name}"](LAYER, ` + methodLine.slice(firstMatch.index + firstMatch[0].length)
+      methodLine = methodLine.slice(0, firstMatch.index) + `await super["${name}"](` + (name === "initialize" ? "" : "LAYER, ") + methodLine.slice(firstMatch.index + firstMatch[0].length)
       this.file.addLine(methodLine, methodData.source, ln, 0, "  ", false)
      } else
       this.file.addLine(methodLine, methodData.source, ln, 0, "  ")
@@ -261,9 +308,9 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
     if (!hasSuper && name !== "initialize" && !isTemplate) console.warn(`\x1b[38;5;100mwarning \x1b[38;5;226m${this.host} => ${name}()\x1b[38;5;100m doesn't call super.\x1b[0m`)
    }
   }
-  if (Framework.isVerbose)
-   this.file.addLine(`;console.groupEnd()`, this.buildSource, 261/* here */, 24, "  ")
-  this.file.addLine(`}`, this.buildSource, 262/* here */, 23, " ")
+  if (Framework.verbosity >= 3)
+   this.file.addLine(`;console.groupEnd()`, this.buildSource, 272/* here */, 24, "  ")
+  this.file.addLine(`}`, this.buildSource, 273/* here */, 23, " ")
  }
  closeClass() {
   this.file.addLine("})", this.buildSource, 155, 22)
@@ -278,6 +325,39 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
    if ((filename + ".js") in sourceObject) throw new Error(`Cannot use Framework.prototype.read on templated file https://${this.host}/${filename}`)
   }
   return fallback
+ }
+ async createResponse(request, part) {
+  const url = new URL(request, "https://" + this.host)
+  const filename = url.pathname.split("/").pop()
+  const [type, binary] = Framework.headerOf(filename)
+  let body = await this.resolve(filename, null, part)
+  if (!body) {
+   console.warn('404 @ ' + this.host + "/" + filename)
+   body = new Blob([], { type })
+  } else if (binary) {
+   const B = atob(body), k = B.length, A = new ArrayBuffer(k), I = new Uint8Array(A)
+   for (var i = 0; i < k; i++) I[i] = B.charCodeAt(i)
+   body = new Blob([I], { type })
+  }
+  return new Response(body, {
+   headers: {
+    "content-type": type,
+    expires: "Sun, 20 Jul 1969 20:17:00 UTC",
+    server: "kireji",
+   },
+  })
+ }
+ async createDataURI(request, part) {
+  const url = new URL(request, "https://" + this.host)
+  const filename = url.pathname.split("/").pop()
+  const [type, binary] = Framework.headerOf(filename)
+  let body = await this.resolve(filename, null, part)
+  if (!body) {
+
+   console.warn('404 ' + this.host + "/" + filename)
+   body = ""
+  }
+  return `data:${type};base64,${binary ? body : Framework.btoaUnicode(body)}`
  }
  async resolve(request, fallback, part, url = new URL(request, "https://" + this.host)) {
   if (url.href in this.generatedFileCache)
@@ -302,10 +382,25 @@ Framework.initialize()`.slice(1), this.buildSource, 119/* here */, 0, "", false)
 
   return fallback
  }
+ resolveSync(request, fallback, url = new URL(request, "https://" + this.host)) {
+  const filename = url.pathname.split("/").pop()
+  const sourceObject = this.getSourceObject(filename)
+  if (sourceObject) {
+   if (filename in sourceObject)
+    return sourceObject[filename]
+
+   throw new Error(`Cannot resolve sync on file - template must be async @${url.href} (from ${this.host}).`)
+  }
+
+  if ("framework" in this.BaseType)
+   return this.BaseType.framework.resolveSync(filename, fallback, url)
+
+  return fallback
+ }
  getSourceObject(filename) {
-  const { options = {}, archive } = this
+  const { options = {}, directory } = this
   if (options && (filename in options || (filename + ".js") in options)) return this.options
-  if (archive && (filename in archive || (filename + ".js") in archive)) return this.archive
+  if (directory && (filename in directory || (filename + ".js") in directory)) return this.directory
  }
  addContext(isAsync = false, isTemplate = false, file = this.file) {
   this.BaseType.framework?.addContext(isAsync, isTemplate, file)
@@ -361,17 +456,16 @@ Framework.tags = (() => {
  return result
 })()
 
-console.log("Archiving " + Framework.tags.join("-"))
+Framework.log(0, "Archiving " + Framework.tags.join("-"))
 
-Framework.archive = (() => {
+Framework.DNSRoot = (() => {
  const result = {}
- const readRecursive = (host, folderPath, indent = "", tab = "  ") => {
+ const readRecursive = (host = "", folderPath = Framework.domainRoot, indent = "", tab = "  ", directory = result) => {
   if (host) {
    if (host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
-   Framework.log(`\x1b[38;5;27m${indent}<host host="\x1b[38;5;75m${host}\x1b[38;5;27m">\x1b[0m`)
-   result[host] = {}
+   Framework.log(2, `\x1b[38;5;27m${indent}<host host="\x1b[38;5;75m${host}\x1b[38;5;27m">\x1b[0m`)
   } else {
-   Framework.log(`\x1b[38;5;27m<hosts>\x1b[0m`)
+   Framework.log(2, `\x1b[38;5;27m<hosts>\x1b[0m`)
   }
   if (!itemExists(folderPath)) throw new ReferenceError("can't pack nonexistent folder " + folderPath)
   for (const itemname of readFolder(folderPath)) {
@@ -380,28 +474,30 @@ Framework.archive = (() => {
     filePath = folderPath + "/" + itemname
    if (itemExists(filePath)) {
     const stats = getItemStats(filePath)
-    if (stats.isDirectory()) readRecursive(host ? itemname ? itemname + "." + host : host : itemname ?? "", filePath, indent + tab)
+    if (stats.isDirectory()) {
+     readRecursive(host ? itemname ? itemname + "." + host : host : itemname ?? "", filePath, indent + tab, tab, directory[itemname] = {})
+    }
     else if (stats.isFile()) {
      try {
       if (!$(`git check-ignore -v ${filePath}`).includes('.gitignore:')) throw 1
-      Framework.log(`\x1b[38;5;239m${indent}${tab}<file name="${itemname}" ignored />\x1b[0m`)
+      Framework.log(2, `\x1b[38;5;239m${indent}${tab}<file name="${itemname}" ignored />\x1b[0m`)
      } catch {
       const
        extension = extname(filePath),
-       content = readFile(filePath, ['.png'].includes(extension) ? "base64" : "utf-8")
-      Framework.log(`\x1b[38;5;28m${indent}${tab}<file name="\x1b[38;5;76m${itemname}\x1b[38;5;28m" />\x1b[0m`)
-      result[host][itemname] = content
+       content = readFile(filePath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
+      Framework.log(2, `\x1b[38;5;28m${indent}${tab}<file name="\x1b[38;5;76m${itemname}\x1b[38;5;28m" />\x1b[0m`)
+      directory[itemname] = content
      }
     }
    }
   }
-  if (host) Framework.log(`\x1b[38;5;27m${indent}</host>\x1b[0m`)
-  else Framework.log(`\x1b[38;5;27m</hosts>\x1b[0m`)
+  if (host) Framework.log(2, `\x1b[38;5;27m${indent}</host>\x1b[0m`)
+  else Framework.log(2, `\x1b[38;5;27m</hosts>\x1b[0m`)
  }
- readRecursive("", Framework.domainRoot)
+ readRecursive()
  /*
   const { resolveTxt } = require('dns')
-  const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (console.error(e), process.exit(21)) : give(TXT)))
+  const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (Framework.log(0, e), process.exit(21)) : give(TXT)))
   const targetHost = "root.core.parts"
   txt(targetHost).then(TXT => {
    for (const txt of TXT) {
@@ -422,7 +518,7 @@ Framework.archive = (() => {
  return result
 })()
 
-console.log("Publishing " + Framework.tags.join("-"))
+Framework.log(0, "Publishing " + Framework.tags.join("-"))
 if (itemExists(Framework.clientRoot))
  removeItem(Framework.clientRoot, { recursive: true, force: true })
 

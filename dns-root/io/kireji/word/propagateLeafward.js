@@ -1,2 +1,0 @@
-super(STATE)
-populate(LAYER)

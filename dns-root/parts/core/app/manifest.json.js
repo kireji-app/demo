@@ -1,7 +1,5 @@
 const icon_uri = await part.resolve("icon.uri", "fallback-icon.svg")
-const [icon_type] = root.headerOf(icon_uri)
-
-console.log('getting manifest.json', part.host)
+const [icon_type] = Framework.headerOf(icon_uri)
 
 return JSON.stringify({
  name: part.niceName ?? part.host,

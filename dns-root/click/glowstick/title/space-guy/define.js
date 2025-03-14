@@ -1,1 +1,3 @@
-super(["season-0"], "1/13/2025", "Space Guy", "Travel the stars with the galaxy's original hero.", true)
+super({
+ season0: "season-0"
+})

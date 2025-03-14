@@ -16,6 +16,13 @@ Object.assign(globalThis, {
   gpu: navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice()
  }),
  element: (parent, tagname) => parent.appendChild(document.createElement(tagname)),
+ svg: (parent, ...paths) => {
+  const result = parent.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
+  result.setAttribute("viewBox", "-1 -1 2 2")
+  result.setAttribute("class", "nav-button")
+  result.innerHTML = paths.map(path => `<path d="${path}" stroke-width="0.2" stroke-linecap="round" />`).join("\n")
+  return result
+ },
  spacer: parent => {
   const spacer = element(parent, "")
   spacer.setAttribute("class", "spacer")
@@ -23,6 +30,6 @@ Object.assign(globalThis, {
  }
 })
 
-client.choice[root.primaryLayer] = client[client.requestedAppHost] ?? client[Framework.fallbackHost]
+client.choice[root.primaryLayer] = client[client.requestedAppHost] ?? client.fallback
 client.state[root.primaryLayer] = client.choice[root.primaryLayer].offset
 await client.choice[root.primaryLayer].initialize()

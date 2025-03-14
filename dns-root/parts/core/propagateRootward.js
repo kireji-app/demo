@@ -1,1 +1,1 @@
-await part.parent?.propagateRootward(LAYER, [part])
+await part.parent?.propagateRootward(LAYER, part.key)

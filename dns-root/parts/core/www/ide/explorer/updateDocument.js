@@ -1,0 +1,2 @@
+app.containerHost.setAttribute("style", "--explorer-width: " + (part.width.choice[LAYER] === part.width.open ? part.width.open.state[LAYER] + 64n + "px" : 0))
+console.log(part.width.choice, part.width.open)

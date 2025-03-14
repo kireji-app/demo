@@ -1,13 +1,9 @@
-part.randomAnchor.innerHTML = ""
-part.randomAnchor.remove()
+part.randomButton.remove()
 delete part.randomAnchor
 
-part.select.innerHTML = ""
-part.select.onchange = undefined
 part.select.remove()
 delete part.select
 
-part.label.innerHTML = ""
 part.label.remove()
 delete part.label
 

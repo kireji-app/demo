@@ -1,1 +1,5 @@
-super(["device", "light", "dark"])
+super({
+ device: "device",
+ light: "light",
+ dark: "dark"
+})

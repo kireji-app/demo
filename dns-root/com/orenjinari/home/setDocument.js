@@ -7,13 +7,13 @@ inherit.containerHost
 part.bunnies = part.bunnyNames.map((bunnyName, bunnyIndex) => {
  const area = bunnyIndex + 1
  const img = element(part.container, "img")
- img.setAttribute("src", `https://${scriptHost}/${bunnyName}.png`)
+ img.setAttribute("src", `https://${scriptHost}/${bunnyName}-up.gif`)
  img.setAttribute("class", "bunny")
  img.setAttribute("id", bunnyName)
  img.onclick = () => part.scroll.setLayer(LAYER, (BigInt(area) * 25000n - 1n))
  const placeholder = element(part.container, "div")
  placeholder.setAttribute("class", "placeholder")
- placeholder.innerHTML = `${Framework.isDebug ? `<h1>Area ${area}</h1>` : ""}<span id=float><img src="https://${scriptHost}/${bunnyName}.png"><span class=thin>is </span><span>coming soon.</span></span>`
+ placeholder.innerHTML = `${Framework.isDebug ? `<h1>Area ${area}</h1>` : ""}<span id=float><img src="https://${scriptHost}/${bunnyName}-up.gif"><span class=thin>is </span><span>coming soon.</span></span>`
  return img
 })
 

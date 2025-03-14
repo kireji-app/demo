@@ -1,3 +1,3 @@
-super([
- "half"
-])
+super({
+ half: "half"
+})

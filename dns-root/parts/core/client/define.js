@@ -1,8 +1,8 @@
-super([
- "www.kireji.io",
- "www.glowstick.click",
- "www.ejaugust.com",
- "www.orenjinari.com",
- "www.fallback.cloud",
- "www.core.parts",
-])
+super({
+ kireji: "www.kireji.io",
+ glowstick: "www.glowstick.click",
+ ejaugust: "www.ejaugust.com",
+ orenjinari: "www.orenjinari.com",
+ fallback: "www.fallback.cloud",
+ core: "www.core.parts",
+})

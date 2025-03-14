@@ -8,7 +8,7 @@ body {
  --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
  --menu-tween: 0;
  --sidebar-width: 256px;
- --bottom-accent: 0 1.5px var(--fg-fade1);
+ --bottom-accent: 0 1.5px var(--fg-fade3);
  --bottom-shadow: 0 2px 7px #0002;
  --icon-size: 29px;
  --spacing: 19px;
@@ -202,13 +202,13 @@ button {
  line-height: 25px;
 }
 
-.applink>img {
+.app-icon {
  height: var(--icon-size);
  width: var(--icon-size);
+ border-radius: calc(var(--icon-size) * 0.2);
 }
 
 .applink>.label {
- text-decoration: none;
  flex: 1 1;
 }
 
@@ -237,7 +237,7 @@ button {
  font-weight: 700;
 }
 
-#toolbar {
+app-toolbar {
  position: fixed;
  top: 0;
  left: 0;
@@ -253,11 +253,11 @@ button {
  gap: var(--spacing);
 }
 
-#toolbar>.btn {
+app-toolbar>.btn {
  width: var(--icon-size);
 }
 
-#toolbar>.btn:hover {
+app-toolbar>.btn:hover {
  color: var(--theme);
 }
 
@@ -313,7 +313,7 @@ button:hover {
 }
 
 @media (display-mode: window-controls-overlay) {
- #toolbar {
+ app-toolbar {
   padding-left: env(titlebar-area-x, 0);
   top: env(titlebar-area-y, 0);
   padding-right: calc(100% - env(titlebar-area-width, 100%) - env(titlebar-area-x, 0));
@@ -323,7 +323,7 @@ button:hover {
   app-region: drag;
  }
 
- #toolbar>button {
+ app-toolbar>button {
   -webkit-app-region: no-drag;
   app-region: no-drag;
  }

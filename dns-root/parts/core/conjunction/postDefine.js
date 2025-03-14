@@ -1,13 +1,20 @@
-if (!Array.isArray(FACTORS))
- throw new RangeError(`conjunction expects array of factors (got ${typeof FACTORS} = ${FACTORS}) (${part.host})`)
+part.setFactors = factors => {
+ if (typeof factors !== "object")
+  throw new RangeError(`conjunction expects a factor object or null (got ${typeof factors} -> ${factors}) (${part.host})`)
 
-part.factors = FACTORS
-part.size = FACTORS.reduceRight((divisors, factor, index) => {
- const subpart = part.insert(factor, index)
- Object.defineProperties(subpart, {
-  conjunctionDivisor: { get() { return divisors[index] } },
-  stateCache: { value: [...subpart.state], writable: true },
- })
- divisors.unshift(divisors[0] * subpart.size)
- return divisors
-}, [1n]).shift()
+ part.length = 0
+ part.factors = factors
+ part.size = Object.keys(factors).reduceRight((divisors, key, index) => {
+  const factor = factors[key]
+  const subpart = part.insert(key, factor, index)
+  Object.defineProperties(subpart, {
+   conjunctionDivisor: { get() { return divisors[index] }, configurable: true },
+   stateCache: { value: [...subpart.state], configurable: true }
+  })
+  divisors.unshift(divisors[0] * subpart.size)
+  return divisors
+ }, [1n]).shift()
+}
+
+if (FACTORS !== null)
+ part.setFactors(FACTORS)

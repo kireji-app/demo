@@ -3,7 +3,7 @@ inherit.styleSheet.replaceSync(read("library.css"))
 const scroller = element(inherit.container, "div")
 scroller.setAttribute("id", "scroller")
 
-const promo = part.nowPlaying[read("promo.uri").match(/(?<=^s*).+?(?=s*$)/gm)[0]]
+const promo = part.nowPlaying[read("promo.txt").split(" ")[0]]
 if (promo) {
  const promoBanner = element(scroller, "section")
  promoBanner.setAttribute("id", "promo")

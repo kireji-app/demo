@@ -4,3 +4,4 @@ part.pendingFrame = requestAnimationFrame(() => {
  delete part.pendingFrame
  part.parent.setLayer(LAYER, 2n)
 })
+console.log("SET " + part.host)

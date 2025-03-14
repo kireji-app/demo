@@ -1,6 +1,6 @@
 {
  "compilerOptions": {
-  "target": "esnext", // Or your preferred target
+  "target": "esnext",
   "module": "esnext",
   "checkJs": false
  },

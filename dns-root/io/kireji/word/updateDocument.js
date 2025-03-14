@@ -1,0 +1,1 @@
+part.container.innerHTML = part.choice[LAYER].host.split(".")[0]

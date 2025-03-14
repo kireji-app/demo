@@ -8,14 +8,14 @@ app.styleSheet = new CSSStyleSheet()
 app.container.adoptedStyleSheets.push(app.styleSheet)
 
 // Create the toolbar.
-app.toolbar = element(document.body, "nav")
-app.toolbar.setAttribute("id", "toolbar")
+app.toolbar = element(document.body, "app-toolbar")
 
 app.homeButton = element(app.toolbar, "button")
 app.homeButton.setAttribute("id", "home")
-app.homeButton.onclick = () => app[0].setLayer(LAYER, 0n)
+app.homeButton.onclick = () => app.shadow.setLayer(LAYER, 0n)
 app.homeIcon = element(app.homeButton, "img")
 app.homeIcon.setAttribute("id", "home-icon")
+app.homeIcon.setAttribute("class", "app-icon")
 app.homeIcon.setAttribute("src", await app.resolve("icon.uri", "fallback-icon.svg"))
 app.homeLabel = element(app.homeButton, "span")
 app.homeLabel.setAttribute("id", "home-label")
@@ -97,23 +97,22 @@ app.appsSection.setAttribute("id", "apps")
 
 app.appNodes = {}
 for (const destinationApp of client) {
- const appHost = destinationApp.host
+ if (destinationApp.host === Framework.fallbackHost) continue
  const icon_uri = await destinationApp.resolve("icon.uri", "fallback-icon.svg")
- app.appNodes[appHost] = element(app.appsSection, "li")
- app.appNodes[appHost].setAttribute("class", "applink")
- app.appNodes[appHost].innerHTML = `<img src="https://${appHost}/${icon_uri}" /><span class=label>${destinationApp.niceName ?? appHost}</span>`
- if (appHost === app.host) app.appNodes[appHost].setAttribute("data-here", "true")
- else app.appNodes[appHost].onclick = e => {
+ app.appNodes[destinationApp.key] = element(app.appsSection, "li")
+ app.appNodes[destinationApp.key].setAttribute("class", "applink")
+ app.appNodes[destinationApp.key].innerHTML = `<img class=app-icon src="https://${destinationApp.host}/${icon_uri}" /><span class=label>${destinationApp.niceName ?? destinationApp.key}</span>`
+ if (destinationApp.key === app.host) app.appNodes[destinationApp.key].setAttribute("data-here", "true")
+ else app.appNodes[destinationApp.key].onclick = e => {
   e.preventDefault()
   let thatState = 0n
-  for (const host of read("preferences.host").split(/\s+/g)) {
-   if (host in app && host in destinationApp) thatState += app[host].state[LAYER] * destinationApp[host].conjunctionDivisor
-  }
+  for (const key in JSON.parse(read("preferences.json")))
+   if (key in app && key in destinationApp) thatState += app[key].state[LAYER] * destinationApp[key].conjunctionDivisor
   const hash = app.encodeState(thatState)
   if (Framework.isDebug) {
    location.hash = hash
-   worker.postMessage({ code: "setDebugHost", host: appHost })
-  } else location = "https://" + appHost + "#" + hash
+   worker.postMessage({ code: "setDebugHost", host: destinationApp.host })
+  } else location = "https://" + destinationApp.host + "#" + hash
  }
 }
 
@@ -147,7 +146,7 @@ app.colorModeHandle.setAttribute("class", "handle")
 const globalCSS = read("style.css")
 const customCSS = await app.resolve("menu.css") ?? ""
 const staticStyleSheet = new CSSStyleSheet()
-staticStyleSheet.replaceSync(globalCSS + customCSS)
+staticStyleSheet.replaceSync(globalCSS + "\n" + customCSS)
 app.colorModeStyleSheet = new CSSStyleSheet()
 
 document.adoptedStyleSheets.push(

@@ -1,1 +1,6 @@
-super(["splash", "scene-0", "scene-1", "scene-2"])
+super({
+ splash: "splash",
+ scene0: "scene-0",
+ scene1: "scene-1",
+ scene2: "scene-2"
+})

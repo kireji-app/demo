@@ -1,4 +1,4 @@
-super([
- "readme.glowstick.click",
- "library.glowstick.click"
-])
+super({
+ readme: "readme.glowstick.click",
+ library: "library.glowstick.click"
+})

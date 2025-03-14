@@ -1,1 +1,1 @@
-part.size = BigInt(await part.parent.resolve("length.number"))
+part.size = BigInt(part.parent.framework.resolveSync("length.number", 404n))

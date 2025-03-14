@@ -36,7 +36,7 @@
 
 #portfolio {
  left: calc(42.5vw - 5vw);
- top: calc(calc(.8 * var(--h)) - 11vw);
+ top: calc(calc(.8 * var(--h)) - 10.5vw);
  width: 10vw;
 }
 

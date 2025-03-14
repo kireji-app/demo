@@ -1,4 +1,4 @@
-super([
- "info.glowstick.click",
+super({
+ info: "info.glowstick.click",
  ...CONTENT
-])
+})

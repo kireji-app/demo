@@ -1,4 +1,4 @@
-super([
- APPLICATION,
- ...read("preferences.host").split(/[\s\n]+/g)
-])
+super({
+ main: new.target.framework.resolveSync("main.host"),
+ ...JSON.parse(read("preferences.json"))
+})

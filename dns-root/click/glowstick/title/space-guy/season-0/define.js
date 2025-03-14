@@ -1,1 +1,3 @@
-super(["episode-0"])
+super({
+ episode0: "episode-0"
+})

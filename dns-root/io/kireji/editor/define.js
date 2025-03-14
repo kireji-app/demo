@@ -1,1 +1,3 @@
-super(["model"])
+super({
+ model: "model"
+})

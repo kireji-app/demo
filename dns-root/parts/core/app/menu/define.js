@@ -1,6 +1,6 @@
-super([
- "closed",
- "introduce",
- "open",
- "dismiss"
-])
+super({
+ closed: "closed",
+ introduce: "introduce",
+ open: "open",
+ dismiss: "dismiss"
+})

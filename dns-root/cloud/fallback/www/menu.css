@@ -2,7 +2,7 @@ body>main {
  height: var(--h);
 }
 
-#toolbar {
+app-toolbar {
  box-shadow: none;
  background: transparent;
 }
