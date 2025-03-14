@@ -54,7 +54,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.21-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.22-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -104,7 +104,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- Binary files like multimedia</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- Entire applications and schemas (such as the applications and global schema of this project)</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- Using the same or similar methods within a stand-alone application, such as:</sub>
+<br><sub>- Using these methods within a stand-alone application, such as:</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that doesn't require a browser</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that is a browser</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that looks or feels like a browser</sub>
