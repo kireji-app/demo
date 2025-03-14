@@ -54,7 +54,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.18-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.19-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -84,7 +84,7 @@ Version `1.0.0` is under development.
 <br><sub>- its live example applications which are each separate, meaningful tools and experiences of their own</sub>
 <p><sub>In addition, this document has a project roadmap and list of extensions discussing plans for additional unique features not yet implemented.</sub></p>
 <p><sub>This document and repository serve to establish prior art for these inventions, the obvious extensions that these features inspire, my upcoming plans for the project, and my intent to continue to research and develop these lines of inquiry. Among the considered features are the following:</sub>
-<br><sub>- Storing a type schema or some or all information about one (including but not limited to global type schema like that used in this project) on the DNS.</sub>
+<br><sub>- Storing a type schema or some or all information about one (including but not limited to a global type schema like that used in this project) on the DNS.</sub>
 <br><sub>- Storing a framework or some or all information about one (including but not limited to a framework like that used in this project) on the DNS, such as:</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- cloud building capabilities and data</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- source mapping capabilities and data</sub>
