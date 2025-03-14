@@ -1,6 +1,6 @@
 <sub><i>© 2013 - 2025 Eric Augustinowicz. All Rights Reserved.</i></sup>
 # [Static Client-Rendered Web Apps with a URL to Every State](https://github.com/EJAugust/EJAugust)
-This project is a JavaScript library that builds [static](https://en.wikipedia.org/wiki/Static_web_page) [single-page](https://en.wikipedia.org/wiki/Single-page_application) [progressive web applications](https://en.wikipedia.org/wiki/Progressive_web_app) with robust hash-based state management:
+This project is a JavaScript library that builds [static](https://en.wikipedia.org/wiki/Static_web_page) [single-page](https://en.wikipedia.org/wiki/Single-page_application) [client-rendered](https://www.patterns.dev/react/client-side-rendering/) [progressive web applications](https://en.wikipedia.org/wiki/Progressive_web_app) with robust hash-based state management:
 ```
 ╭────────────────────────────────────────────────╮
 │ https:// game.example.com # 0-2c9_ghc3whi45... |
@@ -43,7 +43,7 @@ All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, 
 * [glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.7-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.8-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
