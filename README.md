@@ -47,10 +47,10 @@ Hashes should not be hard-coded anywhere in an application's source. Instead, a 
 
 Using domain names for all types enables configuration of type information via DNS.
 
-Semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. This project does implement a per-commit automatic semantic versioning method which relies on indicating two booleans about the API at commit time.
-1. whether any new apps were published or new end points were added to the existing published apps since the last commit
+Semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. This project does implement a per-commit automatic semantic versioning method which relies on indicating two booleans about the API at commit time:
+1. Whether any new apps were published or new end points were added to the existing published apps since the last commit
    - For example, new apps and non-breaking increases to the cardinality of existing web apps
-2. whether any breaking changes were made to any published apps since the last commit
+2. Whether any breaking changes were made to any published apps since the last commit
    - For example, any moved or removed resources that were once published to public URLs
 However, as the project is in alpha, LTS for more than the most current version of the schema has not been implemented.
 
@@ -64,7 +64,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.orenjinari.com](https://www.orenjinari.com) An artist portfolio which includes images, animations, interaction and video streaming.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.30-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.31-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
