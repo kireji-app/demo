@@ -54,7 +54,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.19-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.20-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -111,7 +111,7 @@ Version `1.0.0` is under development.
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that renders information stored on the DNS</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- a stand-alone application that only requires a small bootstrap and the DNS to begin browsing.</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- etc.</sub>
-<br><sub>- A system in which each domain owner curates type definitions associated with the domain they own.</sub>
+<br><sub>- A system in which each domain owner curates type definitions associated with the domain(s) they own.</sub>
 <br><sub>- A video library or video streaming platform that, like `www.glowstick.click`, assigns a URL to and optionally allows the direct editing of every</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- segment ("subset" or "clip") of every video</sub>
 <br>&nbsp;&nbsp;&nbsp;<sub>- scene of every title</sub>
