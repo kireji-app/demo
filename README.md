@@ -33,13 +33,13 @@ All types exist in a hierarchy with each one ultimately extending from a common 
 All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$, extend $`\textcolor{#AA8866}{\text{"app.core.parts"}}`$ and have DNS records. Those records point to a server where the static output files `./public/index.html` and `./public/framework.js` are served.
 
 ## Live Demos
-* [kireji.io](https://www.kireji.io) A short-form document editor.
-* [core.parts](https://www.core.parts) Interactive documentation for the project.
-* [ejaugust.com](https://www.ejaugust.com) My portfolio and blog.
-* [glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
+* [www.kireji.io](https://www.kireji.io) A short-form document editor.
+* [www.core.parts](https://www.core.parts) Interactive documentation for the project.
+* [www.ejaugust.com](https://www.ejaugust.com) My portfolio and blog.
+* [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.10-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.11-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
