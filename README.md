@@ -66,7 +66,7 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.orenjinari.com](https://www.orenjinari.com) An artist portfolio which includes images, animations, interaction and video streaming.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.32-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.33-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
@@ -78,6 +78,7 @@ Version `1.0.0` is under development.
 |**LTS plan**|In progress
 |**Advanced DNS integration**|Planned
 |**Community-curated content**|Planned
+|**Periodicity and transfinite types**|Planned
 
 ## License and Extensions
 <sub>I am still selecting a license for this project. As a result, you do not have permission to use, modify, redistribute, etc. this project or any of its methods or parts except for using the live demos and looking through the repo.</sub>
@@ -166,4 +167,5 @@ Version `1.0.0` is under development.
 <br><sub>- The above use cases used in tandem with the express purpose of creating a self-hosted self-editing application whether it needs to be rebuilt to reflect changes or updates itself in real-time in response to source code or art asset modifications.</sub>
 <br><sub>- The above use cases used in tandem with a git-like staging and committing system.</sub>
 <br><sub>- The above use cases used in tandem with intentional constraints like [no writing with the letter e](https://en.wikipedia.org/wiki/Gadsby_(novel)) or painting with restrictions on color palettes especially when these limitations offer an appealing means of reframing a limit on the cardinality of a data type as a desirable feature.</sub>
+<br><sub>- The above use cases used in tandem with periodic types with non-finite cardinality (rather than or in addition to types with finite cardinality).</sub>
 <br><sub>- etc.</sub>
