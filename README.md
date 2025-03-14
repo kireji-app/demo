@@ -41,9 +41,9 @@ The framework packs all type definitions into `./public/framework.js` which on f
 
 Using domain names enables future configuration of type information via DNS. Using the hash instead of query parameters or a pathname enables the user to engage with the app without sending activity to a server which is useful both for user privacy and for reducing the burdon on cloud services. Furthermore, the [URI fragment](https://datatracker.ietf.org/doc/html/rfc3986#section-3.5) is the most appropriate segment for this kind of information.
 
-Hashes should not be hard-coded anywhere in an application's source. Instead, a staging layer allows parts to stage an arbitrary number of operations on the current state in order to obtain a URL to another state without affecting the current data model and URL. This enables anchor links like `<a href=#1u>` to be generated at runtime.
+Hashes should not be hard-coded anywhere in an application's source. Instead, a staging layer allows parts to stage an arbitrary number of operations on the current state in order to obtain a URL to another state without affecting the current data model and URL. This enables anchor links like $`\text{\textcolor{grey}{<\textcolor{#4466AA}{a} \textcolor{#88AAEE}{href}=\textcolor{#AA8866}{"\#1u"}>}}`$ to be generated at runtime.
 
-Finally, semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. However, as the project is in alpha, this feature has not been implemented.
+Semantic versioning can be used to associate a hash with the version of the type hierarchy that it was generated in. However, this will not be put into practice until the project is in beta.
 
 ## Live Demos
 * [www.kireji.io](https://www.kireji.io) A short-form document editor.
@@ -52,7 +52,7 @@ Finally, semantic versioning can be used to associate a hash with the version of
 * [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.100.12-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.100.13-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status
