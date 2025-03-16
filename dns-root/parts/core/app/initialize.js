@@ -6,7 +6,7 @@ Object.assign(globalThis, {
   radix: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.~?#&/=!$*".slice(0, 64),
   meanFrameTime: 1000,
   shiftKeysDown: 0,
-  addressbarState: undefined,
+  addressBarState: undefined,
   contextKeysDown: 0,
   animationFrameID: undefined,
   throttleDuration: /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ? 350 : 75,
@@ -17,50 +17,109 @@ Object.assign(globalThis, {
   },
   unlisten(id) {
    delete this.callbacks[id]
-  },
+  }, /*
   async requestFrame(now) {
    app.fps = Math.round(1000 / (app.meanFrameTime += (now - app.time - app.meanFrameTime) / 20))
    app.time = now
-   if (app.time - app.throttleStartTime >= app.throttleDuration && app.addressbarState !== app.documentState) {
-    const hash = "#" + app.encodeState(app.documentState)
+   if (app.time - app.throttleStartTime >= app.throttleDuration && app.addressBarState !== app.state[root.primaryLayer]) {
+    const hash = "#" + app.encodeState(app.state[root.primaryLayer])
     history.pushState({}, null, hash)
-    app.addressbarState = app.documentState
+    app.addressBarState = app.state[root.primaryLayer]
     app.throttleStartTime = app.time
    }
-   if (app.state[root.primaryLayer] !== app.documentState) {
-    await app.setLayer(root.primaryLayer, app.documentState)
-    for (const id in app.callbacks) await app.callbacks[id]()
-   }
+
+   // if (app.state[root.primaryLayer] !== app.documentState) {
+   //  await app.setLayer(root.primaryLayer, app.documentState)
+   //  for (const id in app.callbacks) await app.callbacks[id]()
+   // }
 
    app.animationFrameID = requestAnimationFrame(now => app.requestFrame(now))
-  },
-  parseStateFromAddressbar() {
-   let { pathname, search, hash, host } = location
-   if (pathname !== "/" || search || !hash || hash.length <= 1) {
-    console.warn('lost context', location.href)
-    history.replaceState({}, null, `//${host}/${hash ||= "#0"}`)
+  },*/
+  async parseStateFromAddressBar() {
+   const { pathname, search, hash, host, href } = location
+   const isLocal = host.startsWith("localhost:")
+   const typeName = isLocal ? Framework.debugHost : host
+   const myVersion = Framework.version
+   const [version = myVersion, code = ""] = pathname.length > 1 ? pathname.slice(1).split('/') : []
+
+   if (version !== myVersion)
+    throw "unexpected request for another app version"
+
+   let state = this.decodeState(code)
+
+   if (state >= app.size) {
+    console.warn("404 - ignoring out-of-range state " + state + "/" + app.size)
+    state = 0n
    }
-   let binaryString = "0b"
-   for (let i = 1; i < hash.length; i++) binaryString += app.radix.indexOf(hash[i]).toString(2).padStart(6, 0)
-   app.addressbarState = app.documentState = BigInt(binaryString)
+
+   const path = "/" + version + "/" + (state === 0n ? "" : code)
+
+   if (hash || search || pathname !== path)
+    history.replaceState({}, null, path)
+
+   app.addressBarState = state
    app.throttleStartTime = app.time
+
+   if (app.addressBarState !== app.state[root.primaryLayer])
+    await app.setLayer(root.primaryLayer, app.addressBarState)
+  },
+  decodeState(code) {
+   let binaryValue = "0b0"
+   let binaryOffset = "0b0"
+
+   for (const char of code) {
+    const index = app.radix.indexOf(char)
+    if (index === -1) {
+     console.warn("ignoring invalid path (paths cannot include '" + char + "').")
+     binaryValue = "0b0"
+     binaryOffset = "0b0"
+     break;
+    }
+    binaryValue += index.toString(2).padStart(6, 0)
+    binaryOffset += "000001"
+   }
+
+   return BigInt(binaryValue) + BigInt(binaryOffset)
   },
   encodeState(state) {
-   const
-    hexads = [],
-    binaryString = state.toString(2),
-    newLength = Math.ceil(binaryString.length / 6),
-    fullbin = binaryString.padStart(newLength * 6, 0)
-   for (let i = 0; i < newLength; i++) hexads.push(fullbin.slice(i * 6, (i + 1) * 6))
-   return hexads.reduce((hash, hexad) => hash + app.radix[parseInt(hexad, 2)], "")
+   let binaryValue = ""
+   let code = ""
+
+   let tempState = state
+   let chunkCount = 0
+
+   while (tempState > 0n) {
+    if (tempState >= BigInt(Math.pow(2, chunkCount * 6))) {
+     tempState -= BigInt(Math.pow(2, chunkCount * 6))
+     chunkCount++
+    } else {
+     break;
+    }
+   }
+
+   let offset = 0n
+   for (let i = 0; i < chunkCount; i++)
+    offset += BigInt(Math.pow(2, i * 6))
+
+   binaryValue = (state - offset).toString(2)
+
+   const finalLength = chunkCount * 6
+   const paddedBinaryString = binaryValue.padStart(finalLength, '0')
+
+   for (let i = 0; i < finalLength; i += 6) {
+    const hexad = paddedBinaryString.slice(i, i + 6)
+    code += app.radix[parseInt(hexad, 2)]
+   }
+
+   return code
   },
   async stageState(target, state, resetStagingLayer = false) {
    if (resetStagingLayer) await root.resetStagingLayer()
    await target.setLayer(root.stagingLayer, state)
-   return "#" + app.encodeState(app.state[root.stagingLayer])
+   return "/" + Framework.version + "/" + app.encodeState(app.state[root.stagingLayer])
   }
  }),
- onhashchange: () => app.parseStateFromAddressbar(),
+ onhashchange: async () => await app.parseStateFromAddressBar(),
  onblur: e => app.contextKeysDown = app.shiftKeysDown = 0,
  onkeyup: e => {
   if (app.isMac) {
@@ -83,5 +142,4 @@ Object.assign(globalThis, {
 
 app.adoptedStyleSheets = document.adoptedStyleSheets
 
-app.parseStateFromAddressbar()
-await app.requestFrame(app.now)
+await app.parseStateFromAddressBar()

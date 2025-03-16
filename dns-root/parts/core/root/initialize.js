@@ -4,7 +4,6 @@ Object.assign(globalThis, {
   stagingLayer: 1,
   environment: globalThis.constructor === globalThis.Window ? "client" : "worker",
   key: "root",
-  debugHost: Framework.fallbackHost,
   isLocal: location.host.startsWith("localhost:"),
   resetStagingLayer: async () => {
    await root.setLayer(root.stagingLayer, root.state[root.primaryLayer])

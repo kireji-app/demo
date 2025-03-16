@@ -18,8 +18,8 @@ part.refreshButton.onclick = () => {
  console.log('do nav refresh')
 }
 
-part.addressbar = element(part.heading, "input")
-part.addressbar.setAttribute("type", "url")
+part.addressBar = element(part.heading, "input")
+part.addressBar.setAttribute("type", "url")
 
 part.menuButton = svg(part.heading, "M 0 0.5 L 0 0.5 M 0 0 L 0 0 M 0 -0.5 L 0 -0.5")
 part.menuButton.onclick = () => {

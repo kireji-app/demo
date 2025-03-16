@@ -192,7 +192,7 @@ button {
  opacity: 100%;
 }
 
-.applink {
+.app-link {
  display: flex;
  gap: 1.75ch;
  padding: 0;
@@ -208,16 +208,16 @@ button {
  border-radius: calc(var(--icon-size) * 0.2);
 }
 
-.applink>.label {
+.app-link>.label {
  flex: 1 1;
 }
 
-.applink[data-here="true"] {
+.app-link[data-here="true"] {
  position: relative;
  color: var(--theme);
 }
 
-.applink[data-here="true"]::before {
+.app-link[data-here="true"]::before {
  content: "";
  position: absolute;
  width: 1ch;
@@ -228,7 +228,7 @@ button {
  background: var(--theme);
 }
 
-.applink:not([data-here="true"]):hover {
+.app-link:not([data-here="true"]):hover {
  color: var(--theme);
  cursor: pointer;
 }

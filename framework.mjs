@@ -11,8 +11,8 @@ import {
 } from 'fs'
 class Framework {
  static change = {
-  breaksAPI: false,
-  extendsAPI: false
+  breaksAPI: true,
+  extendsAPI: true
  }
  static parts = []
  static cores = []
@@ -20,6 +20,7 @@ class Framework {
  static baseHost = "core.parts"
  static rootHost = "root.core.parts"
  static fallbackHost = "www.fallback.cloud"
+ static debugHost = this.fallbackHost
  static verbosity = 0
  static clientRoot = ".public"
  static domainRoot = "dns-root"
@@ -35,17 +36,17 @@ class Framework {
  static BaseType = null
  static DNSRoot = null
  static tags = null
- static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> <script defer src=/${this.clientScriptURL}></script></head></html>` }
+ static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> <script defer src=/${this.version}/${this.clientScriptURL}></script></head></html>` }
  static asyncMethodArguments = {
   initialize: [],
   setLayer: ["LAYER", "STATE"],
-  propagateLeafward: ["LAYER", "STATE"],
-  propagateRootward: ["LAYER", "KEY"],
+  setLayerLeafward: ["LAYER", "STATE"],
+  setLayerRootward: ["LAYER", "KEY"],
   setDocument: ["LAYER"],
+  setDocumentLeafward: ["LAYER"],
   unsetDocument: ["LAYER"],
+  updateDocumentLeafward: ["LAYER"],
   updateDocument: ["LAYER"],
-  updateLeafward: ["LAYER"],
-  updateRootward: ["LAYER", "KEY"],
  }
  static log(verbosity, ...data) {
   if (this.isDebug && verbosity <= this.verbosity) console.log(...data)
@@ -142,6 +143,7 @@ class Framework {
   this.file.addLines(this.toString().split("\n"), this.buildSource, 11/* here */, 0, " ")
   this.file.addSection(`
   Framework.tags = ${JSON.stringify(this.tags)}
+  Framework.version = ${JSON.stringify(this.version)}
   Framework.DNSRoot = ${JSON.stringify(this.DNSRoot)}
   Framework.initialize()`.slice(1), this.buildSource, 122/* here */, 0, "", false)
   return this.file.packAndMap()
@@ -456,6 +458,8 @@ Framework.tags = (() => {
  return result
 })()
 
+Framework.version = "v" + Framework.tags[0].split(".").slice(0, 1).join(".")
+
 Framework.log(0, "Archiving " + Framework.tags.join("-"))
 
 Framework.DNSRoot = (() => {
@@ -519,12 +523,18 @@ Framework.DNSRoot = (() => {
 })()
 
 Framework.log(0, "Publishing " + Framework.tags.join("-"))
-if (itemExists(Framework.clientRoot))
- removeItem(Framework.clientRoot, { recursive: true, force: true })
 
-makeFolder(Framework.clientRoot)
-writeFile(Framework.clientRoot + "/index.html", Framework.indexHTML)
-writeFile(Framework.clientRoot + "/" + Framework.clientScriptURL, Framework.compile())
+if (!itemExists(Framework.clientRoot))
+ makeFolder(Framework.clientRoot)
+
+const versionPath = Framework.clientRoot + "/" + Framework.version
+
+if (itemExists(versionPath))
+ removeItem(versionPath, { recursive: true, force: true })
+
+makeFolder(versionPath)
+writeFile(versionPath + "/index.html", Framework.indexHTML)
+writeFile(versionPath + "/" + Framework.clientScriptURL, Framework.compile())
 
 const readmeURL = "README.md"
 const readmeBody = readFile(readmeURL, "utf-8")

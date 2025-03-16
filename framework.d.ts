@@ -24,7 +24,7 @@ declare const scriptHost: Part
 declare const Type: typeof Part
 /** The base type of Type. */
 declare const Base: typeof Part
-/** Available only in `propagateRootward.js`.
+/** Available only in `setLayerRootward.js`.
 * 
 * The key for the subpart (if any) of this part whose value change is propagating.*/
 declare var KEY: string
@@ -37,12 +37,12 @@ declare var KEY: string
  * |`initialize.js`|Not available.
  * |`asyncContext.js`|Some positive integer.
  * |`setLayer.js`|Some positive integer.
- * |`propagateRootward.js`|Some positive integer.
- * |`propagateLeafward.js`|Some positive integer.
- * |`updateRootward.js`|Equal to `root.primaryLayer`
- * |`updateLeafward.js`|Equal to `root.primaryLayer`
+ * |`setLayerRootward.js`|Some positive integer.
+ * |`setLayerLeafward.js`|Some positive integer.
  * |`setDocument.js`|Equal to `root.primaryLayer`
+ * |`setDocumentLeafward.js`|Equal to `root.primaryLayer`
  * |`updateDocument.js`|Equal to `root.primaryLayer`
+ * |`updateDocumentLeafward.js`|Equal to `root.primaryLayer`
  * |`unsetDocument.js`|Equal to `root.primaryLayer`*/
 declare const LAYER: number
 /** The incoming state to be propagated leafward. Available only in progateLeafward.js. */
@@ -67,18 +67,18 @@ declare const app: Part & {
  readonly shiftKeysDown: number
  /** The number of context keys (control on Windows, command on mac) the user is holding down. */
  readonly contextKeysDown: number
- /** The application state according to the addressbar. */
- readonly addressbarState: bigint
+ /** The application state according to the addressBar. */
+ readonly addressBarState: bigint
  /** The integer produced by the most recent call to requestAnimationFrame. */
  readonly animationFrameID: number
- /** The length of time between updates to the addressbar location. */
+ /** The length of time between updates to the addressBar location. */
  readonly throttleDuration: number
- /** The session time when the addressbar was last updated.*/
+ /** The session time when the addressBar was last updated.*/
  readonly throttleStartTime: number
  /** The main game loop, which must be running to handle most user interaction.*/
  requestFrame(now: DOMHighResTimeStamp): void
  /** Uses app.radix to parse the current location hash to override the current application state.*/
- parseStateFromAddressbar(): void
+ parseStateFromAddressBar(): void
  /** Uses app.radix to turn a state into a location hash. */
  encodeState(state: bigint): string
  /** Updates a part on the staging layer and propagates it to the rest of the layer. */
@@ -197,11 +197,12 @@ declare class Part extends Array<Part> {
  insert(key: string, subpart: string, index: number, offset?: bigint): Part
  initialize?(): Promise<void>
  setLayer(LAYER: number, STATE: bigint): Promise<void>
- propagateLeafward(LAYER: number, STATE: bigint): Promise<void>
- propagateRootward(LAYER: number, KEY?: string): Promise<void>
- updateLeafward(LAYER: number,): Promise<void>
- updateRootward(LAYER: number, KEY?: string): Promise<void>
+ setLayerLeafward(LAYER: number, STATE: bigint): Promise<void>
+ setLayerRootward(LAYER: number, KEY?: string): Promise<void>
  setDocument(LAYER: number): Promise<void>
+ setDocumentLeafward(LAYER: number,): Promise<void>
+ updateDocument(LAYER: number): Promise<void>
+ updateDocumentLeafward(LAYER: number, KEY?: string): Promise<void>
  unsetDocument(LAYER: number): Promise<void>
 }
 declare class Disjunction extends Part {
@@ -230,8 +231,8 @@ declare interface SourceDirectory {
  readonly "define.js"?: string
  readonly "initialize.js"?: string
  readonly "postDefine.js"?: string
- readonly "propagateLeafward.js"?: string
- readonly "propagateRootward.js"?: string
+ readonly "setLayerLeafward.js"?: string
+ readonly "setLayerRootward.js"?: string
  readonly "setDocument.js"?: string
  readonly "setLayer.js"?: string
  readonly "type.host"?: string
@@ -240,8 +241,8 @@ declare interface SourceDirectory {
 declare interface AsyncMethodData {
  readonly setLayer?: string
  readonly initialize?: string
- readonly propagateLeafward?: string
- readonly propagateRootward?: string
+ readonly setLayerLeafward?: string
+ readonly setLayerRootward?: string
  readonly setDocument?: string
  readonly unsetDocument?: string
 }

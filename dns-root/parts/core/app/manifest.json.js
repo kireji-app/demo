@@ -10,13 +10,13 @@ return JSON.stringify({
  background_color: "#1f2023",
  icons: [
   {
-   src: await part.createDataURI(icon_uri + "?size=192"),
+   src: await part.createDataURI("/" + Framework.version + "/" + icon_uri + "?size=192"),
    sizes: "192x192",
    type: icon_type,
    purpose: "any maskable"
   },
   {
-   src: await part.createDataURI(icon_uri + "?size=512"),
+   src: await part.createDataURI("/" + Framework.version + "/" + icon_uri + "?size=512"),
    sizes: "512x512",
    type: icon_type,
    purpose: "any maskable"

@@ -1,8 +1,19 @@
 {
  "rewrites": [
   {
-   "source": "/(.+)",
+   "source": "/:path((?!v\\d+/?).*)",
    "destination": "/"
+  },
+  {
+   "source": "/v:version(\\d+)(/?.*)?",
+   "destination": "/v:version/"
+  }
+ ],
+ "redirects": [
+  {
+   "source": "/:path((?!v\\d+/?).*)",
+   "destination": "/v0/",
+   "permanent": false
   }
  ]
 }

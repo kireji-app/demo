@@ -12,11 +12,11 @@ app.toolbar = element(document.body, "app-toolbar")
 
 app.homeButton = element(app.toolbar, "button")
 app.homeButton.setAttribute("id", "home")
-app.homeButton.onclick = () => app.shadow.setLayer(LAYER, 0n)
+app.homeButton.onclick = () => app.main.setLayer(LAYER, 0n)
 app.homeIcon = element(app.homeButton, "img")
 app.homeIcon.setAttribute("id", "home-icon")
 app.homeIcon.setAttribute("class", "app-icon")
-app.homeIcon.setAttribute("src", await app.resolve("icon.uri", "fallback-icon.svg"))
+app.homeIcon.setAttribute("src", "/" + Framework.version + "/" + await app.resolve("icon.uri", "fallback-icon.svg"))
 app.homeLabel = element(app.homeButton, "span")
 app.homeLabel.setAttribute("id", "home-label")
 app.homeLabel.textContent = app.niceName ?? app.host
@@ -100,8 +100,8 @@ for (const destinationApp of client) {
  if (destinationApp.host === Framework.fallbackHost) continue
  const icon_uri = await destinationApp.resolve("icon.uri", "fallback-icon.svg")
  app.appNodes[destinationApp.key] = element(app.appsSection, "li")
- app.appNodes[destinationApp.key].setAttribute("class", "applink")
- app.appNodes[destinationApp.key].innerHTML = `<img class=app-icon src="https://${destinationApp.host}/${icon_uri}" /><span class=label>${destinationApp.niceName ?? destinationApp.key}</span>`
+ app.appNodes[destinationApp.key].setAttribute("class", "app-link")
+ app.appNodes[destinationApp.key].innerHTML = `<img class=app-icon src="https://${destinationApp.host}/${Framework.version}/${icon_uri}" /><span class=label>${destinationApp.niceName ?? destinationApp.key}</span>`
  if (destinationApp.key === app.host) app.appNodes[destinationApp.key].setAttribute("data-here", "true")
  else app.appNodes[destinationApp.key].onclick = e => {
   e.preventDefault()

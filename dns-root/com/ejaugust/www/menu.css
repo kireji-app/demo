@@ -1,0 +1,8 @@
+body>main {
+ position: fixed;
+ height: calc(var(--h) - var(--toolbar-height));
+ top: var(--toolbar-height);
+ left: 0;
+ right: 0;
+ bottom: 0;
+}

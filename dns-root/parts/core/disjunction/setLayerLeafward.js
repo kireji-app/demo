@@ -6,7 +6,7 @@ if (part.state[LAYER] !== STATE) {
     part.previousChoice = part.choice[LAYER]
    }
    part.choice[LAYER] = subpart
-   await subpart.propagateLeafward(LAYER, STATE)
+   await subpart.setLayerLeafward(LAYER, STATE)
    break
   }
   STATE -= subpart.size

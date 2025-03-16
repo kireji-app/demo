@@ -1,2 +1,8 @@
-await part.choice[LAYER]?.unsetDocument(LAYER)
-part.choice[LAYER] = undefined
+const currentChoice = part.choice[LAYER]
+
+if (currentChoice) {
+ if (typeof currentChoice.onunsetdocument === "function")
+  await currentChoice.onunsetdocument()
+ await currentChoice.unsetDocument(LAYER)
+ part.choice[LAYER] = undefined
+}
