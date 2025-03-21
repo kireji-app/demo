@@ -1,1 +1,1 @@
-app.containerHost.setAttribute("style", "--explorer-width: " + (part.width.choice[LAYER] === part.width.open ? part.width.open.state[LAYER] + 64n + "px" : 0))
+desktop.containerHost.setAttribute("style", "--explorer-width: " + (part.width.choice[LAYER] === part.width.open ? part.width.open.state[LAYER] + 64n + "px" : 0))

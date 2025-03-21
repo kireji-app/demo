@@ -1,0 +1,1 @@
+desktop.setVintage(part.choice[LAYER] === part[1])

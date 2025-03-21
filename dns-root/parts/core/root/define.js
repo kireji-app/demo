@@ -1,4 +1,4 @@
 super({
  worker: "worker.core.parts",
- client: "client.core.parts"
+ desktop: "www.desktop.parts"
 })

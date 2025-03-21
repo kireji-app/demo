@@ -59,7 +59,7 @@
 
 .placeholder h1 {
  text-align: center;
- line-height: calc(var(--h) - var(--toolbar-height));
+ line-height: calc(var(--h) - var(--taskbar-height));
  height: 100%;
  position: absolute;
  width: 100%;

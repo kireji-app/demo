@@ -1,0 +1,489 @@
+* {
+ box-sizing: border-box
+}
+
+html,
+body {
+ --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+ --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
+ --menu-tween: 0;
+ --sidebar-width: 256px;
+ --bottom-accent: 0 1.5px var(--fg-fade3);
+ --bottom-shadow: 0 2px 7px #0002;
+ --icon-size: 16px;
+ --spacing: 12px;
+ --taskbar-height: calc(var(--icon-size) + var(--spacing));
+ --h: 100vh;
+ font: 11px / 16px var(--system-ui);
+ overscroll-behavior: none !important;
+ color: black;
+ background: #377f7f;
+ -webkit-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ margin: 0;
+ height: var(--h);
+}
+
+@supports (height: 100dvh) {
+
+ html,
+ body {
+  --h: 100dvh;
+ }
+}
+
+#menu {
+ position: fixed;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ margin: 0;
+ padding: 0;
+ /* opacity: var(--menu-tween); */
+ outline: none;
+ pointer-events: none;
+}
+
+#menu-button {
+ flex: 0 0;
+ position: relative;
+ width: 100%;
+ box-sizing: border-box;
+ height: 100%;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: 3px;
+ border: none;
+ font: bold 11px / 16px var(--system-ui);
+ box-sizing: border-box;
+ padding: 4px 4px 2px;
+ text-align: left;
+ background: #c3c3c3;
+ box-shadow:
+  inset -1px -1px black,
+  inset 1px 1px white,
+  inset -2px -2px #7a7a7a,
+  inset 2px 2px #dbdbdb;
+}
+
+.menu-open #menu-button {
+ box-shadow:
+  inset -1px -1px white,
+  inset 1px 1px black,
+  inset -2px -2px #dbdbdb,
+  inset 2px 2px #7a7a7a;
+ padding: 3px 4px 2px;
+}
+
+#menu-button:focus::before {
+ border: 1px dotted black;
+ content: "";
+ position: absolute;
+ margin: 3px;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
+}
+
+#menu-button::after {
+ content: "Start";
+}
+
+button {
+ background: transparent;
+ padding: 0;
+ margin: 0;
+ border: none;
+ color: inherit;
+}
+
+#fullscreen {
+ position: relative;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: 3px;
+ box-sizing: border-box;
+ height: 100%;
+ margin: 0;
+ user-select: none;
+ padding: 3px 4px 3px;
+ text-align: left;
+ background: #c3c3c3;
+ box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
+ width: auto;
+}
+
+#sidebar {
+ padding: 0;
+ margin: 0;
+ position: fixed;
+ overflow: hidden;
+ display: flex;
+ flex-flow: column;
+ height: calc(var(--menu-tween) * var(--sidebar-height));
+ pointer-events: all;
+ min-width: 164px;
+ left: 2px;
+ bottom: calc(var(--taskbar-height) - 4px);
+ line-height: 18px;
+ box-sizing: border-box;
+ padding: 3px 3px 3px 24px;
+ text-align: left;
+ background: #c3c3c3;
+ box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb
+}
+
+#sidebar::after {
+ pointer-events: none;
+ display: block;
+ content: "𝒅𝙚𝒔𝙠𝒕𝙤𝒑.𝑝𝑎𝑟𝑡𝑠";
+ writing-mode: tb-rl;
+ transform: rotate(-180deg);
+ line-height: 21px;
+ font-size: 18px;
+ font-weight: 900;
+ color: white;
+ padding-top: 4px;
+ box-sizing: border-box;
+ position: absolute;
+ left: 3px;
+ top: 3px;
+ height: calc(var(--sidebar-height) - 6px);
+ background:
+  linear-gradient(rgba(0, 255, 255, 0), rgba(0, 255, 255, 0.5) 12.5%, rgba(0, 255, 255, 0) 70.71%),
+  darkblue;
+ width: 21px
+}
+
+#tasks {
+ display: contents;
+}
+
+.task {
+ font: 11px var(--system-ui);
+ position: relative;
+ height: 100%;
+ margin: 0;
+ width: 160px;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: 3px;
+ border: none;
+ box-sizing: border-box;
+ padding: 3px 2px 2px;
+ text-align: left;
+ box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb;
+}
+
+.task>.icon {
+ width: 16px;
+ height: 16px;
+}
+
+.task:focus::after {
+ border: 1px dotted black;
+ content: "";
+ position: absolute;
+ margin: 3px;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
+}
+
+.task.open {
+ font: bold 11px var(--system-ui);
+ padding: 4px 2px 2px;
+ box-shadow: inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a;
+}
+
+.task.open>* {
+ z-index: 3
+}
+
+.task.open::before {
+ content: "";
+ position: absolute;
+ margin: 2px;
+ border-top: 1px solid white;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ background-image:
+  linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
+  linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
+ background-size: 2px 2px;
+ background-position: 0 0, 1px 1px;
+}
+
+.task.icon {
+ width: 16px;
+ height: 16px;
+}
+
+/*
+#tasks,
+#settings {
+ padding: var(--spacing);
+ display: flex;
+ margin: 0;
+ flex-flow: column;
+}
+
+#tasks {
+ background: var(--bg-shade3);
+ gap: var(--spacing);
+ counter-reset: item;
+ flex: 0 1 auto;
+ line-height: var(--icon-size);
+}
+*/
+#settings {
+ display: flex;
+ flex-flow: column;
+ gap: 1ch;
+}
+
+.separator {
+ height: 2px;
+ border-top: 1px solid #7f7f7f;
+ border-bottom: 1px solid white;
+ box-sizing: border-box;
+ margin: 4px 0;
+}
+
+#settings>* {
+ display: flex;
+ gap: 1ch;
+ justify-content: space-between;
+}
+
+/*
+#tags {
+ display: flex;
+}
+
+#tags>* {
+ display: inline-flex;
+ font-weight: 100;
+ line-height: 20px;
+ padding: 0 4px;
+ box-sizing: border-box;
+ font-family: var(--system-ui-mono);
+ background: rgb(97, 36, 23);
+}
+
+#tags> :first-child {
+ background: var(--bg-shade3);
+}
+
+#color-mode,
+#vintage-mode {
+ position: relative;
+ height: var(--spacing);
+}
+
+#color-mode .base,
+#vintage-mode .base {
+ width: 100%;
+ border-radius: var(--spacing);
+ height: var(--spacing);
+ background: var(--bg-shade3);
+ width: calc(var(--spacing) * 2);
+ box-shadow: inset 0px 0px 6px #000;
+ flex: 0 0 auto;
+ overflow: hidden;
+ position: absolute;
+ right: 0;
+ display: flex;
+}
+
+.handle {
+ display: block;
+ background: var(--bg-shade3);
+ box-shadow: 0px 0px 6px #000;
+ width: calc(var(--spacing) - 4px);
+ height: calc(var(--spacing) - 4px);
+ position: absolute;
+ text-align: center;
+ border-radius: var(--spacing);
+ left: calc(.5 * var(--spacing) * var(--color-mode) + 2px);
+ top: 2px;
+}
+ */
+
+#label1,
+#label2 {
+ transition: opacity 0.3s;
+}
+
+#label1 {
+ opacity: 100%;
+}
+
+#label2 {
+ opacity: 0%;
+}
+
+#color-mode:hover #label1 {
+ opacity: 0%;
+}
+
+#color-mode:hover #label2 {
+ opacity: 100%;
+}
+
+.task-link {
+ display: flex;
+ padding: 0;
+ flex: 0;
+ font-weight: 500;
+ margin: -1px;
+ line-height: 25px;
+ position: relative;
+ align-items: center;
+ padding: 4px 0;
+}
+
+.task-link:hover {
+ background: #00007f;
+ color: white
+}
+
+.task-icon {
+ width: 24px;
+ height: 24px;
+ margin: 0 10px;
+ --size: 24px;
+}
+
+.task-icon {
+ height: var(--icon-size);
+ width: var(--icon-size);
+ border-radius: calc(var(--icon-size) * 0.2);
+}
+
+.task-link>.label {
+ flex: 1 1;
+}
+
+.task-link[data-here="true"] {
+ position: relative;
+ color: var(--theme);
+}
+
+.task-link[data-here="true"]::before {
+ content: "";
+ position: absolute;
+ width: 1ch;
+ left: calc(var(--spacing) * -1);
+ top: 0;
+ bottom: 0;
+ width: 8px;
+ background: var(--theme);
+}
+
+#logo {
+ font-weight: 700;
+}
+
+taskbar- {
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ height: var(--taskbar-height);
+ margin: 0;
+ padding: var(--spacing);
+ line-height: var(--taskbar-height);
+ display: flex;
+ box-shadow: var(--taskbar-accent);
+ gap: var(--spacing);
+ box-sizing: border-box;
+ gap: 3px;
+ padding: 4px 2px 2px;
+ background: #c3c3c3;
+ box-shadow: inset 0 1px #c3c3c3, inset 0 2px white;
+}
+
+taskbar->.btn {
+ width: var(--icon-size);
+}
+
+taskbar->.btn:hover {
+ color: var(--theme);
+}
+
+button:hover {
+ color: var(--theme);
+}
+
+#nested button {
+ font-size: 100px;
+}
+
+#home {
+ padding: 0;
+ margin: 0;
+ display: flex;
+ font-size: 21px;
+ line-height: var(--icon-size);
+ font-weight: 400;
+ gap: calc(var(--spacing) / 3);
+}
+
+#home-icon {
+ display: none;
+ height: var(--icon-size);
+ width: var(--icon-size);
+}
+
+#home-label {
+ display: none;
+}
+
+.spacer {
+ flex: 1;
+}
+
+#nested {
+ line-height: var(--icon-size);
+ padding: 0;
+ display: flex;
+ height: var(--icon-size);
+ gap: 6px;
+}
+
+@media (width < 500px) {
+ #nested {
+  position: fixed;
+  bottom: var(--taskbar-height);
+  left: 0;
+  right: 0;
+  width: 100vw;
+  box-shadow: var(--taskbar-accent);
+ }
+}
+
+@media (display-mode: window-controls-overlay) {
+ taskbar- {
+  padding-left: env(titlebar-area-x, 0);
+  top: env(titlebar-area-y, 0);
+  padding-right: calc(100% - env(titlebar-area-width, 100%) - env(titlebar-area-x, 0));
+  height: var(--taskbar-height);
+  width: 100%;
+  -webkit-app-region: drag;
+  app-region: drag;
+ }
+
+ taskbar->button {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+ }
+}

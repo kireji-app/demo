@@ -3,4 +3,4 @@ delete part.container
 
 delete part.heading
 
-app.containerHost.removeAttribute("style")
+desktop.containerHost.removeAttribute("style")

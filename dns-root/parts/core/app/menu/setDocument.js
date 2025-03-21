@@ -1,2 +1,0 @@
-inherit.menuButton
-inherit.menu

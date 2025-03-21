@@ -2,11 +2,11 @@ const addends = {}
 let nonSelfReferentialBrowserTotal = 0n
 let maxRecursiveDepth = 10n
 
-for (const app of part.parent.parent.parent.parent) {
- addends[app.key] = Framework.createPart("origin." + part.host, {
-  "postDefine.js": `part.size = ${app.size}n`
+for (const task of desktop) {
+ addends[task.key] = Framework.createPart("origin." + part.host, {
+  "postDefine.js": `part.size = ${task.size}n`
  }, part)
- nonSelfReferentialBrowserTotal += app.size
+ nonSelfReferentialBrowserTotal += task.size
 }
 
 addends.core = Framework.createPart("origin." + part.host, {

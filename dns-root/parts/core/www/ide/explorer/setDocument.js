@@ -1,7 +1,33 @@
 part.container = element(part.parent.container, "section")
 part.container.setAttribute("id", "explorer")
+
+part.widthHandle = element(part.parent.container, "div")
+part.widthHandle.setAttribute("id", "width-handle")
+
+part.widthHandle.onmousedown = e => {
+ e.preventDefault()
+ const backupOnMouseUp = window.onmouseup
+ const backupOnMouseMove = window.onmousemove
+ const backupClass = desktop.containerHost.getAttribute("class")
+ desktop.containerHost.setAttribute("class", (backupClass ? backupClass + " " : "") + "dragging")
+ window.onmousemove = e => {
+  e.preventDefault()
+  if (e.clientX < 32) {
+   if (part.width.choice[LAYER] === part.width.open)
+    part.width.setLayer(LAYER, 0n)
+  } else part.width.setLayer(LAYER, part.width.open.offset + BigInt(Math.min(895, Math.max(0, Math.trunc(e.clientX) - 64))))
+ }
+ window.onmouseup = e => {
+  e.preventDefault()
+  window.onmouseup = backupOnMouseUp
+  window.onmousemove = backupOnMouseMove
+  if (backupClass) desktop.containerHost.setAttribute("class", backupClass)
+  else desktop.containerHost.removeAttribute("class")
+ }
+}
+
 part.heading = element(part.container, "h2")
-part.heading.textContent = "Explorer"
+part.heading.textContent = "Schema Explorer"
 
 async function addPart(subject, container, depth = 0) {
  for (const subpart of subject) {
@@ -32,14 +58,15 @@ async function addPart(subject, container, depth = 0) {
   } else subpartContainer.setAttribute("class", "empty")
   const symbol = element(summary, "span")
   const icon = element(symbol, "img")
-  icon.setAttribute("src", await subpart.createDataURI("/" + Framework.version + "/" + await subpart.resolve("icon.uri", "fallback-icon.svg")))
+  icon.setAttribute("src", await subpart.createDataURI(Framework.version + await subpart.resolve("icon.uri", "fallback-icon.svg")))
   const typeIcon = element(symbol, "img")
   typeIcon.setAttribute("class", "type-icon")
   const protoSubpart = Object.getPrototypeOf(Object.getPrototypeOf(subpart))
-  typeIcon.setAttribute("src", await protoSubpart.createDataURI("/" + Framework.version + "/" + await protoSubpart.resolve("icon.uri", "fallback-icon.svg")))
+  typeIcon.setAttribute("src", await protoSubpart.createDataURI(Framework.version + await protoSubpart.resolve("icon.uri", "fallback-icon.svg")))
   const label = element(summary, "span")
   label.setAttribute("class", "label")
   label.textContent = subpart.key
+  if (subpart.key === root.key) label.textContent += " (" + Framework.tags[0] + ")"
   addPart(subpart, subpartContainer, depth + 1)
  }
 }

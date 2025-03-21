@@ -8,6 +8,11 @@ declare function decrement(): void
  * Not available in `define.js`. */
 /// <reference path="./dns-root/parts/core/context.js" />
 declare const part: Part
+/** The parent (type instance) of the part currently being defined.
+ * 
+ * Only available in `define.js` and `postDefine.js`. */
+/// <reference path="./dns-root/parts/core/context.js" />
+declare const PARENT: Part
 /** A proxy for `part.parent` that assigns gotten property values directly to `part`.
  * 
  * Shorthand for `part.parent.<property> = part.<property>`.*/
@@ -47,18 +52,16 @@ declare var KEY: string
 declare const LAYER: number
 /** The incoming state to be propagated leafward. Available only in progateLeafward.js. */
 declare const STATE: bigint
-/** The framework that compiled the source code for the class instance of the currently evaluated script. */
+/** The framework instance that compiled the source code for the class instance of the currently evaluated script. */
 declare const framework: Framework
-/** The currently running application (not available in ServiceWorker). */
-declare const app: Part & {
+/** The virtual operating system (not available in ServiceWorker). */
+declare const desktop: Part & {
  /** The computed framerate of the application. */
  readonly fps: number
  /** The current session time. */
  readonly time: DOMHighResTimeStamp
  /** Whether or not the client OS is MacOS. */
  readonly isMac: boolean
- /** The alphabet used as the base when URI-encoding and -decoding a bigint state. */
- readonly radix: string
  /** The application state according to the rendered document. */
  readonly documentState: bigint
  /** The average length of time each frame is on screen in milliseconds. */
@@ -77,24 +80,24 @@ declare const app: Part & {
  readonly throttleStartTime: number
  /** The main game loop, which must be running to handle most user interaction.*/
  requestFrame(now: DOMHighResTimeStamp): void
- /** Uses app.radix to parse the current location hash to override the current application state.*/
+ /** Uses Framework.segmentRadix to parse the current location hash to override the current application state.*/
  parseStateFromAddressBar(): void
- /** Uses app.radix to turn a state into a location hash. */
+ /** Uses Framework.segmentRadix to turn a state into a location hash. */
  encodeState(state: bigint): string
  /** Updates a part on the staging layer and propagates it to the rest of the layer. */
  stageState(target: Part, state: bigint, resetStagingLayer?: boolean): Promise<string>
- /** The host element for the app's content. */
+ /** The host element for desktop content. */
  containerHost: HTMLDivElement
- /** The shadow root of the app's content container. */
+ /** The shadow root of the desktop's content container. */
  container: ShadowRoot
- /** The main CSS stylesheet for the app. */
+ /** The main CSS stylesheet for the desktop. */
  styleSheet: CSSStyleSheet
- /** The main toolbar element. */
- toolbar: HTMLElement
+ /** The main taskbar element. */
+ taskbar: HTMLElement
  /** The home button element. */
  homeButton: HTMLButtonElement
- /** A spacer element in the toolbar. */
- toolbarSpacer: HTMLSpanElement
+ /** A spacer element in the taskbar. */
+ taskbarSpacer: HTMLSpanElement
  /** Whether or not to show the fullscreen control. */
  showFullScreenControl: boolean
  /** Whether or not to show the share button. */
@@ -110,13 +113,13 @@ declare const app: Part & {
  /** Destroys the nested toolbar. */
  destroyNestedToolbar(): void
  /** The main menu element. */
- menu: HTMLElement
+ menuElement: HTMLElement
  /** The sidebar element within the menu. */
  sidebar: HTMLDivElement
- /** The section in the sidebar containing app links. */
- appsSection: HTMLUListElement
- /** An object mapping app hosts to their corresponding list item elements. */
- appNodes: { [key: string]: HTMLLIElement }
+ /** The section in the start menu listing tasks. */
+ tasksSection: HTMLUListElement
+ /** An object mapping tasks to their corresponding list item elements. */
+ taskNodes: { [key: string]: HTMLLIElement }
  /** The settings section in the sidebar. */
  settingsSection: HTMLElement
  /** A line containing the tags label and the tags themselves. */
@@ -142,7 +145,7 @@ declare const app: Part & {
 }
 /** The root part, which manages part layers. */
 declare const root: Disjunction & {
- /** A string which is "client" when in a Window and "server" when in a ServiceWorker. */
+ /** A string which is "desktop" when in a Window and "worker" when in a ServiceWorker. */
  readonly environment: string
  /** The integer that identifies the primary layer, which controls all document rendering. */
  readonly primaryLayer: number
@@ -184,6 +187,8 @@ declare class Part extends Array<Part> {
   * 
   * *Note: There is no* `root.parent`. */
  readonly parent?: Part
+ /** The root part of this part's tree. */
+ readonly rootPart?: Part
  /** The parent part state at which this part becomes it's parent's chosen subpart.
   * 
   * Equal to `0n` if this part's index is `0` or it's parent is not a disjunction. */
@@ -194,6 +199,10 @@ declare class Part extends Array<Part> {
  readonly stateCache: bigint[]
  /** When parent type is `conjunction.core.parts`, a divisor which the parent conjunction uses to encode and decode substate properties.*/
  readonly conjunctionDivisor: bigint
+ /** When parent type is `pick-n.core.parts`, a set of divisors which the pick-n uses to encode and decode substate properties.*/
+ readonly conjunctionDivisors: [bigint]
+ /** When parent type is `pick-n.core.parts`, the size of the plane created by adding this part to the pick-n.*/
+ readonly planeSize: [bigint]
  insert(key: string, subpart: string, index: number, offset?: bigint): Part
  initialize?(): Promise<void>
  setLayer(LAYER: number, STATE: bigint): Promise<void>
@@ -251,13 +260,16 @@ declare class Framework {
  static BaseType: typeof Part | null
  static DNSRoot: {} | null
  static tags: string[] | null
- static vlqBase: string
+ static sourceMappingRadix: string
  static baseHost: string
  static indexHTML: string
  static instances: object
  static verbosity: number
  static clientRoot: string
  static domainRoot: string
+ static maxSegments: number
+ static segmentRadix: string
+ static maxSegmentLength: number
  static asyncMethodArguments: AsyncMethodData
  static typeURL: string
  static contextURL: string

@@ -10,16 +10,15 @@ import {
  writeFileSync as writeFile
 } from 'fs'
 class Framework {
- static change = {
-  breaksAPI: true,
-  extendsAPI: true
- }
- static parts = []
+ static change = ["major", "minor", "patch"][0]
  static cores = []
- static vlqBase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+ static sourceMappingRadix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+ static maxSegments = 25
+ static segmentRadix = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.~!$*"
+ static maxSegmentLength = 250
  static baseHost = "core.parts"
  static rootHost = "root.core.parts"
- static fallbackHost = "www.fallback.cloud"
+ static fallbackHost = "www.desktop.parts"
  static debugHost = this.fallbackHost
  static verbosity = 0
  static clientRoot = ".public"
@@ -36,7 +35,7 @@ class Framework {
  static BaseType = null
  static DNSRoot = null
  static tags = null
- static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> <script defer src=/${this.version}/${this.clientScriptURL}></script></head></html>` }
+ static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> <script defer src=${this.version}${this.clientScriptURL}></script></head></html>` }
  static asyncMethodArguments = {
   initialize: [],
   setLayer: ["LAYER", "STATE"],
@@ -116,16 +115,6 @@ class Framework {
   if (!host) throw "undefined host"
   return new this(host, options).Type
  }
- static register(part) {
-  part.id = this.parts.push(part) - 1
-  this.parts[part.host] ??= []
-  this.parts[part.host].push(part)
- }
- static getPartFromRoot(host) {
-  const part = this.parts[host]?.[0]
-  if (part) return part
-  console.warn('Cannot get part from root which isn\'t in root - ' + host)
- }
  static createPart(host, options, parent) {
   if (!host) throw "undefined host"
   if (typeof host !== "string") throw "invalid host"
@@ -134,6 +123,34 @@ class Framework {
   return new T(parent)
  }
  static async initialize() {
+
+
+  function extractDomainNames(directoryStructure) {
+   const domainNames = new Set();
+
+   function traverse(dir, currentDomainParts) {
+    let hasFiles = false;
+    let hasSubdirectories = false;
+
+    for (const key in dir) {
+     if (typeof dir[key] === 'object') {
+      hasSubdirectories = true;
+      traverse(dir[key], [key, ...currentDomainParts]);
+     } else if (typeof dir[key] === 'string') {
+      hasFiles = true;
+     }
+    }
+
+    if (hasFiles && currentDomainParts.length > 0) {
+     domainNames.add(currentDomainParts.reverse().join('.'));
+    }
+   }
+
+   traverse(directoryStructure, []);
+   return Array.from(domainNames);
+  }
+
+  this.hosts = extractDomainNames(this.DNSRoot)
   this.root = this.createPart(this.rootHost)
   await this.root.initialize()
  }
@@ -168,7 +185,7 @@ class Framework {
       unsignedRelativeDecodedPlace >>>= 5
      }
      if (unsignedRelativeDecodedPlace > 0) characterIndex |= 32
-     encodedSegment += this.vlqBase[characterIndex]
+     encodedSegment += this.sourceMappingRadix[characterIndex]
     }
     return encodedSegment
    }).join('')
@@ -241,7 +258,7 @@ class Framework {
    {`, this.buildSource, 199/* here */)
  }
  compileConstructor() {
-  this.constructorArguments = this.has(Framework.constructorArgumentsURL) || this.isBase ? ["PARENT", ...(this.isBase ? [] : this.read(Framework.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm))] : this.BaseType.framework.constructorArguments
+  this.constructorArguments = this.has(Framework.constructorArgumentsURL) || this.isBase ? ["PARENT", ...(this.isBase ? [] : this.read(Framework.constructorArgumentsURL).match(/(?<=^\s*).+?(?=\s*$)/gm) ?? [])] : this.BaseType.framework.constructorArguments
   if (this.has(Framework.constructorURL) || this.has(Framework.postConstructorURL)) {
    this.file.addLine(`constructor(${this.constructorArguments.join(", ")}) {`, this.buildSource, 207/* here */, 28, " ", false)
    if (this.has(Framework.constructorURL)) {
@@ -440,15 +457,15 @@ Framework.tags = (() => {
  const semanticVersion = commitTag.split(".").map(x => parseInt(x))
  if (result.includes("local")) {
   if (semanticVersion[0] === 0) {
-   if (Framework.change.breaksAPI) {
+   if (Framework.change === "major") {
     semanticVersion[1]++
     semanticVersion[2] = 0
    } else semanticVersion[2]++
   } else {
-   if (Framework.change.breaksAPI) {
+   if (Framework.change === "major") {
     semanticVersion[0]++
     semanticVersion[1] = semanticVersion[2] = 0
-   } else if (Framework.change.extendsAPI) {
+   } else if (Framework.change === "minor") {
     semanticVersion[1]++
     semanticVersion[2] = 0
    } else semanticVersion[2]++
@@ -458,7 +475,7 @@ Framework.tags = (() => {
  return result
 })()
 
-Framework.version = "v" + Framework.tags[0].split(".").slice(0, 1).join(".")
+Framework.version = "/v" + Framework.tags[0].split(".")[0] + "/"
 
 Framework.log(0, "Archiving " + Framework.tags.join("-"))
 
@@ -522,19 +539,21 @@ Framework.DNSRoot = (() => {
  return result
 })()
 
+console.log(Framework.createType("pick-n.core.parts").toString())
+
 Framework.log(0, "Publishing " + Framework.tags.join("-"))
 
 if (!itemExists(Framework.clientRoot))
  makeFolder(Framework.clientRoot)
 
-const versionPath = Framework.clientRoot + "/" + Framework.version
+const versionPath = Framework.clientRoot + Framework.version
 
 if (itemExists(versionPath))
  removeItem(versionPath, { recursive: true, force: true })
 
 makeFolder(versionPath)
-writeFile(versionPath + "/index.html", Framework.indexHTML)
-writeFile(versionPath + "/" + Framework.clientScriptURL, Framework.compile())
+writeFile(versionPath + "index.html", Framework.indexHTML)
+writeFile(versionPath + Framework.clientScriptURL, Framework.compile())
 
 const readmeURL = "README.md"
 const readmeBody = readFile(readmeURL, "utf-8")

@@ -8,7 +8,7 @@
 
 #scroller {
  position: fixed;
- top: var(--toolbar-height);
+ top: var(--taskbar-height);
  bottom: 0;
  left: 0;
  right: 0;
@@ -95,7 +95,7 @@ button {
 dialog {
  display: flex;
  flex-flow: column;
- top: var(--toolbar-height);
+ top: var(--taskbar-height);
  bottom: 0;
  left: 0;
  right: 0;
@@ -161,7 +161,7 @@ dialog>p {
  top: 0;
  left: 0;
  right: 0;
- height: var(--toolbar-height);
+ height: var(--taskbar-height);
  cursor: pointer;
  border: none;
  text-align: left;
@@ -170,7 +170,7 @@ dialog>p {
  background: var(--bg-shade1);
  color: var(--fg-fade1);
  padding: var(--spacing);
- box-shadow: var(--toolbar-accent);
+ box-shadow: var(--taskbar-accent);
 }
 
 @media (orientation: landscape) {

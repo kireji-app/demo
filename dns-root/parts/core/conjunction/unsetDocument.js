@@ -1,5 +1,2 @@
-for (const subpart of part) {
- if (typeof subpart.onunsetdocument === "function")
-  await subpart.onunsetdocument()
+for (const subpart of part)
  await subpart.unsetDocument(LAYER)
-}

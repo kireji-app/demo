@@ -35,7 +35,7 @@ $`\begin{alignat}{3} &{{u_T}_v}_n &\xleftrightarrow{} &\{\;{{u_T}_v}_{n_0}, {{u_
 
 All types exist in a hierarchy with each one ultimately extending from a common base type ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$) which extends native [Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array). A type's cardinality and state are [bigint](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) primitives. The base type has a cardinality of $`\texttt{\textcolor{#88AAEE}{1}\textcolor{#4466AA}{n}}`$ and its one state is $`\texttt{\textcolor{#88AAEE}{0}\textcolor{#4466AA}{n}}`$.
 
-All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$ and extend $`\textcolor{#AA8866}{\text{"app.core.parts"}}`$. These types have associated DNS records pointing to a server hosting the output directory `./public`.
+All client application types start with $`\textcolor{#AA8866}{\text{"www."}}`$ and extend $`\textcolor{#AA8866}{\text{"task.desktop.parts"}}`$. These types have associated DNS records pointing to a server hosting the output directory `./public`.
 
 The framework packs all type definitions into `./public/framework.js` which on first visit registers itself as a service worker to serve `manifest.json` and become an offline installable PWA. On window load, it serves itself as the client runtime framework and recovers its initial state from the window location. On native event (where attached), it updates the client state and window location together.
 
@@ -64,11 +64,11 @@ These projects aren't just live demos, they are standalone projects. Some of the
 * [www.kireji.io](https://www.kireji.io) A short-form document editor.
 * [www.core.parts](https://www.core.parts) Interactive documentation for the project.
 * [www.ejaugust.com](https://www.ejaugust.com) My portfolio and blog.
-* [www.glowstick.click](https://www.glowstick.click) An app presenting animated web content with the ability to edit and share video clips.
+* [www.glowstick.click](https://www.glowstick.click) A video streaming platform with the ability to edit and share video clips.
 * [www.orenjinari.com](https://www.orenjinari.com) An artist portfolio which includes images, animations, interaction and video streaming.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.101.0-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.102.0-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status

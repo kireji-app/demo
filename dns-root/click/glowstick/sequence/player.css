@@ -18,14 +18,14 @@ main {
  bottom: 0;
  left: 0;
  right: 0;
- height: var(--toolbar-height);
+ height: var(--taskbar-height);
  display: flex;
 }
 
 main button {
- width: var(--toolbar-height);
- line-height: var(--toolbar-height);
- font-size: calc(0.6 * var(--toolbar-height));
+ width: var(--taskbar-height);
+ line-height: var(--taskbar-height);
+ font-size: calc(0.6 * var(--taskbar-height));
  text-align: center;
  background: transparent;
  border: none;
@@ -41,7 +41,7 @@ main button:hover {
 
 .play-pause-button,
 #bottom-toolbar,
-app-toolbar {
+taskbar- {
  transition: ease-out 2s;
  opacity: 0%;
 }
@@ -50,10 +50,10 @@ app-toolbar {
  width: unset;
  position: fixed;
  display: block;
- top: var(--toolbar-height);
- bottom: var(--toolbar-height);
- line-height: calc(2 * var(--toolbar-height));
- font-size: calc(2 * var(--toolbar-height));
+ top: var(--taskbar-height);
+ bottom: var(--taskbar-height);
+ line-height: calc(2 * var(--taskbar-height));
+ font-size: calc(2 * var(--taskbar-height));
  left: 0;
  right: 0;
  height: unset;
@@ -61,7 +61,7 @@ app-toolbar {
 
 body:hover .play-pause-button,
 body:hover #bottom-toolbar,
-body:hover app-toolbar {
+body:hover taskbar- {
  opacity: 100%;
  transition: 0.2s;
 }
@@ -70,7 +70,7 @@ body:hover app-toolbar {
  flex: 1;
 }
 
-app-toolbar {
+taskbar- {
  background: transparent;
  box-shadow: none;
 }

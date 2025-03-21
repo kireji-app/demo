@@ -1,0 +1,1 @@
+desktop.vintageModeButton.onclick = increment

@@ -8,7 +8,7 @@ const releaseDate = new Date(part.releaseDate)
 part.popup = element(part.container, "dialog")
 part.popup.tabIndex = 0
 part.popup.innerHTML = `
- <img src="https://${part.parent.host}/${Framework.version}/still.png" alt="Still image captured from ${part.niceName}">
+ <img src="https://${part.parent.host}${Framework.version}still.png" alt="Still image captured from ${part.niceName}">
  <h3>${part.niceName}</h3>
  <p id=release-date>${releaseDate > Date.now() ? "Coming" : "Released on"} ${releaseDate.toLocaleDateString("en-US", {
  year: 'numeric',
@@ -22,12 +22,6 @@ part.popup.innerHTML = `
 // part.backButton.onclick = async () => {
 //  await part.parent.parent.setLayer(LAYER, 0n)
 // }
-part.onclickBackup = app.homeButton.onclick
-app.homeButton.onclick = () => part.parent.parent.setLayer(LAYER, 0n)
-part.homeIconBackup = app.homeIcon
-app.homeIcon.remove()
-part.homeLabelBackup = app.homeLabel.textContent
-app.homeLabel.innerHTML = "❮&nbsp;&nbsp;Library"
 
 part.playButton = part.popup.querySelector("#play-btn")
 part.playButton.onclick = async () => { /*

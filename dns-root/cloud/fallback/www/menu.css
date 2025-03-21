@@ -2,7 +2,7 @@ body>main {
  height: var(--h);
 }
 
-app-toolbar {
+taskbar- {
  box-shadow: none;
  background: transparent;
 }

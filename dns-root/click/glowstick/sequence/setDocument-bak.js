@@ -43,13 +43,6 @@ part.nextButton.setAttribute("id", "next-button")
 part.nextButton.innerHTML = '⏭'
 
 part.styleSheet.replaceSync(read("player.css"))
-part.oldThrottleDuration = app.throttleDuration
-app.throttleDuration = part.oldThrottleDuration // 5000
+part.oldThrottleDuration = desktop.throttleDuration
+desktop.throttleDuration = part.oldThrottleDuration // 5000
 document.adoptedStyleSheets.push(part.styleSheet, part.animatedStyleSheet)
-
-part.onclickBackup = app.homeButton.onclick
-app.homeButton.onclick = () => title.setLayer(LAYER, 0n)
-part.homeIconBackup = app.homeIcon
-app.homeIcon.remove()
-part.homeLabelBackup = app.homeLabel.textContent
-app.homeLabel.innerHTML = "❮&nbsp;&nbsp;" + title.niceName

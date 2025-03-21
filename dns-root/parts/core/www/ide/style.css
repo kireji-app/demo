@@ -6,6 +6,7 @@
  --line-height: 25px;
  --icon-size: inherit;
  --icon-size2: calc(var(--icon-size) * 2 / 3);
+ position: relative;
 }
 
 
@@ -26,8 +27,29 @@
  box-shadow: var(--bottom-shadow);
  background-color: var(--bg-shade2);
  line-height: var(--line-height);
- font-size: var(--line-height);
+ font-size: calc(var(--line-height) * 2 / 3);
  z-index: 1;
+}
+
+#width-handle {
+ --handle-thickness: calc(var(--spacing) / 2);
+ position: absolute;
+ left: calc(var(--explorer-width) - var(--handle-thickness) / 2);
+ top: 0;
+ bottom: 0;
+ width: var(--handle-thickness);
+ border-radius: calc(var(--handle-thickness) / 2);
+}
+
+#width-handle,
+:host(.dragging) {
+ cursor: ew-resize;
+ z-index: 10;
+}
+
+#width-handle:hover,
+:host(.dragging) #width-handle {
+ background-color: var(--fg-fade2);
 }
 
 #browser>h2 {

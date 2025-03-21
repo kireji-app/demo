@@ -14,6 +14,11 @@
    "source": "/:path((?!v\\d+/?).*)",
    "destination": "/v0/",
    "permanent": false
+  },
+  {
+   "source": "/v:version(\\d+$)",
+   "destination": "/v:version/",
+   "permanent": true
   }
  ]
 }

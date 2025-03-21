@@ -4,6 +4,6 @@ if (STATE !== part.state[LAYER]) {
 
  if (LAYER === root.primaryLayer) {
   await part.setDocumentLeafward(LAYER)
-  await root.updateDocumentLeafward(LAYER)
+  part.rootPart.updateDocumentLeafward(LAYER)
  }
-} else console.warn('ignored reassignment', part.host, part.state[LAYER])
+} // else console.warn('ignored reassignment', part.host, part.state[LAYER])
