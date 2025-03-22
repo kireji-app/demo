@@ -10,12 +10,13 @@ import {
  writeFileSync as writeFile
 } from 'fs'
 class Framework {
- static change = ["major", "minor", "patch"][0]
+ static change = ["major", "minor", "patch"][2]
  static cores = []
  static sourceMappingRadix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
  static maxSegments = 25
  static segmentRadix = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_.~!$*"
  static maxSegmentLength = 250
+ static layerCount = 2
  static baseHost = "core.parts"
  static rootHost = "root.core.parts"
  static fallbackHost = "www.desktop.parts"
@@ -38,14 +39,16 @@ class Framework {
  static get indexHTML() { return `<!DOCTYPE html><html lang=en><head><link rel=manifest /><link rel=icon href="data:image/png;base64,iVBORw0KGgo="><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgo="><meta name=robots content=noindex /><meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" /> <script defer src=${this.version}${this.clientScriptURL}></script></head></html>` }
  static asyncMethodArguments = {
   initialize: [],
-  setLayer: ["LAYER", "STATE"],
-  setLayerLeafward: ["LAYER", "STATE"],
-  setLayerRootward: ["LAYER", "KEY"],
+
   setDocument: ["LAYER"],
   setDocumentLeafward: ["LAYER"],
   unsetDocument: ["LAYER"],
   updateDocumentLeafward: ["LAYER"],
   updateDocument: ["LAYER"],
+
+  setLayer: ["LAYER", "STATE", "DELTA"],
+  setLayerLeafward: ["LAYER", "STATE"],
+  setLayerRootward: ["LAYER", "KEY"]
  }
  static log(verbosity, ...data) {
   if (this.isDebug && verbosity <= this.verbosity) console.log(...data)
@@ -123,8 +126,6 @@ class Framework {
   return new T(parent)
  }
  static async initialize() {
-
-
   function extractDomainNames(directoryStructure) {
    const domainNames = new Set();
 
@@ -539,7 +540,7 @@ Framework.DNSRoot = (() => {
  return result
 })()
 
-console.log(Framework.createType("pick-n.core.parts").toString())
+// console.log(Framework.createType("core.parts").toString())
 
 Framework.log(0, "Publishing " + Framework.tags.join("-"))
 

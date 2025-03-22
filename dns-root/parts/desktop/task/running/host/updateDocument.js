@@ -1,7 +1,6 @@
 const host = part.taskHosts[Number(part.state[LAYER])]
-part.parent.taskLabel.innerHTML = host
-part.parent.task = Framework.createPart(host, undefined, part)
-inherit.task
+part.parent[LAYER].taskLabel.innerHTML = host
+part.task = part.parent[LAYER].task = Framework.createPart(host, undefined, part)
 
 if (part.windowArray) {
  part.windowArray.splice(part.windowIndex, 1)
@@ -15,6 +14,6 @@ part.windowArray.push(part)
 
 if (part.task.host === (Framework.isDebug ? Framework.debugHost : location.host) && BigInt(part.windowIndex) === desktop.settings.windowIndex.state[LAYER]) {
  desktop.openTaskItem?.classList.remove("open")
- desktop.openTaskItem = part.parent.taskItem
+ desktop.openTaskItem = part.parent[LAYER].taskItem
  desktop.openTaskItem.classList.add("open")
 }

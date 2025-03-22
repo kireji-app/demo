@@ -1,4 +1,4 @@
-part.container = element(part.parent.container, "section")
+part.container = element(part.parent[LAYER].container, "section")
 part.container.setAttribute("id", "browser")
 
 part.heading = element(part.container, "h2")

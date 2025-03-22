@@ -15,8 +15,7 @@ if (Framework.isDebug)
 Object.assign(globalThis, {
  worker,
  desktop: Object.assign(part, {
-  // pathEncoder: new (Framework.createType("path.core.parts"))(null),
-  // segmentEncoder: new (Framework.createType("segment.path.core.parts"))(null),
+  pathEncoder: new (Framework.createType("path.core.parts"))(null),
   gpu: navigator.gpu && await(await navigator.gpu.requestAdapter()).requestDevice(),
   fps: 1,
   time: performance.now(),
@@ -48,13 +47,34 @@ Object.assign(globalThis, {
    const { pathname, search, hash, host, href } = new URL(location)
    const isLocal = host.startsWith("localhost:")
    const typeName = isLocal ? Framework.debugHost : host
+   if (pathname?.length < Framework.version.length) throw 'malformed url'
+   const segments = pathname.slice(1).split(/\/+/).filter(segment => segment)
+   const versionSegment = segments.shift()
+   const version = "/" + versionSegment + "/"
 
-   console.log('ready to open file ' + pathname)
-   // const segment = pathname.split("/")[1] ?? 'example'
-   // const state = await this.segmentEncoder.setSegment(segment)
-   // const testPath = this.pathEncoder.toString()
-   // console.log({ state, testPath })
-   // await desktop.setLayer(root.primaryLayer, state)
+   if (!versionSegment.startsWith("v") || isNaN(parseInt(versionSegment.slice(1))) || version !== Framework.version)
+    throw 'malformed version ' + version
+
+   if (!segments.length)
+    segments.push(...`default/path/for/${typeName}/goes/here`.split("/"))
+
+   // Temp for example purposes.
+   const desktopCode = segments[0]
+   const desktopState = desktop.decodeState(desktopCode) % desktop.size
+
+   await desktop.setLayer(root.stagingLayer, desktopState)
+   desktop.pathEncoder.parse(root.primaryLayer, segments.join("/"))
+   const results = [...desktop.pathEncoder].map(segment => segment.state[root.primaryLayer])
+   const settingsState = results.shift()
+   if (settingsState >= desktop.settings.size) {
+    console.warn("ignoring settings - out of range")
+    desktop.settings.setLayer(root.stagingLayer, settingsState)
+   }
+   for (let i = 0; i < results.length; i++) {
+    const result = results[i]
+    console.log('set task' + i + ' to state ' + result)
+   }
+   await desktop.setLayer(root.primaryLayer, settingsState)
   },
   decodeState(code) {
    let binaryValue = "0b0"
@@ -117,16 +137,16 @@ Object.assign(globalThis, {
    await desktop.setLayer(root.primaryLayer, desktop.state[root.stagingLayer])
   }
  }),
- element: (parent, tagname) => parent.appendChild(document.createElement(tagname)),
- svg: (parent, ...paths) => {
-  const result = parent.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
+ element: (parentElement, tagname) => parentElement.appendChild(document.createElement(tagname)),
+ svg: (parentElement, ...paths) => {
+  const result = parentElement.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
   result.setAttribute("viewBox", "-1 -1 2 2")
   result.setAttribute("class", "nav-button")
   result.innerHTML = paths.map(path => `<path d="${path}" stroke-width="0.2" stroke-linecap="round" />`).join("\n")
   return result
  },
- spacer: parent => {
-  const spacer = element(parent, "")
+ spacer: parentElement => {
+  const spacer = element(parentElement, "")
   spacer.setAttribute("class", "spacer")
   return spacer
  },
@@ -156,5 +176,4 @@ desktop.adoptedStyleSheets = document.adoptedStyleSheets
 if (Framework.isDebug)
  Framework.debugHost = await(await fetch(Framework.version + "debug.host")).text()
 
-// await this.pathEncoder.setLayer(root.primaryLayer, 0n)
 await desktop.parseStateFromAddressBar()

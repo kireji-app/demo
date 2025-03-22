@@ -1,1 +1,1 @@
-part.parent.setColorMode(true)
+part.parent[LAYER].setColorMode(true)

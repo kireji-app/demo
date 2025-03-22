@@ -9,13 +9,13 @@ part.pauseButton = element(part.container, "button")
 part.pauseButton.setAttribute("class", "play-pause-button")
 part.pauseButton.setAttribute("id", "pause-button")
 part.pauseButton.innerHTML = '⏸'
-part.pauseButton.onclick = decrement
+part.pauseButton.onclick = async () => await part.setLayer(LAYER, -1n, true)
 
 part.playButton = element(part.container, "button")
 part.playButton.setAttribute("class", "play-pause-button")
 part.playButton.setAttribute("id", "play-button")
 part.playButton.innerHTML = '⏵'
-part.playButton.onclick = increment
+part.playButton.onclick = async () => await part.setLayer(LAYER, 1n, true)
 
 part.bottomToolbar = element(part.container, "footer")
 part.bottomToolbar.setAttribute("id", "bottom-toolbar")
@@ -32,10 +32,10 @@ part.timeline.setAttribute("min", 0)
 part.timeline.setAttribute("step", 1)
 part.timeline.setAttribute("value", 0)
 
-part.timeline.oninput = () => {
+part.timeline.oninput = async () => {
  const frame = BigInt(parseInt(part.timeline.value)) * part.size * part.step / (BigInt(Number.MAX_SAFE_INTEGER) + 1n)
  console.log({ frame, host })
- part.setLayer(LAYER, frame * this.step + BigInt(+this.playing))
+ await part.setLayer(LAYER, frame * this.step + BigInt(+this.playing))
 }
 
 part.nextButton = element(part.bottomToolbar, "button")

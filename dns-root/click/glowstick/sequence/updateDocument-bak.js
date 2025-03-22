@@ -1,7 +1,7 @@
 if (part.frameRequest) cancelAnimationFrame(part.frameRequest)
-if (part.playing) part.frameRequest = requestAnimationFrame(() => {
- if (part.state[LAYER] === part.size - part.step + BigInt(+part.playing)) part.parent.increment(LAYER, part.step)
- else part.increment(LAYER, part.step)
+if (part.playing) part.frameRequest = requestAnimationFrame(async () => {
+ if (part.state[LAYER] === part.size - part.step + BigInt(+part.playing)) await part.parent[LAYER].setLayer(LAYER, part.step, true)
+ else await part.setLayer(LAYER, part.step, true)
 })
 const frame = part.state[LAYER] / part.step
 const value = Number(frame * (BigInt(Number.MAX_SAFE_INTEGER) + 1n) / (part.size / part.step))

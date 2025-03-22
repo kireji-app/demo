@@ -1,1 +1,1 @@
-part.size = BigInt(part.parent.framework.resolveSync("length.number", 404n))
+part.size = BigInt(404n) // TODO

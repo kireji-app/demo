@@ -1,4 +1,4 @@
-delete part.parent.task
+delete part.parent[LAYER].task
 delete part.task
 
 if (part.windowArray) {

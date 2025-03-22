@@ -1,1 +1,1 @@
-await part.parent?.setLayerRootward(LAYER, part.key)
+await part.parent[LAYER]?.setLayerRootward(LAYER, part.key)

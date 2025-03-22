@@ -1,2 +1,4 @@
-part.state[LAYER] = part.choice[LAYER].offset + part.choice[LAYER].state[LAYER]
+if (KEY)
+ part.state[LAYER] = part[KEY].offset + part[KEY].state[LAYER]
+
 super(KEY)

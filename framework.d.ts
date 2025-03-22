@@ -1,6 +1,4 @@
 declare function element(parents: HTMLElement, tagname: string): HTMLElement
-declare function increment(): void
-declare function decrement(): void
 /** The ultimately part (type instance) on which the current script is being called.
  * 
  * Alias for `this` to disambiguate it from globalThis.
@@ -188,7 +186,7 @@ declare class Part extends Array<Part> {
   * *Note: There is no* `root.parent`. */
  readonly parent?: Part
  /** The root part of this part's tree. */
- readonly rootPart?: Part
+ readonly root?: Part
  /** The parent part state at which this part becomes it's parent's chosen subpart.
   * 
   * Equal to `0n` if this part's index is `0` or it's parent is not a disjunction. */
@@ -205,7 +203,11 @@ declare class Part extends Array<Part> {
  readonly planeSize: [bigint]
  insert(key: string, subpart: string, index: number, offset?: bigint): Part
  initialize?(): Promise<void>
- setLayer(LAYER: number, STATE: bigint): Promise<void>
+ /** 
+  * Sets the given layer to the given state. 
+  * @param DELTA If true, the given state is added to the existing state and if the result is out of range, it wraps around.
+  */
+ setLayer(LAYER: number, STATE: bigint, DELTA?: boolean): Promise<void>
  setLayerLeafward(LAYER: number, STATE: bigint): Promise<void>
  setLayerRootward(LAYER: number, KEY?: string): Promise<void>
  setDocument(LAYER: number): Promise<void>

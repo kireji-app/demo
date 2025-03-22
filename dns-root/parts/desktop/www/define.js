@@ -1,5 +1,28 @@
 super({
  // windows: "windows.desktop.parts",
+ // Let the number k of segments define the number of apps
+ // Let the settings object describe k-1 apps' settings
+ // - task settings (conjunction)
+ //   - host (disjunction)
+ //   - window mode (disjunction)
+ //     - hidden (minimized)
+ //     - expanded (maximized)
+ //     - fullscreen
+ //     - floating (restored)
+ //     - docked
+ //   - floating transform (conjunction)
+ //     - x
+ //     - y
+ //     - w
+ //     - h
+ //   - docking transform (conjunction)
+ //     - tbd...
+ //   - window stacking order (disjunction)
+ //     * The "top" item has focus?
+ //     - option 1
+ //     - option 2
+ //     - ...
+ //     - option task.index
  settings: "settings.desktop.parts"
 })
 

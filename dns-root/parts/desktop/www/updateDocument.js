@@ -5,6 +5,7 @@
 //  desktop.throttleStartTime = now
 
 console.log("ready to save file " + desktop.state[LAYER])
+// TODO: set layer for path, segment and character
 // await desktop.pathEncoder.setLayer(LAYER, desktop.state[LAYER])
 // history.replaceState({}, null, desktop.pathEncoder.toString())
 desktop.addressBarState = desktop.state[LAYER]

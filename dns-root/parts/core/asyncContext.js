@@ -1,2 +1,1 @@
-const increment = () => part.increment(LAYER)
-const decrement = () => part.decrement(LAYER)
+const inherit = new Proxy(part, { get: (_, p) => part[p] = part.parent[LAYER][p] })

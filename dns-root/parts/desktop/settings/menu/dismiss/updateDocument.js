@@ -3,8 +3,8 @@ desktop.menuElement.setAttribute("style", "--menu-tween: " + (1 - (Number(part.s
 if (part.pendingFrame)
  cancelAnimationFrame(part.pendingFrame)
 
-part.pendingFrame = requestAnimationFrame(() => {
+part.pendingFrame = requestAnimationFrame(async () => {
  delete part.pendingFrame
- const target = part.state[LAYER] < part.size - 1n ? part : part.parent
- target.increment(LAYER, 1n)
+ const target = part.state[LAYER] < part.size - 1n ? part : part.parent[LAYER]
+ await target.setLayer(LAYER, 1n, true)
 })

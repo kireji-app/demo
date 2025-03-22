@@ -1,1 +1,1 @@
-part.container = element(part.parent.container, "span")
+part.container = element(part.parent[LAYER].container, "span")

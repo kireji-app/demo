@@ -4,7 +4,7 @@ if (desktop.menuButtonTimeout)
  clearTimeout(desktop.menuButtonTimeout)
 
 desktop.menuButtonTimeout = setTimeout(() => {
- desktop.menuButton.onclick = () => part.parent.increment(LAYER, 1n)
+ desktop.menuButton.onclick = async () => await part.parent[LAYER].setLayer(LAYER, 1n, true)
 }, 120)
 
 document.body.classList.remove("menu-open")

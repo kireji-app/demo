@@ -1,4 +1,4 @@
-const icon_uri = await part.resolve("icon.uri", "fallback-icon.svg")
+const icon_uri = await part.resolve("icon.uri")
 const [icon_type] = Framework.headerOf(icon_uri)
 
 return JSON.stringify({

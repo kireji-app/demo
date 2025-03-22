@@ -10,14 +10,14 @@ part.bunnies = part.bunnyNames.map((bunnyName, bunnyIndex) => {
  img.setAttribute("src", `https://${scriptHost}${Framework.version}${bunnyName}-up.gif`)
  img.setAttribute("class", "bunny")
  img.setAttribute("id", bunnyName)
- img.onclick = () => part.scroll.setLayer(LAYER, (BigInt(area) * 25000n - 1n))
+ img.onclick = async () => await part.scroll.setLayer(LAYER, (BigInt(area) * 25000n - 1n))
  const placeholder = element(part.container, "div")
  placeholder.setAttribute("class", "placeholder")
  placeholder.innerHTML = `${Framework.isDebug ? `<h1>Area ${area}</h1>` : ""}<span id=float><img src="https://${scriptHost}${Framework.version}${bunnyName}-up.gif"><span class=thin>is </span><span>coming soon.</span></span>`
  return img
 })
 
-addEventListener("wheel", part.onwheel = event => {
+addEventListener("wheel", part.onwheel = async event => {
  event.preventDefault()
  event.stopPropagation()
  const maxScrollY = part.scroll.size - 1n
@@ -26,5 +26,5 @@ addEventListener("wheel", part.onwheel = event => {
  const requestedScrollY = part.state[LAYER] + currentScrollRatio * part.scroll.size / BigInt(Number.MAX_SAFE_INTEGER)
  const minScrollY = 0n
  const finalScrollY = requestedScrollY > maxScrollY ? maxScrollY : requestedScrollY < minScrollY ? minScrollY : requestedScrollY
- part.scroll.setLayer(LAYER, finalScrollY)
+ await part.scroll.setLayer(LAYER, finalScrollY)
 }, { passive: false })

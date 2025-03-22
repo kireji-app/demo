@@ -1,8 +1,8 @@
-part.parent = PARENT
-part.rootPart = PARENT?.rootPart ?? part
 part.size = 1n
 part.index = 0
-part.state = [-1n, -1n]
+part.state = Array(Framework.layerCount).fill(-1n)
+part.parent = Array(Framework.layerCount).fill(PARENT)
+part.root = PARENT ? PARENT.root : Array(Framework.layerCount).fill(part)
 part.insert = (key, subpart, index, offset = 0n) => {
  if (!subpart) throw new TypeError('cannot insert undefined subpart into ' + part.host)
  if (typeof subpart === "string") {
@@ -12,11 +12,7 @@ part.insert = (key, subpart, index, offset = 0n) => {
  if (key in part) console.warn(new TypeError(`duplicate key ${key} in ${part.host}`))
  subpart.offset = offset
  part[subpart.index = index] = subpart
- // if (!part.skipKey) {
  subpart.key = key
  part[key] = part[subpart.host] = subpart
- // }
  return subpart
 }
-part.increment = async (LAYER, step = 1n) => await part.setLayer(LAYER, (part.state[LAYER] + step) % part.size)
-part.decrement = async (LAYER, step = 1n) => await part.setLayer(LAYER, (part.state[LAYER] - step) % part.size)

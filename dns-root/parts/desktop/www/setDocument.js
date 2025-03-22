@@ -97,7 +97,7 @@ desktop.taskNodes = {}
 
 for (const apexDomain of ["kireji.io", "core.parts", "ejaugust.com", "kireji.app", "orenjinari.com"]) {
  const key = "www." + apexDomain
- const icon_uri = (await(await fetch("https://" + key + Framework.version + "icon.uri"))?.text()) ?? "fallback-icon.svg"
+ const icon_uri = (await(await fetch("https://" + key + Framework.version + "icon.uri"))?.text())
  // const destinationTask = Framework.createPart(key, undefined, desktop)
  // if (destinationTask.host === Framework.fallbackHost) continue
  desktop.taskNodes[key] = element(desktop.tasksSection, "li")

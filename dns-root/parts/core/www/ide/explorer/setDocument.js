@@ -1,7 +1,7 @@
-part.container = element(part.parent.container, "section")
+part.container = element(part.parent[LAYER].container, "section")
 part.container.setAttribute("id", "explorer")
 
-part.widthHandle = element(part.parent.container, "div")
+part.widthHandle = element(part.parent[LAYER].container, "div")
 part.widthHandle.setAttribute("id", "width-handle")
 
 part.widthHandle.onmousedown = e => {
@@ -10,12 +10,12 @@ part.widthHandle.onmousedown = e => {
  const backupOnMouseMove = window.onmousemove
  const backupClass = desktop.containerHost.getAttribute("class")
  desktop.containerHost.setAttribute("class", (backupClass ? backupClass + " " : "") + "dragging")
- window.onmousemove = e => {
+ window.onmousemove = async e => {
   e.preventDefault()
   if (e.clientX < 32) {
    if (part.width.choice[LAYER] === part.width.open)
-    part.width.setLayer(LAYER, 0n)
-  } else part.width.setLayer(LAYER, part.width.open.offset + BigInt(Math.min(895, Math.max(0, Math.trunc(e.clientX) - 64))))
+    await part.width.setLayer(LAYER, 0n)
+  } else await part.width.setLayer(LAYER, part.width.open.offset + BigInt(Math.min(895, Math.max(0, Math.trunc(e.clientX) - 64))))
  }
  window.onmouseup = e => {
   e.preventDefault()
@@ -58,11 +58,11 @@ async function addPart(subject, container, depth = 0) {
   } else subpartContainer.setAttribute("class", "empty")
   const symbol = element(summary, "span")
   const icon = element(symbol, "img")
-  icon.setAttribute("src", await subpart.createDataURI(Framework.version + await subpart.resolve("icon.uri", "fallback-icon.svg")))
+  icon.setAttribute("src", await subpart.createDataURI(Framework.version + await subpart.resolve("icon.uri")))
   const typeIcon = element(symbol, "img")
   typeIcon.setAttribute("class", "type-icon")
   const protoSubpart = Object.getPrototypeOf(Object.getPrototypeOf(subpart))
-  typeIcon.setAttribute("src", await protoSubpart.createDataURI(Framework.version + await protoSubpart.resolve("icon.uri", "fallback-icon.svg")))
+  typeIcon.setAttribute("src", await protoSubpart.createDataURI(Framework.version + await protoSubpart.resolve("icon.uri")))
   const label = element(summary, "span")
   label.setAttribute("class", "label")
   label.textContent = subpart.key
