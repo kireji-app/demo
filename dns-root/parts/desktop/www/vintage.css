@@ -344,7 +344,7 @@ button {
  padding: 0;
  flex: 0;
  font-weight: 500;
- margin: -1px;
+ margin: 0;
  line-height: 25px;
  position: relative;
  align-items: center;

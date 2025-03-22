@@ -15,3 +15,5 @@ Object.assign(globalThis, {
 root.choice[root.primaryLayer] = root[root.environment]
 root.state[root.primaryLayer] = root.choice[root.primaryLayer].offset + root.choice[root.primaryLayer].state[root.primaryLayer]
 await root.choice[root.primaryLayer].initialize()
+
+console.log('initialized root complete')

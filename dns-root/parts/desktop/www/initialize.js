@@ -68,13 +68,13 @@ Object.assign(globalThis, {
    const settingsState = results.shift()
    if (settingsState >= desktop.settings.size) {
     console.warn("ignoring settings - out of range")
-    desktop.settings.setLayer(root.stagingLayer, settingsState)
-   }
+    await desktop.settings.setLayer(root.stagingLayer, 0n)
+   } else await desktop.settings.setLayer(root.stagingLayer, settingsState)
+   await desktop.setLayer(root.primaryLayer, desktop.state[root.stagingLayer])
    for (let i = 0; i < results.length; i++) {
     const result = results[i]
     console.log('set task' + i + ' to state ' + result)
    }
-   await desktop.setLayer(root.primaryLayer, settingsState)
   },
   decodeState(code) {
    let binaryValue = "0b0"
@@ -177,3 +177,5 @@ if (Framework.isDebug)
  Framework.debugHost = await(await fetch(Framework.version + "debug.host")).text()
 
 await desktop.parseStateFromAddressBar()
+
+console.log('initialized desktop')

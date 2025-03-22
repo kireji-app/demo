@@ -76,6 +76,7 @@ class Framework {
    pathToRoot,
    pathFromRoot,
    addSource(source, script) {
+    if (!Framework.isDebug) return
     let srcIndex = this.sources.indexOf(source)
     if (srcIndex === -1) {
      srcIndex = this.sources.length
@@ -86,6 +87,7 @@ class Framework {
    },
    addLine(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
     this.lines.push(indent + string)
+    if (!Framework.isDebug) return
     if (string && mapTokens) this.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
     else this.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
    },
@@ -154,6 +156,7 @@ class Framework {
   this.hosts = extractDomainNames(this.DNSRoot)
   this.root = this.createPart(this.rootHost)
   await this.root.initialize()
+  console.log('initialization complete')
  }
  static compile() {
   this.file = this.createFile("../")
@@ -206,7 +209,7 @@ class Framework {
   }[extension], binary, extension]
  }
  static get isDebug() {
-  return this.tags.includes("dev") || this.tags.includes("local")
+  return false // this.tags.includes("dev") || this.tags.includes("local")
  }
  asyncMethods = {}
  generatedFileCache = {}

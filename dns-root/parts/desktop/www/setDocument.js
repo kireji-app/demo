@@ -163,6 +163,7 @@ staticStyleSheet.replaceSync(modernCSS + "\n" + customCSS)
 desktop.colorModeStyleSheet = new CSSStyleSheet()
 desktop.vintageModeStyleSheet = new CSSStyleSheet()
 
+console.log('defining the set vintage method now', ...desktop.settings.vintageMode.state)
 let vintage = false
 
 desktop.setVintage = enable => {
@@ -184,6 +185,7 @@ ${customCSS}`)
  }
 }
 
+console.log('adopting stylesheets')
 document.adoptedStyleSheets.push(
  staticStyleSheet,
  desktop.colorModeStyleSheet,
