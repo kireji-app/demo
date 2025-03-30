@@ -1,1 +1,0 @@
-window.scrollTo(0, Number(part.state[LAYER] * BigInt(document.body.scrollHeight - window.innerHeight) / part.size))

@@ -1,24 +1,12 @@
 {
  "rewrites": [
   {
-   "source": "/:path((?!v\\d+/?).*)",
-   "destination": "/"
+   "source": "/(.*?)",
+   "destination": "/api/endpoint"
   },
   {
-   "source": "/v:version(\\d+)(/?.*)?",
-   "destination": "/v:version/"
-  }
- ],
- "redirects": [
-  {
-   "source": "/:path((?!v\\d+/?).*)",
-   "destination": "/v0/",
-   "permanent": false
-  },
-  {
-   "source": "/v:version(\\d+$)",
-   "destination": "/v:version/",
-   "permanent": true
+   "source": "/api",
+   "destination": "/api/endpoint"
   }
  ]
 }

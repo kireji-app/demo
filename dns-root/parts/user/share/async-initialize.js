@@ -1,0 +1,1 @@
+part.share = nav.share

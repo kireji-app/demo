@@ -1,0 +1,1 @@
+document.body.setAttribute("data-theme", part.arm === part[1] ? "vintage" : "modern")

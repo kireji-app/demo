@@ -1,0 +1,9 @@
+taskbar- {
+ background: transparent;
+ box-shadow: none;
+ color: black;
+}
+
+body {
+ overflow-y: scroll;
+}

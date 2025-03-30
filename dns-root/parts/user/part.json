@@ -1,0 +1,6 @@
+{
+ "extends": "mix.core.parts",
+ "location-parse": [
+  "LOCATION"
+ ]
+}

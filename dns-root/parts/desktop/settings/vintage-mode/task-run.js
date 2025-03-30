@@ -1,0 +1,1 @@
+desktop.vintageModeButton.onclick = () => part.set(1n, true)

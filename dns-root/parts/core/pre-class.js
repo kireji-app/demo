@@ -1,0 +1,1 @@
+const BasePart = framework.isCore ? null : framework.parent.PartConstructor

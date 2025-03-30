@@ -1,0 +1,31 @@
+{
+ "route-set": [
+  "ROUTE_ID",
+  "DELTA"
+ ],
+ "route-capture": [
+  "ROUTE_ID"
+ ],
+ "route-bubble": [
+  "SUBPART"
+ ],
+ "route-update": [
+  "ROUTE_ID"
+ ],
+ "parts-set": [
+  "PART_OBJECT",
+  "INDEX"
+ ],
+ "string-to": [],
+ "render": [
+  "FILENAME",
+  "FALLBACK",
+  "REQUEST_URL"
+ ],
+ "task-install": [],
+ "task-capture-execution": [],
+ "task-run": [],
+ "task-end": [],
+ "task-capture-update": [],
+ "task-update": []
+}

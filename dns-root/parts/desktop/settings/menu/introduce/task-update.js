@@ -1,0 +1,1 @@
+desktop.menuElement.setAttribute("style", "--menu-tween: " + (Number(part.routeID) / Number(part.cardinality)))

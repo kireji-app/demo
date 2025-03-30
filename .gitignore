@@ -13,5 +13,8 @@
 .vscode/
 .cspell/
 
+# Ignore my archive for scripts I might need again later
+.dns-root/
+
 # Don't commit the output directory.
-.public/
+api/

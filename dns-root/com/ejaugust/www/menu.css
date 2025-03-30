@@ -1,8 +1,0 @@
-body>main {
- position: fixed;
- height: calc(var(--h) - var(--taskbar-height));
- top: var(--taskbar-height);
- left: 0;
- right: 0;
- bottom: 0;
-}

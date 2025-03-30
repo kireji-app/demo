@@ -5,6 +5,7 @@
   "checkJs": false
  },
  "exclude": [
-  "framework.mjs"
+  "framework.mjs",
+  "*/**/pre-method.js"
  ]
 }

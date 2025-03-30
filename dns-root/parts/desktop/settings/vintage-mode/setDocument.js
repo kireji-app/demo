@@ -1,1 +1,0 @@
-desktop.vintageModeButton.onclick = async () => await part.setLayer(LAYER, 1n, true)

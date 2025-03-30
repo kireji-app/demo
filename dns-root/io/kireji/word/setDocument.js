@@ -1,1 +1,0 @@
-part.container = element(part.parent[LAYER].container, "span")
