@@ -1,1 +1,0 @@
-return Framework.portableString

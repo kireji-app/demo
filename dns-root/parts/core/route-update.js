@@ -14,4 +14,4 @@ part.justDisabled = !part.enabled && part.wasEnabled
 part.deltaRouteID = part.routeID - part.previousRouteID
 
 if (part.deltaRouteID === 0n)
- Framework.warn(0, ' reassigned state to ' + part.key)
+ warn(' reassigned state to ' + part.key)

@@ -74,7 +74,7 @@ function addPart(subject, container, depth = 0) {
   const label = element(summary, "span")
   label.setAttribute("class", "label")
   label.textContent = subpart.key
-  if (subpart.key === root.key) label.textContent += " (" + BUILD.tags[0] + ")"
+  if (subpart.key === root.key) label.textContent += " (" + TAGS[0] + ")"
   addPart(subpart, subpartContainer, depth + 1)
  }
 }

@@ -9,14 +9,14 @@ const bodyClassList = []
 if (menu.arm?.key === "open")
  bodyClassList.push("menu-fully-open")
 
-const dynamically_added_script_for_later = `<script src="/portable.js?raw"></script>`
+const dynamically_added_script_for_later = `<script src="/portable.js!"></script>`
 
 return `<!DOCTYPE html>
 <html lang=en>
  <head>
   <meta name=robots content=noindex />
   <meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>
-  <link rel="manifest"${Framework.environment === "worker" ? ' href="/manifest.json?raw"' : ""}/>
+  <link rel="manifest"${ENVIRONMENT === "worker" ? ' href="/manifest.json!"' : ""}/>
   <style id="desktop-css">${desktop.render("inline.css")}</style>
   <style id="vintage-mode-css">${vintageMode.render("inline.css")}</style>
   <style id="color-mode-css">${colorMode.render("inline.css")}</style>

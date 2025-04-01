@@ -6,7 +6,7 @@ if (part.playing) part.frameRequest = requestAnimationFrame(() => {
 const frame = part.routeID / part.step
 const value = Number(frame * (BigInt(Number.MAX_SAFE_INTEGER) + 1n) / (part.cardinality / part.step))
 const fraction = value / Number.MAX_SAFE_INTEGER
-console.log({ frame, host })
+debug({ frame, host })
 part.timeline.value = value
 part.animatedStyleSheet.replaceSync(`
 main {

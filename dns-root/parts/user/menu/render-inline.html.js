@@ -14,7 +14,7 @@ return `
   <section id="settings">
    <span id=version tabIndex=6>
     <span class="label">Version</span>
-    <span id="tags">${BUILD.tags.map(tag => `<span>${tag}</span>`).join("")}</span>
+    <span id="tags">${TAGS.map(tag => `<span>${tag}</span>`).join("")}</span>
    </span>
    <span id="color-mode" tabIndex=7>
     <span id="label1" class="label">Color Mode</span>

@@ -12,36 +12,8 @@ declare class Framework {
  /** A cache of the response objects which have been produced by the fetch operation so far. */
  static readonly responses: object
 
- /** A number used to filter console logs. Only messages with a priority less than or equal to this number will be sent to the console. */
- static readonly verbosity: number
-
  /** A cache of the framework objects that have been instantiated so far (used to prevent compiling the same script twice). */
  static readonly frameworks: Framework[]
-
- /** A string representing which of four known environments the framework is running on.
-  * 1. "build"
-  *     - The project is running in it's unpacked state.
-  *     - The script, `framework.mjs`, is running in node.
-  *     - It is sitting in a clone of its git repository and can read/write files.
-  *     - It was called with `node framework.mjs`.
-  *     - It's task is to package and deploy itself.
-  * 2. "server"
-  *     - The project is packed and deployed.
-  *     - The script, `portable.js` is running in node.
-  *     - It only has an inline cache of its git repository and can only read files.
-  *     - It was triggered by a network request (probably for index.html, but could for be anything).
-  *     - It's task is to respond to the network request.
-  * 3. "worker"
-  *     - The project is packed and deployed.
-  *     - The script, `portable.js` is running in the ServiceWorkerGlobalScope.
-  * 3. "desktop"
-  *     - The project is packed and deployed.
-  *     - The script, `portable.js` is running in the Window.
- */
- static readonly environment: string
-
- /** Whether the project is deploying/deployed as the live, public deployment (as determined by the absence of build tags). */
- static readonly isProduction: boolean
 
  /** The maximum safe length of a URI path segment, used for determining the maximum safe route cardinality.
   * 
@@ -73,31 +45,19 @@ declare class Framework {
  /** A type used for tracking source code mapping while packing data from one or more files into a single new file. */
  static readonly SourceMappedFile = SourceMappedFile
 
- /**  */
- static readonly sourceCode
-
- /** A single string which packs together the entire operating system and git repo. */
- static readonly portableString: string
-
- static log(VERBOSITY: number, ...DATA: any[]): void
- static warn(VERBOSITY: number, ...DATA: any[]): void
- static debug(VERBOSITY: number, ...DATA: any[], METHOD: string): void
- static openLog(VERBOSITY: number, ...DATA: any[]): void
- static closeLog(VERBOSITY: number, ...DATA: any[]): void
+ /** The current class, as a string. */
+ static readonly sourceCode: string
 
  /** Populates the needed runtime values and then boots the virtual operating system. */
- static initialize(BUILD): void
-
- /** Get information about the format of the string in the collection (MIME type, encoding) based only on its file extension. */
- static headerOf(FILENAME: string): string
+ static initialize(GLOBE): void
  /** Traverses the actual computer file system to pack source files into a collection of strings so that they can be inlined in the resulting file.
   * 
   * Throws an error if not in the build environment. */
  static buildStringCollection(HOST: string): string
+ /** Generates the string called `portable.js`, which contains this class and an inline cache of the git repository. */
+ static render(): string
  /** A synchronous server that can respond with every asset in the framework, both dynamic and static.  */
  static fetchSync(REQUEST: Request): Response
- /** A unicode-safe replacement for btoa. */
- static btoaUnicode(BODY: string): string
  /** A function that encodes source code mappings according to the Source Map Version 3 specification. */
  static encodeSourceMap(DECODED_MAPPINGS: []): string
  /** The part constructor obtained by evaluating `framework.script.` */
@@ -123,7 +83,7 @@ declare class Framework {
  readonly methodData: MethodData<MethodDataEntry>
  /** The dedicated SourceFile which the framework was created to assemble and evaluate. */
  readonly sourceFile: SourceFile
- /** The index of framework.mjs in the list of source mapping files for the framework's dedicated sourceFile. */
+ /** The index of framework.js in the list of source mapping files for the framework's dedicated sourceFile. */
  readonly buildSource: number
  /** The path to the folder in the git repo containing the source code that the framework compiled. */
  readonly pathFromRoot: string
@@ -147,12 +107,7 @@ declare class Framework {
  /** Adds only the current framework's own method prefix script to the given file. */
  addOwnScopeString(STRING_NAME, FILE, INDENT = "  "): void
 }
-declare const BUILD: {
- readonly tags: string[]
- readonly host: string,
- readonly change: string,
- readonly stringCollection: SourceDirectory
-}
+
 
 declare interface SourceDirectory<T> {
 }
@@ -196,3 +151,63 @@ class SourceMappedFile {
  packAndMap(url?: string): string
  getMap(): string
 }
+
+/** A string representing which of four known environments the framework is running on.
+ * 1. "build"
+ *     - The project is running in it's unpacked state.
+ *     - The script, `framework.js`, is running in node.
+ *     - It is sitting in a clone of its git repository and can read/write files.
+ *     - It was called with `node framework.js`.
+ *     - It's task is to package and deploy itself.
+ * 2. "server"
+ *     - The project is packed and deployed.
+ *     - The script, `portable.js` is running in node.
+ *     - It only has an inline cache of its git repository and can only read files.
+ *     - It was triggered by a network request (probably for index.html, but could for be anything).
+ *     - It's task is to respond to the network request.
+ * 3. "worker"
+ *     - The project is packed and deployed.
+ *     - The script, `portable.js` is running in the ServiceWorkerGlobalScope.
+ * 3. "desktop"
+ *     - The project is packed and deployed.
+ *     - The script, `portable.js` is running in the Window.
+*/
+declare const ENVIRONMENT: string
+/** Whether the project is deploying/deployed as the live, public deployment (as determined by the absence of non-production build tags). */
+declare const IS_PRODUCTION: boolean
+/** A list of tags describing the build version. */
+declare const TAGS: string[]
+/** A debugging value for reliably switching between hosts in local and staging builds. */
+declare const DEVELOPMENT_HOST: string
+/** A packed archive of the git repository. */
+declare const STRING_COLLECTION: SourceDirectory
+/** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
+declare const SERVER_VERBOSITY: number
+/** A wrapper class that constructs a part of the given host type.
+ * 
+ * If the host type doesn't exist yet or if CUSTOM_STRING_COLLECTION is
+ * passed, creates a new framework, compiles a new type class from the host
+ * source code and any source code in CUSTOM_STRING_COLLECTION, caches the new
+ * type, and then returns a new instance of it. */
+declare class Part {
+ constructor(HOST, CUSTOM_STRING_COLLECTION): CorePart
+}
+/** An object dedicated to this method script's type and containing
+ * data collected while compiling the source code for that type.
+ * 
+ * This is the framework for the currently evaluated source code file.
+ * 
+ * It may or may not differ from `part.framework`, the part's ultimate type framework.*/
+declare const framework: Framework
+/** The host of the currently evaluating script. */
+declare const SCRIPT_HOST: string
+
+/** Returns an array of content information based on the given string name. */
+declare function headerOf(STRING_NAME: string): [string, string, string]
+/** A unicode-safe replacement for btoa. */
+declare function btoaUnicode(BODY: string): string
+declare function log(VERBOSITY: number, ...DATA: any[]): void
+declare function warn(...DATA: any[]): void
+declare function debug(...DATA: any[]): void
+declare function openLog(VERBOSITY: number, ...DATA: any[]): void
+declare function closeLog(VERBOSITY: number, ...DATA: any[]): void

@@ -12,7 +12,6 @@ if (framework.fetchStatic)
  // if there is no static own string, and if the incoming framework is not CorePart's framework,
  //  call this function with the framework.parent this is not the base, 
 
-
  let body = null
 
 if (isCustom)
@@ -25,9 +24,6 @@ if (body === null) {
   body = part()
  let body = part.framework.readString(stringName)
 }
-
-if (RESULT_FORMAT === "raw")
- return body
 
 if (RESULT_FORMAT === "datauri")
  return `data:${type};base64,${base64 ? body : Framework.btoaUnicode(body)}`
@@ -48,4 +44,7 @@ if (RESULT_FORMAT === "response") {
  return new Response(body, { headers: { "content-type": type, expires: "Sun, 20 Jul 1969 20:17:00 UTC" } })
 }
 
-throw 'invalid RESULT_FORMAT ' + RESULT_FORMAT
+if (RESULT_FORMAT !== "raw")
+ throw 'invalid RESULT_FORMAT ' + RESULT_FORMAT
+
+return body

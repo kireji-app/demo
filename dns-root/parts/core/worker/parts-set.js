@@ -4,7 +4,7 @@ const controller = {
   globe.clients.claim()
  },
  impart(host) {
-  BUILD.host = host
+  DEVELOPMENT_HOST = host
   globe.skipWaiting()
  },
  resign() {
@@ -12,13 +12,13 @@ const controller = {
   const replacement = registration.installing
   replacement.postMessage({
    code: 'impart',
-   payload: BUILD.host
+   payload: DEVELOPMENT_HOST
   })
  },
  setDebugHost: host => {
-  BUILD.host = host
+  DEVELOPMENT_HOST = host
   delete Framework.responses[location.origin + "/"]
-  delete Framework.responses[location.origin + "/portable.js?raw"]
+  delete Framework.responses[location.origin + "/portable.js!"]
   const channel = new BroadcastChannel("debug-reload")
   channel.postMessage(1)
   channel.close()
@@ -37,21 +37,21 @@ var interval
 registration.onupdatefound = () => {
  if (serviceWorker !== registration.installing) {
   if (registration.installing) {
-   Framework.log(0, 'I am the old service worker, and I see the installing one. I\'ll resign.', globe)
+   log(0, 'I am the old service worker, and I see the installing one. I\'ll resign.', globe)
    controller.resign()
   } else {
-   Framework.log(0, 'I am the old service worker, but I don\'t see the installing one. I\'ll ... wait?', globe)
+   log(0, 'I am the old service worker, but I don\'t see the installing one. I\'ll ... wait?', globe)
 
    if (interval)
     throw 'double interval set'
 
    interval = setInterval(() => {
-    console.log('polling')
+    debug('polling')
     if (registration.installing) controller.resign()
    }, 25)
   }
  } else {
-  Framework.log(0, 'I am the installing service worker', globe)
+  log(0, 'I am the installing service worker', globe)
  }
 }
 

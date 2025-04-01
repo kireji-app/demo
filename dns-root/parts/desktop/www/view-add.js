@@ -28,7 +28,13 @@ if (desktop.showShareButton && navigator.share) {
  desktop.shareButton = element(desktop.taskbar, "button")
  desktop.shareButton.innerText = "➦"
  desktop.shareButton.setAttribute("id", "share")
- desktop.shareButton.onclick = () => navigator.share({ title: document.title, url: location.href }).catch(e => e.name == "AbortError" || console.error(e))
+ desktop.shareButton.onclick = () => navigator.share({
+  title: document.title,
+  url: location.href
+ }).catch(e => {
+  if (e.name !== "AbortError")
+   throw e
+ })
 }
 
 desktop.showFullScreenControl = true
@@ -62,10 +68,10 @@ if (desktop.canEnterFullScreen) {
 
 document.addEventListener('fullscreenchange', () => document.fullscreenElement || (desktop.doKioskNavigation(desktop.pendingHost), delete desktop.pendingHost));
 desktop.doKioskNavigation = host => {
- if (Framework.isProduction)
+ if (IS_PRODUCTION)
   return location = host + pathname
 
- if (host === BUILD.host)
+ if (host === DEVELOPMENT_HOST)
   return
 
  desktop.worker.postMessage({ code: "setDebugHost", payload: host })
@@ -92,7 +98,7 @@ if (false) SimulateSlowLaunch: {
  const testDurationSeconds = 5
 
  const start = performance.now()
- Framework.log(0, `Simulating ${testDurationSeconds}-second root initialization.`)
+ log(0, `Simulating ${testDurationSeconds}-second root initialization.`)
  let iteration = -1
  let elapsedSeconds
  let remainingSeconds
@@ -102,10 +108,10 @@ if (false) SimulateSlowLaunch: {
   Math.sin(iteration++)
   if (newRemainingSeconds !== remainingSeconds) {
    remainingSeconds = newRemainingSeconds
-   Framework.log(0, "t: -" + remainingSeconds)
+   log(0, "t: -" + remainingSeconds)
   }
  } while (remainingSeconds > 0)
- console.log('unblocked at iteration ' + iteration)
+ debug('unblocked at iteration ' + iteration)
  // throw 'no continue'
 }
 

@@ -9,7 +9,7 @@ globe.root = part
 root.key = "root"
 
 // Manually determine the correct routeID.
-root.setRoute(root.offsets[Framework.environment])
+root.setRoute(root.offsets[ENVIRONMENT])
 
 // Only a match arm can undergo a cardinality change, which causes a different match offset to be used for the routeID.
 // The cardinality of the match per se never changes.

@@ -4,7 +4,7 @@ let binaryOffset = "0b0"
 for (const char of STRING) {
  const index = Framework.pathSegmentRadix.indexOf(char)
  if (index === -1 || index >= 64) {
-  console.warn("ignoring unused path (paths cannot include '" + char + "').")
+  warn("ignoring unused path (paths cannot include '" + char + "').")
   binaryValue = "0b0"
   binaryOffset = "0b0"
   break;

@@ -1,5 +1,5 @@
 serviceWorker.startupRegistration = serviceWorker.registration = await nav.serviceWorker.getRegistration()
-serviceWorker.registration ??= await nav.serviceWorker.register("/portable.js?raw")
+serviceWorker.registration ??= await nav.serviceWorker.register("/portable.js!")
 if (!serviceWorker.registration.active) {
  await new Promise(resolve => {
   serviceWorker.incomingServiceWorker = serviceWorker.registration.waiting ?? serviceWorker.registration.installing
@@ -17,7 +17,7 @@ serviceWorker.controller ??= await new Promise(resolve => {
 serviceWorker.channel = new BroadcastChannel("debug-reload")
 serviceWorker.channel.onmessage = nav.serviceWorker.oncontrollerchange = () => location.reload()
 serviceWorker.manifestLink = document.querySelector('link[rel="manifest"]')
-serviceWorker.manifestLink.href = "/manifest.json?raw"
+serviceWorker.manifestLink.href = "/manifest.json!"
 
-if (!Framework.isProduction)
+if (!IS_PRODUCTION)
  addEventListener("focus", () => serviceWorker.active.update().catch(serviceWorker.channel.onmessage))

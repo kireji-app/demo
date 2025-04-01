@@ -125,17 +125,6 @@ declare class CorePart extends Iterable<CorePart> {
  distributeViewRemove(): void
 }
 
-/** A wrapper class that constructs a part of the given host type.
- * 
- * If the host type doesn't exist yet or if CUSTOM_STRING_COLLECTION is
- * passed, creates a new framework, compiles a new type class from the host
- * source code and any source code in CUSTOM_STRING_COLLECTION, caches the new
- * type, and then returns a new instance of it. */
-declare class Part {
- constructor(HOST, CUSTOM_STRING_COLLECTION): CorePart
-}
-/** The host of the currently evaluating script. */
-declare const SCRIPT_HOST: string
 /** The part instance on which the current script is being called.
  * 
  * Alias for `this` to disambiguate it from globalThis.
@@ -144,7 +133,5 @@ declare const SCRIPT_HOST: string
 declare const part: CorePart
 /** Alias for `part.render`. */
 declare const render: CorePart
-/** The framework instance that compiled the source code for the class instance of the currently evaluated script. */
-declare const framework: Framework
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part.parent.exampleProperty`.  */
 declare const inherit: CorePart

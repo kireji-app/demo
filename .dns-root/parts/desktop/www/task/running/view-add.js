@@ -9,7 +9,7 @@ part.taskItem.onclick = e => {
  desktop.openTaskItem?.classList.remove("open")
  desktop.openTaskItem = part.taskItem
  desktop.openTaskItem.classList.add("open")
- console.log('consider cross-origin link here')
+ debug('consider cross-origin link here')
 }
 
 desktop.taskbarSpacer.before(part.taskItem)

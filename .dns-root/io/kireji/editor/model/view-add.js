@@ -14,4 +14,4 @@ for (const subpart of part)
 
 part.randomButton = element(part.toolbar, "button")
 part.randomButton.innerHTML = "🍀 Random"
-part.randomButton.onclick = () => console.log(part.shuffleRoute)
+part.randomButton.onclick = () => debug(part.shuffleRoute)

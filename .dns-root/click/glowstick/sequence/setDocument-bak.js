@@ -34,7 +34,7 @@ part.timeline.setAttribute("value", 0)
 
 part.timeline.oninput = () => {
  const frame = BigInt(parseInt(part.timeline.value)) * part.cardinality * part.step / (BigInt(Number.MAX_SAFE_INTEGER) + 1n)
- console.log({ frame, host })
+ debug({ frame, host })
  part.set(frame * this.step + BigInt(+this.playing))
 }
 
