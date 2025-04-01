@@ -1,0 +1,1 @@
+menu.element.setAttribute("style", menuState.render("style-attr"))

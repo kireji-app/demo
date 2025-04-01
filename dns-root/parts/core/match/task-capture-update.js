@@ -1,3 +1,0 @@
-super()
-
-part.arm.captureTaskUpdate()

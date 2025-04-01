@@ -1,31 +1,40 @@
 {
+ "symbol-iterator": [],
  "route-set": [
   "ROUTE_ID",
-  "DELTA"
+  "DELTA = false"
  ],
- "route-capture": [
-  "ROUTE_ID"
- ],
- "route-bubble": [
+ "route-collect": [
   "SUBPART"
+ ],
+ "route-distribute": [
+  "ROUTE_ID"
  ],
  "route-update": [
   "ROUTE_ID"
  ],
  "parts-set": [
-  "PART_OBJECT",
-  "INDEX"
+  "PART_OBJECT"
  ],
- "string-to": [],
+ "filter": [
+  "FILTER_FUNCTION"
+ ],
+ "includes": [
+  "SUBPART"
+ ],
  "render": [
-  "FILENAME",
-  "FALLBACK",
-  "REQUEST_URL"
+  "OPTIONS"
  ],
- "task-install": [],
- "task-capture-execution": [],
- "task-run": [],
- "task-end": [],
- "task-capture-update": [],
- "task-update": []
+ "get-framework": [],
+ "get-host": [],
+ "get-super": [],
+ "view-collect-add": [],
+ "view-collect-remove": [],
+ "view-collect-populate": [],
+ "view-distribute-add": [],
+ "view-distribute-remove": [],
+ "view-distribute-populate": [],
+ "view-add": [],
+ "view-remove": [],
+ "view-populate": []
 }

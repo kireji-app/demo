@@ -1,0 +1,247 @@
+* {
+ box-sizing: border-box;
+ -webkit-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+}
+
+[data-loading] {
+ cursor: wait;
+}
+
+[data-loading] * {
+ pointer-events: none;
+}
+
+a,
+a:visited {
+ text-decoration: none;
+ color: inherit;
+}
+
+body wallpaper- {
+ background: #377f7f;
+}
+
+body {
+ --sidebar-height: 288px;
+ --spacing: 12px;
+ --taskbar-height: 28px;
+ --icon-size: var(--taskbar-height);
+ --deep-inset:
+  inset -1px -1px white,
+  inset 1px 1px black,
+  inset -2px -2px #dbdbdb,
+  inset 2px 2px #7a7a7a;
+ --deep-outset:
+  inset -1px -1px black,
+  inset 1px 1px white,
+  inset -2px -2px #7a7a7a,
+  inset 2px 2px #dbdbdb;
+ font: 11px / 16px var(--system-ui);
+ color: black;
+ --surface: #c3c3c3;
+}
+
+body sidebar- {
+ height: calc(var(--menu-tween) * var(--sidebar-height));
+ min-width: 164px;
+ left: 2px;
+ bottom: calc(var(--taskbar-height) - 4px);
+ line-height: 18px;
+ padding: 3px 3px 3px 24px;
+ background: var(--surface);
+ text-align: left;
+ box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb
+}
+
+body sidebar-::after {
+ pointer-events: none;
+ font-smooth: never;
+ -webkit-font-smoothing: none;
+ display: block;
+ content: "𝗱𝗲𝘀𝗸𝘁𝗼𝗽.𝑝𝑎𝑟𝑡𝑠";
+ writing-mode: tb-rl;
+ transform: rotate(-180deg);
+ line-height: 21px;
+ font-size: 18px;
+ font-weight: 200;
+ color: white;
+ padding-top: 4px;
+ box-sizing: border-box;
+ position: absolute;
+ left: 3px;
+ top: 3px;
+ height: calc(var(--sidebar-height) - 6px);
+ background:
+  linear-gradient(rgba(0, 200, 255, 0), rgba(0, 200, 255, 0.5) 12.5%, rgba(0, 200, 255, 0) 70.71%),
+  darkblue;
+ width: 21px
+}
+
+body sidebar->hr {
+ height: 2px;
+ border-top: 1px solid #7f7f7f;
+ border-bottom: 1px solid white;
+ box-sizing: border-box;
+ margin: 4px 0;
+}
+
+body #wallpapers {
+ display: contents;
+}
+
+body #settings>span {
+ padding: 4px;
+}
+
+html,
+body {
+ --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+ --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
+ --menu-tween: 0;
+ --h: 100vh;
+ overscroll-behavior: none !important;
+ margin: 0;
+ height: var(--h);
+ font-synthesis: weight style;
+ --sidebar-width: 256px;
+}
+
+img {
+ fill: var(--fg-fade1);
+}
+
+
+wallpaper- {
+ position: fixed;
+ top: 0;
+ bottom: var(--taskbar-height);
+ left: 0;
+ right: 0;
+}
+
+@supports (height: 100dvh) {
+
+ html,
+ body {
+  --h: 100dvh;
+ }
+}
+
+task-menu {
+ position: fixed;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ margin: 0;
+ padding: 0;
+ outline: none;
+}
+
+button,
+menu-button {
+ background: transparent;
+ padding: 0;
+ margin: 0;
+ border: none;
+ color: inherit;
+}
+
+sidebar- {
+ margin: 0;
+ position: fixed;
+ overflow: hidden;
+ display: flex;
+ flex-flow: column;
+}
+
+#settings {
+ display: flex;
+ flex-flow: column;
+}
+
+#settings>span {
+ display: flex;
+ justify-content: space-between;
+}
+
+.task-link {
+ display: contents;
+}
+
+.task-link>a,
+.task-link>a:visited {
+ display: flex;
+ flex: 0;
+ font-weight: 500;
+ margin: 0;
+ position: relative;
+ align-items: center;
+}
+
+.task-link>a>.label {
+ flex: 1 1;
+}
+
+.task-icon {
+ height: var(--icon-size);
+ width: var(--icon-size);
+ border-radius: calc(var(--icon-size) * 0.2);
+}
+
+#logo {
+ font-weight: 700;
+}
+
+taskbar- {
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ height: var(--taskbar-height);
+ margin: 0;
+ line-height: var(--taskbar-height);
+ display: flex;
+}
+
+taskbar->.btn {
+ width: var(--icon-size);
+}
+
+taskbar->.btn:hover {
+ color: var(--theme);
+}
+
+button:hover,
+menu-button:hover {
+ color: var(--theme);
+}
+
+#nested button {
+ font-size: 100px;
+}
+
+flex-spacer {
+ flex: 1;
+}
+
+#nested {
+ line-height: var(--icon-size);
+ padding: 0;
+ display: flex;
+ height: var(--icon-size);
+ gap: 6px;
+}
+
+@media (width < 500px) {
+ #nested {
+  position: fixed;
+  bottom: var(--taskbar-height);
+  left: 0;
+  right: 0;
+  width: 100vw;
+  box-shadow: var(--taskbar-accent);
+ }
+}

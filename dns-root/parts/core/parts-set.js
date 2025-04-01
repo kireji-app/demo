@@ -1,25 +1,34 @@
+part.key = "untitled"
+part.index = 0
+part.length = 0
+part.enabled = false
+part.routeID = -1n
+part.cardinality = 1n
+part.instancePath = "unknown-root/"
+part.previousRouteID = -1n
+
 const entries = Object.entries(PARTS)
 
 if (entries.length > 1)
  throw 'CorePart.prototype.setParts() expects an object with at most one key ' + part.host
 
-if (typeof SUBPART === "string") {
+const key = entries[0].shift()
+let subpart = entries[0].shift()
 
- if (/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/g.test(SUBPART)) {
+if (typeof subpart === "string") {
+
+ if (/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/g.test(subpart)) {
   // Resolve relative host.
-  SUBPART += "." + part.host
+  subpart += "." + part.host
  }
 
- SUBPART = new Part(SUBPART, null, part)
-} else if (!(SUBPART instanceof Framework.Core))
- throw new TypeError(`unexpected ${SUBPART.constructor?.name ?? typeof SUBPART} encountered as subpart of ${part.host}`)
+ subpart = new Part(subpart, null, part)
+} else if (!(subpart instanceof CorePart))
+ throw new TypeError(`unexpected ${subpart.constructor?.name ?? typeof subpart} encountered as subpart of ${part.host}`)
 
-if (KEY in part)
- console.warn(new TypeError(`duplicate key ${KEY} in ${part.host}`))
+if (key in part)
+ throw new TypeError(`duplicate key ${key} in ${part.host}`)
 
-SUBPART.key = KEY
-SUBPART.index = INDEX
-SUBPART.parent = part
-SUBPART.instancePath = part.instancePath + "/" + key
-
-return part[KEY] = part[INDEX] = SUBPART
+part[subpart.key = key] = part[subpart.index = INDEX] = subpart
+subpart.parent = part
+subpart.instancePath = part.instancePath + "/" + key

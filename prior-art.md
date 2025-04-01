@@ -54,6 +54,7 @@ This repo already brings together lots of features and notions. To list them all
   - whose entire state fits in a URL
     - which means it inherently offers comprehensive deep-linking
   - which can hide itself to create kiosk-like presentations for its running apps
+  - which can have a live wallpaper which is a kiosk-like presentation
 - automatic semantic versioning
 - quine-like self-outputting
 - the ability to pack
@@ -65,7 +66,7 @@ This repo already brings together lots of features and notions. To list them all
 
 ##### Example Applications
 This project includes example applications that serve as prior art for their features and the obvious extensions and future applications they inspire. For example:
-- An operating system that, like $`\textcolor{#AA8866}{\text{"www.desktop.parts"}}`$ can store its entire runtime state including the state of all of its running tasks in a short string such as a URL.
+- An operating system that, like $`\textcolor{#AA8866}{\text{"www.desktop.parts"}}`$ can store its entire runtime state including the state of all of its tasks in a short string such as a URL.
 - A document editor and/or library that, like $`\textcolor{#AA8866}{\text{"www.kireji.io"}}`$, assigns a URL to and optionally allows the direct editing of every
   - word
   - haiku

@@ -1,3 +1,3 @@
-super({
+super.setParts({
  scroll: "scroll"
 })

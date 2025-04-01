@@ -1,1 +1,1 @@
-return Framework.compile()
+return Framework.portableString

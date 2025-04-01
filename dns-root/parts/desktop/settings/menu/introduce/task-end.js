@@ -1,1 +1,0 @@
-desktop.menuElement.removeAttribute("style")

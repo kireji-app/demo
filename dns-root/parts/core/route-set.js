@@ -1,51 +1,47 @@
 if (DELTA) {
- // Delta gives us a relative routeID
+ // Delta means that ROUTE_ID is relative.
  ROUTE_ID = (ROUTE_ID + part.routeID) % part.cardinality
 }
 
 if (ROUTE_ID !== part.routeID) {
- // This updates the routeID for the current part and subparts.
- part.captureRoute(ROUTE_ID)
+ part.distributeRoute(ROUTE_ID)
+ part.parent?.collectRoute([part])
 
- // This updates the routeID for the parent chain.
- part.bubbleRoute()
-
+ // At this point, no views have updated, but all routeIDs are up to date.
  if (part.wasEnabled) {
   if (part.enabled) {
-   // The routeID changed...
+   // The routeID of an active part changed.
+   part.distributeViewRemove()
 
-   // Always finish one thing...
-   part.captureTaskEnd()
-
-   // ... before you start another.
-   part.captureTaskRun()
+   // ... before making new ones.
+   part.distributeViewAdd()
   } else {
    // The routeID was set to -1n.
 
-   // Always close a subtask ...
-   part.captureTaskEnd()
+   // Always remove subpart views ...
+   part.distributeViewRemove()
 
-   // ... before closing its parent.
-   part.bubbleTaskEnd()
+   // ... before removing own views.
+   part.collectViewRemove()
   }
  } else {
-  // This part's own task was just enabled.
+  // The part's own view was just enabled.
 
-  // Always open the parent task ...
-  part.bubbleTaskRun()
+  // Always open the parent view ...
+  part.parent?.collectViewAdd()
 
   // ... before you open this one.
-  part.captureTaskRun()
+  part.distributeViewAdd()
  }
 
- // The task update signal bubbles through all disabled
+ // The view update signal collects through all disabled
  //  parents up to the first enabled parent.
- part.parent?.bubbleTaskUpdate()
+ part.parent?.collectViewPopulate()
 
- // But only update this part and subparts when they are enabled.
+ // But only update the part and subparts when they are enabled.
  if (part.enabled) {
-  part.captureTaskUpdate()
+  part.distributeViewPopulate()
  } else {
-  // This part will now be garbage collected.
+  // The part will now be garbage collected.
  }
 }

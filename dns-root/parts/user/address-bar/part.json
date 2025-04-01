@@ -1,0 +1,9 @@
+{
+ "extends": "mix.core.parts",
+ "route-decode": [
+  "STRING"
+ ],
+ "route-encode": [
+  "ROUTE_ID"
+ ]
+}

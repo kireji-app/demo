@@ -1,5 +1,5 @@
 serviceWorker.startupRegistration = serviceWorker.registration = await nav.serviceWorker.getRegistration()
-serviceWorker.registration ??= await nav.serviceWorker.register("/" + Framework.filenames.clientScript + "?raw")
+serviceWorker.registration ??= await nav.serviceWorker.register("/portable.js?raw")
 if (!serviceWorker.registration.active) {
  await new Promise(resolve => {
   serviceWorker.incomingServiceWorker = serviceWorker.registration.waiting ?? serviceWorker.registration.installing

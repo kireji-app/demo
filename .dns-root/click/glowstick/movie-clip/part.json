@@ -1,0 +1,7 @@
+{
+ "playback-initiate": [],
+ "playback-stop": [],
+ "playback-handle-end": [
+  "END_OF_PLAYBACK_BEHAVIOR"
+ ]
+}

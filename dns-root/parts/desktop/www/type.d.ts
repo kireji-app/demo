@@ -1,33 +1,21 @@
-declare interface DesktopPart extends CorePart {
- /** The computed framerate of the application. */
- readonly fps: number
- /** The current session time. */
- readonly time: DOMHighResTimeStamp
- /** The average length of time each frame is on screen in milliseconds. */
- readonly meanFrameTime: number
- /** The number of shift keys the user is holding down. */
- readonly shiftKeysDown: number
- /** The number of context keys (control on Windows, command on mac) the user is holding down. */
- readonly contextKeysDown: number
- /** The application's current route according to the addressBar. */
- readonly addressBarRouteID: bigint
- /** The session time when the addressBar was last updated.*/
- readonly throttleStartTime: number
+declare class DesktopPart extends CorePart {
  readonly user: UserPart
- /** The main game loop, which must be running to handle most user interaction.*/
- requestFrame(now: DOMHighResTimeStamp): void
+
  /** Uses Framework.pathSegmentRadix to parse the current location hash to set the current desktop route.*/
  parseRouteIDFromAddressBar(): void
- /** Uses Framework.pathSegmentRadix to turn a routeID back into the routing path string that it represents. */
- encodeRouteID(routeID: bigint): string
- /** The host element for desktop content. */
- containerHost: HTMLDivElement
- /** The shadow root of the desktop's content container. */
- container: ShadowRoot
+
+ /** Boots a virtual operating system that can produce a static HTML image of its output. */
+ setParts(): void
+
+ /** The root element for the desktop's live wallpaper. */
+ wallpaper: ShadowRoot
+
  /** The main CSS stylesheet for the desktop. */
  styleSheet: CSSStyleSheet
+
  /** The main taskbar element. */
  taskbar: HTMLElement
+
  /** The home button element. */
  homeButton: HTMLButtonElement
  /** A spacer element in the taskbar. */
@@ -46,8 +34,8 @@ declare interface DesktopPart extends CorePart {
  getNestedToolbar(): ShadowRoot
  /** Destroys the nested toolbar. */
  destroyNestedToolbar(): void
- /** The main menu element. */
- menuElement: HTMLElement
+ /** The main menu part. */
+ menu: MenuPart
  /** The sidebar element within the menu. */
  sidebar: HTMLDivElement
  /** The section in the start menu listing kiosks. */

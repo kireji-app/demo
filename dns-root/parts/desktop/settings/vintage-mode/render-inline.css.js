@@ -1,0 +1,1 @@
+return vintageMode.arm.render("inline.css")

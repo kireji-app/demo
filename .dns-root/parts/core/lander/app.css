@@ -1,0 +1,44 @@
+:host {
+ padding: var(--spacing);
+ padding-top: calc(var(--taskbar-height) + var(--spacing));
+ /*
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1ch;
+  font-size: max(min(calc(.03 * var(--h)), 3vw), 12px);
+  place-content: center;
+  place-items: center;
+  height: 100%;
+ */
+}
+
+p,
+h2 {
+ width: min(80vw, 512px);
+ padding: 0;
+ /* text-align: center; */
+ margin: 0;
+}
+
+p {
+ color: var(--fg-fade2);
+ margin-bottom: calc(var(--spacing) / 2);
+}
+
+a,
+a:visited {
+ color: unset;
+}
+
+a:hover {
+ color: var(--theme);
+}
+
+@media (pointer: coarse) {
+
+ a,
+ a:visited {
+  text-decoration: none;
+  color: var(--theme);
+ }
+}

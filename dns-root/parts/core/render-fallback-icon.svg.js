@@ -1,7 +1,10 @@
-const italicize = x => String.fromCodePoint((x.codePointAt(0) - 'a'.codePointAt(0)) + '𝑎'.codePointAt(0))
-const firstLetter = HOST[HOST.startsWith("www.") ? 4 : 0]
 const size = PARAMS.get("size") ?? 512
-const theme_color = part.render("theme.color", "#ccc")
+
+const theme_color = part.render({
+ filename: "theme.color",
+ fallback: "#ccc"
+})
+
 const isSelf = part.host === framework.host
 
 return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -34,5 +37,5 @@ return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://
  <circle class="exit" cx="19" cy="4" r="1.5" />
  <circle class="min" cx="16" cy="4" r="1.5" />
  <circle class="max" cx="13" cy="4" r="1.5" />
- ${isSelf ? "" : `<text x="12" y="12" text-anchor="middle" dominant-baseline="central">${italicize(firstLetter)}</text>`}
+ ${isSelf ? "" : `<text x="12" y="12" text-anchor="middle" dominant-baseline="central">${part.render("unicode")}</text>`}
 </svg>`

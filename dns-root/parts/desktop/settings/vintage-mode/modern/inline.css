@@ -1,0 +1,184 @@
+body #color-mode .base,
+body #vintage-mode .base {
+ background: white;
+ width: 16px;
+ height: 16px;
+ box-shadow: var(--deep-inset);
+}
+
+body #settings>*:focus>.label {
+ display: block;
+ position: relative;
+}
+
+body #label2::before {
+ content: "Mode: ";
+}
+
+body #settings>*:focus>.label::after {
+ border: 1px dotted black;
+ content: "";
+ position: absolute;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
+}
+
+body .task-link>a,
+body .task-link>a:visited {
+ line-height: var(--icon-size);
+ cursor: default;
+}
+
+body .task-link>a:hover {
+ background: #00007f;
+ color: white
+}
+
+body .task-link>a>.label {
+ font-weight: 300;
+ padding: 0px 4px;
+}
+
+body .task-icon {
+ margin: 2px 6px;
+}
+
+body .task {
+ font: 11px var(--system-ui);
+ position: relative;
+ height: 100%;
+ margin: 0;
+ width: 160px;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: 3px;
+ border: none;
+ box-sizing: border-box;
+ padding: 3px 2px 2px;
+ text-align: left;
+ box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb;
+}
+
+body .task>.icon {
+ width: 16px;
+ height: 16px;
+}
+
+body .task:focus::after {
+ border: 1px dotted black;
+ content: "";
+ position: absolute;
+ margin: 3px;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
+}
+
+body .task.open {
+ font: bold 11px var(--system-ui);
+ padding: 4px 2px 2px;
+ box-shadow: inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a;
+}
+
+body .task.open>* {
+ z-index: 3
+}
+
+body .task.open::before {
+ content: "";
+ position: absolute;
+ margin: 2px;
+ border-top: 1px solid white;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ background-image:
+  linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
+  linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
+ background-size: 2px 2px;
+ background-position: 0 0, 1px 1px;
+}
+
+body .task.icon {
+ width: 16px;
+ height: 16px;
+}
+
+body #fullscreen {
+ position: relative;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: 3px;
+ box-sizing: border-box;
+ height: 100%;
+ margin: 0;
+ padding: 3px 4px 3px;
+ text-align: left;
+ background: #c3c3c3;
+ box-shadow: inset -1px -1px white, inset 1px 1px #7a7a7a;
+ width: auto;
+}
+
+body taskbar- {
+ gap: 3px;
+ padding: 4px 2px 2px;
+ background: #c3c3c3;
+ box-shadow: inset 0 1px #c3c3c3, inset 0 2px white;
+}
+
+body menu-button {
+ flex: 0 0;
+ position: relative;
+ width: 100%;
+ box-sizing: border-box;
+ height: 100%;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: 3px;
+ border: none;
+ font: bold 11px / 16px var(--system-ui);
+ box-sizing: border-box;
+ padding: 3px 4px 2px;
+ text-align: left;
+ background: #c3c3c3;
+ box-shadow: var(--deep-outset);
+}
+
+body.menu-fully-open menu-button {
+ box-shadow: var(--deep-inset);
+ padding: 4px 4px 2px;
+}
+
+body menu-button:focus::before {
+ border: 1px dotted black;
+ content: "";
+ position: absolute;
+ margin: 3px;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
+}
+
+body menu-button::after {
+ content: "Start";
+}
+
+body #tags> :not(:first-child)::before {
+ content: "-";
+}
+
+body .handle {
+ display: none;
+}
+
+body #color-mode #label1 {
+ display: none;
+}

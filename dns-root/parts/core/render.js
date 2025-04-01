@@ -1,7 +1,30 @@
-const { host, pathname, searchParams, hash } = REQUEST_URL
-const filename = pathname.split("/").pop()
-const [type, base64] = Framework.headerOf(filename)
-const body = part.framework.readString(filename)
+const [stringName, queryString] = STRING_REQUEST.split("?")
+const [type, base64] = Framework.headerOf(stringName)
+const isCustom = !!queryString
+
+if (framework.fetchStatic)
+ // if the current object has a directly defined render function for this type,
+ //  use it
+
+ // if there is no defined render function for this type,
+ //  if there is no query string, check for a static own string.
+ //
+ // if there is no static own string, and if the incoming framework is not CorePart's framework,
+ //  call this function with the framework.parent this is not the base, 
+
+
+ let body = null
+
+if (isCustom)
+ body = part.framework.readOwnString(stringName, null)
+
+if (body === null) {
+ if (stringName in part.framework.ownStringNameTable)
+  body = part.framework.ownStringNameTable
+ if (stringName in part)
+  body = part()
+ let body = part.framework.readString(stringName)
+}
 
 if (RESULT_FORMAT === "raw")
  return body

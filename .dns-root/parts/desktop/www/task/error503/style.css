@@ -1,0 +1,56 @@
+:host {
+ display: block;
+ overflow: clip;
+ padding: 15px;
+}
+
+h1 {
+ text-align: center;
+ line-height: var(--h);
+ height: 100%;
+ position: absolute;
+ width: 100%;
+ left: 0;
+ top: 0;
+ margin: 0;
+ padding: 0;
+}
+
+h1 {
+ font-size: 35vw;
+ color: var(--fg-fade5);
+}
+
+.thin {
+ font-weight: 200;
+}
+
+#float {
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ font-size: 32px;
+ align-items: center;
+ justify-content: center;
+ display: flex;
+ gap: 0.5ch;
+ line-height: 1em;
+}
+
+img {
+ width: 64px;
+ height: 64px;
+ border-radius: calc(64px * 0.2);
+}
+
+#host {
+ font-weight: 600;
+}
+
+@media (width < 500px) {
+ #float {
+  font-size: max(min(5vw, .05 * var(--h)), 16px);
+ }
+}

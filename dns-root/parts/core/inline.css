@@ -47,7 +47,7 @@ body[data-theme="modern"] {
  color: var(--fg-fade1);
 }
 
-desktop- {
+wallpaper- {
  position: fixed;
  top: 0;
  bottom: var(--taskbar-height);
@@ -55,11 +55,11 @@ desktop- {
  right: 0;
 }
 
-body[data-theme="modern"] desktop- {
+body[data-theme="modern"] wallpaper- {
  background: var(--bg-shade1);
 }
 
-body[data-theme="vintage"] desktop- {
+body[data-theme="vintage"] wallpaper- {
  background: #377f7f;
 }
 
@@ -192,7 +192,7 @@ body[data-theme="vintage"] sidebar->hr {
  margin: 4px 0;
 }
 
-body[data-theme="modern"] #kiosks,
+body[data-theme="modern"] #wallpapers,
 body[data-theme="modern"] #settings {
  padding: var(--spacing);
  display: flex;
@@ -200,14 +200,14 @@ body[data-theme="modern"] #settings {
  flex-flow: column;
 }
 
-body[data-theme="modern"] #kiosks {
+body[data-theme="modern"] #wallpapers {
  background: var(--bg-shade3);
  counter-reset: item;
  flex: 0 1 auto;
  line-height: var(--icon-size);
 }
 
-body[data-theme="vintage"] #kiosks {
+body[data-theme="vintage"] #wallpapers {
  display: contents;
 }
 
@@ -567,7 +567,7 @@ body[data-theme="vintage"] menu-button {
  box-shadow: var(--deep-outset);
 }
 
-body[data-theme="vintage"].menu-open menu-button {
+body[data-theme="vintage"].menu-fully-open menu-button {
  box-shadow: var(--deep-inset);
  padding: 4px 4px 2px;
 }

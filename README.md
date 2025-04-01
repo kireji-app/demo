@@ -14,7 +14,7 @@ Using a straightforward approach, all user-configurable information in the opera
 
 In a URI, the [fragment](https://datatracker.ietf.org/doc/html/rfc3986#section-3.5) allows more special characters than the [path](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3). However, Google's search engine crawler [doesn't support fragments](https://developers.google.com/search/docs/crawling-indexing/url-structure) so this framework uses the path. This project is currently in alpha, so this and other details are subject to change as I do more research.
 
-The domain name of the URI corresponds to the type of application which is currently "kiosked". When no application is kiosked, the domain name of the state is $`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$.
+The domain name of the URI corresponds to the type of application which is currently set as the live wallpaper of the operating system.
 
 This repo contains the source code for all the data types, organized by domain name. Together, they create the virtual machine which the framework packs into a single source-mapped script.
 
@@ -22,7 +22,7 @@ The operating system can run multiple small-scale, feature-rich web apps (such a
 
 That URL can then be shared which effectively shares all the app content even though the user never uploaded anything.
 
-By closing all apps except one, the user can create more advanced content in the given app without running out of URL space. By putting an app into "kiosk" mode, the user can hide the operating system in order to obtain an appealing full-screen form of the content which can then be shared as a message or e-card.
+By closing all apps except one, the user can create more advanced content in the given app without running out of URL space. By putting an app into "wallpaper" mode and closing all windows, the user can obtain an appealing full-screen form of the content that retains some menu controls and which can then be shared as a message or e-card.
 
 As mentioned, the project is still in alpha. See below for the [roadmap](#roadmap) and [live demos](#live-demos).
 
@@ -73,10 +73,10 @@ The client window machine $`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$ 
 
 The operating system can run up to 20 tasks at once. In the future, this limit could change or go away entirely.
 
-The operating system allows any single task to be in **kiosk mode**. This lets the task override the GUI of the operating system. When the kiosked task (such as $`\textcolor{#AA8866}{\texttt{"www.orenjinari.com"}}`$) is restored or minimized, the operating system returns to its default style.
+The operating system has exactly one task in **live wallpaper mode**. This renders the website behind the taskbar of the operating system. The live wallpaper task (such as $`\textcolor{#AA8866}{\texttt{"www.orenjinari.com"}}`$) cannot be restored or minimized. Instead, the user can pick between wallpapers, which results in navigation changing origins in their browser.
 
 All tasks
-- can run in kiosk mode
+- can run in wallpaper mode
 - extend $`\textcolor{#AA8866}{\text{"task.desktop.parts"}}`$
 - have a type name that starts with $`\textcolor{#AA8866}{\text{"www."}}`$
 - are meant to be reached over the web

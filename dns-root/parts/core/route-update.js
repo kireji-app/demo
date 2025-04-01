@@ -8,8 +8,10 @@ part.previousRouteID = part.routeID
 part.routeID = ROUTE_ID
 part.wasEnabled = part.enabled
 part.enabled = part.routeID >= 0
+part.disabled = part.routeID === -1n
+part.justEnabled = part.enabled && !part.wasEnabled
+part.justDisabled = !part.enabled && part.wasEnabled
 part.deltaRouteID = part.routeID - part.previousRouteID
 
-if (part.deltaRouteID === 0n) {
- Framework.warn(' reassigned state to ' + part.key)
-}
+if (part.deltaRouteID === 0n)
+ Framework.warn(0, ' reassigned state to ' + part.key)

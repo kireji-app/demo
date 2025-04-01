@@ -2,11 +2,11 @@
  "rewrites": [
   {
    "source": "/(.*?)",
-   "destination": "/api/endpoint"
+   "destination": "/api/portable"
   },
   {
    "source": "/api",
-   "destination": "/api/endpoint"
+   "destination": "/api/portable"
   }
  ]
 }

@@ -14,7 +14,7 @@
 .cspell/
 
 # Ignore my archive for scripts I might need again later
-.dns-root/
+# .dns-root/
 
 # Don't commit the output directory.
 api/

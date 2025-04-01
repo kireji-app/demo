@@ -1,1 +1,1 @@
-return document.body.hasAttribute(hydration.attributeName)
+return document.body.hasAttribute("data-dry")

@@ -1,0 +1,1 @@
+return `/${[...part].map(subpart => addressBar.encodeRoute(subpart.routeID)).join("/")}`

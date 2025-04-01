@@ -1,0 +1,76 @@
+main {
+ background: conic-gradient(from var(--angle),
+   rgba(255, 0, 0, 1) 0%,
+   rgba(255, 154, 0, 1) 10%,
+   rgba(208, 222, 33, 1) 20%,
+   rgba(79, 220, 74, 1) 30%,
+   rgba(63, 218, 216, 1) 40%,
+   rgba(47, 201, 226, 1) 50%,
+   rgba(28, 127, 238, 1) 60%,
+   rgba(95, 21, 242, 1) 70%,
+   rgba(186, 12, 248, 1) 80%,
+   rgba(251, 7, 217, 1) 90%,
+   rgba(255, 0, 0, 1) 100%);
+}
+
+#bottom-toolbar {
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ height: var(--taskbar-height);
+ display: flex;
+}
+
+main button {
+ width: var(--taskbar-height);
+ line-height: var(--taskbar-height);
+ font-size: calc(0.6 * var(--taskbar-height));
+ text-align: center;
+ background: transparent;
+ border: none;
+ outline: none;
+ color: var(--fg-color1);
+ cursor: pointer;
+}
+
+main button:hover {
+ color: var(--bg-shade1);
+ background: var(--fg-color1);
+}
+
+.play-pause-button,
+#bottom-toolbar,
+taskbar- {
+ transition: ease-out 2s;
+ opacity: 0%;
+}
+
+.play-pause-button {
+ width: unset;
+ position: fixed;
+ display: block;
+ top: var(--taskbar-height);
+ bottom: var(--taskbar-height);
+ line-height: calc(2 * var(--taskbar-height));
+ font-size: calc(2 * var(--taskbar-height));
+ left: 0;
+ right: 0;
+ height: unset;
+}
+
+body:hover .play-pause-button,
+body:hover #bottom-toolbar,
+body:hover taskbar- {
+ opacity: 100%;
+ transition: 0.2s;
+}
+
+#bottom-toolbar>input {
+ flex: 1;
+}
+
+taskbar- {
+ background: transparent;
+ box-shadow: none;
+}

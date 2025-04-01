@@ -1,0 +1,8 @@
+body>main {
+ height: var(--h);
+}
+
+taskbar- {
+ box-shadow: none;
+ background: transparent;
+}
