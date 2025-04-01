@@ -1,0 +1,1 @@
+part.cardinality = BigInt(render("max")) - BigInt(render("min"))

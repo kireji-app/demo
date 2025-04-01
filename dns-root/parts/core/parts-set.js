@@ -4,7 +4,6 @@ part.length = 0
 part.enabled = false
 part.routeID = -1n
 part.cardinality = 1n
-part.instancePath = "unknown-root/"
 part.previousRouteID = -1n
 
 const entries = Object.entries(PARTS)
@@ -31,4 +30,3 @@ if (key in part)
 
 part[subpart.key = key] = part[subpart.index = INDEX] = subpart
 subpart.parent = part
-subpart.instancePath = part.instancePath + "/" + key

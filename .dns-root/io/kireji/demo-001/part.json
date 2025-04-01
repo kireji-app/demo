@@ -1,3 +1,4 @@
 {
- "extends": "model.kireji.io"
+ "extends": "model.kireji.io",
+ "parts-set": []
 }

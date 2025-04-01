@@ -51,8 +51,6 @@ declare class CorePart extends Iterable<CorePart> {
  readonly parent: CorePart
  /** The root part of the part's tree. */
  readonly root: CorePart
- /** The unique path to the instance from the root object. */
- readonly instancePath: string
  /** When parent type is `mix.core.parts`, a divisor which the parent mix uses to encode and decode subroutes.*/
  readonly mixedRadixPlaceValue: bigint
  /** Generate a named string or fetch it from the static cache.
@@ -144,6 +142,8 @@ declare const SCRIPT_HOST: string
  * 
  * *Note: Not available in `constructor.js`*. */
 declare const part: CorePart
+/** Alias for `part.render`. */
+declare const render: CorePart
 /** The framework instance that compiled the source code for the class instance of the currently evaluated script. */
 declare const framework: Framework
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part.parent.exampleProperty`.  */

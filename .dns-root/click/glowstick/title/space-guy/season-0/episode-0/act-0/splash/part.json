@@ -1,3 +1,4 @@
 {
- "extends": "sequence.glowstick.click"
+ "extends": "sequence.glowstick.click",
+ "parts-set": []
 }

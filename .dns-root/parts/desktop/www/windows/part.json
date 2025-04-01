@@ -1,3 +1,4 @@
 {
- "extends": "pick-n.core.parts"
+ "extends": "pick-n.core.parts",
+ "parts-set": []
 }

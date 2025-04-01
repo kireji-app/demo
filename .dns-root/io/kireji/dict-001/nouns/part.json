@@ -1,3 +1,4 @@
 {
- "extends": "word.kireji.io"
+ "extends": "word.kireji.io",
+ "parts-set": []
 }

@@ -1,28 +1,28 @@
-const icon_uri = part.render("icon.uri")
+const icon_uri = render("icon.uri")
 const [icon_type] = Framework.headerOf(icon_uri)
 
 return JSON.stringify({
- name: part.niceName || part.host,
- short_name: part.niceName || part.host,
- start_url: "#0",
+ name: render("title") || part.host,
+ short_name: render("title") || part.host,
+ start_url: "/",
  display: "standalone",
- theme_color: part.render("theme.color"),
- background_color: "#1f2023",
+ theme_color: render("theme.color"),
+ background_color: render("theme.color"),
  icons: [
   {
-   src: part.createDataURI(icon_uri, "?size=192"),
+   src: render({ stringName: icon_uri + "icon.uri?size=192", format: "datauri" }),
    sizes: "192x192",
    type: icon_type,
    purpose: "any maskable"
   },
   {
-   src: part.createDataURI(icon_uri, "?size=512"),
+   src: render({ stringName: icon_uri + "icon.uri?size=512", format: "datauri" }),
    sizes: "512x512",
    type: icon_type,
    purpose: "any maskable"
   }
  ],
- description: "This app is under development.",
+ description: render("description"),
  display_override: ["window-controls-overlay"],
  categories: ["entertainment", "games", "utilities"],
 }, null, 1)

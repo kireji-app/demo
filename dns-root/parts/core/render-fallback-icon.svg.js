@@ -1,6 +1,6 @@
 const size = PARAMS.get("size") ?? 512
 
-const theme_color = part.render({
+const theme_color = render({
  filename: "theme.color",
  fallback: "#ccc"
 })
@@ -37,5 +37,5 @@ return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://
  <circle class="exit" cx="19" cy="4" r="1.5" />
  <circle class="min" cx="16" cy="4" r="1.5" />
  <circle class="max" cx="13" cy="4" r="1.5" />
- ${isSelf ? "" : `<text x="12" y="12" text-anchor="middle" dominant-baseline="central">${part.render("unicode")}</text>`}
+ ${isSelf ? "" : `<text x="12" y="12" text-anchor="middle" dominant-baseline="central">${render("unicode")}</text>`}
 </svg>`

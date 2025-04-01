@@ -1,3 +1,4 @@
 {
- "extends": "mix.core.parts"
+ "extends": "mix.core.parts",
+ "parts-set": []
 }

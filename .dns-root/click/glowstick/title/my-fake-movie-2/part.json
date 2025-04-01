@@ -1,3 +1,4 @@
 {
- "extends": "movie.glowstick.click"
+ "extends": "movie.glowstick.click",
+ "parts-set": []
 }

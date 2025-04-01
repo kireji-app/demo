@@ -1,3 +1,4 @@
 {
- "extends": "tv-show.glowstick.click"
+ "extends": "tv-show.glowstick.click",
+ "parts-set": []
 }
