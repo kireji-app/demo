@@ -1,4 +1,4 @@
 for (const factor of mix)
- factor.distributeViewRemove()
+ factor.distributeRemoveView()
 
 super() // Now, remove own view.

@@ -1,1 +1,0 @@
-module.exports = { GET: request => Framework.fetchSync(request) }

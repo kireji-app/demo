@@ -14,7 +14,9 @@
   "ROUTE_ID"
  ],
  "parts-set": [
-  "PART_OBJECT"
+  "PART_MANIFEST",
+  "CARDINALITY_CALLBACK",
+  "INITIAL_CARDINALITY"
  ],
  "filter": [
   "FILTER_FUNCTION"
@@ -24,17 +26,5 @@
  ],
  "render": [
   "OPTIONS"
- ],
- "get-framework": [],
- "get-host": [],
- "get-super": [],
- "view-collect-add": [],
- "view-collect-remove": [],
- "view-collect-populate": [],
- "view-distribute-add": [],
- "view-distribute-remove": [],
- "view-distribute-populate": [],
- "view-add": [],
- "view-remove": [],
- "view-populate": []
+ ]
 }

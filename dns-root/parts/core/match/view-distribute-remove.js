@@ -5,4 +5,4 @@ if (match.previousArm) {
  delete match.previousArm
 }
 
-match.arm.distributeViewEnd()
+match.arm.distributeEndView()

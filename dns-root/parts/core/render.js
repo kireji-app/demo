@@ -1,31 +1,85 @@
-const [stringName, queryString] = STRING_REQUEST.split("?")
-const [type, base64] = Framework.headerOf(stringName)
-const isCustom = !!queryString
+// OPTIONS, the only argument, can be a string or an object.
+if (typeof OPTIONS === "string")
+ OPTIONS = { request: OPTIONS }
 
-if (framework.fetchStatic)
- // if the current object has a directly defined render function for this type,
- //  use it
+// Set some defaults.
+OPTIONS.links ??= "follow-all"
+OPTIONS.format ??= "raw"
+OPTIONS.fallback ??= null
 
- // if there is no defined render function for this type,
- //  if there is no query string, check for a static own string.
- //
- // if there is no static own string, and if the incoming framework is not CorePart's framework,
- //  call this function with the framework.parent this is not the base, 
+// A request can have a query attached.
+const [stringName, search = ""] = OPTIONS.request.split("?")
 
- let body = null
+if (!stringName)
+ throw part.host + " Render Error: cannot handle render request without a string name. " + JSON.stringify(OPTIONS)
 
-if (isCustom)
- body = part.framework.readOwnString(stringName, null)
+// Some information is needed to handle encoding later.
+const [type, base64, extension] = Framework.headerOf(stringName)
 
-if (body === null) {
- if (stringName in part.framework.ownStringNameTable)
-  body = part.framework.ownStringNameTable
- if (stringName in part)
-  body = part()
- let body = part.framework.readString(stringName)
+// Any query object should be cast to a more useful object.
+const searchParams = new URLSearchParams(search)
+const requestHasParameters = searchParams.size > 0
+
+// Delegate any link following to a recursive call.
+if (extension === "uri" && OPTIONS.links !== "no-follow") {
+
+ if (!(OPTIONS.links === "follow-all" || OPTIONS.links === "follow-once"))
+  throw part.host + " Render Error: invalid links property value: " + OPTIONS.links + ". " + JSON.stringify(OPTIONS)
+
+ const newOptions = { ...OPTIONS }
+ const newStringName = part.framework.readString(stringName)
+
+ if (!newStringName) {
+  warn(part.host + " Render 404: can't follow .uri link " + stringName + ". " + JSON.stringify(OPTIONS))
+  return OPTIONS.fallback
+ }
+
+ if (OPTIONS.links === "follow-once")
+  newOptions.links = "no-follow"
+
+ newOptions.stringName = newStringName + search
+
+ return render(newOptions)
 }
 
-if (RESULT_FORMAT === "datauri")
+// Acquire the raw result from a defined render endpoint or return the fallback value.
+let body = null
+const renderMethodSymbol = Symbol.for(stringName)
+const partHasRenderMethod = renderMethodSymbol in part
+if (partHasRenderMethod) {
+ let prototype = part
+ while (true) {
+
+  if (requestHasParameters || prototype.framework.ownRenderableStringNames.includes(stringName)) {
+   body = part[renderMethodSymbol]()
+   break
+  }
+
+  if (prototype.framework.ownStringNameTable.has(stringName)) {
+   body = prototype.framework.readOwnString(stringName)
+   break
+  }
+
+  prototype = prototype.super
+ }
+} else {
+
+ if (requestHasParameters)
+  warn(part.host + " Render Warning: ignoring request parameters (no render endpoint found). " + JSON.stringify(OPTIONS))
+
+ body = part.framework.readString(stringName, null)
+
+ if (body === null) {
+  warn(part.host + ' Render 404: : no static or dynamic string could fullfil the request: ' + JSON.stringify(OPTIONS))
+  return OPTIONS.fallback
+ }
+}
+
+// Process the raw result into the requested format.
+if (RESULT_FORMAT === "raw")
+ return body
+
+if (OPTIONS.format === "datauri")
  return `data:${type};base64,${base64 ? body : Framework.btoaUnicode(body)}`
 
 if (RESULT_FORMAT === "response") {
@@ -44,7 +98,4 @@ if (RESULT_FORMAT === "response") {
  return new Response(body, { headers: { "content-type": type, expires: "Sun, 20 Jul 1969 20:17:00 UTC" } })
 }
 
-if (RESULT_FORMAT !== "raw")
- throw 'invalid RESULT_FORMAT ' + RESULT_FORMAT
-
-return body
+throw part.host + ' Render Error: invalid format ' + JSON.stringify(OPTIONS)

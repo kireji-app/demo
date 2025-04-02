@@ -11,36 +11,36 @@ if (ROUTE_ID !== part.routeID) {
  if (part.wasEnabled) {
   if (part.enabled) {
    // The routeID of an active part changed.
-   part.distributeViewRemove()
+   part.distributeRemoveView()
 
    // ... before making new ones.
-   part.distributeViewAdd()
+   part.distributeAddView()
   } else {
    // The routeID was set to -1n.
 
    // Always remove subpart views ...
-   part.distributeViewRemove()
+   part.distributeRemoveView()
 
    // ... before removing own views.
-   part.collectViewRemove()
+   part.collectRemoveView()
   }
  } else {
   // The part's own view was just enabled.
 
   // Always open the parent view ...
-  part.parent?.collectViewAdd()
+  part.parent?.collectAddView()
 
   // ... before you open this one.
-  part.distributeViewAdd()
+  part.distributeAddView()
  }
 
  // The view update signal collects through all disabled
  //  parents up to the first enabled parent.
- part.parent?.collectViewPopulate()
+ part.parent?.collectPopulateView()
 
  // But only update the part and subparts when they are enabled.
  if (part.enabled) {
-  part.distributeViewPopulate()
+  part.distributePopulateView()
  } else {
   // The part will now be garbage collected.
  }

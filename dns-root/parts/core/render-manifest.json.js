@@ -1,4 +1,4 @@
-const icon_uri = render("icon.uri")
+const icon_uri = render({ request: "icon.uri", links: "no-follow" })
 const [icon_type] = Framework.headerOf(icon_uri)
 
 return JSON.stringify({
@@ -10,13 +10,13 @@ return JSON.stringify({
  background_color: render("theme.color"),
  icons: [
   {
-   src: render({ stringName: icon_uri + "icon.uri?size=192", format: "datauri" }),
+   src: render({ request: "icon.uri?size=192", format: "datauri" }),
    sizes: "192x192",
    type: icon_type,
    purpose: "any maskable"
   },
   {
-   src: render({ stringName: icon_uri + "icon.uri?size=512", format: "datauri" }),
+   src: render({ request: "icon.uri?size=512", format: "datauri" }),
    sizes: "512x512",
    type: icon_type,
    purpose: "any maskable"

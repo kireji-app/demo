@@ -1,7 +1,9 @@
 if (mix.routeID !== ROUTE_ID) {
- super(ROUTE_ID)
- for (const factor of mix) {
-  factor.distributeRoute(ROUTE_ID / mix.placeValues[factor])
-  ROUTE_ID %= mix.placeValues[factor]
+ mix.updateRoute(ROUTE_ID)
+
+ for (let i = mix.length - 1; i >= 0; i--) {
+  const placeValue = mix.placeValues[i]
+  mix[i].distributeRoute(ROUTE_ID / placeValue)
+  ROUTE_ID %= mix.placeValues[i]
  }
 }

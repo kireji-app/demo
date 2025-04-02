@@ -1,1 +1,1 @@
-return part.super[METHOD_ID]() + framework.readString("inline.css")
+return part.super[METHOD_DATA.niceName]() + framework.readString("inline.css")

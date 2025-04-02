@@ -79,7 +79,7 @@ class Framework {
    }
    packAndMap(url) {
     const sourceFile = this
-    return sourceFile.lines.join("\n") + (IS_PRODUCTION ? "" : `
+    return sourceFile.lines.join("\n") + (/*IS_PRODUCTION */true ? "" : `
 //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url ? `
 //${"#"} sourceURL=${url}` : ""}`)
    }
@@ -100,12 +100,13 @@ class Framework {
   Framework.registerSourcePositionMarks()
   Framework.registerHosts()
 
-  debug(new Part("root.core.parts"))
+  const desktop = new Part("www.desktop.parts")
+  desktop.setParts()
  }
  static setGlobe(GLOBE) {
   const {
    constructor: Globe,
-   Window: Desktop,
+   Window,
    ServiceWorkerGlobalScope: Worker,
    process: cloudProcess
   } = Object.assign(globalThis, {
@@ -149,15 +150,16 @@ class Framework {
    // String handling.
    headerOf(STRING_NAME) {
     let binary = false
-    const extension = STRING_NAME.split(".").pop()
+    const extension = STRING_NAME.includes(".") ? STRING_NAME.split(".").pop() : null
     return [{
+     [null]: "text/plain",
      get "png"() { binary = true; return "image/png" },
      get "gif"() { binary = true; return "image/gif" },
      "svg": "image/svg+xml;charset=UTF-8",
+     "uri": "text/uri-list",
      "js": "text/javascript;charset=UTF-8",
      "json": "application/json;charset=UTF-8",
-     "html": "text/html;charset=UTF-8",
-     "host": "text/plain"
+     "html": "text/html;charset=UTF-8"
     }[extension], binary, extension]
    },
    btoaUnicode(BODY) {
@@ -168,7 +170,7 @@ class Framework {
   })
 
   globe.ENVIRONMENT =
-   Globe === Desktop ? "desktop" : (
+   Globe === Window ? "window" : (
     Globe === Worker ? "worker" : (
      cloudProcess?.argv[1]?.split("/").pop() === "framework.js" ? "build" : "server"
     )
@@ -282,7 +284,7 @@ class Framework {
    // Future DNS resolution process...
    const { resolveTxt } = require('dns')
    const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), process.exit(21)) : give(TXT)))
-   const targetHost = "root.core.parts"
+   const targetHost = "www.core.parts"
    txt(targetHost).then(TXT => {
     for (const txt of TXT) {
      if (txt[0].startsWith("part://")) {
@@ -402,14 +404,19 @@ class Framework {
    }
    constructor(METHOD_ID) {
     const methodData = this
+    methodData.methodID = METHOD_ID
     methodData.stringName = `${METHOD_ID}.js`
     methodData.content = framework.readOwnString(methodData.stringName)
-    methodData.isSymbol = METHOD_ID.startsWith("symbol-")
+    methodData.isRender = METHOD_ID.startsWith("render-")
+    methodData.isView = METHOD_ID.startsWith("view-")
+    methodData.isSymbol = METHOD_ID.startsWith("symbol-") || methodData.isRender
     methodData.isGetOrSet = METHOD_ID.startsWith("get-") || METHOD_ID.startsWith("set-")
     methodData.niceName = (() => {
      if (METHOD_ID.includes("-")) {
-      if (methodData.isSymbol)
-       return `[Symbol.${METHOD_ID.slice(7)}]`
+      if (methodData.isSymbol) {
+       const subMethodID = METHOD_ID.slice(7)
+       return `[Symbol.${methodData.isRender ? `for("${subMethodID}")` : subMethodID}]`
+      }
       let temp = METHOD_ID.split("-")
       let firstWordBecomesLastWord = temp.shift()
 
@@ -422,8 +429,71 @@ class Framework {
      }
      return METHOD_ID
     })()
+    methodData.Constant = class MethodConstant {
+     static all = {}
+     static unused = {}
+     used = false
+     requirements = []
+     constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
+      /**
+       This object manages exactly one inherited constant declaration (SOURCE_LINE)
+        including its dependencies as the parent MethodData class instance traverses
+        the prototype chain of the type it is constructing to find both generic method
+        constants and specific subtype constants.
 
-    debug(METHOD_ID, "--->", methodData.niceName)
+       It adds the constant - after adding any previous constants that it depends
+       on - to the file as soon as its constructed, but only if the given method
+       body includes the constant.
+      */
+
+      const constant = this
+      constant.path = SOURCE_PATH
+      constant.line = SOURCE_LINE
+      constant.lineNumber = SOURCE_LINE_NUMBER
+      constant.source = framework.sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
+
+      if (!SOURCE_LINE.startsWith("const "))
+       throw 'invalid const line: ' + SOURCE_LINE
+
+      constant.equalsIndex = SOURCE_LINE.indexOf("=")
+      constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
+
+      if (constant.identifier in methodData.Constant.all)
+       throw 'constant overriding is not ready yet'
+
+      for (const previousConstantIdentifier in methodData.Constant.unused) {
+       // A currently unused constant is used by this constant.
+       const previousConstant = methodData.Constant.unused[previousConstantIdentifier]
+       if (previousConstant.usageRegExp.test(SOURCE_LINE)) {
+        constant.requirements.push(methodData.Constant.unused[previousConstantIdentifier])
+       }
+      }
+
+      methodData.Constant.all[constant.identifier] = constant
+      methodData.Constant.unused[constant.identifier] = constant
+      constant.usageRegExp = new RegExp(`(?:^|[^.])\\b${constant.identifier}\\b`)
+      for (const methodBodyLine of methodData.lines) {
+       if (constant.usageRegExp.test(methodBodyLine)) {
+
+        // This constant is used in the method's body.
+        constant.ensureDeclarationAndDependencies()
+       }
+      }
+     }
+     ensureDeclarationAndDependencies() {
+      const constant = this
+
+      if (constant.used)
+       return
+
+      for (const requiredConstant of constant.requirements)
+       requiredConstant.ensureDeclarationAndDependencies()
+
+      framework.sourceFile.addSection(constant.line, constant.source, constant.lineNumber, 0, "  ")
+      constant.used = true
+      delete methodData.Constant.unused[constant.identifier]
+     }
+    }
 
     if (methodData.content !== undefined)
      methodData.source = framework.sourceFile.addSource(methodData.stringName, methodData.content)
@@ -433,85 +503,55 @@ class Framework {
      methodData.postContent = framework.readOwnString(postConstructorStringName)
      methodData.postSource = framework.sourceFile.addSource(postConstructorStringName, methodData.postContent)
 
-     if (SERVER_VERBOSITY < 3 && methodData.content === undefined && methodData.postContent === undefined)
+     if (methodData.content === undefined && methodData.postContent === undefined)
       return
-    } else if (SERVER_VERBOSITY < 3 && methodData.content === undefined)
+    } else if (methodData.content === undefined)
      return
 
     methodData.hasValidPropertyName = methodData.isSymbol || /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(methodData.niceName)
     methodData.propertyReference = methodData.hasValidPropertyName ? methodData.niceName : `["${methodData.niceName}"]`
     methodData.propertyAccessor = methodData.propertyReference.startsWith("[") ? methodData.propertyReference : "." + methodData.niceName
-    debug(METHOD_ID)
     methodData.argumentString = "(" + (framework.partJSON[METHOD_ID]?.join(", ") ?? "") + ")"
     methodData.modifiers = METHOD_ID.startsWith("async-") ? "async " : ""
     methodData.modifiers = METHOD_ID.startsWith("get-") ? "get " : ""
-
-    framework.sourceFile.addSection(`@method-open@\n\n ${methodData.modifiers}${methodData.propertyReference}${methodData.argumentString} {
-  const THIS_METHOD_ID = "${METHOD_ID}";`, framework.buildSource)
-    if (SERVER_VERBOSITY >= 3)
-     framework.sourceFile.addLine(`@method-log-open@   openLog(\`\x1b[38;5;158mƒ part<${HOST}>${this.propertyAccessor}(${methodData.argumentString})\x1b[0m\`);`, framework.buildSource)
-
-    let indent = "  "
-    if (METHOD_ID === "constructor") {
-     if (methodData.content) {
-      const lines = methodData.content.split("\n")
-      for (let ln = 0; ln < lines.length; ln++)
-       framework.sourceFile.addLine(lines[ln], methodData.source, ln, 0, "  ")
-     } else if (!framework.isCore)
-      framework.sourceFile.addLine(`@constructor-auto-super@super${framework.isCore ? "()" : methodData.argumentString}`, framework.buildSource, null, null, "  ", false)
-     if (methodData.postContent !== undefined) {
-      if (methodData.postContent === "")
-       framework.sourceFile.addLines(`@do-nothing-constructor@  // Do nothing.`, framework.buildSource)
-      else {
-       framework.addMethodScope(framework.sourceFile)
-       framework.sourceFile.addLines(methodData.postContent.split("\n"), methodData.postSource, 0, 0, "  ")
-      }
-     }
-    } else {
-
-     if (methodData.content !== "")
-      framework.addMethodScope(framework.sourceFile, METHOD_ID.startsWith("view-"))
-     else
-      methodData.content = "// Do nothing."
-
-     const methodLines = methodData.content.split("\n")
-
-     if (framework.isCore)
-      framework.sourceFile.addLines(methodLines, methodData.source, 0, 0, indent)
-     else {
-      if (["view-add", "view-populate"].includes(METHOD_ID)) {
-       // For all of these view functions, we want to execute the core part's instructions first, then the next and then the next.
-       framework.sourceFile.addLine(`@auto-super-top@super${methodData.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
-       framework.sourceFile.addLines(methodLines, methodData.source, 0, 0, indent)
-      } else if (["view-remove"].includes(METHOD_ID)) {
-       // For these view functions, we want to execute the derived method's instructions first, then work our way toward the core.
-       framework.sourceFile.addLines(methodLines, methodData.source, 0, 0, indent)
-       framework.sourceFile.addLine(`@auto-super-bottom@super${methodData.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
-      } else {
-       let hasSuper = false
-       methodLines.forEach((methodLine, ln) => {
-        const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
-        if (firstMatch) {
-         hasSuper = true
-         methodLine = methodLine.slice(0, firstMatch.index) + `super${methodData.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
-         framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, indent, false)
-        } else
-         framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, indent)
-       })
-       if (!hasSuper)
-        warn(`${HOST} => ${METHOD_ID}()`, "doesn't call super.")
-      }
+    methodData.signature = methodData.modifiers + methodData.propertyReference + methodData.argumentString
+    framework.sourceFile.addSection(`@method-open@\n\n ${methodData.signature} {`, framework.buildSource)
+    methodData.lines = methodData.content.split("\n")
+    framework.collectConstants(framework, methodData)
+    // if it is used ... FILE.addSection(`@provide-method-id@  const METHOD_ID = "${methodData.methodID}"`, framework.buildSource, 0, 0, INDENT)
+    // NOW ADD USED CONSTANTS HERE
+    if (framework.isCore)
+     framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
+    else {
+     if (["view-add", "view-populate"].includes(METHOD_ID)) {
+      // For all of these view functions, we want to execute the core part's instructions first, then the next and then the next.
+      framework.sourceFile.addLine(`@auto-super-top@super${methodData.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
+      framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
+     } else if (["view-remove"].includes(METHOD_ID)) {
+      // For these view functions, we want to execute the derived method's instructions first, then work our way toward the core.
+      framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
+      framework.sourceFile.addLine(`@auto-super-bottom@super${methodData.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
+     } else {
+      let hasSuper = false
+      methodData.lines.forEach((methodLine, ln) => {
+       const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
+       if (firstMatch) {
+        hasSuper = true
+        methodLine = methodLine.slice(0, firstMatch.index) + `super${methodData.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
+        framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, "  ", false)
+       } else
+        framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, "  ")
+      })
+      if (!hasSuper)
+       warn(`${HOST} => ${METHOD_ID}()`, "doesn't call super.")
      }
     }
-
-    if (SERVER_VERBOSITY >= 3)
-     framework.sourceFile.addLine(`@method-log-close@; closeLog()`, framework.buildSource, null, null, indent)
 
     framework.sourceFile.addLine(`@method-close@}`, framework.buildSource, null, null, " ")
    }
   }
 
-  framework.ownStringNameTable = Object.fromEntries(
+  framework.ownStringNameTable = new Map(
    Object.keys(framework.stockStringCollection)
     .map(stringName => [stringName, framework.stockStringCollection])
     .concat(
@@ -520,8 +560,24 @@ class Framework {
     )
   )
 
-  framework.ownRenderMethodIDs = Object.keys(framework.ownStringNameTable)
-   .filter(stringName => stringName.endsWith(".js") && stringName.startsWith("render-"))
+  framework.ownRenderMethodIDs = []
+  framework.ownGetAndSetMethodIDs = []
+  framework.ownViewMethodIDs = []
+
+  for (const stringName of framework.ownStringNameTable.keys()) {
+
+   if (!stringName.endsWith(".js"))
+    continue
+
+   const methodID = stringName.slice(0, -3)
+
+   if (stringName.startsWith("render-"))
+    framework.ownRenderMethodIDs.push(methodID)
+   else if (stringName.startsWith("get-") || stringName.startsWith("set-"))
+    framework.ownGetAndSetMethodIDs.push(methodID)
+   else if (stringName.startsWith("view-"))
+    framework.ownViewMethodIDs.push(methodID)
+  }
 
   framework.renderedStrings = {}
   framework.sourceFile = new Framework.SourceMappedFile(framework.pathFromRepo, framework.pathToRepo, "compiled-type.js")
@@ -530,36 +586,41 @@ class Framework {
   framework.stockPartJSON = JSON.parse(framework.stockStringCollection["part.json"] ?? "{}")
   framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customStringCollection["part.json"] ?? "{}"), framework.stockPartJSON)
   framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "core.parts")
+  framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
 
   if (!framework.isCore)
    Object.setPrototypeOf(framework.stockPartJSON, framework.parent.partJSON)
 
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
-  framework.addFrameworkScope(framework.sourceFile)
+  framework.addConstants(framework.sourceFile)
   framework.niceName = HOST.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
   framework.sourceFile.addSection(`@class-open@
- return class ${framework.niceName}${framework.isCore ? "" : " extends framework.parent.PartConstructor"} {
+ return class ${framework.niceName}${framework.isCore ? "" : " extends BasePart"} {
  // ${HOST}${framework.isCore ? "" : ` extends ${framework.parent.host}`}
 
- static framework = framework
- static host = HOST`, framework.buildSource)
+ static framework = framework;
+ static host = HOST;`, framework.buildSource)
 
-  for (const METHOD_ID in framework.partJSON) {
-   console.log(HOST, METHOD_ID)
-   if (METHOD_ID === "extends")
+  for (const methodID of framework.ownGetAndSetMethodIDs)
+   framework.MethodData.fromMethodID(methodID)
+
+  for (const methodID in framework.partJSON) {
+   if (methodID === "extends")
     continue
 
-   framework.MethodData.fromMethodID(METHOD_ID)
+   framework.MethodData.fromMethodID(methodID)
   }
 
-  for (const METHOD_ID of framework.ownRenderMethodIDs) {
-   framework.MethodData.fromMethodID(METHOD_ID)
-  }
+  for (const methodID of framework.ownRenderMethodIDs)
+   framework.MethodData.fromMethodID(methodID)
+
+  for (const methodID of framework.ownViewMethodIDs)
+   framework.MethodData.fromMethodID(methodID)
 
   framework.sourceFile.addLine("@class-close@}", framework.buildSource)
   framework.sourceFile.addLine("@eval-close@})()", framework.buildSource)
   framework.script = framework.sourceFile.packAndMap()
-  debug(framework.script)
+  // debug(framework.script)
   framework.PartConstructor = eval(framework.script)
   framework.PartConstructor.framework = framework
 
@@ -568,8 +629,8 @@ class Framework {
  }
  readString(STRING_NAME, FALLBACK) {
   const framework = this
-  if (STRING_NAME in framework.ownStringNameTable)
-   return framework.ownStringNameTable[STRING_NAME][STRING_NAME]
+  if (framework.ownStringNameTable.has(STRING_NAME))
+   return framework.ownStringNameTable.get(STRING_NAME)[STRING_NAME]
 
   if (!framework.isCore)
    return framework.parent.readString(STRING_NAME, STRING_NAME)
@@ -578,33 +639,60 @@ class Framework {
  }
  readOwnString(STRING_NAME, FALLBACK) {
   const framework = this
-  if (STRING_NAME in framework.ownStringNameTable)
-   return framework.ownStringNameTable[STRING_NAME][STRING_NAME]
+  if (framework.ownStringNameTable.has(STRING_NAME))
+   return framework.ownStringNameTable.get(STRING_NAME)[STRING_NAME]
 
   return FALLBACK
  }
- addMethodScope(FILE, IS_VIEW) {
+ addConstants(FILE) {
   const framework = this
-
-  framework.parent?.addMethodScope(FILE, IS_VIEW)
-  framework.addOwnScopeString("pre-method.js", FILE)
-
-  if (IS_VIEW)
-   framework.addOwnScopeString("pre-view.js", FILE)
- }
- addFrameworkScope(FILE) {
-  const framework = this
-  framework.parent?.addFrameworkScope(FILE)
-  framework.addOwnScopeString("pre-class.js", FILE, " ")
- }
- addOwnScopeString(STRING_NAME, FILE, INDENT = "  ") {
-  const framework = this
+  framework.parent?.addConstants(FILE)
+  const stringName = "const-class.js"
   const pathPrefix = FILE === framework.sourceFile ? "" : FILE.pathToRepo + "/" + framework.pathFromRepo + "/"
-  const path = pathPrefix + STRING_NAME
-  const body = framework.readOwnString(STRING_NAME)
+  const path = pathPrefix + stringName
+  const body = framework.readOwnString(stringName)
 
   if (body)
-   FILE.addSection(body, FILE.addSource(path, body), 0, 0, INDENT)
+   FILE.addSection(body, FILE.addSource(path, body), 0, 0, " ")
+ }
+ collectConstants(FRAMEWORK, METHOD_DATA) {
+  const framework = this
+  const isForOwnScript = FRAMEWORK === framework
+
+  if (isForOwnScript) {
+   if (METHOD_DATA.content === "") {
+    METHOD_DATA.content = "// Do nothing."
+    METHOD_DATA.lines = [METHOD_DATA.content]
+    return
+   }
+  }
+
+  framework.parent?.collectConstants(FRAMEWORK, METHOD_DATA)
+
+  function collectOwnConstants(STRING_NAME) {
+
+   if (!framework.ownStringNameTable.has(STRING_NAME))
+    return
+
+   const pathPrefix = isForOwnScript ? "" : FRAMEWORK.pathToRepo + "/" + framework.pathFromRepo + "/"
+   const path = pathPrefix + STRING_NAME
+   const body = framework.readOwnString(STRING_NAME)
+   const lines = body.split("\n")
+
+   for (let ln = 0; ln < lines.length; ln++)
+    new METHOD_DATA.Constant(path, lines[ln], ln)
+  }
+
+  collectOwnConstants("const-method.js")
+
+  if (METHOD_DATA.isGetOrSet)
+   collectOwnConstants("const-get-or-set.js")
+
+  if (METHOD_DATA.isRender)
+   collectOwnConstants("const-render.js")
+
+  if (METHOD_DATA.isView)
+   collectOwnConstants("const-view.js")
  }
 }
 

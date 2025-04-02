@@ -1,0 +1,15 @@
+{
+ "extends": "match.core.parts",
+ "go-cross-origin": [
+  "HOST"
+ ],
+ "go-wallpaper": [
+  "EVENT"
+ ],
+ "go": [
+  "EVENT"
+ ],
+ "noop": [
+  "EVENT"
+ ]
+}

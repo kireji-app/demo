@@ -1,0 +1,1 @@
+return `<button id=fullscreen-button onclick="fullscreen.go()">⛶</button>`

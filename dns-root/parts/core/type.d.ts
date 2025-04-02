@@ -47,10 +47,8 @@ declare class CorePart extends Iterable<CorePart> {
  readonly deltaRouteID: bigint
  /** The parent part.
   * 
-  * *Note: There is no* `root.parent`. */
+  * *Note: There is no* `desktop.parent`. */
  readonly parent: CorePart
- /** The root part of the part's tree. */
- readonly root: CorePart
  /** When parent type is `mix.core.parts`, a divisor which the parent mix uses to encode and decode subroutes.*/
  readonly mixedRadixPlaceValue: bigint
  /** Generate a named string or fetch it from the static cache.
@@ -63,7 +61,7 @@ declare class CorePart extends Iterable<CorePart> {
    * ```
    * "icon.png?size=64"
    * ``` */
-  stringName: string,
+  request: string,
   /** Whether or not to treat `*.uri` files as literal files ("no-follow"), or shortcut links ("follow-once" and "follow-all").
    * 
    * The default is "follow-all".
@@ -85,7 +83,7 @@ declare class CorePart extends Iterable<CorePart> {
   * and computes its own route cardinality from it. This is the only time the route cardinality should be set.
   * 
   * This function is like a reusable `constructor` for the part. */
- setParts(PARTS: object): void
+ setParts(PART_MANIFEST: object): void
  /** Set's the part's routeID, propagates it leafward and rootward, and then updates all views. */
  setRoute(ROUTE_ID: bigint): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
@@ -108,21 +106,21 @@ declare class CorePart extends Iterable<CorePart> {
  populateView(): void
  /** Removes all view elements, properties and references that were added in either `addView` or `populateView`. */
  removeView(): void
- /** If the part was just enabled, calls addView then calls collectViewAdd on any parent, passing the signal rootward.*/
- collectViewAdd(): void
- /** Whether the part is enabled or not, calls collectViewPopulate on any parent, passing the signal rootward.
+ /** If the part was just enabled, calls addView then calls collectAddView on any parent, passing the signal rootward.*/
+ collectAddView(): void
+ /** Whether the part is enabled or not, calls collectPopulateView on any parent, passing the signal rootward.
   * 
   * Then, if the part is enabled, calls populateView.*/
- collectViewPopulate(): void
- /** If the part was just disabled, calls removeView and then calls collectViewRemove on any parent, passing the signal rootward.*/
- collectViewRemove(): void
- /** If the part just became enabled, calls addView and then calls distributeViewAdd on all subparts, passing the signal leafward.*/
- distributeViewAdd(): void
- /** If the part is enabled, calls populateView on it and then calls distributeViewPopulate on all subparts, passing the signal leafward.*/
- distributeViewPopulate(): void
- /** If the part was enabled, calls distributeViewRemove on any subparts that were also enabled, passing the signal leafward.
+ collectPopulateView(): void
+ /** If the part was just disabled, calls removeView and then calls collectRemoveView on any parent, passing the signal rootward.*/
+ collectRemoveView(): void
+ /** If the part just became enabled, calls addView and then calls distributeAddView on all subparts, passing the signal leafward.*/
+ distributeAddView(): void
+ /** If the part is enabled, calls populateView on it and then calls distributePopulateView on all subparts, passing the signal leafward.*/
+ distributePopulateView(): void
+ /** If the part was enabled, calls distributeRemoveView on any subparts that were also enabled, passing the signal leafward.
   * Then, if the part is no longer enabled, calls removeView on itself.*/
- distributeViewRemove(): void
+ distributeRemoveView(): void
 }
 
 /** The part instance on which the current script is being called.
@@ -131,6 +129,12 @@ declare class CorePart extends Iterable<CorePart> {
  * 
  * *Note: Not available in `constructor.js`*. */
 declare const part: CorePart
+/** The base type's version of this function.
+ * 
+ * Alias for `part.super[methodData.niceName]`. */
+declare const base: Function
+/** The value of `performance.now()` around the time this method was called. */
+declare const now: DOMHighResTimeStamp
 /** Alias for `part.render`. */
 declare const render: CorePart
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part.parent.exampleProperty`.  */

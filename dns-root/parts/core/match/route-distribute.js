@@ -25,7 +25,7 @@ if (match.deltaRouteID !== 0n) {
 
     /*
      If a previous arm exists, we need to remove the view.
-     match.arm?.distributeViewEnd()
+     match.arm?.distributeEndView()
      But now is not the time for view changes. It is route-only time.
      We will simply make a note of the expired arm.
     */

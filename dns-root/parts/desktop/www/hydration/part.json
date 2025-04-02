@@ -1,0 +1,7 @@
+{
+ "extends": "feature.www.desktop.parts",
+ "finish": [],
+ "performance-simulate-slow": [
+  "DELAY_IN_MS"
+ ]
+}

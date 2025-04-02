@@ -7,12 +7,26 @@ declare class ClipPart extends CorePart {
 
  /** Determines the next step when the clip autoplays past it's last frame. */
  readonly endOfPlaybackBehavior: "autoplay" | "autoplayInto" | "loop"
- readonly playbackStartFrame = clip.routeID
- readonly playbackStartTime = performance.now()
- readonly elapsedTime = 0
- readonly elapsedFrames = 0
+
+ /** If the clip is playing, `clip.routeID` when initiatePlayback was last called. */
+ readonly playbackStartFrame: bigint
+
+ /** If the clip is playing, the value of `now` when `clip.initiatePlayback()` was called. */
+ readonly playbackStartTime: DOMHighResTimeStamp
+
+ /** If the clip is playing, the difference between `now` and `clip.playbackStartTime`. */
+ readonly elapsedTime: number
+
+ /** If playing, the difference between `clip.routeID` and `clip.playbackStartFrame` */
+ readonly elapsedFrames: number
+
+ /** Initiates automatic route changes on the part that create a video playback effect. */
  initiatePlayback(): void
+
+ /** Stops the playback started by `clip.initiatePlayback()`. */
  stopPlayback(): void
+
+ /** A utility function used to handle reaching the end of a clip. */
  handlePlaybackEnd(): void
 }
 declare const clip: ClipPart

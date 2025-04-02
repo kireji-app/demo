@@ -43,6 +43,6 @@ part.nextButton.setAttribute("id", "next-button")
 part.nextButton.innerHTML = '⏭'
 
 part.styleSheet.replaceSync(framework.openOwnStaticFile("player.css"))
-part.originalThrottleDuration = desktop.user.agent.throttleDuration
-desktop.user.agent.throttleDuration = 2000
+part.originalThrottleDuration = desktop.agent.throttleDuration
+desktop.agent.throttleDuration = 2000
 document.adoptedStyleSheets.push(part.styleSheet, part.animatedStyleSheet)

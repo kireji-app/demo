@@ -53,8 +53,8 @@ This repo already brings together lots of features and notions. To list them all
   - which runs on the machine
   - whose entire state fits in a URL
     - which means it inherently offers comprehensive deep-linking
-  - which can hide itself to create kiosk-like presentations for its running apps
-  - which can have a live wallpaper which is a kiosk-like presentation
+  - which can hide itself to create powerpoint-like presentations for its running apps
+  - which can have a live wallpaper which is also a nice presentation
 - automatic semantic versioning
 - quine-like self-outputting
 - the ability to pack

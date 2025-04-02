@@ -1,4 +1,3 @@
-const now = performance.now()
-user.fps = Math.round(1000 / (user.meanFrameTime += (now - user.time - user.meanFrameTime) / 20))
-user.time = now
+desktop.fps = Math.round(1000 / (desktop.meanFrameTime += (now - desktop.time - desktop.meanFrameTime) / 20))
+desktop.time = now
 addressBar.populateView()

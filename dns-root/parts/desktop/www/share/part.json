@@ -1,0 +1,6 @@
+{
+ "extends": "feature.www.desktop.parts",
+ "go": [
+  "EVENT"
+ ]
+}

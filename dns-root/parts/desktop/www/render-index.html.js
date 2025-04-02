@@ -1,5 +1,5 @@
 const iconDataURI = desktop.render({
- stringName: "icon.uri",
+ request: "icon.uri",
  fallback: "data:image/png;base64,iVBORw0KGgo=",
  format: "datauri"
 })
@@ -29,7 +29,7 @@ return `<!DOCTYPE html>
   <taskbar- tabIndex=2>
    <menu-button tabIndex=3 class=btn>≡</menu-button>
    <!-- desktop task items spawn here -->
-   <flex-spacer></flex-spacer>
+   <flex-spacer></flex-spacer><tray->${share.render("inline.html")}${fullscreen.render("inline.html")}</tray->
   </taskbar->${menu.render("inline.html")}
  </body>
 </html>`

@@ -3,7 +3,7 @@ if (part.frameRequest)
 
 document.adoptedStyleSheets.pop()
 document.adoptedStyleSheets.pop()
-desktop.user.agent.throttleDuration = part.originalThrottleDuration
+desktop.agent.throttleDuration = part.originalThrottleDuration
 part.container.replaceWith(part.oldMain)
 
 delete part.frameRequest

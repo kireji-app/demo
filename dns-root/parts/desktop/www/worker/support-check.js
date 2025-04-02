@@ -1,0 +1,1 @@
+return ENVIRONMENT === "worker" || nav.serviceWorker

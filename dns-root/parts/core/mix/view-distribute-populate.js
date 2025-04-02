@@ -1,4 +1,4 @@
 super()
 
 for (const factor of mix)
- factor.distributeViewPopulate()
+ factor.distributePopulateView()

@@ -1,3 +1,3 @@
 super()
 
-match.arm.distributeViewPopulate()
+match.arm.distributePopulateView()

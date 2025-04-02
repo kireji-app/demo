@@ -57,13 +57,13 @@ Each type is responsible for inheriting or overriding its parent type's cardinal
 This forms a type tree whose root type is ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$).
 
 #### Virtual Machine
-The root type ($`\textcolor{#AA8866}{\texttt{"root.core.parts"}}`$) defines the state of a virtual machine that specializes into one of four submachines depending on which of four major web development environments it was launched in:
+The root type ($`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$) which defines the state of a virtual machine. It has four subparts corresponding to the four major web development environments it can launch in:
 1. For the cloud build environment, $`\textcolor{#AA8866}{\texttt{"build.core.parts"}}`$
 2. For the cloud serverless function environment, $`\textcolor{#AA8866}{\texttt{"server.core.parts"}}`$
 3. For the client service worker, $`\textcolor{#AA8866}{\texttt{"worker.core.parts"}}`$,
 4. For the client window, $`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$
 
-This forms a runtime object tree whose root is ($`\textcolor{#AA8866}{\texttt{"root.core.parts"}}`$).
+This forms a runtime object tree whose root is ($`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$).
 
 ##### Operating System and Tasks
 The client window machine $`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$ is an operating system for the virtual machine. It includes:
@@ -99,7 +99,7 @@ After the browser parses the static DOM content and styles, the client then down
 
 PWA assets like `manifest.json`, icons and screenshots are designed to be client-rendered and the framework is engineered not to fetch any resources until the service worker is in place.
 
-The root part ($`\textcolor{#AA8866}{\texttt{"root.core.parts"}}`$) is instantiated explicitly by `*.js` at start up. All other parts are instantiated by their parent part when the application launches. This creates a global uniform data structure representing the state of the entire runtime. It's subparts represent the state of various aspects of the runtime.
+The root part ($`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$) is instantiated explicitly by `*.js` at start up. All other parts are instantiated by their parent part when the application launches. This creates a global uniform data structure representing the state of the entire runtime. It's subparts represent the state of various aspects of the runtime.
 
 Using domain names for all types enables configuration of type information via DNS.
 

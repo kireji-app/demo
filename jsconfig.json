@@ -6,6 +6,6 @@
  },
  "exclude": [
   "framework.js",
-  "*/**/pre-method.js"
+  "*/**/const-*.js",
  ]
 }

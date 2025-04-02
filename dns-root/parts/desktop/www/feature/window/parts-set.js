@@ -1,0 +1,2 @@
+feature.environments = ["window"]
+base()

@@ -1,4 +1,4 @@
 if (part.justEnabled) {
  part.addView()
- part.parent?.collectViewAdd()
+ part.parent?.collectAddView()
 }

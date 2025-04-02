@@ -1,7 +1,7 @@
 {
+ "parts-set": [],
  "playback-initiate": [],
  "playback-stop": [],
- "playback-handle-end": [
-  "END_OF_PLAYBACK_BEHAVIOR"
- ]
+ "playback-handle-end": [],
+ "playback-single-frame": []
 }

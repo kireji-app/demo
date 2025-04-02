@@ -3,8 +3,6 @@
  * routing functions, virtual DOM and synchronous fetch method which can
  * produce both static assets and dynamically generated files. */
 declare class Framework {
- /** The root part, probably never used. */
- static readonly root: RootPart
 
  /** A list of hosts collected during initialization. This is temporary. Later, we will probably remove the 'nesting' of string collections and the list of hosts will be provided for free. */
  static readonly hosts: string[]
@@ -164,13 +162,14 @@ class SourceMappedFile {
  *     - The script, `portable.js` is running in node.
  *     - It only has an inline cache of its git repository and can only read files.
  *     - It was triggered by a network request (probably for index.html, but could for be anything).
- *     - It's task is to respond to the network request.
+ *     - It's task is to enter the given state and respond with a snapshot of what the machine renders in that state.
  * 3. "worker"
- *     - The project is packed and deployed.
- *     - The script, `portable.js` is running in the ServiceWorkerGlobalScope.
- * 3. "desktop"
+ *     - Behavior and context matches "server" except that it is running in the ServiceWorkerGlobalScope instead of node.js.
+ * 3. "window"
  *     - The project is packed and deployed.
  *     - The script, `portable.js` is running in the Window.
+ *     - It only has an inline cache of its git repository and can only read files.
+ *     - The state changes are triggered by the user. The system's job is to patch the DOM and the address bar URL as the user interacts.
 */
 declare const ENVIRONMENT: string
 /** Whether the project is deploying/deployed as the live, public deployment (as determined by the absence of non-production build tags). */

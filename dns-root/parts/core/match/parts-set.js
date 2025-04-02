@@ -1,14 +1,10 @@
-if (typeof PARTS !== "object")
- throw new RangeError(`match expected an arm object or null (got ${typeof PARTS} -> ${PARTS}) (${match.host})`)
+if (typeof PART_MANIFEST !== "object")
+ throw new RangeError(`match expected a part manifest (got ${typeof PART_MANIFEST} -> ${PART_MANIFEST}) (${match.host})`)
 
-match.keys = Object.keys(PARTS)
-match.length = 0
-match.offsets = {}
+match.offsets = new Map()
 match.cardinality = 0n
 
-for (const key in PARTS) {
- const index = match.length
- match.offsets[index] = match.offsets[key] = match.cardinality
- super({ [key]: ARMS[key] })
- match.cardinality += match[index].cardinality
-}
+base(PART_MANIFEST, arm => {
+ match.offsets[arm.index] = match.offsets[arm.key] = match.cardinality
+ match.cardinality += arm.cardinality
+})

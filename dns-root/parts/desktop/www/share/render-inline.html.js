@@ -1,0 +1,1 @@
+return `<button id=share-button onclick="share.go(event)">➦</button>`

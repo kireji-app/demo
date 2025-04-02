@@ -1,7 +1,7 @@
 const size = PARAMS.get("size") ?? 512
 
 const theme_color = render({
- filename: "theme.color",
+ request: "theme.color",
  fallback: "#ccc"
 })
 
