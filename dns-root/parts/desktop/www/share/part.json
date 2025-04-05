@@ -1,5 +1,5 @@
 {
- "extends": "feature.www.desktop.parts",
+ "extends": "window.feature.www.desktop.parts",
  "go": [
   "EVENT"
  ]

@@ -1,5 +1,6 @@
 {
  "extends": "match.core.parts",
+ "part-distribute-initialize": [],
  "go-cross-origin": [
   "HOST"
  ],

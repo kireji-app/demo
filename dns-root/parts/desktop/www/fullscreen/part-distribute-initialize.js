@@ -1,0 +1,2 @@
+globe.fullscreen = feature
+super()

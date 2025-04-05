@@ -1,6 +1,10 @@
 declare class CorePart extends Iterable<CorePart> {
  constructor(): CorePart
  [Symbol.iterator](): IterableIterator<CorePart>
+ /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
+ filter(FILTER_FUNCTION: Function): CorePart[]
+ /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
+ includes(SUBPART: CorePart): boolean
  /** The framework instance which was dedicated to compiling the script defining the part's type. */
  readonly static framework: Framework
  /** The framework instance, which was dedicated to compiling the script of the part's class. */
@@ -78,12 +82,8 @@ declare class CorePart extends Iterable<CorePart> {
    * instead of this value.  */
   fallback?: string | Response
  }): any | string | Response
-
- /** Completely resets the part to it's factory settings, assigns it the given subpart,
-  * and computes its own route cardinality from it. This is the only time the route cardinality should be set.
-  * 
-  * This function is like a reusable `constructor` for the part. */
- setParts(PART_MANIFEST: object): void
+ /** Sets the part's factory settings, subparts and cardinality. */
+ distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: Function): void
  /** Set's the part's routeID, propagates it leafward and rootward, and then updates all views. */
  setRoute(ROUTE_ID: bigint): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
@@ -92,7 +92,9 @@ declare class CorePart extends Iterable<CorePart> {
  collectRoute(SUBPARTS: CorePart[]): void
  /** Updates the part's routeID to ROUTE_ID and then recomputes all subpart routeIDs to match.
   * 
-  * For any active subparts, it calls distributeRoute on them, passing the signal leafward. */
+  * For any active subparts, it calls distributeRoute on them, passing the signal leafward.
+  * 
+  * To avoid redistributing the same route, **check for route ID changes *before* calling distributeRoute**. */
  distributeRoute(ROUTE_ID: bigint): void
  /** If ROUTE_ID is in the part's range, sets the part to that routeID while caching information about
   * the previous routeID. Otherwise, throws an error.
@@ -121,8 +123,9 @@ declare class CorePart extends Iterable<CorePart> {
  /** If the part was enabled, calls distributeRemoveView on any subparts that were also enabled, passing the signal leafward.
   * Then, if the part is no longer enabled, calls removeView on itself.*/
  distributeRemoveView(): void
-}
 
+}
+declare class PartError extends Error { }
 /** The part instance on which the current script is being called.
  * 
  * Alias for `this` to disambiguate it from globalThis.

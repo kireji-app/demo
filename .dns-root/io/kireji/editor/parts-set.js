@@ -1,3 +1,0 @@
-super.setParts({
- model: "model"
-})

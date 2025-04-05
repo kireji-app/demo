@@ -1,4 +1,4 @@
 {
  "extends": "model.kireji.io",
- "parts-set": []
+ "part-distribute-initialize": []
 }

@@ -1,0 +1,2 @@
+globe.share = feature
+super()

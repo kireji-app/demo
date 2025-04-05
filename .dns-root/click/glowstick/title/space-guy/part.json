@@ -1,4 +1,4 @@
 {
  "extends": "tv-show.glowstick.click",
- "parts-set": []
+ "part-distribute-initialize": []
 }

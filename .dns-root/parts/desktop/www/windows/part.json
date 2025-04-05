@@ -1,4 +1,4 @@
 {
  "extends": "pick-n.core.parts",
- "parts-set": []
+ "part-distribute-initialize": []
 }

@@ -1,4 +1,4 @@
 {
  "extends": "movie.glowstick.click",
- "parts-set": []
+ "part-distribute-initialize": []
 }

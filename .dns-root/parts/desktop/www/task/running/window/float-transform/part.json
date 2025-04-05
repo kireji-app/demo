@@ -1,3 +1,3 @@
 {
- "extends": "w-h-x-y.core.parts"
+ "extends": "box.core.parts"
 }

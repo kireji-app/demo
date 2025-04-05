@@ -1,6 +1,6 @@
 const host = part.taskHosts[Number(part.routeID)]
 part.parent.taskLabel.innerHTML = host
-part.task = part.parent.task = new Part(host, undefined, part)
+part.task = part.parent.task = new Part(host)
 
 if (part.windowArray) {
  part.windowArray.splice(part.windowIndex, 1)

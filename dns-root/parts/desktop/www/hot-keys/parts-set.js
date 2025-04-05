@@ -1,2 +1,0 @@
-globe.hotKeys = feature
-base()

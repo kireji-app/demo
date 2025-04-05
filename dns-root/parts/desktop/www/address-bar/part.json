@@ -1,5 +1,5 @@
 {
- "extends": "mix.core.parts",
+ "extends": "window.feature.www.desktop.parts",
  "route-decode": [
   "STRING"
  ],

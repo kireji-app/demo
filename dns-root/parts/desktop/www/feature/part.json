@@ -1,4 +1,6 @@
 {
+ "initialize": [],
  "async-initialize": [],
- "support-check": []
+ "support-check": [],
+ "part-distribute-initialize": []
 }

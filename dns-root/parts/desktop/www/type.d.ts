@@ -37,7 +37,7 @@ declare class DesktopPart extends MixPart {
 
  /** Boots a virtual operating system that can produce a static HTML image of its output. 
   * Sets all of the client features. Those features will only initialize if we are in the desktop environment. */
- setParts(): void
+ distributeInitializePart(): void
 
  /** The root element for the desktop's live wallpaper. */
  wallpaper: ShadowRoot

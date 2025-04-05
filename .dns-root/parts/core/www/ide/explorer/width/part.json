@@ -1,4 +1,4 @@
 {
  "extends": "match.core.parts",
- "parts-set": []
+ "part-distribute-initialize": []
 }

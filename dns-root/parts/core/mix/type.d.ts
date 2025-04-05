@@ -9,17 +9,16 @@ declare class MixPart extends CorePart {
   * Used to speed up computation. */
  readonly placeValues: Map<CorePart, bigint>
 
- /** A map from mix factor to last known routeID.
-  *  Used to speed up computation when a change occurs. */
- readonly cache: Map<CorePart, bigint>
-
  /** Sets the list of factors for the mix and computes place values.*/
- readonly setParts(PART_MANIFEST: object, CARDINALITY_CALLBACK: function): void
+ distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: function): void
 
  /** Updates the mix's routeID and bubbles the update rootward. */
- readonly collectRoute(SUBPARTS: CorePart[]): void
+ collectRoute(SUBPARTS: CorePart[]): void
 
  /** Updates the mix's routeID and bubbles the update leafward. */
- readonly distributeRoute(ROUTE_ID): void
+ distributeRoute(ROUTE_ID): void
 }
 declare const mix: MixPart
+declare class MixError extends Error { }
+declare class MixCollectRouteError extends MatchError { }
+declare const CHANGED_FACTORS: CorePart[]

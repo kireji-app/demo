@@ -101,7 +101,8 @@ class Framework {
   Framework.registerHosts()
 
   const desktop = new Part("www.desktop.parts")
-  desktop.setParts()
+  desktop.distributeInitializePart()
+  desktop["index.html"]
  }
  static setGlobe(GLOBE) {
   const {
@@ -118,8 +119,11 @@ class Framework {
    DEVELOPMENT_HOST: GLOBE.host,
    STRING_COLLECTION: GLOBE.stringCollection,
    Part: class {
-    constructor(...ARGS) {
-     return new (new Framework(...ARGS).PartConstructor)()
+    constructor(INPUT) {
+     if (typeof INPUT === "string")
+      return new (new Framework(INPUT).PartConstructor)()
+
+     throw 'other constructor forms are not yet supported'
     }
    },
 
@@ -385,7 +389,7 @@ class Framework {
   if (!CUSTOM_STRING_COLLECTION) {
 
    if (HOST in Framework.frameworks)
-    return Framework.frameworks[HOST].PartConstructor
+    return Framework.frameworks[HOST]
 
    Framework.frameworks[HOST] = framework
   }
@@ -398,7 +402,7 @@ class Framework {
   framework.stockStringCollection = Framework.getStringCollection(HOST)
   framework.customStringCollection = CUSTOM_STRING_COLLECTION ?? {}
   framework.MethodData = class {
-   framework = framework
+   static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
    static fromMethodID(METHOD_ID) {
     this[METHOD_ID] = new this(METHOD_ID)
    }
@@ -406,16 +410,24 @@ class Framework {
     const methodData = this
     methodData.methodID = METHOD_ID
     methodData.stringName = `${METHOD_ID}.js`
-    methodData.content = framework.readOwnString(methodData.stringName)
-    methodData.isRender = METHOD_ID.startsWith("render-")
+    methodData.isAuto = METHOD_ID.startsWith("auto-")
+    methodData.content = methodData.isAuto ? `@auto-getter@return framework.readOwnString("${METHOD_ID.slice(5)}")` : framework.readOwnString(methodData.stringName)
     methodData.isView = METHOD_ID.startsWith("view-")
-    methodData.isSymbol = METHOD_ID.startsWith("symbol-") || methodData.isRender
+    methodData.isAsync = METHOD_ID.startsWith("async-")
+    methodData.isSymbol = METHOD_ID.startsWith("symbol-")
     methodData.isGetOrSet = METHOD_ID.startsWith("get-") || METHOD_ID.startsWith("set-")
     methodData.niceName = (() => {
      if (METHOD_ID.includes("-")) {
       if (methodData.isSymbol) {
        const subMethodID = METHOD_ID.slice(7)
-       return `[Symbol.${methodData.isRender ? `for("${subMethodID}")` : subMethodID}]`
+       return `[Symbol.${subMethodID}]`
+      } else if (methodData.isGetOrSet) {
+       if (METHOD_ID.includes("."))
+        return `["${METHOD_ID.slice(4)}"]`
+      } else if (methodData.isAuto) {
+       const stringName = METHOD_ID.slice(5)
+       const isValidIdentifier = framework.MethodData.identifierPattern.test(stringName)
+       return isValidIdentifier ? stringName : `["${stringName}"]`
       }
       let temp = METHOD_ID.split("-")
       let firstWordBecomesLastWord = temp.shift()
@@ -432,6 +444,7 @@ class Framework {
     methodData.Constant = class MethodConstant {
      static all = {}
      static unused = {}
+     static methodIDUsed = false
      used = false
      requirements = []
      constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
@@ -494,33 +507,39 @@ class Framework {
       delete methodData.Constant.unused[constant.identifier]
      }
     }
+    methodData.Constant.all.METHOD_ID = methodData.Constant.unused.METHOD_ID = {
+     identifier: "METHOD_ID",
+     usageRegExp: /(?:^|[^.])\bMETHOD_ID\b/g,
+     ensureDeclarationAndDependencies() {
+      const constant = this
+      framework.sourceFile.addLine(`@method-i-d-literal@  const METHOD_ID = "${METHOD_ID}"`, framework.buildSource)
+      constant.used = true
+     }
+    }
 
-    if (methodData.content !== undefined)
-     methodData.source = framework.sourceFile.addSource(methodData.stringName, methodData.content)
-
-    if (METHOD_ID === "constructor") {
-     const postConstructorStringName = "post-constructor.js"
-     methodData.postContent = framework.readOwnString(postConstructorStringName)
-     methodData.postSource = framework.sourceFile.addSource(postConstructorStringName, methodData.postContent)
-
-     if (methodData.content === undefined && methodData.postContent === undefined)
-      return
-    } else if (methodData.content === undefined)
-     return
-
-    methodData.hasValidPropertyName = methodData.isSymbol || /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(methodData.niceName)
+    methodData.source = methodData.isAuto ? framework.buildSource : framework.sourceFile.addSource(methodData.stringName, methodData.content)
+    methodData.lines = methodData.content ? methodData.content.split("\n") : []
+    methodData.hasValidPropertyName = methodData.isSymbol || methodData.isGetOrSet || methodData.isAuto || framework.MethodData.identifierPattern.test(methodData.niceName)
     methodData.propertyReference = methodData.hasValidPropertyName ? methodData.niceName : `["${methodData.niceName}"]`
     methodData.propertyAccessor = methodData.propertyReference.startsWith("[") ? methodData.propertyReference : "." + methodData.niceName
     methodData.argumentString = "(" + (framework.partJSON[METHOD_ID]?.join(", ") ?? "") + ")"
-    methodData.modifiers = METHOD_ID.startsWith("async-") ? "async " : ""
-    methodData.modifiers = METHOD_ID.startsWith("get-") ? "get " : ""
+    methodData.modifiers = methodData.isAsync ? "async " : (methodData.isGetOrSet ? METHOD_ID.slice(0, 3) + " " : (methodData.isAuto ? "get " : ""))
     methodData.signature = methodData.modifiers + methodData.propertyReference + methodData.argumentString
+
+    if (methodData.content === undefined)
+     return
+
+    if (methodData.isAuto && framework.ownStringNameTable.has(`get-${METHOD_ID.slice(5)}.js`))
+     return
+
     framework.sourceFile.addSection(`@method-open@\n\n ${methodData.signature} {`, framework.buildSource)
-    methodData.lines = methodData.content.split("\n")
-    framework.collectConstants(framework, methodData)
-    // if it is used ... FILE.addSection(`@provide-method-id@  const METHOD_ID = "${methodData.methodID}"`, framework.buildSource, 0, 0, INDENT)
-    // NOW ADD USED CONSTANTS HERE
-    if (framework.isCore)
+
+    if (!methodData.isAuto)
+     framework.collectConstants(framework, methodData)
+
+    if (methodData.isAuto)
+     framework.sourceFile.addLine(methodData.content, methodData.source, null, null, "  ")
+    else if (framework.isCore)
      framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
     else {
      if (["view-add", "view-populate"].includes(METHOD_ID)) {
@@ -542,8 +561,8 @@ class Framework {
        } else
         framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, "  ")
       })
-      if (!hasSuper)
-       warn(`${HOST} => ${METHOD_ID}()`, "doesn't call super.")
+      // if (!hasSuper)
+      //  warn(`${HOST} => ${METHOD_ID}()`, "doesn't call super.")
      }
     }
 
@@ -553,6 +572,7 @@ class Framework {
 
   framework.ownStringNameTable = new Map(
    Object.keys(framework.stockStringCollection)
+    .filter(itemName => typeof framework.stockStringCollection[itemName] === "string")
     .map(stringName => [stringName, framework.stockStringCollection])
     .concat(
      Object.keys(framework.customStringCollection)
@@ -585,7 +605,7 @@ class Framework {
   framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", framework.sourceCode)
   framework.stockPartJSON = JSON.parse(framework.stockStringCollection["part.json"] ?? "{}")
   framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customStringCollection["part.json"] ?? "{}"), framework.stockPartJSON)
-  framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "core.parts")
+  framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "one.core.parts")
   framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
 
   if (!framework.isCore)
@@ -593,6 +613,7 @@ class Framework {
 
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
   framework.addConstants(framework.sourceFile)
+  // Convert kebab-case subdomain to PascalCase constructor name.
   framework.niceName = HOST.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
   framework.sourceFile.addSection(`@class-open@
  return class ${framework.niceName}${framework.isCore ? "" : " extends BasePart"} {
@@ -617,15 +638,18 @@ class Framework {
   for (const methodID of framework.ownViewMethodIDs)
    framework.MethodData.fromMethodID(methodID)
 
+  for (const stringName of framework.ownStringNameTable.keys())
+   framework.MethodData.fromMethodID("auto-" + stringName)
+
   framework.sourceFile.addLine("@class-close@}", framework.buildSource)
   framework.sourceFile.addLine("@eval-close@})()", framework.buildSource)
   framework.script = framework.sourceFile.packAndMap()
-  // debug(framework.script)
   framework.PartConstructor = eval(framework.script)
   framework.PartConstructor.framework = framework
 
-  if (framework.isCore)
+  if (framework.isCore) {
    globe.CorePart = framework.PartConstructor
+  }
  }
  readString(STRING_NAME, FALLBACK) {
   const framework = this
@@ -687,9 +711,6 @@ class Framework {
 
   if (METHOD_DATA.isGetOrSet)
    collectOwnConstants("const-get-or-set.js")
-
-  if (METHOD_DATA.isRender)
-   collectOwnConstants("const-render.js")
 
   if (METHOD_DATA.isView)
    collectOwnConstants("const-view.js")

@@ -14,13 +14,13 @@ declare class AddressBarPart extends MixPart {
  readonly hostname: string
 
  /** Takes in a single valid URI path segment and returns it's routeID. */
- readonly decodeRoute(STRING: string): void
+ decodeRoute(STRING: string): void
 
  /** Takes in a routeID and returns a string representation that is also a valid URI path segment. */
- readonly encodeRoute(ROUTE_ID: bigint): void
+ encodeRoute(ROUTE_ID: bigint): void
 
  /** Parses the given url (or the address bar itself) and uses it to instantiate factors. */
- readonly setParts(LOCATION?: URL): void
+ distributeInitializePart(LOCATION?: URL): void
 }
 
 declare const addressBar: AddressBarPart

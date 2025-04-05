@@ -1,0 +1,1 @@
+throw new MatchError("Match has no default arm assigned.")

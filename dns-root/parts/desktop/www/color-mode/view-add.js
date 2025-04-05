@@ -35,23 +35,23 @@ const blend = (a, b, c = "screen") => {
  }))
 }
 
-const themeColor = part.parent.render({ request: "theme.color", fallback: "#1f2025" })
+const themeColor = colorMode.parent.render({ request: "theme.color", fallback: "#1f2025" })
 const palette = [themeColor.slice(1), "faf9f8"]
 
-desktop.colorModeButton.onclick = () => part.set(1n, true)
+desktop.colorModeButton.onclick = () => colorMode.set(1n, true)
 
-part.labelTimeout
-part.setColorMode = light => {
+colorMode.labelTimeout
+colorMode.setColorMode = light => {
  const bgColor = palette[+light]
  const fgColor = palette[+!light]
  const bgShade1 = blend(bgColor, "1f1f1f", "multiply")
  const bgShade2 = blend(bgColor, "5f5f5f", "multiply")
  const bgShade3 = blend(bgColor, "afafaf", "multiply")
- desktop.colorModeLabel2.innerText = part.arm.niceName
- desktop.colorModeHandle.innerText = part.arm.symbol
+ desktop.colorModeLabel2.innerText = colorMode.arm.niceName
+ desktop.colorModeHandle.innerText = colorMode.arm.symbol
  desktop.colorModeStyleSheet.replaceSync(`
 html, body {
- --color-mode: ${part.routeID};
+ --color-mode: ${colorMode.routeID};
  --fg-fade1: #${light ? "000000" : "ffffff"}EF;
  --fg-fade2: #${light ? "000000" : "ffffff"}Bf;
  --fg-fade3: #${light ? "000000" : "ffffff"}7f;

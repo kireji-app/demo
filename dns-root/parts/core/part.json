@@ -5,7 +5,7 @@
   "DELTA = false"
  ],
  "route-collect": [
-  "SUBPART"
+  "SUBPARTS"
  ],
  "route-distribute": [
   "ROUTE_ID"
@@ -13,9 +13,9 @@
  "route-update": [
   "ROUTE_ID"
  ],
- "parts-set": [
+ "part-distribute-initialize": [
   "PART_MANIFEST",
-  "CARDINALITY_CALLBACK",
+  "CARDINALITY_CALLBACK = x => x",
   "INITIAL_CARDINALITY"
  ],
  "filter": [

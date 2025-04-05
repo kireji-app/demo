@@ -1,4 +1,4 @@
 {
  "extends": "sequence.glowstick.click",
- "parts-set": []
+ "part-distribute-initialize": []
 }

@@ -1,0 +1,6 @@
+{
+ "extends": "core.parts",
+ "route-collect": [
+  "CHANGED_ARMS"
+ ]
+}

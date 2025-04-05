@@ -92,7 +92,7 @@ declare class Framework {
  /** An optional collection (defaults to `{}`) which overrides any string in the collection corresponding to the framework's host directory dns-root. */
  readonly customStringCollection?: SourceDirectory<string>
  /** An array of all the strings whose render method is defined directly on the part type. */
- readonly ownRenderableStringNames: string[]
+ readonly ownRenderMethodIDs: string[]
  constructor(HOST: string, CUSTOM_FILES: SourceDirectory): Framework
  /** Reads a static asset string from the framework's two string directories, passing the call to the parent framework if nothing is found on the one and returning a fallback if nothing is found all the way to Core. */
  readString(STRING_NAME, FALLBACK): void
@@ -118,7 +118,7 @@ declare interface MethodDataEntry {
 }
 
 declare interface MethodData<T> {
- readonly ["parts-set"]: T
+ readonly ["part-distribute-initialize"]: T
 
  readonly ["render"]: T
 

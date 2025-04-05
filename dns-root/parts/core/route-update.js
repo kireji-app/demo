@@ -1,8 +1,8 @@
-if (ROUTE_ID < -1n)
- throw new RangeError(`(host ${part.host}, index ${part.index}): routeID (${ROUTE_ID}) is too small (min = -1).`)
+if (typeof ROUTE_ID !== bigint || ROUTE_ID < -1n)
+ throw new PartError(`Route ID is invalid.`)
 
 if (ROUTE_ID >= part.cardinality)
- throw new RangeError(`(host ${part.host}, index ${part.index}): routeID (${ROUTE_ID}) is too large (max = ${part.cardinality}).`)
+ throw new PartError(`Route ID out of range.`)
 
 part.previousRouteID = part.routeID
 part.routeID = ROUTE_ID
@@ -14,4 +14,4 @@ part.justDisabled = !part.enabled && part.wasEnabled
 part.deltaRouteID = part.routeID - part.previousRouteID
 
 if (part.deltaRouteID === 0n)
- warn(' reassigned state to ' + part.key)
+ throw new PartError('Reassigned routeID.')

@@ -14,7 +14,7 @@ if (!stringName)
  throw part.host + " Render Error: cannot handle render request without a string name. " + JSON.stringify(OPTIONS)
 
 // Some information is needed to handle encoding later.
-const [type, base64, extension] = Framework.headerOf(stringName)
+const [type, base64, extension] = headerOf(stringName)
 
 // Any query object should be cast to a more useful object.
 const searchParams = new URLSearchParams(search)
@@ -42,47 +42,33 @@ if (extension === "uri" && OPTIONS.links !== "no-follow") {
  return render(newOptions)
 }
 
-// Acquire the raw result from a defined render endpoint or return the fallback value.
+// Acquire a raw result from the part instance or return the fallback value.
 let body = null
-const renderMethodSymbol = Symbol.for(stringName)
-const partHasRenderMethod = renderMethodSymbol in part
-if (partHasRenderMethod) {
- let prototype = part
- while (true) {
+let prototype = part
+while (true) {
 
-  if (requestHasParameters || prototype.framework.ownRenderableStringNames.includes(stringName)) {
-   body = part[renderMethodSymbol]()
-   break
-  }
-
-  if (prototype.framework.ownStringNameTable.has(stringName)) {
-   body = prototype.framework.readOwnString(stringName)
-   break
-  }
-
-  prototype = prototype.super
+ if (prototype.framework.ownRenderMethodIDs.includes(stringName)
+  || prototype.framework.ownStringNameTable.has(stringName) && !requestHasParameters) {
+  body = prototype[stringName]
+  break
  }
-} else {
 
- if (requestHasParameters)
-  warn(part.host + " Render Warning: ignoring request parameters (no render endpoint found). " + JSON.stringify(OPTIONS))
+ prototype = prototype.super
 
- body = part.framework.readString(stringName, null)
-
- if (body === null) {
-  warn(part.host + ' Render 404: : no static or dynamic string could fullfil the request: ' + JSON.stringify(OPTIONS))
+ if (!prototype.framework) {
+  warn("Render Warning: couldn't find a render endpoint for asset " + stringName + ".")
   return OPTIONS.fallback
  }
 }
 
 // Process the raw result into the requested format.
-if (RESULT_FORMAT === "raw")
+if (OPTIONS.format === "raw")
  return body
 
 if (OPTIONS.format === "datauri")
- return `data:${type};base64,${base64 ? body : Framework.btoaUnicode(body)}`
+ return `data:${type};base64,${base64 ? body : btoaUnicode(body)}`
 
-if (RESULT_FORMAT === "response") {
+if (OPTIONS.format === "response") {
  if (base64) {
   const B = atob(body)
   const k = B.length

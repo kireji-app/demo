@@ -1,0 +1,1 @@
+super(Object.fromEntries(Array(Framework.maxSegments).fill(0).map((_, i) => ["task" + i, "task.desktop.parts"])))
