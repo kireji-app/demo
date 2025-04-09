@@ -1,3 +1,0 @@
-super({
- model: null
-})

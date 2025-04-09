@@ -1,6 +1,10 @@
 #### This file not only prevents unwanted files from appearing in the git repo,
 ####  it prevents them from being packed during the build process.
 
+## There is an empty untracked file on github called `api/serverless.js`.
+## Vercel needs this to register the serverless function before the build creates it.
+## To stop hiding this file, use `git update-index --no-assume-unchanged api/serverless.js`
+
 ## Ignore operating system clutter.
 **/.DS_Store
 **/Icon
@@ -14,10 +18,4 @@
 .cspell/
 
 ## Ignore my archive for scripts I might need again later
-# .dns-root/
-
-## There is an empty script on github at `api/serverless.js`.
-## Vercel will register it before the build runs.
-## The build process will then populate the file.
-## Ignore any local build of the same file.
-api/serverless.js
+.dns-root/

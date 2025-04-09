@@ -1,1 +1,0 @@
-part.container.innerHTML = part.arm.host.split(".")[0]

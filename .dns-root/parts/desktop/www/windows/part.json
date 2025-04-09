@@ -1,4 +1,0 @@
-{
- "extends": "pick-n.core.parts",
- "part-distribute-initialize": []
-}

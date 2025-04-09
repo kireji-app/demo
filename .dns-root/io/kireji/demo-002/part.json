@@ -1,4 +1,0 @@
-{
- "extends": "model.kireji.io",
- "part-distribute-initialize": []
-}

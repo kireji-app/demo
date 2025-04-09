@@ -1,4 +1,0 @@
-{
- "extends": "task.desktop.parts",
- "part-distribute-initialize": []
-}

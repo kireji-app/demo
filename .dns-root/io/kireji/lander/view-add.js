@@ -1,2 +1,0 @@
-inherit.container
-inherit.styleSheet
