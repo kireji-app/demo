@@ -16,7 +16,8 @@
 ## Ignore my archive for scripts I might need again later
 # .dns-root/
 
-## Don't commit the output directories.
-# api/
-public/
-## Ok ... let's try committing the output directories.
+## There is an empty script on github at `api/serverless.js`.
+## Vercel will register it before the build runs.
+## The build process will then populate the file.
+## Ignore any local build of the same file.
+api/serverless.js
