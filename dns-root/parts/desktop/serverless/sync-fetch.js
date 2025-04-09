@@ -14,7 +14,7 @@ if (!route.routeIDs.length) {
 if (!(route.host in theme)) {
  warn('Handle the case for a host that isn\'t a theme.')
  route.port = ''
- route.host = "www.ejaugust.com"
+ route.host = "localhost:3000"
 }
 
 if (theme.arm?.key !== route.host)
