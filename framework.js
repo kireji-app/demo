@@ -667,7 +667,7 @@ class Framework {
 
 Framework.initialize({
  BUILD_TAGS: [],
- BUILD_CHANGE: ["major", "minor", "patch"][0],
+ BUILD_CHANGE: ["major", "minor", "patch"][2],
  BUILD_VERBOSITY: 10,
  BUILD_STRING_COLLECTION: {}
 })
