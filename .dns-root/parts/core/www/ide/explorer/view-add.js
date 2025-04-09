@@ -59,7 +59,7 @@ function addPart(subject, container, depth = 0) {
   const symbol = element(summary, "span")
   const icon = element(symbol, "img")
   icon.setAttribute("src", subpart.render({
-   request: "icon.uri",
+   request: "theme.png",
    fallback: "data:image/png;base64,iVBORw0KGgo=",
    format: "datauri"
   }))
@@ -67,14 +67,14 @@ function addPart(subject, container, depth = 0) {
   typeIcon.setAttribute("class", "type-icon")
   const protoSubpart = Object.getPrototypeOf(Object.getPrototypeOf(subpart))
   typeIcon.setAttribute("src", subpart.render({
-   request: "icon.uri",
+   request: "theme.png",
    fallback: "data:image/png;base64,iVBORw0KGgo=",
    format: "datauri"
   }))
   const label = element(summary, "span")
   label.setAttribute("class", "label")
   label.textContent = subpart.key
-  if (subpart.key === desktop.key) label.textContent += " (" + TAGS[0] + ")"
+  if (subpart.key === desktop.key) label.textContent += " (" + BUILD_TAGS[0] + ")"
   addPart(subpart, subpartContainer, depth + 1)
  }
 }

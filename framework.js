@@ -3,15 +3,11 @@ class Framework {
  // Startup.
  static initialize(GLOBE) {
   Framework.setGlobe(GLOBE)
-  Framework.hosts = []
   Framework.sourceCode = Framework.toString()
   Framework.sourceLines = Framework.sourceCode.split("\n")
   Framework.responses = {}
   Framework.frameworks = []
-  Framework.maxPathLength = 2000
   Framework.sourceMapRadix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-  Framework.pathSegmentRadix = Framework.sourceMapRadix.slice(0, -2) + "-_"
-  Framework.maxSegmentLength = 250
   Framework.SourceMappedFile = class {
    lines = []
    sources = []
@@ -44,7 +40,7 @@ class Framework {
     if (typeof string !== "string")
      throw 'bad line: ' + (typeof string)
 
-    const mark = string.match(Framework.sourcePositionMarkPattern)?.[0]
+    const mark = string.match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
     if (mark) {
      string = string.slice(mark.length)
@@ -68,7 +64,7 @@ class Framework {
    addSection(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
     const sourceFile = this
     const lines = string.split("\n")
-    const mark = lines[0].match(Framework.sourcePositionMarkPattern)?.[0]
+    const mark = lines[0].match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
     if (mark) {
      lines.shift()
@@ -98,11 +94,11 @@ class Framework {
    }
   }
   Framework.registerSourcePositionMarks()
-  Framework.registerHosts()
 
-  const desktop = new Part("www.desktop.parts")
+  const desktop = new Part("desktop.parts")
   desktop.distributeInitializePart()
-  desktop["index.html"]
+  log(0, "Desktop Initialized.")
+  serverless.fetchSync("https://www.desktop.parts/-")
  }
  static setGlobe(GLOBE) {
   const {
@@ -111,13 +107,10 @@ class Framework {
    ServiceWorkerGlobalScope: Worker,
    process: cloudProcess
   } = Object.assign(globalThis, {
+   ...GLOBE,
    globe: globalThis,
-   TAGS: GLOBE.tags,
-   CHANGE: GLOBE.change,
    IS_PRODUCTION: false,
-   SERVER_VERBOSITY: GLOBE.verbosity,
-   DEVELOPMENT_HOST: GLOBE.host,
-   STRING_COLLECTION: GLOBE.stringCollection,
+   GLOBE_KEYS: Object.keys(GLOBE),
    Part: class {
     constructor(INPUT) {
      if (typeof INPUT === "string")
@@ -152,20 +145,6 @@ class Framework {
    },
 
    // String handling.
-   headerOf(STRING_NAME) {
-    let binary = false
-    const extension = STRING_NAME.includes(".") ? STRING_NAME.split(".").pop() : null
-    return [{
-     [null]: "text/plain",
-     get "png"() { binary = true; return "image/png" },
-     get "gif"() { binary = true; return "image/gif" },
-     "svg": "image/svg+xml;charset=UTF-8",
-     "uri": "text/uri-list",
-     "js": "text/javascript;charset=UTF-8",
-     "json": "application/json;charset=UTF-8",
-     "html": "text/html;charset=UTF-8"
-    }[extension], binary, extension]
-   },
    btoaUnicode(BODY) {
     return btoa(new TextEncoder('utf-8').encode(BODY)
      .reduce((data, byte) => data + String.fromCharCode(byte), '')
@@ -181,7 +160,7 @@ class Framework {
    )
 
   function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
-   if (!IS_PRODUCTION && VERBOSITY <= SERVER_VERBOSITY)
+   if (!IS_PRODUCTION && VERBOSITY <= BUILD_VERBOSITY)
     console[METHOD](...DATA)
   }
 
@@ -210,7 +189,7 @@ class Framework {
    branchName = $('git branch --show-current').toString().trim()
    commitMessage = $('git log -1').toString()
    commitTag = $('git log -1 --pretty=%s').toString().trim()
-   TAGS.push("local")
+   BUILD_TAGS.push("local")
   } else {
    branchName = process.env.VERCEL_GIT_COMMIT_REF
    commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
@@ -218,30 +197,30 @@ class Framework {
    IS_PRODUCTION = branchName === "main"
   }
 
-  TAGS.push(branchName)
+  BUILD_TAGS.push(branchName)
 
   const semanticVersion = commitTag.split(".").map(x => parseInt(x))
 
-  if (TAGS.includes("local")) {
+  if (BUILD_TAGS.includes("local")) {
    if (semanticVersion[0] === 0) {
-    if (CHANGE === "major") {
+    if (BUILD_CHANGE === "major") {
      semanticVersion[1]++
      semanticVersion[2] = 0
     } else semanticVersion[2]++
    } else {
-    if (CHANGE === "major") {
+    if (BUILD_CHANGE === "major") {
      semanticVersion[0]++
      semanticVersion[1] = semanticVersion[2] = 0
-    } else if (CHANGE === "minor") {
+    } else if (BUILD_CHANGE === "minor") {
      semanticVersion[1]++
      semanticVersion[2] = 0
     } else semanticVersion[2]++
    }
   }
 
-  TAGS.unshift(semanticVersion.join("."))
+  BUILD_TAGS.unshift(semanticVersion.join("."))
 
-  const readRecursive = (host = "", folderPath = "dns-root", stringCollection = STRING_COLLECTION) => {
+  const readRecursive = (host = "", folderPath = "dns-root", stringCollection = BUILD_STRING_COLLECTION) => {
    if (host) {
     if (host.length > 253)
      throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
@@ -281,7 +260,7 @@ class Framework {
    }
   }
 
-  openLog(0, TAGS.join("-") + " dns-root/")
+  openLog(0, BUILD_TAGS.join("-") + " dns-root/")
   readRecursive()
   closeLog(0)
   /*
@@ -307,30 +286,13 @@ class Framework {
   */
   closeLog(0)
  }
- static registerHosts() {
-  // Temporary.
-  const traverse = (dir, currentDomainParts) => {
-   let hasStrings = false
-
-   for (const key in dir) {
-    if (typeof dir[key] === 'object')
-     traverse(dir[key], [key, ...currentDomainParts])
-    else if (typeof dir[key] === 'string')
-     hasStrings = true
-   }
-
-   if (hasStrings && currentDomainParts.length > 0)
-    Framework.hosts.push(currentDomainParts.reverse().join('.'))
-  }
-  traverse(STRING_COLLECTION, [])
-
- }
  static registerSourcePositionMarks() {
   Framework.sourcePositionMarks = {}
-  Framework.sourcePositionMarkPattern = /@[a-z-]+@/g
+  Framework.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
+  Framework.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
 
   for (let ln = 0; ln < Framework.sourceLines.length; ln++) {
-   for (const { 0: mark, index: col } of Framework.sourceLines[ln].matchAll(Framework.sourcePositionMarkPattern)) {
+   for (const { 0: mark, index: col } of Framework.sourceLines[ln].matchAll(Framework.sourcePositionMarkPatternRegister)) {
     if (mark in Framework.sourcePositionMarks)
      throw `Duplicate source position mark ${mark} in framework.js.`
     Framework.sourcePositionMarks[mark] = { ln, col }
@@ -339,13 +301,6 @@ class Framework {
  }
 
  // File creation and processing.
- static render() {
-  const sourceFile = Framework.SourceMappedFile("../", undefined, "portable.js")
-  const buildSource = sourceFile.addSource("framework.js", Framework.sourceCode)
-  sourceFile.addSection(Framework.sourceCode, buildSource)
-  sourceFile.addSection(`@init@\n\nFramework.initialize(${JSON.stringify(GLOBE, null, 1)})`, buildSource)
-  return sourceFile.packAndMap()
- }
  static encodeSourceMap(DECODED_MAPPINGS) {
   const encoderAbsolutePosition = [0, 0, 0, 0, 0]
   return DECODED_MAPPINGS.map(decodedLine => (encoderAbsolutePosition[0] = 0, decodedLine.map(decodedSegment => {
@@ -373,7 +328,7 @@ class Framework {
   }).join(","))).join(";")
  }
  static getStringCollection(HOST) {
-  return HOST.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, STRING_COLLECTION)
+  return HOST.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, BUILD_STRING_COLLECTION)
  }
 
  // Creation of host-based part classes.
@@ -425,14 +380,13 @@ class Framework {
        if (METHOD_ID.includes("."))
         return `["${METHOD_ID.slice(4)}"]`
       } else if (methodData.isAuto) {
-       const stringName = METHOD_ID.slice(5)
-       const isValidIdentifier = framework.MethodData.identifierPattern.test(stringName)
-       return isValidIdentifier ? stringName : `["${stringName}"]`
+       if (METHOD_ID.includes("."))
+        return `["${METHOD_ID.slice(5)}"]`
       }
       let temp = METHOD_ID.split("-")
       let firstWordBecomesLastWord = temp.shift()
 
-      if (methodData.isGetOrSet)
+      if (methodData.isGetOrSet || methodData.isAuto)
        firstWordBecomesLastWord = temp.shift()
 
       temp.push(firstWordBecomesLastWord)
@@ -580,7 +534,6 @@ class Framework {
     )
   )
 
-  framework.ownRenderMethodIDs = []
   framework.ownGetAndSetMethodIDs = []
   framework.ownViewMethodIDs = []
 
@@ -591,9 +544,7 @@ class Framework {
 
    const methodID = stringName.slice(0, -3)
 
-   if (stringName.startsWith("render-"))
-    framework.ownRenderMethodIDs.push(methodID)
-   else if (stringName.startsWith("get-") || stringName.startsWith("set-"))
+   if (stringName.startsWith("get-") || stringName.startsWith("set-"))
     framework.ownGetAndSetMethodIDs.push(methodID)
    else if (stringName.startsWith("view-"))
     framework.ownViewMethodIDs.push(methodID)
@@ -631,9 +582,6 @@ class Framework {
 
    framework.MethodData.fromMethodID(methodID)
   }
-
-  for (const methodID of framework.ownRenderMethodIDs)
-   framework.MethodData.fromMethodID(methodID)
 
   for (const methodID of framework.ownViewMethodIDs)
    framework.MethodData.fromMethodID(methodID)
@@ -718,9 +666,8 @@ class Framework {
 }
 
 Framework.initialize({
- tags: [],
- host: "www.desktop.parts",
- change: ["major", "minor", "patch"][0],
- verbosity: 10,
- stringCollection: {},
+ BUILD_TAGS: [],
+ BUILD_CHANGE: ["major", "minor", "patch"][0],
+ BUILD_VERBOSITY: 10,
+ BUILD_STRING_COLLECTION: {}
 })

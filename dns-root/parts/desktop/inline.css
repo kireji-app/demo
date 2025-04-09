@@ -1,0 +1,179 @@
+*,
+*::before,
+*::after {
+ box-sizing: border-box;
+ -webkit-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+}
+
+[data-dry] {
+ cursor: wait;
+}
+
+[data-dry] * {
+ pointer-events: none;
+}
+
+a,
+a:visited {
+ text-decoration: none;
+ color: inherit;
+}
+
+body #themes {
+ display: contents;
+}
+
+html,
+body {
+ --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+ --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
+ --menu-tween: 0;
+ --h: 100vh;
+ overscroll-behavior: none !important;
+ margin: 0;
+ height: var(--h);
+ font-synthesis: weight style;
+ --sidebar-width: 256px;
+}
+
+img {
+ fill: var(--fg-fade1);
+}
+
+
+wallpaper- {
+ position: fixed;
+ top: 0;
+ bottom: var(--taskbar-height);
+ left: 0;
+ right: 0;
+}
+
+@supports (height: 100dvh) {
+
+ html,
+ body {
+  --h: 100dvh;
+ }
+}
+
+task-menu {
+ position: fixed;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ margin: 0;
+ padding: 0;
+ outline: none;
+}
+
+button,
+menu-button {
+ background: transparent;
+ padding: 0;
+ margin: 0;
+ border: none;
+ color: inherit;
+}
+
+sidebar- {
+ margin: 0;
+ position: fixed;
+ overflow: hidden;
+ display: flex;
+ flex-flow: column;
+}
+
+#settings {
+ display: flex;
+ flex-flow: column;
+}
+
+body #settings>span {
+ display: flex;
+ justify-content: space-between;
+ padding: 4px;
+ gap: 4px;
+}
+
+.task-link {
+ display: contents;
+}
+
+.task-link>a,
+.task-link>a:visited {
+ display: flex;
+ flex: 0;
+ font-weight: 500;
+ margin: 0;
+ position: relative;
+ align-items: center;
+}
+
+.task-link>a>.label {
+ flex: 1 1;
+}
+
+.task-icon {
+ height: var(--icon-size);
+ width: var(--icon-size);
+ border-radius: calc(var(--icon-size) * 0.2);
+}
+
+#logo {
+ font-weight: 700;
+}
+
+taskbar- {
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ height: var(--taskbar-height);
+ margin: 0;
+ line-height: var(--taskbar-height);
+ display: flex;
+}
+
+taskbar->.btn {
+ width: var(--icon-size);
+}
+
+taskbar->.btn:hover {
+ color: var(--theme);
+}
+
+button:hover,
+menu-button:hover {
+ color: var(--theme);
+}
+
+#nested button {
+ font-size: 100px;
+}
+
+flex-spacer {
+ flex: 1;
+}
+
+#nested {
+ line-height: var(--icon-size);
+ padding: 0;
+ display: flex;
+ height: var(--icon-size);
+ gap: 6px;
+}
+
+@media (width < 500px) {
+ #nested {
+  position: fixed;
+  bottom: var(--taskbar-height);
+  left: 0;
+  right: 0;
+  width: 100vw;
+  box-shadow: var(--taskbar-accent);
+ }
+}

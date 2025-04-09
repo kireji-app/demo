@@ -66,8 +66,8 @@ This repo already brings together lots of features and notions. To list them all
 
 ##### Example Applications
 This project includes example applications that serve as prior art for their features and the obvious extensions and future applications they inspire. For example:
-- An operating system that, like $`\textcolor{#AA8866}{\text{"www.desktop.parts"}}`$ can store its entire runtime state including the state of all of its tasks in a short string such as a URL.
-- A document editor and/or library that, like $`\textcolor{#AA8866}{\text{"www.kireji.io"}}`$, assigns a URL to and optionally allows the direct editing of every
+- An operating system that, like $`\textcolor{#AA8866}{\text{"desktop.parts"}}`$ can store its entire runtime state including the state of all of its tasks in a short string such as a URL.
+- A document editor and/or library that, like $`\textcolor{#AA8866}{\text{"kireji.io"}}`$, assigns a URL to and optionally allows the direct editing of every
   - word
   - haiku
   - multi-word expression (MWE)
@@ -83,7 +83,7 @@ This project includes example applications that serve as prior art for their fea
       - etc
     - etc.
   - etc.
-- A development environment app that, like $`\textcolor{#AA8866}{\text{"www.core.parts"}}`$, can 'look at itself' by assigning a URL to and optionally allowing the direct editing of every state of every data type and component defined by a repo, database, or the DNS including a URL to every piece of meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).
+- A development environment app that, like $`\textcolor{#AA8866}{\text{"core.parts"}}`$, can 'look at itself' by assigning a URL to and optionally allowing the direct editing of every state of every data type and component defined by a repo, database, or the DNS including a URL to every piece of meta-information about or simulation of every state of another app (or itself, such as would require a special encoding scheme to avoid infinite recursion).
 - Any of the many other obvious applications inspired by the principles that enable this project to work, such as
   - a way to browse or link to every character sequence
   - a way to browse or link to every vector path
@@ -91,14 +91,14 @@ This project includes example applications that serve as prior art for their fea
   - a way to browse or link to every possible arrangement of a given collection of interior decorations and furniture
   - a way to enumerate (such as to find, index, compare and contrast) a collection of approaches to solving the same computational problem
   - etc.
-- A blog or editorial website that, like $`\textcolor{#AA8866}{\text{"www.ejaugust.com"}}`$, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.
-- A static website that, like $`\textcolor{#AA8866}{\text{"www.orenjinari.com"}}`$, presents a third party's own design at their own domain by incorporating it into the global type schema. This gives it access to all other types in the schema and makes all of its content openly available to all other types in the schema, as long as the type graph remains acyclic.
+- A blog or editorial website that, like $`\textcolor{#AA8866}{\text{"ejaugust.com"}}`$, presents text content and includes a method of embedding one or more interactive content elements so that the URL of the content in which the elements are embedded is 'aware' or 'reactive' to the state of the embedded element(s) themselves.
+- A static website that, like $`\textcolor{#AA8866}{\text{"orenjinari.com"}}`$, presents a third party's own design at their own domain by incorporating it into the global type schema. This gives it access to all other types in the schema and makes all of its content openly available to all other types in the schema, as long as the type graph remains acyclic.
 - The above use cases used in tandem with a search-result style list (such as a paginated list of links) that allows enumerating and scrolling through, browsing or searching for every value of a given type especially when generated automatically by a schema.
 - The above use cases used in tandem with the express purpose of creating a self-hosted self-editing application whether it needs to be rebuilt to reflect changes or updates itself in real-time in response to source code or art asset modifications.
 - The above use cases used in tandem with a git-like staging and committing system.
 - The above use cases used in tandem with intentional constraints like [no writing with the letter e](https://en.wikipedia.org/wiki/Gadsby_(novel)) or painting with restrictions on color palettes especially when these limitations offer an appealing means of reframing a limit on the cardinality of a data type as a desirable feature.
 - The above use cases used in tandem with periodic types with non-finite cardinality (rather than or in addition to types with finite cardinality).
-- A video library or video streaming platform that, like $`\textcolor{#AA8866}{\text{"www.glowstick.click"}}`$, assigns a URL to and optionally allows the direct editing of every
+- A video library or video streaming platform that, like $`\textcolor{#AA8866}{\text{"glowstick.click"}}`$, assigns a URL to and optionally allows the direct editing of every
   - segment ("subset" or "clip") of every video
   - scene of every title
   - act of every movie

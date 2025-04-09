@@ -20,7 +20,7 @@ for (let index = 0; index < string.length; index++) {
   ROUTE_ID -= string.offsets.get(index)
 
   for (let indexToUpdate = index; indexToUpdate >= 0; indexToUpdate--) {
-   const placeValue = string.placeValues[indexToUpdate]
+   const placeValue = string.placeValues.get(indexToUpdate)
    string[indexToUpdate].distributeRoute(ROUTE_ID / placeValue)
    ROUTE_ID %= placeValue
   }

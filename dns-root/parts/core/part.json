@@ -21,10 +21,16 @@
  "filter": [
   "FILTER_FUNCTION"
  ],
+ "map": [
+  "MAP_FUNCTION"
+ ],
  "includes": [
   "SUBPART"
  ],
  "render": [
   "OPTIONS"
+ ],
+ "host-resolve-implicit": [
+  "KEY"
  ]
 }

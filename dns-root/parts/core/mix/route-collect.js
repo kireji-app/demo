@@ -15,7 +15,7 @@ for (const changedFactor of CHANGED_FACTORS) {
   if (!reportsAtLeastOneEnabledFactor)
    reportsAtLeastOneEnabledFactor = true
 
-  deltaMixRouteID += changedFactor.deltaRouteID * changedFactor.mixedRadixPlaceValue
+  deltaMixRouteID += changedFactor.deltaRouteID * mix.placeValues.get(changedFactor)
  } else {
 
   if (reportsAtLeastOneEnabledFactor)
@@ -26,9 +26,12 @@ for (const changedFactor of CHANGED_FACTORS) {
  }
 }
 
-if (reportsAtLeastOneEnabledFactor)
- mix.updateRoute(deltaMixRouteID + (!mix.enabled && reportsAtLeastOneEnabledFactor ? mix.routeID : 0n))
-else
+if (reportsAtLeastOneEnabledFactor) {
+ const result = deltaMixRouteID + (!mix.enabled && reportsAtLeastOneEnabledFactor ? 0n : mix.routeID)
+ debug(result)
+ mix.updateRoute(result)
+} else {
  mix.updateRoute(-1n)
+}
 
 mix.parent?.collectRoute([mix])

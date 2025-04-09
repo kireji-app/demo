@@ -1,24 +1,23 @@
 if (part.enabled)
- throw "setting the parts of an enabled part is currently not supported"
+ throw new PartError("Setting the parts of an enabled part is currently not supported. " + part.host)
 
 part.length = 0
+part.enabled = part.wasEnabled = part.justDisabled = part.justEnabled = false
 part.routeID = part.previousRouteID = -1n
 part.cardinality = INITIAL_CARDINALITY
+part.deltaRouteID = 0n
 
 if (!PART_MANIFEST)
- throw new StringError("No part manifest was provided.")
+ throw new PartError("No part manifest was provided. " + part.host)
 
 Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
 
  if (key in part)
-  throw new TypeError(`duplicate key ${key} in ${part.host}`)
+  throw new PartError(`Duplicate key ${key}. ${part.host}`)
 
- if (!subpart)
-  subpart = key
+ subpart ||= part.resolveImplicitHost(key)
 
  if (typeof subpart === "string") {
-  if (/^[a-z][A-Za-z0-9]+$/.test(key))
-   subpart = key.split(/(?<=[a-z0-9])(?=[A-Z])/).map(word => word[0].toLocaleLowerCase() + word.slice(1)).join("-")
 
   if (/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(subpart))
    subpart += "." + part.host
@@ -27,19 +26,19 @@ Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
  }
 
  else if (!(subpart instanceof CorePart))
-  throw new TypeError(`unexpected ${subpart?.constructor?.name ?? typeof subpart} encountered as subpart of ${part.host}`)
+  throw new PartError(`Unexpected ${subpart?.constructor?.name ?? typeof subpart} encountered as subpart. ${part.host}`)
 
  part[subpart.key = key] = part[subpart.index = index] = subpart
  subpart.parent = part
 
  if (subpart.distributeInitializePart.length !== 0)
-  throw new PartError("Attempted to initialize an abstract part, " + subpart.host + ".")
+  throw new PartError("Attempted to initialize an abstract part, " + subpart.host + ". " + part.host)
 
  // try {
  subpart.distributeInitializePart()
 
  if (typeof subpart.cardinality !== "bigint")
-  throw new PartError("Subpart initialized with invalid cardinality.")
+  throw new PartError("Subpart initialized with invalid cardinality. " + part.host)
 
  //} catch (cause) {
  // throw new PartError(`${cause.message ?? cause} \n  ${part.key}: "${part.host}" {\n   ${key}: "${subpart.host}" <----- here \n  }`, { cause })
@@ -48,7 +47,7 @@ Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
  part.cardinality = CARDINALITY_CALLBACK(part.cardinality, subpart, index, entries)
 
  if (typeof part.cardinality !== "bigint")
-  throw new PartError("Cardinality callback returned invalid cardinality.")
+  throw new PartError("Cardinality callback returned invalid cardinality. " + part.host)
 
  part.length++
 })

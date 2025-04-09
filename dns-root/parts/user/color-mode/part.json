@@ -1,0 +1,17 @@
+{
+ "extends": "match.core.parts",
+ "part-distribute-initialize": [],
+ "hex-rgb-from": [
+  "HEX"
+ ],
+ "hex-rgb-to": [
+  "R",
+  "G",
+  "B"
+ ],
+ "hex-blend": [
+  "A",
+  "B",
+  "MODE=\"screen\""
+ ]
+}

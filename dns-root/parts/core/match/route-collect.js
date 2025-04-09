@@ -41,5 +41,5 @@ if (!newArm) {
 if (oldArm && newArm !== oldArm && !disabledArm)
  oldArm.distributeRoute(-1n)
 
-match.updateRoute(match.offsets[newArm] + newArm.routeID)
+match.updateRoute(match.offsets.get(newArm) + newArm.routeID)
 match.parent?.collectRoute([match])

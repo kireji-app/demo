@@ -1,26 +1,3 @@
-part.oldIconLinks = []
-document.querySelectorAll('link[rel="icon"]').forEach(link => {
- part.oldIconLinks.push(link.href)
- link.setAttribute("href", link.href.slice(0, 22) + framework.openOwnStaticFile("icon.png"))
-})
-part.bunnyNames = ["about", "portfolio", "others", "connect"]
-
-inherit.styleSheet.replaceSync(part.framework.openOwnStaticFile("style.css"))
-inherit.wallpaper
-
-part.bunnies = part.bunnyNames.map((bunnyName, bunnyIndex) => {
- const area = bunnyIndex + 1
- const img = element(part.wallpaper, "img")
- img.setAttribute("src", `https://${framework.host}/${bunnyName}-up.gif!`)
- img.setAttribute("class", "bunny")
- img.setAttribute("id", bunnyName)
- img.onclick = () => part.scroll.set((BigInt(area) * 25000n - 1n))
- const placeholder = element(part.wallpaper, "div")
- placeholder.setAttribute("class", "placeholder")
- placeholder.innerHTML = `${IS_PRODUCTION ? "" : `<h1>Area ${area}</h1>`}<span id=float><img src="https://${framework.host}/${bunnyName}-up.gif!"><span class=thin>is </span><span>coming soon.</span></span>`
- return img
-})
-
 addEventListener("wheel", part.onwheel = event => {
  event.preventDefault()
  event.stopPropagation()

@@ -1,5 +1,0 @@
-{
- "extends": "feature.www.desktop.parts",
- "async-register": [],
- "server-create-local": []
-}

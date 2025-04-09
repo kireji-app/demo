@@ -1,9 +1,0 @@
-{
- "extends": "window.feature.www.desktop.parts",
- "route-decode": [
-  "STRING"
- ],
- "route-encode": [
-  "ROUTE_ID"
- ]
-}

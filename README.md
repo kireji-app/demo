@@ -57,23 +57,23 @@ Each type is responsible for inheriting or overriding its parent type's cardinal
 This forms a type tree whose root type is ($`\textcolor{#AA8866}{\texttt{"core.parts"}}`$).
 
 #### Virtual Machine
-The root type ($`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$) which defines the state of a virtual machine. It has four subparts corresponding to the four major web development environments it can launch in:
+The root type ($`\textcolor{#AA8866}{\texttt{"desktop.parts"}}`$) which defines the state of a virtual machine. It has four subparts corresponding to the four major web development environments it can launch in:
 1. For the cloud build environment, $`\textcolor{#AA8866}{\texttt{"build.core.parts"}}`$
 2. For the cloud serverless function environment, $`\textcolor{#AA8866}{\texttt{"server.core.parts"}}`$
 3. For the client service worker, $`\textcolor{#AA8866}{\texttt{"worker.core.parts"}}`$,
-4. For the client window, $`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$
+4. For the client window, $`\textcolor{#AA8866}{\texttt{"desktop.parts"}}`$
 
-This forms a runtime object tree whose root is ($`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$).
+This forms a runtime object tree whose root is ($`\textcolor{#AA8866}{\texttt{"desktop.parts"}}`$).
 
 ##### Operating System and Tasks
-The client window machine $`\textcolor{#AA8866}{\texttt{"www.desktop.parts"}}`$ is an operating system for the virtual machine. It includes:
+The client window machine $`\textcolor{#AA8866}{\texttt{"desktop.parts"}}`$ is an operating system for the virtual machine. It includes:
 - A desktop with icons for quickly launching tasks.
 - A menu that allows quickly launching tasks.
 - A taskbar that allows switching between running tasks and a start button for opening the task menu.
 
 The operating system can run up to 20 tasks at once. In the future, this limit could change or go away entirely.
 
-The operating system has exactly one task in **live wallpaper mode**. This renders the website behind the taskbar of the operating system. The live wallpaper task (such as $`\textcolor{#AA8866}{\texttt{"www.orenjinari.com"}}`$) cannot be restored or minimized. Instead, the user can pick between wallpapers, which results in navigation changing origins in their browser.
+The operating system has exactly one task in **live wallpaper mode**. This renders the website behind the taskbar of the operating system. The live wallpaper task (such as $`\textcolor{#AA8866}{\texttt{"www.orenjinari.com"}}`$) cannot be restored or minimized. Instead, the user can pick between themes, which results in navigation changing origins in their browser.
 
 All tasks
 - can run in wallpaper mode
@@ -130,7 +130,7 @@ Some of these projects were in the works before this framework was created and t
 * [www.orenjinari.com](https://www.orenjinari.com) An artist portfolio which includes images, animations, interaction and video streaming.
 
 ## Roadmap
-![version](https://img.shields.io/badge/version-0.103.0-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+![version](https://img.shields.io/badge/version-0.108.0-silver) [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha) [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust) [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
 Version `1.0.0` is under development.
 |Phase|Status

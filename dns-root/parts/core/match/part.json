@@ -2,5 +2,8 @@
  "extends": "core.parts",
  "route-collect": [
   "CHANGED_ARMS"
+ ],
+ "arm-set": [
+  "ARM"
  ]
 }

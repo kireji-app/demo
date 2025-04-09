@@ -1,0 +1,6 @@
+{
+ "extends": "feature.desktop.parts",
+ "sync-fetch": [
+  "REQUEST_URL"
+ ]
+}

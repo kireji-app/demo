@@ -1,1 +1,0 @@
-return part.super[METHOD_DATA.niceName]() + framework.readString("inline.css")

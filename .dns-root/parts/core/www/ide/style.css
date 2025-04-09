@@ -90,7 +90,6 @@
  width: fit-content;
  min-width: var(--explorer-width);
  padding-bottom: min(calc(var(--h) / 2), calc(var(--line-height) * 3));
- box-sizing: border-box;
 }
 
 details {

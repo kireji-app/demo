@@ -53,8 +53,6 @@ declare class CorePart extends Iterable<CorePart> {
   * 
   * *Note: There is no* `desktop.parent`. */
  readonly parent: CorePart
- /** When parent type is `mix.core.parts`, a divisor which the parent mix uses to encode and decode subroutes.*/
- readonly mixedRadixPlaceValue: bigint
  /** Generate a named string or fetch it from the static cache.
   * 
   * String names are treated like their file extension. For binary file types (like .png)
@@ -84,8 +82,10 @@ declare class CorePart extends Iterable<CorePart> {
  }): any | string | Response
  /** Sets the part's factory settings, subparts and cardinality. */
  distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: Function): void
- /** Set's the part's routeID, propagates it leafward and rootward, and then updates all views. */
+ /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */
  setRoute(ROUTE_ID: bigint): void
+ /** Sets the match's arm to the given index, part, or key. This sets the part's routeID, propagating it leafward and rootward and updating all views. */
+ setArm(ARM: number | CorePart | string): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
@@ -123,7 +123,14 @@ declare class CorePart extends Iterable<CorePart> {
  /** If the part was enabled, calls distributeRemoveView on any subparts that were also enabled, passing the signal leafward.
   * Then, if the part is no longer enabled, calls removeView on itself.*/
  distributeRemoveView(): void
-
+ /** Resolves an implicit domain name from the part's host and KEY.
+  * @param KEY - A string representing a valid JavaScript identifier.
+  * 
+  * For example, if the part's host is `part.example.com`, then:
+  * ```
+  *  part.resolveImplicitHost("someKey") === "some-key.part.example.com"
+  * ```*/
+ resolveImplicitHost(KEY: string): string
 }
 declare class PartError extends Error { }
 /** The part instance on which the current script is being called.
@@ -142,3 +149,5 @@ declare const now: DOMHighResTimeStamp
 declare const render: CorePart
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part.parent.exampleProperty`.  */
 declare const inherit: CorePart
+/** The framework.MethodData object describing this method. */
+declare const methodData: MethodData

@@ -43,7 +43,7 @@ if (disabledChangedCharacters.size) {
  ) {
   /** @type {CorePart} */
   const characterToDisable = string[indexToDisable]
-  newRouteID -= characterToDisable.previousRouteID * string.placeValues[indexToDisable]
+  newRouteID -= characterToDisable.previousRouteID * string.placeValues.get(indexToDisable)
   if (disabledChangedCharacters.has(characterToDisable))
    continue
   characterToDisable.distributeRoute(-1n)
@@ -72,7 +72,7 @@ if (disabledChangedCharacters.size) {
    if (!enabledChangedCharacters.has(newlyEnabledCharacter))
     throw new StringCollectRouteError("Requested updates would leave gaps in the string.")
 
-   newRouteID += string.placeValues[indexToEnable] * string[indexToEnable].routeID
+   newRouteID += string.placeValues.get(indexToEnable) * string[indexToEnable].routeID
 
    enabledChangedCharacters.delete(newlyEnabledCharacter)
   }
@@ -82,14 +82,14 @@ if (disabledChangedCharacters.size) {
 }
 
 if (stringLengthChanged) {
- const oldStringLengthOffset = wasEnabled ? string.offsets[oldHighestEnabledCharacter] : 0n
- const newStringLengthOffset = willBeEnabled ? string.offsets[newHighestEnabledCharacter] : -1n
+ const oldStringLengthOffset = wasEnabled ? string.offsets.get(oldHighestEnabledCharacter) : 0n
+ const newStringLengthOffset = willBeEnabled ? string.offsets.get(newHighestEnabledCharacter) : -1n
  newRouteID += newStringLengthOffset - oldStringLengthOffset
 }
 
 if (wasEnabled) {
  for (const remainingChangedCharacter of enabledChangedCharacters)
-  newRouteID += remainingChangedCharacter.newRouteID * string.placeValues[remainingChangedCharacter]
+  newRouteID += remainingChangedCharacter.newRouteID * string.placeValues.get(remainingChangedCharacter)
 
  newRouteID += string.routeID
 }

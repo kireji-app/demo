@@ -1,28 +1,27 @@
-const icon_uri = render({ request: "icon.uri", links: "no-follow" })
-const [icon_type] = headerOf(icon_uri)
+const src = theme.arm.render({ request: "theme.png", format: "datauri" })
 
 return JSON.stringify({
- name: render("title") || part.host,
- short_name: render("title") || part.host,
+ name: theme.arm.title || "Untitled Part",
+ short_name: theme.arm.title || "untitled",
  start_url: "/",
  display: "standalone",
- theme_color: render("theme.color"),
- background_color: render("theme.color"),
+ theme_color: theme.arm["theme.color"],
+ background_color: theme.arm["bg.color"],
  icons: [
   {
-   src: render({ request: "icon.uri?size=192", format: "datauri" }),
+   src, // request: "theme.png?size=192"
    sizes: "192x192",
-   type: icon_type,
+   type: "image/png",
    purpose: "any maskable"
   },
   {
-   src: render({ request: "icon.uri?size=512", format: "datauri" }),
+   src, // request: "theme.png?size=512"
    sizes: "512x512",
-   type: icon_type,
+   type: "image/png",
    purpose: "any maskable"
   }
  ],
- description: render("description"),
+ description: theme.arm.description,
  display_override: ["window-controls-overlay"],
  categories: ["entertainment", "games", "utilities"],
 }, null, 1)

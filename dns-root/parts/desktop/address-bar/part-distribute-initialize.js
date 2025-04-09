@@ -1,0 +1,2 @@
+globe.addressBar ??= part
+super()
