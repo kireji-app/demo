@@ -11,14 +11,15 @@ if (!route.routeIDs.length) {
  route.pathname = "/1"
 }
 
-if (theme.arm?.key !== route.host) {
- if (!(route.host in theme)) {
-  warn('Handle the case for a host that isn\'t a theme.')
-  route.port = ''
-  route.host = "www.ejaugust.com"
- }
- theme.setArm(route.host)
+if (!(route.host in theme)) {
+ warn('Handle the case for a host that isn\'t a theme.')
+ route.port = ''
+ route.host = "www.ejaugust.com"
 }
+
+if (theme.arm?.key !== route.host)
+ theme.setArm(route.host)
+
 
 const [userRouteID, ...taskRouteIDs] = route.routeIDs
 if (userRouteID !== user.routeID) {
