@@ -7,20 +7,28 @@ if (REQUEST_URL in Framework.responses)
 const route = new Route(REQUEST_URL)
 
 if (!route.routeIDs.length) {
- warn("assign the default routeIDs here!")
- route.pathname = "/-"
+ warn('Handle the case for a lack of user settings here.')
+ route.pathname = "/1"
 }
 
-if (!IS_PRODUCTION) {
- route.port = ''
- route.host = "www.desktop.parts"
-}
-
-if (theme.arm?.key !== route.host)
+if (theme.arm?.key !== route.host) {
+ if (!(route.host in theme)) {
+  warn('Handle the case for a host that isn\'t a theme.')
+  route.port = ''
+  route.host = "www.ejaugust.com"
+ }
  theme.setArm(route.host)
+}
 
-if (user.routeID !== route.routeIDs[0])
+const [userRouteID, ...taskRouteIDs] = route.routeIDs
+if (userRouteID !== user.routeID) {
+ if (userRouteID >= user.cardinality) {
+  route.routeIDs = [0n, ...route.routeIDs.slice(1)]
+  warn('Out-of-range task replaced. Add a new task with error message containing ' + userRouteID + ". For all other tasks, replace the existing task.")
+ }
+
  user.setRoute(route.routeIDs[0])
+}
 
 Framework.responses[route.href] = desktop.render({
  request: route.stringName + route.search,

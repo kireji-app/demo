@@ -1,0 +1,6 @@
+wallpaper- {
+ font-family: var(--system-ui-mono);
+ margin: 0;
+ padding: 1em;
+ white-space: pre;
+}

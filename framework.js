@@ -98,7 +98,7 @@ class Framework {
   const desktop = new Part("desktop.parts")
   desktop.distributeInitializePart()
   log(0, "Desktop Initialized.")
-  serverless.fetchSync("https://www.desktop.parts/-")
+  // serverless.fetchSync("https://www.desktop.parts/-")
  }
  static setGlobe(GLOBE) {
   const {
@@ -338,7 +338,7 @@ class Framework {
   if (typeof HOST !== "string")
    throw "host cannot be " + typeof HOST
 
-  if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(HOST))
+  if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(HOST) && !/^localhost:\d+$/.test(HOST))
    throw "malformed host " + HOST
 
   if (!CUSTOM_STRING_COLLECTION) {
@@ -565,7 +565,7 @@ class Framework {
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
   framework.addConstants(framework.sourceFile)
   // Convert kebab-case subdomain to PascalCase constructor name.
-  framework.niceName = HOST.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
+  framework.niceName = HOST.startsWith("localhost:") ? "LocalHostPart" : HOST.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
   framework.sourceFile.addSection(`@class-open@
  return class ${framework.niceName}${framework.isCore ? "" : " extends BasePart"} {
  // ${HOST}${framework.isCore ? "" : ` extends ${framework.parent.host}`}

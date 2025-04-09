@@ -6,4 +6,5 @@ super({
  "www.ejaugust.com": null,
  "www.orenjinari.com": null,
  "www.user.parts": null,
+ "localhost:3000": null,
 })

@@ -7,13 +7,15 @@
  user-select: none;
 }
 
-[data-dry] {
- cursor: wait;
-}
+/*
+ [data-dry] {
+  cursor: wait;
+ }
 
-[data-dry] * {
- pointer-events: none;
-}
+ [data-dry] * {
+  pointer-events: none;
+ }
+*/
 
 a,
 a:visited {
@@ -21,7 +23,7 @@ a:visited {
  color: inherit;
 }
 
-body #themes {
+#themes {
  display: contents;
 }
 
@@ -92,7 +94,7 @@ sidebar- {
  flex-flow: column;
 }
 
-body #settings>span {
+#settings>span {
  display: flex;
  justify-content: space-between;
  padding: 4px;

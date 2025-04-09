@@ -1,0 +1,1 @@
+return `Please select a theme to boot into:${theme.map(subpart => subpart === part ? "" : `\n<a href="https://${subpart.host}" onclick=menu.noop()>${subpart.index}. ${subpart.title} (${subpart.host})</a>`).join("")}`

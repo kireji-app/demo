@@ -1,17 +1,17 @@
-body #vintage-mode .handle {
+#vintage-mode .handle {
  left: 2px;
 }
 
 
-body #color-mode,
-body #vintage-mode {
+#color-mode,
+#vintage-mode {
  cursor: pointer;
  position: relative;
  height: var(--spacing);
 }
 
-body #color-mode .base,
-body #vintage-mode .base {
+#color-mode .base,
+#vintage-mode .base {
  width: 100%;
  border-radius: var(--spacing);
  height: var(--spacing);
@@ -36,26 +36,26 @@ body {
  color: var(--fg-fade1);
 }
 
-body wallpaper- {
+wallpaper- {
  background: var(--bg-shade1);
 }
 
 
-body task-menu {
+task-menu {
  background: #0003;
  opacity: var(--menu-tween);
  color: var(--fg-fade1);
 }
 
-body button,
-body menu-button {
+button,
+menu-button {
  height: var(--icon-size);
  font-size: calc(var(--icon-size) * 1.2);
  line-height: var(--icon-size);
  cursor: pointer;
 }
 
-body sidebar- {
+sidebar- {
  box-shadow: 0px 0px 22px var(--spacing) #0001;
  background: var(--bg-shade2);
  padding: 0;
@@ -66,39 +66,39 @@ body sidebar- {
  width: auto;
 }
 
-body sidebar->hr {
+sidebar->hr {
  display: none;
 }
 
-body #themes,
-body #settings {
+#themes,
+#settings {
  padding: var(--spacing);
  display: flex;
  margin: 0;
  flex-flow: column;
 }
 
-body #themes {
+#themes {
  background: var(--bg-shade3);
  counter-reset: item;
  flex: 0 1 auto;
  line-height: var(--icon-size);
 }
 
-body #settings {
+#settings {
  gap: 1ch;
 }
 
-body #settings>span {
+#settings>span {
  gap: 1ch;
  height: var(--icon-size);
 }
 
-body #tags {
+#tags {
  display: flex;
 }
 
-body #tags>* {
+#tags>* {
  display: inline-flex;
  font-weight: 100;
  line-height: 20px;
@@ -108,20 +108,20 @@ body #tags>* {
  background: rgb(97, 36, 23);
 }
 
-body #tags> :first-child {
+#tags> :first-child {
  background: var(--bg-shade3);
  border-radius: 8px 0 0 8px;
 }
 
-body #tags> :last-child {
+#tags> :last-child {
  border-radius: 0 8px 8px 0;
 }
 
-body #tags> :only-child {
+#tags> :only-child {
  border-radius: 8px;
 }
 
-body .handle {
+.handle {
  display: block;
  background: var(--bg-shade3);
  box-shadow: 0px 0px 6px #000;
@@ -134,8 +134,8 @@ body .handle {
  top: 2px;
 }
 
-body #label1,
-body #label2 {
+#label1,
+#label2 {
  transition: opacity 0.3s;
  position: absolute;
  left: 0;
@@ -144,24 +144,24 @@ body #label2 {
  width: 120px;
 }
 
-body #label1 {
+#label1 {
  opacity: 100%;
 }
 
-body #label2 {
+#label2 {
  opacity: 0%;
 }
 
-body #color-mode:hover #label1 {
+#color-mode:hover #label1 {
  opacity: 0%;
 }
 
-body #color-mode:hover #label2 {
+#color-mode:hover #label2 {
  opacity: 100%;
 }
 
 
-body .task-link[data-here]>a::before {
+.task-link[data-here]>a::before {
  content: "";
  position: absolute;
  width: 1ch;
@@ -172,24 +172,24 @@ body .task-link[data-here]>a::before {
  background: var(--theme);
 }
 
-body .task-link>a,
-body .task-link>a:visited {
+.task-link>a,
+.task-link>a:visited {
  line-height: 25px;
  gap: var(--spacing);
  padding: 8px;
  cursor: pointer;
 }
 
-body .task-link[data-here]>a {
+.task-link[data-here]>a {
  color: var(--theme);
 }
 
-body .task-link:not([data-here]):hover {
+.task-link:not([data-here]):hover {
  color: var(--theme);
  cursor: pointer;
 }
 
-body taskbar- {
+taskbar- {
  gap: var(--spacing);
  padding: var(--spacing);
  box-shadow: var(--taskbar-accent);

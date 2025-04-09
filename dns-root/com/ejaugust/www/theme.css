@@ -1,8 +1,163 @@
-body>main {
- position: fixed;
- height: calc(var(--h) - var(--taskbar-height));
- top: var(--taskbar-height);
- left: 0;
- right: 0;
- bottom: 0;
+wallpaper- {
+ background: var(--bg-shade1);
+ color: var(--fg-fade1);
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ line-height: 1.6;
+ margin: 0;
+ padding: 0;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+wallpaper- article {
+ max-width: 800px;
+ width: 90%;
+ padding: 30px;
+ background-color: var(--bg-shade2);
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ margin-top: 40px;
+ margin-bottom: 40px;
+ border-radius: 8px;
+}
+
+/* Typography */
+wallpaper- h1,
+wallpaper- h2,
+wallpaper- h3,
+wallpaper- h4,
+wallpaper- h5,
+wallpaper- h6 {
+ color: var(--fg-fade2);
+ line-height: 1.3;
+ margin-bottom: 0.75em;
+}
+
+wallpaper- h1 {
+ font-size: 2.5em;
+ margin-top: 0;
+}
+
+wallpaper- p {
+ margin-bottom: 1.2em;
+ font-size: 1.1em;
+}
+
+wallpaper- a {
+ color: #007bff;
+ text-decoration: none;
+ transition: color 0.3s ease;
+}
+
+wallpaper- a:hover {
+ color: #0056b3;
+}
+
+wallpaper- em,
+wallpaper- i {
+ font-style: italic;
+ color: var(--fg-fade2);
+}
+
+wallpaper- strong,
+wallpaper- b {
+ font-weight: bold;
+ color: var(--fg-fade2);
+}
+
+/* Layout Specific to Post */
+wallpaper- article>header {
+ margin-bottom: 2em;
+ text-align: center;
+}
+
+wallpaper- article>header h1 {
+ margin-bottom: 0.2em;
+}
+
+wallpaper- .post-meta {
+ color: var(--fg-fade-3);
+ font-size: 0.9em;
+ margin-bottom: 1.5em;
+}
+
+wallpaper- .post-meta a {
+ color: var(--fg-fade-3);
+}
+
+wallpaper- .post-content {
+ line-height: 1.8;
+}
+
+/* Code Blocks */
+wallpaper- pre {
+ background-color: var(--bg-shade3);
+ padding: 15px;
+ border-radius: 5px;
+ overflow-x: auto;
+ font-family: 'Courier New', Courier, monospace;
+ font-size: 0.95em;
+ line-height: 1.4;
+ margin-bottom: 1.5em;
+}
+
+wallpaper- code {
+ font-family: 'Courier New', Courier, monospace;
+ font-size: 0.9em;
+ background-color: var(--bg-shade3);
+ padding: 0.2em 0.4em;
+ border-radius: 3px;
+}
+
+wallpaper- pre code {
+ background-color: transparent;
+ padding: 0;
+ border-radius: 0;
+}
+
+/* Blockquotes */
+wallpaper- blockquote {
+ border-left: 5px solid #ddd;
+ padding-left: 1.5em;
+ font-style: italic;
+ color: #555;
+ margin-left: 0;
+ margin-right: 0;
+ margin-bottom: 1.5em;
+}
+
+/* Lists */
+wallpaper- ul,
+wallpaper- ol {
+ margin-bottom: 1.5em;
+ padding-left: 20px;
+}
+
+wallpaper- li {
+ margin-bottom: 0.5em;
+}
+
+/* Separator */
+wallpaper- hr {
+ border: 0;
+ border-top: 1px solid #eee;
+ margin: 2em 0;
+}
+
+/* Responsive Design (adjust as needed) */
+@media (max-width: 768px) {
+ wallpaper- article {
+  width: 95%;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+ }
+
+ wallpaper- h1 {
+  font-size: 2em;
+ }
+
+ wallpaper- p {
+  font-size: 1em;
+ }
 }

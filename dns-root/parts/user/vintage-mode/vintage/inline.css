@@ -1,13 +1,13 @@
-body #color-mode .base,
-body #vintage-mode .base {
+#color-mode .base,
+#vintage-mode .base {
  background: white;
  width: 16px;
  height: 16px;
  box-shadow: var(--deep-inset);
 }
 
-body #color-mode .base::after,
-body #vintage-mode .base::after {
+#color-mode .base::after,
+#vintage-mode .base::after {
  content: "";
  display: block;
  background: white;
@@ -27,16 +27,16 @@ body #vintage-mode .base::after {
  content: "–";
 }
 
-body #settings>*:focus>.label {
+#settings>*:focus>.label {
  display: block;
  position: relative;
 }
 
-body #label2::before {
+#label2::before {
  content: "Mode: ";
 }
 
-body #settings>*:focus>.label::after {
+#settings>*:focus>.label::after {
  border: 1px dotted black;
  content: "";
  position: absolute;
@@ -47,14 +47,14 @@ body #settings>*:focus>.label::after {
  pointer-events: none;
 }
 
-body .task-link>a,
-body .task-link>a:visited {
+.task-link>a,
+.task-link>a:visited {
  line-height: var(--icon-size);
  cursor: default;
  position: relative;
 }
 
-body .task-link>a:hover {
+.task-link>a:hover {
  background: #00007f;
  color: white
 }
@@ -72,16 +72,16 @@ body .task-link>a:hover {
  top: 8px;
 }
 
-body .task-link>a>.label {
+.task-link>a>.label {
  font-weight: 300;
  padding: 0px 4px;
 }
 
-body .task-icon {
+.task-icon {
  margin: 2px 6px;
 }
 
-body .task {
+.task {
  font: 11px var(--system-ui);
  position: relative;
  height: 100%;
@@ -96,7 +96,7 @@ body .task {
  box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb;
 }
 
-body wallpaper- {
+wallpaper- {
  background: #377f7f;
 }
 
@@ -120,7 +120,7 @@ body {
  --surface: #c3c3c3;
 }
 
-body sidebar- {
+sidebar- {
  height: calc(var(--menu-tween) * var(--sidebar-height));
  min-width: 164px;
  left: 2px;
@@ -132,7 +132,7 @@ body sidebar- {
  box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px #7a7a7a, inset 2px 2px #dbdbdb
 }
 
-body sidebar-::after {
+sidebar-::after {
  pointer-events: none;
  font-smooth: never;
  -webkit-font-smoothing: none;
@@ -155,19 +155,19 @@ body sidebar-::after {
  width: 21px
 }
 
-body sidebar->hr {
+sidebar->hr {
  height: 2px;
  border-top: 1px solid #7f7f7f;
  border-bottom: 1px solid white;
  margin: 4px 0;
 }
 
-body .task>.icon {
+.task>.icon {
  width: 16px;
  height: 16px;
 }
 
-body .task:focus::after {
+.task:focus::after {
  border: 1px dotted black;
  content: "";
  position: absolute;
@@ -179,17 +179,17 @@ body .task:focus::after {
  pointer-events: none;
 }
 
-body .task.open {
+.task.open {
  font: bold 11px var(--system-ui);
  padding: 4px 2px 2px;
  box-shadow: inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px #7a7a7a;
 }
 
-body .task.open>* {
+.task.open>* {
  z-index: 3
 }
 
-body .task.open::before {
+.task.open::before {
  content: "";
  position: absolute;
  margin: 2px;
@@ -224,7 +224,7 @@ tray- {
  width: auto;
 }
 
-body taskbar- {
+taskbar- {
  gap: 3px;
  padding: 4px 2px 2px;
  background: #c3c3c3;
@@ -253,7 +253,7 @@ body.menu-pressed menu-button {
  padding: 4px 4px 2px;
 }
 
-body menu-button:focus::before {
+menu-button:focus::before {
  border: 1px dotted black;
  content: "";
  position: absolute;
@@ -265,18 +265,18 @@ body menu-button:focus::before {
  pointer-events: none;
 }
 
-body menu-button::after {
+menu-button::after {
  content: "Start";
 }
 
-body #tags> :not(:first-child)::before {
+#tags> :not(:first-child)::before {
  content: "-";
 }
 
-body .handle {
+.handle {
  display: none;
 }
 
-body #color-mode #label1 {
+#color-mode #label1 {
  display: none;
 }

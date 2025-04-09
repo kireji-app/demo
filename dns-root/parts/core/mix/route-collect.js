@@ -28,7 +28,6 @@ for (const changedFactor of CHANGED_FACTORS) {
 
 if (reportsAtLeastOneEnabledFactor) {
  const result = deltaMixRouteID + (!mix.enabled && reportsAtLeastOneEnabledFactor ? 0n : mix.routeID)
- debug(result)
  mix.updateRoute(result)
 } else {
  mix.updateRoute(-1n)
