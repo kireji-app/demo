@@ -1,4 +1,4 @@
-const sourceFile = new Framework.SourceMappedFile("../", undefined, "portable.js")
+const sourceFile = new Framework.SourceMappedFile("../", undefined, "serverless.js")
 const externalSource = sourceFile.addSource("framework.js", Framework.sourceCode)
 const internalSource = sourceFile.addSource(methodData.stringName, methodData.content)
 sourceFile.addSection(Framework.sourceCode, externalSource)

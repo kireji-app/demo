@@ -20,7 +20,7 @@ worker.controller = {
  setDebugHost: host => {
   theme.setArm(host)
   delete Framework.responses[location.origin + "/"]
-  delete Framework.responses[location.origin + "/portable.js!"]
+  delete Framework.responses[location.origin + "/serverless.js!"]
   const channel = new BroadcastChannel("debug-reload")
   channel.postMessage(1)
   channel.close()

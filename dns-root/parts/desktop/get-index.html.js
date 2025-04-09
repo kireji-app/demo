@@ -12,7 +12,7 @@ if (menu.arm?.key === "open")
 if (menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
-const dynamically_added_script_for_later = `<script src="/portable.js!"></script>`
+const dynamically_added_script_for_later = `<script src="/serverless.js!"></script>`
 
 return `<!DOCTYPE html>
 <html lang=en>

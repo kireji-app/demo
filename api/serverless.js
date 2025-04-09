@@ -1,0 +1,1 @@
+// Placeholder to register future file with Vercel.

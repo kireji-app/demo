@@ -1,20 +1,22 @@
-# This file not only prevents unwanted files from appearing in the git repo,
-#  it prevents them from being packed during the build process.
+#### This file not only prevents unwanted files from appearing in the git repo,
+####  it prevents them from being packed during the build process.
 
-# Ignore operating system clutter.
+## Ignore operating system clutter.
 **/.DS_Store
 **/Icon
 
-# Ignore cloud build files.
+## Ignore cloud build files.
 .env*.local
 .vercel/
 
-# Ignore IDE workspace preferences and plugins.
+## Ignore IDE workspace preferences and plugins.
 .vscode/
 .cspell/
 
-# Ignore my archive for scripts I might need again later
+## Ignore my archive for scripts I might need again later
 # .dns-root/
 
-# Don't commit the output directory.
-api/
+## Don't commit the output directories.
+# api/
+public/
+## Ok ... let's try committing the output directories.

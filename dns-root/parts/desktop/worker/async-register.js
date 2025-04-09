@@ -1,5 +1,5 @@
 worker.startupRegistration = worker.registration = await nav.serviceWorker.getRegistration()
-worker.registration ??= await nav.serviceWorker.register("/portable.js!")
+worker.registration ??= await nav.serviceWorker.register("/serverless.js!")
 if (!worker.registration.active) {
  await new Promise(resolve => {
   worker.incomingServiceWorker = worker.registration.waiting ?? worker.registration.installing
