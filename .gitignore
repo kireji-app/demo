@@ -12,6 +12,7 @@
 ## Ignore cloud build files.
 .env*.local
 .vercel/
+api/dns-root.json
 
 ## Ignore IDE workspace preferences and plugins.
 .vscode/
