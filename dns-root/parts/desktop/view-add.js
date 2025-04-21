@@ -2,7 +2,7 @@ if (!hydration.supported)
  throw "Unrecoverable: call to view function without the necessary feature support."
 
 // Debug.
-hydration.simulateSlowPerformance()
+hydration.simulateSlowPerformance(10000)
 
 worker.promise.then(() => {
  worker.manifestLink = document.querySelector('link[rel="manifest"]')
@@ -11,7 +11,7 @@ worker.promise.then(() => {
 
 document.title = desktop.host
 desktop.wallpaper = document.querySelector("wallpaper-")
-desktop.taskbar = document.querySelector("taskbar-")
+desktop.taskbar = document.querySelector("task-bar")
 desktop.menuButton = document.querySelector("menu-button")
 desktop.taskbarSpacer = desktop.taskbar.querySelector("flex-spacer")
 desktop.sidebar = desktop.menuElement.querySelector("sidebar-")

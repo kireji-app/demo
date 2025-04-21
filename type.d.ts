@@ -154,6 +154,8 @@ declare function debug(...DATA: any[]): void
 declare function log(VERBOSITY: number, ...DATA: any[]): void
 declare function openLog(VERBOSITY: number, ...DATA: any[]): void
 declare function closeLog(VERBOSITY: number, ...DATA: any[]): void
+/** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
+declare function serialize(VERBOSITY: number, ...DATA: any[]): void
 /** Represents metadata and processing logic for a single method
  * of the framework's class script. It handles parsing method IDs,
  * generating the method's signature, dynamically generated constants and method body. */

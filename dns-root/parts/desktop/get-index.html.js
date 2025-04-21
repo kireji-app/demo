@@ -1,8 +1,31 @@
-const iconDataURI = desktop.render({
+const iconDataURI = theme.arm.render({
  request: "theme.png",
- fallback: "data:image/png;base64,iVBORw0KGgo=",
+ fallback: "data:image/png;base64,",
  format: "datauri"
 })
+
+const debugHTML = `<debug->` + (
+
+ `<div><label for=debug-theme>Theme</label><select id=debug-theme>${theme.map(subpart =>
+  `<option${subpart === theme.arm ? ` selected` : ""}>${subpart.key}</option>`
+ ).join("")}</select></div>` +
+
+ `<div><label for=debug-color-mode>Color Mode</label><select id=debug-color-mode>${colorMode.map(subpart =>
+  `<option${subpart === colorMode.arm ? ` selected` : ""}>${subpart.key}</option>`
+ ).join("")}</select></div>` +
+
+ `<div><label for=debug-vintage-mode>Vintage Mode</label><select id=debug-vintage-mode>${vintageMode.map(subpart =>
+  `<option${subpart === vintageMode.arm ? ` selected` : ""}>${subpart.key}</option>`
+ ).join("")}</select></div>` +
+
+ `<div><label for=debug-menu-clip>Menu Clip</label><select id=debug-menu-clip>${menu.map(subpart =>
+  `<option${subpart === menu.arm ? ` selected` : ""}>${subpart.key}</option>`
+ ).join("")}</select></div>` +
+
+ `<div><label for=debug-menu-frame>Menu Frame</label><select id=debug-menu-frame>${new Array(Number(menu.arm.cardinality)).fill(0).map((_, index) =>
+  `<option${BigInt(index) === menu.arm.routeID ? ` selected` : ""}>${index}</option>`
+ ).join("")}</select></div>`
+) + `</debug->`
 
 const bodyClassList = []
 
@@ -11,8 +34,6 @@ if (menu.arm?.key === "open")
 
 if (menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
-
-const dynamically_added_script_for_later = `<script src="/serverless.js!"></script>`
 
 return `<!DOCTYPE html>
 <html lang=en>
@@ -28,13 +49,6 @@ return `<!DOCTYPE html>
   <link rel=icon href="${iconDataURI}"/>
   <link rel="apple-touch-icon" href="${iconDataURI}"/>
  </head>
- <body data-dry ${bodyClassList.length ? ` class="${bodyClassList.join(" ")}"` : ""}>
-  <wallpaper- tabIndex=1>${theme.arm["wallpaper.html"]}</wallpaper->
-  <!-- desktop windows spawn here -->
-  <taskbar- tabIndex=2>
-   <menu-button tabIndex=3 class=btn>≡</menu-button>
-   <!-- desktop task items spawn here -->
-   <flex-spacer></flex-spacer><tray->${share["inline.html"]}${fullscreen["inline.html"]}</tray->
-  </taskbar->${menu["inline.html"]}
+ <body inert class="${bodyClassList.join(" ")}">${theme["inline.html"]}${debugHTML}<!-- windows -->${taskBar["inline.html"]}${worker["inline.html"]}
  </body>
 </html>`

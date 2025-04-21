@@ -4,5 +4,5 @@ const internalSource = sourceFile.addSource(methodData.stringName, methodData.co
 sourceFile.addSection(Framework.sourceCode, externalSource)
 sourceFile.addSection(`
 
-Framework.initialize(${JSON.stringify(Object.fromEntries(GLOBE_KEYS.map(key => [key, globe[key]])), null, 1)})`, internalSource)
+Framework.initialize(${serialize(Object.fromEntries(GLOBE_KEYS.map(key => [key, globe[key]])), null, 1)})`, internalSource)
 return sourceFile.packAndMap()

@@ -218,7 +218,6 @@ globe.Route ??= class Route {
 }
 
 if (false) Do_Fuzz_Test: {
- const replacer = (key, value) => typeof value === "bigint" ? value.toString() + "n" : value
  for (const href of [
   "https://example.com/one/file.jpeg!",
   "https://example.com/one/two!",
@@ -231,13 +230,13 @@ if (false) Do_Fuzz_Test: {
  ]) {
   const r = new Route(href)
   const strings = ["myFile.jpeg", "suziesFile.txt", "sarahsFile.pdf", "alexsFile.exe"]
-  openLog(0, JSON.stringify(r))
+  openLog(0, serialize(r))
   for (const prop of ["href", "path", "pathname", "routeIDs", "segments", "stringName", "binary", "extension", "header"]) {
-   debug(prop + " before change: " + JSON.stringify(r[prop], replacer))
+   debug(prop + " before change: " + serialize(r[prop]))
    const randomInteger = BigInt(Math.trunc(Math.random() * strings.length))
    debug("change: set string name to " + strings[randomInteger])
    r.stringName = strings[randomInteger]
-   debug(prop + " after change: " + JSON.stringify(r[prop], replacer))
+   debug(prop + " after change: " + serialize(r[prop]))
   }
   closeLog(0)
  }

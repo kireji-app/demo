@@ -7,15 +7,9 @@
  user-select: none;
 }
 
-/*
- [data-dry] {
-  cursor: wait;
- }
-
- [data-dry] * {
-  pointer-events: none;
- }
-*/
+html:has(body[inert]) {
+ cursor: wait;
+}
 
 a,
 a:visited {
@@ -48,9 +42,56 @@ img {
 wallpaper- {
  position: fixed;
  top: 0;
- bottom: var(--taskbar-height);
+ bottom: var(--task-bar-height);
  left: 0;
  right: 0;
+}
+
+debug- {
+ --u: calc(var(--spacing) / 4);
+ top: 0;
+ color: white;
+ right: 0;
+ margin: var(--spacing);
+ opacity: 20%;
+ padding: var(--spacing);
+ position: fixed;
+ text-align: right;
+ font-family: var(--system-ui-mono);
+ white-space: pre;
+ border-radius: var(--u);
+ mix-blend-mode: multiply;
+ pointer-events: none;
+ background-color: black;
+ gap: var(--u);
+ display: flex;
+ flex-flow: column;
+}
+
+debug->div {
+ font-weight: 700;
+ display: flex;
+ justify-content: space-between;
+ gap: var(--u);
+ width: 250px;
+}
+
+debug- select {
+ margin: 0;
+ font-weight: 700;
+ padding: 0;
+ background: white;
+ border: none;
+ outline: none;
+ border-radius: var(--u);
+ width: 150px;
+}
+
+debug- select>option {
+ color: black;
+ padding: var(--u);
+ font-weight: 700;
+ margin: 0;
 }
 
 @supports (height: 100dvh) {
@@ -119,7 +160,7 @@ sidebar- {
  flex: 1 1;
 }
 
-.task-icon {
+.part-icon {
  height: var(--icon-size);
  width: var(--icon-size);
  border-radius: calc(var(--icon-size) * 0.2);
@@ -129,22 +170,22 @@ sidebar- {
  font-weight: 700;
 }
 
-taskbar- {
+task-bar {
  position: fixed;
  bottom: 0;
  left: 0;
  right: 0;
- height: var(--taskbar-height);
+ height: var(--task-bar-height);
  margin: 0;
- line-height: var(--taskbar-height);
+ line-height: var(--task-bar-height);
  display: flex;
 }
 
-taskbar->.btn {
+task-bar>.btn {
  width: var(--icon-size);
 }
 
-taskbar->.btn:hover {
+task-bar>.btn:hover {
  color: var(--theme);
 }
 
@@ -172,10 +213,10 @@ flex-spacer {
 @media (width < 500px) {
  #nested {
   position: fixed;
-  bottom: var(--taskbar-height);
+  bottom: var(--task-bar-height);
   left: 0;
   right: 0;
   width: 100vw;
-  box-shadow: var(--taskbar-accent);
+  box-shadow: var(--task-bar-accent);
  }
 }

@@ -1,6 +1,6 @@
 const src = theme.arm.render({ request: "theme.png", format: "datauri" })
 
-return JSON.stringify({
+return serialize({
  name: theme.arm.title || "Untitled Part",
  short_name: theme.arm.title || "untitled",
  start_url: "/",

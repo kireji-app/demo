@@ -6,4 +6,4 @@ if (IS_PRODUCTION) {
 if (HOST === THEME_HOST)
  return
 
-desktop.worker.postMessage({ code: "setDebugHost", payload: HOST })
+desktop.worker.postMessage({ code: "setTheme", payload: HOST })

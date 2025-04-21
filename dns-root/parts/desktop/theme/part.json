@@ -1,4 +1,7 @@
 {
  "extends": "match.core.parts",
- "part-distribute-initialize": []
+ "part-distribute-initialize": [],
+ "go": [
+  "EVENT"
+ ]
 }

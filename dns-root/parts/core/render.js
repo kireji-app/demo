@@ -12,7 +12,7 @@
  const [stringName, search = ""] = OPTIONS.request.split("?")
 
  if (!stringName)
-  throw part.host + " Render Error: cannot handle render request without a string name. " + JSON.stringify(OPTIONS)
+  throw part.host + " Render Error: cannot handle render request without a string name. " + serialize(OPTIONS)
 
  // Some information is needed to handle encoding later.
  const { type, binary: base64, extension } = new StringHeader(stringName)
@@ -21,16 +21,16 @@
  const searchParams = new URLSearchParams(search)
  const requestHasParameters = searchParams.size > 0
  // Delegate any link following to a recursive call.
- if (extension === "uri" && OPTIONS.links !== "no-follow") {
+ if (extension === ".uri" && OPTIONS.links !== "no-follow") {
 
   if (!(OPTIONS.links === "follow-all" || OPTIONS.links === "follow-once"))
-   throw part.host + " Render Error: invalid links property value: " + OPTIONS.links + ". " + JSON.stringify(OPTIONS)
+   throw part.host + " Render Error: invalid links property value: " + OPTIONS.links + ". " + serialize(OPTIONS)
 
   const newOptions = { ...OPTIONS }
   const newStringName = part.framework.readString(stringName)
 
   if (!newStringName) {
-   warn(part.host + " Render 404: can't follow .uri link " + stringName + ". " + JSON.stringify(OPTIONS))
+   warn(part.host + " Render 404: can't follow .uri link " + stringName + ". " + serialize(OPTIONS))
    return OPTIONS.fallback
   }
 
@@ -46,8 +46,7 @@
  // TODO: String Parameters require a function
  //  with the 'render-*.js' pattern to accept PARAMS.
 
-
- let body = part[stringName]
+ let body = part[extension === ".png" && ENVIRONMENT !== "worker" ? "blank.png" : stringName]
 
  if (search)
   warn("Render ignored params: " + OPTIONS.request)
@@ -56,8 +55,15 @@
  if (OPTIONS.format === "raw")
   return body
 
- if (OPTIONS.format === "datauri")
-  return `data:${type};base64,${base64 ? body : btoaUnicode(body)}`
+ if (OPTIONS.format === "datauri") {
+  if (!base64)
+   body = btoaUnicode(body)
+
+  if (body === undefined || body === "undefined")
+   debug(body, part.host, stringName)
+
+  return `data:${type};base64,${body}`
+ }
 
  if (OPTIONS.format === "response") {
   if (base64) {
@@ -75,5 +81,5 @@
   return new Response(body, { headers: { "content-type": type, expires: "Sun, 20 Jul 1969 20:17:00 UTC" } })
  }
 
- throw part.host + ' Render Error: invalid format ' + JSON.stringify(OPTIONS)
+ throw part.host + ' Render Error: invalid format ' + serialize(OPTIONS)
 }

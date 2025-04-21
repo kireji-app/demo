@@ -1,0 +1,2 @@
+globe.tray = part
+super()

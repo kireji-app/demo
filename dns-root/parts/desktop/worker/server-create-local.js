@@ -17,11 +17,11 @@ worker.controller = {
    payload: theme.arm.host
   })
  },
- setDebugHost: host => {
+ setTheme: host => {
   theme.setArm(host)
   delete Framework.responses[location.origin + "/"]
   delete Framework.responses[location.origin + "/serverless.js!"]
-  const channel = new BroadcastChannel("debug-reload")
+  const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)
   channel.close()
  }

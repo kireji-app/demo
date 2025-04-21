@@ -5,23 +5,24 @@ if (REQUEST_URL in Framework.responses)
  return Framework.responses[REQUEST_URL]
 
 const route = new Route(REQUEST_URL)
-
-if (!route.routeIDs.length) {
- warn('Handle the case for a lack of user settings here.')
- route.pathname = "/1"
-}
+serverless.requestedHost = route.host
 
 if (!(route.host in theme)) {
- warn('Handle the case for a host that isn\'t a theme.')
- route.port = ''
- route.host = "localhost:3000"
+ // Handle the case for an unknown theme.
+ route.port &&= ''
+ route.host = "www.desktop.parts"
+}
+
+if (!route.routeIDs.length) {
+ // Use the default route.
+ route.routeIDs = [0n]
 }
 
 if (theme.arm?.key !== route.host)
  theme.setArm(route.host)
 
-
 const [userRouteID, ...taskRouteIDs] = route.routeIDs
+
 if (userRouteID !== user.routeID) {
  if (userRouteID >= user.cardinality) {
   route.routeIDs = [0n, ...route.routeIDs.slice(1)]

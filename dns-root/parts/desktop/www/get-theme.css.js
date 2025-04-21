@@ -7,12 +7,14 @@ return `wallpaper- {
  gap: 8px;
  padding: ${vintage ? `0` : `16px`};
  color: white;
+ background: #377f7f;
 }
 
 desktop-icon {
  display: flex;
  flex-flow: column;
- flex: 0 0 min-content;
+ flex: 0 0;
+ height: 66px;
  align-items: center;
 }
 

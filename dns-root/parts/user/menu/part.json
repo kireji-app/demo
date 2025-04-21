@@ -4,9 +4,6 @@
  "go-cross-origin": [
   "HOST"
  ],
- "go-wallpaper": [
-  "EVENT"
- ],
  "go": [
   "EVENT"
  ],

@@ -2,9 +2,11 @@ declare class CorePart extends Iterable<CorePart> {
  constructor(): CorePart
  [Symbol.iterator](): IterableIterator<CorePart>
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
- filter(FILTER_FUNCTION: Function): CorePart[]
+ filter(FILTER_FUNCTION: (subpart: CorePart, index: number, part: CorePart) => CorePart): CorePart[]
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
  includes(SUBPART: CorePart): boolean
+ /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
+ map(MAP_FUNCTION: (subpart: CorePart, index: number, part: CorePart) => T): T[]
  /** The framework instance which was dedicated to compiling the script defining the part's type. */
  readonly static framework: Framework
  /** The framework instance, which was dedicated to compiling the script of the part's class. */

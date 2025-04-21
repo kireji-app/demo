@@ -17,7 +17,7 @@ wallpaper- {
  padding-top: calc(var(--h) + var(--section-gap)) !important;
 }
 
-taskbar- {
+task-bar {
  background: transparent;
  box-shadow: none;
  color: black;
@@ -65,7 +65,7 @@ taskbar- {
 
 .placeholder h1 {
  text-align: center;
- line-height: calc(var(--h) - var(--taskbar-height));
+ line-height: calc(var(--h) - var(--task-bar-height));
  height: 100%;
  position: absolute;
  width: 100%;
@@ -81,7 +81,7 @@ taskbar- {
  font-weight: 200;
 }
 
-#float {
+.float {
  font-size: 32px;
  height: 100%;
  align-items: center;
@@ -93,7 +93,7 @@ taskbar- {
 }
 
 @media (width < 500px) {
- #float {
+ .float {
   font-size: max(min(5vw, calc(.05 * var(--h))), 16px);
  }
 }

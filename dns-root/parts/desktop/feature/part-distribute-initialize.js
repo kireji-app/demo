@@ -7,7 +7,7 @@ if (feature.environments.includes(ENVIRONMENT)) {
  feature.supported = feature.checkSupport()
  if (feature.supported) {
   const isAsync = "initializeAsync" in feature
-  feature.promise = isAsync ? feature.initializeAsync() : (feature.initialize(), new Promise(x => x()))
+  feature.promise = isAsync ? feature.initializeAsync() : (feature.initialize?.(), new Promise(x => x()))
   feature.promise.then(() => log(0, feature.framework.niceName + " Good."))
  } else {
   feature.error = "support-check-failed"

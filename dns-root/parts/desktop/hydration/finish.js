@@ -1,2 +1,2 @@
-document.body.removeAttribute("data-dry")
+document.body.removeAttribute("inert")
 part.hydrated = true

@@ -1,0 +1,1 @@
+return `<tray->${share["tray.html"]}${fullscreen["tray.html"]}</tray->`

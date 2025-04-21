@@ -82,7 +82,7 @@ class Framework {
    getMap() {
     const sourceFile = this
     const mappings = Framework.encodeSourceMap(sourceFile.mappings)
-    return JSON.stringify({
+    return serialize({
      version: 3,
      sourceFile: "sourceFile.js",
      sourceRoot: sourceFile.pathFromRepo,
@@ -97,7 +97,7 @@ class Framework {
 
   const desktop = new Part("desktop.parts")
   desktop.distributeInitializePart()
-  log(0, "Desktop Initialized.")
+  log(0, "Desktop Good.")
   // serverless.fetchSync("https://www.desktop.parts/-")
  }
  static setGlobe(GLOBE) {
@@ -119,7 +119,9 @@ class Framework {
      throw 'other constructor forms are not yet supported'
     }
    },
-
+   serialize(VALUE) {
+    return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
+   },
    // Debug logging.
    log(VERBOSITY, ...DATA) {
     conditionalConsoleCall(VERBOSITY, DATA, 'log')
@@ -161,7 +163,7 @@ class Framework {
 
   function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
    if (!IS_PRODUCTION && VERBOSITY <= BUILD_VERBOSITY)
-    console[METHOD](...DATA)
+    console[METHOD](ENVIRONMENT, ...DATA)
   }
 
   if (ENVIRONMENT === "build")
@@ -179,21 +181,25 @@ class Framework {
    { statSync: getItemStats,
     existsSync: itemExists,
     readdirSync: readFolder,
-    readFileSync: readFile } = require('fs')
+    readFileSync: readFile,
+    readFileSync } = require('fs')
 
   let branchName
   let commitMessage
   let commitTag
+  let hash
 
   if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
    branchName = $('git branch --show-current').toString().trim()
    commitMessage = $('git log -1').toString()
    commitTag = $('git log -1 --pretty=%s').toString().trim()
+   hash = $('git rev-parse HEAD')
    BUILD_TAGS.push("local")
   } else {
    branchName = process.env.VERCEL_GIT_COMMIT_REF
    commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
    commitTag = commitMessage.slice(0, commitMessage.indexOf("\n"))
+   hash = process.env.VERCEL_GIT_COMMIT_SHA
    IS_PRODUCTION = branchName === "main"
   }
 
@@ -261,7 +267,16 @@ class Framework {
   }
 
   openLog(0, BUILD_TAGS.join("-") + " dns-root/")
+
+
+  //if (itemExists("api/dns-root.json")) {
+  // log(0, "Archive detected. Performing partial build.")
+  // const existingStringCollection = JSON.parse(readFile("api/dns-root.json", "utf-8"))
+  // throw "need new behavior here"
+  //} else {
   readRecursive()
+  //}
+
   closeLog(0)
   /*
    // Future DNS resolution process...

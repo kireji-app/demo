@@ -1,1 +1,1 @@
-return document.body.hasAttribute("data-dry")
+return document.body.hasAttribute("inert")

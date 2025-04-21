@@ -1,10 +1,14 @@
 wallpaper- {
- --unit: min(48px, 5vw, calc(var(--h) / 5));
+ --unit: min(48px, 4vw, calc(var(--h) / 5));
  padding-top: calc(var(--h) * 0.4);
+ margin: 0;
+ display: block;
+ overflow: clip;
+ padding: 15px;
 }
 
-wallpaper- h1,
-wallpaper- h2 {
+wallpaper->h1,
+wallpaper->h2 {
  text-align: center;
  line-height: calc(var(--h) / 2);
  height: calc(var(--h) / 2);
@@ -19,6 +23,15 @@ wallpaper- h2 {
 wallpaper- h1 {
  font-size: min(35vw, var(--h) / 2);
  color: var(--fg-fade5);
+ text-align: center;
+ line-height: var(--h);
+ height: 100%;
+ position: absolute;
+ width: 100%;
+ left: 0;
+ top: 0;
+ margin: 0;
+ padding: 0;
 }
 
 wallpaper- .thin {
@@ -60,4 +73,36 @@ wallpaper- img {
  border-radius: calc(var(--unit) / 5);
  margin-right: calc(var(--unit) / 2);
  transform: scale(2);
+}
+
+wallpaper- .float {
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ font-size: 32px;
+ align-items: center;
+ justify-content: center;
+ display: flex;
+ flex-flow: column;
+ gap: 0.5ch;
+ line-height: 1em;
+}
+
+@media(width < 500px) {
+ wallpaper- .float {
+  font-size: max(min(5vw, .05 * var(--h)), 16px);
+ }
+}
+
+wallpaper- .float>h2 {
+ display: flex;
+ gap: 0.5ch;
+}
+
+wallpaper- .float>h2 img {
+ width: 64px;
+ height: 64px;
+ border-radius: calc(64px * 0.2);
 }
