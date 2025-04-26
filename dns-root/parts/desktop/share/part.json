@@ -1,6 +1,0 @@
-{
- "extends": "window.feature.desktop.parts",
- "go": [
-  "EVENT"
- ]
-}

@@ -3,10 +3,21 @@
  * routing functions, virtual DOM and synchronous fetch method which can
  * produce both static assets and dynamically generated files. */
 declare class Framework {
+ /** Populates the global object and then boots the user configuration space. */
+ static initialize(_BUILD): void
+ /** A type used for source mapping and packing data from one or more files into a single new file. */
+ static readonly SourceMappedFile = SourceMappedFile
  /** A cache of the response objects which have been produced by the fetch operation so far. */
  static readonly responses: object
  /** A cache of the framework objects that have been instantiated so far (used to prevent compiling the same script twice). */
  static readonly frameworks: Framework[]
+ /** The current class, as a string. */
+ static readonly sourceCode: string
+ /** An array of environment names corresponding to the four environments that the framework can run in.
+  * ```
+  * ["window", "worker", "build", "server"]
+  * ``` */
+ static readonly environments = ["window", "worker", "build", "server"]
  /** The alphabet that Source Map Version 3 uses to base64 encode its source mapping data segments. */
  static readonly sourceMapRadix: string
  /** A runtime-only archive of the strings which have been generated dynamically. */
@@ -15,18 +26,7 @@ declare class Framework {
  static readonly sourcePositionMarks: object
  /** The regular expression used to pick out source position marks from code. */
  static readonly sourcePositionMarkPattern: RegExp
- /** A type used for source mapping and packing data from one or more files into a single new file. */
- static readonly SourceMappedFile = SourceMappedFile
- /** The current class, as a string. */
- static readonly sourceCode: string
- /** Populates the needed runtime values and then boots the virtual operating system. */
- static initialize(GLOBE): void
- /** Traverses the actual computer file system to pack source files into a collection of strings so that they can be inlined in the resulting file.
-  * 
-  * Throws an error if not in the build environment. */
- static buildStringCollection(HOST: string): string
- /** A function that encodes source code mappings according to the Source Map Version 3 specification. */
- static encodeSourceMap(DECODED_MAPPINGS: []): string
+
  /** The part constructor obtained by evaluating `framework.script.` */
  readonly PartConstructor: typeof CorePart
  /** The host used to lookup all of the source code for the source file. */
@@ -63,16 +63,12 @@ declare class Framework {
  /** An array of all the strings whose render method is defined directly on the part type. */
  readonly ownRenderMethodIDs: string[]
  constructor(HOST: string, CUSTOM_FILES: SourceDirectory): Framework
- /** Reads a static asset string from the framework's two string directories, passing the call to the parent framework if nothing is found on the one and returning a fallback if nothing is found all the way to Core. */
- readString(STRING_NAME, FALLBACK): void
  /** Reads a static asset string from the framework's two string directories, returning a fallback nothing is found.*/
  readOwnString(STRING_NAME, FALLBACK): void
- /** Traverses up the parent chain to add an inherited method prefix to the the body of methods which will be added to the compiled class. */
- addMethodScope(FILE, IS_VIEW): void
- /** Traverses up the parent chain to add an inherited method prefix to the body of the anonymous method in the framework script which returns the newly generated class instance. */
- addFrameworkScope(FILE): void
- /** Adds only the current framework's own method prefix script to the given file. */
- addOwnScopeString(STRING_NAME, FILE, INDENT = "  "): void
+ /** Traverses up the framework parent chain to add an inherited set of constant declarations to the the body of methods which will be added to the compiled class. */
+ addConstants(FILE): void
+ /** Traverses up the framework parent chain to determine which constant declarations are used in the given method data. */
+ collectConstants(FRAMEWORK, METHOD_DATA): void
 }
 declare interface SourceDirectory<T> {
 }
@@ -121,14 +117,29 @@ class SourceMappedFile {
  *     - Packed and deployed as a front-end framework in the browser window.
  *     - It was created by a server-rendered script to transfer rendering control from server to client. */
 declare const ENVIRONMENT: string
+/** The index of ENVIRONMENT in the array `Framework.environments`. */
+declare const ENVIRONMENT_INDEX: number
 /** Whether the project is deploying/deployed as the live, public deployment (as determined by the absence of non-production build tags). */
 declare const IS_PRODUCTION: boolean
-/** A list of tags describing the build version. */
-declare const BUILD_TAGS: string[]
-/** A packed archive of the git repository. */
-declare const BUILD_STRING_COLLECTION: SourceDirectory
-/** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
-declare const BUILD_VERBOSITY: number
+/** All of the inline information compiled from the git repo in node by the build process. */
+declare const _BUILD: {
+ /** One of three strings representing the severity of the API change. Used to automatically compute the correct semantic version at build time. */
+ readonly change: "major" | "minor" | "patch"
+ /** The hash of the most recent git commit at build time. */
+ readonly hash: string
+ /** The automatically generated semantic version number of the current build. */
+ readonly version: string,
+ /** Whether or not this is a local build. */
+ readonly local?: boolean,
+ /** The git commit message for this build version. */
+ readonly message: string,
+ /** The git branch for this build version. */
+ readonly branch: string
+ /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
+ readonly verbosity: number
+ /** A packed archive of the git repository. */
+ readonly stringCollection: SourceDirectory
+}
 /** A wrapper class that constructs a part of the given host type.
  * 
  * If the host type doesn't exist yet or if CUSTOM_STRING_COLLECTION is

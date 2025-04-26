@@ -1,352 +1,371 @@
 class Framework {
-
- // Startup.
- static initialize(GLOBE) {
-  Framework.setGlobe(GLOBE)
-  Framework.sourceCode = Framework.toString()
-  Framework.sourceLines = Framework.sourceCode.split("\n")
-  Framework.responses = {}
-  Framework.frameworks = []
-  Framework.sourceMapRadix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-  Framework.SourceMappedFile = class {
-   lines = []
-   sources = []
-   scripts = []
-   mappings = []
-   constructor(NAME, PATH_TO_REPO, PATH_FROM_REPO) {
-    const sourceFile = this
-    sourceFile.name = NAME
-    sourceFile.pathToRepo = PATH_TO_REPO
-    sourceFile.pathFromRepo = PATH_FROM_REPO
-   }
-   addSource(source, script) {
-    const sourceFile = this
-
-    if (IS_PRODUCTION)
-     return
-
-    let srcIndex = sourceFile.sources.indexOf(source)
-
-    if (srcIndex === -1) {
-     srcIndex = sourceFile.sources.length
-     sourceFile.sources.push(source)
-     sourceFile.scripts.push(script)
+ static initialize(_BUILD) {
+  Set_Static_Properties: {
+   Framework.SourceMappedFile = class {
+    lines = []
+    sources = []
+    scripts = []
+    mappings = []
+    constructor(NAME, PATH_TO_REPO, PATH_FROM_REPO) {
+     const sourceFile = this
+     sourceFile.name = NAME
+     sourceFile.pathToRepo = PATH_TO_REPO
+     sourceFile.pathFromRepo = PATH_FROM_REPO
     }
+    addSource(source, script) {
+     const sourceFile = this
 
-    return srcIndex
-   }
-   addLine(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
-    const sourceFile = this
-    if (typeof string !== "string")
-     throw 'bad line: ' + (typeof string)
+     if (IS_PRODUCTION)
+      return
 
-    const mark = string.match(Framework.sourcePositionMarkPatternAddLine)?.[0]
+     let srcIndex = sourceFile.sources.indexOf(source)
 
-    if (mark) {
-     string = string.slice(mark.length)
-     ogLn = Framework.sourcePositionMarks[mark].ln
+     if (srcIndex === -1) {
+      srcIndex = sourceFile.sources.length
+      sourceFile.sources.push(source)
+      sourceFile.scripts.push(script)
+     }
+
+     return srcIndex
     }
+    addLine(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
+     const sourceFile = this
+     if (typeof string !== "string")
+      throw 'bad line: ' + (typeof string)
 
-    sourceFile.lines.push(indent + string)
+     const mark = string.match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
-    if (IS_PRODUCTION)
-     return
+     if (mark) {
+      string = string.slice(mark.length)
+      ogLn = Framework.sourcePositionMarks[mark].ln
+     }
 
-    if (string && mapTokens)
-     sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
-    else
-     sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
-   }
-   addLines(strings, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
-    const sourceFile = this
-    strings.forEach((string, ln) => sourceFile.addLine(string, srcIndex, ogLn + ln, ogCol, indent, mapTokens))
-   }
-   addSection(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
-    const sourceFile = this
-    const lines = string.split("\n")
-    const mark = lines[0].match(Framework.sourcePositionMarkPatternAddLine)?.[0]
+     sourceFile.lines.push(indent + string)
 
-    if (mark) {
-     lines.shift()
-     ogLn = Framework.sourcePositionMarks[mark].ln + 1
-    }
+     if (IS_PRODUCTION)
+      return
 
-    sourceFile.addLines(lines, srcIndex, ogLn, ogCol, indent, mapTokens)
-   }
-   packAndMap(url) {
-    const sourceFile = this
-    return sourceFile.lines.join("\n") + (/*IS_PRODUCTION */true ? "" : `
-//${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url ? `
-//${"#"} sourceURL=${url}` : ""}`)
-   }
-   getMap() {
-    const sourceFile = this
-    const mappings = Framework.encodeSourceMap(sourceFile.mappings)
-    return serialize({
-     version: 3,
-     sourceFile: "sourceFile.js",
-     sourceRoot: sourceFile.pathFromRepo,
-     sources: sourceFile.sources,
-     names: [],
-     sourcesContent: sourceFile.scripts,
-     mappings,
-    }, null, 1)
-   }
-  }
-  Framework.registerSourcePositionMarks()
-
-  const desktop = new Part("desktop.parts")
-  desktop.distributeInitializePart()
-  log(0, "Desktop Good.")
-  // serverless.fetchSync("https://www.desktop.parts/-")
- }
- static setGlobe(GLOBE) {
-  const {
-   constructor: Globe,
-   Window,
-   ServiceWorkerGlobalScope: Worker,
-   process: cloudProcess
-  } = Object.assign(globalThis, {
-   ...GLOBE,
-   globe: globalThis,
-   IS_PRODUCTION: false,
-   GLOBE_KEYS: Object.keys(GLOBE),
-   Part: class {
-    constructor(INPUT) {
-     if (typeof INPUT === "string")
-      return new (new Framework(INPUT).PartConstructor)()
-
-     throw 'other constructor forms are not yet supported'
-    }
-   },
-   serialize(VALUE) {
-    return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
-   },
-   // Debug logging.
-   log(VERBOSITY, ...DATA) {
-    conditionalConsoleCall(VERBOSITY, DATA, 'log')
-   },
-   warn(...DATA) {
-    if (typeof DATA[0] === "string")
-     if (typeof DATA[1] === "string")
-      DATA.unshift("\x1b[38;5;100m" + 'warning ' + '\x1b[38;5;226m' + DATA.shift() + "\x1b[38;5;100m" + DATA.shift() + "\x1b[0m")
+     if (string && mapTokens)
+      sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
      else
-      DATA.unshift("\x1b[38;5;100m" + 'warning ' + DATA.shift() + "\x1b[0m")
-    else
-     DATA.unshift("\x1b[38;5;100m" + "warning" + "\x1b[0m")
-    conditionalConsoleCall(0, DATA, 'warn')
-   },
-   debug(...DATA) {
-    conditionalConsoleCall(0, DATA, 'debug')
-   },
-   openLog(VERBOSITY, ...DATA) {
-    conditionalConsoleCall(VERBOSITY, DATA, 'group')
-   },
-   closeLog(VERBOSITY) {
-    conditionalConsoleCall(VERBOSITY, [], 'groupEnd')
-   },
-
-   // String handling.
-   btoaUnicode(BODY) {
-    return btoa(new TextEncoder('utf-8').encode(BODY)
-     .reduce((data, byte) => data + String.fromCharCode(byte), '')
-    )
-   }
-  })
-
-  globe.ENVIRONMENT =
-   Globe === Window ? "window" : (
-    Globe === Worker ? "worker" : (
-     cloudProcess?.argv[1]?.split("/").pop() === "framework.js" ? "build" : "server"
-    )
-   )
-
-  function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
-   if (!IS_PRODUCTION && VERBOSITY <= BUILD_VERBOSITY)
-    console[METHOD](ENVIRONMENT, ...DATA)
-  }
-
-  if (ENVIRONMENT === "build")
-   Framework.packRepository()
- }
- static packRepository() {
-  openLog(0, "Building String Collection")
-
-  if (ENVIRONMENT !== "build")
-   throw 'Can\'t build framework from ' + ENVIRONMENT
-
-  const
-   { extname } = require('path'),
-   { execSync: $ } = require('child_process'),
-   { statSync: getItemStats,
-    existsSync: itemExists,
-    readdirSync: readFolder,
-    readFileSync: readFile,
-    readFileSync } = require('fs')
-
-  let branchName
-  let commitMessage
-  let commitTag
-  let hash
-
-  if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
-   branchName = $('git branch --show-current').toString().trim()
-   commitMessage = $('git log -1').toString()
-   commitTag = $('git log -1 --pretty=%s').toString().trim()
-   hash = $('git rev-parse HEAD')
-   BUILD_TAGS.push("local")
-  } else {
-   branchName = process.env.VERCEL_GIT_COMMIT_REF
-   commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
-   commitTag = commitMessage.slice(0, commitMessage.indexOf("\n"))
-   hash = process.env.VERCEL_GIT_COMMIT_SHA
-   IS_PRODUCTION = branchName === "main"
-  }
-
-  BUILD_TAGS.push(branchName)
-
-  const semanticVersion = commitTag.split(".").map(x => parseInt(x))
-
-  if (BUILD_TAGS.includes("local")) {
-   if (semanticVersion[0] === 0) {
-    if (BUILD_CHANGE === "major") {
-     semanticVersion[1]++
-     semanticVersion[2] = 0
-    } else semanticVersion[2]++
-   } else {
-    if (BUILD_CHANGE === "major") {
-     semanticVersion[0]++
-     semanticVersion[1] = semanticVersion[2] = 0
-    } else if (BUILD_CHANGE === "minor") {
-     semanticVersion[1]++
-     semanticVersion[2] = 0
-    } else semanticVersion[2]++
-   }
-  }
-
-  BUILD_TAGS.unshift(semanticVersion.join("."))
-
-  const readRecursive = (host = "", folderPath = "dns-root", stringCollection = BUILD_STRING_COLLECTION) => {
-   if (host) {
-    if (host.length > 253)
-     throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
-   }
-
-   if (!itemExists(folderPath))
-    throw new ReferenceError("can't pack nonexistent folder " + folderPath)
-
-   const stringNames = []
-   for (const itemName of readFolder(folderPath)) {
-    const
-     folderPath = ["dns-root", ...(host ? host.split(".").reverse() : [])].join('/'),
-     filePath = folderPath + "/" + itemName
-    if (itemExists(filePath)) {
-     const stats = getItemStats(filePath)
-
-     if (stats.isDirectory()) {
-      openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
-      readRecursive(host ? itemName ? itemName + "." + host : host : itemName ?? "", filePath, stringCollection[itemName] = {})
-      closeLog(2)
-     } else if (stats.isFile())
-      stringNames.push([itemName, filePath])
+      sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
     }
-   }
-
-   for (const [stringName, stringPath] of stringNames) {
-    try {
-     if (!$(`git check-ignore -v ${stringPath}`).includes('.gitignore:')) throw 1
-     log(2, `\x1b[38;5;27m/\x1b[38;5;239m${stringName} ignored\x1b[0m`)
-    } catch {
-     const
-      extension = extname(stringPath),
-      content = readFile(stringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
-     log(2, `\x1b[38;5;28m/\x1b[38;5;76m${stringName}\x1b[38;5;28m"\x1b[0m`)
-     stringCollection[stringName] = content
+    addLines(strings, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
+     const sourceFile = this
+     strings.forEach((string, ln) => sourceFile.addLine(string, srcIndex, ogLn + ln, ogCol, indent, mapTokens))
     }
-   }
-  }
+    addSection(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
+     const sourceFile = this
+     const lines = string.split("\n")
+     const mark = lines[0].match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
-  openLog(0, BUILD_TAGS.join("-") + " dns-root/")
-
-
-  //if (itemExists("api/dns-root.json")) {
-  // log(0, "Archive detected. Performing partial build.")
-  // const existingStringCollection = JSON.parse(readFile("api/dns-root.json", "utf-8"))
-  // throw "need new behavior here"
-  //} else {
-  readRecursive()
-  //}
-
-  closeLog(0)
-  /*
-   // Future DNS resolution process...
-   const { resolveTxt } = require('dns')
-   const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), process.exit(21)) : give(TXT)))
-   const targetHost = "www.core.parts"
-   txt(targetHost).then(TXT => {
-    for (const txt of TXT) {
-     if (txt[0].startsWith("part://")) {
-      const
-       { host: host, searchParams, hash } = new URL(txt.join("")),
-       payload = { [targetHost + "/.host"]: host }
-      if (searchParams.has("$1") || searchParams.has("$2")) {
-       payload[targetHost + "/constructor.js"] = `super(${atob(searchParams.get("$1") ?? "")})\n${atob(searchParams.get("$2") ?? "")}`
-      }
-      debug(payload)
-      break
+     if (mark) {
+      lines.shift()
+      ogLn = Framework.sourcePositionMarks[mark].ln + 1
      }
+
+     sourceFile.addLines(lines, srcIndex, ogLn, ogCol, indent, mapTokens)
     }
-    process.exit(21)
+    packAndMap(url) {
+     const sourceFile = this
+     return sourceFile.lines.join("\n") + (/*IS_PRODUCTION */true ? "" : `
+ //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url ? `
+ //${"#"} sourceURL=${url}` : ""}`)
+    }
+    getMap() {
+     const sourceFile = this
+     const encoderAbsolutePosition = [0, 0, 0, 0, 0]
+     const mappings = DECODED_MAPPINGS.map(decodedLine => (encoderAbsolutePosition[0] = 0, decodedLine.map(decodedSegment => {
+      return decodedSegment.map((absoluteDecodedPlace, i) => {
+       const signedRelativeDecodedPlace = absoluteDecodedPlace - encoderAbsolutePosition[i]
+       encoderAbsolutePosition[i] = absoluteDecodedPlace
+       if (signedRelativeDecodedPlace === 0) return 'A'
+       let
+        unsignedRelativeDecodedPlace = Math.abs(signedRelativeDecodedPlace),
+        encodedSegment = ''
+       while (unsignedRelativeDecodedPlace > 0) {
+        let characterIndex
+        if (!encodedSegment) {
+         characterIndex = (unsignedRelativeDecodedPlace & 15) * 2 + +!Object.is(signedRelativeDecodedPlace, unsignedRelativeDecodedPlace)
+         unsignedRelativeDecodedPlace >>>= 4
+        } else {
+         characterIndex = unsignedRelativeDecodedPlace & 31
+         unsignedRelativeDecodedPlace >>>= 5
+        }
+        if (unsignedRelativeDecodedPlace > 0) characterIndex |= 32
+        encodedSegment += Framework.sourceMapRadix[characterIndex]
+       }
+       return encodedSegment
+      }).join('')
+     }).join(","))).join(";")
+     return serialize({
+      version: 3,
+      sourceFile: "sourceFile.js",
+      sourceRoot: sourceFile.pathFromRepo,
+      sources: sourceFile.sources,
+      names: [],
+      sourcesContent: sourceFile.scripts,
+      mappings,
+     }, null, 1)
+    }
+   }
+   Framework.sourceCode = Framework.toString()
+   Framework.sourceLines = Framework.sourceCode.split("\n")
+   Framework.responses = {}
+   Framework.frameworks = []
+   Framework.environments = ["build", "server", "worker", "window"]
+   Framework.sourceMapRadix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+  }
+  Register_Source_Position_Marks: {
+   Framework.sourcePositionMarks = {}
+   Framework.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
+   Framework.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
+
+   for (let ln = 0; ln < Framework.sourceLines.length; ln++) {
+    for (const { 0: mark, index: col } of Framework.sourceLines[ln].matchAll(Framework.sourcePositionMarkPatternRegister)) {
+     if (mark in Framework.sourcePositionMarks)
+      throw `Duplicate source position mark ${mark} in framework.js.`
+     Framework.sourcePositionMarks[mark] = { ln, col }
+    }
+   }
+  }
+  Set_Global_Object: {
+   const {
+    constructor: Globe,
+    Window,
+    ServiceWorkerGlobalScope: Worker,
+    process: cloudProcess
+   } = Object.assign(globalThis, {
+    _BUILD,
+    globe: globalThis,
+    IS_PRODUCTION: false,
+    Part: class {
+     constructor(INPUT) {
+      if (typeof INPUT === "string")
+       return new (new Framework(INPUT).PartConstructor)()
+
+      throw 'other constructor forms are not yet supported'
+     }
+    },
+    serialize(VALUE) {
+     return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
+    },
+    // Debug logging.
+    log(VERBOSITY, ...DATA) {
+     conditionalConsoleCall(VERBOSITY, DATA, 'log')
+    },
+    warn(...DATA) {
+     if (typeof DATA[0] === "string")
+      if (typeof DATA[1] === "string")
+       DATA.unshift("\x1b[38;5;100m" + 'warning ' + '\x1b[38;5;226m' + DATA.shift() + "\x1b[38;5;100m" + DATA.shift() + "\x1b[0m")
+      else
+       DATA.unshift("\x1b[38;5;100m" + 'warning ' + DATA.shift() + "\x1b[0m")
+     else
+      DATA.unshift("\x1b[38;5;100m" + "warning" + "\x1b[0m")
+     conditionalConsoleCall(0, DATA, 'warn')
+    },
+    debug(...DATA) {
+     conditionalConsoleCall(0, DATA, 'debug')
+    },
+    openLog(VERBOSITY, ...DATA) {
+     conditionalConsoleCall(VERBOSITY, DATA, 'group')
+    },
+    closeLog(VERBOSITY) {
+     conditionalConsoleCall(VERBOSITY, [], 'groupEnd')
+    },
+
+    // String handling.
+    btoaUnicode(BODY) {
+     return btoa(new TextEncoder('utf-8').encode(BODY)
+      .reduce((data, byte) => data + String.fromCharCode(byte), '')
+     )
+    }
    })
-  */
-  closeLog(0)
- }
- static registerSourcePositionMarks() {
-  Framework.sourcePositionMarks = {}
-  Framework.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
-  Framework.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
 
-  for (let ln = 0; ln < Framework.sourceLines.length; ln++) {
-   for (const { 0: mark, index: col } of Framework.sourceLines[ln].matchAll(Framework.sourcePositionMarkPatternRegister)) {
-    if (mark in Framework.sourcePositionMarks)
-     throw `Duplicate source position mark ${mark} in framework.js.`
-    Framework.sourcePositionMarks[mark] = { ln, col }
+   globe.ENVIRONMENT_INDEX =
+    Globe === Window ? 3 : (
+     Globe === Worker ? 2 : (
+      cloudProcess?.argv[1]?.split("/").pop() === "framework.js" ? 0 : 1
+     )
+    )
+
+   globe.ENVIRONMENT = Framework.environments[ENVIRONMENT_INDEX]
+
+   function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
+    if (!IS_PRODUCTION && VERBOSITY <= _BUILD.verbosity)
+     console[METHOD](ENVIRONMENT_INDEX, ...DATA)
+   }
+
+   if (ENVIRONMENT === "build") {
+    const
+     { extname } = require('path'),
+     { execSync: $ } = require('child_process'),
+     { statSync: getItemStats,
+      existsSync: itemExists,
+      readdirSync: readFolder,
+      readFileSync: readFile } = require('fs')
+
+    let branchName
+    let commitMessage
+    let commitTag
+    let commitHash
+
+    if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
+     branchName = $('git branch --show-current').toString().trim()
+     commitMessage = $('git log -1').toString()
+     commitTag = $('git log -1 --pretty=%s').toString().trim()
+     commitHash = $('git rev-parse HEAD').toString().trim()
+     _BUILD.local = true
+     $('git update-index --assume-unchanged api/serverless.js')
+    } else {
+     branchName = process.env.VERCEL_GIT_COMMIT_REF
+     commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
+     commitTag = commitMessage.slice(0, commitMessage.indexOf("\n"))
+     commitHash = process.env.VERCEL_GIT_COMMIT_SHA
+     IS_PRODUCTION = branchName === "main"
+    }
+
+    _BUILD.branch = branchName
+
+    const semanticVersion = commitTag.split(".").map(x => parseInt(x))
+
+    if (_BUILD.local) {
+     if (semanticVersion[0] === 0) {
+      if (_BUILD.change === "major") {
+       semanticVersion[1]++
+       semanticVersion[2] = 0
+      } else semanticVersion[2]++
+     } else {
+      if (_BUILD.change === "major") {
+       semanticVersion[0]++
+       semanticVersion[1] = semanticVersion[2] = 0
+      } else if (_BUILD.change === "minor") {
+       semanticVersion[1]++
+       semanticVersion[2] = 0
+      } else semanticVersion[2]++
+     }
+    }
+
+    _BUILD.hash = commitHash
+    _BUILD.version = semanticVersion.join(".")
+    _BUILD.message = commitMessage
+
+    const readRecursive = (host = "", folderPath = "dns-root", stringCollection = _BUILD.stringCollection) => {
+     // TODO: Don't read in large files.
+     if (host) {
+      if (host.length > 253)
+       throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
+     }
+
+     if (!itemExists(folderPath))
+      throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
+
+     const stringNames = []
+     for (const itemName of readFolder(folderPath)) {
+      const
+       folderPath = ["dns-root", ...(host ? host.split(".").reverse() : [])].join('/'),
+       filePath = folderPath + "/" + itemName
+      if (itemExists(filePath)) {
+       const stats = getItemStats(filePath)
+
+       if (stats.isDirectory()) {
+        openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
+        readRecursive(host ? itemName ? itemName + "." + host : host : itemName ?? "", filePath, stringCollection[itemName] = {})
+        closeLog(2)
+       } else if (stats.isFile())
+        stringNames.push([itemName, filePath])
+      }
+     }
+
+     for (const [stringName, stringPath] of stringNames) {
+      try {
+       if (!$(`git check-ignore -v ${stringPath}`).includes('.gitignore:')) throw 1
+       log(2, `\x1b[38;5;27m/\x1b[38;5;239m${stringName} ignored\x1b[0m`)
+      } catch {
+       const
+        extension = extname(stringPath),
+        content = readFile(stringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;28m/\x1b[38;5;76m${stringName}\x1b[38;5;28m"\x1b[0m`)
+       stringCollection[stringName] = content
+      }
+     }
+    }
+
+    openLog(0, `Building version ${_BUILD.version}${_BUILD.local ? " (local)" : ""} from branch "${_BUILD.branch}".`)
+    if (_BUILD.local && itemExists("api/serverless.js")) {
+     log(0, "Existing build detected. Performing partial build.")
+     const serverlessScript = readFile("api/serverless.js", "utf-8")
+     // This string is split so it catch here.
+     const openMark = "Framework.initialize" + "("
+     const closeMark = ")"
+     const closeIndex = 0 - closeMark.length
+     const openIndex = serverlessScript.indexOf(openMark) + openMark.length
+
+     if (openIndex < openMark.length)
+      throw "Missing global object marker in existing build script."
+
+     $(`git add --intent-to-add .`)
+     const { stringCollection, hash } = JSON.parse(serverlessScript.slice(openIndex, closeIndex))
+     for (const nameStatus of $(`git diff --name-status --untracked-files=all ${hash} -- dns-root/`).toString().trim().split("\n")) {
+      const [fileStatus, changedStringPath] = nameStatus.split(/\s+/)
+      if (changedStringPath.endsWith("/")) continue
+      const extension = extname(changedStringPath)
+      const path = changedStringPath.slice(9).split("/")
+      const stringName = path.pop()
+      let root = stringCollection
+      for (const pathPart of path)
+       root = root[pathPart] ??= {}
+      switch (fileStatus) {
+       case "A":
+        root[stringName] = readFile(changedStringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
+        log(2, `\x1b[38;5;34m/\x1b[38;5;82m${stringName}\x1b[38;5;34m - added \x1b[0m`)
+        break;
+       case "M":
+        root[stringName] = readFile(changedStringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
+        log(2, `\x1b[38;5;28m/\x1b[38;5;226m${stringName}\x1b[38;5;28m - modified \x1b[0m`)
+        break;
+       case "D":
+        delete root[stringName];
+        log(2, `\x1b[38;5;28m/\x1b[38;5;196m${stringName}\x1b[38;5;28m - deleted \x1b[0m`)
+        break;
+       case "C": // Copied
+       case "R": // Renamed
+       case "T": // Type-changed
+       case "U": // Unmerged
+       case "X": // Unknown
+       case "B": // Broken pairing
+        throw "Unsupported git diff status '" + fileStatus + "'."
+      }
+     }
+     Object.assign(_BUILD.stringCollection, stringCollection)
+    } else readRecursive()
+    closeLog(0)
+    /*
+     // Future DNS resolution process...
+     const { resolveTxt } = require('dns')
+     const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), process.exit(21)) : give(TXT)))
+     const targetHost = "www.core.parts"
+     txt(targetHost).then(TXT => {
+      for (const txt of TXT) {
+       if (txt[0].startsWith("part://")) {
+        const
+         { host: host, searchParams, hash } = new URL(txt.join("")),
+         payload = { [targetHost + "/.host"]: host }
+        if (searchParams.has("$1") || searchParams.has("$2")) {
+         payload[targetHost + "/constructor.js"] = `super(${atob(searchParams.get("$1") ?? "")})\n${atob(searchParams.get("$2") ?? "")}`
+        }
+        debug(payload)
+        break
+       }
+      }
+      process.exit(21)
+     })
+    */
    }
   }
- }
 
- // File creation and processing.
- static encodeSourceMap(DECODED_MAPPINGS) {
-  const encoderAbsolutePosition = [0, 0, 0, 0, 0]
-  return DECODED_MAPPINGS.map(decodedLine => (encoderAbsolutePosition[0] = 0, decodedLine.map(decodedSegment => {
-   return decodedSegment.map((absoluteDecodedPlace, i) => {
-    const signedRelativeDecodedPlace = absoluteDecodedPlace - encoderAbsolutePosition[i]
-    encoderAbsolutePosition[i] = absoluteDecodedPlace
-    if (signedRelativeDecodedPlace === 0) return 'A'
-    let
-     unsignedRelativeDecodedPlace = Math.abs(signedRelativeDecodedPlace),
-     encodedSegment = ''
-    while (unsignedRelativeDecodedPlace > 0) {
-     let characterIndex
-     if (!encodedSegment) {
-      characterIndex = (unsignedRelativeDecodedPlace & 15) * 2 + +!Object.is(signedRelativeDecodedPlace, unsignedRelativeDecodedPlace)
-      unsignedRelativeDecodedPlace >>>= 4
-     } else {
-      characterIndex = unsignedRelativeDecodedPlace & 31
-      unsignedRelativeDecodedPlace >>>= 5
-     }
-     if (unsignedRelativeDecodedPlace > 0) characterIndex |= 32
-     encodedSegment += Framework.sourceMapRadix[characterIndex]
-    }
-    return encodedSegment
-   }).join('')
-  }).join(","))).join(";")
+  new Part("user.parts").distributeInitializePart()
  }
- static getStringCollection(HOST) {
-  return HOST.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, BUILD_STRING_COLLECTION)
- }
-
- // Creation of host-based part classes.
  constructor(HOST, CUSTOM_STRING_COLLECTION) {
   const framework = this
 
@@ -369,7 +388,7 @@ class Framework {
   framework.domains = HOST.split(".").concat("dns-root")
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
-  framework.stockStringCollection = Framework.getStringCollection(HOST)
+  framework.stockStringCollection = HOST.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, _BUILD.stringCollection)
   framework.customStringCollection = CUSTOM_STRING_COLLECTION ?? {}
   framework.MethodData = class {
    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
@@ -614,23 +633,6 @@ class Framework {
    globe.CorePart = framework.PartConstructor
   }
  }
- readString(STRING_NAME, FALLBACK) {
-  const framework = this
-  if (framework.ownStringNameTable.has(STRING_NAME))
-   return framework.ownStringNameTable.get(STRING_NAME)[STRING_NAME]
-
-  if (!framework.isCore)
-   return framework.parent.readString(STRING_NAME, STRING_NAME)
-
-  return FALLBACK
- }
- readOwnString(STRING_NAME, FALLBACK) {
-  const framework = this
-  if (framework.ownStringNameTable.has(STRING_NAME))
-   return framework.ownStringNameTable.get(STRING_NAME)[STRING_NAME]
-
-  return FALLBACK
- }
  addConstants(FILE) {
   const framework = this
   framework.parent?.addConstants(FILE)
@@ -678,11 +680,17 @@ class Framework {
   if (METHOD_DATA.isView)
    collectOwnConstants("const-view.js")
  }
+ readOwnString(STRING_NAME, FALLBACK) {
+  const framework = this
+  if (framework.ownStringNameTable.has(STRING_NAME))
+   return framework.ownStringNameTable.get(STRING_NAME)[STRING_NAME]
+
+  return FALLBACK
+ }
 }
 
 Framework.initialize({
- BUILD_TAGS: [],
- BUILD_CHANGE: ["major", "minor", "patch"][2],
- BUILD_VERBOSITY: 10,
- BUILD_STRING_COLLECTION: {}
+ "stringCollection": {},
+ "change": "major",
+ "verbosity": 10
 })

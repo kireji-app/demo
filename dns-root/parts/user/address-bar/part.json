@@ -1,0 +1,15 @@
+{
+ "extends": "window.feature.user.parts",
+ "route-segment-to": [
+  "SEGMENT"
+ ],
+ "route-segment-from": [
+  "ROUTE_ID"
+ ],
+ "route-pathname-to": [
+  "PATHNAME"
+ ],
+ "route-pathname-from": [
+  "...ROUTE_IDS"
+ ]
+}

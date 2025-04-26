@@ -1,0 +1,1 @@
+user.vintageModeButton.setAttribute("data-state", "enabled")

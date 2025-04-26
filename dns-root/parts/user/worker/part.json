@@ -1,0 +1,6 @@
+{
+ "extends": "feature.user.parts",
+ "async-register": [],
+ "async-bootstrap": [],
+ "server-create-local": []
+}

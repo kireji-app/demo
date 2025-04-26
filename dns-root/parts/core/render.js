@@ -20,27 +20,6 @@
  // Any query object should be cast to a more useful object.
  const searchParams = new URLSearchParams(search)
  const requestHasParameters = searchParams.size > 0
- // Delegate any link following to a recursive call.
- if (extension === ".uri" && OPTIONS.links !== "no-follow") {
-
-  if (!(OPTIONS.links === "follow-all" || OPTIONS.links === "follow-once"))
-   throw part.host + " Render Error: invalid links property value: " + OPTIONS.links + ". " + serialize(OPTIONS)
-
-  const newOptions = { ...OPTIONS }
-  const newStringName = part.framework.readString(stringName)
-
-  if (!newStringName) {
-   warn(part.host + " Render 404: can't follow .uri link " + stringName + ". " + serialize(OPTIONS))
-   return OPTIONS.fallback
-  }
-
-  if (OPTIONS.links === "follow-once")
-   newOptions.links = "no-follow"
-
-  newOptions.stringName = newStringName + search
-
-  return render(newOptions)
- }
 
  // Acquire a raw result from the part instance or return the fallback value.
  // TODO: String Parameters require a function

@@ -1,0 +1,1 @@
+user.vintageModeButton.removeAttribute("data-state")

@@ -1,4 +1,1 @@
-return part.parent?.render({
- request: "path-instance",
- fallback: "no-root"
-}) + "/" + part.key
+return part.parent?.instancePath + "/" + part.key

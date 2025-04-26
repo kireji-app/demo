@@ -1,0 +1,6 @@
+{
+ "extends": "window.feature.user.parts",
+ "go": [
+  "EVENT"
+ ]
+}

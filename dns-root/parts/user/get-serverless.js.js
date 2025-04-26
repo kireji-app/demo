@@ -1,0 +1,6 @@
+const sourceFile = new Framework.SourceMappedFile("../", undefined, "serverless.js")
+const externalSource = sourceFile.addSource("framework.js", Framework.sourceCode)
+const internalSource = sourceFile.addSource(methodData.stringName, methodData.content)
+sourceFile.addSection(Framework.sourceCode, externalSource)
+sourceFile.addSection(`\nFramework.initialize(${serialize(_BUILD)})`, internalSource)
+return sourceFile.packAndMap()

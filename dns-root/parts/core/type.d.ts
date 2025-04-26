@@ -13,8 +13,10 @@ declare class CorePart extends Iterable<CorePart> {
  readonly framework: Framework
  /** The domain name used to identify the part's type. */
  readonly host: string
- /** The number of routes the part has, used heavily to compute routing across the desktop. */
+ /** The number of routes the part has, used heavily to compute routing across the user space. */
  readonly cardinality: bigint
+ /** The path to the part in its instance hierarchy. */
+ readonly instancePath: string
  /** The child name used to identify the part on its parent. */
  readonly key: string
  /** The part's index in it's parent. */
@@ -53,7 +55,7 @@ declare class CorePart extends Iterable<CorePart> {
  readonly deltaRouteID: bigint
  /** The parent part.
   * 
-  * *Note: There is no* `desktop.parent`. */
+  * *Note: There is no* `user.parent`. */
  readonly parent: CorePart
  /** Generate a named string or fetch it from the static cache.
   * 

@@ -1,4 +1,4 @@
-desktop.react = () => {
- // const href = desktop...
+user.react = () => {
+ // const href = user...
  // part.link.setAttribute("href", href)
 }
