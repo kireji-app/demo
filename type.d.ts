@@ -123,22 +123,22 @@ declare const ENVIRONMENT_INDEX: number
 declare const IS_PRODUCTION: boolean
 /** All of the inline information compiled from the git repo in node by the build process. */
 declare const _BUILD: {
+ /** A packed archive of the necessary type definitions. */
+ readonly dnsRoot: SourceDirectory
  /** One of three strings representing the severity of the API change. Used to automatically compute the correct semantic version at build time. */
  readonly change: "major" | "minor" | "patch"
+ /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
+ readonly verbosity: number
+ /** Whether or not this is a local build. */
+ readonly local: boolean,
+ /** The git branch for this build version. */
+ readonly branch: string
  /** The hash of the most recent git commit at build time. */
  readonly hash: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string,
- /** Whether or not this is a local build. */
- readonly local?: boolean,
  /** The git commit message for this build version. */
  readonly message: string,
- /** The git branch for this build version. */
- readonly branch: string
- /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
- readonly verbosity: number
- /** A packed archive of the git repository. */
- readonly stringCollection: SourceDirectory
 }
 /** A wrapper class that constructs a part of the given host type.
  * 

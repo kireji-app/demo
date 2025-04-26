@@ -217,11 +217,13 @@ class Framework {
      commitHash = $('git rev-parse HEAD').toString().trim()
      _BUILD.local = true
      $('git update-index --assume-unchanged api/serverless.js')
+     IS_PRODUCTION = false
     } else {
      branchName = process.env.VERCEL_GIT_COMMIT_REF
      commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
      commitTag = commitMessage.slice(0, commitMessage.indexOf("\n"))
      commitHash = process.env.VERCEL_GIT_COMMIT_SHA
+     _BUILD.local = false
      IS_PRODUCTION = branchName === "main"
     }
 
@@ -250,7 +252,7 @@ class Framework {
     _BUILD.version = semanticVersion.join(".")
     _BUILD.message = commitMessage
 
-    const readRecursive = (host = "", folderPath = "dns-root", stringCollection = _BUILD.stringCollection) => {
+    const readRecursive = (host = "", folderPath = "dns-root", stringCollection = _BUILD.dnsRoot) => {
      // TODO: Don't read in large files.
      if (host) {
       if (host.length > 253)
@@ -309,14 +311,14 @@ class Framework {
 
      $(`git add --intent-to-add .`)
 
-     const { stringCollection, hash } = JSON.parse(serverlessScript.slice(openIndex, closeIndex))
+     const { dnsRoot, hash } = JSON.parse(serverlessScript.slice(openIndex, closeIndex))
      for (const nameStatus of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
       if (!nameStatus) continue
       const [fileStatus, leftPath, rightPath] = nameStatus.split(/\s+/)
       const leftExtension = extname(leftPath)
       const leftPathSegments = leftPath.slice(9).split("/")
       const leftStringName = leftPathSegments.pop()
-      let leftRoot = stringCollection
+      let leftRoot = dnsRoot
       let rightRoot = null
       let rightStringName = null
       let rightExtension = null
@@ -356,7 +358,7 @@ class Framework {
         throw "Unsupported git diff status '" + fileStatus + "'."
       }
      }
-     Object.assign(_BUILD.stringCollection, stringCollection)
+     Object.assign(_BUILD.dnsRoot, dnsRoot)
     } catch (e) {
      log(0, e + " Building from scratch.")
      readRecursive()
@@ -410,7 +412,7 @@ class Framework {
   framework.domains = inputHost.split(".").concat("dns-root")
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
-  framework.stockStringCollection = inputHost.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, _BUILD.stringCollection)
+  framework.stockStringCollection = inputHost.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, _BUILD.dnsRoot)
   framework.customStringCollection = customStringCollection ?? {}
   framework.MethodData = class {
    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
@@ -710,7 +712,7 @@ class Framework {
 }
 
 Framework.initialize({
- "stringCollection": {},
+ "dnsRoot": {},
  "change": "patch",
  "verbosity": 10
 })
