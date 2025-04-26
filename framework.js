@@ -1,5 +1,5 @@
 class Framework {
- static initialize(_BUILD) {
+ static initialize(buildData) {
   Set_Static_Properties: {
    Framework.SourceMappedFile = class {
     lines = []
@@ -136,7 +136,7 @@ class Framework {
     ServiceWorkerGlobalScope: Worker,
     process: cloudProcess
    } = Object.assign(globalThis, {
-    _BUILD,
+    _BUILD: buildData,
     globe: globalThis,
     IS_PRODUCTION: false,
     Part: class {
@@ -292,7 +292,10 @@ class Framework {
     }
 
     openLog(0, `Building version ${_BUILD.version}${_BUILD.local ? " (local)" : ""} from branch "${_BUILD.branch}".`)
-    if (_BUILD.local && itemExists("api/serverless.js")) {
+    try {
+     if (!_BUILD.local || !itemExists("api/serverless.js"))
+      throw "No existing build detected."
+
      log(0, "Existing build detected. Performing partial build.")
      const serverlessScript = readFile("api/serverless.js", "utf-8")
      // This string is split so it catch here.
@@ -305,31 +308,47 @@ class Framework {
       throw "Missing global object marker in existing build script."
 
      $(`git add --intent-to-add .`)
+
      const { stringCollection, hash } = JSON.parse(serverlessScript.slice(openIndex, closeIndex))
-     for (const nameStatus of $(`git diff --name-status --untracked-files=all ${hash} -- dns-root/`).toString().trim().split("\n")) {
-      const [fileStatus, changedStringPath] = nameStatus.split(/\s+/)
-      if (changedStringPath.endsWith("/")) continue
-      const extension = extname(changedStringPath)
-      const path = changedStringPath.slice(9).split("/")
-      const stringName = path.pop()
-      let root = stringCollection
-      for (const pathPart of path)
-       root = root[pathPart] ??= {}
-      switch (fileStatus) {
+     for (const nameStatus of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
+      if (!nameStatus) continue
+      const [fileStatus, leftPath, rightPath] = nameStatus.split(/\s+/)
+      const leftExtension = extname(leftPath)
+      const leftPathSegments = leftPath.slice(9).split("/")
+      const leftStringName = leftPathSegments.pop()
+      let leftRoot = stringCollection
+      let rightRoot = null
+      let rightStringName = null
+      let rightExtension = null
+      for (const pathPart of leftPathSegments)
+       leftRoot = leftRoot[pathPart] ??= {}
+      if (rightPath) {
+       rightRoot = stringCollection
+       rightExtension = extname(rightPath)
+       const rightPathSegments = rightPath.slice(9).split("/")
+       rightStringName = rightPathSegments.pop()
+       for (const pathPart of rightPathSegments)
+        rightRoot = rightRoot[pathPart] ??= {}
+      }
+      switch (fileStatus[0]) {
        case "A":
-        root[stringName] = readFile(changedStringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
-        log(2, `\x1b[38;5;34m/\x1b[38;5;82m${stringName}\x1b[38;5;34m - added \x1b[0m`)
+        leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
+        log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftStringName}\x1b[38;5;34m - added \x1b[0m`)
         break;
        case "M":
-        root[stringName] = readFile(changedStringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
-        log(2, `\x1b[38;5;28m/\x1b[38;5;226m${stringName}\x1b[38;5;28m - modified \x1b[0m`)
+        leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
+        log(2, `\x1b[38;5;28m/\x1b[38;5;226m${leftStringName}\x1b[38;5;28m - modified \x1b[0m`)
         break;
        case "D":
-        delete root[stringName];
-        log(2, `\x1b[38;5;28m/\x1b[38;5;196m${stringName}\x1b[38;5;28m - deleted \x1b[0m`)
+        delete leftRoot[leftStringName];
+        log(2, `\x1b[38;5;28m/\x1b[38;5;196m${leftStringName}\x1b[38;5;28m - deleted \x1b[0m`)
         break;
        case "C": // Copied
        case "R": // Renamed
+        delete leftRoot[leftStringName]
+        rightRoot[rightStringName] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
+        log(2, `\x1b[38;5;28m/\x1b[38;5;129m${rightStringName}\x1b[38;5;28m -${nameStatus[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
+        break;
        case "T": // Type-changed
        case "U": // Unmerged
        case "X": // Unknown
@@ -338,7 +357,10 @@ class Framework {
       }
      }
      Object.assign(_BUILD.stringCollection, stringCollection)
-    } else readRecursive()
+    } catch (e) {
+     log(0, e + " Building from scratch.")
+     readRecursive()
+    }
     closeLog(0)
     /*
      // Future DNS resolution process...
@@ -366,30 +388,30 @@ class Framework {
 
   new Part("user.parts").distributeInitializePart()
  }
- constructor(HOST, CUSTOM_STRING_COLLECTION) {
+ constructor(inputHost, customStringCollection) {
   const framework = this
 
-  if (typeof HOST !== "string")
-   throw "host cannot be " + typeof HOST
+  if (typeof inputHost !== "string")
+   throw "host cannot be " + typeof inputHost
 
-  if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(HOST) && !/^localhost:\d+$/.test(HOST))
-   throw "malformed host " + HOST
+  if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(inputHost) && !/^localhost:\d+$/.test(inputHost))
+   throw "malformed host " + inputHost
 
-  if (!CUSTOM_STRING_COLLECTION) {
+  if (!customStringCollection) {
 
-   if (HOST in Framework.frameworks)
-    return Framework.frameworks[HOST]
+   if (inputHost in Framework.frameworks)
+    return Framework.frameworks[inputHost]
 
-   Framework.frameworks[HOST] = framework
+   Framework.frameworks[inputHost] = framework
   }
 
-  framework.host = HOST
-  framework.isCore = HOST === "core.parts"
-  framework.domains = HOST.split(".").concat("dns-root")
+  framework.host = inputHost
+  framework.isCore = inputHost === "core.parts"
+  framework.domains = inputHost.split(".").concat("dns-root")
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
-  framework.stockStringCollection = HOST.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, _BUILD.stringCollection)
-  framework.customStringCollection = CUSTOM_STRING_COLLECTION ?? {}
+  framework.stockStringCollection = inputHost.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, _BUILD.stringCollection)
+  framework.customStringCollection = customStringCollection ?? {}
   framework.MethodData = class {
    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
    static fromMethodID(METHOD_ID) {
@@ -441,7 +463,7 @@ class Framework {
         including its dependencies as the parent MethodData class instance traverses
         the prototype chain of the type it is constructing to find both generic method
         constants and specific subtype constants.
-
+ 
        It adds the constant - after adding any previous constants that it depends
        on - to the file as soon as its constructed, but only if the given method
        body includes the constant.
@@ -549,8 +571,6 @@ class Framework {
        } else
         framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, "  ")
       })
-      // if (!hasSuper)
-      //  warn(`${HOST} => ${METHOD_ID}()`, "doesn't call super.")
      }
     }
 
@@ -599,13 +619,13 @@ class Framework {
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
   framework.addConstants(framework.sourceFile)
   // Convert kebab-case subdomain to PascalCase constructor name.
-  framework.niceName = HOST.startsWith("localhost:") ? "LocalHostPart" : HOST.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
+  framework.niceName = inputHost.startsWith("localhost:") ? "LocalHostPart" : inputHost.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
   framework.sourceFile.addSection(`@class-open@
  return class ${framework.niceName}${framework.isCore ? "" : " extends BasePart"} {
- // ${HOST}${framework.isCore ? "" : ` extends ${framework.parent.host}`}
+ // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}
 
  static framework = framework;
- static host = HOST;`, framework.buildSource)
+ static host = inputHost;`, framework.buildSource)
 
   for (const methodID of framework.ownGetAndSetMethodIDs)
    framework.MethodData.fromMethodID(methodID)
@@ -633,64 +653,64 @@ class Framework {
    globe.CorePart = framework.PartConstructor
   }
  }
- addConstants(FILE) {
+ addConstants(targetFile) {
   const framework = this
-  framework.parent?.addConstants(FILE)
+  framework.parent?.addConstants(targetFile)
   const stringName = "const-class.js"
-  const pathPrefix = FILE === framework.sourceFile ? "" : FILE.pathToRepo + "/" + framework.pathFromRepo + "/"
+  const pathPrefix = targetFile === framework.sourceFile ? "" : targetFile.pathToRepo + "/" + framework.pathFromRepo + "/"
   const path = pathPrefix + stringName
   const body = framework.readOwnString(stringName)
 
   if (body)
-   FILE.addSection(body, FILE.addSource(path, body), 0, 0, " ")
+   targetFile.addSection(body, targetFile.addSource(path, body), 0, 0, " ")
  }
- collectConstants(FRAMEWORK, METHOD_DATA) {
+ collectConstants(targetFramework, targetMethodData) {
   const framework = this
-  const isForOwnScript = FRAMEWORK === framework
+  const isForOwnScript = targetFramework === framework
 
   if (isForOwnScript) {
-   if (METHOD_DATA.content === "") {
-    METHOD_DATA.content = "// Do nothing."
-    METHOD_DATA.lines = [METHOD_DATA.content]
+   if (targetMethodData.content === "") {
+    targetMethodData.content = "// Do nothing."
+    targetMethodData.lines = [targetMethodData.content]
     return
    }
   }
 
-  framework.parent?.collectConstants(FRAMEWORK, METHOD_DATA)
+  framework.parent?.collectConstants(targetFramework, targetMethodData)
 
   function collectOwnConstants(STRING_NAME) {
 
    if (!framework.ownStringNameTable.has(STRING_NAME))
     return
 
-   const pathPrefix = isForOwnScript ? "" : FRAMEWORK.pathToRepo + "/" + framework.pathFromRepo + "/"
+   const pathPrefix = isForOwnScript ? "" : targetFramework.pathToRepo + "/" + framework.pathFromRepo + "/"
    const path = pathPrefix + STRING_NAME
    const body = framework.readOwnString(STRING_NAME)
    const lines = body.split("\n")
 
    for (let ln = 0; ln < lines.length; ln++)
-    new METHOD_DATA.Constant(path, lines[ln], ln)
+    new targetMethodData.Constant(path, lines[ln], ln)
   }
 
   collectOwnConstants("const-method.js")
 
-  if (METHOD_DATA.isGetOrSet)
+  if (targetMethodData.isGetOrSet)
    collectOwnConstants("const-get-or-set.js")
 
-  if (METHOD_DATA.isView)
+  if (targetMethodData.isView)
    collectOwnConstants("const-view.js")
  }
- readOwnString(STRING_NAME, FALLBACK) {
+ readOwnString(stringName, fallback) {
   const framework = this
-  if (framework.ownStringNameTable.has(STRING_NAME))
-   return framework.ownStringNameTable.get(STRING_NAME)[STRING_NAME]
+  if (framework.ownStringNameTable.has(stringName))
+   return framework.ownStringNameTable.get(stringName)[stringName]
 
-  return FALLBACK
+  return fallback
  }
 }
 
 Framework.initialize({
  "stringCollection": {},
- "change": "major",
+ "change": "patch",
  "verbosity": 10
 })
