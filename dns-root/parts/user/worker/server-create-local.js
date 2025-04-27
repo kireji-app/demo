@@ -25,7 +25,7 @@ worker.controller = {
 
   theme.setArm(host)
   delete Framework.responses[location.origin + "/"]
-  delete Framework.responses[location.origin + "/serverless.js!"]
+  delete Framework.responses[location.origin + "/service.js!"]
   const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)
   channel.close()
@@ -33,7 +33,7 @@ worker.controller = {
 }
 
 // TODO: Large files won't be inlined soon. Fetch or stream them into the cache first, them provide them.
-globe.onfetch = e => e.respondWith(serverless.fetchSync(e.request.url))
+globe.onfetch = e => e.respondWith(service.fetchSync(e.request.url))
 globe.onactivate = e => globe.clients.claim()
 globe.onmessage = ({ data: { code, payload } }) => worker.controller[code](payload)
 

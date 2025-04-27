@@ -5,5 +5,4 @@ declare interface WorkerPart extends UserFeature {
  readonly incomingServiceWorker?: ServiceWorker
  readonly controller: ServiceWorker
  readonly channel: BroadcastChannel
- readonly manifestLink: HTMLLinkElement
 }

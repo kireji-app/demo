@@ -3,8 +3,6 @@ if (environment === "worker") {
  return
 }
 
-await worker.registerAsync()
-
 // if (!production)
 //  addEventListener("focus", () => {
 //   log(0, 'Checking for updates.')

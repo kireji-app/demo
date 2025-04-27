@@ -1,3 +1,3 @@
 module.exports = {
- GET: request => serverless.fetchSync(request.url)
+ GET: ({ url }) => service.fetchSync(url)
 }

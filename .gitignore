@@ -13,7 +13,7 @@
 .env*.local
 .vercel/
 
-## The build process outputs `api.serverless.js` but Vercel looks for serverless
+## The build process outputs `api/service.js` but Vercel looks for serverless
 ## functions before it runs the build process. An empty placeholder was pushed
 ## to the remote repository and the file is assumed unchanged during the local
-## build. Undo using `git update-index --no-assume-unchanged api/serverless.js`.
+## build. Undo using `git update-index --no-assume-unchanged api/service.js`.

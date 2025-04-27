@@ -1,3 +1,3 @@
-globe.serverless = feature
-serverless.environments = ["server"]
+globe.service = feature
+service.environments = ["server"]
 super()

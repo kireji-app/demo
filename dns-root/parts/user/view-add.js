@@ -1,15 +1,14 @@
+// This base HTML is always server-rendered.
+
 if (!hydration.supported)
  throw "Unrecoverable: call to view function without the necessary feature support."
 
 // Debug.
 hydration.simulateSlowPerformance(10000)
 
-worker.promise.then(() => {
- worker.manifestLink = document.querySelector('link[rel="manifest"]')
- worker.manifestLink.href ??= "/manifest.json!"
-})
-
 document.title = user.host
+user.manifestLink = document.querySelector('link[rel="manifest"]')
+user.manifestLink.href ??= "/manifest.json!"
 user.wallpaper = document.querySelector("wallpaper-")
 user.taskbar = document.querySelector("task-bar")
 user.menuButton = document.querySelector("menu-button")

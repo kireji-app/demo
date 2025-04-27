@@ -222,12 +222,12 @@ class Framework {
     if (production)
      throw "The production environment should always build from scratch."
 
-    if (!itemExists("api/serverless.js"))
+    if (!itemExists("api/service.js"))
      throw "No existing build file."
 
     log(0, "Existing build detected. Attempting partial build.")
 
-    const existingBuild = readFile("api/serverless.js", "utf-8")
+    const existingBuild = readFile("api/service.js", "utf-8")
     const openMark = "Framework.initialize" + "("
     const openIndex = existingBuild.indexOf(openMark) + openMark.length
 
@@ -296,7 +296,7 @@ class Framework {
    } catch (reason) {
     log(0, "Building from scratch.", { reason })
     log(1, "Initializing local git configuration (idempotent).")
-    $('git update-index --assume-unchanged api/serverless.js')
+    $('git update-index --assume-unchanged api/service.js')
     log(1, "Packing shallow git repository into script.")
     build.dnsRoot = {}
     function readRecursive(host = "", folderPath = "dns-root", stringCollection = build.dnsRoot) {

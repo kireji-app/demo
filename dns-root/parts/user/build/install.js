@@ -7,5 +7,5 @@ const {
 if (!itemExists("api"))
  makeFolder("api")
 
-writeFile("api/serverless.js", user["serverless.js"])
+writeFile("api/service.js", user["service.js"])
 writeFile("README.md", build.readme)

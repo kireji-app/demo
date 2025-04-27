@@ -4,35 +4,32 @@ if (environment === "window")
 if (REQUEST_URL in Framework.responses)
  return Framework.responses[REQUEST_URL]
 
-const route = serverless.route = new Route(REQUEST_URL)
+service.route = new Route(REQUEST_URL)
 
-if (!route.routeIDs.length) {
- // Use the default route.
- route.routeIDs = [0n]
+if (!service.route.routeIDs.length)
+ service.route.routeIDs = [0n]
+
+if (!(service.route.host in theme)) {
+ service.route.port &&= ''
+ service.route.host = "www.orenjinari.com"
 }
 
-if (!(route.host in theme)) {
- // Handle the case for an unknown theme.
- route.port &&= ''
- route.host = "www.orenjinari.com"
-}
+if (theme.arm?.key !== service.route.host)
+ theme.setArm(service.route.host)
 
-if (theme.arm?.key !== route.host)
- theme.setArm(route.host)
-
-const [desktopRouteID, ...taskRouteIDs] = route.routeIDs
+const [desktopRouteID, ...taskRouteIDs] = service.route.routeIDs
 
 if (desktopRouteID !== desktop.routeID) {
  if (desktopRouteID >= desktop.cardinality) {
-  route.routeIDs = [0n, ...route.routeIDs.slice(1)]
+  service.route.routeIDs = [0n, ...service.route.routeIDs.slice(1)]
   warn('Out-of-range task replaced. Add a new task with error message containing ' + desktopRouteID + ". For all other tasks, replace the existing task.")
  }
- desktop.setRoute(route.routeIDs[0])
+ desktop.setRoute(service.route.routeIDs[0])
 }
 
-Framework.responses[route.href] = (theme.arm.framework.ownStringNameTable.has(route.stringName) ? theme.arm : user).render({
- request: route.stringName + route.search,
+Framework.responses[service.route.href] = (theme.arm.framework.ownStringNameTable.has(service.route.stringName) ? theme.arm : user).render({
+ request: service.route.stringName + service.route.search,
  format: "response"
 })
 
-return Framework.responses[route.href].clone()
+return Framework.responses[service.route.href].clone()

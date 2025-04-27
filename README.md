@@ -15,7 +15,7 @@ The URI can then be shared, which in turn shares exactly what the user sees in t
 The project is currently in alpha. See below for [live demos](#live-demos).
 
 ## Roadmap
-[![version](https://img.shields.io/badge/version-0.115.5-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.6-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
@@ -51,13 +51,13 @@ The project is still in alpha. It is not ready for large scale usage. Please do 
 These methods are subject to change as I continue research and development.
 
 ### Build Process
-This framework creates a static web application by packing source files into a single source-mapped script, `./api/serverless.js`, and deploying that script as both a client service worker and cloud serverless function.
+This framework creates a static web application by packing source files into a single source-mapped script, `./api/service.js`, and deploying that script as both a client service worker and cloud serverless function.
 
 On first visit to a given URI, the request reaches a serverless function for that domain name which uses the incoming request to pre-render an HTML file with inlined CSS. This is like a still image of the requested application in the requested state. This ensures:
 1. That the client will always see something besides a blank page on first visit, while the rest of the application data downloads in the background.
 2. Search engine crawlers like Googlebot will see fully rendered pages for any given link.
 
-An inline script registers `serverless.js` as a service worker while the window continues parsing the HTML. No other assets (including PWA assets like `manifest.json`, icons or screenshots) are fetched until after the client window is controlled by a service worker, ensuring that all of these assets are client-rendered, reducing the burden on the serverless function.
+An inline script registers `service.js` as a service worker while the window continues parsing the HTML. No other assets (including PWA assets like `manifest.json`, icons or screenshots) are fetched until after the client window is controlled by a service worker, ensuring that all of these assets are client-rendered, reducing the burden on the serverless function.
 
 ### Parts and State Encoding
 A bijection $`\textcolor{#88AAEE}{\text{pathname} \xleftrightarrow{} \text{object state}}`$ is computed. The method uses an alphabet of $`\textcolor{#88AAEE}{b = 64}`$ characters to encode/decode integers as an array of variable-length pathname segments (each segment up to $`\textcolor{#88AAEE}{250}`$ characters long). Each path segment can represent $`\textcolor{#88AAEE}{k_{\text{segment}} = (64^{251}-64)/63 ≈ 3.56 * 10^{451} ≈ 2^{1500}}`$ unique values (about $`\textcolor{#88AAEE}{1500}`$ bits of storage space). The computation is similar to a numeral [base conversion](https://en.wikipedia.org/wiki/Positional_notation#Base_conversion) with some added complexity which takes advantage of the storage potential of a variable-length string. 

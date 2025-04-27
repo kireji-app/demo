@@ -68,6 +68,8 @@ declare class UserPart extends MixPart {
  readonly colorModeStyleSheet: CSSStyleSheet;
  /** The toggle button for vintage mode. */
  readonly vintageModeButton: HTMLButtonElement;
+ /** The link element for the web app manifest. */
+ readonly manifestLink: HTMLLinkElement
  /** Initializes the entire part hierarchy which handles mapping URIs to app state.
   * 
   * Sets all of the client features. Those features will only initialize if we are in the window environment. */

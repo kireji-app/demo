@@ -5,7 +5,7 @@ globalThis.worker ??= {}
 
 worker.startupRegistration = worker.registration = await nav.serviceWorker.getRegistration()
 
-worker.registration ??= await nav.serviceWorker.register("/serverless.js")
+worker.registration ??= await nav.serviceWorker.register("/service.js")
 
 if (!worker.registration.active) {
  await new Promise(resolve => {
@@ -29,5 +29,5 @@ worker.channel.onmessage = nav.serviceWorker.oncontrollerchange = () => location
 
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
-newScript.setAttribute("src", "/serverless.js!")
+newScript.setAttribute("src", "/service.js!")
 oldScript.replaceWith(newScript)

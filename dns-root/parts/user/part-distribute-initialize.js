@@ -8,18 +8,18 @@ user.time = now
 user.meanFrameTime = 1000
 
 super({
- addressBar: null,
- theme: null,
  gpu: null,
  agent: null,
  build: null,
  share: null,
+ theme: null,
  worker: null,
  desktop: "desktop.parts",
  hotKeys: null,
+ service: null,
  hydration: null,
+ addressBar: null,
  fullscreen: null,
- serverless: null,
 })
 
 closeLog(1)

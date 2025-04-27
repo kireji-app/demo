@@ -4,7 +4,7 @@ if (environment === "build")
  return null
 
 if (environment === "server" || environment === "worker")
- return serverless.requestedHost
+ return service.requestedHost
 
 if (environment === "window")
  return location.host

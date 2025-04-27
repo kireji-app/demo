@@ -9,7 +9,7 @@ return `wallpaper- {
   radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 20.255vw 20.968vw at 80.029vw 6.956vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 14.194vw 20.968vw at 94.327vw 5.053vw, white 99.5%, transparent 100%),
-  /* url("https://home.orenjinari.com/mockup.png!") 0 0/100% auto, */
+  /* url(${part.render({ request: "mockup.png", format: "datauri" })}) 0 0/100% auto, */
   #F8D2AC;
  display: flex;
  flex-flow: column;

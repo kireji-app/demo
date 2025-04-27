@@ -24,13 +24,7 @@
  // TODO: String Parameters require a function
  //  with the 'render-*.js' pattern to accept PARAMS.
 
- let body = part[stringName]
-
- if (environment === "server" && base64) {
-  const placeholder = part["blank" + extension] ?? ""
-  if (placeholder.length < body.length)
-   body = placeholder
- }
+ let body = part[base64 && environment === "server" ? "blank" + extension : stringName]
 
  if (search)
   warn("Render ignored params: " + OPTIONS.request)
