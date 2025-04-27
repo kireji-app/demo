@@ -7,6 +7,7 @@ class Framework {
   this.sourceCode = this.toString()
   this.sourceLines = this.sourceCode.split("\n")
   this.sourcePositionMarks = {}
+  this.readmeVersionPattern = /version-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/
   this.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
   this.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
   for (let ln = 0; ln < this.sourceLines.length; ln++) {
@@ -181,41 +182,42 @@ class Framework {
     { extname } = require('path'),
     { execSync: $ } = require('child_process')
 
+   build.readme = readFile("README.md", "utf-8")
+   const semver = build.semanticVersion = build.readme.match(this.readmeVersionPattern).groups
+
    if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
     build.branch = $('git branch --show-current').toString().trim()
     build.message = $('git log -1').toString()
-    build.tagline = $('git log -1 --pretty=%s').toString().trim()
     build.hash = $('git rev-parse HEAD').toString().trim()
     build.local = true
     globalThis.production = false
    } else {
     build.branch = process.env.VERCEL_GIT_COMMIT_REF
     build.message = process.env.VERCEL_GIT_COMMIT_MESSAGE
-    build.tagline = build.message.slice(0, build.message.indexOf("\n"))
     build.hash = process.env.VERCEL_GIT_COMMIT_SHA
     build.local = false
     globalThis.production = build.branch === "main"
    }
    openLog(0, "Starting build...")
-   build.semanticVersion = build.tagline.split(".").map(x => parseInt(x))
+   const version = `version-${semver.major}.${semver.minor}.${semver.patch}`
+   build.readme = build.readme.replace(this.readmeVersionPattern, version)
    if (build.local) {
-    if (build.semanticVersion[0] === 0) {
+    if (semver[0] === 0) {
      if (build.change === "major") {
-      build.semanticVersion[1]++
-      build.semanticVersion[2] = 0
-     } else build.semanticVersion[2]++
+      semver[1]++
+      semver[2] = 0
+     } else semver[2]++
     } else {
      if (build.change === "major") {
-      build.semanticVersion[0]++
-      build.semanticVersion[1] = build.semanticVersion[2] = 0
+      semver[0]++
+      semver[1] = semver[2] = 0
      } else if (build.change === "minor") {
-      build.semanticVersion[1]++
-      build.semanticVersion[2] = 0
-     } else build.semanticVersion[2]++
+      semver[1]++
+      semver[2] = 0
+     } else semver[2]++
     }
    }
-   log(0, `Version ${build.semanticVersion.join(".")}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
-
+   log(0, `${version}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
 
    try {
     // Try to use git diff to patch the existing build.
@@ -236,9 +238,10 @@ class Framework {
      throw "The existing build file wasn't populated."
 
     const closeMark = ")"
-    const closeIndex = 0 - closeMark.length
+    const closeIndex = existingBuild.lastIndexOf(closeMark)
     const { dnsRoot, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
 
+    log(0, "Staging the intent to add all untracked files.")
     $(`git add --intent-to-add .`)
 
     for (const diffResult of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
@@ -690,5 +693,5 @@ class Framework {
 
 Framework.initialize({
  "change": "patch",
- "verbosity": 1
+ "verbosity": 2
 })

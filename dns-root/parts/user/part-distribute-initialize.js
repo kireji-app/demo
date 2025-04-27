@@ -1,6 +1,6 @@
-openLog(1, "Initializing user configuration space.")
-
 globe.user = part
+
+openLog(1, `${user.instancePath}/ initializing.`)
 
 user.key = "user"
 user.fps = 1
@@ -22,5 +22,5 @@ super({
  serverless: null,
 })
 
-log(1, "User configuration space initialized.")
 closeLog(1)
+log(1, `${user.instancePath}/ ready.`)
