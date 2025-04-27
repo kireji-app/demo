@@ -169,9 +169,7 @@ class Framework {
   globalThis.globe = globalThis
   globalThis.build = buildData
 
-  // Pack the shallow clone of the repository.
   if (environment === "build") {
-
    const
     {
      statSync: getItemStats,
@@ -182,41 +180,40 @@ class Framework {
     { extname } = require('path'),
     { execSync: $ } = require('child_process')
 
-   build.readme = readFile("README.md", "utf-8")
-   const semver = build.semanticVersion = build.readme.match(this.readmeVersionPattern).groups
+   build.local = !process.env.VERCEL || !!process.env.__VERCEL_DEV_RUNNING
 
-   if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
+   if (build.local) {
     build.branch = $('git branch --show-current').toString().trim()
-    build.message = $('git log -1').toString()
     build.hash = $('git rev-parse HEAD').toString().trim()
-    build.local = true
+    // build.message = $('git log -1').toString()
     globalThis.production = false
    } else {
     build.branch = process.env.VERCEL_GIT_COMMIT_REF
-    build.message = process.env.VERCEL_GIT_COMMIT_MESSAGE
     build.hash = process.env.VERCEL_GIT_COMMIT_SHA
-    build.local = false
+    // build.message = process.env.VERCEL_GIT_COMMIT_MESSAGE
     globalThis.production = build.branch === "main"
    }
    openLog(0, "Starting build...")
-   const version = `version-${semver.major}.${semver.minor}.${semver.patch}`
-   build.readme = build.readme.replace(this.readmeVersionPattern, version)
+
+   build.readme = readFile("README.md", "utf-8")
+   const semver = build.semanticVersion = build.readme.match(this.readmeVersionPattern).groups
    if (build.local) {
-    if (semver[0] === 0) {
-     if (build.change === "major") {
-      semver[1]++
-      semver[2] = 0
-     } else semver[2]++
+    if (semver.major && build.change === "major") {
+     semver.major++
+     semver.minor = 0
+     semver.patch = 0
+    } else if (build.change === "minor" || !semver.major && build.change === "major") {
+     semver.major = parseInt(semver.major)
+     semver.minor++
+     semver.patch = 0
     } else {
-     if (build.change === "major") {
-      semver[0]++
-      semver[1] = semver[2] = 0
-     } else if (build.change === "minor") {
-      semver[1]++
-      semver[2] = 0
-     } else semver[2]++
+     semver.major = parseInt(semver.major)
+     semver.minor = parseInt(semver.minor)
+     semver.patch++
     }
    }
+   const version = `version-${semver.major}.${semver.minor}.${semver.patch}`
+   build.readme = build.readme.replace(this.readmeVersionPattern, version)
    log(0, `${version}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
 
    try {
@@ -269,8 +266,9 @@ class Framework {
       for (const pathPart of rightPathSegments)
        rightRoot = rightRoot[pathPart] ??= {}
      }
-
-     switch (fileStatus[0]) {
+     if (rightPath && rightExtension === ".ts" || leftExtension === ".ts") {
+      log(2, `\x1b[38;5;27m/\x1b[38;5;239m${stringName} ignored\x1b[0m`)
+     } else switch (fileStatus[0]) {
       case "A":
        leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
        log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftStringName}\x1b[38;5;34m - added \x1b[0m`)
@@ -329,13 +327,15 @@ class Framework {
      }
 
      for (const [stringName, stringPath] of stringNames) {
+      const extension = extname(stringPath)
       try {
-       if (!$(`git check-ignore -v ${stringPath}`).includes('.gitignore:')) throw 1
+
+       if (extension !== ".ts" && !$(`git check-ignore -v ${stringPath}`).includes('.gitignore:'))
+        throw "Don't ignore."
+
        log(2, `\x1b[38;5;27m/\x1b[38;5;239m${stringName} ignored\x1b[0m`)
       } catch {
-       const
-        extension = extname(stringPath),
-        content = readFile(stringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
+       const content = readFile(stringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
        log(2, `\x1b[38;5;28m/\x1b[38;5;76m${stringName}\x1b[38;5;28m"\x1b[0m`)
        stringCollection[stringName] = content
       }
