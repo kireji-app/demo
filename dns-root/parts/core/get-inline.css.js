@@ -1,4 +1,4 @@
-*,
+return `*,
 *::before,
 *::after {
  box-sizing: border-box;
@@ -38,6 +38,10 @@ img {
  fill: var(--fg-fade1);
 }
 
+img[src="${part.render({ request: "blank.png", format: "datauri" })}"],
+img[src="${part.render({ request: "blank.gif", format: "datauri" })}"] {
+ background: magenta;
+}
 
 wallpaper- {
  position: fixed;
@@ -219,4 +223,4 @@ flex-spacer {
   width: 100vw;
   box-shadow: var(--task-bar-accent);
  }
-}
+}`

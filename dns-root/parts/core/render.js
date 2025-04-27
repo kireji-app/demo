@@ -4,7 +4,6 @@
   OPTIONS = { request: OPTIONS }
 
  // Set some defaults.
- OPTIONS.links ??= "follow-all"
  OPTIONS.format ??= "raw"
  OPTIONS.fallback ??= null
 
@@ -25,10 +24,19 @@
  // TODO: String Parameters require a function
  //  with the 'render-*.js' pattern to accept PARAMS.
 
- let body = part[extension === ".png" && ENVIRONMENT !== "worker" ? "blank.png" : stringName]
+ let body = part[stringName]
+
+ if (environment === "server" && base64) {
+  const placeholder = part["blank" + extension] ?? ""
+  if (placeholder.length < body.length)
+   body = placeholder
+ }
 
  if (search)
   warn("Render ignored params: " + OPTIONS.request)
+
+ if (body === undefined || body === "undefined")
+  warn("undefined body", part.host, stringName)
 
  // Process the raw result into the requested format.
  if (OPTIONS.format === "raw")
@@ -38,15 +46,12 @@
   if (!base64)
    body = btoaUnicode(body)
 
-  if (body === undefined || body === "undefined")
-   debug(body, part.host, stringName)
-
   return `data:${type};base64,${body}`
  }
 
  if (OPTIONS.format === "response") {
   if (base64) {
-   const B = atob(body)
+   const B = atob(body ?? "")
    const k = B.length
    const A = new ArrayBuffer(k)
    const I = new Uint8Array(A)

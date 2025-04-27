@@ -3,7 +3,9 @@ worker.controller = {
   globe.clients.claim()
  },
  impart(host) {
-  theme.setArm(host)
+  if (theme.arm?.key !== host)
+   theme.setArm(host)
+
   globe.skipWaiting()
  },
  resign() {
@@ -18,6 +20,9 @@ worker.controller = {
   })
  },
  setTheme: host => {
+  if (theme.arm?.key === host)
+   return
+
   theme.setArm(host)
   delete Framework.responses[location.origin + "/"]
   delete Framework.responses[location.origin + "/serverless.js!"]
@@ -36,20 +41,22 @@ var interval
 registration.onupdatefound = () => {
  if (serviceWorker !== registration.installing) {
   if (registration.installing) {
-   log(0, 'I am the old service worker, and I see the installing one. I\'ll resign.')
+   log(1, 'Previous service worker is now resigning.')
    worker.controller.resign()
   } else {
-   log(0, 'I am the old service worker, but I don\'t see the installing one. I\'ll ... wait?')
+   // Not sure if this is reachable.
+   warn('Previous service worker, but I don\'t see the installing one. I\'ll ... wait?')
 
    if (interval)
     throw 'double interval set'
 
    interval = setInterval(() => {
-    debug('polling')
-    if (registration.installing) worker.controller.resign()
+    warn('polling')
+    if (registration.installing)
+     worker.controller.resign()
    }, 25)
   }
  } else {
-  log(0, 'I am the installing service worker')
+  log(1, 'New service worker is now installing.')
  }
 }

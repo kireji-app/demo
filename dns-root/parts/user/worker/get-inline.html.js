@@ -1,1 +1,1 @@
-return `<script${ENVIRONMENT === "worker" ? ` src="/serverless.js!">` : `>({${worker.bootstrapAsync}}.bootstrapAsync())`}</script>`
+return `<script${environment === "worker" ? ` src="/serverless.js!">` : `>({${worker.bootstrapAsync}}.bootstrapAsync())`}</script>`

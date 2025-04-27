@@ -68,11 +68,6 @@ declare class CorePart extends Iterable<CorePart> {
    * "icon.png?size=64"
    * ``` */
   request: string,
-  /** Whether or not to treat `*.uri` files as literal files ("no-follow"), or shortcut links ("follow-once" and "follow-all").
-   * 
-   * The default is "follow-all".
-   */
-  links?: "no-follow" | "follow-once" | "follow-all"
   /** How to package the rendered value. All values are converted to string before becoming a datauri or response.
    * 
    * The default is "value".

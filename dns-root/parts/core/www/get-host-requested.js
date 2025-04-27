@@ -1,10 +1,10 @@
 const boilerplate = `Theme Select | `
 
-if (ENVIRONMENT === "build")
+if (environment === "build")
  return null
 
-if (ENVIRONMENT === "server" || ENVIRONMENT === "worker")
+if (environment === "server" || environment === "worker")
  return serverless.requestedHost
 
-if (ENVIRONMENT === "window")
+if (environment === "window")
  return location.host

@@ -1,1 +1,1 @@
-return "./" + user.key
+return "user:"

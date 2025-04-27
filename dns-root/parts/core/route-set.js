@@ -4,7 +4,7 @@ if (DELTA)
 part.distributeRoute(ROUTE_ID)
 part.parent?.collectRoute([part])
 
-if (ENVIRONMENT === "window") {
+if (environment === "window") {
  part.distributeRemoveView()
  part.parent?.collectRemoveView()
  part.parent?.collectAddView()

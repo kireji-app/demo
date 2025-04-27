@@ -1,4 +1,4 @@
-if (IS_PRODUCTION) {
+if (production) {
  location = HOST + PATHNAME
  return
 }

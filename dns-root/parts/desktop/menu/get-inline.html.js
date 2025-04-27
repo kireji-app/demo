@@ -18,9 +18,9 @@ return `
    <span id=version tabIndex=6>
     <span class="label">Version</span>
     <span id="tags">${[
-  _BUILD.version,
-  ...(_BUILD.branch === "main" ? [] : [_BUILD.branch]),
-  ...(_BUILD.local ? ["local"] : [])
+  build.semanticVersion.join("."),
+  ...(build.branch === "main" ? [] : [build.branch]),
+  ...(build.local ? ["local"] : [])
  ].map(tag => `<span>${tag}</span>`).join("")}</span>
    </span>
    <span id="color-mode" tabIndex=7 data-state="${colorMode.arm.stateData}" onclick="colorMode.set(1n, true)">

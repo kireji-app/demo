@@ -70,7 +70,7 @@ globe.Route ??= class Route {
   for (const character of segment) {
    const index = Route.pathSegmentRadix.indexOf(character)
    if (index === -1 || index >= 64) {
-    warn("ignoring unused path (paths cannot include '" + character + "').")
+    warn("Route Error: ignoring unused segment (segments cannot include '" + character + "'). (" + segment + ")")
     binaryValue = "0b0"
     binaryOffset = "0b0"
     break;

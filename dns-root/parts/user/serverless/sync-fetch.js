@@ -1,4 +1,4 @@
-if (ENVIRONMENT === "window")
+if (environment === "window")
  throw "Cannot call fetchSync from client window."
 
 if (REQUEST_URL in Framework.responses)
@@ -6,21 +6,22 @@ if (REQUEST_URL in Framework.responses)
 
 const route = serverless.route = new Route(REQUEST_URL)
 
+if (!route.routeIDs.length) {
+ // Use the default route.
+ route.routeIDs = [0n]
+}
+
 if (!(route.host in theme)) {
  // Handle the case for an unknown theme.
  route.port &&= ''
  route.host = "www.orenjinari.com"
 }
 
-if (!route.routeIDs.length) {
- // Use the default route.
- route.routeIDs = [0n]
-}
-
 if (theme.arm?.key !== route.host)
  theme.setArm(route.host)
 
 const [desktopRouteID, ...taskRouteIDs] = route.routeIDs
+
 if (desktopRouteID !== desktop.routeID) {
  if (desktopRouteID >= desktop.cardinality) {
   route.routeIDs = [0n, ...route.routeIDs.slice(1)]
@@ -29,7 +30,7 @@ if (desktopRouteID !== desktop.routeID) {
  desktop.setRoute(route.routeIDs[0])
 }
 
-Framework.responses[route.href] = user.render({
+Framework.responses[route.href] = (theme.arm.framework.ownStringNameTable.has(route.stringName) ? theme.arm : user).render({
  request: route.stringName + route.search,
  format: "response"
 })

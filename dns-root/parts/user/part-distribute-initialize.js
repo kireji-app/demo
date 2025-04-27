@@ -1,4 +1,4 @@
-openLog(0, "Initializing user configuration space.")
+openLog(1, "Initializing user configuration space.")
 
 globe.user = part
 
@@ -22,5 +22,5 @@ super({
  serverless: null,
 })
 
-closeLog(0)
-log(0, "User configuration space initialized.")
+log(1, "User configuration space initialized.")
+closeLog(1)

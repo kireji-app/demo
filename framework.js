@@ -1,259 +1,305 @@
 class Framework {
  static initialize(buildData) {
-  Set_Static_Properties: {
-   Framework.SourceMappedFile = class {
-    lines = []
-    sources = []
-    scripts = []
-    mappings = []
-    constructor(NAME, PATH_TO_REPO, PATH_FROM_REPO) {
-     const sourceFile = this
-     sourceFile.name = NAME
-     sourceFile.pathToRepo = PATH_TO_REPO
-     sourceFile.pathFromRepo = PATH_FROM_REPO
+
+  // Initialize own static properties
+  this.responses = {}
+  this.frameworks = []
+  this.sourceCode = this.toString()
+  this.sourceLines = this.sourceCode.split("\n")
+  this.sourcePositionMarks = {}
+  this.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
+  this.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
+  for (let ln = 0; ln < this.sourceLines.length; ln++) {
+   for (const { 0: mark, index: col } of this.sourceLines[ln].matchAll(this.sourcePositionMarkPatternRegister)) {
+    if (mark in this.sourcePositionMarks)
+     throw `Duplicate source position mark ${mark} in framework.js.`
+    this.sourcePositionMarks[mark] = { ln, col }
+   }
+  }
+
+  // Initialize global properties.
+  const { constructor: Globe, Window, ServiceWorkerGlobalScope: Worker, process: Cloud } = globalThis
+  globalThis.environment = Globe === Window ? "window" : (Globe === Worker ? "worker" : (Cloud?.argv[1]?.split("/").pop() === "framework.js" ? "build" : "server"))
+  function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
+   // Logging functions cannot be used until globalThis.production is defined.
+   if (!production && VERBOSITY <= build.verbosity)
+    console[METHOD](environment + ":", ...DATA)
+  }
+  globalThis.log = (VERBOSITY, ...DATA) => {
+   conditionalConsoleCall(VERBOSITY, DATA, 'log')
+  }
+  globalThis.warn = (...DATA) => {
+   conditionalConsoleCall(0, DATA, 'warn')
+  }
+  globalThis.debug = (...DATA) => {
+   conditionalConsoleCall(0, DATA, 'debug')
+  }
+  globalThis.openLog = (VERBOSITY, ...DATA) => {
+   conditionalConsoleCall(VERBOSITY, DATA, 'group')
+  }
+  globalThis.closeLog = (VERBOSITY) => {
+   conditionalConsoleCall(VERBOSITY, [], 'groupEnd')
+  }
+  globalThis.btoaUnicode = BODY => {
+   return btoa(new TextEncoder('utf-8').encode(BODY)
+    .reduce((data, byte) => data + String.fromCharCode(byte), '')
+   )
+  }
+  globalThis.serialize = VALUE => {
+   return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
+  }
+  globalThis.SourceMappedFile = class {
+   static radix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+   lines = []
+   sources = []
+   scripts = []
+   mappings = []
+   constructor(NAME, PATH_TO_REPO, PATH_FROM_REPO) {
+    const sourceFile = this
+    sourceFile.name = NAME
+    sourceFile.pathToRepo = PATH_TO_REPO
+    sourceFile.pathFromRepo = PATH_FROM_REPO
+   }
+   addSource(source, script) {
+    const sourceFile = this
+
+    if (production)
+     return
+
+    let srcIndex = sourceFile.sources.indexOf(source)
+
+    if (srcIndex === -1) {
+     srcIndex = sourceFile.sources.length
+     sourceFile.sources.push(source)
+     sourceFile.scripts.push(script)
     }
-    addSource(source, script) {
-     const sourceFile = this
 
-     if (IS_PRODUCTION)
-      return
+    return srcIndex
+   }
+   addLine(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
+    const sourceFile = this
+    if (typeof string !== "string")
+     throw 'bad line: ' + (typeof string)
 
-     let srcIndex = sourceFile.sources.indexOf(source)
+    const mark = string.match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
-     if (srcIndex === -1) {
-      srcIndex = sourceFile.sources.length
-      sourceFile.sources.push(source)
-      sourceFile.scripts.push(script)
-     }
-
-     return srcIndex
+    if (mark) {
+     string = string.slice(mark.length)
+     ogLn = Framework.sourcePositionMarks[mark].ln
     }
-    addLine(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
-     const sourceFile = this
-     if (typeof string !== "string")
-      throw 'bad line: ' + (typeof string)
 
-     const mark = string.match(Framework.sourcePositionMarkPatternAddLine)?.[0]
+    sourceFile.lines.push(indent + string)
 
-     if (mark) {
-      string = string.slice(mark.length)
-      ogLn = Framework.sourcePositionMarks[mark].ln
-     }
+    if (production)
+     return
 
-     sourceFile.lines.push(indent + string)
+    if (string && mapTokens)
+     sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
+    else
+     sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
+   }
+   addLines(strings, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
+    const sourceFile = this
+    strings.forEach((string, ln) => sourceFile.addLine(string, srcIndex, ogLn + ln, ogCol, indent, mapTokens))
+   }
+   addSection(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
+    const sourceFile = this
+    const lines = string.split("\n")
+    const mark = lines[0].match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
-     if (IS_PRODUCTION)
-      return
-
-     if (string && mapTokens)
-      sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
-     else
-      sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
+    if (mark) {
+     lines.shift()
+     ogLn = Framework.sourcePositionMarks[mark].ln + 1
     }
-    addLines(strings, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
-     const sourceFile = this
-     strings.forEach((string, ln) => sourceFile.addLine(string, srcIndex, ogLn + ln, ogCol, indent, mapTokens))
-    }
-    addSection(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
-     const sourceFile = this
-     const lines = string.split("\n")
-     const mark = lines[0].match(Framework.sourcePositionMarkPatternAddLine)?.[0]
 
-     if (mark) {
-      lines.shift()
-      ogLn = Framework.sourcePositionMarks[mark].ln + 1
-     }
-
-     sourceFile.addLines(lines, srcIndex, ogLn, ogCol, indent, mapTokens)
-    }
-    packAndMap(url) {
-     const sourceFile = this
-     return sourceFile.lines.join("\n") + (/*IS_PRODUCTION */true ? "" : `
+    sourceFile.addLines(lines, srcIndex, ogLn, ogCol, indent, mapTokens)
+   }
+   packAndMap(url) {
+    const sourceFile = this
+    return sourceFile.lines.join("\n") + (production ? "" : `
  //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url ? `
  //${"#"} sourceURL=${url}` : ""}`)
-    }
-    getMap() {
-     const sourceFile = this
-     const encoderAbsolutePosition = [0, 0, 0, 0, 0]
-     const mappings = DECODED_MAPPINGS.map(decodedLine => (encoderAbsolutePosition[0] = 0, decodedLine.map(decodedSegment => {
-      return decodedSegment.map((absoluteDecodedPlace, i) => {
-       const signedRelativeDecodedPlace = absoluteDecodedPlace - encoderAbsolutePosition[i]
-       encoderAbsolutePosition[i] = absoluteDecodedPlace
-       if (signedRelativeDecodedPlace === 0) return 'A'
-       let
-        unsignedRelativeDecodedPlace = Math.abs(signedRelativeDecodedPlace),
-        encodedSegment = ''
-       while (unsignedRelativeDecodedPlace > 0) {
-        let characterIndex
-        if (!encodedSegment) {
-         characterIndex = (unsignedRelativeDecodedPlace & 15) * 2 + +!Object.is(signedRelativeDecodedPlace, unsignedRelativeDecodedPlace)
-         unsignedRelativeDecodedPlace >>>= 4
-        } else {
-         characterIndex = unsignedRelativeDecodedPlace & 31
-         unsignedRelativeDecodedPlace >>>= 5
-        }
-        if (unsignedRelativeDecodedPlace > 0) characterIndex |= 32
-        encodedSegment += Framework.sourceMapRadix[characterIndex]
+   }
+   getMap() {
+    const sourceFile = this
+    const encoderAbsolutePosition = [0, 0, 0, 0, 0]
+    const mappings = sourceFile.mappings.map(decodedLine => (encoderAbsolutePosition[0] = 0, decodedLine.map(decodedSegment => {
+     return decodedSegment.map((absoluteDecodedPlace, i) => {
+      const signedRelativeDecodedPlace = absoluteDecodedPlace - encoderAbsolutePosition[i]
+      encoderAbsolutePosition[i] = absoluteDecodedPlace
+      if (signedRelativeDecodedPlace === 0) return 'A'
+      let
+       unsignedRelativeDecodedPlace = Math.abs(signedRelativeDecodedPlace),
+       encodedSegment = ''
+      while (unsignedRelativeDecodedPlace > 0) {
+       let characterIndex
+       if (!encodedSegment) {
+        characterIndex = (unsignedRelativeDecodedPlace & 15) * 2 + +!Object.is(signedRelativeDecodedPlace, unsignedRelativeDecodedPlace)
+        unsignedRelativeDecodedPlace >>>= 4
+       } else {
+        characterIndex = unsignedRelativeDecodedPlace & 31
+        unsignedRelativeDecodedPlace >>>= 5
        }
-       return encodedSegment
-      }).join('')
-     }).join(","))).join(";")
-     return serialize({
-      version: 3,
-      sourceFile: "sourceFile.js",
-      sourceRoot: sourceFile.pathFromRepo,
-      sources: sourceFile.sources,
-      names: [],
-      sourcesContent: sourceFile.scripts,
-      mappings,
-     }, null, 1)
-    }
-   }
-   Framework.sourceCode = Framework.toString()
-   Framework.sourceLines = Framework.sourceCode.split("\n")
-   Framework.responses = {}
-   Framework.frameworks = []
-   Framework.environments = ["build", "server", "worker", "window"]
-   Framework.sourceMapRadix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-  }
-  Register_Source_Position_Marks: {
-   Framework.sourcePositionMarks = {}
-   Framework.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
-   Framework.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
-
-   for (let ln = 0; ln < Framework.sourceLines.length; ln++) {
-    for (const { 0: mark, index: col } of Framework.sourceLines[ln].matchAll(Framework.sourcePositionMarkPatternRegister)) {
-     if (mark in Framework.sourcePositionMarks)
-      throw `Duplicate source position mark ${mark} in framework.js.`
-     Framework.sourcePositionMarks[mark] = { ln, col }
-    }
+       if (unsignedRelativeDecodedPlace > 0) characterIndex |= 32
+       encodedSegment += SourceMappedFile.radix[characterIndex]
+      }
+      return encodedSegment
+     }).join('')
+    }).join(","))).join(";")
+    return serialize({
+     version: 3,
+     sourceFile: "sourceFile.js",
+     sourceRoot: sourceFile.pathFromRepo,
+     sources: sourceFile.sources,
+     names: [],
+     sourcesContent: sourceFile.scripts,
+     mappings,
+    }, null, 1)
    }
   }
-  Set_Global_Object: {
-   const {
-    constructor: Globe,
-    Window,
-    ServiceWorkerGlobalScope: Worker,
-    process: cloudProcess
-   } = Object.assign(globalThis, {
-    _BUILD: buildData,
-    globe: globalThis,
-    IS_PRODUCTION: false,
-    Part: class {
-     constructor(INPUT) {
-      if (typeof INPUT === "string")
-       return new (new Framework(INPUT).PartConstructor)()
+  globalThis.Part = class Part {
+   constructor(INPUT) {
+    if (typeof INPUT === "string")
+     return new (new Framework(INPUT).PartConstructor)()
 
-      throw 'other constructor forms are not yet supported'
-     }
-    },
-    serialize(VALUE) {
-     return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
-    },
-    // Debug logging.
-    log(VERBOSITY, ...DATA) {
-     conditionalConsoleCall(VERBOSITY, DATA, 'log')
-    },
-    warn(...DATA) {
-     if (typeof DATA[0] === "string")
-      if (typeof DATA[1] === "string")
-       DATA.unshift("\x1b[38;5;100m" + 'warning ' + '\x1b[38;5;226m' + DATA.shift() + "\x1b[38;5;100m" + DATA.shift() + "\x1b[0m")
-      else
-       DATA.unshift("\x1b[38;5;100m" + 'warning ' + DATA.shift() + "\x1b[0m")
-     else
-      DATA.unshift("\x1b[38;5;100m" + "warning" + "\x1b[0m")
-     conditionalConsoleCall(0, DATA, 'warn')
-    },
-    debug(...DATA) {
-     conditionalConsoleCall(0, DATA, 'debug')
-    },
-    openLog(VERBOSITY, ...DATA) {
-     conditionalConsoleCall(VERBOSITY, DATA, 'group')
-    },
-    closeLog(VERBOSITY) {
-     conditionalConsoleCall(VERBOSITY, [], 'groupEnd')
-    },
-
-    // String handling.
-    btoaUnicode(BODY) {
-     return btoa(new TextEncoder('utf-8').encode(BODY)
-      .reduce((data, byte) => data + String.fromCharCode(byte), '')
-     )
-    }
-   })
-
-   globe.ENVIRONMENT_INDEX =
-    Globe === Window ? 3 : (
-     Globe === Worker ? 2 : (
-      cloudProcess?.argv[1]?.split("/").pop() === "framework.js" ? 0 : 1
-     )
-    )
-
-   globe.ENVIRONMENT = Framework.environments[ENVIRONMENT_INDEX]
-
-   function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
-    if (!IS_PRODUCTION && VERBOSITY <= _BUILD.verbosity)
-     console[METHOD](ENVIRONMENT_INDEX, ...DATA)
+    throw 'other constructor forms are not yet supported'
    }
+  }
+  globalThis.globe = globalThis
+  globalThis.build = buildData
 
-   if (ENVIRONMENT === "build") {
-    const
-     { extname } = require('path'),
-     { execSync: $ } = require('child_process'),
-     { statSync: getItemStats,
-      existsSync: itemExists,
-      readdirSync: readFolder,
-      readFileSync: readFile } = require('fs')
+  // Pack the shallow clone of the repository.
+  if (environment === "build") {
 
-    let branchName
-    let commitMessage
-    let commitTag
-    let commitHash
+   const
+    {
+     statSync: getItemStats,
+     existsSync: itemExists,
+     readdirSync: readFolder,
+     readFileSync: readFile
+    } = require('fs'),
+    { extname } = require('path'),
+    { execSync: $ } = require('child_process')
 
-    if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
-     branchName = $('git branch --show-current').toString().trim()
-     commitMessage = $('git log -1').toString()
-     commitTag = $('git log -1 --pretty=%s').toString().trim()
-     commitHash = $('git rev-parse HEAD').toString().trim()
-     _BUILD.local = true
-     $('git update-index --assume-unchanged api/serverless.js')
-     IS_PRODUCTION = false
+   if (!process.env.VERCEL || process.env.__VERCEL_DEV_RUNNING) {
+    build.branch = $('git branch --show-current').toString().trim()
+    build.message = $('git log -1').toString()
+    build.tagline = $('git log -1 --pretty=%s').toString().trim()
+    build.hash = $('git rev-parse HEAD').toString().trim()
+    build.local = true
+    globalThis.production = false
+   } else {
+    build.branch = process.env.VERCEL_GIT_COMMIT_REF
+    build.message = process.env.VERCEL_GIT_COMMIT_MESSAGE
+    build.tagline = build.message.slice(0, build.message.indexOf("\n"))
+    build.hash = process.env.VERCEL_GIT_COMMIT_SHA
+    build.local = false
+    globalThis.production = build.branch === "main"
+   }
+   openLog(0, "Starting build...")
+   build.semanticVersion = build.tagline.split(".").map(x => parseInt(x))
+   if (build.local) {
+    if (build.semanticVersion[0] === 0) {
+     if (build.change === "major") {
+      build.semanticVersion[1]++
+      build.semanticVersion[2] = 0
+     } else build.semanticVersion[2]++
     } else {
-     branchName = process.env.VERCEL_GIT_COMMIT_REF
-     commitMessage = process.env.VERCEL_GIT_COMMIT_MESSAGE
-     commitTag = commitMessage.slice(0, commitMessage.indexOf("\n"))
-     commitHash = process.env.VERCEL_GIT_COMMIT_SHA
-     _BUILD.local = false
-     IS_PRODUCTION = branchName === "main"
+     if (build.change === "major") {
+      build.semanticVersion[0]++
+      build.semanticVersion[1] = build.semanticVersion[2] = 0
+     } else if (build.change === "minor") {
+      build.semanticVersion[1]++
+      build.semanticVersion[2] = 0
+     } else build.semanticVersion[2]++
     }
+   }
+   log(0, `Version ${build.semanticVersion.join(".")}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
 
-    _BUILD.branch = branchName
 
-    const semanticVersion = commitTag.split(".").map(x => parseInt(x))
+   try {
+    // Try to use git diff to patch the existing build.
 
-    if (_BUILD.local) {
-     if (semanticVersion[0] === 0) {
-      if (_BUILD.change === "major") {
-       semanticVersion[1]++
-       semanticVersion[2] = 0
-      } else semanticVersion[2]++
-     } else {
-      if (_BUILD.change === "major") {
-       semanticVersion[0]++
-       semanticVersion[1] = semanticVersion[2] = 0
-      } else if (_BUILD.change === "minor") {
-       semanticVersion[1]++
-       semanticVersion[2] = 0
-      } else semanticVersion[2]++
+    if (production)
+     throw "The production environment should always build from scratch."
+
+    if (!itemExists("api/serverless.js"))
+     throw "No existing build file."
+
+    log(0, "Existing build detected. Attempting partial build.")
+
+    const existingBuild = readFile("api/serverless.js", "utf-8")
+    const openMark = "Framework.initialize" + "("
+    const openIndex = existingBuild.indexOf(openMark) + openMark.length
+
+    if (openIndex < openMark.length)
+     throw "The existing build file wasn't populated."
+
+    const closeMark = ")"
+    const closeIndex = 0 - closeMark.length
+    const { dnsRoot, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
+
+    $(`git add --intent-to-add .`)
+
+    for (const diffResult of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
+
+     if (!diffResult)
+      continue
+
+     const [fileStatus, leftPath, rightPath] = diffResult.split(/\s+/)
+     const leftExtension = extname(leftPath)
+     const leftPathSegments = leftPath.slice(9).split("/")
+     const leftStringName = leftPathSegments.pop()
+     let leftRoot = dnsRoot
+     let rightRoot = null
+     let rightStringName = null
+     let rightExtension = null
+
+     for (const pathPart of leftPathSegments)
+      leftRoot = leftRoot[pathPart] ??= {}
+
+     if (rightPath) {
+      rightRoot = dnsRoot
+      rightExtension = extname(rightPath)
+      const rightPathSegments = rightPath.slice(9).split("/")
+      rightStringName = rightPathSegments.pop()
+      for (const pathPart of rightPathSegments)
+       rightRoot = rightRoot[pathPart] ??= {}
+     }
+
+     switch (fileStatus[0]) {
+      case "A":
+       leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftStringName}\x1b[38;5;34m - added \x1b[0m`)
+       break;
+      case "M":
+       leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;28m/\x1b[38;5;226m${leftStringName}\x1b[38;5;28m - modified \x1b[0m`)
+       break;
+      case "D":
+       delete leftRoot[leftStringName];
+       log(2, `\x1b[38;5;28m/\x1b[38;5;196m${leftStringName}\x1b[38;5;28m - deleted \x1b[0m`)
+       break;
+      case "C":
+      case "R":
+       delete leftRoot[leftStringName]
+       rightRoot[rightStringName] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;28m/\x1b[38;5;129m${rightStringName}\x1b[38;5;28m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
+       break;
+      default:
+       throw "Unsupported git diff type, '" + fileStatus + "'."
      }
     }
 
-    _BUILD.hash = commitHash
-    _BUILD.version = semanticVersion.join(".")
-    _BUILD.message = commitMessage
-
-    const readRecursive = (host = "", folderPath = "dns-root", stringCollection = _BUILD.dnsRoot) => {
-     // TODO: Don't read in large files.
+    build.dnsRoot = dnsRoot
+   } catch (reason) {
+    log(0, "Building from scratch.", { reason })
+    log(1, "Initializing local git configuration (idempotent).")
+    $('git update-index --assume-unchanged api/serverless.js')
+    log(1, "Packing shallow git repository into script.")
+    build.dnsRoot = {}
+    function readRecursive(host = "", folderPath = "dns-root", stringCollection = build.dnsRoot) {
+     // TODO: Manage file size max.
      if (host) {
       if (host.length > 253)
        throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
@@ -292,102 +338,33 @@ class Framework {
       }
      }
     }
-
-    openLog(0, `Building version ${_BUILD.version}${_BUILD.local ? " (local)" : ""} from branch "${_BUILD.branch}".`)
-    try {
-     if (!_BUILD.local || !itemExists("api/serverless.js"))
-      throw "No existing build detected."
-
-     log(0, "Existing build detected. Performing partial build.")
-     const serverlessScript = readFile("api/serverless.js", "utf-8")
-     // This string is split so it catch here.
-     const openMark = "Framework.initialize" + "("
-     const closeMark = ")"
-     const closeIndex = 0 - closeMark.length
-     const openIndex = serverlessScript.indexOf(openMark) + openMark.length
-
-     if (openIndex < openMark.length)
-      throw "Missing global object marker in existing build script."
-
-     $(`git add --intent-to-add .`)
-
-     const { dnsRoot, hash } = JSON.parse(serverlessScript.slice(openIndex, closeIndex))
-     for (const nameStatus of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
-      if (!nameStatus) continue
-      const [fileStatus, leftPath, rightPath] = nameStatus.split(/\s+/)
-      const leftExtension = extname(leftPath)
-      const leftPathSegments = leftPath.slice(9).split("/")
-      const leftStringName = leftPathSegments.pop()
-      let leftRoot = dnsRoot
-      let rightRoot = null
-      let rightStringName = null
-      let rightExtension = null
-      for (const pathPart of leftPathSegments)
-       leftRoot = leftRoot[pathPart] ??= {}
-      if (rightPath) {
-       rightRoot = stringCollection
-       rightExtension = extname(rightPath)
-       const rightPathSegments = rightPath.slice(9).split("/")
-       rightStringName = rightPathSegments.pop()
-       for (const pathPart of rightPathSegments)
-        rightRoot = rightRoot[pathPart] ??= {}
-      }
-      switch (fileStatus[0]) {
-       case "A":
-        leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-        log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftStringName}\x1b[38;5;34m - added \x1b[0m`)
-        break;
-       case "M":
-        leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-        log(2, `\x1b[38;5;28m/\x1b[38;5;226m${leftStringName}\x1b[38;5;28m - modified \x1b[0m`)
-        break;
-       case "D":
-        delete leftRoot[leftStringName];
-        log(2, `\x1b[38;5;28m/\x1b[38;5;196m${leftStringName}\x1b[38;5;28m - deleted \x1b[0m`)
-        break;
-       case "C": // Copied
-       case "R": // Renamed
-        delete leftRoot[leftStringName]
-        rightRoot[rightStringName] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
-        log(2, `\x1b[38;5;28m/\x1b[38;5;129m${rightStringName}\x1b[38;5;28m -${nameStatus[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
-        break;
-       case "T": // Type-changed
-       case "U": // Unmerged
-       case "X": // Unknown
-       case "B": // Broken pairing
-        throw "Unsupported git diff status '" + fileStatus + "'."
+    readRecursive()
+   }
+   /*
+    // Conceptual:
+    const { resolveTxt } = require('dns')
+    const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), process.exit(21)) : give(TXT)))
+    const targetHost = "www.core.parts"
+    txt(targetHost).then(TXT => {
+     for (const txt of TXT) {
+      if (txt[0].startsWith("part://")) {
+       const
+        { host: host, searchParams, hash } = new URL(txt.join("")),
+        payload = { [targetHost + "/.host"]: host }
+       if (searchParams.has("$1") || searchParams.has("$2")) {
+        payload[targetHost + "/constructor.js"] = `super(${atob(searchParams.get("$1") ?? "")})\n${atob(searchParams.get("$2") ?? "")}`
+       }
+       debug(payload)
+       break
       }
      }
-     Object.assign(_BUILD.dnsRoot, dnsRoot)
-    } catch (e) {
-     log(0, e + " Building from scratch.")
-     readRecursive()
-    }
-    closeLog(0)
-    /*
-     // Future DNS resolution process...
-     const { resolveTxt } = require('dns')
-     const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), process.exit(21)) : give(TXT)))
-     const targetHost = "www.core.parts"
-     txt(targetHost).then(TXT => {
-      for (const txt of TXT) {
-       if (txt[0].startsWith("part://")) {
-        const
-         { host: host, searchParams, hash } = new URL(txt.join("")),
-         payload = { [targetHost + "/.host"]: host }
-        if (searchParams.has("$1") || searchParams.has("$2")) {
-         payload[targetHost + "/constructor.js"] = `super(${atob(searchParams.get("$1") ?? "")})\n${atob(searchParams.get("$2") ?? "")}`
-        }
-        debug(payload)
-        break
-       }
-      }
-      process.exit(21)
-     })
-    */
-   }
-  }
+     process.exit(21)
+    })
+   */
+   closeLog(0)
+  } else globalThis.production = !build.local && build.branch === "main"
 
+  // Create and initialize the user configuration space.
   new Part("user.parts").distributeInitializePart()
  }
  constructor(inputHost, customStringCollection) {
@@ -412,7 +389,7 @@ class Framework {
   framework.domains = inputHost.split(".").concat("dns-root")
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
-  framework.stockStringCollection = inputHost.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, _BUILD.dnsRoot)
+  framework.stockStringCollection = inputHost.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, build.dnsRoot)
   framework.customStringCollection = customStringCollection ?? {}
   framework.MethodData = class {
    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
@@ -465,7 +442,7 @@ class Framework {
         including its dependencies as the parent MethodData class instance traverses
         the prototype chain of the type it is constructing to find both generic method
         constants and specific subtype constants.
- 
+  
        It adds the constant - after adding any previous constants that it depends
        on - to the file as soon as its constructed, but only if the given method
        body includes the constant.
@@ -607,7 +584,7 @@ class Framework {
   }
 
   framework.renderedStrings = {}
-  framework.sourceFile = new Framework.SourceMappedFile(framework.pathFromRepo, framework.pathToRepo, "compiled-type.js")
+  framework.sourceFile = new SourceMappedFile(framework.pathFromRepo, framework.pathToRepo, "compiled-type.js")
   framework.sourceFile.framework = framework
   framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", framework.sourceCode)
   framework.stockPartJSON = JSON.parse(framework.stockStringCollection["part.json"] ?? "{}")
@@ -652,7 +629,7 @@ class Framework {
   framework.PartConstructor.framework = framework
 
   if (framework.isCore) {
-   globe.CorePart = framework.PartConstructor
+   globalThis.CorePart = framework.PartConstructor
   }
  }
  addConstants(targetFile) {
@@ -712,7 +689,6 @@ class Framework {
 }
 
 Framework.initialize({
- "dnsRoot": {},
  "change": "patch",
- "verbosity": 10
+ "verbosity": 1
 })

@@ -15,7 +15,7 @@ declare class AddressBarPart extends MixPart {
  * 
  * An extension of the native URL class. */
 declare class Route extends URL {
- /** The alphabet used when encoding bigints as path segments. A URI path-friendly revision to Framework.sourceMapRadix. */
+ /** The alphabet used when encoding bigints as URI path segments. */
  static readonly pathSegmentRadix: string
  /** The maximum safe length of a URI path segment, used for determining the maximum safe route cardinality.
   * 
