@@ -6,7 +6,6 @@
 
 ## IDE configuration
 .vscode/
-.cspell/
 
 ## Local development files
 .dns-root/

@@ -170,6 +170,9 @@ class Framework {
   globalThis.build = buildData
 
   if (environment === "build") {
+
+   build.repository = {}
+
    const
     {
      statSync: getItemStats,
@@ -194,9 +197,12 @@ class Framework {
     globalThis.production = build.branch === "main"
    }
    openLog(0, "Starting build...")
-
-   build.readme = readFile("README.md", "utf-8")
-   const semver = build.semanticVersion = build.readme.match(this.readmeVersionPattern).groups
+   build.repository[".gitignore"] = readFile(".gitignore", "utf-8")
+   build.repository["jsconfig.json"] = readFile("jsconfig.json", "utf-8")
+   build.repository["README.md"] = readFile("README.md", "utf-8")
+   build.repository["vercel.json"] = readFile("vercel.json", "utf-8")
+   build.repository["type.d.ts"] = readFile("type.d.ts", "utf-8")
+   const semver = build.semanticVersion = build.repository["README.md"].match(this.readmeVersionPattern).groups
    if (build.local) {
     if (semver.major && build.change === "major") {
      semver.major++
@@ -213,7 +219,7 @@ class Framework {
     }
    }
    const version = `version-${semver.major}.${semver.minor}.${semver.patch}`
-   build.readme = build.readme.replace(this.readmeVersionPattern, version)
+   build.repository["README.md"] = build.repository["README.md"].replace(this.readmeVersionPattern, version)
    log(0, `${version}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
 
    try {
@@ -236,7 +242,7 @@ class Framework {
 
     const closeMark = ")"
     const closeIndex = existingBuild.lastIndexOf(closeMark)
-    const { dnsRoot, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
+    const { repository, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
 
     log(0, "Staging the intent to add all untracked files.")
     $(`git add --intent-to-add .`)
@@ -249,57 +255,57 @@ class Framework {
      const [fileStatus, leftPath, rightPath] = diffResult.split(/\s+/)
      const leftExtension = extname(leftPath)
      const leftPathSegments = leftPath.slice(9).split("/")
-     const leftStringName = leftPathSegments.pop()
-     let leftRoot = dnsRoot
+     const leftFilename = leftPathSegments.pop()
+     let leftRoot = repository["dns-root"]
      let rightRoot = null
-     let rightStringName = null
+     let rightFilename = null
      let rightExtension = null
 
      for (const pathPart of leftPathSegments)
       leftRoot = leftRoot[pathPart] ??= {}
 
      if (rightPath) {
-      rightRoot = dnsRoot
+      rightRoot = repository["dns-root"]
       rightExtension = extname(rightPath)
       const rightPathSegments = rightPath.slice(9).split("/")
-      rightStringName = rightPathSegments.pop()
+      rightFilename = rightPathSegments.pop()
       for (const pathPart of rightPathSegments)
        rightRoot = rightRoot[pathPart] ??= {}
      }
-     if (rightPath && rightExtension === ".ts" || leftExtension === ".ts") {
-      log(2, `\x1b[38;5;27m/\x1b[38;5;239m${stringName} ignored\x1b[0m`)
-     } else switch (fileStatus[0]) {
+     /* if (rightPath && rightExtension === ".ts" || leftExtension === ".ts") {
+      log(2, `\x1b[38;5;27m/\x1b[38;5;239m${filename} ignored\x1b[0m`)
+     } else */ switch (fileStatus[0]) {
       case "A":
-       leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftStringName}\x1b[38;5;34m - added \x1b[0m`)
+       leftRoot[leftFilename] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftFilename}\x1b[38;5;34m - added \x1b[0m`)
        break;
       case "M":
-       leftRoot[leftStringName] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;28m/\x1b[38;5;226m${leftStringName}\x1b[38;5;28m - modified \x1b[0m`)
+       leftRoot[leftFilename] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;28m/\x1b[38;5;226m${leftFilename}\x1b[38;5;28m - modified \x1b[0m`)
        break;
       case "D":
-       delete leftRoot[leftStringName];
-       log(2, `\x1b[38;5;28m/\x1b[38;5;196m${leftStringName}\x1b[38;5;28m - deleted \x1b[0m`)
+       delete leftRoot[leftFilename];
+       log(2, `\x1b[38;5;28m/\x1b[38;5;196m${leftFilename}\x1b[38;5;28m - deleted \x1b[0m`)
        break;
       case "C":
       case "R":
-       delete leftRoot[leftStringName]
-       rightRoot[rightStringName] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;28m/\x1b[38;5;129m${rightStringName}\x1b[38;5;28m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
+       delete leftRoot[leftFilename]
+       rightRoot[rightFilename] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;28m/\x1b[38;5;129m${rightFilename}\x1b[38;5;28m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
        break;
       default:
        throw "Unsupported git diff type, '" + fileStatus + "'."
      }
     }
 
-    build.dnsRoot = dnsRoot
+    build.repository["dns-root"] = repository["dns-root"]
    } catch (reason) {
     log(0, "Building from scratch.", { reason })
     log(1, "Initializing local git configuration (idempotent).")
     $('git update-index --assume-unchanged api/service.js')
     log(1, "Packing shallow git repository into script.")
-    build.dnsRoot = {}
-    function readRecursive(host = "", folderPath = "dns-root", stringCollection = build.dnsRoot) {
+    build.repository["dns-root"] = {}
+    function readRecursive(host = "", folderPath = "dns-root", directory = build.repository["dns-root"]) {
      // TODO: Manage file size max.
      if (host) {
       if (host.length > 253)
@@ -309,7 +315,7 @@ class Framework {
      if (!itemExists(folderPath))
       throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
 
-     const stringNames = []
+     const filenames = []
      for (const itemName of readFolder(folderPath)) {
       const
        folderPath = ["dns-root", ...(host ? host.split(".").reverse() : [])].join('/'),
@@ -319,25 +325,25 @@ class Framework {
 
        if (stats.isDirectory()) {
         openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
-        readRecursive(host ? itemName ? itemName + "." + host : host : itemName ?? "", filePath, stringCollection[itemName] = {})
+        readRecursive(host ? itemName ? itemName + "." + host : host : itemName ?? "", filePath, directory[itemName] = {})
         closeLog(2)
        } else if (stats.isFile())
-        stringNames.push([itemName, filePath])
+        filenames.push([itemName, filePath])
       }
      }
 
-     for (const [stringName, stringPath] of stringNames) {
-      const extension = extname(stringPath)
+     for (const [filename, filePath] of filenames) {
+      const extension = extname(filePath)
       try {
 
-       if (extension !== ".ts" && !$(`git check-ignore -v ${stringPath}`).includes('.gitignore:'))
+       if (/*extension !== ".ts" && */!$(`git check-ignore -v ${filePath}`).includes('.gitignore:'))
         throw "Don't ignore."
 
-       log(2, `\x1b[38;5;27m/\x1b[38;5;239m${stringName} ignored\x1b[0m`)
+       log(2, `\x1b[38;5;27m/\x1b[38;5;239m${filename} ignored\x1b[0m`)
       } catch {
-       const content = readFile(stringPath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;28m/\x1b[38;5;76m${stringName}\x1b[38;5;28m"\x1b[0m`)
-       stringCollection[stringName] = content
+       const content = readFile(filePath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
+       log(2, `\x1b[38;5;28m/\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
+       directory[filename] = content
       }
      }
     }
@@ -370,7 +376,7 @@ class Framework {
   // Create and initialize the user configuration space.
   new Part("user.parts").distributeInitializePart()
  }
- constructor(inputHost, customStringCollection) {
+ constructor(inputHost, customDirectory) {
   const framework = this
 
   if (typeof inputHost !== "string")
@@ -379,7 +385,7 @@ class Framework {
   if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(inputHost) && !/^localhost:\d+$/.test(inputHost))
    throw "malformed host " + inputHost
 
-  if (!customStringCollection) {
+  if (!customDirectory) {
 
    if (inputHost in Framework.frameworks)
     return Framework.frameworks[inputHost]
@@ -392,8 +398,8 @@ class Framework {
   framework.domains = inputHost.split(".").concat("dns-root")
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
-  framework.stockStringCollection = inputHost.split(".").reduceRight((stringCollection, subdomain) => stringCollection?.[subdomain] ?? {}, build.dnsRoot)
-  framework.customStringCollection = customStringCollection ?? {}
+  framework.stockDirectory = inputHost.split(".").reduceRight((directory, subdomain) => directory?.[subdomain] ?? {}, build.repository["dns-root"])
+  framework.customDirectory = customDirectory ?? {}
   framework.MethodData = class {
    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
    static fromMethodID(METHOD_ID) {
@@ -402,9 +408,9 @@ class Framework {
    constructor(METHOD_ID) {
     const methodData = this
     methodData.methodID = METHOD_ID
-    methodData.stringName = `${METHOD_ID}.js`
+    methodData.filename = `${METHOD_ID}.js`
     methodData.isAuto = METHOD_ID.startsWith("auto-")
-    methodData.content = methodData.isAuto ? `@auto-getter@return framework.readOwnString("${METHOD_ID.slice(5)}")` : framework.readOwnString(methodData.stringName)
+    methodData.content = methodData.isAuto ? `@auto-getter@return framework.readOwnString("${METHOD_ID.slice(5)}")` : framework.readOwnString(methodData.filename)
     methodData.isView = METHOD_ID.startsWith("view-")
     methodData.isAsync = METHOD_ID.startsWith("async-")
     methodData.isSymbol = METHOD_ID.startsWith("symbol-")
@@ -509,7 +515,7 @@ class Framework {
      }
     }
 
-    methodData.source = methodData.isAuto ? framework.buildSource : framework.sourceFile.addSource(methodData.stringName, methodData.content)
+    methodData.source = methodData.isAuto ? framework.buildSource : framework.sourceFile.addSource(methodData.filename, methodData.content)
     methodData.lines = methodData.content ? methodData.content.split("\n") : []
     methodData.hasValidPropertyName = methodData.isSymbol || methodData.isGetOrSet || methodData.isAuto || framework.MethodData.identifierPattern.test(methodData.niceName)
     methodData.propertyReference = methodData.hasValidPropertyName ? methodData.niceName : `["${methodData.niceName}"]`
@@ -521,7 +527,7 @@ class Framework {
     if (methodData.content === undefined)
      return
 
-    if (methodData.isAuto && framework.ownStringNameTable.has(`get-${METHOD_ID.slice(5)}.js`))
+    if (methodData.isAuto && framework.ownFilenameTable.has(`get-${METHOD_ID.slice(5)}.js`))
      return
 
     framework.sourceFile.addSection(`@method-open@\n\n ${methodData.signature} {`, framework.buildSource)
@@ -560,29 +566,29 @@ class Framework {
    }
   }
 
-  framework.ownStringNameTable = new Map(
-   Object.keys(framework.stockStringCollection)
-    .filter(itemName => typeof framework.stockStringCollection[itemName] === "string")
-    .map(stringName => [stringName, framework.stockStringCollection])
+  framework.ownFilenameTable = new Map(
+   Object.keys(framework.stockDirectory)
+    .filter(itemName => typeof framework.stockDirectory[itemName] === "string")
+    .map(filename => [filename, framework.stockDirectory])
     .concat(
-     Object.keys(framework.customStringCollection)
-      .map(stringName => [stringName, framework.customStringCollection])
+     Object.keys(framework.customDirectory)
+      .map(filename => [filename, framework.customDirectory])
     )
   )
 
   framework.ownGetAndSetMethodIDs = []
   framework.ownViewMethodIDs = []
 
-  for (const stringName of framework.ownStringNameTable.keys()) {
+  for (const filename of framework.ownFilenameTable.keys()) {
 
-   if (!stringName.endsWith(".js"))
+   if (!filename.endsWith(".js"))
     continue
 
-   const methodID = stringName.slice(0, -3)
+   const methodID = filename.slice(0, -3)
 
-   if (stringName.startsWith("get-") || stringName.startsWith("set-"))
+   if (filename.startsWith("get-") || filename.startsWith("set-"))
     framework.ownGetAndSetMethodIDs.push(methodID)
-   else if (stringName.startsWith("view-"))
+   else if (filename.startsWith("view-"))
     framework.ownViewMethodIDs.push(methodID)
   }
 
@@ -590,8 +596,8 @@ class Framework {
   framework.sourceFile = new SourceMappedFile(framework.pathFromRepo, framework.pathToRepo, "compiled-type.js")
   framework.sourceFile.framework = framework
   framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", framework.sourceCode)
-  framework.stockPartJSON = JSON.parse(framework.stockStringCollection["part.json"] ?? "{}")
-  framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customStringCollection["part.json"] ?? "{}"), framework.stockPartJSON)
+  framework.stockPartJSON = JSON.parse(framework.stockDirectory["part.json"] ?? "{}")
+  framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customDirectory["part.json"] ?? "{}"), framework.stockPartJSON)
   framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "one.core.parts")
   framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
 
@@ -622,8 +628,8 @@ class Framework {
   for (const methodID of framework.ownViewMethodIDs)
    framework.MethodData.fromMethodID(methodID)
 
-  for (const stringName of framework.ownStringNameTable.keys())
-   framework.MethodData.fromMethodID("auto-" + stringName)
+  for (const filename of framework.ownFilenameTable.keys())
+   framework.MethodData.fromMethodID("auto-" + filename)
 
   framework.sourceFile.addLine("@class-close@}", framework.buildSource)
   framework.sourceFile.addLine("@eval-close@})()", framework.buildSource)
@@ -638,10 +644,10 @@ class Framework {
  addConstants(targetFile) {
   const framework = this
   framework.parent?.addConstants(targetFile)
-  const stringName = "const-class.js"
+  const filename = "const-class.js"
   const pathPrefix = targetFile === framework.sourceFile ? "" : targetFile.pathToRepo + "/" + framework.pathFromRepo + "/"
-  const path = pathPrefix + stringName
-  const body = framework.readOwnString(stringName)
+  const path = pathPrefix + filename
+  const body = framework.readOwnString(filename)
 
   if (body)
    targetFile.addSection(body, targetFile.addSource(path, body), 0, 0, " ")
@@ -660,14 +666,14 @@ class Framework {
 
   framework.parent?.collectConstants(targetFramework, targetMethodData)
 
-  function collectOwnConstants(STRING_NAME) {
+  function collectOwnConstants(FILENAME) {
 
-   if (!framework.ownStringNameTable.has(STRING_NAME))
+   if (!framework.ownFilenameTable.has(FILENAME))
     return
 
    const pathPrefix = isForOwnScript ? "" : targetFramework.pathToRepo + "/" + framework.pathFromRepo + "/"
-   const path = pathPrefix + STRING_NAME
-   const body = framework.readOwnString(STRING_NAME)
+   const path = pathPrefix + FILENAME
+   const body = framework.readOwnString(FILENAME)
    const lines = body.split("\n")
 
    for (let ln = 0; ln < lines.length; ln++)
@@ -682,10 +688,10 @@ class Framework {
   if (targetMethodData.isView)
    collectOwnConstants("const-view.js")
  }
- readOwnString(stringName, fallback) {
+ readOwnString(filename, fallback) {
   const framework = this
-  if (framework.ownStringNameTable.has(stringName))
-   return framework.ownStringNameTable.get(stringName)[stringName]
+  if (framework.ownFilenameTable.has(filename))
+   return framework.ownFilenameTable.get(filename)[filename]
 
   return fallback
  }

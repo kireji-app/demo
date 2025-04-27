@@ -1,5 +1,5 @@
 {
- // OPTIONS, the only argument, can be a string or an object.
+ // OPTIONS, the only argument, can be a filename or an options object.
  if (typeof OPTIONS === "string")
   OPTIONS = { request: OPTIONS }
 
@@ -8,43 +8,43 @@
  OPTIONS.fallback ??= null
 
  // A request can have a query attached.
- const [stringName, search = ""] = OPTIONS.request.split("?")
+ const [filename, search = ""] = OPTIONS.request.split("?")
 
- if (!stringName)
-  throw part.host + " Render Error: cannot handle render request without a string name. " + serialize(OPTIONS)
+ if (!filename)
+  throw part.host + " Render Error: cannot handle render request without a filename. " + serialize(OPTIONS)
 
  // Some information is needed to handle encoding later.
- const { type, binary: base64, extension } = new StringHeader(stringName)
+ const { type, binary, extension } = new FileHeader(filename)
 
  // Any query object should be cast to a more useful object.
  const searchParams = new URLSearchParams(search)
  const requestHasParameters = searchParams.size > 0
 
  // Acquire a raw result from the part instance or return the fallback value.
- // TODO: String Parameters require a function
+ // TODO: Search parameters require a generating function.
  //  with the 'render-*.js' pattern to accept PARAMS.
 
- let body = part[base64 && environment === "server" ? "blank" + extension : stringName]
+ let body = part[binary && environment === "server" ? "blank" + extension : filename]
 
  if (search)
   warn("Render ignored params: " + OPTIONS.request)
 
  if (body === undefined || body === "undefined")
-  warn("undefined body", part.host, stringName)
+  warn("undefined body", part.host, filename)
 
  // Process the raw result into the requested format.
  if (OPTIONS.format === "raw")
   return body
 
  if (OPTIONS.format === "datauri") {
-  if (!base64)
+  if (!binary)
    body = btoaUnicode(body)
 
   return `data:${type};base64,${body}`
  }
 
  if (OPTIONS.format === "response") {
-  if (base64) {
+  if (binary) {
    const B = atob(body ?? "")
    const k = B.length
    const A = new ArrayBuffer(k)

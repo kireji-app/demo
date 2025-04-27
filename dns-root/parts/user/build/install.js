@@ -8,4 +8,4 @@ if (!itemExists("api"))
  makeFolder("api")
 
 writeFile("api/service.js", user["service.js"])
-writeFile("README.md", build.readme)
+writeFile("README.md", build.repository["README.md"])

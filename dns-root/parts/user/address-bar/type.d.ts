@@ -34,29 +34,29 @@ declare class Route extends URL {
   * @param {string} [base] Optional base URL if the first argument is relative.
   */
  constructor(input: string | URL, base: string)
- /** The name of any explicit string request added between the path and the mark. */
- stringName: string
- /** The string parts of the pathname, split along "/" and excluding any string name or mark. */
+ /** The name of any explicit file request added between the path and the mark. */
+ filename: string
+ /** The string parts of the pathname, split along "/" and excluding any filename or mark. */
  segments: string[]
  /** An array of the routeIDs corresponding to the route's path segments. */
  routeIDs: bigint[]
- /** The portion of the route's pathname which does not include the string name or mark. */
+ /** The portion of the route's pathname which does not include the filename or mark. */
  path: string
- /** The mark at the end of the pathname indicating whether or not it contains an explicit string name. */
+ /** The mark at the end of the pathname indicating whether or not it contains an explicit filename. */
  mark: string
- /** The header for the route's stringName.*/
- readonly header: StringHeader
+ /** The header for the route's filename.*/
+ readonly header: FileHeader
 }
-declare class StringHeader {
+declare class FileHeader {
  static readonly mimeTypes: string[]
  static readonly textBasedPrefixes: Set<string>
- /** Generates a new read-only StringHeader from the given string name. */
- constructor(stringName): StringHeader
- /** The string type extension (including the dot). */
+ /** Generates a new read-only FileHeader from the given filename. */
+ constructor(filename): FileHeader
+ /** The filetype extension (including the dot). */
  readonly extension: string
- /** The content-type of the string, based on its extension. */
+ /** The content-type of the file, based on its extension. */
  readonly type: string
- /** Whether or not the string's content type refers to binary data. */
+ /** Whether or not the file's content type refers to binary data. */
  readonly binary: boolean
 }
 /** A window feature representing the browser address bar that provides `pathname <=> route ID` mapping to all environments. */

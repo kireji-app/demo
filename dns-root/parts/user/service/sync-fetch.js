@@ -27,8 +27,8 @@ if (desktopRouteID !== desktop.routeID) {
  desktop.setRoute(service.route.routeIDs[0])
 }
 
-Framework.responses[service.route.href] = (theme.arm.framework.ownStringNameTable.has(service.route.stringName) ? theme.arm : user).render({
- request: service.route.stringName + service.route.search,
+Framework.responses[service.route.href] = (theme.arm.framework.ownFilenameTable.has(service.route.filename) ? theme.arm : user).render({
+ request: service.route.filename + service.route.search,
  format: "response"
 })
 

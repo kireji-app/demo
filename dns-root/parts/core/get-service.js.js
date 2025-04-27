@@ -1,6 +1,6 @@
 const sourceFile = new SourceMappedFile("../", undefined, "service.js")
 const externalSource = sourceFile.addSource("framework.js", Framework.sourceCode)
-const internalSource = sourceFile.addSource(methodData.stringName, methodData.content)
+const internalSource = sourceFile.addSource(methodData.filename, methodData.content)
 sourceFile.addSection(Framework.sourceCode, externalSource)
 sourceFile.addSection(`\nFramework.initialize(${serialize(build)})`, internalSource)
 return sourceFile.packAndMap()

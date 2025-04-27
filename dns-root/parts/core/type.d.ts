@@ -57,13 +57,13 @@ declare class CorePart extends Iterable<CorePart> {
   * 
   * *Note: There is no* `user.parent`. */
  readonly parent: CorePart
- /** Generate a named string or fetch it from the static cache.
+ /** Generate a dynamic or static file from the part's directory.
   * 
-  * String names are treated like their file extension. For binary file types (like .png)
+  * Filenames are treated like their file extension. For binary file types (like .png)
    * the "value" format will return a base64 encoded string and the "response" and "datauri"
    * formats will return a file or file literal with the corresponding content-type.*/
  render(REQUEST: string | {
-  /** The name of the string to render, which can include URI parameters, such as
+  /** The name of the file to render, which can include URI parameters, such as
    * ```
    * "icon.png?size=64"
    * ``` */
@@ -74,7 +74,7 @@ declare class CorePart extends Iterable<CorePart> {
   */
   format?: "value" | "datauri" | "response",
   /** A fallback value. This fallback value will be returned exactly as
-   * is if there was no render endpoint for the given string name. If the
+   * is if there was no render endpoint with the given filename. If the
    * render function returns a nullish value, the nullish value will be returned
    * instead of this value.  */
   fallback?: string | Response

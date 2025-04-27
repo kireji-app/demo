@@ -1,4 +1,4 @@
-globe.StringHeader ??= class StringHeader {
+globe.FileHeader ??= class FileHeader {
  static useUTF8 = true
  static textBasedPrefixes = [
   'text/',
@@ -29,28 +29,28 @@ globe.StringHeader ??= class StringHeader {
   'ttf': 'font/ttf',
   'otf': 'font/otf',
  }
- #stringName
+ #filename
  #extension
  #type
  #binary
  get extension() { return this.#extension }
  get type() { return this.#type }
  get binary() { return this.#binary }
- constructor(stringName) {
-  const lastDotIndex = stringName.lastIndexOf('.')
-  this.#stringName = stringName
-  this.#extension = lastDotIndex === -1 || lastDotIndex === stringName.length - 1 ? '' : stringName.slice(lastDotIndex)
-  this.#type = StringHeader.mimeTypes[this.#extension.slice(1).toLowerCase()] || "text/plain"
-  this.#binary = !StringHeader.textBasedPrefixes.some(prefix => this.#type.startsWith(prefix))
-  if (!this.#binary && StringHeader.useUTF8 && !this.#type.includes('charset'))
+ constructor(filename) {
+  const lastDotIndex = filename.lastIndexOf('.')
+  this.#filename = filename
+  this.#extension = lastDotIndex === -1 || lastDotIndex === filename.length - 1 ? '' : filename.slice(lastDotIndex)
+  this.#type = FileHeader.mimeTypes[this.#extension.slice(1).toLowerCase()] || "text/plain"
+  this.#binary = !FileHeader.textBasedPrefixes.some(prefix => this.#type.startsWith(prefix))
+  if (!this.#binary && FileHeader.useUTF8 && !this.#type.includes('charset'))
    this.#type += ';charset=UTF-8'
  }
  toString() {
-  return this.#stringName
+  return this.#filename
  }
  toJSON() {
   return {
-   stringName: this.#stringName,
+   filename: this.#filename,
    extension: this.extension,
    type: this.type,
    binary: this.binary
@@ -61,7 +61,7 @@ globe.StringHeader ??= class StringHeader {
 globe.Route ??= class Route {
  static maxPathLength = 2000
  static maxSegmentLength = 250
- static defaultStringName = 'index.html'
+ static defaultFilename = 'index.html'
  static pathSegmentRadix = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0'
  static segmentToRouteID(segment) {
   let binaryValue = "0b0"
@@ -115,7 +115,7 @@ globe.Route ??= class Route {
   return segment
  }
 
- #stringName
+ #filename
  #segments
  #routeIDs
  #path
@@ -153,17 +153,17 @@ globe.Route ??= class Route {
  get pathname() { return this.#url.pathname }
  set pathname(pathname) {
   this.#path = String(pathname) || '/'
-  this.#stringName = ''
+  this.#filename = ''
   this.#mark = ''
   if (this.#path.endsWith('!')) {
    const lastSlashIndex = this.#path.lastIndexOf('/')
-   const stringNameSegment = this.#path.substring(lastSlashIndex + 1, this.#path.length - 1)
-   if (stringNameSegment && stringNameSegment !== Route.defaultStringName) {
+   const filenameSegment = this.#path.substring(lastSlashIndex + 1, this.#path.length - 1)
+   if (filenameSegment && filenameSegment !== Route.defaultFilename) {
 
-    if (!/^[A-Za-z0-9_.-]+$/.test(stringNameSegment))
-     throw new TypeError("Route Error: string name contained invalid characters. " + stringNameSegment)
+    if (!/^[A-Za-z0-9_.-]+$/.test(filenameSegment))
+     throw new TypeError("Route Error: filename contained invalid characters. " + filenameSegment)
 
-    this.#stringName = stringNameSegment
+    this.#filename = filenameSegment
     this.#mark = '!'
    }
    this.#path = this.#path.substring(0, lastSlashIndex + 1)
@@ -182,25 +182,25 @@ globe.Route ??= class Route {
    return true
   })
   this.#path = `/${this.#segments.join("/")}${this.#segments.length ? "/" : ""}`
-  this.#header = new StringHeader(this.#stringName || Route.defaultStringName)
-  this.#url.pathname = `${this.#path}${this.#stringName}${this.#mark}`
+  this.#header = new FileHeader(this.#filename || Route.defaultFilename)
+  this.#url.pathname = `${this.#path}${this.#filename}${this.#mark}`
  }
 
- get stringName() { return this.#stringName || Route.defaultStringName }
- set stringName(value) { this.pathname = `${this.#path}${value}!` }
+ get filename() { return this.#filename || Route.defaultFilename }
+ set filename(value) { this.pathname = `${this.#path}${value}!` }
 
  get extension() { return this.#header.extension }
  get type() { return this.#header.type }
  get binary() { return this.#header.binary }
 
  get segments() { return [...this.#segments] }
- set segments(segments) { this.pathname = `/${segments.join("/")}${segments.length ? "/" : ""}${this.#stringName}${this.#mark}` }
+ set segments(segments) { this.pathname = `/${segments.join("/")}${segments.length ? "/" : ""}${this.#filename}${this.#mark}` }
 
  get routeIDs() { return [...this.#routeIDs] }
  set routeIDs(newRouteIDs) { this.segments = newRouteIDs.map(routeID => Route.segmentFromRouteID(routeID)) }
 
  get path() { return this.#path }
- set path(path) { this.pathname = `${path}${this.#stringName}${this.#mark}` }
+ set path(path) { this.pathname = `${path}${this.#filename}${this.#mark}` }
 
  get search() { return this.#url.search }
  set search(value) { this.#url.search = value }
@@ -229,13 +229,13 @@ if (false) Do_Fuzz_Test: {
   "https://localhost:3000/"
  ]) {
   const r = new Route(href)
-  const strings = ["myFile.jpeg", "suziesFile.txt", "sarahsFile.pdf", "alexsFile.exe"]
+  const filenames = ["myFile.jpeg", "suziesFile.txt", "sarahsFile.pdf", "alexsFile.exe"]
   openLog(0, serialize(r))
-  for (const prop of ["href", "path", "pathname", "routeIDs", "segments", "stringName", "binary", "extension", "header"]) {
+  for (const prop of ["href", "path", "pathname", "routeIDs", "segments", "filename", "binary", "extension", "header"]) {
    debug(prop + " before change: " + serialize(r[prop]))
-   const randomInteger = BigInt(Math.trunc(Math.random() * strings.length))
-   debug("change: set string name to " + strings[randomInteger])
-   r.stringName = strings[randomInteger]
+   const randomInteger = BigInt(Math.trunc(Math.random() * filenames.length))
+   debug("change: set filename to " + filenames[randomInteger])
+   r.filename = filenames[randomInteger]
    debug(prop + " after change: " + serialize(r[prop]))
   }
   closeLog(0)

@@ -18,8 +18,8 @@ declare class Framework {
   * ["window", "worker", "build", "server"]
   * ``` */
  static readonly environments = ["window", "worker", "build", "server"]
- /** A runtime-only archive of the strings which have been generated dynamically. */
- static readonly renderedStrings: Map<string, string>
+ /** A runtime-only archive of the files (as strings) which have been generated dynamically. */
+ static readonly renderedFiles: Map<string, string>
  /** Data about the locator symbols marks that determine the source mappings for code originating as string literals. */
  static readonly sourcePositionMarks: object
  /** The regular expression used to pick out source position marks from code. */
@@ -40,7 +40,7 @@ declare class Framework {
   * Example: "www\.example\.part" => "WwwPart"
  */
  readonly niceName: string
- /** An object that serializes the method signatures and base type for the class script the framework compiled. The object is parsed from `part.json` in the custom string directory (or `{}` if no string is found). It's direct prototype object is parsed from `part.json` in the stock string directory (also {} if not found). Finally, the stock prototype's prototype is the framework's parent's partJSON or null, if it is the Core. */
+ /** An object that serializes the method signatures and base type for the class script the framework compiled. The object is parsed from the file `part.json` in the custom directory (or `{}` if no file is found). It's direct prototype object is parsed from `part.json` in the stock directory (also {} if not found). Finally, the stock prototype's prototype is the framework's parent's partJSON or null, if it is the Core. */
  readonly partJSON: PartData
  /** The inverse of pathToRoot. The path "back up" to dns-root from the directory containing the source code the framework used. */
  readonly pathToRepo: string
@@ -52,17 +52,17 @@ declare class Framework {
  readonly buildSource: number
  /** The path to the folder in the git repo containing the source code that the framework compiled. */
  readonly pathFromRepo: string
- /** A lookup table which tells all of the static assets the part can render as well as which string collection they came from (stock vs. custom). */
- readonly ownStringNameTable?: Map<string, SourceDirectory<string>>
- /** The collection of strings obtained when using the framework's host to traverse the dns-root string collection. */
- readonly stockStringCollection?: SourceDirectory<string>
- /** An optional collection (defaults to `{}`) which overrides any string in the collection corresponding to the framework's host directory dns-root. */
- readonly customStringCollection?: SourceDirectory<string>
- /** An array of all the strings whose render method is defined directly on the part type. */
+ /** A lookup table which tells all of the static assets the part can render as well as which directory they came from (stock vs. custom). */
+ readonly ownFilenameTable?: Map<string, SourceDirectory<string>>
+ /** The archived repository files (strings) and folders (objects) obtained when using the framework's host to traverse the inline repository archive. */
+ readonly stockDirectory?: SourceDirectory<string>
+ /** An optional directory (defaults to `{}`) whose files are added on top of the files in the framework's stock directory before the class is compiled. */
+ readonly customDirectory?: SourceDirectory<string>
+ /** An array of all the methodIDs whose render method is defined directly on the part type. */
  readonly ownRenderMethodIDs: string[]
- constructor(inputHost: string, customStringCollection: SourceDirectory): Framework
- /** Reads a static asset string from the framework's two string directories, returning a fallback nothing is found.*/
- readOwnString(stringName, fallback): void
+ constructor(inputHost: string, customDirectory: SourceDirectory): Framework
+ /** Reads a static file from the framework's two directories, returning a fallback nothing is found.*/
+ readOwnString(filename, fallback): void
  /** Traverses up the framework parent chain to add an inherited set of constant declarations to the the body of methods which will be added to the compiled class. */
  addConstants(targetFile): void
  /** Traverses up the framework parent chain to determine which constant declarations are used in the given method data. */
@@ -121,8 +121,6 @@ declare const environment: string
 declare const production: boolean
 /** All of the inline information compiled from the git repo in node by the build process. */
 declare const build: {
- /** A packed archive of the necessary type definitions. */
- readonly dnsRoot: SourceDirectory
  /** One of three strings representing the severity of the API change. Used to automatically compute the correct semantic version at build time. */
  readonly change: "major" | "minor" | "patch"
  /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
@@ -134,9 +132,16 @@ declare const build: {
  /** The hash of the most recent git commit at build time. */
  readonly hash: string
  /** The automatically generated semantic version number of the current build. */
- readonly semanticVersion: string,
- /** The git commit message for this build version. */
- readonly message: string,
+ readonly semanticVersion: {
+  /** The part of the version number which increments when there are breaking changes to the routes of the user space. */
+  readonly major: number
+  /** The part of the version number which increments when there are non-breaking additions to the routes of the user space. */
+  readonly minor: number
+  /** The part of the version number which increments when there are no changes to the routes of the user space. */
+  readonly patch: number
+ },
+ /** A packed archive of the git repository at build time. */
+ readonly repository: SourceDirectory
 }
 /** A wrapper class that constructs a part of the given host type.
  * 
@@ -176,15 +181,15 @@ declare class MethodData {
  static fromMethodID(METHOD_ID: string): void
  /** The original kebab-case identifier string for this method. */
  readonly methodID: string;
- /** The expected filename for storing the method's source code.
+ /** The expected file name for storing the method's source code.
   * Typically `${METHOD_ID}.js`. */
- readonly stringName: string;
+ readonly filename: string;
  /** Flag indicating if this method is an automatic getter generated by the framework.
   * Determined by checking if `methodID` starts with "auto-". */
  readonly isAuto: boolean;
  /** The raw source code for the body of the method.
   * For 'auto' methods, it's a generated template string.
-  * Otherwise, it's read from the corresponding file (`stringName`).
+  * Otherwise, it's read from the corresponding file (`filename`).
   * Undefined if reading fails. */
  content: string | undefined;
  /** Flag indicating if this method is related to view logic.
