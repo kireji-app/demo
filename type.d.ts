@@ -76,8 +76,9 @@ declare interface MethodDataTable<T> {
  readonly ["render"]: T
 
  readonly ["route-set"]: T
- readonly ["route-collect"]: T
- readonly ["route-distribute"]: T
+ readonly ["routeID-set"]: T
+ readonly ["routeID-collect"]: T
+ readonly ["routeID-distribute"]: T
 
  readonly ["view-remove"]: T
  readonly ["view-add"]: T
@@ -163,6 +164,8 @@ declare const framework: Framework
 declare const SCRIPT_HOST: string
 /** A unicode-safe replacement for btoa. */
 declare function btoaUnicode(BODY: string): string
+/** Creates a main-thread-blocking loop for the given length of time. */
+declare function hang(timeInMilliseconds: number): void
 declare function warn(...DATA: any[]): void
 declare function debug(...DATA: any[]): void
 declare function log(VERBOSITY: number, ...DATA: any[]): void

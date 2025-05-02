@@ -1,12 +1,12 @@
 const options = {
  autoplay() {
-  clip.parent.setRoute(1n, true)
+  clip.parent.setRouteID(1n, true)
  },
  autoplayInto() {
   throw '!implemented'
  },
  loop() {
-  clip.setRoute(1n, true)
+  clip.setRouteID(1n, true)
  }
 }
 

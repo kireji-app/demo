@@ -1,4 +1,4 @@
-globe.desktop = part
+globe.desktop = this
 
 super({
  menu: null,

@@ -1,3 +1,3 @@
 {
- "extends": "clip.menu.user.parts"
+ "extends": "clip.menu.desktop.parts"
 }

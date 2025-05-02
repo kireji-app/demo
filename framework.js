@@ -49,6 +49,29 @@ class Framework {
   globalThis.serialize = VALUE => {
    return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
   }
+  globalThis.hang = timeInMilliseconds => {
+   const start = now
+   warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
+   let iteration = -1
+   let elapsedMilliseconds
+   let remainingMilliseconds
+
+   do {
+    elapsedMilliseconds = Math.trunc((performance.now() - start))
+
+    const newRemainingMilliseconds = timeInMilliseconds - elapsedMilliseconds
+
+    Math.sin(iteration++)
+
+    if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100))
+     log(0, "t: -" + newRemainingMilliseconds)
+
+    remainingMilliseconds = newRemainingMilliseconds
+
+   } while (remainingMilliseconds > 0)
+
+   warn(`Main thread hang finished at iteration ${iteration}.`)
+  }
   globalThis.SourceMappedFile = class {
    static radix = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
    lines = []
@@ -170,8 +193,7 @@ class Framework {
   globalThis.build = buildData
 
   if (environment === "build") {
-
-   build.repository = {}
+   const repository = {}
 
    const
     {
@@ -197,12 +219,12 @@ class Framework {
     globalThis.production = build.branch === "main"
    }
    openLog(0, "Starting build...")
-   build.repository[".gitignore"] = readFile(".gitignore", "utf-8")
-   build.repository["jsconfig.json"] = readFile("jsconfig.json", "utf-8")
-   build.repository["README.md"] = readFile("README.md", "utf-8")
-   build.repository["vercel.json"] = readFile("vercel.json", "utf-8")
-   build.repository["type.d.ts"] = readFile("type.d.ts", "utf-8")
-   const semver = build.semanticVersion = build.repository["README.md"].match(this.readmeVersionPattern).groups
+   repository[".gitignore"] = readFile(".gitignore", "utf-8")
+   repository["jsconfig.json"] = readFile("jsconfig.json", "utf-8")
+   repository["README.md"] = readFile("README.md", "utf-8")
+   repository["vercel.json"] = readFile("vercel.json", "utf-8")
+   repository["type.d.ts"] = readFile("type.d.ts", "utf-8")
+   const semver = build.semanticVersion = repository["README.md"].match(this.readmeVersionPattern).groups
    if (build.local) {
     if (semver.major && build.change === "major") {
      semver.major++
@@ -219,7 +241,7 @@ class Framework {
     }
    }
    const version = `version-${semver.major}.${semver.minor}.${semver.patch}`
-   build.repository["README.md"] = build.repository["README.md"].replace(this.readmeVersionPattern, version)
+   repository["README.md"] = repository["README.md"].replace(this.readmeVersionPattern, version)
    log(0, `${version}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
 
    try {
@@ -242,7 +264,7 @@ class Framework {
 
     const closeMark = ")"
     const closeIndex = existingBuild.lastIndexOf(closeMark)
-    const { repository, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
+    const { repository: existingRepository, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
 
     log(0, "Staging the intent to add all untracked files.")
     $(`git add --intent-to-add .`)
@@ -256,7 +278,7 @@ class Framework {
      const leftExtension = extname(leftPath)
      const leftPathSegments = leftPath.slice(9).split("/")
      const leftFilename = leftPathSegments.pop()
-     let leftRoot = repository["dns-root"]
+     let leftRoot = existingRepository["dns-root"]
      let rightRoot = null
      let rightFilename = null
      let rightExtension = null
@@ -265,7 +287,7 @@ class Framework {
       leftRoot = leftRoot[pathPart] ??= {}
 
      if (rightPath) {
-      rightRoot = repository["dns-root"]
+      rightRoot = existingRepository["dns-root"]
       rightExtension = extname(rightPath)
       const rightPathSegments = rightPath.slice(9).split("/")
       rightFilename = rightPathSegments.pop()
@@ -281,31 +303,31 @@ class Framework {
        break;
       case "M":
        leftRoot[leftFilename] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;28m/\x1b[38;5;226m${leftFilename}\x1b[38;5;28m - modified \x1b[0m`)
+       log(2, `\x1b[38;5;100m/\x1b[38;5;226m${leftFilename}\x1b[38;5;100m - modified \x1b[0m`)
        break;
       case "D":
        delete leftRoot[leftFilename];
-       log(2, `\x1b[38;5;28m/\x1b[38;5;196m${leftFilename}\x1b[38;5;28m - deleted \x1b[0m`)
+       log(2, `\x1b[38;5;88m/\x1b[38;5;196m${leftFilename}\x1b[38;5;88m - deleted \x1b[0m`)
        break;
       case "C":
       case "R":
        delete leftRoot[leftFilename]
        rightRoot[rightFilename] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;28m/\x1b[38;5;129m${rightFilename}\x1b[38;5;28m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
+       log(2, `\x1b[38;5;54m/\x1b[38;5;129m${rightFilename}\x1b[38;5;54m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
        break;
       default:
        throw "Unsupported git diff type, '" + fileStatus + "'."
      }
     }
 
-    build.repository["dns-root"] = repository["dns-root"]
+    repository["dns-root"] = existingRepository["dns-root"]
    } catch (reason) {
     log(0, "Building from scratch.", { reason })
     log(1, "Initializing local git configuration (idempotent).")
     $('git update-index --assume-unchanged api/service.js')
     log(1, "Packing shallow git repository into script.")
-    build.repository["dns-root"] = {}
-    function readRecursive(host = "", folderPath = "dns-root", directory = build.repository["dns-root"]) {
+    repository["dns-root"] = {}
+    function readRecursive(host = "", folderPath = "dns-root", directory = repository["dns-root"]) {
      // TODO: Manage file size max.
      if (host) {
       if (host.length > 253)
@@ -348,6 +370,8 @@ class Framework {
      }
     }
     readRecursive()
+   } finally {
+    build.repository = repository
    }
    /*
     // Conceptual:
@@ -446,17 +470,6 @@ class Framework {
      used = false
      requirements = []
      constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
-      /**
-       This object manages exactly one inherited constant declaration (SOURCE_LINE)
-        including its dependencies as the parent MethodData class instance traverses
-        the prototype chain of the type it is constructing to find both generic method
-        constants and specific subtype constants.
-  
-       It adds the constant - after adding any previous constants that it depends
-       on - to the file as soon as its constructed, but only if the given method
-       body includes the constant.
-      */
-
       const constant = this
       constant.path = SOURCE_PATH
       constant.line = SOURCE_LINE
@@ -470,7 +483,7 @@ class Framework {
       constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
 
       if (constant.identifier in methodData.Constant.all)
-       throw 'constant overriding is not ready yet'
+       throw 'Duplicate definition of constant ' + constant.identifier + ' in type ' + framework.host + "."
 
       for (const previousConstantIdentifier in methodData.Constant.unused) {
        // A currently unused constant is used by this constant.

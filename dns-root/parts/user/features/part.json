@@ -1,0 +1,4 @@
+{
+ "extends": "mix.core.parts",
+ "part-distribute-initialize": []
+}

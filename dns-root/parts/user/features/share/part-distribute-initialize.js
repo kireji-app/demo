@@ -1,0 +1,2 @@
+globe.share = this
+super()

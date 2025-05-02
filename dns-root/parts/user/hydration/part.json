@@ -1,7 +1,0 @@
-{
- "extends": "window.feature.user.parts",
- "finish": [],
- "performance-simulate-slow": [
-  "DELAY_IN_MS = 0"
- ]
-}

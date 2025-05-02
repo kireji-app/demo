@@ -1,1 +1,1 @@
-menu.setRoute(1n, true)
+menu.setRouteID(1n, true)

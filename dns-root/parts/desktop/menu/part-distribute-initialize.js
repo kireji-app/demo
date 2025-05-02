@@ -1,4 +1,4 @@
-globe.menu = match
+globe.menu = this
 
 super({
  closed: null,

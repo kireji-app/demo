@@ -1,4 +1,7 @@
 {
  "extends": "mix.core.parts",
- "part-distribute-initialize": []
+ "part-distribute-initialize": [],
+ "route-set": [
+  "ROUTE"
+ ]
 }

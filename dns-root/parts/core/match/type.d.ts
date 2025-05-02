@@ -9,6 +9,8 @@ declare class MatchPart extends CorePart {
   * 
   * For each subpart in the manifest, the cardinality callback will receive the precomputed match cardinality and must return a cardinality to assign to the match. */
  distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: Function): void
+ /** Sets the match's arm to the given index, part, or key. This sets the part's routeID, propagating it leafward and rootward and updating all views. */
+ setArm(ARM: number | CorePart | string): void
 }
 declare const match: MatchPart
 declare class MatchError extends Error { }

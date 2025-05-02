@@ -1,2 +1,2 @@
-globe.tray = part
+globe.tray = this
 super()

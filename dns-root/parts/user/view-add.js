@@ -1,12 +1,8 @@
-// This base HTML is always server-rendered.
+// This base HTML is always server-rendered, making this a hydrating task.
 
 if (!hydration.supported)
- throw "Unrecoverable: call to view function without the necessary feature support."
+ throw "Unrecoverable: call to the root view function without the necessary feature support."
 
-// Debug.
-hydration.simulateSlowPerformance(10000)
-
-document.title = user.host
 user.manifestLink = document.querySelector('link[rel="manifest"]')
 user.manifestLink.href ??= "/manifest.json!"
 user.wallpaper = document.querySelector("wallpaper-")
@@ -21,6 +17,3 @@ user.vintageModeButton = document.getElementById("vintage-mode")
 user.colorModeHandle = user.colorModeButton.querySelector(".handle")
 user.colorModeLabel2 = document.getElementById("label2")
 user.styleNode = document.getElementById("inline-style")
-
-if (!hydration.hydrated)
- hydration.finish()

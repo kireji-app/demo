@@ -1,16 +1,16 @@
 {
  "symbol-iterator": [],
- "route-set": [
+ "routeID-set": [
   "ROUTE_ID",
   "DELTA = false"
  ],
- "route-collect": [
+ "routeID-collect": [
   "SUBPARTS"
  ],
- "route-distribute": [
+ "routeID-distribute": [
   "ROUTE_ID"
  ],
- "route-update": [
+ "routeID-update": [
   "ROUTE_ID"
  ],
  "part-distribute-initialize": [

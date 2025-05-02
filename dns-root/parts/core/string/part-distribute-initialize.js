@@ -6,6 +6,10 @@ let fixedLengthCardinality = 1n
 if (!PART_MANIFEST)
  throw new StringError("No part manifest was provided.")
 
+if (typeof PART_MANIFEST === "string") {
+ string.typed = true
+}
+
 super(PART_MANIFEST, (cardinality, character, index, entries) => {
  const placeValue = fixedLengthCardinality
  string.placeValues.set(factor, placeValue)
@@ -15,5 +19,5 @@ super(PART_MANIFEST, (cardinality, character, index, entries) => {
  string.offsets.set(index, cardinality)
  string.offsets.set(character.key, cardinality)
  const newCardinality = cardinality + (fixedLengthCardinality *= character.cardinality)
- return CARDINALITY_CALLBACK(cardinality, character, index, entries)
+ return CARDINALITY_CALLBACK(newCardinality, character, index, entries)
 }, 0n)

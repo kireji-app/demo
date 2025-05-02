@@ -1,2 +1,0 @@
-globe.gpu = feature
-super()

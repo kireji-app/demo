@@ -13,10 +13,10 @@ declare class MixPart extends CorePart {
  distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: function): void
 
  /** Updates the mix's routeID and bubbles the update rootward. */
- collectRoute(SUBPARTS: CorePart[]): void
+ collectRouteID(SUBPARTS: T[]): void
 
  /** Updates the mix's routeID and bubbles the update leafward. */
- distributeRoute(ROUTE_ID): void
+ distributeRouteID(ROUTE_ID): void
 }
 declare const mix: MixPart
 declare class MixError extends Error { }

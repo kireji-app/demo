@@ -1,4 +1,4 @@
-globe.colorMode = match
+globe.colorMode = this
 
 super({
  device: null,

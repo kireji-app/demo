@@ -1,2 +1,0 @@
-globe.fullscreen = feature
-super()

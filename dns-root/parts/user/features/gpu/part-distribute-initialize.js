@@ -1,0 +1,2 @@
+globe.gpu = this
+super()

@@ -1,0 +1,2 @@
+globe.fullscreen = this
+super()

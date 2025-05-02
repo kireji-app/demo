@@ -1,13 +1,21 @@
+/** The part type for the user configuration space. */
 declare class UserPart extends MixPart {
- // Client Features.
- readonly gpu: GpuPart
- readonly agent: AgentPart
- readonly share: SharePart
+ /** The single-cardinality mix of environment-specific features.
+  * 
+  * Feature content is not encoded in the user route but inferred from the available context. */
+ readonly features: FeaturesPart
+ /** The operating system theme.
+  * 
+  * Theme content is encoded by the host of the user route. */
+ readonly theme: ThemePart
+ /** The core operating system interface part itself. Separate from other running tasks because this task is required.
+  * 
+  * Desktop content is encoded by the first segment of the user route pathname. */
  readonly desktop: DesktopPart
- readonly hotKeys: HotKeysPart
- readonly hydration: HydrationPart
- readonly addressBar: AddressBarPart
- readonly serviceWorker: ServiceWorkerPart
+ /** The string of optional processes which are currently running on the operating system.
+  * 
+  * Task content is encoded by all segments appearing after the first segment in the user route pathname. */
+ readonly tasks: TasksPart
  /** The prototype of the user space, whose host is `mix.core.parts`. */
  readonly super: MixPart
  /** The computed framerate of the application. */
@@ -70,6 +78,8 @@ declare class UserPart extends MixPart {
  readonly vintageModeButton: HTMLButtonElement;
  /** The link element for the web app manifest. */
  readonly manifestLink: HTMLLinkElement
+ /** A promise which resolves when the user space is fully initialized and ready to install features. */
+ readonly promise: Promise<void>
  /** Initializes the entire part hierarchy which handles mapping URIs to app state.
   * 
   * Sets all of the client features. Those features will only initialize if we are in the window environment. */
@@ -78,8 +88,10 @@ declare class UserPart extends MixPart {
  getNestedToolbar(): ShadowRoot
  /** Destroys the nested toolbar. */
  destroyNestedToolbar(): void
+ /** Sets the entire user configuration space to match the given Route object. */
+ setRoute(ROUTE: Route): void
 }
 /** The root of the client window part hierarchy.
  * 
- * It handles the DOM and user interaction as well as baking inlined HTML and CSS on the server. */
+ * It handles the DOM and user interaction as well as baking inline HTML and CSS on the server. */
 declare const user: UserPart

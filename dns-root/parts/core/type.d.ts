@@ -49,7 +49,7 @@ declare class CorePart extends Iterable<CorePart> {
  readonly justDisabled: boolean
  /** The current route of the part expressed as a bigint index in the virtual array of all of its routes. */
  readonly routeID: bigint
- /** The previous route of the part, changed at the last call to route-distribute or route-collect. */
+ /** The previous route of the part, changed at the last call to distributeRouteID or collectRouteID. */
  readonly previousRouteID: bigint
  /** The difference between the current routeID and the previous one. */
  readonly deltaRouteID: bigint
@@ -82,25 +82,23 @@ declare class CorePart extends Iterable<CorePart> {
  /** Sets the part's factory settings, subparts and cardinality. */
  distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: Function): void
  /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */
- setRoute(ROUTE_ID: bigint): void
- /** Sets the match's arm to the given index, part, or key. This sets the part's routeID, propagating it leafward and rootward and updating all views. */
- setArm(ARM: number | CorePart | string): void
+ setRouteID(ROUTE_ID: bigint): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
- collectRoute(SUBPARTS: CorePart[]): void
+ collectRouteID(SUBPARTS: CorePart[]): void
  /** Updates the part's routeID to ROUTE_ID and then recomputes all subpart routeIDs to match.
   * 
   * For any active subparts, it calls distributeRoute on them, passing the signal leafward.
   * 
   * To avoid redistributing the same route, **check for route ID changes *before* calling distributeRoute**. */
- distributeRoute(ROUTE_ID: bigint): void
+ distributeRouteID(ROUTE_ID: bigint): void
  /** If ROUTE_ID is in the part's range, sets the part to that routeID while caching information about
   * the previous routeID. Otherwise, throws an error.
   * 
   * This method is called by both collectRoute and distributeRoute.
   * It does not propagate the routeID or update any views. */
- updateRoute(ROUTE_ID: bigint): void
+ updateRouteID(ROUTE_ID: bigint): void
  /** Adds all view elements, properties, and references which the part needs to have in *all* of it's routes. */
  addView(): void
  /** An updating function which runs *every time* the route of a part changes to something other than `-1n`. */
