@@ -1,75 +1,40 @@
 class Framework {
  static initialize(buildData) {
-
-  // Initialize own static properties
-  this.responses = {}
-  this.frameworks = []
-  this.sourceCode = this.toString()
-  this.sourceLines = this.sourceCode.split("\n")
-  this.sourcePositionMarks = {}
-  this.readmeVersionPattern = /version-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/
-  this.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
-  this.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
-  for (let ln = 0; ln < this.sourceLines.length; ln++) {
-   for (const { 0: mark, index: col } of this.sourceLines[ln].matchAll(this.sourcePositionMarkPatternRegister)) {
-    if (mark in this.sourcePositionMarks)
-     throw `Duplicate source position mark ${mark} in framework.js.`
-    this.sourcePositionMarks[mark] = { ln, col }
-   }
+  Framework.responses = {}
+  Framework.frameworks = []
+  Framework.sourceCode = Framework.toString()
+  Framework.sourceLines = Framework.sourceCode.split("\n")
+  Framework.sourcePositionMarks = {}
+  Framework.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
+  Framework.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
+  for (let ln = 0; ln < Framework.sourceLines.length; ln++) for (const { 0: mark, index: col } of Framework.sourceLines[ln].matchAll(Framework.sourcePositionMarkPatternRegister)) {
+   if (mark in Framework.sourcePositionMarks) throw `Duplicate source position mark ${mark} in framework.js.`
+   Framework.sourcePositionMarks[mark] = { ln, col }
   }
-
-  // Initialize global properties.
+  globalThis.globe = globalThis
+  globalThis.build = buildData
+  globalThis.Part = class Part { constructor(host) { return new (new Framework(host).PartConstructor)() } }
   const { constructor: Globe, Window, ServiceWorkerGlobalScope: Worker, process: Cloud } = globalThis
   globalThis.environment = Globe === Window ? "window" : (Globe === Worker ? "worker" : (Cloud?.argv[1]?.split("/").pop() === "framework.js" ? "build" : "server"))
-  function conditionalConsoleCall(VERBOSITY, DATA, METHOD = 'debug') {
-   // Logging functions cannot be used until globalThis.production is defined.
-   if (!production && VERBOSITY <= build.verbosity)
-    console[METHOD](environment + ":", ...DATA)
-  }
-  globalThis.log = (VERBOSITY, ...DATA) => {
-   conditionalConsoleCall(VERBOSITY, DATA, 'log')
-  }
-  globalThis.warn = (...DATA) => {
-   conditionalConsoleCall(0, DATA, 'warn')
-  }
-  globalThis.debug = (...DATA) => {
-   conditionalConsoleCall(0, DATA, 'debug')
-  }
-  globalThis.openLog = (VERBOSITY, ...DATA) => {
-   conditionalConsoleCall(VERBOSITY, DATA, 'group')
-  }
-  globalThis.closeLog = (VERBOSITY) => {
-   conditionalConsoleCall(VERBOSITY, [], 'groupEnd')
-  }
-  globalThis.btoaUnicode = BODY => {
-   return btoa(new TextEncoder('utf-8').encode(BODY)
-    .reduce((data, byte) => data + String.fromCharCode(byte), '')
-   )
-  }
-  globalThis.serialize = VALUE => {
-   return JSON.stringify(VALUE, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
-  }
+  const conditionalLog = (verbosity, data, method = 'debug') => !production && verbosity <= build.verbosity && console[method](...(environment === "server" ? ["server:", ...data] : data))
+  globalThis.log = (verbosity, ...data) => conditionalLog(verbosity, data, 'log')
+  globalThis.warn = (...data) => conditionalLog(0, data, 'warn')
+  globalThis.debug = (...data) => conditionalLog(0, data, 'debug')
+  globalThis.openLog = (verbosity, ...data) => conditionalLog(verbosity, data, 'group')
+  globalThis.closeLog = (verbosity) => conditionalLog(verbosity, [], 'groupEnd')
+  globalThis.btoaUnicode = string => btoa(new TextEncoder('utf-8').encode(string).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+  globalThis.serialize = value => JSON.stringify(value, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
   globalThis.hang = timeInMilliseconds => {
-   const start = now
    warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
-   let iteration = -1
-   let elapsedMilliseconds
-   let remainingMilliseconds
-
+   const start = now
+   let iteration = -1, elapsedMilliseconds, remainingMilliseconds
    do {
     elapsedMilliseconds = Math.trunc((performance.now() - start))
-
     const newRemainingMilliseconds = timeInMilliseconds - elapsedMilliseconds
-
     Math.sin(iteration++)
-
-    if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100))
-     log(0, "t: -" + newRemainingMilliseconds)
-
+    if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100)) log(0, "t: -" + newRemainingMilliseconds)
     remainingMilliseconds = newRemainingMilliseconds
-
    } while (remainingMilliseconds > 0)
-
    warn(`Main thread hang finished at iteration ${iteration}.`)
   }
   globalThis.SourceMappedFile = class {
@@ -78,49 +43,35 @@ class Framework {
    sources = []
    scripts = []
    mappings = []
-   constructor(NAME, PATH_TO_REPO, PATH_FROM_REPO) {
+   constructor(name, pathToRepo, pathFromRepo) {
     const sourceFile = this
-    sourceFile.name = NAME
-    sourceFile.pathToRepo = PATH_TO_REPO
-    sourceFile.pathFromRepo = PATH_FROM_REPO
+    sourceFile.name = name
+    sourceFile.pathToRepo = pathToRepo
+    sourceFile.pathFromRepo = pathFromRepo
    }
    addSource(source, script) {
     const sourceFile = this
-
-    if (production)
-     return
-
+    if (production) return
     let srcIndex = sourceFile.sources.indexOf(source)
-
     if (srcIndex === -1) {
      srcIndex = sourceFile.sources.length
      sourceFile.sources.push(source)
      sourceFile.scripts.push(script)
     }
-
     return srcIndex
    }
    addLine(string, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
     const sourceFile = this
-    if (typeof string !== "string")
-     throw 'bad line: ' + (typeof string)
-
+    if (typeof string !== "string") throw 'bad line: ' + (typeof string)
     const mark = string.match(Framework.sourcePositionMarkPatternAddLine)?.[0]
-
     if (mark) {
      string = string.slice(mark.length)
      ogLn = Framework.sourcePositionMarks[mark].ln
     }
-
     sourceFile.lines.push(indent + string)
-
-    if (production)
-     return
-
-    if (string && mapTokens)
-     sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
-    else
-     sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
+    if (production) return
+    if (string && mapTokens) sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
+    else sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
    }
    addLines(strings, srcIndex, ogLn = 0, ogCol = 0, indent = "", mapTokens = true) {
     const sourceFile = this
@@ -130,19 +81,18 @@ class Framework {
     const sourceFile = this
     const lines = string.split("\n")
     const mark = lines[0].match(Framework.sourcePositionMarkPatternAddLine)?.[0]
-
     if (mark) {
      lines.shift()
      ogLn = Framework.sourcePositionMarks[mark].ln + 1
     }
-
     sourceFile.addLines(lines, srcIndex, ogLn, ogCol, indent, mapTokens)
    }
    packAndMap(url) {
     const sourceFile = this
-    return sourceFile.lines.join("\n") + (production ? "" : `
+    const script = sourceFile.lines.join("\n")
+    return build.mapping ? script + `
  //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url ? `
- //${"#"} sourceURL=${url}` : ""}`)
+ //${"#"} sourceURL=${url}` : ""}` : script
    }
    getMap() {
     const sourceFile = this
@@ -181,51 +131,17 @@ class Framework {
     }, null, 1)
    }
   }
-  globalThis.Part = class Part {
-   constructor(INPUT) {
-    if (typeof INPUT === "string")
-     return new (new Framework(INPUT).PartConstructor)()
-
-    throw 'other constructor forms are not yet supported'
-   }
-  }
-  globalThis.globe = globalThis
-  globalThis.build = buildData
-
   if (environment === "build") {
-   const repository = {}
-
-   const
-    {
-     statSync: getItemStats,
-     existsSync: itemExists,
-     readdirSync: readFolder,
-     readFileSync: readFile
-    } = require('fs'),
-    { extname } = require('path'),
-    { execSync: $ } = require('child_process')
-
-   build.local = !process.env.VERCEL || !!process.env.__VERCEL_DEV_RUNNING
-
+   const { extname } = require('path'), { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile, writeFileSync: writeFile, mkdirSync: makeFolder } = require('fs'), { execSync: $ } = require('child_process')
+   build.repository = Object.fromEntries([".gitignore", "jsconfig.json", "README.md", "vercel.json", "type.d.ts"].map(fn => [fn, readFile(fn, "utf-8")]))
+   build.local = !Cloud.env.VERCEL || !!Cloud.env.__VERCEL_DEV_RUNNING
+   build.size = 0
+   const readmeVersionPattern = /version-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/
+   const semver = build.semanticVersion = build.repository["README.md"].match(readmeVersionPattern).groups
    if (build.local) {
     build.branch = $('git branch --show-current').toString().trim()
     build.hash = $('git rev-parse HEAD').toString().trim()
-    // build.message = $('git log -1').toString()
     globalThis.production = false
-   } else {
-    build.branch = process.env.VERCEL_GIT_COMMIT_REF
-    build.hash = process.env.VERCEL_GIT_COMMIT_SHA
-    // build.message = process.env.VERCEL_GIT_COMMIT_MESSAGE
-    globalThis.production = build.branch === "main"
-   }
-   openLog(0, "Starting build...")
-   repository[".gitignore"] = readFile(".gitignore", "utf-8")
-   repository["jsconfig.json"] = readFile("jsconfig.json", "utf-8")
-   repository["README.md"] = readFile("README.md", "utf-8")
-   repository["vercel.json"] = readFile("vercel.json", "utf-8")
-   repository["type.d.ts"] = readFile("type.d.ts", "utf-8")
-   const semver = build.semanticVersion = repository["README.md"].match(this.readmeVersionPattern).groups
-   if (build.local) {
     if (semver.major && build.change === "major") {
      semver.major++
      semver.minor = 0
@@ -239,64 +155,47 @@ class Framework {
      semver.minor = parseInt(semver.minor)
      semver.patch++
     }
+    build.repository["README.md"] = build.repository["README.md"].replace(readmeVersionPattern, `version-${semver.major}.${semver.minor}.${semver.patch}`)
+   } else {
+    build.branch = Cloud.env.VERCEL_GIT_COMMIT_REF
+    build.hash = Cloud.env.VERCEL_GIT_COMMIT_SHA
+    globalThis.production = build.branch === "main"
    }
-   const version = `version-${semver.major}.${semver.minor}.${semver.patch}`
-   repository["README.md"] = repository["README.md"].replace(this.readmeVersionPattern, version)
-   log(0, `${version}${build.local ? " (local)" : ""} from branch "${build.branch}".`)
-
-   try {
-    // Try to use git diff to patch the existing build.
-
-    if (production)
-     throw "The production environment should always build from scratch."
-
-    if (!itemExists("api/service.js"))
-     throw "No existing build file."
-
-    log(0, "Existing build detected. Attempting partial build.")
-
+   // Conditional logging is only functional after this point.
+   openLog(0, `Building ${build.local ? "local" : "cloud"}/${build.branch} ${[semver.major, semver.minor, semver.patch].join(".")}...`)
+   try { // Try to use git diff to patch the existing repository.
+    if (production) throw "The production environment should always build from scratch."
+    if (!itemExists("api/service.js")) throw "No existing build file."
+    log(0, "Patching existing build.")
     const existingBuild = readFile("api/service.js", "utf-8")
     const openMark = "Framework.initialize" + "("
     const openIndex = existingBuild.indexOf(openMark) + openMark.length
-
-    if (openIndex < openMark.length)
-     throw "The existing build file wasn't populated."
-
+    if (openIndex < openMark.length) throw "The existing build file wasn't populated."
     const closeMark = ")"
     const closeIndex = existingBuild.lastIndexOf(closeMark)
-    const { repository: existingRepository, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
-
-    log(0, "Staging the intent to add all untracked files.")
+    const { repository, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
+    log(1, "Staging the intent to add all untracked files.")
     $(`git add --intent-to-add .`)
-
     for (const diffResult of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
-
-     if (!diffResult)
-      continue
-
+     if (!diffResult) continue
      const [fileStatus, leftPath, rightPath] = diffResult.split(/\s+/)
      const leftExtension = extname(leftPath)
      const leftPathSegments = leftPath.slice(9).split("/")
      const leftFilename = leftPathSegments.pop()
-     let leftRoot = existingRepository["dns-root"]
+     let leftRoot = repository["dns-root"]
      let rightRoot = null
      let rightFilename = null
      let rightExtension = null
-
-     for (const pathPart of leftPathSegments)
-      leftRoot = leftRoot[pathPart] ??= {}
-
+     for (const pathPart of leftPathSegments) leftRoot = leftRoot[pathPart] ??= {}
      if (rightPath) {
-      rightRoot = existingRepository["dns-root"]
+      rightRoot = repository["dns-root"]
       rightExtension = extname(rightPath)
       const rightPathSegments = rightPath.slice(9).split("/")
       rightFilename = rightPathSegments.pop()
       for (const pathPart of rightPathSegments)
        rightRoot = rightRoot[pathPart] ??= {}
      }
-     /* if (rightPath && rightExtension === ".ts" || leftExtension === ".ts") {
-      log(2, `\x1b[38;5;27m/\x1b[38;5;239m${filename} ignored\x1b[0m`)
-     } else */ switch (fileStatus[0]) {
+     switch (fileStatus[0]) {
       case "A":
        leftRoot[leftFilename] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
        log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftFilename}\x1b[38;5;34m - added \x1b[0m`)
@@ -319,24 +218,16 @@ class Framework {
        throw "Unsupported git diff type, '" + fileStatus + "'."
      }
     }
-
-    repository["dns-root"] = existingRepository["dns-root"]
-   } catch (reason) {
+    build.repository["dns-root"] = repository["dns-root"]
+   } catch (reason) { // Pack the repository from scratch.
     log(0, "Building from scratch.", { reason })
     log(1, "Initializing local git configuration (idempotent).")
     $('git update-index --assume-unchanged api/service.js')
     log(1, "Packing shallow git repository into script.")
-    repository["dns-root"] = {}
-    function readRecursive(host = "", folderPath = "dns-root", directory = repository["dns-root"]) {
-     // TODO: Manage file size max.
-     if (host) {
-      if (host.length > 253)
-       throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
-     }
-
-     if (!itemExists(folderPath))
-      throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
-
+    build.repository["dns-root"] = {}
+    function readRecursive(host = "", folderPath = "dns-root", directory = build.repository["dns-root"]) {
+     if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
+     if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
      const filenames = []
      for (const itemName of readFolder(folderPath)) {
       const
@@ -344,23 +235,17 @@ class Framework {
        filePath = folderPath + "/" + itemName
       if (itemExists(filePath)) {
        const stats = getItemStats(filePath)
-
        if (stats.isDirectory()) {
         openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
         readRecursive(host ? itemName ? itemName + "." + host : host : itemName ?? "", filePath, directory[itemName] = {})
         closeLog(2)
-       } else if (stats.isFile())
-        filenames.push([itemName, filePath])
+       } else if (stats.isFile()) filenames.push([itemName, filePath])
       }
      }
-
      for (const [filename, filePath] of filenames) {
       const extension = extname(filePath)
       try {
-
-       if (/*extension !== ".ts" && */!$(`git check-ignore -v ${filePath}`).includes('.gitignore:'))
-        throw "Don't ignore."
-
+       if (!$(`git check-ignore -v ${filePath}`).includes('.gitignore:')) throw "Don't ignore."
        log(2, `\x1b[38;5;27m/\x1b[38;5;239m${filename} ignored\x1b[0m`)
       } catch {
        const content = readFile(filePath, ['.png', '.gif'].includes(extension) ? "base64" : "utf-8")
@@ -370,13 +255,11 @@ class Framework {
      }
     }
     readRecursive()
-   } finally {
-    build.repository = repository
    }
    /*
     // Conceptual:
     const { resolveTxt } = require('dns')
-    const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), process.exit(21)) : give(TXT)))
+    const txt = host => new Promise(give => resolveTxt(host, (e, TXT) => e ? (debug(e), Cloud.exit(21)) : give(TXT)))
     const targetHost = "www.core.parts"
     txt(targetHost).then(TXT => {
      for (const txt of TXT) {
@@ -391,82 +274,126 @@ class Framework {
        break
       }
      }
-     process.exit(21)
+     Cloud.exit(21)
     })
    */
+   new Part("user.parts").distributeInitializePart()
+   if (!itemExists("api")) makeFolder("api")
+   writeFile("api/service.js", user["service.js"])
+   writeFile("README.md", build.repository["README.md"])
+   build.size = getItemStats("api/service.js").size
+   writeFile("api/service.js", user["service.js"])
+   build.size = getItemStats("api/service.js").size
+   const finalBody = user["service.js"]
+   writeFile("api/service.js", finalBody)
+   openLog(1, "Stats for service.js")
+   log(1, [...finalBody].length.toLocaleString() + " utf-8 characters")
+   log(2, finalBody.length.toLocaleString() + " String characters")
+   log(1, build.size.toLocaleString() + " bytes")
+   log(0, Math.trunc(10000000 * build.size / 2 ** 20) / 10000000 + " megabytes")
+   log(2, Math.ceil(build.size * 8 / 6).toLocaleString() + " hexads/sextets")
+   closeLog(1)
    closeLog(0)
-  } else globalThis.production = !build.local && build.branch === "main"
-
-  // Create and initialize the user configuration space.
-  new Part("user.parts").distributeInitializePart()
+  } else {
+   globalThis.production = !build.local && build.branch === "main"
+   // Conditional logging is only functional after this point.
+   const semver = build.semanticVersion
+   openLog(0, `Booting ${build.local ? "local" : "cloud"}/${build.branch} ${[semver.major, semver.minor, semver.patch].join(".")}`)
+   new Part("user.parts").distributeInitializePart()
+   closeLog(0)
+  }
+  log(0, "Build successful.")
  }
  constructor(inputHost, customDirectory) {
   const framework = this
-
-  if (typeof inputHost !== "string")
-   throw "host cannot be " + typeof inputHost
-
-  if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(inputHost) && !/^localhost:\d+$/.test(inputHost))
-   throw "malformed host " + inputHost
-
+  if (typeof inputHost !== "string") throw "host cannot be " + typeof inputHost
+  if (!/^[0-9a-z-]+(?:\.[0-9a-z-]+){1,}$/.test(inputHost) && !/^localhost:\d+$/.test(inputHost)) throw "malformed host " + inputHost
   if (!customDirectory) {
-
-   if (inputHost in Framework.frameworks)
-    return Framework.frameworks[inputHost]
-
+   if (inputHost in Framework.frameworks) return Framework.frameworks[inputHost]
    Framework.frameworks[inputHost] = framework
   }
-
+  framework.renderedStrings = {}
   framework.host = inputHost
   framework.isCore = inputHost === "core.parts"
   framework.domains = inputHost.split(".").concat("dns-root")
+  framework.niceName = inputHost.startsWith("localhost:") ? "LocalHostPart" : inputHost.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
   framework.stockDirectory = inputHost.split(".").reduceRight((directory, subdomain) => directory?.[subdomain] ?? {}, build.repository["dns-root"])
   framework.customDirectory = customDirectory ?? {}
-  framework.MethodData = class {
+  framework.stockPartJSON = JSON.parse(framework.stockDirectory["part.json"] ?? "{}")
+  framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customDirectory["part.json"] ?? "{}"), framework.stockPartJSON)
+  framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "one.core.parts")
+  framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
+  if (!framework.isCore) Object.setPrototypeOf(framework.stockPartJSON, framework.parent.partJSON)
+  framework.stockFilenames = Object.keys(framework.stockDirectory).filter(n => typeof framework.stockDirectory[n] === "string")
+  framework.customFilenames = Object.keys(framework.customDirectory).filter(n => typeof framework.customDirectory[n] === "string")
+  framework.allFilenames = framework.stockFilenames.concat(framework.customFilenames)
+  framework.ownFilenameTable = new Map(framework.stockFilenames.map(fn => [fn, framework.stockDirectory]).concat(framework.customFilenames.map(fn => [fn, framework.customDirectory])))
+  framework.Property = class {
    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
-   static fromMethodID(METHOD_ID) {
-    this[METHOD_ID] = new this(METHOD_ID)
+   static ids = new Set()
+   static addConstants(targetFile) {
+    // framework.parent?.Property.addConstants(targetFile)
+    // Parents can pass their constants up.
+    const filename = "const-class.js"
+    const pathPrefix = targetFile === framework.sourceFile ? "" : targetFile.pathToRepo + "/" + framework.pathFromRepo + "/"
+    const path = pathPrefix + filename
+    const body = framework.Property.readOwnString(filename)
+    if (body) targetFile.addSection(body, targetFile.addSource(path, body), 0, 0, " ")
    }
-   constructor(METHOD_ID) {
-    const methodData = this
-    methodData.methodID = METHOD_ID
-    methodData.filename = `${METHOD_ID}.js`
-    methodData.isAuto = METHOD_ID.startsWith("auto-")
-    methodData.content = methodData.isAuto ? `@auto-getter@return framework.readOwnString("${METHOD_ID.slice(5)}")` : framework.readOwnString(methodData.filename)
-    methodData.isView = METHOD_ID.startsWith("view-")
-    methodData.isAsync = METHOD_ID.startsWith("async-")
-    methodData.isSymbol = METHOD_ID.startsWith("symbol-")
-    methodData.isGetOrSet = METHOD_ID.startsWith("get-") || METHOD_ID.startsWith("set-")
-    methodData.niceName = (() => {
-     if (METHOD_ID.includes("-")) {
-      if (methodData.isSymbol) {
-       const subMethodID = METHOD_ID.slice(7)
-       return `[Symbol.${subMethodID}]`
-      } else if (methodData.isGetOrSet) {
-       if (METHOD_ID.includes("."))
-        return `["${METHOD_ID.slice(4)}"]`
-      } else if (methodData.isAuto) {
-       if (METHOD_ID.includes("."))
-        return `["${METHOD_ID.slice(5)}"]`
+   static collectConstants(targetFramework, targetProperty) {
+    if (targetFramework === framework) {
+     if (targetProperty.content === "") {
+      targetProperty.content = "// Do nothing."
+      targetProperty.lines = [targetProperty.content]
+      return
+     }
+    }
+    framework.parent?.Property.collectConstants(targetFramework, targetProperty)
+    function collectOwnConstants(FILENAME) {
+     if (!framework.ownFilenameTable.has(FILENAME)) return
+     const pathPrefix = targetFramework.pathToRepo + "/" + framework.pathFromRepo + "/"
+     const path = pathPrefix + FILENAME
+     const body = framework.Property.readOwnString(FILENAME)
+     const lines = body.split("\n")
+     for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
+    }
+    collectOwnConstants("const-method.js")
+    if (targetProperty.isGetOrSet) collectOwnConstants("const-get-or-set.js")
+    if (targetProperty.isView) collectOwnConstants("const-view.js")
+   }
+   static readOwnString(filename, fallback) {
+    return framework.ownFilenameTable.has(filename) ? framework.ownFilenameTable.get(filename)[filename] : fallback
+   }
+   constructor(PROPERTY_ID) {
+    const property = framework.Property[PROPERTY_ID] = this
+    property.id = PROPERTY_ID
+    property.filename = `${PROPERTY_ID}.js`
+    property.isAuto = PROPERTY_ID.startsWith("auto-")
+    property.content = property.isAuto ? `@auto-getter@return framework.Property.readOwnString("${PROPERTY_ID.slice(5)}")` : framework.Property.readOwnString(property.filename)
+    property.isView = PROPERTY_ID.startsWith("view-")
+    property.isAsync = PROPERTY_ID.startsWith("async-")
+    property.isSymbol = PROPERTY_ID.startsWith("symbol-")
+    property.isGetOrSet = PROPERTY_ID.startsWith("get-") || PROPERTY_ID.startsWith("set-")
+    property.niceName = (() => {
+     if (PROPERTY_ID.includes("-")) {
+      if (property.isSymbol) return `[Symbol.${PROPERTY_ID.slice(7)}]`
+      if (PROPERTY_ID.includes(".")) {
+       if (property.isGetOrSet) return `["${PROPERTY_ID.slice(4)}"]`
+       if (property.isAuto) return `["${PROPERTY_ID.slice(5)}"]`
       }
-      let temp = METHOD_ID.split("-")
+      let temp = PROPERTY_ID.split("-")
       let firstWordBecomesLastWord = temp.shift()
-
-      if (methodData.isGetOrSet || methodData.isAuto)
-       firstWordBecomesLastWord = temp.shift()
-
+      if (property.isGetOrSet || property.isAuto) firstWordBecomesLastWord = temp.shift()
       temp.push(firstWordBecomesLastWord)
-
       return temp.map((word, i) => i ? word[0].toUpperCase() + word.slice(1) : word).join("")
      }
-     return METHOD_ID
+     return PROPERTY_ID
     })()
-    methodData.Constant = class MethodConstant {
+    property.MethodConstant = class MethodConstant {
      static all = {}
      static unused = {}
-     static methodIDUsed = false
      used = false
      requirements = []
      constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
@@ -475,242 +402,99 @@ class Framework {
       constant.line = SOURCE_LINE
       constant.lineNumber = SOURCE_LINE_NUMBER
       constant.source = framework.sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
-
-      if (!SOURCE_LINE.startsWith("const "))
-       throw 'invalid const line: ' + SOURCE_LINE
-
+      if (!SOURCE_LINE.startsWith("const ")) throw 'invalid const line: ' + SOURCE_LINE
       constant.equalsIndex = SOURCE_LINE.indexOf("=")
       constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
-
-      if (constant.identifier in methodData.Constant.all)
-       throw 'Duplicate definition of constant ' + constant.identifier + ' in type ' + framework.host + "."
-
-      for (const previousConstantIdentifier in methodData.Constant.unused) {
-       // A currently unused constant is used by this constant.
-       const previousConstant = methodData.Constant.unused[previousConstantIdentifier]
-       if (previousConstant.usageRegExp.test(SOURCE_LINE)) {
-        constant.requirements.push(methodData.Constant.unused[previousConstantIdentifier])
-       }
+      if (constant.identifier in property.MethodConstant.all) throw 'Duplicate definition of constant ' + constant.identifier + ' in type ' + framework.host + "."
+      for (const previousConstantIdentifier in property.MethodConstant.unused) {
+       const previousConstant = property.MethodConstant.unused[previousConstantIdentifier]
+       if (previousConstant.usageRegExp.test(SOURCE_LINE)) constant.requirements.push(property.MethodConstant.unused[previousConstantIdentifier])
       }
-
-      methodData.Constant.all[constant.identifier] = constant
-      methodData.Constant.unused[constant.identifier] = constant
+      property.MethodConstant.all[constant.identifier] = constant
+      property.MethodConstant.unused[constant.identifier] = constant
       constant.usageRegExp = new RegExp(`(?:^|[^.])\\b${constant.identifier}\\b`)
-      for (const methodBodyLine of methodData.lines) {
-       if (constant.usageRegExp.test(methodBodyLine)) {
-
-        // This constant is used in the method's body.
-        constant.ensureDeclarationAndDependencies()
-       }
-      }
+      for (const methodBodyLine of property.lines) if (constant.usageRegExp.test(methodBodyLine)) constant.ensureDeclarationAndDependencies()
      }
      ensureDeclarationAndDependencies() {
       const constant = this
-
-      if (constant.used)
-       return
-
-      for (const requiredConstant of constant.requirements)
-       requiredConstant.ensureDeclarationAndDependencies()
-
+      if (constant.used) return
+      for (const requiredConstant of constant.requirements) requiredConstant.ensureDeclarationAndDependencies()
       framework.sourceFile.addSection(constant.line, constant.source, constant.lineNumber, 0, "  ")
       constant.used = true
-      delete methodData.Constant.unused[constant.identifier]
+      delete property.MethodConstant.unused[constant.identifier]
      }
     }
-    methodData.Constant.all.METHOD_ID = methodData.Constant.unused.METHOD_ID = {
-     identifier: "METHOD_ID",
-     usageRegExp: /(?:^|[^.])\bMETHOD_ID\b/g,
+    property.MethodConstant.all.PROPERTY_ID = property.MethodConstant.unused.PROPERTY_ID = {
+     identifier: "PROPERTY_ID",
+     usageRegExp: /(?:^|[^.])\bPROPERTY_ID\b/g,
      ensureDeclarationAndDependencies() {
       const constant = this
-      framework.sourceFile.addLine(`@method-i-d-literal@  const METHOD_ID = "${METHOD_ID}"`, framework.buildSource)
+      framework.sourceFile.addLine(`@method-i-d-literal@  const PROPERTY_ID = "${PROPERTY_ID}"`, framework.buildSource)
       constant.used = true
      }
     }
-
-    methodData.source = methodData.isAuto ? framework.buildSource : framework.sourceFile.addSource(methodData.filename, methodData.content)
-    methodData.lines = methodData.content ? methodData.content.split("\n") : []
-    methodData.hasValidPropertyName = methodData.isSymbol || methodData.isGetOrSet || methodData.isAuto || framework.MethodData.identifierPattern.test(methodData.niceName)
-    methodData.propertyReference = methodData.hasValidPropertyName ? methodData.niceName : `["${methodData.niceName}"]`
-    methodData.propertyAccessor = methodData.propertyReference.startsWith("[") ? methodData.propertyReference : "." + methodData.niceName
-    methodData.argumentString = "(" + (framework.partJSON[METHOD_ID]?.join(", ") ?? "") + ")"
-    methodData.modifiers = methodData.isAsync ? "async " : (methodData.isGetOrSet ? METHOD_ID.slice(0, 3) + " " : (methodData.isAuto ? "get " : ""))
-    methodData.signature = methodData.modifiers + methodData.propertyReference + methodData.argumentString
-
-    if (methodData.content === undefined)
-     return
-
-    if (methodData.isAuto && framework.ownFilenameTable.has(`get-${METHOD_ID.slice(5)}.js`))
-     return
-
-    framework.sourceFile.addSection(`@method-open@\n\n ${methodData.signature} {`, framework.buildSource)
-
-    if (!methodData.isAuto)
-     framework.collectConstants(framework, methodData)
-
-    if (methodData.isAuto)
-     framework.sourceFile.addLine(methodData.content, methodData.source, null, null, "  ")
-    else if (framework.isCore)
-     framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
+    property.source = property.isAuto ? framework.buildSource : framework.sourceFile.addSource(property.filename, property.content)
+    property.lines = property.content ? property.content.split("\n") : []
+    property.hasValidPropertyName = property.isSymbol || property.isGetOrSet || property.isAuto || framework.Property.identifierPattern.test(property.niceName)
+    property.propertyReference = property.hasValidPropertyName ? property.niceName : `["${property.niceName}"]`
+    property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
+    property.argumentString = "(" + (framework.partJSON[PROPERTY_ID]?.join(", ") ?? "") + ")"
+    property.modifiers = property.isAsync ? "async " : (property.isGetOrSet ? PROPERTY_ID.slice(0, 3) + " " : (property.isAuto ? "get " : ""))
+    property.signature = property.modifiers + property.propertyReference + property.argumentString
+    if (property.content === undefined) return
+    if (property.isAuto && framework.ownFilenameTable.has(`get-${PROPERTY_ID.slice(5)}.js`)) return
+    framework.sourceFile.addSection(`@method-open@\n\n ${property.signature} {`, framework.buildSource)
+    if (property.isAuto) framework.sourceFile.addLine(property.content, property.source, null, null, "  ")
     else {
-     if (["view-add", "view-populate"].includes(METHOD_ID)) {
-      // For all of these view functions, we want to execute the core part's instructions first, then the next and then the next.
-      framework.sourceFile.addLine(`@auto-super-top@super${methodData.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
-      framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
-     } else if (["view-remove"].includes(METHOD_ID)) {
-      // For these view functions, we want to execute the derived method's instructions first, then work our way toward the core.
-      framework.sourceFile.addLines(methodData.lines, methodData.source, 0, 0, "  ")
-      framework.sourceFile.addLine(`@auto-super-bottom@super${methodData.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
-     } else {
-      let hasSuper = false
-      methodData.lines.forEach((methodLine, ln) => {
-       const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
-       if (firstMatch) {
-        hasSuper = true
-        methodLine = methodLine.slice(0, firstMatch.index) + `super${methodData.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
-        framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, "  ", false)
-       } else
-        framework.sourceFile.addLine(methodLine, methodData.source, ln, 0, "  ")
-      })
+     framework.Property.collectConstants(framework, property)
+     if (framework.isCore) framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
+     else {
+      if (["view-add", "view-populate"].includes(PROPERTY_ID)) {
+       framework.sourceFile.addLine(`@auto-super-top@super${property.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
+       framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
+      } else if (["view-remove"].includes(PROPERTY_ID)) {
+       framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
+       framework.sourceFile.addLine(`@auto-super-bottom@super${property.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
+      } else {
+       let hasSuper = false
+       property.lines.forEach((methodLine, ln) => {
+        const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
+        if (firstMatch) {
+         hasSuper = true
+         methodLine = methodLine.slice(0, firstMatch.index) + `super${property.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
+         framework.sourceFile.addLine(methodLine, property.source, ln, 0, "  ", false)
+        } else
+         framework.sourceFile.addLine(methodLine, property.source, ln, 0, "  ")
+       })
+      }
      }
     }
-
     framework.sourceFile.addLine(`@method-close@}`, framework.buildSource, null, null, " ")
    }
   }
-
-  framework.ownFilenameTable = new Map(
-   Object.keys(framework.stockDirectory)
-    .filter(itemName => typeof framework.stockDirectory[itemName] === "string")
-    .map(filename => [filename, framework.stockDirectory])
-    .concat(
-     Object.keys(framework.customDirectory)
-      .map(filename => [filename, framework.customDirectory])
-    )
-  )
-
-  framework.ownGetAndSetMethodIDs = []
-  framework.ownViewMethodIDs = []
-
-  for (const filename of framework.ownFilenameTable.keys()) {
-
-   if (!filename.endsWith(".js"))
-    continue
-
-   const methodID = filename.slice(0, -3)
-
-   if (filename.startsWith("get-") || filename.startsWith("set-"))
-    framework.ownGetAndSetMethodIDs.push(methodID)
-   else if (filename.startsWith("view-"))
-    framework.ownViewMethodIDs.push(methodID)
+  for (const fn of framework.allFilenames) {
+   framework.Property.ids.add("auto-" + fn);
+   if (fn.endsWith(".js") && (fn.startsWith("get-") || fn.startsWith("set-") || fn.startsWith("view-"))) framework.Property.ids.add(fn.slice(0, -3))
   }
-
-  framework.renderedStrings = {}
+  for (const methodID in framework.partJSON) if (methodID !== "extends") framework.Property.ids.add(methodID)
   framework.sourceFile = new SourceMappedFile(framework.pathFromRepo, framework.pathToRepo, "compiled-type.js")
   framework.sourceFile.framework = framework
   framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", framework.sourceCode)
-  framework.stockPartJSON = JSON.parse(framework.stockDirectory["part.json"] ?? "{}")
-  framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customDirectory["part.json"] ?? "{}"), framework.stockPartJSON)
-  framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "one.core.parts")
-  framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
-
-  if (!framework.isCore)
-   Object.setPrototypeOf(framework.stockPartJSON, framework.parent.partJSON)
-
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
-  framework.addConstants(framework.sourceFile)
-  // Convert kebab-case subdomain to PascalCase constructor name.
-  framework.niceName = inputHost.startsWith("localhost:") ? "LocalHostPart" : inputHost.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
-  framework.sourceFile.addSection(`@class-open@
- return class ${framework.niceName}${framework.isCore ? "" : " extends BasePart"} {
- // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}
-
- static framework = framework;
- static host = inputHost;`, framework.buildSource)
-
-  for (const methodID of framework.ownGetAndSetMethodIDs)
-   framework.MethodData.fromMethodID(methodID)
-
-  for (const methodID in framework.partJSON) {
-   if (methodID === "extends")
-    continue
-
-   framework.MethodData.fromMethodID(methodID)
-  }
-
-  for (const methodID of framework.ownViewMethodIDs)
-   framework.MethodData.fromMethodID(methodID)
-
-  for (const filename of framework.ownFilenameTable.keys())
-   framework.MethodData.fromMethodID("auto-" + filename)
-
+  framework.Property.addConstants(framework.sourceFile)
+  framework.sourceFile.addSection(`@class-open@\n return class ${framework.niceName}${framework.isCore ? "" : " extends framework.parent.PartConstructor"} {\n // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}\n\n static framework = framework;\n static host = inputHost;`, framework.buildSource)
+  for (const id of framework.Property.ids) new framework.Property(id)
   framework.sourceFile.addLine("@class-close@}", framework.buildSource)
   framework.sourceFile.addLine("@eval-close@})()", framework.buildSource)
   framework.script = framework.sourceFile.packAndMap()
   framework.PartConstructor = eval(framework.script)
   framework.PartConstructor.framework = framework
-
-  if (framework.isCore) {
-   globalThis.CorePart = framework.PartConstructor
-  }
- }
- addConstants(targetFile) {
-  const framework = this
-  framework.parent?.addConstants(targetFile)
-  const filename = "const-class.js"
-  const pathPrefix = targetFile === framework.sourceFile ? "" : targetFile.pathToRepo + "/" + framework.pathFromRepo + "/"
-  const path = pathPrefix + filename
-  const body = framework.readOwnString(filename)
-
-  if (body)
-   targetFile.addSection(body, targetFile.addSource(path, body), 0, 0, " ")
- }
- collectConstants(targetFramework, targetMethodData) {
-  const framework = this
-  const isForOwnScript = targetFramework === framework
-
-  if (isForOwnScript) {
-   if (targetMethodData.content === "") {
-    targetMethodData.content = "// Do nothing."
-    targetMethodData.lines = [targetMethodData.content]
-    return
-   }
-  }
-
-  framework.parent?.collectConstants(targetFramework, targetMethodData)
-
-  function collectOwnConstants(FILENAME) {
-
-   if (!framework.ownFilenameTable.has(FILENAME))
-    return
-
-   const pathPrefix = isForOwnScript ? "" : targetFramework.pathToRepo + "/" + framework.pathFromRepo + "/"
-   const path = pathPrefix + FILENAME
-   const body = framework.readOwnString(FILENAME)
-   const lines = body.split("\n")
-
-   for (let ln = 0; ln < lines.length; ln++)
-    new targetMethodData.Constant(path, lines[ln], ln)
-  }
-
-  collectOwnConstants("const-method.js")
-
-  if (targetMethodData.isGetOrSet)
-   collectOwnConstants("const-get-or-set.js")
-
-  if (targetMethodData.isView)
-   collectOwnConstants("const-view.js")
- }
- readOwnString(filename, fallback) {
-  const framework = this
-  if (framework.ownFilenameTable.has(filename))
-   return framework.ownFilenameTable.get(filename)[filename]
-
-  return fallback
+  if (framework.isCore) globalThis.CorePart = framework.PartConstructor
  }
 }
 
 Framework.initialize({
  "change": "patch",
- "verbosity": 2
+ "verbosity": 1,
+ "mapping": false
 })

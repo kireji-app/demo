@@ -138,7 +138,7 @@ declare class PartError extends Error { }
 declare const part: CorePart
 /** The base type's version of this function.
  * 
- * Alias for `part.super[methodData.niceName]`. */
+ * Alias for `part.super[property.niceName]`. */
 declare const base: Function
 /** The value of `performance.now()` around the time this method was called. */
 declare const now: DOMHighResTimeStamp
@@ -146,5 +146,5 @@ declare const now: DOMHighResTimeStamp
 declare const render: CorePart
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part.parent.exampleProperty`.  */
 declare const inherit: CorePart
-/** The framework.MethodData object describing this method. */
-declare const methodData: MethodData
+/** The framework.Property object describing this property. */
+declare const property: Property

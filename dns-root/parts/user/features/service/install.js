@@ -1,4 +1,4 @@
 debug('sally0')
-// module.exports = {
-//  GET: ({ url }) => service.fetchSync(url)
-// }
+module.exports = {
+ GET: ({ url }) => service.fetchSync(url)
+}

@@ -44,8 +44,8 @@ declare class Framework {
  readonly partJSON: PartData
  /** The inverse of pathToRoot. The path "back up" to dns-root from the directory containing the source code the framework used. */
  readonly pathToRepo: string
- /** All of the data collected about the source of each method added to the type class compiled by the framework. */
- readonly methodData: MethodData<MethodDataEntry>
+ /** All of the data collected about the source of each property added to the type class compiled by the framework. */
+ readonly property: Property<PropertyEntry>
  /** The dedicated SourceMappedFile which the framework was created to assemble and evaluate. */
  readonly sourceFile: SourceMappedFile
  /** The index of framework.js in the list of source mapping files for the framework's dedicated sourceMappedFile. */
@@ -58,19 +58,13 @@ declare class Framework {
  readonly stockDirectory?: SourceDirectory<string>
  /** An optional directory (defaults to `{}`) whose files are added on top of the files in the framework's stock directory before the class is compiled. */
  readonly customDirectory?: SourceDirectory<string>
- /** An array of all the methodIDs whose render method is defined directly on the part type. */
+ /** An array of all the property IDs which represent a custom render render method defined directly on the part type. */
  readonly ownRenderMethodIDs: string[]
  constructor(inputHost: string, customDirectory: SourceDirectory): Framework
- /** Reads a static file from the framework's two directories, returning a fallback nothing is found.*/
- readOwnString(filename, fallback): void
- /** Traverses up the framework parent chain to add an inherited set of constant declarations to the the body of methods which will be added to the compiled class. */
- addConstants(targetFile): void
- /** Traverses up the framework parent chain to determine which constant declarations are used in the given method data. */
- collectConstants(targetFramework, targetMethodData): void
 }
 declare interface SourceDirectory<T> {
 }
-declare interface MethodDataTable<T> {
+declare interface PropertyTable<T> {
  readonly ["part-distribute-initialize"]: T
 
  readonly ["render"]: T
@@ -86,7 +80,7 @@ declare interface MethodDataTable<T> {
  readonly ["view-distribute-update"]: T
  readonly ["view-distribute-end"]: T
 }
-declare interface PartData extends MethodDataTable<string[]> {
+declare interface PartData extends PropertyTable<string[]> {
  readonly extends: string
 }
 class SourceMappedFile {
@@ -102,6 +96,15 @@ class SourceMappedFile {
  addSource(source: string, script: string | null = null): number
  packAndMap(url?: string): string
  getMap(): string
+}
+/** A wrapper class that constructs a part of the given host type.
+ * 
+ * If the host type doesn't exist yet or if CUSTOM_STRING_COLLECTION is
+ * passed, creates a new framework, compiles a new type class from the host
+ * source code and any source code in CUSTOM_STRING_COLLECTION, caches the new
+ * type, and then returns a new instance of it. */
+declare class Part {
+ constructor(HOST, CUSTOM_STRING_COLLECTION): CorePart
 }
 /** A string representing which of four known environments the framework is running on.
  * 1. "build"
@@ -144,15 +147,6 @@ declare const build: {
  /** A packed archive of the git repository at build time. */
  readonly repository: SourceDirectory
 }
-/** A wrapper class that constructs a part of the given host type.
- * 
- * If the host type doesn't exist yet or if CUSTOM_STRING_COLLECTION is
- * passed, creates a new framework, compiles a new type class from the host
- * source code and any source code in CUSTOM_STRING_COLLECTION, caches the new
- * type, and then returns a new instance of it. */
-declare class Part {
- constructor(HOST, CUSTOM_STRING_COLLECTION): CorePart
-}
 /** An object dedicated to this method script's type and containing
  * data collected while compiling the source code for that type.
  * 
@@ -173,22 +167,28 @@ declare function openLog(VERBOSITY: number, ...DATA: any[]): void
 declare function closeLog(VERBOSITY: number, ...DATA: any[]): void
 /** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
 declare function serialize(VERBOSITY: number, ...DATA: any[]): void
-/** Represents metadata and processing logic for a single method
- * of the framework's class script. It handles parsing method IDs,
- * generating the method's signature, dynamically generated constants and method body. */
-declare class MethodData {
+/** Represents metadata and processing logic for a single property
+ * of the framework's class script. If the property is a method or getter/setter, it
+ * parses the method's ID and generates its signature, dynamic constants and body.
+ * If the property is a static file, a simple getter method is created automatically.
+ * 
+ * This is a nested type. There is a dedicated instance of this type for each framework instance. */
+declare class Property {
  /** Regular expression to validate if a string is a valid JavaScript identifier. */
  static readonly identifierPattern: RegExp;
- /** Creates and registers a new MethodData instance for the given METHOD_ID.
-  * @param METHOD_ID The unique identifier string for the method. */
- static fromMethodID(METHOD_ID: string): void
- /** The original kebab-case identifier string for this method. */
- readonly methodID: string;
+ /** Traverses up the framework parent chain to add an inherited set of constant declarations to the the body of methods which will be added to the compiled class. */
+ static addConstants(targetFile): void
+ /** Traverses up the framework parent chain to determine which constant declarations are used in the given method data. */
+ static collectConstants(targetFramework, targetProperty): void
+ /** Reads a static file from the framework's two directories, returning a fallback if nothing is found.*/
+ static readOwnString(filename, fallback): void
+ /** The original kebab-case identifier string for this property. */
+ readonly id: string;
  /** The expected file name for storing the method's source code.
-  * Typically `${METHOD_ID}.js`. */
+  * Typically `${PROPERTY_ID}.js`. */
  readonly filename: string;
- /** Flag indicating if this method is an automatic getter generated by the framework.
-  * Determined by checking if `methodID` starts with "auto-". */
+ /** Flag indicating if this property is an automatic getter generated by the framework.
+  * Determined by checking if `id` starts with "auto-". */
  readonly isAuto: boolean;
  /** The raw source code for the body of the method.
   * For 'auto' methods, it's a generated template string.
@@ -196,23 +196,23 @@ declare class MethodData {
   * Undefined if reading fails. */
  content: string | undefined;
  /** Flag indicating if this method is related to view logic.
-  * Determined by checking if `methodID` starts with "view-". */
+  * Determined by checking if `ids` starts with "view-". */
  readonly isView: boolean;
  /** Flag indicating if this method is asynchronous.
-  * Determined by checking if `methodID` starts with "async-". */
+  * Determined by checking if `id` starts with "async-". */
  readonly isAsync: boolean;
  /** Flag indicating if this method represents a well-known Symbol (e.g., Symbol.iterator).
-  * Determined by checking if `methodID` starts with "symbol-". */
+  * Determined by checking if `id` starts with "symbol-". */
  readonly isSymbol: boolean;
- /** Flag indicating if this method is a property getter or setter.
-  * Determined by checking if `methodID` starts with "get-" or "set-". */
+ /** Flag indicating if this property is a getter or setter.
+  * Determined by checking if `id` starts with "get-" or "set-". */
  readonly isGetOrSet: boolean;
  /** A processed, potentially more human-readable or code-friendly name for the method.
   * - For Symbols: `[Symbol.symbolName]`
-  * - For certain get/set with dots: `["property.name"]`
+  * - For certain get/set with dots: `["file.extension"]`
   * - For auto-getters: The base property name (quoted if not a valid identifier).
   * - For kebab-case method IDs: Transformed into camelCase (e.g., "view-update" -> "updateView").
-  * - Otherwise: The original `methodID`. */
+  * - Otherwise: The original `id`. */
  readonly niceName: string;
  /** Represents and manages constant declarations (`const ... = ...`) found or used
   * within the method's body, handling dependencies between them. */
@@ -234,7 +234,7 @@ declare class MethodData {
   * Example: `.myMethod`, `[Symbol.iterator]`, `["property-with-hyphens"]`. */
  readonly propertyAccessor: string;
  /** The string representing the method's arguments list, including parentheses.
-  * Derived from framework configuration (`framework.partJSON[METHOD_ID]`).
+  * Derived from framework configuration (`framework.partJSON[PROPERTY_ID]`).
   * Example: `(arg1, arg2)`. Defaults to `()` if no arguments defined. */
  readonly argumentString: string;
  /** String containing modifiers for the method signature (e.g., "async ", "get ", "set ").
@@ -244,22 +244,20 @@ declare class MethodData {
   * Combines `modifiers`, `propertyReference`, and `argumentString`.
   * Example: `async myMethod(arg1)`, `get propertyName()`, `[Symbol.iterator]()`. */
  readonly signature: string;
- /** Constructs a MethodData instance, parsing the METHOD_ID and processing
+ /** Constructs a Property instance, parsing the PROPERTY_ID and processing
   * associated metadata and source code content.
-  * @param METHOD_ID The unique identifier string for the method. */
- constructor(METHOD_ID: string);
+  * @param PROPERTY_ID The unique identifier string for the method. */
+ constructor(PROPERTY_ID: string);
 }
 /** Inner class representing a single constant declaration within a method's scope.
  * Manages its source, dependencies, and ensures it's declared when used. */
 declare class MethodConstant {
- /** Registry of all MethodConstant instances created for the parent MethodData, keyed by identifier.
-  * Includes the special 'METHOD_ID' constant. */
+ /** Registry of all MethodConstant instances created for the parent Property, keyed by identifier.
+  * Includes the special 'PROPERTY_ID' constant. */
  static all: Record<string, MethodConstant | { identifier: string; usageRegExp: RegExp; ensureDeclarationAndDependencies(): void }>
  /** Registry of MethodConstant instances that have not yet been marked as used within the method body.
-  * Keyed by identifier. Includes the special 'METHOD_ID' constant initially. */
+  * Keyed by identifier. Includes the special 'PROPERTY_ID' constant initially. */
  static unused: Record<string, MethodConstant | { identifier: string; usageRegExp: RegExp; ensureDeclarationAndDependencies(): void }>
- /** Flag indicating if the special METHOD_ID constant has been used/declared.*/
- static methodIDUsed: boolean
  /** Flag indicating whether this specific constant has been used and its declaration
   * added to the output source file. */
  used: boolean
@@ -291,12 +289,3 @@ declare class MethodConstant {
   * are declared (added to the source file output). Marks the constant as used. */
  ensureDeclarationAndDependencies(): void;
 }
-// Assign the inner class type to the static property of the outer class
-// This reflects the structure `methodData.Constant = class MethodConstant { ... }`
-// Note: In typical TS, you'd define the inner class directly inside the outer one.
-// This reflects the JS pattern used.
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// interface MethodData { // This alternative uses declaration merging
-//    Constant: typeof MethodConstant;
-// }
-// Using `static readonly Constant: typeof MethodConstant;` within MethodData is cleaner.

@@ -9,8 +9,7 @@ user.meanFrameTime = 1000
 super({
  features: null,
  theme: null,
- desktop: "desktop.parts",
- tasks: null,
+ desktop: "desktop.parts"
 })
 
 closeLog(1)

@@ -241,8 +241,8 @@ globe.Route ??= class Route {
  toString() { return this.#url.toString() }
 }
 
-Route.defaultDesktopSegment = Route.segmentFromRouteID(Route.defaultDesktopRouteID)
-Route.maxSegmentCardinality = (64n ** 251n - 64n) / 63n
+Route.defaultDesktopSegment ??= Route.segmentFromRouteID(Route.defaultDesktopRouteID)
+Route.maxSegmentCardinality ??= (64n ** 251n - 64n) / 63n
 
 if (false) Do_Fuzz_Test: {
  for (const href of [

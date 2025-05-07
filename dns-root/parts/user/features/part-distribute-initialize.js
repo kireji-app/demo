@@ -3,7 +3,6 @@ globe.features = this
 super({
  addressBar: null,
  agent: null,
- build: null,
  fullscreen: null,
  gpu: null,
  hotKeys: null,
@@ -23,7 +22,7 @@ for (const feature of features) {
   if (environment !== "window")
    throw TypeError(`Asynchronous feature (${feature.instancePath}) is not allowed outside of the window environment.`)
 
-  feature.installAsync().then(() => log(1, `${feature.instancePath} installed.`))
+  feature.installAsync().then(() => log(2, `${feature.instancePath} installed.`))
   log(1, `${feature.instancePath} enqueued.`)
  } else {
   feature.install()
