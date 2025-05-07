@@ -2,8 +2,7 @@ class Framework {
  static initialize(buildData) {
   Framework.responses = {}
   Framework.frameworks = []
-  Framework.sourceCode = Framework.toString()
-  Framework.sourceLines = Framework.sourceCode.split("\n")
+  Framework.sourceLines = Framework.toString().split("\n")
   Framework.sourcePositionMarks = {}
   Framework.sourcePositionMarkPatternRegister = /@[a-z-]+@/g
   Framework.sourcePositionMarkPatternAddLine = /^@[a-z-]+@/g
@@ -12,11 +11,10 @@ class Framework {
    Framework.sourcePositionMarks[mark] = { ln, col }
   }
   globalThis.globe = globalThis
-  globalThis.build = buildData
   globalThis.Part = class Part { constructor(host) { return new (new Framework(host).PartConstructor)() } }
   const { constructor: Globe, Window, ServiceWorkerGlobalScope: Worker, process: Cloud } = globalThis
   globalThis.environment = Globe === Window ? "window" : (Globe === Worker ? "worker" : (Cloud?.argv[1]?.split("/").pop() === "framework.js" ? "build" : "server"))
-  const conditionalLog = (verbosity, data, method = 'debug') => !production && verbosity <= build.verbosity && console[method](...(environment === "server" ? ["server:", ...data] : data))
+  const conditionalLog = (verbosity, data, method = 'debug') => !production && verbosity <= build.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data))
   globalThis.log = (verbosity, ...data) => conditionalLog(verbosity, data, 'log')
   globalThis.warn = (...data) => conditionalLog(0, data, 'warn')
   globalThis.debug = (...data) => conditionalLog(0, data, 'debug')
@@ -131,13 +129,22 @@ class Framework {
     }, null, 1)
    }
   }
+  const initializeRootPart = () => {
+   const root = new Part("user.parts")
+   root.distributeInitializePart()
+   // openLog(1, "Performing reinitialization test.")
+   // root.distributeInitializePart()
+   closeLog(1)
+  }
+  globalThis.build = buildData
   if (environment === "build") {
    const { extname } = require('path'), { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile, writeFileSync: writeFile, mkdirSync: makeFolder } = require('fs'), { execSync: $ } = require('child_process')
-   build.repository = Object.fromEntries([".gitignore", "jsconfig.json", "README.md", "vercel.json", "type.d.ts"].map(fn => [fn, readFile(fn, "utf-8")]))
+   for (const fn of [".gitignore", "jsconfig.json", "README.md", "vercel.json", "type.d.ts"])
+    build[fn] = readFile(fn, "utf-8")
    build.local = !Cloud.env.VERCEL || !!Cloud.env.__VERCEL_DEV_RUNNING
    build.size = 0
    const readmeVersionPattern = /version-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/
-   const semver = build.semanticVersion = build.repository["README.md"].match(readmeVersionPattern).groups
+   const semver = build.semanticVersion = build["README.md"].match(readmeVersionPattern).groups
    if (build.local) {
     build.branch = $('git branch --show-current').toString().trim()
     build.hash = $('git rev-parse HEAD').toString().trim()
@@ -155,7 +162,7 @@ class Framework {
      semver.minor = parseInt(semver.minor)
      semver.patch++
     }
-    build.repository["README.md"] = build.repository["README.md"].replace(readmeVersionPattern, `version-${semver.major}.${semver.minor}.${semver.patch}`)
+    build["README.md"] = build["README.md"].replace(readmeVersionPattern, `version-${semver.major}.${semver.minor}.${semver.patch}`)
    } else {
     build.branch = Cloud.env.VERCEL_GIT_COMMIT_REF
     build.hash = Cloud.env.VERCEL_GIT_COMMIT_SHA
@@ -173,27 +180,27 @@ class Framework {
     if (openIndex < openMark.length) throw "The existing build file wasn't populated."
     const closeMark = ")"
     const closeIndex = existingBuild.lastIndexOf(closeMark)
-    const { repository, hash } = JSON.parse(existingBuild.slice(openIndex, closeIndex))
+    const existingRoot = JSON.parse(existingBuild.slice(openIndex, closeIndex))
+    const { hash, com, parts } = existingRoot
     log(1, "Staging the intent to add all untracked files.")
     $(`git add --intent-to-add .`)
-    for (const diffResult of $(`git diff --name-status ${hash} -- dns-root/`).toString().trim().split("\n")) {
+    for (const diffResult of $(`git diff --name-status ${hash} -- com/ parts/`).toString().trim().split("\n")) {
      if (!diffResult) continue
      const [fileStatus, leftPath, rightPath] = diffResult.split(/\s+/)
      const leftExtension = extname(leftPath)
      const leftPathSegments = leftPath.slice(9).split("/")
      const leftFilename = leftPathSegments.pop()
-     let leftRoot = repository["dns-root"]
+     let leftRoot = existingRoot
      let rightRoot = null
      let rightFilename = null
      let rightExtension = null
      for (const pathPart of leftPathSegments) leftRoot = leftRoot[pathPart] ??= {}
      if (rightPath) {
-      rightRoot = repository["dns-root"]
+      rightRoot = existingRoot
       rightExtension = extname(rightPath)
       const rightPathSegments = rightPath.slice(9).split("/")
       rightFilename = rightPathSegments.pop()
-      for (const pathPart of rightPathSegments)
-       rightRoot = rightRoot[pathPart] ??= {}
+      for (const pathPart of rightPathSegments) rightRoot = rightRoot[pathPart] ??= {}
      }
      switch (fileStatus[0]) {
       case "A":
@@ -218,20 +225,20 @@ class Framework {
        throw "Unsupported git diff type, '" + fileStatus + "'."
      }
     }
-    build.repository["dns-root"] = repository["dns-root"]
+    build.com = com
+    build.parts = parts
    } catch (reason) { // Pack the repository from scratch.
     log(0, "Building from scratch.", { reason })
     log(1, "Initializing local git configuration (idempotent).")
     $('git update-index --assume-unchanged api/service.js')
     log(1, "Packing shallow git repository into script.")
-    build.repository["dns-root"] = {}
-    function readRecursive(host = "", folderPath = "dns-root", directory = build.repository["dns-root"]) {
+    function readRecursive(host, folderPath, directory) {
      if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
      if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
      const filenames = []
      for (const itemName of readFolder(folderPath)) {
       const
-       folderPath = ["dns-root", ...(host ? host.split(".").reverse() : [])].join('/'),
+       folderPath = host ? host.split(".").reverse().join('/') : '',
        filePath = folderPath + "/" + itemName
       if (itemExists(filePath)) {
        const stats = getItemStats(filePath)
@@ -254,7 +261,8 @@ class Framework {
       }
      }
     }
-    readRecursive()
+    readRecursive("com", "com", build.com = {})
+    readRecursive("parts", "parts", build.parts = {})
    }
    /*
     // Conceptual:
@@ -277,10 +285,10 @@ class Framework {
      Cloud.exit(21)
     })
    */
-   new Part("user.parts").distributeInitializePart()
+   initializeRootPart()
    if (!itemExists("api")) makeFolder("api")
    writeFile("api/service.js", user["service.js"])
-   writeFile("README.md", build.repository["README.md"])
+   writeFile("README.md", build["README.md"])
    build.size = getItemStats("api/service.js").size
    writeFile("api/service.js", user["service.js"])
    build.size = getItemStats("api/service.js").size
@@ -299,7 +307,7 @@ class Framework {
    // Conditional logging is only functional after this point.
    const semver = build.semanticVersion
    openLog(0, `Booting ${build.local ? "local" : "cloud"}/${build.branch} ${[semver.major, semver.minor, semver.patch].join(".")}`)
-   new Part("user.parts").distributeInitializePart()
+   initializeRootPart()
    closeLog(0)
   }
   log(0, "Build successful.")
@@ -315,11 +323,11 @@ class Framework {
   framework.renderedStrings = {}
   framework.host = inputHost
   framework.isCore = inputHost === "core.parts"
-  framework.domains = inputHost.split(".").concat("dns-root")
+  framework.domains = inputHost.split(".")
   framework.niceName = inputHost.startsWith("localhost:") ? "LocalHostPart" : inputHost.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
-  framework.stockDirectory = inputHost.split(".").reduceRight((directory, subdomain) => directory?.[subdomain] ?? {}, build.repository["dns-root"])
+  framework.stockDirectory = framework.domains.reduceRight((directory, subdomain) => directory?.[subdomain] ?? {}, build)
   framework.customDirectory = customDirectory ?? {}
   framework.stockPartJSON = JSON.parse(framework.stockDirectory["part.json"] ?? "{}")
   framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customDirectory["part.json"] ?? "{}"), framework.stockPartJSON)
@@ -479,7 +487,7 @@ class Framework {
   for (const methodID in framework.partJSON) if (methodID !== "extends") framework.Property.ids.add(methodID)
   framework.sourceFile = new SourceMappedFile(framework.pathFromRepo, framework.pathToRepo, "compiled-type.js")
   framework.sourceFile.framework = framework
-  framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", framework.sourceCode)
+  framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", Framework.sourceLines.join("\n"))
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
   framework.Property.addConstants(framework.sourceFile)
   framework.sourceFile.addSection(`@class-open@\n return class ${framework.niceName}${framework.isCore ? "" : " extends framework.parent.PartConstructor"} {\n // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}\n\n static framework = framework;\n static host = inputHost;`, framework.buildSource)
@@ -494,7 +502,7 @@ class Framework {
 }
 
 Framework.initialize({
- "change": "patch",
- "verbosity": 1,
- "mapping": false
+ change: "patch",
+ verbosity: 1,
+ mapping: true
 })

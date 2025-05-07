@@ -10,6 +10,9 @@ part.deltaRouteID = 0n
 if (!PART_MANIFEST)
  throw new PartError("No part manifest was provided. " + part.host)
 
+for (const key in part.manifest ?? {})
+ delete part[key]
+
 Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
 
  if (key in part)
@@ -51,3 +54,5 @@ Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
 
  part.length++
 })
+
+part.manifest = PART_MANIFEST

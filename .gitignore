@@ -8,7 +8,7 @@
 .vscode/
 
 ## Local development files
-.dns-root/
+.archive/
 .env*.local
 .vercel/
 

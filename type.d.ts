@@ -11,8 +11,8 @@ declare class Framework {
  static readonly responses: object
  /** A cache of the framework objects that have been instantiated so far (used to prevent compiling the same script twice). */
  static readonly frameworks: Framework[]
- /** The current class, as a string. */
- static readonly sourceCode: string
+ /** The current class, as an array of strings representing each line. */
+ static readonly sourceLines: string[]
  /** An array of environment names corresponding to the four environments that the framework can run in.
   * ```
   * ["window", "worker", "build", "server"]
@@ -33,7 +33,7 @@ declare class Framework {
  readonly isCore: boolean
  /** The compiled string which the framework evaluates to a class. */
  readonly script: string
- /** An array of subdomain names obtained by splitting the host at "." and adding "dns-root". */
+ /** An array of subdomain names obtained by splitting the host at ".". */
  readonly domains: string[]
  /** A properly formatted class name made by converting the host's subdomain from kebab-case to PascalCase and append "Part".
   * 
@@ -42,7 +42,7 @@ declare class Framework {
  readonly niceName: string
  /** An object that serializes the method signatures and base type for the class script the framework compiled. The object is parsed from the file `part.json` in the custom directory (or `{}` if no file is found). It's direct prototype object is parsed from `part.json` in the stock directory (also {} if not found). Finally, the stock prototype's prototype is the framework's parent's partJSON or null, if it is the Core. */
  readonly partJSON: PartData
- /** The inverse of pathToRoot. The path "back up" to dns-root from the directory containing the source code the framework used. */
+ /** The inverse of pathToRoot. The path "back up" to the repository/dns root from the directory containing the source code the framework used. */
  readonly pathToRepo: string
  /** All of the data collected about the source of each property added to the type class compiled by the framework. */
  readonly property: Property<PropertyEntry>
