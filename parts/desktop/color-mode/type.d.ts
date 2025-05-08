@@ -1,7 +1,7 @@
-declare class ColorModePart extends MatchPart {
- readonly device: CorePart
- readonly light: CorePart
- readonly dark: CorePart
+declare class PartColorMode extends PartMatch {
+ readonly device: PartCore
+ readonly light: PartCore
+ readonly dark: PartCore
  /** Blends two color hex codes (A and B) using the given MODE.
   * 
   * The default MODE is "screen". */
@@ -11,4 +11,4 @@ declare class ColorModePart extends MatchPart {
  /** Converts three RGB component values to a single hex string. */
  rgbToHex(R: number, G: number, B: number): string
 }
-declare const colorMode: ColorModePart
+declare const colorMode: PartColorMode

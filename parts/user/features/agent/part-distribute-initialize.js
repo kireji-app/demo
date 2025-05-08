@@ -1,0 +1,2 @@
+globe.agent ??= this
+super()

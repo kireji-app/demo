@@ -59,8 +59,6 @@ globe.FileHeader ??= class FileHeader {
 }
 
 globe.Route ??= class Route {
- static defaultDesktopRouteID = 0n
- static defaultHost = "www.core.parts"
  static maxPathLength = 2000
  static maxSegmentLength = 250
  static defaultFilename = 'index.html'
@@ -131,7 +129,7 @@ globe.Route ??= class Route {
   this.#url = new URL(url, base)
   if (!(this.#url.host in theme)) {
    this.#url.port &&= ''
-   this.#url.host = Route.defaultHost
+   this.#url.host = build.defaultHost
   }
   this.pathname = this.#url.pathname
  }
@@ -151,14 +149,14 @@ globe.Route ??= class Route {
 
  set hostname(value) {
   if (!(value in theme))
-   value = Route.defaultHost
+   value = build.defaultHost
   this.#url.hostname = value
  }
 
  get host() { return this.#url.host }
  set host(value) {
   if (!(value in theme))
-   value = Route.defaultHost
+   value = build.defaultHost
   this.#url.host = value
  }
 
@@ -196,7 +194,7 @@ globe.Route ??= class Route {
    return true
   })
   if (!this.#segments.length || this.#routeIDs[0] >= desktop.cardinality) {
-   this.#routeIDs[0] = Route.defaultDesktopRouteID
+   this.#routeIDs[0] = BigInt(build.defaultDesktopRouteID)
    this.#segments[0] = Route.defaultDesktopSegment
    warn(new RangeError('Encountered out-of-range desktop routeID while setting pathname of Route.'), { route: this, pathname })
   }
@@ -241,7 +239,7 @@ globe.Route ??= class Route {
  toString() { return this.#url.toString() }
 }
 
-Route.defaultDesktopSegment ??= Route.segmentFromRouteID(Route.defaultDesktopRouteID)
+Route.defaultDesktopSegment ??= Route.segmentFromRouteID(BigInt(build.defaultDesktopRouteID))
 Route.maxSegmentCardinality ??= (64n ** 251n - 64n) / 63n
 
 if (false) Do_Fuzz_Test: {

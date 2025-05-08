@@ -1,4 +1,4 @@
-globe.vintageMode ??= match
+globe.era ??= match
 
 super({
  modern: "modern",

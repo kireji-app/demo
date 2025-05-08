@@ -1,2 +1,2 @@
-globe.fullscreen = this
+globe.fullscreen ??= this
 super()

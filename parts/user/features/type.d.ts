@@ -1,11 +1,11 @@
-declare class FeaturesPart extends MixPart {
- readonly gpu: GpuPart
- readonly agent: AgentPart
- readonly share: SharePart
- readonly desktop: DesktopPart
- readonly hotKeys: HotKeysPart
- readonly hydration: HydrationPart
- readonly addressBar: AddressBarPart
- readonly serviceWorker: ServiceWorkerPart
+declare class PartFeatures extends PartMix {
+ readonly gpu: PartGpu
+ readonly agent: PartAgent
+ readonly share: PartShare
+ readonly desktop: PartDesktop
+ readonly hotKeys: PartHotKeys
+ readonly hydration: PartHydration
+ readonly addressBar: PartAddressBar
+ readonly serviceWorker: PartServiceWorker
 }
-declare const features: FeaturesPart & Iterable<UserFeature>
+declare const features: PartFeatures & Iterable<UserFeature>

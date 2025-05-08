@@ -1,12 +1,12 @@
-declare class CorePart extends Iterable<CorePart> {
- constructor(): CorePart
- [Symbol.iterator](): IterableIterator<CorePart>
+declare class PartCore extends Iterable<PartCore> {
+ constructor(): PartCore
+ [Symbol.iterator](): IterableIterator<PartCore>
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
- filter(FILTER_FUNCTION: (subpart: CorePart, index: number, part: CorePart) => CorePart): CorePart[]
+ filter(FILTER_FUNCTION: (subpart: PartCore, index: number, part: PartCore) => PartCore): PartCore[]
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
- includes(SUBPART: CorePart): boolean
+ includes(SUBPART: PartCore): boolean
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
- map(MAP_FUNCTION: (subpart: CorePart, index: number, part: CorePart) => T): T[]
+ map(MAP_FUNCTION: (subpart: PartCore, index: number, part: PartCore) => T): T[]
  /** The framework instance which was dedicated to compiling the script defining the part's type. */
  readonly static framework: Framework
  /** The framework instance, which was dedicated to compiling the script of the part's class. */
@@ -24,7 +24,7 @@ declare class CorePart extends Iterable<CorePart> {
  /** The number of subparts the part has. */
  readonly length: number
  /** The object in the part's prototype chain that owns its base class methods. */
- readonly super: CorePart
+ readonly super: PartCore
  /** Whether or not the part has a running task */
  readonly running: boolean
  /** Whether or not the part has a routeID greater than `-1n`. */
@@ -56,7 +56,11 @@ declare class CorePart extends Iterable<CorePart> {
  /** The parent part.
   * 
   * *Note: There is no* `user.parent`. */
- readonly parent: CorePart
+ readonly parent: PartCore
+ /** A display name for the part.
+  * 
+  * The default name is "Untitled". */
+ readonly title: string | "Untitled"
  /** Generate a dynamic or static file from the part's directory.
   * 
   * Filenames are treated like their file extension. For binary file types (like .png)
@@ -86,7 +90,7 @@ declare class CorePart extends Iterable<CorePart> {
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
- collectRouteID(SUBPARTS: CorePart[]): void
+ collectRouteID(SUBPARTS: PartCore[]): void
  /** Updates the part's routeID to ROUTE_ID and then recomputes all subpart routeIDs to match.
   * 
   * For any active subparts, it calls distributeRoute on them, passing the signal leafward.
@@ -135,7 +139,7 @@ declare class PartError extends Error { }
  * Alias for `this` to disambiguate it from globalThis.
  * 
  * *Note: Not available in `constructor.js`*. */
-declare const part: CorePart
+declare const part: PartCore
 /** The base type's version of this function.
  * 
  * Alias for `part.super[property.niceName]`. */
@@ -143,8 +147,8 @@ declare const base: Function
 /** The value of `performance.now()` around the time this method was called. */
 declare const now: DOMHighResTimeStamp
 /** Alias for `part.render`. */
-declare const render: CorePart
+declare const render: PartCore
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part.parent.exampleProperty`.  */
-declare const inherit: CorePart
+declare const inherit: PartCore
 /** The framework.Property object describing this property. */
 declare const property: Property

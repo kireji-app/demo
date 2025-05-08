@@ -1,4 +1,4 @@
-declare class ClipPart extends CorePart {
+declare class PartClip extends PartCore {
  /** The framerate at which to play this movie clip. */
  readonly frameRate: number
 
@@ -29,4 +29,4 @@ declare class ClipPart extends CorePart {
  /** A utility function used to handle reaching the end of a clip. */
  handlePlaybackEnd(): void
 }
-declare const clip: ClipPart
+declare const clip: PartClip

@@ -1,5 +1,5 @@
-declare const worker: WorkerPart
-declare interface WorkerPart extends UserFeature {
+declare const worker: PartWorker
+declare interface PartWorker extends UserFeature {
  readonly startupRegistration?: ServiceWorkerRegistration
  readonly registration: ServiceWorkerRegistration
  readonly incomingServiceWorker?: ServiceWorker

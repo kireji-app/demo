@@ -1,1 +1,0 @@
-return vintageMode.arm["inline.css"]

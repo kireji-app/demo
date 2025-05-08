@@ -1,4 +1,4 @@
-declare const taskBar: TaskBarPart
-declare class TaskBarPart extends CorePart {
+declare const taskBar: PartTaskBar
+declare class PartTaskBar extends PartCore {
 
 }

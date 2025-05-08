@@ -15,7 +15,7 @@ const links =
 
 const styles =
  `<style id="user-css">${user["inline.css"]}</style>` +
- `<style id="vintage-mode-css">${vintageMode["inline.css"]}</style>` +
+ `<style id="era-css">${era["inline.css"]}</style>` +
  `<style id="color-mode-css">${colorMode["inline.css"]}</style>` +
  `<style id="theme-css">${theme.arm["theme.css"]}</style>`
 
@@ -33,8 +33,8 @@ const debugHTML =
   `<div><label for=debug-color-mode>Color Mode</label><select id=debug-color-mode>${colorMode.map(subpart =>
    `<option${subpart === colorMode.arm ? ` selected` : ""}>${subpart.key}</option>`
   ).join("")}</select></div>` +
-  `<div><label for=debug-vintage-mode>Vintage Mode</label><select id=debug-vintage-mode>${vintageMode.map(subpart =>
-   `<option${subpart === vintageMode.arm ? ` selected` : ""}>${subpart.key}</option>`
+  `<div><label for=debug-era>Era</label><select id=debug-era>${era.map(subpart =>
+   `<option${subpart === era.arm ? ` selected` : ""}>${subpart.key}</option>`
   ).join("")}</select></div>` +
   `<div><label for=debug-menu-clip>Menu Clip</label><select id=debug-menu-clip>${menu.map(subpart =>
    `<option${subpart === menu.arm ? ` selected` : ""}>${subpart.key}</option>`
@@ -45,7 +45,7 @@ const debugHTML =
  ) +
  `</debug->`
 
-const bodyClassList = []
+const bodyClassList = [era.arm.key]
 
 if (menu.arm?.key === "open")
  bodyClassList.push("menu-fully-open")

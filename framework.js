@@ -24,7 +24,7 @@ class Framework {
   globalThis.serialize = value => JSON.stringify(value, (k, v) => typeof v === "bigint" ? v.toString() + "n" : v, 1)
   globalThis.hang = timeInMilliseconds => {
    warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
-   const start = now
+   const start = performance.now()
    let iteration = -1, elapsedMilliseconds, remainingMilliseconds
    do {
     elapsedMilliseconds = Math.trunc((performance.now() - start))
@@ -144,7 +144,7 @@ class Framework {
    build.local = !Cloud.env.VERCEL || !!Cloud.env.__VERCEL_DEV_RUNNING
    build.size = 0
    const readmeVersionPattern = /version-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/
-   const semver = build.semanticVersion = build["README.md"].match(readmeVersionPattern).groups
+   const semver = build["README.md"].match(readmeVersionPattern).groups
    if (build.local) {
     build.branch = $('git branch --show-current').toString().trim()
     build.hash = $('git rev-parse HEAD').toString().trim()
@@ -162,18 +162,20 @@ class Framework {
      semver.minor = parseInt(semver.minor)
      semver.patch++
     }
-    build["README.md"] = build["README.md"].replace(readmeVersionPattern, `version-${semver.major}.${semver.minor}.${semver.patch}`)
+    build.version = [semver.major, semver.minor, semver.patch].join(".")
+    build["README.md"] = build["README.md"].replace(readmeVersionPattern, `version-${build.version}`)
    } else {
     build.branch = Cloud.env.VERCEL_GIT_COMMIT_REF
     build.hash = Cloud.env.VERCEL_GIT_COMMIT_SHA
     globalThis.production = build.branch === "main"
    }
    // Conditional logging is only functional after this point.
-   openLog(0, `Building ${build.local ? "local" : "cloud"}/${build.branch} ${[semver.major, semver.minor, semver.patch].join(".")}...`)
+   openLog(0, `Building ${build.local ? "local" : "cloud"}/${build.branch} ${build.version}...`)
    try { // Try to use git diff to patch the existing repository.
     if (production) throw "The production environment should always build from scratch."
     if (!itemExists("api/service.js")) throw "No existing build file."
     log(0, "Patching existing build.")
+    warn("The patch system does not detect files which were changed in the working tree during the previous build and then reverted prior to the current build.")
     const existingBuild = readFile("api/service.js", "utf-8")
     const openMark = "Framework.initialize" + "("
     const openIndex = existingBuild.indexOf(openMark) + openMark.length
@@ -188,7 +190,7 @@ class Framework {
      if (!diffResult) continue
      const [fileStatus, leftPath, rightPath] = diffResult.split(/\s+/)
      const leftExtension = extname(leftPath)
-     const leftPathSegments = leftPath.slice(9).split("/")
+     const leftPathSegments = leftPath.split("/")
      const leftFilename = leftPathSegments.pop()
      let leftRoot = existingRoot
      let rightRoot = null
@@ -198,28 +200,28 @@ class Framework {
      if (rightPath) {
       rightRoot = existingRoot
       rightExtension = extname(rightPath)
-      const rightPathSegments = rightPath.slice(9).split("/")
+      const rightPathSegments = rightPath.split("/")
       rightFilename = rightPathSegments.pop()
       for (const pathPart of rightPathSegments) rightRoot = rightRoot[pathPart] ??= {}
      }
      switch (fileStatus[0]) {
       case "A":
        leftRoot[leftFilename] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftFilename}\x1b[38;5;34m - added \x1b[0m`)
+       log(2, `\x1b[38;5;34m/\x1b[38;5;82m${leftPath}\x1b[38;5;34m - added \x1b[0m`)
        break;
       case "M":
        leftRoot[leftFilename] = readFile(leftPath, ['.png', '.gif'].includes(leftExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;100m/\x1b[38;5;226m${leftFilename}\x1b[38;5;100m - modified \x1b[0m`)
+       log(2, `\x1b[38;5;100m/\x1b[38;5;226m${leftPath}\x1b[38;5;100m - modified \x1b[0m`)
        break;
       case "D":
        delete leftRoot[leftFilename];
-       log(2, `\x1b[38;5;88m/\x1b[38;5;196m${leftFilename}\x1b[38;5;88m - deleted \x1b[0m`)
+       log(2, `\x1b[38;5;88m/\x1b[38;5;196m${leftPath}\x1b[38;5;88m - deleted \x1b[0m`)
        break;
       case "C":
       case "R":
        delete leftRoot[leftFilename]
        rightRoot[rightFilename] = readFile(rightPath, ['.png', '.gif'].includes(rightExtension) ? "base64" : "utf-8")
-       log(2, `\x1b[38;5;54m/\x1b[38;5;129m${rightFilename}\x1b[38;5;54m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
+       log(2, `\x1b[38;5;54m/\x1b[38;5;129m${rightPath}\x1b[38;5;54m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
        break;
       default:
        throw "Unsupported git diff type, '" + fileStatus + "'."
@@ -305,12 +307,11 @@ class Framework {
   } else {
    globalThis.production = !build.local && build.branch === "main"
    // Conditional logging is only functional after this point.
-   const semver = build.semanticVersion
-   openLog(0, `Booting ${build.local ? "local" : "cloud"}/${build.branch} ${[semver.major, semver.minor, semver.patch].join(".")}`)
+   openLog(0, `Booting ${build.local ? "local" : "cloud"}/${build.branch} ${build.version}`)
    initializeRootPart()
    closeLog(0)
   }
-  log(0, "Build successful.")
+  log(0, "Boot successful.")
  }
  constructor(inputHost, customDirectory) {
   const framework = this
@@ -324,7 +325,7 @@ class Framework {
   framework.host = inputHost
   framework.isCore = inputHost === "core.parts"
   framework.domains = inputHost.split(".")
-  framework.niceName = inputHost.startsWith("localhost:") ? "LocalHostPart" : inputHost.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("") + "Part"
+  framework.niceName = inputHost.startsWith("localhost:") ? "PartLocalHost" : "Part" + inputHost.split(".")[0].split("-").map(word => word[0].toUpperCase() + word.slice(1)).join("")
   framework.pathToRepo = new Array(framework.domains.length).fill("..").join("/")
   framework.pathFromRepo = [...framework.domains].reverse().join("/")
   framework.stockDirectory = framework.domains.reduceRight((directory, subdomain) => directory?.[subdomain] ?? {}, build)
@@ -497,12 +498,14 @@ class Framework {
   framework.script = framework.sourceFile.packAndMap()
   framework.PartConstructor = eval(framework.script)
   framework.PartConstructor.framework = framework
-  if (framework.isCore) globalThis.CorePart = framework.PartConstructor
+  if (framework.isCore) globalThis.PartCore = framework.PartConstructor
  }
 }
 
 Framework.initialize({
  change: "patch",
- verbosity: 1,
- mapping: true
+ verbosity: 2,
+ mapping: true,
+ defaultHost: "www.core.parts",
+ defaultDesktopRouteID: "0"
 })

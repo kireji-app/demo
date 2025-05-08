@@ -1,4 +1,3 @@
-globe.agent = this
 agent.isMac = nav.userAgent.indexOf("Mac") > -1
 agent.isSafari = /^((?!chrome|android).)*safari/i.test(nav.userAgent)
 

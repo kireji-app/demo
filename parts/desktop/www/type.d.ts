@@ -1,2 +1,2 @@
-declare class DesktopThemePart extends CorePart {
+declare class PartDesktopTheme extends PartCore {
 }

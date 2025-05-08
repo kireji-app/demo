@@ -1,0 +1,1 @@
+return "<article>" + post["post.html"] + "</article>"

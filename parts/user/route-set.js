@@ -1,9 +1,10 @@
-if (theme.arm?.key !== ROUTE.host)
- theme.setArm(ROUTE.host)
+user.route = ROUTE
 
-if (ROUTE.desktopRouteID !== desktop.routeID)
- desktop.setRouteID(ROUTE.desktopRouteID)
+if (theme.arm?.key !== user.route.host)
+ theme.setArm(user.route.host)
 
-for (const taskRouteID of ROUTE.taskRouteIDs) {
+if (user.route.desktopRouteID !== desktop.routeID)
+ desktop.setRouteID(user.route.desktopRouteID)
+
+for (const taskRouteID of user.route.taskRouteIDs)
  warn("Do something with this task route ID.", taskRouteID)
-}

@@ -1,14 +1,19 @@
 worker.controller = {
  claim() {
+  debug('received claim message')
   globe.clients.claim()
  },
  impart(host) {
+  debug('received impart message')
   if (theme.arm?.key !== host)
    theme.setArm(host)
 
   globe.skipWaiting()
+
+  globe.imparted = true
  },
  resign() {
+  debug('received resign message')
   if (interval)
    clearInterval(interval)
 
@@ -16,10 +21,11 @@ worker.controller = {
 
   replacement.postMessage({
    code: 'impart',
-   payload: theme.arm.host
+   payload: theme.arm?.host ?? build.defaultHost
   })
  },
  setTheme: host => {
+  debug('received setTheme message')
   if (theme.arm?.key === host)
    return
 
@@ -43,20 +49,7 @@ registration.onupdatefound = () => {
   if (registration.installing) {
    log(1, 'Previous service worker is now resigning.')
    worker.controller.resign()
-  } else {
-   // Not sure if this is reachable.
-   warn('Previous service worker, but I don\'t see the installing one. I\'ll ... wait?')
-
-   if (interval)
-    throw 'double interval set'
-
-   interval = setInterval(() => {
-    warn('polling')
-    if (registration.installing)
-     worker.controller.resign()
-   }, 25)
   }
- } else {
-  log(1, 'New service worker is now installing.')
- }
+  throw 'unexpected error updating worker'
+ } else log(1, 'New service worker is now installing.')
 }

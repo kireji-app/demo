@@ -1,7 +1,8 @@
-menu.element = document.querySelector("task-menu")
-
-if (!menu.element) {
+menu.element = document.querySelector("task-menu") ?? (() => {
  const offscreen = document.createElement("div")
- offscreen.innerHTML = menu.render("inline.html")
- menu.element = offscreen.querySelector("task-menu")
-}
+ offscreen.innerHTML = menu.render("menu.html")
+ return offscreen.querySelector("task-menu")
+})()
+
+menu.settingsSection = menu.element.querySelector("#settings")
+menu.themeSection = menu.element.querySelector("#themes")

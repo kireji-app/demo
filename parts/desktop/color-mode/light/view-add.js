@@ -1,2 +1,1 @@
-part.parent.setColorMode(true)
-user.colorModeButton.removeAttribute("data-state")
+// user.colorModeButton.removeAttribute("data-state")

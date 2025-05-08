@@ -3,6 +3,6 @@ globe.desktop = this
 super({
  menu: null,
  colorMode: null,
- vintageMode: null,
+ era: null,
  taskBar: null
 })

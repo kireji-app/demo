@@ -1,4 +1,4 @@
-declare class AddressBarPart extends UserFeature {
+declare class PartAddressBar extends UserFeature {
  /** The minimum time between address bar changes, used to throttle them
   * to prevent from triggering the browser's own, much more aggressive throttle. */
  readonly throttleDuration: number
@@ -70,4 +70,4 @@ declare class FileHeader {
  readonly binary: boolean
 }
 /** A window feature representing the browser address bar that provides `pathname <=> route ID` mapping to all environments. */
-declare const addressBar: AddressBarPart
+declare const addressBar: PartAddressBar

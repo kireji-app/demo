@@ -1,2 +1,2 @@
-declare class UserThemePart extends CorePart {
+declare class PartUserTheme extends PartCore {
 }

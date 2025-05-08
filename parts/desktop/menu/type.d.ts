@@ -10,23 +10,26 @@
  *   menu.dismiss
  * ]
  * ```*/
-declare class MenuPart extends MatchPart {
+declare class PartMenu extends PartMatch {
  /** The match prototype of the menu. */
- readonly super: MatchPart
+ readonly super: PartMatch
  /** A movie clip that represents the closed position. It plays once and freezes on its last frame. */
- readonly closed: MenuClipPart
+ readonly closed: PartMenuClip
  /** The movie clip that tweens the menu from the closed position to the opened position. */
- readonly introduce: MenuClipPart
+ readonly introduce: PartMenuClip
  /** A movie clip that represents the opened position. It plays once and freezes on its last frame. */
- readonly opened: MenuClipPart
+ readonly opened: PartMenuClip
  /** The movie clip that tweens the menu from the opened position to the closed position. */
- readonly dismiss: MenuClipPart
-
+ readonly dismiss: PartMenuClip
  /** When enabled, the button element which appears on the taskbar and opens the menu. */
  readonly button: HTMLButtonElement
  /** When enabled, the fullscreen element that contains the menu. */
  readonly element: HTMLElement
+ /** The settings section in the sidebar. */
+ readonly settingsSection: HTMLElement
+ /** The section in the menu listing themes to choose from. */
+ readonly themeSection: HTMLUListElement
 }
 
 /** The task menu that lets users change the theme and access settings. */
-declare const menu: MenuPart
+declare const menu: PartMenu

@@ -1,10 +1,10 @@
-/** @type {CorePart | null} */
+/** @type {PartCore | null} */
 let highestEnabledChangedCharacter = null
-/** @type {CorePart | null} */
+/** @type {PartCore | null} */
 let lowestDisabledChangedCharacter = null
-/** @type {Set<CorePart>} */
+/** @type {Set<PartCore>} */
 const disabledChangedCharacters = new Set()
-/** @type {Set<CorePart>} */
+/** @type {Set<PartCore>} */
 const enabledChangedCharacters = new Set()
 let newRouteID = 0n
 let stringLengthChanged = false
@@ -41,7 +41,7 @@ if (disabledChangedCharacters.size) {
   indexToDisable >= lowestDisabledChangedCharacter.index;
   indexToDisable--
  ) {
-  /** @type {CorePart} */
+  /** @type {PartCore} */
   const characterToDisable = string[indexToDisable]
   newRouteID -= characterToDisable.previousRouteID * string.placeValues.get(indexToDisable)
   if (disabledChangedCharacters.has(characterToDisable))

@@ -1,13 +1,13 @@
-declare class MixPart extends CorePart {
+declare class PartMix extends PartCore {
  /** The prototype of the mix, whose host is "core.parts". */
- readonly super: CorePart
+ readonly super: PartCore
 
  /** A map from mix factor to last-known place value multiplier,
   * (the value of routeID unit for the given factor)
   * where mix is viewed as a fixed-length mixed-radix string.
   * 
   * Used to speed up computation. */
- readonly placeValues: Map<CorePart, bigint>
+ readonly placeValues: Map<PartCore, bigint>
 
  /** Sets the list of factors for the mix and computes place values.*/
  distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: function): void
@@ -18,7 +18,7 @@ declare class MixPart extends CorePart {
  /** Updates the mix's routeID and bubbles the update leafward. */
  distributeRouteID(ROUTE_ID): void
 }
-declare const mix: MixPart
+declare const mix: PartMix
 declare class MixError extends Error { }
 declare class MixCollectRouteError extends MatchError { }
-declare const CHANGED_FACTORS: CorePart[]
+declare const CHANGED_FACTORS: PartCore[]

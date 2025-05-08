@@ -1,4 +1,4 @@
-const vintage = vintageMode.arm.key === "vintage"
+const vintage = era.arm.key === "vintage"
 return `wallpaper- {
  display: flex;
  flex-flow: column wrap;

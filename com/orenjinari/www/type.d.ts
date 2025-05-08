@@ -1,2 +1,2 @@
-declare class OrenjinariThemePart extends CorePart {
+declare class PartOrenjinari extends PartCore {
 }

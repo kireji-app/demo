@@ -22,7 +22,7 @@ wallpaper->h2 {
 
 wallpaper- h1 {
  font-size: min(35vw, var(--h) / 2);
- color: var(--fg-fade5);
+ color: var(--fg-un-mode-est);
  text-align: center;
  line-height: var(--h);
  height: 100%;
@@ -54,7 +54,7 @@ wallpaper- p {
  letter-spacing: calc(var(--unit) / 13);
  font-size: var(--unit);
  line-height: var(--unit);
- color: var(--fg-fade3);
+ color: var(--fg-un-mode-er);
  background-color: #0005;
  margin: calc(var(--unit) * 2);
  padding: calc(var(--unit) * 2);
@@ -63,7 +63,7 @@ wallpaper- p {
 wallpaper- a,
 wallpaper- a:visited {
  text-decoration: none;
- color: var(--fg-fade2);
+ color: var(--fg-un-mode);
  font-weight: 400;
 }
 

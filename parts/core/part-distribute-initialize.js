@@ -18,17 +18,11 @@ Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
  if (key in part)
   throw new PartError(`Duplicate key ${key}. ${part.host}`)
 
- subpart ||= part.resolveImplicitHost(key)
 
- if (typeof subpart === "string") {
-
-  if (/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(subpart))
-   subpart += "." + part.host
-
+ if (!subpart || typeof subpart === "string") {
+  subpart = part.resolveImplicitHost(subpart || key)
   PART_MANIFEST[key] = entries[index][1] = subpart = new Part(subpart)
- }
-
- else if (!(subpart instanceof CorePart))
+ } else if (!(subpart instanceof CorePart))
   throw new PartError(`Unexpected ${subpart?.constructor?.name ?? typeof subpart} encountered as subpart. ${part.host}`)
 
  part[subpart.key = key] = part[subpart.index = index] = subpart

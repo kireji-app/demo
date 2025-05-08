@@ -1,5 +1,5 @@
-class GpuPart extends UserFeature {
+class PartGpu extends UserFeature {
  readonly adapter: GPUAdapter
  readonly device: GPUDevice
 }
-declare const gpu: GpuPart
+declare const gpu: PartGpu

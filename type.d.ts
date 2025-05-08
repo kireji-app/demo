@@ -26,7 +26,7 @@ declare class Framework {
  static readonly sourcePositionMarkPattern: RegExp
 
  /** The part constructor obtained by evaluating `framework.script.` */
- readonly PartConstructor: typeof CorePart
+ readonly PartConstructor: typeof PartCore
  /** The host used to lookup all of the source code for the source file. */
  readonly host: string
  /** Whether or not the current framework is building a Core part, which has no parent type. */
@@ -35,9 +35,9 @@ declare class Framework {
  readonly script: string
  /** An array of subdomain names obtained by splitting the host at ".". */
  readonly domains: string[]
- /** A properly formatted class name made by converting the host's subdomain from kebab-case to PascalCase and append "Part".
+ /** A properly formatted class name made by appending the host's subdomain (converted from kebab-case to PascalCase) to the word "Part".
   * 
-  * Example: "www\.example\.part" => "WwwPart"
+  * Example: "www\.example\.part" => "PartWww"
  */
  readonly niceName: string
  /** An object that serializes the method signatures and base type for the class script the framework compiled. The object is parsed from the file `part.json` in the custom directory (or `{}` if no file is found). It's direct prototype object is parsed from `part.json` in the stock directory (also {} if not found). Finally, the stock prototype's prototype is the framework's parent's partJSON or null, if it is the Core. */
@@ -104,7 +104,7 @@ class SourceMappedFile {
  * source code and any source code in CUSTOM_STRING_COLLECTION, caches the new
  * type, and then returns a new instance of it. */
 declare class Part {
- constructor(HOST, CUSTOM_STRING_COLLECTION): CorePart
+ constructor(HOST, CUSTOM_STRING_COLLECTION): PartCore
 }
 /** A string representing which of four known environments the framework is running on.
  * 1. "build"
@@ -120,7 +120,7 @@ declare class Part {
  * 3. "window"
  *     - Packed and deployed as a front-end framework in the browser window.
  *     - It was created by a server-rendered script to transfer rendering control from server to client. */
-declare const environment: string
+declare const environment: "build" | "server" | "worker" | "window"
 /** True if the framework was built on the cloud from the main branch. */
 declare const production: boolean
 /** All of the inline information compiled from the git repo in node by the build process. */
@@ -136,7 +136,7 @@ declare const build: {
  /** The hash of the most recent git commit at build time. */
  readonly hash: string
  /** The automatically generated semantic version number of the current build. */
- readonly semanticVersion: {
+ readonly version: {
   /** The part of the version number which increments when there are breaking changes to the routes of the user space. */
   readonly major: number
   /** The part of the version number which increments when there are non-breaking additions to the routes of the user space. */

@@ -1,3 +1,24 @@
+return `
+wallpaper- footer {
+ display: flex;
+ gap: var(--spacing);
+ padding: var(--spacing);
+ width: 100%;
+ justify-content: end;
+}
+wallpaper- :is(h1, article, footer) {
+ margin: 0;
+ padding: var(--spacing);
+}
+wallpaper- footer p {
+ margin: 0;
+ padding: 0;
+}
+wallpaper- {
+ top: var(--task-bar-height);
+ bottom: 0;
+}`/*
+
 wallpaper- {
  background: var(--bg-shade1);
  color: var(--fg-fade1);
@@ -10,18 +31,6 @@ wallpaper- {
  align-items: center;
 }
 
-wallpaper- article {
- max-width: 800px;
- width: 90%;
- padding: 30px;
- background-color: var(--bg-shade2);
- box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
- margin-top: 40px;
- margin-bottom: 40px;
- border-radius: 8px;
-}
-
-/* Typography */
 wallpaper- h1,
 wallpaper- h2,
 wallpaper- h3,
@@ -43,14 +52,56 @@ wallpaper- p {
  font-size: 1.1em;
 }
 
-wallpaper- a {
- color: #007bff;
+wallpaper- menu {
+ display: flex;
+ width: 100%;
+ padding: 0 3ch;
+ margin: 3ch 0;
+ gap: 3ch;
+}
+
+wallpaper- :is(a, a:visited) {
+ --color: var(--fg-fade1);
+ color: var(--color);
  text-decoration: none;
- transition: color 0.3s ease;
+ box-shadow: 0 1px 0 -0.25px var(--color);
+ white-space: nowrap;
 }
 
 wallpaper- a:hover {
- color: #0056b3;
+ --color: var(--theme);
+}
+
+wallpaper- article a[target="_blank"]::after {
+ content: '↗';
+ color: inherit;
+ display: inline-block;
+ font-size: inherit;
+ line-height: inherit;
+ font-weight: 900;
+ height: 1ch;
+ width: 1ch;
+ margin: 0 0.5ch;
+}
+
+wallpaper- menu>a {
+ display: block;
+ text-indent: -9999px;
+ overflow: hidden;
+ width: var(--icon-size);
+ height: var(--icon-size);
+ background-image: url(${blog.render({ request: "github-mark-white.svg", format: "datauri" })});
+ background-repeat: no-repeat;
+ background-position: center center;
+}
+
+wallpaper- article a[href^="https://github.com"]::before {
+ content: "";
+ background-image: url(${blog.render({ request: "github-mark-white.svg", format: "datauri" })});
+ display: inline-block;
+ height: 1ch;
+ width: 1ch;
+ margin: 0 0.5ch;
 }
 
 wallpaper- em,
@@ -65,14 +116,12 @@ wallpaper- b {
  color: var(--fg-fade2);
 }
 
-/* Layout Specific to Post */
 wallpaper- article>header {
- margin-bottom: 2em;
- text-align: center;
+ margin-bottom: 2ch;
 }
 
 wallpaper- article>header h1 {
- margin-bottom: 0.2em;
+ margin-bottom: 0.2ch;
 }
 
 wallpaper- .post-meta {
@@ -89,7 +138,6 @@ wallpaper- .post-content {
  line-height: 1.8;
 }
 
-/* Code Blocks */
 wallpaper- pre {
  background-color: var(--bg-shade3);
  padding: 15px;
@@ -115,7 +163,6 @@ wallpaper- pre code {
  border-radius: 0;
 }
 
-/* Blockquotes */
 wallpaper- blockquote {
  border-left: 5px solid #ddd;
  padding-left: 1.5em;
@@ -126,7 +173,6 @@ wallpaper- blockquote {
  margin-bottom: 1.5em;
 }
 
-/* Lists */
 wallpaper- ul,
 wallpaper- ol {
  margin-bottom: 1.5em;
@@ -137,14 +183,12 @@ wallpaper- li {
  margin-bottom: 0.5em;
 }
 
-/* Separator */
 wallpaper- hr {
  border: 0;
  border-top: 1px solid #eee;
  margin: 2em 0;
 }
 
-/* Responsive Design (adjust as needed) */
 @media (max-width: 768px) {
  wallpaper- article {
   width: 95%;
@@ -160,4 +204,4 @@ wallpaper- hr {
  wallpaper- p {
   font-size: 1em;
  }
-}
+}`*/

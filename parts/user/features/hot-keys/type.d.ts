@@ -1,4 +1,4 @@
-declare class HotKeysPart extends CorePart {
+declare class PartHotKeys extends UserFeature {
 
  /** The number of shift keys the user is holding down. */
  readonly shiftKeysDown: number
@@ -7,4 +7,4 @@ declare class HotKeysPart extends CorePart {
  readonly contextKeysDown: number
 }
 
-declare const hotKeys: HotKeysPart
+declare const hotKeys: PartHotKeys

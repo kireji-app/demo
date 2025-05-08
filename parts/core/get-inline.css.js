@@ -32,10 +32,12 @@ body {
  height: var(--h);
  font-synthesis: weight style;
  --sidebar-width: 256px;
+ color: var(--fg);
+ background: var(--bg);
 }
 
 img {
- fill: var(--fg-fade1);
+ fill: var(--fg);
 }
 
 img[src="${part.render({ request: "blank.png", format: "datauri" })}"],

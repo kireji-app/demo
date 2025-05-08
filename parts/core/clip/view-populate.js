@@ -16,5 +16,5 @@ else {
  else
   nextFrameCallback = () => clip.handleEndPlayback()
 }
-
-clip.pendingFrame = requestAnimationFrame(nextFrameCallback)
+// commented out for debug only
+// clip.pendingFrame = requestAnimationFrame(nextFrameCallback)

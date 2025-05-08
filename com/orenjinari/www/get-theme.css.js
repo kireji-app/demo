@@ -17,53 +17,53 @@ return `wallpaper- {
  padding-top: calc(var(--h) + var(--section-gap)) !important;
 }
 
-task-bar {
+body.modern task-bar {
  background: transparent;
  box-shadow: none;
  color: black;
 }
 
-.bunny {
+wallpaper- .bunny {
  position: absolute;
  cursor: pointer;
 }
 
-#connect {
+wallpaper- #connect {
  left: calc(75vw - 3.7vw);
  top: calc(calc(.8 * var(--h)) - 7.6vw);
  width: 7.4vw;
 }
 
-#others {
+wallpaper- #others {
  left: calc(57.5vw - 4vw);
  top: calc(calc(.8 * var(--h)) - 9.3vw);
  width: 8vw;
 }
 
-#portfolio {
+wallpaper- #portfolio {
  left: calc(42.5vw - 5vw);
  top: calc(calc(.8 * var(--h)) - 10.5vw);
  width: 10vw;
 }
 
-#about {
+wallpaper- #about {
  left: calc(25vw - 4vw);
  top: calc(.8 * var(--h) - 8vw);
  width: 8vw;
 }
 
-.placeholder {
+wallpaper- .placeholder {
  width: 100vw;
  height: var(--h);
- box-shadow: inset 0 0 0 8vw var(--fg-fade4);
+ box-shadow: inset 0 0 0 8vw var(--fg-mode-er);
  position: relative;
 }
 
-.placeholder img {
+wallpaper- .placeholder img {
  width: 64px;
 }
 
-.placeholder h1 {
+wallpaper- .placeholder h1 {
  text-align: center;
  line-height: calc(var(--h) - var(--task-bar-height));
  height: 100%;
@@ -74,14 +74,14 @@ task-bar {
  margin: 0;
  padding: 0;
  font-size: 25vw;
- color: var(--fg-fade5);
+ color: var(--fg-mode-est);
 }
 
-.placeholder .thin {
+wallpaper- .placeholder .thin {
  font-weight: 200;
 }
 
-.float {
+wallpaper- .float {
  font-size: 32px;
  height: 100%;
  align-items: center;
@@ -93,7 +93,7 @@ task-bar {
 }
 
 @media (width < 500px) {
- .float {
+ wallpaper- .float {
   font-size: max(min(5vw, calc(.05 * var(--h))), 16px);
  }
 }

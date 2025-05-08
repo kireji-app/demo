@@ -1,5 +1,5 @@
 const oldArm = match.arm
-/** @type CorePart */
+/** @type PartCore */
 let newArm = null
 let disabledArm = null
 
