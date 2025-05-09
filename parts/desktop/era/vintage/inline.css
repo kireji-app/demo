@@ -10,13 +10,13 @@
 #era-button .base::after {
  content: "";
  display: block;
- background: white;
  width: 16px;
  height: 16px;
  line-height: 16px;
  text-align: center;
  font-weight: 900;
  box-shadow: var(--deep-inset);
+ color: black;
 }
 
 #settings>span[data-state="enabled"] .base::after {
@@ -37,7 +37,7 @@
 }
 
 #settings>*:focus>.label::after {
- border: 1px dotted black;
+ border: 1px dotted var(--bg-un-mode-est);
  content: "";
  position: absolute;
  left: 0;
@@ -55,8 +55,8 @@
 }
 
 .task-link>a:hover {
- background: #00007f;
- color: white
+ background: var(--fg-accent);
+ color: var(--bg-mode-est);
 }
 
 .task-link[data-here]>a::after {
@@ -93,7 +93,7 @@
  border: none;
  padding: 3px 2px 2px;
  text-align: left;
- box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px var(--surface-dim), inset 2px 2px #dbdbdb;
+ box-shadow: inset -1px -1px var(--bg-dark-er), inset 1px 1px var(--bg-light-er), inset -2px -2px var(--bg-dark), inset 2px 2px var(--bg-light);
 }
 
 body {
@@ -102,15 +102,15 @@ body {
  --task-bar-height: 28px;
  --icon-size: var(--task-bar-height);
  --deep-inset:
-  inset -1px -1px white,
-  inset 1px 1px black,
-  inset -2px -2px #dbdbdb,
-  inset 2px 2px var(--surface-dim);
+  inset -1px -1px var(--bg-light-er),
+  inset 1px 1px var(--bg-dark-er),
+  inset -2px -2px var(--bg-light),
+  inset 2px 2px var(--bg-dark);
  --deep-outset:
-  inset -1px -1px black,
-  inset 1px 1px white,
-  inset -2px -2px var(--surface-dim),
-  inset 2px 2px #dbdbdb;
+  inset -1px -1px var(--bg-dark-er),
+  inset 1px 1px var(--bg-light-er),
+  inset -2px -2px var(--bg-dark),
+  inset 2px 2px var(--bg-light);
  font: 11px / 16px var(--system-ui);
 }
 
@@ -121,38 +121,38 @@ sidebar- {
  bottom: calc(var(--task-bar-height) - 4px);
  line-height: 18px;
  padding: 3px 3px 3px 24px;
- background: var(--surface);
+ background: var(--bg);
  text-align: left;
- box-shadow: inset -1px -1px black, inset 1px 1px white, inset -2px -2px var(--surface-dim), inset 2px 2px #dbdbdb
+ box-shadow: inset -1px -1px var(--bg-dark-er), inset 1px 1px var(--bg-light), inset -2px -2px var(--bg-dark), inset 2px 2px var(--bg-light-er)
 }
 
 sidebar-::after {
+ content: "𝗱𝗲𝘀𝗸𝘁𝗼𝗽.𝑝𝑎𝑟𝑡𝑠";
  pointer-events: none;
  font-smooth: never;
  -webkit-font-smoothing: none;
  display: block;
- content: "𝗱𝗲𝘀𝗸𝘁𝗼𝗽.𝑝𝑎𝑟𝑡𝑠";
  writing-mode: tb-rl;
  transform: rotate(-180deg);
  line-height: 21px;
  font-size: 18px;
  font-weight: 200;
- color: white;
+ color: var(--color-dark-fg);
  padding-top: 4px;
  position: absolute;
  left: 3px;
  top: 3px;
  height: calc(var(--sidebar-height) - 6px);
  background:
-  linear-gradient(rgba(0, 200, 255, 0), rgba(0, 200, 255, 0.5) 12.5%, rgba(0, 200, 255, 0) 70.71%),
-  darkblue;
+  linear-gradient(rgba(0, 200, 255, 0), var(--color-dark-accent) 12.5%, rgba(0, 200, 255, 0) 70.71%),
+  var(--color-light-accent);
  width: 21px
 }
 
 sidebar->hr {
  height: 2px;
- border-top: 1px solid #7f7f7f;
- border-bottom: 1px solid white;
+ border-top: 1px solid var(--bg-dark);
+ border-bottom: 1px solid var(--bg-light-er);
  margin: 4px 0;
 }
 
@@ -162,7 +162,7 @@ sidebar->hr {
 }
 
 .task:focus::after {
- border: 1px dotted black;
+ border: 1px dotted var(--bg-un-mode-est);
  content: "";
  position: absolute;
  margin: 3px;
@@ -176,7 +176,7 @@ sidebar->hr {
 .task.open {
  font: bold 11px var(--system-ui);
  padding: 4px 2px 2px;
- box-shadow: inset -1px -1px white, inset 1px 1px black, inset -2px -2px #dbdbdb, inset 2px 2px var(--surface-dim);
+ box-shadow: inset -1px -1px var(--bg-light-er), inset 1px 1px var(--bg-dark-er), inset -2px -2px var(--bg-light), inset 2px 2px var(--bg-dark);
 }
 
 .task.open>* {
@@ -187,14 +187,14 @@ sidebar->hr {
  content: "";
  position: absolute;
  margin: 2px;
- border-top: 1px solid white;
+ border-top: 1px solid var(--bg-light-er);
  left: 0;
  right: 0;
  top: 0;
  bottom: 0;
  background-image:
-  linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white),
-  linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white);
+  linear-gradient(45deg, var(--bg-light-er) 25%, transparent 25%, transparent 75%, var(--bg-light-er) 75%, var(--bg-light-er)),
+  linear-gradient(45deg, var(--bg-light-er) 25%, transparent 25%, transparent 75%, var(--bg-light-er) 75%, var(--bg-light-er));
  background-size: 2px 2px;
  background-position: 0 0, 1px 1px;
 }
@@ -213,23 +213,23 @@ tray- {
  margin: 0;
  padding: 3px 4px 3px;
  text-align: left;
- background: var(--surface);
- box-shadow: inset -1px -1px white, inset 1px 1px var(--surface-dim);
+ background: var(--bg);
+ box-shadow: inset -1px -1px var(--bg-light-er), inset 1px 1px var(--bg-dark);
  width: auto;
 }
 
 task-bar {
  gap: 3px;
  padding: 4px 2px 2px;
- background: var(--surface);
- box-shadow: inset 0 1px var(--surface), inset 0 2px white;
+ background: var(--bg);
+ box-shadow: inset 0 1px var(--bg-light-er), inset 0 2px var(--bg-light);
 }
 
 task-bar>menu-button {
- flex: 0 0;
- position: relative;
- width: 100%;
- height: 100%;
+ width: 54px !important;
+ height: 22px;
+ bottom: 2px;
+ left: 2px;
  display: flex;
  flex-flow: row nowrap;
  gap: 3px;
@@ -237,9 +237,8 @@ task-bar>menu-button {
  font: bold 11px / 16px var(--system-ui);
  padding: 3px 4px 2px;
  text-align: left;
- background: var(--surface);
+ background: var(--bg);
  box-shadow: var(--deep-outset);
- width: min-content !important;
 }
 
 menu-button>.part-icon {
@@ -254,7 +253,7 @@ body.menu-pressed menu-button {
 }
 
 menu-button:focus::before {
- border: 1px dotted black;
+ border: 1px dotted var(--bg-un-mode-est);
  content: "";
  position: absolute;
  margin: 3px;

@@ -69,7 +69,7 @@ wallpaper- :is(a, a:visited) {
 }
 
 wallpaper- a:hover {
- --color: var(--theme);
+ --color: var(--accent);
 }
 
 wallpaper- article a[target="_blank"]::after {

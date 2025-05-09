@@ -8,6 +8,7 @@ worker.controller = {
   if (theme.arm?.key !== host)
    theme.setArm(host)
 
+  build.defaultHost = host
   globe.skipWaiting()
 
   globe.imparted = true
@@ -25,13 +26,14 @@ worker.controller = {
   })
  },
  setTheme: host => {
-  debug('received setTheme message')
+  debug('received setTheme message', host, theme.arm?.key)
   if (theme.arm?.key === host)
    return
 
+  build.defaultHost = host
   theme.setArm(host)
-  delete Framework.responses[location.origin + "/"]
-  delete Framework.responses[location.origin + "/service.js!"]
+  // delete Framework.responses[location.origin + "/"]
+  // delete Framework.responses[location.origin + "/service.js!"]
   const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)
   channel.close()

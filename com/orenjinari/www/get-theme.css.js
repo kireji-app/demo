@@ -20,7 +20,12 @@ return `wallpaper- {
 body.modern task-bar {
  background: transparent;
  box-shadow: none;
- color: black;
+}
+
+
+body.vintage sidebar-::after {
+ content: "orenjinari";
+ font-weight: 900;
 }
 
 wallpaper- .bunny {

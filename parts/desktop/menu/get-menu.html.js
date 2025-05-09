@@ -4,7 +4,7 @@ return `
  <ul id=themes>${theme.map(themePart => {
  return `
   <li class=task-link${themePart === theme.arm ? ` data-here` : ""}>
-   <a href="https://${themePart.host}" onclick="theme.go(event)">
+   <a href="https://${themePart.host}" onclick="theme.go(event, this)">
     <img src="${themePart.render({ request: "theme.png", format: "datauri" })}" class=part-icon />
     <span class=label>${themePart.render("title")}</span>
    </a>

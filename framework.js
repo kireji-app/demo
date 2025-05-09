@@ -1,6 +1,6 @@
 class Framework {
  static initialize(buildData) {
-  Framework.responses = {}
+  // Framework.responses = {}
   Framework.frameworks = []
   Framework.sourceLines = Framework.toString().split("\n")
   Framework.sourcePositionMarks = {}
@@ -130,8 +130,8 @@ class Framework {
    }
   }
   const initializeRootPart = () => {
-   const root = new Part("user.parts")
-   root.distributeInitializePart()
+   const user = new Part("user.parts")
+   user.distributeInitializePart()
    // openLog(1, "Performing reinitialization test.")
    // root.distributeInitializePart()
    closeLog(1)
@@ -303,6 +303,10 @@ class Framework {
    log(0, Math.trunc(10000000 * build.size / 2 ** 20) / 10000000 + " megabytes")
    log(2, Math.ceil(build.size * 8 / 6).toLocaleString() + " hexads/sextets")
    closeLog(1)
+   openLog(8, "Testing index.html.")
+   user.setRoute(new Route("https://" + build.defaultHost + "/1"))
+   log(8, user["index.html"])
+   closeLog(2)
    closeLog(0)
   } else {
    globalThis.production = !build.local && build.branch === "main"
@@ -451,9 +455,15 @@ class Framework {
     property.modifiers = property.isAsync ? "async " : (property.isGetOrSet ? PROPERTY_ID.slice(0, 3) + " " : (property.isAuto ? "get " : ""))
     property.signature = property.modifiers + property.propertyReference + property.argumentString
     if (property.content === undefined) return
-    if (property.isAuto && framework.ownFilenameTable.has(`get-${PROPERTY_ID.slice(5)}.js`)) return
+    if (property.isAuto && (framework.ownFilenameTable.has(`get-${PROPERTY_ID.slice(5)}.js`) || framework.ownFilenameTable.has(`set-${PROPERTY_ID.slice(5)}.js`))) return
     framework.sourceFile.addSection(`@method-open@\n\n ${property.signature} {`, framework.buildSource)
-    if (property.isAuto) framework.sourceFile.addLine(property.content, property.source, null, null, "  ")
+    if (property.isAuto) {
+     framework.sourceFile.addLine(property.content, property.source, null, null, "  ")
+     if (!PROPERTY_ID.includes(".") && PROPERTY_ID.slice(5) !== property.niceName) {
+      framework.sourceFile.addLine(`@method-transition@}\n\nget ["${PROPERTY_ID.slice(5)}"]() {\n`, framework.buildSource, null, null, " ")
+      framework.sourceFile.addLine(property.content, property.source, null, null, "  ")
+     }
+    }
     else {
      framework.Property.collectConstants(framework, property)
      if (framework.isCore) framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
@@ -506,6 +516,6 @@ Framework.initialize({
  change: "patch",
  verbosity: 2,
  mapping: true,
- defaultHost: "www.core.parts",
+ defaultHost: "www.ejaugust.com",
  defaultDesktopRouteID: "0"
 })

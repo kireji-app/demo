@@ -74,7 +74,7 @@ return coreTheme.requestedHost === coreTheme.host ?
 
   `<ol>` + (theme.map(subpart =>
    `<li>` + (
-    `<a href="https://${subpart.host}" onclick="theme.go(event)">` + (
+    `<a href="https://${subpart.host}" onclick="theme.go(event, this)">` + (
      `${subpart.title} (${subpart.host})`
     ) +
     `</a>`

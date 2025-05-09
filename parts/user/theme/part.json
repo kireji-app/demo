@@ -2,6 +2,7 @@
  "extends": "match.core.parts",
  "part-distribute-initialize": [],
  "go": [
-  "EVENT"
+  "EVENT",
+  "LINK"
  ]
 }

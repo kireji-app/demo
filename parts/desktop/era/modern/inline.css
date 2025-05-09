@@ -72,6 +72,7 @@ sidebar->hr {
  display: flex;
  margin: 0;
  flex-flow: column;
+ background-color: var(--bg-dark-er);
 }
 
 #themes {
@@ -165,7 +166,7 @@ sidebar->hr {
  top: 0;
  bottom: 0;
  width: 8px;
- background: var(--theme);
+ background: var(--fg-accent);
 }
 
 .task-link>a,
@@ -177,11 +178,11 @@ sidebar->hr {
 }
 
 .task-link[data-here]>a {
- color: var(--theme);
+ color: var(--fg-accent);
 }
 
 .task-link:not([data-here]):hover {
- color: var(--theme);
+ color: var(--fg-accent);
  cursor: pointer;
 }
 

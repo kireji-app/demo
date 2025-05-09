@@ -128,6 +128,12 @@ menu-button {
  color: inherit;
 }
 
+task-bar>menu-button {
+ position: absolute;
+ left: var(--spacing);
+ bottom: var(--spacing);
+}
+
 sidebar- {
  margin: 0;
  position: fixed;
@@ -192,12 +198,12 @@ task-bar>.btn {
 }
 
 task-bar>.btn:hover {
- color: var(--theme);
+ color: var(--fg-accent);
 }
 
 button:hover,
 menu-button:hover {
- color: var(--theme);
+ color: var(--fg-accent);
 }
 
 #nested button {
