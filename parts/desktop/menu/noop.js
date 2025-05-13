@@ -1,2 +1,0 @@
-EVENT.preventDefault()
-EVENT.stopPropagation()

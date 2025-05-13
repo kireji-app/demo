@@ -1,108 +1,152 @@
 wallpaper- {
- --unit: min(48px, 4vw, calc(var(--h) / 5));
- padding-top: calc(var(--h) * 0.4);
- margin: 0;
- display: block;
- overflow: clip;
- padding: 15px;
+ display: grid;
+ grid-template-columns: var(--explorer-width) 1fr;
+ grid-template-rows: 1fr;
+ font: inherit;
+ --line-height: 25px;
+ --icon-size: inherit;
+ --icon-size2: calc(var(--icon-size) * 2 / 3);
+ position: relative;
 }
 
-wallpaper->h1,
-wallpaper->h2 {
- text-align: center;
- line-height: calc(var(--h) / 2);
- height: calc(var(--h) / 2);
- position: absolute;
- width: 100%;
- left: 0;
- top: 0;
- margin: 0;
- padding: 0;
-}
-
-wallpaper- h1 {
- font-size: min(35vw, var(--h) / 2);
- color: var(--fg-un-mode-est);
- text-align: center;
- line-height: var(--h);
+wallpaper- #explorer {
  height: 100%;
- position: absolute;
- width: 100%;
+ overflow: auto;
+ background-color: var(--bg-un-mode);
+}
+
+wallpaper- #explorer>h2,
+wallpaper- #browser>h2 {
+ position: sticky;
  left: 0;
  top: 0;
  margin: 0;
- padding: 0;
+ padding: calc(var(--spacing) / 3);
+ font-weight: 300;
+ box-shadow: var(--bottom-shadow);
+ background-color: var(--bg-un-mode);
+ line-height: var(--line-height);
+ font-size: calc(var(--line-height) * 2 / 3);
+ z-index: 1;
 }
 
-wallpaper- .thin {
- font-weight: 200;
-}
-
-wallpaper- h2 {
- top: calc(var(--h) * .1);
- height: calc(var(--h) * .4);
- line-height: calc(var(--h) * 0.4);
+wallpaper- #width-handle {
+ --handle-thickness: calc(var(--spacing) / 2);
  position: absolute;
- font-size: var(--unit);
- text-align: center;
-}
-
-wallpaper- p {
- --unit: min(18px, 8vw, calc(var(--h) / 28));
- display: block;
- font-weight: 200;
- letter-spacing: calc(var(--unit) / 13);
- font-size: var(--unit);
- line-height: var(--unit);
- color: var(--fg-un-mode-er);
- background-color: #0005;
- margin: calc(var(--unit) * 2);
- padding: calc(var(--unit) * 2);
-}
-
-wallpaper- a,
-wallpaper- a:visited {
- text-decoration: none;
- color: var(--fg-un-mode);
- font-weight: 400;
-}
-
-wallpaper- img {
- width: var(--unit);
- height: var(--unit);
- border-radius: calc(var(--unit) / 5);
- margin-right: calc(var(--unit) / 2);
- transform: scale(2);
-}
-
-wallpaper- .float {
- position: absolute;
+ left: calc(var(--explorer-width) - var(--handle-thickness) / 2);
  top: 0;
- left: 0;
- right: 0;
  bottom: 0;
- font-size: 32px;
+ width: var(--handle-thickness);
+ border-radius: calc(var(--handle-thickness) / 2);
+}
+
+wallpaper- #width-handle {
+ z-index: 10;
+}
+
+body.dragging {
+ cursor: ew-resize;
+}
+
+wallpaper- #width-handle:hover,
+body.dragging #width-handle {
+ background-color: var(--fg-mode-er);
+}
+
+wallpaper- #browser>h2 {
+ padding: calc(var(--spacing) / 6);
+ display: flex;
  align-items: center;
- justify-content: center;
+}
+
+wallpaper- #browser>h2>input {
+ margin: 0;
+ padding: calc(var(--spacing) / 6);
+ line-height: var(--line-height);
+ border: none;
+ outline: none;
+ flex: 1;
+ border-radius: calc((var(--line-height) + var(--spacing) / 6) / 2);
+}
+
+wallpaper- #browser>h2>svg {
+ height: var(--line-height);
+ width: var(--line-height);
+ stroke: var(--fg-mode-er);
+ margin: 0;
+ fill: none;
+ border: none;
+ cursor: pointer;
+ outline: none;
+}
+
+wallpaper- #browser>h2>svg:hover {
+ stroke: var(--fg-mode);
+ background-color: var(--bg-fade-2);
+}
+
+wallpaper- #explorer>details {
+ flex: 1 1;
+ overflow: hidden;
+ width: fit-content;
+ min-width: var(--explorer-width);
+ padding-bottom: min(calc(var(--h) / 2), calc(var(--line-height) * 3));
+}
+
+wallpaper- details {
  display: flex;
  flex-flow: column;
- gap: 0.5ch;
- line-height: 1em;
+ margin: 0;
+ padding: 0;
+ /* border-left: 1px dashed var(--fg-mode-est); */
 }
 
-@media(width < 500px) {
- wallpaper- .float {
-  font-size: max(min(5vw, .05 * var(--h)), 16px);
- }
-}
-
-wallpaper- .float>h2 {
+wallpaper- summary {
+ color: var(--fg-mode-er);
  display: flex;
- gap: 0.5ch;
+ padding: 0;
+ gap: calc((var(--line-height) - var(--icon-size2)) / 2);
+ flex: 0;
+ font-weight: 500;
+ line-height: var(--line-height);
+ cursor: pointer;
+ position: relative;
 }
 
-wallpaper- .float>h2 img {
- width: 64px;
- height: 64px;
- border-radius: calc(64px * 0.2);
+wallpaper- summary:hover {
+ color: var(--fg-mode);
+ background-color: var(--bg-un-mode-er);
+}
+
+wallpaper- summary>img,
+wallpaper- .handle,
+wallpaper- .spacer,
+wallpaper- summary>span>img {
+ height: var(--icon-size2);
+ width: var(--icon-size2);
+ border-radius: calc(var(--icon-size2) * 0.4 / 3);
+ top: calc((var(--line-height) - var(--icon-size2)) / 2);
+}
+
+wallpaper- summary>span {
+ position: relative;
+}
+
+wallpaper- .type-icon {
+ display: none;
+ height: calc(2 / 3 * var(--icon-size2));
+ width: calc(2 / 3 * var(--icon-size2));
+ border-radius: calc(var(--icon-size2) * 0.8 / 9);
+ position: absolute;
+ right: -25%;
+ bottom: 0;
+}
+
+wallpaper- .label {
+ padding-left: calc((var(--line-height) - var(--icon-size2)) / 2);
+ padding-right: calc(var(--line-height) - var(--icon-size2));
+}
+
+wallpaper- svg {
+ stroke: var(--fg-mode-er)
 }

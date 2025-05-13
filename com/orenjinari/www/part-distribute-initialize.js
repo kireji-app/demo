@@ -1,2 +1,0 @@
-part.cardinality = 100000n
-super()

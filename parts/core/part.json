@@ -29,8 +29,5 @@
  ],
  "render": [
   "OPTIONS"
- ],
- "host-resolve-implicit": [
-  "KEY"
  ]
 }

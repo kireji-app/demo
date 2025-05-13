@@ -1,0 +1,15 @@
+{
+ "extends": "mix.core.parts",
+ "part-distribute-initialize": [],
+ "drag": [
+  "EVENT"
+ ],
+ "itemHTML-recursive": [
+  "SUBJECT",
+  "CONTAINER",
+  "DEPTH = 0"
+ ],
+ "toggle": [
+  "ELEMENT"
+ ]
+}

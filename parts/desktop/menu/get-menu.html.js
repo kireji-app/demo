@@ -1,6 +1,6 @@
 return `
 <task-menu style="${menu.arm.styleAttr}">
- <sidebar- onclick="menu.noop(event)">
+ <sidebar- onclick="noop(event)">
  <ul id=themes>${theme.map(themePart => {
  return `
   <li class=task-link${themePart === theme.arm ? ` data-here` : ""}>

@@ -16,6 +16,7 @@ desktop-icon {
  flex: 0 0;
  height: 66px;
  align-items: center;
+ position: relative;
 }
 
 desktop-icon>img {

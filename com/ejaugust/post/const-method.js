@@ -1,2 +1,2 @@
 const post = this
-const blog = this.parent
+const blog = this.parent.parent

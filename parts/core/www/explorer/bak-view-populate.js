@@ -1,0 +1,1 @@
+desktop.containerHost.setAttribute("style", "--explorer-width: " + (part.width.arm === part.width.open ? part.width.open.routeID + 64n + "px" : 0))

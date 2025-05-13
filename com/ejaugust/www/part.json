@@ -1,4 +1,6 @@
 {
+ "extends": "mix.core.parts",
+ "part-distribute-initialize": [],
  "date-nice": [
   "UNIX_TIMESTAMP"
  ]

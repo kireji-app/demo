@@ -58,8 +58,24 @@ declare class Framework {
  readonly stockDirectory?: SourceDirectory<string>
  /** An optional directory (defaults to `{}`) whose files are added on top of the files in the framework's stock directory before the class is compiled. */
  readonly customDirectory?: SourceDirectory<string>
+ /** The list of subdomains from the framework's stock directory. */
+ readonly stockSubdomains?: string[]
+ /** The list of subdomains from the framework's custom directory. */
+ readonly customSubdomains?: string[]
+ /** The list of files from both of the framework's directories. */
+ readonly allFilenames?: string[]
+ /** The list of subdomains from both of the framework's directories. */
+ readonly allSubdomains?: string[]
  /** An array of all the property IDs which represent a custom render render method defined directly on the part type. */
  readonly ownRenderMethodIDs: string[]
+ /** Resolves an implicit domain name from the framework's host and the given KEY.
+  * @param KEY - A string representing a valid JavaScript identifier.
+  * 
+  * For example, if the part's host is `part.example.com`, then:
+  * ```
+  *  framework.resolveImplicitHost("someKey") === "some-key.part.example.com"
+  * ```*/
+ resolveImplicitHost(KEY: string): string
  constructor(inputHost: string, customDirectory: SourceDirectory): Framework
 }
 declare interface SourceDirectory<T> {

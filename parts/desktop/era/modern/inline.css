@@ -53,7 +53,7 @@ menu-button>img {
 
 sidebar- {
  box-shadow: 0px 0px 22px var(--spacing) #0001;
- background: var(--bg);
+ background: var(--bg-light);
  padding: 0;
  border-radius: calc(var(--spacing) / 2);
  bottom: calc(var(--task-bar-height) - var(--spacing) / 2);
@@ -72,11 +72,9 @@ sidebar->hr {
  display: flex;
  margin: 0;
  flex-flow: column;
- background-color: var(--bg-dark-er);
 }
 
 #themes {
- background: var(--bg-dark);
  counter-reset: item;
  flex: 0 1 auto;
  line-height: var(--icon-size);
@@ -84,6 +82,7 @@ sidebar->hr {
 
 #settings {
  gap: 1ch;
+ background-color: var(--bg-dark);
 }
 
 #settings>span {

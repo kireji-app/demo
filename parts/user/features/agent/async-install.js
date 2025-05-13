@@ -5,6 +5,10 @@ Object.assign(globe, {
  element(parentElement, tagname) {
   return parentElement.appendChild(document.createElement(tagname))
  },
+ noop(event) {
+  event.preventDefault()
+  event.stopPropagation()
+ },
  svg(parentElement, ...paths) {
   const result = parentElement.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
   result.setAttribute("viewBox", "-1 -1 2 2")

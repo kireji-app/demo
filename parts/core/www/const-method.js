@@ -1,1 +1,1 @@
-const coreTheme = this
+const core = this

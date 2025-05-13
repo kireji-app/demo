@@ -124,14 +124,6 @@ declare class PartCore extends Iterable<PartCore> {
  /** If the part was enabled, calls distributeRemoveView on any subparts that were also enabled, passing the signal leafward.
   * Then, if the part is no longer enabled, calls removeView on itself.*/
  distributeRemoveView(): void
- /** Resolves an implicit domain name from the part's host and KEY.
-  * @param KEY - A string representing a valid JavaScript identifier.
-  * 
-  * For example, if the part's host is `part.example.com`, then:
-  * ```
-  *  part.resolveImplicitHost("someKey") === "some-key.part.example.com"
-  * ```*/
- resolveImplicitHost(KEY: string): string
 }
 declare class PartError extends Error { }
 /** The part instance on which the current script is being called.

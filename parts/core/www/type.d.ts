@@ -3,5 +3,7 @@ declare class PartCoreTheme extends PartCore {
   * 
   * This exists only on this theme because this theme is the fallback theme for all domain names which do not have a theme.*/
  readonly requestedHost: string
+ readonly explorer: PartExplorer
+ readonly browser: PartBrowser
 }
-declare const coreTheme: PartCoreTheme
+declare const core: PartCoreTheme

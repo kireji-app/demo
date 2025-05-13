@@ -1,8 +1,7 @@
 globe.user = this
 
-openLog(1, user.key)
+openLog(1, user.key = "user")
 
-user.key = "user"
 user.fps = 1
 user.time = now
 user.meanFrameTime = 1000

@@ -9,6 +9,7 @@ const colorDarkAccent = theme.arm["color-dark-accent"].slice(1)
 const fgColor = light ? colorLightFg : colorDarkFg
 const bgColor = light ? colorLightBg : colorDarkBg
 const accentColor = light ? colorLightAccent : colorDarkAccent
+const unAccentColor = light ? colorDarkAccent : colorLightAccent
 
 const fgLightest = colorMode.blendHex(fgColor, "bfbfbf", "screen")
 const fgLighter = colorMode.blendHex(fgColor, "7f7f7f", "screen")
@@ -26,6 +27,7 @@ const bgDarkest = colorMode.blendHex(bgColor, "6f6f6f", "multiply")
 
 return `html, body {
  --fg-accent: #${accentColor};
+ --fg-un-accent: #${unAccentColor};
 
  --color-light-fg: #${colorLightFg};
  --color-light-bg: #${colorLightBg};

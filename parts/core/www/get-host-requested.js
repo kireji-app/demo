@@ -1,5 +1,3 @@
-const boilerplate = `Theme Select | `
-
 if (environment === "build")
  return null
 

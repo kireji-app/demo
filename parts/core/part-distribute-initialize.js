@@ -20,7 +20,7 @@ Object.entries(PART_MANIFEST).forEach(([key, subpart], index, entries) => {
 
 
  if (!subpart || typeof subpart === "string") {
-  subpart = part.resolveImplicitHost(subpart || key)
+  subpart = part.framework.resolveImplicitHost(subpart || key)
   PART_MANIFEST[key] = entries[index][1] = subpart = new Part(subpart)
  } else if (!(subpart instanceof CorePart))
   throw new PartError(`Unexpected ${subpart?.constructor?.name ?? typeof subpart} encountered as subpart. ${part.host}`)

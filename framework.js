@@ -339,6 +339,9 @@ class Framework {
   framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "one.core.parts")
   framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
   if (!framework.isCore) Object.setPrototypeOf(framework.stockPartJSON, framework.parent.partJSON)
+  framework.stockSubdomains = Object.keys(framework.stockDirectory).filter(n => typeof framework.stockDirectory[n] === "object")
+  framework.customSubdomains = Object.keys(framework.customDirectory).filter(n => typeof framework.customDirectory[n] === "object")
+  framework.allSubdomains = framework.stockSubdomains.concat(framework.customSubdomains)
   framework.stockFilenames = Object.keys(framework.stockDirectory).filter(n => typeof framework.stockDirectory[n] === "string")
   framework.customFilenames = Object.keys(framework.customDirectory).filter(n => typeof framework.customDirectory[n] === "string")
   framework.allFilenames = framework.stockFilenames.concat(framework.customFilenames)
@@ -510,12 +513,29 @@ class Framework {
   framework.PartConstructor.framework = framework
   if (framework.isCore) globalThis.PartCore = framework.PartConstructor
  }
+ resolveImplicitHost(key) {
+  key = String(key)
+
+  if (/^localhost:\d+$/.test(key))
+   return key
+
+  if (/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(key))
+   return [key, this.host].join(".")
+
+  if (/^[a-z][A-Za-z0-9]+$/.test(key))
+   return [key.split(/(?<=[a-z0-9])(?=[A-Z])/).map(word => word[0].toLocaleLowerCase() + word.slice(1)).join("-"), this.host].join(".")
+
+  if (/[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/.test(key))
+   return key
+
+  throw new PartError(`Subpart key '${key}' cannot be implicitly resolved to a host. ${this.host}`)
+ }
 }
 
 Framework.initialize({
  change: "patch",
  verbosity: 2,
- mapping: true,
+ mapping: false,
  defaultHost: "www.ejaugust.com",
  defaultDesktopRouteID: "0"
 })
