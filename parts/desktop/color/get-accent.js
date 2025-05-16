@@ -1,0 +1,1 @@
+return color.arm === color.light ? themes.arm.lightAccentTheme : themes.arm.darkAccentTheme

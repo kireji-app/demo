@@ -4,10 +4,10 @@ declare class PartUser extends PartMix {
   * 
   * Feature content is not encoded in the user route but inferred from the available context. */
  readonly features: PartFeatures
- /** The operating system theme.
+ /** The operating system theme selector.
   * 
   * Theme content is encoded by the host of the user route. */
- readonly theme: PartTheme
+ readonly themes: PartThemes
  /** The core operating system interface part itself. Separate from other running tasks because this task is required.
   * 
   * Desktop content is encoded by the first segment of the user route pathname. */

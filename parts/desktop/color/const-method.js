@@ -1,0 +1,1 @@
+const light = this.arm === this.light

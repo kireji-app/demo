@@ -127,7 +127,7 @@ globe.Route ??= class Route {
 
  constructor(url, base) {
   this.#url = new URL(url, base)
-  if (!(this.#url.host in theme)) {
+  if (!(this.#url.host in themes)) {
    this.#url.port &&= ''
    this.#url.host = build.defaultHost
   }
@@ -148,14 +148,14 @@ globe.Route ??= class Route {
  get hostname() { return this.#url.hostname }
 
  set hostname(value) {
-  if (!(value in theme))
+  if (!(value in themes))
    value = build.defaultHost
   this.#url.hostname = value
  }
 
  get host() { return this.#url.host }
  set host(value) {
-  if (!(value in theme))
+  if (!(value in themes))
    value = build.defaultHost
   this.#url.host = value
  }

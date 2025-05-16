@@ -9,6 +9,7 @@ if (environment === "window") {
  part.parent?.collectRemoveView()
  part.parent?.collectAddView()
  part.distributeAddView()
- part.parent?.collectPopulateView()
- part.distributePopulateView()
+ // Let's try something ... no populate. Just add and remove view logic.
+ // part.parent?.collectPopulateView()
+ // part.distributePopulateView()
 }

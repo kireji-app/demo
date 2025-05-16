@@ -8,29 +8,21 @@ body {
  font: 13px var(--system-ui);
 }
 
-#era-button .handle {
- left: 2px;
-}
-
-#color-mode,
-#era-button {
+#color-control,
+#era-control {
  cursor: pointer;
  position: relative;
- height: var(--spacing);
 }
 
-#color-mode .base,
-#era-button .base {
+#color-control .base,
+#era-control .base {
  width: 100%;
  border-radius: var(--spacing);
- height: var(--spacing);
  background: var(--bg-dark-er);
  width: calc(var(--spacing) * 2);
  box-shadow: inset 0px 0px 6px #000;
  flex: 0 0 auto;
  overflow: hidden;
- position: absolute;
- right: 0;
  display: flex;
 }
 
@@ -66,7 +58,12 @@ sidebar->hr {
  display: none;
 }
 
-#themes,
+sidebar->* {
+ white-space: nowrap;
+ line-height: var(--spacing);
+}
+
+#theme-control,
 #settings {
  padding: var(--spacing);
  display: flex;
@@ -74,7 +71,7 @@ sidebar->hr {
  flex-flow: column;
 }
 
-#themes {
+#theme-control {
  counter-reset: item;
  flex: 0 1 auto;
  line-height: var(--icon-size);
@@ -122,40 +119,12 @@ sidebar->hr {
  box-shadow: 0px 0px 6px #000;
  width: calc(var(--spacing) - 4px);
  height: calc(var(--spacing) - 4px);
- position: absolute;
  text-align: center;
  border-radius: var(--spacing);
- /* TODO: color-mode was removed. use new state attr method */
+ /* TODO: --color-mode was removed. use new state attr method */
  left: calc(.5 * var(--spacing) * var(--color-mode) + 2px);
  top: 2px;
 }
-
-#label1,
-#label2 {
- transition: opacity 0.3s;
- position: absolute;
- left: 0;
- top: 0;
- right: 0;
- width: 120px;
-}
-
-#label1 {
- opacity: 100%;
-}
-
-#label2 {
- opacity: 0%;
-}
-
-#color-mode:hover #label1 {
- opacity: 0%;
-}
-
-#color-mode:hover #label2 {
- opacity: 100%;
-}
-
 
 .task-link[data-here]>a::before {
  content: "";

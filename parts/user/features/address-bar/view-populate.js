@@ -1,4 +1,6 @@
-if (now - addressBar.throttleStartTime >= addressBar.throttleDuration) {
- if (user.route.pathname !== location.pathname)
+if (now - (addressBar.throttleStartTime ??= now) >= addressBar.throttleDuration) {
+ if (user.route.desktopRouteID !== desktop.routeID) {
+  user.route.routeIDs = [desktop.routeID, ...user.route.routeIDs.slice(1)]
   history.replaceState({}, null, user.route.pathname)
+ }
 }

@@ -1,0 +1,1 @@
+return themes.map(arm => arm["theme.svg"]).join("")

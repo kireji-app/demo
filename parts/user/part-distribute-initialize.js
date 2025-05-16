@@ -2,16 +2,15 @@ globe.user = this
 
 openLog(1, user.key = "user")
 
-user.fps = 1
-user.time = now
-user.meanFrameTime = 1000
 
 super({
  features: null,
- theme: null,
+ themes: null,
  desktop: "desktop.parts"
 })
 
+user.fps = 1
+user.meanFrameTime = 1000
 features.install()
 
 closeLog(1)

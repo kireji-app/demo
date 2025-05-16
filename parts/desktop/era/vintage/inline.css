@@ -1,13 +1,13 @@
-#color-mode .base,
-#era-button .base {
+#color-control .base,
+#era-control .base {
  background: white;
  width: 16px;
  height: 16px;
  box-shadow: var(--deep-inset);
 }
 
-#color-mode .base::after,
-#era-button .base::after {
+#color-control .base::after,
+#era-control .base::after {
  content: "";
  display: block;
  width: 16px;
@@ -137,15 +137,15 @@ sidebar-::after {
  line-height: 21px;
  font-size: 18px;
  font-weight: 200;
- color: var(--color-dark-fg);
+ color: var(--dark-fg);
  padding-top: 4px;
  position: absolute;
  left: 3px;
  top: 3px;
  height: calc(var(--sidebar-height) - 6px);
  background:
-  linear-gradient(rgba(0, 200, 255, 0), var(--color-dark-accent) 12.5%, rgba(0, 200, 255, 0) 70.71%),
-  var(--color-light-accent);
+  linear-gradient(rgba(0, 200, 255, 0), var(--dark-accent) 12.5%, rgba(0, 200, 255, 0) 70.71%),
+  var(--light-accent);
  width: 21px
 }
 
@@ -226,7 +226,7 @@ task-bar {
 }
 
 task-bar>menu-button {
- width: 54px !important;
+ width: min-content !important;
  height: 22px;
  bottom: 2px;
  left: 2px;
@@ -270,7 +270,7 @@ desktop-icon:focus .label::before {
 }
 
 menu-button::after {
- content: "Parts";
+ content: "Menu";
 }
 
 #tags> :not(:first-child)::before {
@@ -278,9 +278,5 @@ menu-button::after {
 }
 
 .handle {
- display: none;
-}
-
-#color-mode #label1 {
  display: none;
 }

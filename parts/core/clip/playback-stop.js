@@ -7,3 +7,4 @@ delete clip.playbackStartTime
 delete clip.playbackStartFrame
 delete clip.elapsedTime
 delete clip.elapsedFrames
+clip.playing = false

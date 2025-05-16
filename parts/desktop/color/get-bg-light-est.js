@@ -1,0 +1,1 @@
+return "#" + color.blendHex(color.bg.slice(1), "7f7f7f", "screen")

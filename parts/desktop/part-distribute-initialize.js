@@ -2,7 +2,7 @@ globe.desktop = this
 
 super({
  menu: null,
- colorMode: null,
+ color: null,
  era: null,
  taskBar: null
 })

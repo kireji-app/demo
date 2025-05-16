@@ -1,4 +1,4 @@
-globe.theme ??= match
+globe.themes ??= match
 
 super({
  "www.core.parts": null,

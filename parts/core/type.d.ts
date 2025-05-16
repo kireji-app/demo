@@ -60,7 +60,11 @@ declare class PartCore extends Iterable<PartCore> {
  /** A display name for the part.
   * 
   * The default name is "Untitled". */
- readonly title: string | "Untitled"
+ readonly title: string
+ /** A unicode character to identify the part.
+  * 
+  * The default unicode character is the Mathematical Small Cursive form of the first letter of the part's domain name. */
+ readonly unicode: string
  /** Generate a dynamic or static file from the part's directory.
   * 
   * Filenames are treated like their file extension. For binary file types (like .png)
@@ -124,6 +128,18 @@ declare class PartCore extends Iterable<PartCore> {
  /** If the part was enabled, calls distributeRemoveView on any subparts that were also enabled, passing the signal leafward.
   * Then, if the part is no longer enabled, calls removeView on itself.*/
  distributeRemoveView(): void
+ /** One of the six theme colors for this part. This is the accent/hover color when the color mode is dark. */
+ readonly darkAccentTheme: string
+ /** One of the six theme colors for this part. This is the background color when the color mode is dark. */
+ readonly darkBgTheme: string
+ /** One of the six theme colors for this part. This is the foreground color when the color mode is dark. */
+ readonly darkFgTheme: string
+ /** One of the six theme colors for this part. This is the accent/hover color when the color mode is light. */
+ readonly lightAccentTheme: string
+ /** One of the six theme colors for this part. This is the background color when the color mode is light. */
+ readonly lightBgTheme: string
+ /** One of the six theme colors for this part. This is the foreground color when the color mode is light. */
+ readonly lightFgTheme: string
 }
 declare class PartError extends Error { }
 /** The part instance on which the current script is being called.

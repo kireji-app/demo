@@ -1,4 +1,4 @@
-declare class PartEjaugust extends PartCore {
+declare class PartEjaugustTheme extends PartTheme {
  /** Outputs unix timestamps as a human-readable date, for consistent date formats across the blog. */
  niceDate(UNIX_TIMESTAMP: number): string
  /** The match that selects the currently displayed blog post. */
@@ -6,4 +6,4 @@ declare class PartEjaugust extends PartCore {
 }
 
 /** The blog at https://www.ejaugust.com. */
-declare const blog: PartEjaugust
+declare const blog: PartEjaugust & PartMix

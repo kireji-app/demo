@@ -1,0 +1,1 @@
+return color.arm === color.light ? color.fgLight : color.fgDark

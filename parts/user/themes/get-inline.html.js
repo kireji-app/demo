@@ -1,0 +1,1 @@
+return `<wallpaper- tabIndex=1 ${themes.arm["wallpaperAttributes"] ?? ""}>${themes.arm["wallpaper.html"]}</wallpaper->`

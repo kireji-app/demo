@@ -9,14 +9,13 @@ wallpaper- {
  position: relative;
 }
 
-wallpaper- #explorer {
+part-explorer {
  height: 100%;
  overflow: auto;
  background-color: var(--bg-un-mode);
 }
 
-wallpaper- #explorer>h2,
-wallpaper- #browser>h2 {
+wallpaper- :is(part-explorer, part-browser)>h2 {
  position: sticky;
  left: 0;
  top: 0;
@@ -27,10 +26,9 @@ wallpaper- #browser>h2 {
  background-color: var(--bg-un-mode);
  line-height: var(--line-height);
  font-size: calc(var(--line-height) * 2 / 3);
- z-index: 1;
 }
 
-wallpaper- #width-handle {
+width-handle {
  --handle-thickness: calc(var(--spacing) / 2);
  position: absolute;
  left: calc(var(--explorer-width) - var(--handle-thickness) / 2);
@@ -38,9 +36,6 @@ wallpaper- #width-handle {
  bottom: 0;
  width: var(--handle-thickness);
  border-radius: calc(var(--handle-thickness) / 2);
-}
-
-wallpaper- #width-handle {
  z-index: 10;
 }
 
@@ -48,18 +43,18 @@ body.dragging {
  cursor: ew-resize;
 }
 
-wallpaper- #width-handle:hover,
-body.dragging #width-handle {
+width-handle:hover,
+body.dragging width-handle {
  background-color: var(--fg-mode-er);
 }
 
-wallpaper- #browser>h2 {
+part-browser>h2 {
  padding: calc(var(--spacing) / 6);
  display: flex;
  align-items: center;
 }
 
-wallpaper- #browser>h2>input {
+part-browser>h2>input {
  margin: 0;
  padding: calc(var(--spacing) / 6);
  line-height: var(--line-height);
@@ -69,7 +64,7 @@ wallpaper- #browser>h2>input {
  border-radius: calc((var(--line-height) + var(--spacing) / 6) / 2);
 }
 
-wallpaper- #browser>h2>svg {
+part-browser>h2>svg {
  height: var(--line-height);
  width: var(--line-height);
  stroke: var(--fg-mode-er);
@@ -80,12 +75,12 @@ wallpaper- #browser>h2>svg {
  outline: none;
 }
 
-wallpaper- #browser>h2>svg:hover {
+part-browser>h2>svg:hover {
  stroke: var(--fg-mode);
  background-color: var(--bg-fade-2);
 }
 
-wallpaper- #explorer>details {
+part-explorer>details {
  flex: 1 1;
  overflow: hidden;
  width: fit-content;

@@ -1,6 +1,6 @@
-B = colorMode.rgbFromHex(B)
+B = color.rgbFromHex(B)
 
-return colorMode.rgbToHex(...colorMode.rgbFromHex(A).map((n, i) => {
+return color.rgbToHex(...color.rgbFromHex(A).map((n, i) => {
  const m = B[i]
  const k = 255
  switch (MODE) {

@@ -1,0 +1,37 @@
+return `html, body {
+ --light-fg: ${themes.arm.lightFgTheme};
+ --light-bg: ${themes.arm.lightBgTheme};
+ --light-accent: ${themes.arm.lightAccentTheme};
+ --dark-fg: ${themes.arm.darkFgTheme};
+ --dark-bg: ${themes.arm.darkBgTheme};
+ --dark-accent: ${themes.arm.darkAccentTheme};
+
+ --fg-accent: ${color.accent};
+ --fg-un-accent: ${color.unAccent};
+ --fg-light-est: ${color.lightEstFg};
+ --fg-light-er: ${color.lightErFg};
+ --fg-light: ${color.lightFg};
+ --fg: ${color.fg};
+ --fg-dark: ${color.darkFg};
+ --fg-dark-er: ${color.darkErFg};
+ --fg-dark-est: ${color.darkEstFg};
+ --fg-mode-est: ${color.modeEstFg};
+ --fg-mode-er: ${color.modeErFg};
+ --fg-mode: ${color.modeFg};
+ --fg-un-mode: ${color.unModeFg};
+ --fg-un-mode-er: ${color.unModeErFg};
+ --fg-un-mode-est: ${color.unModeEstFg};
+ --bg-light-est: ${color.lightEstBg};
+ --bg-light-er: ${color.lightErBg};
+ --bg-light: ${color.lightBg};
+ --bg: ${color.bg};
+ --bg-dark: ${color.darkBg};
+ --bg-dark-er: ${color.darkErBg};
+ --bg-dark-est: ${color.darkEstBg};
+ --bg-mode-est: ${color.modeEstBg};
+ --bg-mode-er: ${color.modeErBg};
+ --bg-mode: ${color.modeBg};
+ --bg-un-mode: ${color.unModeBg};
+ --bg-un-mode-er: ${color.unModeErBg};
+ --bg-un-mode-est: ${color.unModeEstBg};
+}`

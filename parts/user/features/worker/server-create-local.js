@@ -5,8 +5,8 @@ worker.controller = {
  },
  impart(host) {
   debug('received impart message')
-  if (theme.arm?.key !== host)
-   theme.setArm(host)
+  if (themes.arm?.key !== host)
+   themes.setArm(host)
 
   build.defaultHost = host
   globe.skipWaiting()
@@ -14,24 +14,25 @@ worker.controller = {
   globe.imparted = true
  },
  resign() {
-  debug('received resign message')
   if (interval)
    clearInterval(interval)
 
   const replacement = registration.installing
 
+  debug('received resign message. sending impart message', replacement)
+
   replacement.postMessage({
    code: 'impart',
-   payload: theme.arm?.host ?? build.defaultHost
+   payload: themes.arm?.host ?? build.defaultHost
   })
  },
  setTheme: host => {
-  debug('received setTheme message', host, theme.arm?.key)
-  if (theme.arm?.key === host)
+  debug('received setTheme message', host, themes.arm?.key)
+  if (themes.arm?.key === host)
    return
 
   build.defaultHost = host
-  theme.setArm(host)
+  themes.setArm(host)
   // delete Framework.responses[location.origin + "/"]
   // delete Framework.responses[location.origin + "/service.js!"]
   const channel = new BroadcastChannel("theme-reload")
@@ -45,13 +46,14 @@ globe.onfetch = e => e.respondWith(service.fetchSync(e.request.url))
 globe.onactivate = e => globe.clients.claim()
 globe.onmessage = ({ data: { code, payload } }) => worker.controller[code](payload)
 
+console.log("ready for impart message...")
+
 var interval
 registration.onupdatefound = () => {
  if (serviceWorker !== registration.installing) {
   if (registration.installing) {
    log(1, 'Previous service worker is now resigning.')
    worker.controller.resign()
-  }
-  throw 'unexpected error updating worker'
+  } else throw 'unexpected error updating worker'
  } else log(1, 'New service worker is now installing.')
 }

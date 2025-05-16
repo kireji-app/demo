@@ -1,2 +1,5 @@
-declare class PartOrenjinari extends PartCore {
+declare class PartOrenjinariTheme extends PartTheme {
+
 }
+/** Orenjinari's artist profile. */
+declare const orenjinari: PartOrenjinariTheme & PartScroll

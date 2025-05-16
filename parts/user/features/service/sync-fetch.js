@@ -6,7 +6,7 @@ if (user.route?.href !== REQUEST_URL)
  user.setRoute(new Route(REQUEST_URL));
 
 // Framework.responses[REQUEST_URL] = 
-return (theme.arm.framework.ownFilenameTable.has(user.route.filename) ? theme.arm : user).render({
+return (themes.arm.framework.ownFilenameTable.has(user.route.filename) ? themes.arm : user).render({
  request: user.route.filename + user.route.search,
  format: "response"
 })

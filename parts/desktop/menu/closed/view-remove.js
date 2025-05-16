@@ -1,1 +1,2 @@
-document.body.appendChild(menu.element)
+user.menuButton.before(menu.element)
+super()

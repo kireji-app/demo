@@ -1,4 +1,4 @@
-const iconDataURI = theme.arm.render({
+const iconDataURI = themes.arm.render({
  request: "theme.png",
  fallback: "data:image/png;base64,",
  format: "datauri"
@@ -16,22 +16,22 @@ const links =
 const styles =
  `<style id="user-css">${user["inline.css"]}</style>` +
  `<style id="era-css">${era["inline.css"]}</style>` +
- `<style id="color-mode-css">${colorMode["inline.css"]}</style>` +
- `<style id="theme-css">${theme.arm["theme.css"]}</style>`
+ `<style id="color-css">${color["inline.css"]}</style>` +
+ `<style id="theme-css">${themes.arm["theme.css"]}</style>`
 
 const title =
- `<title>${theme.arm.title}</title>`
+ `<title>${themes.arm.title}</title>`
 
 const head =
  `<head>${title}${meta}${links}${styles}</head>`
 
 const debugHTML =
  `<debug->` + (
-  `<div><label for=debug-theme>Theme</label><select id=debug-theme>${theme.map(subpart =>
-   `<option${subpart === theme.arm ? ` selected` : ""}>${subpart.key}</option>`
+  `<div><label for=debug-theme>Theme</label><select id=debug-theme>${themes.map(subpart =>
+   `<option${subpart === themes.arm ? ` selected` : ""}>${subpart.key}</option>`
   ).join("")}</select></div>` +
-  `<div><label for=debug-color-mode>Color Mode</label><select id=debug-color-mode>${colorMode.map(subpart =>
-   `<option${subpart === colorMode.arm ? ` selected` : ""}>${subpart.key}</option>`
+  `<div><label for=debug-color>Color Mode</label><select id=debug-color>${color.map(subpart =>
+   `<option${subpart === color.arm ? ` selected` : ""}>${subpart.key}</option>`
   ).join("")}</select></div>` +
   `<div><label for=debug-era>Era</label><select id=debug-era>${era.map(subpart =>
    `<option${subpart === era.arm ? ` selected` : ""}>${subpart.key}</option>`
@@ -54,6 +54,6 @@ if (menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
 const body =
- `<body inert class="${bodyClassList.join(" ")}">${theme["inline.html"]}${debugHTML}<!-- windows -->${taskBar["inline.html"]}${worker["inline.html"]}</body>`
+ `<body inert class="${bodyClassList.join(" ")}">${themes["inline.html"]}${debugHTML}<!-- windows -->${taskBar["inline.html"]}${worker["inline.html"]}</body>`
 
 return `<!DOCTYPE html><html lang=en>${head}${body}</html>`

@@ -2,14 +2,14 @@ return `wallpaper- {
  --sections: 5;
  --section-gap: 128px;
  background:
-  url(${part.render({ request: "signature.png", format: "datauri" })}) 36.5vw 8vw/27vw 7.78vw no-repeat,
-  url(${part.render({ request: "ground.png", format: "datauri" })}) 12.5vw calc(.8 * var(--h))/75vw 3.75vw no-repeat,
+  url(${orenjinari.render({ request: "signature.png", format: "datauri" })}) 36.5vw 8vw/27vw 7.78vw no-repeat,
+  url(${orenjinari.render({ request: "ground.png", format: "datauri" })}) 12.5vw calc(.8 * var(--h))/75vw 3.75vw no-repeat,
   radial-gradient(ellipse 17.597vw 20.968vw at 7.735vw 5.433vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 12.477vw 20.968vw at 28.291vw 2.626vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 20.255vw 20.968vw at 80.029vw 6.956vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 14.194vw 20.968vw at 94.327vw 5.053vw, white 99.5%, transparent 100%),
-  /* url(${part.render({ request: "mockup.png", format: "datauri" })}) 0 0/100% auto, */
+  /* url(${orenjinari.render({ request: "mockup.png", format: "datauri" })}) 0 0/100% auto, */
   #F8D2AC;
  display: flex;
  flex-flow: column;

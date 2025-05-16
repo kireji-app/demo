@@ -1,4 +1,3 @@
 super({
- width: null,
- desktop: null
+ width: null
 })

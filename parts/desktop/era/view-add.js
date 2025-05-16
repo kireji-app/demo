@@ -1,1 +1,0 @@
-// era.button = document.getElementById("era")

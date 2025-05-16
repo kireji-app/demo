@@ -1,7 +1,7 @@
 user.route = ROUTE
 
-if (theme.arm?.key !== user.route.host)
- theme.setArm(user.route.host)
+if (themes.arm?.key !== user.route.host)
+ themes.setArm(user.route.host)
 
 if (user.route.desktopRouteID !== desktop.routeID)
  desktop.setRouteID(user.route.desktopRouteID)

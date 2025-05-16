@@ -17,7 +17,7 @@ a:visited {
  color: inherit;
 }
 
-#themes {
+#theme-control {
  display: contents;
 }
 
@@ -59,7 +59,7 @@ debug- {
  color: white;
  right: 0;
  margin: var(--spacing);
- opacity: 20%;
+ opacity: 50%;
  padding: var(--spacing);
  position: fixed;
  text-align: right;

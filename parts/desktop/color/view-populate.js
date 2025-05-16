@@ -1,0 +1,1 @@
+debug('hydrate or patch the color mode throughout')

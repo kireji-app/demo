@@ -470,25 +470,25 @@ class Framework {
     else {
      framework.Property.collectConstants(framework, property)
      if (framework.isCore) framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
-     else {
+     else {/*
       if (["view-add", "view-populate"].includes(PROPERTY_ID)) {
        framework.sourceFile.addLine(`@auto-super-top@super${property.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
        framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
       } else if (["view-remove"].includes(PROPERTY_ID)) {
        framework.sourceFile.addLines(property.lines, property.source, 0, 0, "  ")
        framework.sourceFile.addLine(`@auto-super-bottom@super${property.propertyAccessor}();`, framework.buildSource, null, null, "  ", false)
-      } else {
-       let hasSuper = false
-       property.lines.forEach((methodLine, ln) => {
-        const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
-        if (firstMatch) {
-         hasSuper = true
-         methodLine = methodLine.slice(0, firstMatch.index) + `super${property.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
-         framework.sourceFile.addLine(methodLine, property.source, ln, 0, "  ", false)
-        } else
-         framework.sourceFile.addLine(methodLine, property.source, ln, 0, "  ")
-       })
-      }
+      } else {*/
+      let hasSuper = false
+      property.lines.forEach((methodLine, ln) => {
+       const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
+       if (firstMatch) {
+        hasSuper = true
+        methodLine = methodLine.slice(0, firstMatch.index) + `super${property.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
+        framework.sourceFile.addLine(methodLine, property.source, ln, 0, "  ", false)
+       } else
+        framework.sourceFile.addLine(methodLine, property.source, ln, 0, "  ")
+      })
+      // }
      }
     }
     framework.sourceFile.addLine(`@method-close@}`, framework.buildSource, null, null, " ")
@@ -536,6 +536,6 @@ Framework.initialize({
  change: "patch",
  verbosity: 2,
  mapping: false,
- defaultHost: "www.ejaugust.com",
+ defaultHost: "www.core.parts",
  defaultDesktopRouteID: "0"
 })

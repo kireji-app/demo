@@ -1,1 +1,0 @@
-return `<wallpaper- tabIndex=1>${theme.arm["wallpaper.html"]}</wallpaper->`

@@ -2,6 +2,5 @@
  "part-distribute-initialize": [],
  "playback-initiate": [],
  "playback-stop": [],
- "playback-handle-end": [],
- "playback-single-frame": []
+ "playback-handle-end": []
 }

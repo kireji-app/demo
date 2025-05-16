@@ -21,14 +21,14 @@ declare class PartMenu extends PartMatch {
  readonly opened: PartMenuClip
  /** The movie clip that tweens the menu from the opened position to the closed position. */
  readonly dismiss: PartMenuClip
- /** When enabled, the button element which appears on the taskbar and opens the menu. */
- readonly button: HTMLButtonElement
  /** When enabled, the fullscreen element that contains the menu. */
  readonly element: HTMLElement
  /** The settings section in the sidebar. */
  readonly settingsSection: HTMLElement
  /** The section in the menu listing themes to choose from. */
  readonly themeSection: HTMLUListElement
+ /** The part dedicated to the currently selected menu clip. */
+ readonly arm: PartCore
 }
 
 /** The task menu that lets users change the theme and access settings. */
