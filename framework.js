@@ -336,7 +336,9 @@ class Framework {
   framework.customDirectory = customDirectory ?? {}
   framework.stockPartJSON = JSON.parse(framework.stockDirectory["part.json"] ?? "{}")
   framework.partJSON = Object.setPrototypeOf(JSON.parse(framework.customDirectory["part.json"] ?? "{}"), framework.stockPartJSON)
-  framework.parent = framework.isCore ? null : new Framework(framework.partJSON.extends ?? "one.core.parts")
+  framework.extends = framework.partJSON.extends ?? "*.one.core.parts"
+  framework.instanced = framework.extends.startsWith("*.")
+  framework.parent = framework.isCore ? null : new Framework(framework.extends.slice(2 * framework.instanced))
   framework.depth = framework.isCore ? 0 : framework.parent.depth + 1
   if (!framework.isCore) Object.setPrototypeOf(framework.stockPartJSON, framework.parent.partJSON)
   framework.stockSubdomains = Object.keys(framework.stockDirectory).filter(n => typeof framework.stockDirectory[n] === "object")
@@ -491,7 +493,7 @@ class Framework {
       // }
      }
     }
-    framework.sourceFile.addLine(`@method-close@}`, framework.buildSource, null, null, " ")
+    framework.sourceFile.addLine(`@method-close@}${!framework.instanced ? "," : ""}`, framework.buildSource, null, null, " ")
    }
   }
   for (const fn of framework.allFilenames) {
@@ -504,11 +506,16 @@ class Framework {
   framework.buildSource = framework.sourceFile.addSource(framework.pathToRepo + "/framework.js", Framework.sourceLines.join("\n"))
   framework.sourceFile.addLine("@eval-open@(()=>{", framework.buildSource)
   framework.Property.addConstants(framework.sourceFile)
-  framework.sourceFile.addSection(`@class-open@\n return class ${framework.niceName}${framework.isCore ? "" : " extends framework.parent.PartConstructor"} {\n // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}\n\n static framework = framework;\n static host = inputHost;`, framework.buildSource)
+  if (framework.instanced)
+   framework.sourceFile.addSection(`@class-open@\n return class ${framework.niceName}${framework.isCore ? "" : " extends framework.parent.PartConstructor"} {\n // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}\n\n static framework = framework;\n static host = inputHost;`, framework.buildSource)
+  else
+   framework.sourceFile.addSection(`@instance-open@\n return {\n // ${inputHost}${framework.isCore ? "" : ` extends ${framework.parent.host}`}\n\n framework,\n host: inputHost,`, framework.buildSource)
   for (const id of framework.Property.ids) new framework.Property(id)
   framework.sourceFile.addLine("@class-close@}", framework.buildSource)
   framework.sourceFile.addLine("@eval-close@})()", framework.buildSource)
   framework.script = framework.sourceFile.packAndMap()
+  if (!framework.instanced)
+   debug(framework.script)
   framework.PartConstructor = eval(framework.script)
   framework.PartConstructor.framework = framework
   if (framework.isCore) globalThis.PartCore = framework.PartConstructor

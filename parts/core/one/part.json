@@ -1,4 +1,4 @@
 {
- "extends": "core.parts",
+ "extends": "*.core.parts",
  "part-distribute-initialize": []
 }
