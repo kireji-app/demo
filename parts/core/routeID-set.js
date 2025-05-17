@@ -12,3 +12,6 @@ if (environment === "window") {
  part.parent?.collectPopulateView()
  part.distributePopulateView()
 }
+
+part.distributeClean()
+part.parent?.collectClean()

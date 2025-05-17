@@ -1,3 +1,4 @@
 {
- "extends": "window.feature.user.parts"
+ "extends": "window.feature.user.parts",
+ "notify": []
 }

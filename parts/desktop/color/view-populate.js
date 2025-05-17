@@ -1,1 +1,1 @@
-debug('hydrate or patch the color mode throughout')
+color.styleElement.innerHTML = color["inline.css"]

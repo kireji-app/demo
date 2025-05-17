@@ -13,6 +13,8 @@
  "routeID-update": [
   "ROUTE_ID"
  ],
+ "clean-distribute": [],
+ "clean-collect": [],
  "part-distribute-initialize": [
   "PART_MANIFEST",
   "CARDINALITY_CALLBACK = x => x",

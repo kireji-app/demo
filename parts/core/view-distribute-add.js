@@ -1,5 +1,9 @@
-if (part.justEnabled)
- part.addView()
+if (part.dirty) {
 
-for (const subpart of part)
- subpart.distributeAddView()
+ // Add my own view before adding child.
+ if (part.justEnabled)
+  part.addView()
+
+ for (const subpart of part)
+  subpart.distributeAddView()
+}

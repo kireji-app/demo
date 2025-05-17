@@ -1,0 +1,1 @@
+color.styleElement = document.getElementById("color-css")

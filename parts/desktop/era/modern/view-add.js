@@ -1,1 +1,1 @@
-// era.button.removeAttribute("data-state")
+document.body.classList.add("modern")

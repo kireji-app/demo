@@ -152,16 +152,16 @@ declare const build: {
  /** The hash of the most recent git commit at build time. */
  readonly hash: string
  /** The automatically generated semantic version number of the current build. */
- readonly version: {
-  /** The part of the version number which increments when there are breaking changes to the routes of the user space. */
+ readonly version: string /* {
+  /** The part of the version number which increments when there are breaking changes to the routes of the user space. * /
   readonly major: number
-  /** The part of the version number which increments when there are non-breaking additions to the routes of the user space. */
+  /** The part of the version number which increments when there are non-breaking additions to the routes of the user space. * /
   readonly minor: number
-  /** The part of the version number which increments when there are no changes to the routes of the user space. */
+  /** The part of the version number which increments when there are no changes to the routes of the user space. * /
   readonly patch: number
- },
- /** A packed archive of the git repository at build time. */
- readonly repository: SourceDirectory
+ },*/
+ readonly com: SourceDirectory
+ readonly parts: SourceDirectory
 }
 /** An object dedicated to this method script's type and containing
  * data collected while compiling the source code for that type.

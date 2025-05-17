@@ -25,7 +25,7 @@ const title =
 const head =
  `<head>${title}${meta}${links}${styles}</head>`
 
-const debugHTML =
+const debugHTML = build.debug ?
  `<debug->` + (
   `<div><label for=debug-theme>Theme</label><select id=debug-theme>${themes.map(subpart =>
    `<option${subpart === themes.arm ? ` selected` : ""}>${subpart.key}</option>`
@@ -43,7 +43,7 @@ const debugHTML =
    `<option${BigInt(index) === menu.arm.routeID ? ` selected` : ""}>${index}</option>`
   ).join("")}</select></div>`
  ) +
- `</debug->`
+ `</debug->` : ''
 
 const bodyClassList = [era.arm.key]
 

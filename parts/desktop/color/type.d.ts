@@ -15,6 +15,8 @@ declare class PartColor extends PartMatch {
   /** The current color mode as a state string, which can be used for controlling UI components. */
   readonly stateData: string
  }
+ /** The style element which holds the CSS that this part uses to drive UI changes. */
+ readonly styleElement: HTMLStyleElement
 
  readonly lightFg: string
  readonly lightBg: string

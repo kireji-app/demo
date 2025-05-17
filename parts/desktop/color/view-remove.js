@@ -1,0 +1,1 @@
+delete color.styleElement

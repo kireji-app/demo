@@ -15,3 +15,5 @@ part.deltaRouteID = part.routeID - part.previousRouteID
 
 if (part.deltaRouteID === 0n)
  throw new PartError(`Reassigned route ID (${part.routeID}) to part.\n ${part.parent ? `${part.parent.key} {\n  ${part.key} : "${part.host}" // <--- this part \n }` : part.host}`)
+
+part.dirty = true

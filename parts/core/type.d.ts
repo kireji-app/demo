@@ -140,6 +140,12 @@ declare class PartCore extends Iterable<PartCore> {
  readonly lightBgTheme: string
  /** One of the six theme colors for this part. This is the foreground color when the color mode is light. */
  readonly lightFgTheme: string
+ /** True if the routeID of this part just changed in the current, still incomplete route propagation cycle.
+  * 
+  * Unlike other historical route properties which hold information about the part's last route change even
+  * if that change occurred one or more cycles ago, this property is always cleared at the end of the cycle
+  * so that view functions are not run multiple times. */
+ readonly dirty: true | undefined
 }
 declare class PartError extends Error { }
 /** The part instance on which the current script is being called.

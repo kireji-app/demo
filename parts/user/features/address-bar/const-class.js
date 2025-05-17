@@ -1,3 +1,4 @@
+// TODO: Include the file name request as part of the routing by making it part of the desktop state. 
 globe.FileHeader ??= class FileHeader {
  static useUTF8 = true
  static textBasedPrefixes = [
