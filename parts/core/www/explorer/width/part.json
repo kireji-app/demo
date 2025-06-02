@@ -1,6 +1,5 @@
 {
- "extends": "*.match.core.parts",
- "part-distribute-initialize": [],
+ "typename": "match.core.parts",
  "drag-mouse": [
   "EVENT"
  ]

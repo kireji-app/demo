@@ -1,5 +1,5 @@
 if (!CHANGED_FACTORS || !CHANGED_FACTORS.length)
- new MixCollectRouteError("No mix factors were provided.")
+ throw new Error("No mix factors were provided.")
 
 let reportsAtLeastOneEnabledFactor = false
 let reportsAtLeastOneDisabledFactor = false
@@ -10,7 +10,7 @@ for (const changedFactor of CHANGED_FACTORS) {
  if (changedFactor.enabled) {
 
   if (reportsAtLeastOneDisabledFactor)
-   throw new MixCollectRouteError("Cannot enable some factors and disable others.")
+   throw new Error("Cannot enable some factors and disable others.")
 
   if (!reportsAtLeastOneEnabledFactor)
    reportsAtLeastOneEnabledFactor = true
@@ -19,7 +19,7 @@ for (const changedFactor of CHANGED_FACTORS) {
  } else {
 
   if (reportsAtLeastOneEnabledFactor)
-   throw new MixCollectRouteError("Cannot enable some factors and disable others.")
+   throw new Error("Cannot enable some factors and disable others.")
 
   if (!reportsAtLeastOneDisabledFactor)
    reportsAtLeastOneDisabledFactor = true
@@ -33,4 +33,4 @@ if (reportsAtLeastOneEnabledFactor) {
  mix.updateRouteID(-1n)
 }
 
-mix.parent?.collectRouteID([mix])
+mix[".."]?.collectRouteID([mix])

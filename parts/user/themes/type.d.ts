@@ -1,5 +1,5 @@
 declare class PartThemes extends PartMatch {
- readonly core: PartCoreTheme
+ readonly core: PartTheme
  readonly user: PartUserTheme
  readonly desktop: PartDesktopTheme
  readonly ejaugust: PartEJAugustTheme
@@ -7,7 +7,7 @@ declare class PartThemes extends PartMatch {
  /** The currently selected theme across the operating system. */
  readonly arm: PartTheme
 }
-declare class PartTheme extends PartCore {
+declare class PartTheme extends Part {
  /** The HTML content which will be presented as the live wallpaper of the operating system when this theme is the selected theme. */
  readonly "wallpaper.html": string
  /** The css content which will be presented to style the entire operating system (including the live wallpaper) when this theme is the selected theme. */

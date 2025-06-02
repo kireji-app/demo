@@ -1,10 +1,10 @@
-/** @type {PartCore | null} */
+/** @type {Part | null} */
 let highestEnabledChangedCharacter = null
-/** @type {PartCore | null} */
+/** @type {Part | null} */
 let lowestDisabledChangedCharacter = null
-/** @type {Set<PartCore>} */
+/** @type {Set<Part>} */
 const disabledChangedCharacters = new Set()
-/** @type {Set<PartCore>} */
+/** @type {Set<Part>} */
 const enabledChangedCharacters = new Set()
 let newRouteID = 0n
 let stringLengthChanged = false
@@ -29,10 +29,10 @@ for (const changedCharacter of CHANGED_CHARACTERS) {
 
 if (disabledChangedCharacters.size) {
  if (lowestDisabledChangedCharacter.index > oldHighestEnabledCharacter.index)
-  throw new StringCollectRouteError(`Redundant call to disable already disabled character${disabledChangedCharacters.size > 1 ? "s" : ""}.`)
+  throw new Error(`Redundant call to disable already disabled character${disabledChangedCharacters.size > 1 ? "s" : ""}.`)
 
  if (highestEnabledChangedCharacter.index >= lowestDisabledChangedCharacter.index)
-  throw new StringCollectRouteError("Requested update would gaps in the string.")
+  throw new Error("Requested update would gaps in the string.")
 
  stringLengthChanged = true
 
@@ -41,7 +41,7 @@ if (disabledChangedCharacters.size) {
   indexToDisable >= lowestDisabledChangedCharacter.index;
   indexToDisable--
  ) {
-  /** @type {PartCore} */
+  /** @type {Part} */
   const characterToDisable = string[indexToDisable]
   newRouteID -= characterToDisable.previousRouteID * string.placeValues.get(indexToDisable)
   if (disabledChangedCharacters.has(characterToDisable))
@@ -56,7 +56,7 @@ if (disabledChangedCharacters.size) {
  string.highestEnabledCharacter = string[newMaxIndex]
 } else {
  if (!enabledChangedCharacters.size)
-  throw new StringCollectRouteError("No character updates came in.")
+  throw new Error("No character updates came in.")
 
  if (highestEnabledChangedCharacter.index > oldHighestEnabledCharacter.index) {
   newHighestEnabledCharacter = highestEnabledChangedCharacter
@@ -70,7 +70,7 @@ if (disabledChangedCharacters.size) {
    const newlyEnabledCharacter = string[indexToEnable]
 
    if (!enabledChangedCharacters.has(newlyEnabledCharacter))
-    throw new StringCollectRouteError("Requested updates would leave gaps in the string.")
+    throw new Error("Requested updates would leave gaps in the string.")
 
    newRouteID += string.placeValues.get(indexToEnable) * string[indexToEnable].routeID
 
@@ -95,4 +95,4 @@ if (wasEnabled) {
 }
 
 string.updateRouteID(newRouteID)
-string.parent?.collectRouteID([string])
+string[".."].collectRouteID([string])

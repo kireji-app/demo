@@ -1,10 +1,10 @@
 declare class PartEra extends PartMatch {
- readonly vintage: PartCore
- readonly modern: PartCore
+ readonly vintage: Part
+ readonly modern: Part
  /** The toggle button for vintage/modern mode. */
  readonly button: HTMLButtonElement
  /** The part for the currently selected era. */
- readonly arm: PartCore & {
+ readonly arm: Part & {
   /** The current era as a state string, which can be used for controlling UI components. */
   readonly stateData: string
  }

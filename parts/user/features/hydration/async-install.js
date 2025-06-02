@@ -9,5 +9,5 @@ await worker.promise
 
 user.setRoute(addressBar.route)
 document.body.removeAttribute("inert")
-hydration.hydrated = true
+feature.hydrated = true
 log(1, "Hydrated.")

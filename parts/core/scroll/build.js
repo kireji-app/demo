@@ -1,0 +1,4 @@
+Object.defineProperties(scroller, {
+ cardinality: { value: 100_000n, configurable: true, writable: true },
+ container: { value: null, configurable: true, writable: true }
+})

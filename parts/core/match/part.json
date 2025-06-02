@@ -1,5 +1,6 @@
 {
- "extends": "*.core.parts",
+ "typename": "part.core.parts",
+ "cardinality": "0",
  "routeID-collect": [
   "CHANGED_ARMS"
  ],

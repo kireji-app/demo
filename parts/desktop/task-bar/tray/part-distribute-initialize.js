@@ -1,2 +1,0 @@
-globe.tray = this
-super()

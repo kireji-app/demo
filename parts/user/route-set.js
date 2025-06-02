@@ -1,10 +1,10 @@
 user.route = ROUTE
 
-if (themes.arm?.key !== user.route.host)
- themes.setArm(user.route.host)
+if (root.parts.user.themes.arm?.key !== root.parts.user.route.host)
+ root.parts.user.themes.setArm(root.parts.user.route.host)
 
-if (user.route.desktopRouteID !== desktop.routeID)
- desktop.setRouteID(user.route.desktopRouteID)
+if (root.parts.user.route.desktopRouteID !== root.parts.desktop.routeID)
+ root.parts.desktop.setRouteID(root.parts.user.route.desktopRouteID)
 
-for (const taskRouteID of user.route.taskRouteIDs)
+for (const taskRouteID of root.parts.user.route.taskRouteIDs)
  warn("Do something with this task route ID.", taskRouteID)

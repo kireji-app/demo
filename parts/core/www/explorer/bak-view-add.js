@@ -1,15 +1,15 @@
-part.container = element(part.parent.container, "section")
+part.container = element(part[".."].container, "section")
 part.container.setAttribute("id", "explorer")
 
-part.widthHandle = element(part.parent.container, "div")
+part.widthHandle = element(part[".."].container, "div")
 part.widthHandle.setAttribute("id", "width-handle")
 
 part.widthHandle.onmousedown = e => {
  e.preventDefault()
  const backupOnMouseUp = window.onmouseup
  const backupOnMouseMove = window.onmousemove
- const backupClass = desktop.containerHost.getAttribute("class")
- desktop.containerHost.setAttribute("class", (backupClass ? backupClass + " " : "") + "dragging")
+ const backupClass = root.parts.desktop.containerHost.getAttribute("class")
+ root.parts.desktop.containerHost.setAttribute("class", (backupClass ? backupClass + " " : "") + "dragging")
  window.onmousemove = e => {
   e.preventDefault()
   if (e.clientX < 32) {
@@ -21,8 +21,8 @@ part.widthHandle.onmousedown = e => {
   e.preventDefault()
   window.onmouseup = backupOnMouseUp
   window.onmousemove = backupOnMouseMove
-  if (backupClass) desktop.containerHost.setAttribute("class", backupClass)
-  else desktop.containerHost.removeAttribute("class")
+  if (backupClass) root.parts.desktop.containerHost.setAttribute("class", backupClass)
+  else root.parts.desktop.containerHost.removeAttribute("class")
  }
 }
 
@@ -64,7 +64,7 @@ function addPart(subject, container, depth = 0) {
    format: "datauri"
   }))
   const typeIcon = element(symbol, "img")
-  typeIcon.setAttribute("class", "type-icon")
+  typeIcon.setAttribute("class", "prototype-icon")
   const protoSubpart = Object.getPrototypeOf(Object.getPrototypeOf(subpart))
   typeIcon.setAttribute("src", subpart.render({
    request: "theme.png",
@@ -74,9 +74,9 @@ function addPart(subject, container, depth = 0) {
   const label = element(summary, "span")
   label.setAttribute("class", "label")
   label.textContent = subpart.key
-  if (subpart.key === desktop.key) label.textContent += " (" + BUILD_TAGS[0] + ")"
+  if (subpart.key === root.parts.desktop.key) label.textContent += " (" + BUILD_TAGS[0] + ")"
   addPart(subpart, subpartContainer, depth + 1)
  }
 }
 
-addPart([desktop], part.container)
+addPart([root.parts.desktop], part.container)

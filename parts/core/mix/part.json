@@ -1,5 +1,5 @@
 {
- "extends": "*.core.parts",
+ "cardinality": "1",
  "routeID-collect": [
   "CHANGED_FACTORS"
  ]

@@ -1,2 +1,0 @@
-globe.fullscreen ??= this
-super()

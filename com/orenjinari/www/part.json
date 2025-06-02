@@ -1,3 +1,3 @@
 {
- "extends": "*.scroll.core.parts"
+ "typename": "scroll.core.parts"
 }

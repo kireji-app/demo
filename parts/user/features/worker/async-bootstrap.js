@@ -1,5 +1,5 @@
 if (!(globalThis instanceof globalThis.Window))
- throw new PartError("The worker bootstrap can only be run on the client window.")
+ throw new Error("The worker bootstrap can only be run on the client window.")
 
 globalThis.worker ??= {}
 

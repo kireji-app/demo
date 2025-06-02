@@ -1,4 +1,4 @@
-declare class BlogPost extends PartCore {
+declare class BlogPost extends Part {
  /** The optional unix timestamp of the last edit to this blog post. */
  readonly editDate?: number
  /** The displayed title of the blog post. */

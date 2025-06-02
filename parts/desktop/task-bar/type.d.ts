@@ -1,4 +1,3 @@
-declare const taskBar: PartTaskBar
-declare class PartTaskBar extends PartCore {
+declare class PartTaskBar extends Part {
 
 }

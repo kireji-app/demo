@@ -1,2 +1,0 @@
-globe.share = this
-super()

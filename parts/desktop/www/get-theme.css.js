@@ -1,4 +1,4 @@
-const vintage = era.arm.key === "vintage"
+const vintage = root.parts.desktop.era.arm.key === "vintage"
 return `wallpaper- {
  display: flex;
  flex-flow: column wrap;

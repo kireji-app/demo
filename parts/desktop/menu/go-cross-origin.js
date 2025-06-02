@@ -3,7 +3,7 @@ if (production) {
  return
 }
 
-if (HOST === build.defaultHost)
+if (HOST === root.defaultHost)
  return
 
 worker.registration.active.postMessage({ code: "setTheme", payload: HOST })

@@ -1,12 +1,12 @@
-const src = themes.arm.render({ request: "theme.png", format: "datauri" })
+const src = root.parts.user.themes.arm.render({ request: "theme.png", format: "datauri" })
 
 return serialize({
- name: themes.arm.title,
- short_name: themes.arm.title,
+ name: root.parts.user.themes.arm.title,
+ short_name: root.parts.user.themes.arm.title,
  start_url: "/",
  display: "standalone",
- theme_color: color.accent,
- background_color: color.bg,
+ theme_color: root.parts.desktop.color.accent,
+ background_color: root.parts.desktop.color.bg,
  icons: [
   {
    src, // request: "theme.png?size=192"
@@ -21,7 +21,7 @@ return serialize({
    purpose: "any maskable"
   }
  ],
- description: themes.arm.description,
+ description: root.parts.user.themes.arm.description,
  display_override: ["window-controls-overlay"],
  categories: ["entertainment", "games", "utilities"],
 }, null, 1)

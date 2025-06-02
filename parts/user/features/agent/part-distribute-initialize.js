@@ -1,2 +1,0 @@
-globe.agent ??= this
-super()

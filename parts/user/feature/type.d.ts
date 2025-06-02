@@ -1,7 +1,7 @@
 /** A type of single-cardinality part which requires an installation step that
  * can only take place within a proper subset of the four environments and only
  * after the user part has distributed it's initialization. */
-declare class UserFeature extends PartCore {
+declare class UserFeature extends Part {
  /** Whether or not the feature is supported. */
  readonly supported: boolean
  /** Whether or not the feature requires an asynchronous installation. */

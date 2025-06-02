@@ -2,6 +2,5 @@
  "install": [],
  "sync-install": [],
  "async-install": [],
- "support-check": [],
- "part-distribute-initialize": []
+ "support-check": []
 }

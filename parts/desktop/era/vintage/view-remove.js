@@ -1,2 +1,2 @@
-// era.button.removeAttribute("data-state")
+// root.parts.desktop.era.button.removeAttribute("data-state")
 document.body.classList.remove("vintage")

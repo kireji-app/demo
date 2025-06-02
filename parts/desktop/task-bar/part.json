@@ -1,4 +1,3 @@
 {
- "extends": "*.mix.core.parts",
- "part-distribute-initialize": []
+ "typename": "mix.core.parts"
 }

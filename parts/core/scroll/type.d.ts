@@ -1,4 +1,4 @@
-declare class PartScroll extends PartCore {
+declare class PartScroll extends Part {
  /** The HTML element that the scroller controls.
   * 
   * Used only by view methods. */

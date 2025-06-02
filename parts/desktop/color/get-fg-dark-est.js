@@ -1,1 +1,1 @@
-return "#" + color.blendHex(color.fg.slice(1), "3f3f3f", "multiply")
+return "#" + root.parts.desktop.color.blendHex(root.parts.desktop.color.fg.slice(1), "3f3f3f", "multiply")

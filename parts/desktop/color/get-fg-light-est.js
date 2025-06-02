@@ -1,1 +1,1 @@
-return "#" + color.blendHex(color.fg.slice(1), "bfbfbf", "screen")
+return "#" + root.parts.desktop.color.blendHex(root.parts.desktop.color.fg.slice(1), "bfbfbf", "screen")

@@ -1,1 +1,1 @@
-return color.arm === color.light ? color.fgLightEst : color.fgDarkEst
+return root.parts.desktop.color.arm === root.parts.desktop.color.light ? root.parts.desktop.color.fgLightEst : root.parts.desktop.color.fgDarkEst

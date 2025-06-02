@@ -2,7 +2,6 @@ declare class PartFeatures extends PartMix {
  readonly gpu: PartGpu
  readonly agent: PartAgent
  readonly share: PartShare
- readonly desktop: PartDesktop
  readonly hotKeys: PartHotKeys
  readonly hydration: PartHydration
  readonly addressBar: PartAddressBar

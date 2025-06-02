@@ -1,1 +1,0 @@
-part.cardinality = BigInt(BigInt(part.max) - BigInt(render.min))

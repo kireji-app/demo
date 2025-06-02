@@ -6,4 +6,4 @@ if (!feature.button) {
  feature.button = offscreen.querySelector("#fullscreen-button")
 }
 
-document.addEventListener('fullscreenchange', () => document.fullscreenElement || (user.doKioskNavigation(user.pendingHost), delete user.pendingHost));
+document.addEventListener('fullscreenchange', () => document.fullscreenElement || (root.parts.user.doKioskNavigation(root.parts.user.pendingHost), delete root.parts.user.pendingHost));

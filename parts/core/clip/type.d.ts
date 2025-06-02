@@ -1,4 +1,4 @@
-declare class PartClip extends PartCore {
+declare class PartClip extends Part {
  /** The framerate at which to play this movie clip. */
  readonly frameRate: number
  /** The amount of time each frame would be on the screen, given ideal performance. */

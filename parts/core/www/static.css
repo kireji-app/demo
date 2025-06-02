@@ -127,7 +127,7 @@ wallpaper- summary>span {
  position: relative;
 }
 
-wallpaper- .type-icon {
+wallpaper- .prototype-icon {
  display: none;
  height: calc(2 / 3 * var(--icon-size2));
  width: calc(2 / 3 * var(--icon-size2));

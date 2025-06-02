@@ -50,7 +50,7 @@ declare class Route extends URL {
  readonly header: FileHeader
  /** The first routeID (taken from the first segment of the pathname).
   * 
-  * This routeID is designated for encoding the state of the operating system desktop. */
+  * This routeID is designated for encoding the state of the desktop.parts object. */
  readonly desktopRouteID: bigint
  /** All routeIDs after the first one.
   * 

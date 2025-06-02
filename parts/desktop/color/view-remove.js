@@ -1,1 +1,1 @@
-delete color.styleElement
+delete root.parts.desktop.color.styleElement

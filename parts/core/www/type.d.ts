@@ -1,4 +1,4 @@
-declare class PartCoreTheme extends PartTheme {
+declare class PartTheme extends PartTheme {
  /** The most recent host at which the fetch function was requested.
   * 
   * This exists only on this theme because this theme is the fallback theme for all domain names which do not have a theme.*/
@@ -6,4 +6,4 @@ declare class PartCoreTheme extends PartTheme {
  readonly explorer: PartExplorer
  readonly browser: PartBrowser
 }
-declare const core: PartCoreTheme
+declare const core: PartTheme

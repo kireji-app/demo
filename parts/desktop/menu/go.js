@@ -1,1 +1,1 @@
-menu.setRouteID(1n, true)
+root.parts.desktop.menu.setRouteID(1n, true)

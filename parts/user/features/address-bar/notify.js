@@ -2,8 +2,8 @@ if (!feature.supported)
  throw "Cannot set address bar right now. " + feature.error
 
 if (now - (addressBar.throttleStartTime ??= now) >= addressBar.throttleDuration) {
- if (user.route.desktopRouteID !== desktop.routeID) {
-  user.route.routeIDs = [desktop.routeID, ...user.route.routeIDs.slice(1)]
-  history.replaceState({}, null, user.route.pathname)
+ if (root.parts.user.route.desktopRouteID !== root.parts.desktop.routeID) {
+  root.parts.user.route.routeIDs = [root.parts.desktop.routeID, ...root.parts.user.route.routeIDs.slice(1)]
+  history.replaceState({}, null, root.parts.user.route.pathname)
  }
 }

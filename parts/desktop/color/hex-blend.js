@@ -1,6 +1,6 @@
-B = color.rgbFromHex(B)
+B = root.parts.desktop.color.rgbFromHex(B)
 
-return color.rgbToHex(...color.rgbFromHex(A).map((n, i) => {
+return root.parts.desktop.color.rgbToHex(...root.parts.desktop.color.rgbFromHex(A).map((n, i) => {
  const m = B[i]
  const k = 255
  switch (MODE) {

@@ -3,7 +3,7 @@ const arms = {}
 let nonSelfReferentialBrowserTotal = 0n
 let maxRecursiveDepth = 2n
 
-for (const task of user) {
+for (const task of root.parts.user) {
  arms[task.key] = new Part("origin." + part.host, {
   "post-constructor.js": `part.cardinality = ${task.cardinality}n`
  }, part)
@@ -37,4 +37,4 @@ super(arms)
 // So why not simply fill up the pool ourselves?
 
 // We ensure that the only thing a normal initialized object has upon initialization is a route ID.
-// If it needs more than that, why wouldn't that be established as part of its type?
+// If it needs more than that, why wouldn't that be established as part of its prototype?

@@ -1,1 +1,0 @@
-return part.parent.render("min-" + part.framework.domains[0])

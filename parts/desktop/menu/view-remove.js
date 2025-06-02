@@ -1,4 +1,4 @@
-if (menu.element) {
- menu.element.remove()
- delete menu.element
+if (root.parts.desktop.menu.element) {
+ root.parts.desktop.menu.element.remove()
+ delete root.parts.desktop.menu.element
 }

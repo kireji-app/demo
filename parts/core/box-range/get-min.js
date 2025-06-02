@@ -1,0 +1,1 @@
+return part[".."].render("min-" + domains[0])

@@ -1,17 +1,17 @@
 worker.controller = {
  claim() {
   debug('received claim message')
-  globe.clients.claim()
+  globalThis.clients.claim()
  },
  impart(host) {
   debug('received impart message')
-  if (themes.arm?.key !== host)
-   themes.setArm(host)
+  if (root.parts.user.themes.arm?.key !== host)
+   root.parts.user.themes.setArm(host)
 
-  build.defaultHost = host
-  globe.skipWaiting()
+  root.defaultHost = host
+  globalThis.skipWaiting()
 
-  globe.imparted = true
+  globalThis.imparted = true
  },
  resign() {
   if (interval)
@@ -23,18 +23,16 @@ worker.controller = {
 
   replacement.postMessage({
    code: 'impart',
-   payload: themes.arm?.host ?? build.defaultHost
+   payload: root.parts.user.themes.arm?.host ?? root.defaultHost
   })
  },
  setTheme: host => {
-  debug('received setTheme message', host, themes.arm?.key)
-  if (themes.arm?.key === host)
+  debug('received setTheme message', host, root.parts.user.themes.arm?.key)
+  if (root.parts.user.themes.arm?.key === host)
    return
 
-  build.defaultHost = host
-  themes.setArm(host)
-  // delete Framework.responses[location.origin + "/"]
-  // delete Framework.responses[location.origin + "/service.js!"]
+  root.defaultHost = host
+  root.parts.user.themes.setArm(host)
   const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)
   channel.close()
@@ -42,11 +40,11 @@ worker.controller = {
 }
 
 // TODO: Large files won't be inlined soon. Fetch or stream them into the cache first, them provide them.
-globe.onfetch = e => e.respondWith(service.fetchSync(e.request.url))
-globe.onactivate = e => globe.clients.claim()
-globe.onmessage = ({ data: { code, payload } }) => worker.controller[code](payload)
+globalThis.onfetch = e => e.respondWith(service.fetchSync(e.request.url))
+globalThis.onactivate = e => globalThis.clients.claim()
+globalThis.onmessage = ({ data: { code, payload } }) => worker.controller[code](payload)
 
-console.log("ready for impart message...")
+debug("ready for impart message...")
 
 var interval
 registration.onupdatefound = () => {

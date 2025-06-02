@@ -1,10 +1,10 @@
 return `
-<task-menu style="${menu.arm.styleAttr}" onclick=menu.go()>
+<task-menu style="${root.parts.desktop.menu.arm.styleAttr}" onclick=root.parts.desktop.menu.go()>
  <sidebar- onclick="noop(event)">
- <ul id=theme-control>${themes.map(themePart => {
+ <ul id=theme-control>${root.parts.user.themes.map(themePart => {
  return `
-  <li class=task-link${themePart === themes.arm ? ` data-here` : ""}>
-   <a href="https://${themePart.host}" onclick="themes.go(event, this)">
+  <li class=task-link${themePart === root.parts.user.themes.arm ? ` data-here` : ""}>
+   <a href="https://${themePart.host}" onclick="root.parts.user.themes.go(event, this)">
     <img src="${themePart.render({ request: "theme.png", format: "datauri" })}" class=part-icon />
     <span class=label>${themePart.render("title")}</span>
    </a>
@@ -15,9 +15,9 @@ return `
    <span id=version tabIndex=6>
     <span class="label">Version:</span>
     <span id="tags">${[
-  build.version,
-  ...(build.branch === "main" ? [] : [build.branch]),
-  ...(build.local ? ["local"] : [])
+  root.version,
+  ...(root.branch === "main" ? [] : [root.branch]),
+  ...(root.local ? ["local"] : [])
  ].map(tag => `<span>${tag}</span>`).join("")}</span>
    </span>
    ${color["control.html"]}
