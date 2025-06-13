@@ -1,6 +1,0 @@
-{
- "typename": "feature.user.parts",
- "sync-fetch": [
-  "REQUEST_URL"
- ]
-}

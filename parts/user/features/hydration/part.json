@@ -1,6 +1,0 @@
-{
- "typename": "window-feature.user.parts",
- "performance-simulate-slow": [
-  "DELAY_IN_MS = 0"
- ]
-}

@@ -5,7 +5,25 @@ function boot(root) {
  const warn = (...data) => conditionalLog(0, data, "warn")
  const debug = (...data) => conditionalLog(0, data, "debug")
  const openLog = (verbosity, ...data) => conditionalLog(verbosity, data, "group")
- const closeLog = verbosity => conditionalLog(verbosity, [], "groupEnd")
+ const closeLog = verbosity => { log(verbosity, ""); conditionalLog(verbosity, [], "groupEnd") }
+ const logMeasure = (verbosity, measure, unit, columnWidth = 0) => {
+  if (!["bigint", "number"].includes(typeof measure))
+   throw new TypeError(`Logging a measure requires a bigint or number (got ${typeof measure}.`)
+  let measureIntegerString, measureString
+  const isBigInt = typeof measure === "bigint"
+  const measureInteger = isBigInt ? measure : Math.trunc(measure)
+  if (isBigInt || measureInteger === measure) {
+   measureIntegerString = measureString = measureInteger.toLocaleString()
+  } else {
+   measureIntegerString = measureInteger.toLocaleString().split(".")[0]
+   measureString = measureIntegerString + "." + (measure - measureInteger).toString().slice(2)
+  }
+  if (measureIntegerString.length > columnWidth) throw new RangeError(`Cannot fit ${measureIntegerString.length} characters into a ${columnWidth}-character column (while logging measure "${measureString} ${unit}").`)
+  if (measureString.length > columnWidth) measureString = measureString.slice(0, columnWidth)
+  else if (measureString.includes(".")) measureString = measureString.padEnd(columnWidth, "0")
+  else measureString = measureString.padStart(columnWidth, " ")
+  log(verbosity, "| " + measureString + " " + unit + " |")
+ }
  const btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), ""))
  const serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1)
  const hang = timeInMilliseconds => {
@@ -150,7 +168,7 @@ function boot(root) {
    )
   }
  }
- // TODO: Include the file name request as part of the routing by making it part of the desktop state. 
+ // TODO: Include the file name request as part of the routing by making it part of the desktop state integer. Each origin has a known finite file list, making full file names extremely inefficient.
  class FileHeader {
   static useUTF8 = true
   static textBasedPrefixes = [
@@ -278,7 +296,7 @@ function boot(root) {
   #desktopRouteID
   #taskRouteIDs
 
-  constructor(url, base) {
+  constructor(url = `https://${root.defaultHost}/${Route.defaultDesktopSegment}`, base) {
    this.#url = new URL(url, base)
    if (!(this.#url.host in root.parts.user.themes)) {
     this.#url.port &&= ''
@@ -402,23 +420,30 @@ function boot(root) {
    meanFrameTime: { value: 1000, configurable: true, writable: true },
   })
 
+  function getPartFromDomains(domains) {
+   return domains.reduceRight((currentFolder, name, index) => {
+
+    if (!currentFolder[name])
+     throw new ReferenceError(`There is no folder called '${name}' in ${[...domains].slice(index + 1).reverse().join("/")} (trying to create ${domains.join(".")}).`)
+
+    return currentFolder[name]
+   }, root)
+  }
+
+  openLog(3, "Recursive Domain Hydration")
   function recursiveDistributeHydration(part = root, domains = []) {
    let host
    if (typeof part === "string") {
     if (domains.length) throw 'unexpected domains'
     host = part
     domains = host.split(".")
-    part = domains.reduceRight((currentFolder, name, index) => {
-
-     if (!currentFolder[name])
-      throw new ReferenceError(`There is no folder called '${name}' in ${[...domains].slice(index + 1).reverse().join("/")} (trying to create ${domains.join(".")}).`)
-
-     return currentFolder[name]
-    }, root)
+    part = getPartFromDomains(domains)
    } else host = domains.join(".")
 
    if (part.host)
     return part
+
+   openLog(2, `\x1b[38;5;27m"\x1b[38;5;75m${host}\x1b[38;5;27m"\x1b[0m`)
 
    const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
    const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
@@ -429,7 +454,8 @@ function boot(root) {
     host: { value: host },
     subdomains: { value: subdomains },
     filenames: { value: filenames },
-    length: { value: subdomains.length }
+    length: { value: subdomains.length },
+    domains: { value: domains }
    })
    const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
    const prototype = typename ? recursiveDistributeHydration(typename ?? "part.core.parts") : null
@@ -438,7 +464,6 @@ function boot(root) {
     Object.setPrototypeOf(part, prototype)
     Object.defineProperty(part, "prototype", { value: prototype })
    }
-   const depth = (prototype?.depth ?? 0) + 1
    const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
    const buildSource = sourceFile.addSource(pathToRepo + "/build.js", boot.toString())
 
@@ -594,7 +619,6 @@ function boot(root) {
    for (const id of Property.ids) new Property(id)
    sourceFile.addLine("@descriptor-map-close@})", buildSource)
    const propertyDescriptorScript = sourceFile.packAndMap()
-
    const propertyDescriptor = eval(propertyDescriptorScript)
    Object.defineProperties(part, propertyDescriptor)
    Object.defineProperties(part, {
@@ -631,26 +655,52 @@ function boot(root) {
 
    })
 
-   part.build()
+   log(5, "Building...")
+
+   if (part !== root) // The root is already the one building.
+    part.build()
+
 
    if (typeof part.cardinality !== "bigint")
     throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
+
+   log(5, "Build succeeded.")
+
+   if (!part[".."]) { // The part was first hydrated as a prototype, not a subdomain.
+    const parentDomains = [...domains]
+    const subdomain = parentDomains.shift()
+    const parent = part === root ? null : getPartFromDomains(parentDomains)
+    Object.defineProperty(part, "..", { value: parent, configurable: true, writable: true })
+    if (part !== root)
+     Object.defineProperty(part, "index", {
+      value: (
+       part[".."].subdomains ?? Object.keys(part[".."]).filter(n => typeof part[n] === "object")
+      ).indexOf(subdomain),
+      configurable: true, writable: true
+     })
+   }
+
+   closeLog(2)
 
    return part
   }
 
   recursiveDistributeHydration()
 
-  root.parts.user.features.install()
+  log(1, "Part hydration complete.")
+  closeLog(3)
+
+  root.parts.user.modules.install()
  }
+
  let production = false
  if (environment === "build") {
   const { extname } = require("path"),
    { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile, writeFileSync: writeFile, mkdirSync: makeFolder } = require("fs"),
    { execSync: $ } = require("child_process")
   // TODO: Instead of importing root files separately, modify the readRecursive call to include the DNS root.
-  for (const fn of [".gitignore", "jsconfig.json", "get-path-instance.js", "README.md", "vercel.json", "type.d.ts", "part.json", "build.js"])
-   root[fn] = readFile(fn, "utf-8")
+  const initialFilenames = [".gitignore", "jsconfig.json", "get-path-instance.js", "README.md", "vercel.json", "type.d.ts", "part.json", "build.js"]
+  for (const fn of initialFilenames) root[fn] = readFile(fn, "utf-8")
   root.local = !process.env.VERCEL || !!process.env.__VERCEL_DEV_RUNNING
   root.size = 0
   const readmeVersionPattern = /version-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)/
@@ -680,18 +730,18 @@ function boot(root) {
    production = root.branch === "main"
   }
   // Conditional logging is only functional after this point.
-  openLog(0, `Building ${root.local ? "local" : "cloud"}/${root.branch} ${root.version}...`)
+  openLog(0, `Build Notes - ${root.local ? "local" : "cloud"}/${root.branch} ${root.version}`)
   try {
-   throw "Always perform the full build for now."
+   throw "we always perform a full build during a refactor."
    // Try to use git diff to patch the existing repository.
-   if (production) throw "The production environment should always build from scratch."
-   if (!itemExists("api/service.js")) throw "No existing build."
+   if (production) throw "the production environment should always build from scratch."
+   if (!itemExists("api/service.js")) throw "there was no existing build file."
    log(0, "Patching existing build.")
    warn("The patch system does not detect files which were changed in the working tree during the previous build and then reverted prior to the current build.")
    const existingBuild = readFile("api/service.js", "utf-8")
    const openMark = "\nboot" + "("
    const openIndex = existingBuild.indexOf(openMark) + openMark.length
-   if (openIndex < openMark.length) throw "The existing build wasn't populated."
+   if (openIndex < openMark.length) throw " the existing build wasn't populated correctly."
    const closeMark = ")"
    const closeIndex = existingBuild.lastIndexOf(closeMark)
    const existingRoot = JSON.parse(existingBuild.slice(openIndex, closeIndex))
@@ -736,17 +786,28 @@ function boot(root) {
       log(2, `\x1b[38;5;54m/\x1b[38;5;129m${rightPath}\x1b[38;5;54m -${diffResult[0] === "C" ? "copied" : "renamed"} \x1b[0m`)
       break
      default:
-      throw "Unsupported git file status, '" + fileStatus + "'."
+      throw "the build process encountered an unsupported git file status, '" + fileStatus + "'."
     }
    }
    root.com = com
    root.parts = parts
   } catch (reason) {
    // Pack the repository from scratch.
-   log(0, "Building from scratch.", { reason })
-   log(1, "Initializing local git configuration (idempotent).")
-   $("git update-index --assume-unchanged api/service.js")
-   log(1, "Packing shallow git repository into script.")
+   log(0, "This build was made from scratch because " + reason)
+
+   openLog(1, "Initializing git configuration.")
+   log(3, `This process configures the git repository to hide output file(s) during local development. It is idempotent.`)
+   const commands = ["git update-index --assume-unchanged api/service.js"]
+   commands.forEach(command => {
+    log(2, `Executing the following command: \`${command}\``)
+    $(command)
+    log(2, "Command succeeded.")
+   })
+   closeLog(1)
+
+   openLog(1, "Recursive Packing")
+   log(2, "This recursive process makes the project portable by packing a shallow clone of the git repository into a valid ECMA-262 file.")
+   let fileCount = initialFilenames.length, domainCount = 1
    function readRecursive(host, folderPath, part) {
     if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
     if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
@@ -772,11 +833,15 @@ function boot(root) {
       const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
       log(2, `\x1b[38;5;28m/\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
       part[filename] = content
+      fileCount++
      }
     }
+    domainCount++
    }
-   readRecursive("com", "com", (root.com = {}))
-   readRecursive("parts", "parts", (root.parts = {}))
+   const TLDs = ["com", "parts"]
+   TLDs.forEach(tld => readRecursive(tld, tld, root[tld] = {}))
+   log(2, `The process succeeded. It packed ${fileCount} files across ${domainCount} domains (including the dns-root and ${TLDs.length} top-level domains).`)
+   closeLog(1)
   }
   /*
    // Conceptual:
@@ -801,24 +866,51 @@ function boot(root) {
   */
   hydrate()
   if (!itemExists("api")) makeFolder("api")
-  writeFile("api/service.js", root.parts.user["service.js"])
+  const outputPath = "api/service.js"
+
+  log(2, `Outputting the project README.md which has been modified to reflect the correct version number.\n`)
   writeFile("README.md", root["README.md"])
+
+  log(2, `Outputting the ECMA-262 repository to ${outputPath}.\n`)
+
+  openLog(1, "Computing Size Statistics.\n")
+  log(3, "The size is initially missing from the output file\n  because the file size is determined after the file is saved.\n\nAdditional write operations allow us to quickly converge\n  on a correct measurement of the file's size,\n  including the size of the measurement itself.\n")
+  writeFile(outputPath, root.parts.user["service.js"])
   root.size = getItemStats("api/service.js").size
   writeFile("api/service.js", root.parts.user["service.js"])
   root.size = getItemStats("api/service.js").size
   const finalBody = root.parts.user["service.js"]
   writeFile("api/service.js", finalBody)
-  openLog(1, "Stats for service.js")
-  log(1, [...finalBody].length.toLocaleString() + " utf-8 characters")
-  log(2, finalBody.length.toLocaleString() + " String characters")
-  log(1, root.size.toLocaleString() + " bytes")
-  log(0, Math.trunc((10000000 * root.size) / 2 ** 20) / 10000000 + " megabytes")
-  log(2, Math.ceil((root.size * 8) / 6).toLocaleString() + " hexads/sextets")
+
+  const bits = Math.ceil(root.size * 8)
+  const col1Width = bits.toLocaleString().length
+  const utf16Unit = "| ECMA-262 string indices "
+  const col2Width = utf16Unit.length
+  log(0, "| Quantity".padEnd(col1Width + 3) + "| Unit Name   ".padEnd(col2Width) + "| Radix | Abbr. | Format |")
+  log(0, "|-".padEnd(col1Width + 3, "-") + "|".padEnd(col2Width, "-") + "|-------|-------|--------|")
+  logMeasure(0, root.size / 2 ** 20, "| mebibytes".padEnd(col2Width) + "| 2²⁰   | MiB   | UTF-8 ", col1Width)
+  logMeasure(4, root.size / 10 ** 6, "| megabytes".padEnd(col2Width) + "| 10⁶   | MB    | UTF-8 ", col1Width)
+  logMeasure(4, root.size / 2 ** 10, "| kibibytes".padEnd(col2Width) + "| 2¹⁰   | KiB   | UTF-8 ", col1Width)
+  logMeasure(4, root.size / 10 ** 3, "| kilobytes".padEnd(col2Width) + "| 10³   | KB    | UTF-8 ", col1Width)
+  logMeasure(1, [...finalBody].length, "| Unicode code points".padEnd(col2Width) + "| ----- | UCP   | UTF-32", col1Width)
+  logMeasure(4, finalBody.length, utf16Unit + "| ----- | chars | UTF-16", col1Width)
+  logMeasure(1, root.size, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
+  logMeasure(3, Math.ceil((root.size * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
+  logMeasure(2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
   closeLog(1)
-  openLog(8, "Testing index.html.")
-  root.parts.user.setRoute(new Route("https://" + root.defaultHost + "/1"))
-  log(8, root.parts.user["index.html"])
-  closeLog(2)
+
+  openLog(5, "Testing index.html.")
+  const route = new Route()
+  openLog(5, "Setting the route to " + route + ".")
+  root.parts.user.setRoute(route)
+  log(5, "Done." + route)
+
+  closeLog(5)
+  openLog(5, "Reading index.html.")
+  log(5, root.parts.user["index.html"])
+  closeLog(5)
+  closeLog(5)
+
   closeLog(0)
  } else {
   production = !root.local && root.branch === "main"
@@ -832,7 +924,7 @@ function boot(root) {
 
 boot({
  change: "patch",
- verbosity: "0",
+ verbosity: "100",
  mapping: "0",
  defaultHost: "www.core.parts",
  defaultDesktopRouteID: "0",

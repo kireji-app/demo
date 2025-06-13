@@ -1,0 +1,6 @@
+{
+ "typename": "window-module.user.parts",
+ "performance-simulate-slow": [
+  "DELAY_IN_MS = 0"
+ ]
+}

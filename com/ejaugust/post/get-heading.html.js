@@ -1,1 +1,1 @@
-return `<h1>${post.title}</h1>`
+return `<h1>${post.title}</h1><span class=subtitle>${post.subtitle ?? ""}</span>`

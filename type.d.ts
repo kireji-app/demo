@@ -43,8 +43,6 @@ declare const host: string
 declare const isCore: boolean
 /** The compiled string which should evaluate to an object. */
 declare const script: string
-/** The array of subdomain names corresponding to the host split along ".". */
-declare const domains: string[]
 /** An object that serializes method signatures and meta data during part object hydration.
  * The object is parsed from the file `part.json` (or `{}` if no file is found).
  * Its prototype is the prototype part's own partManifest or null, if it is the Core. */
@@ -252,10 +250,10 @@ declare class MethodConstant {
 }
 /** The part which represents the user configuration space. */
 declare class PartUser extends PartMix {
- /** The single-cardinality mix of environment-specific features.
+ /** The single-cardinality mix of environment-specific modules.
   * 
-  * Feature content is not encoded in the user route but inferred from the available context. */
- readonly features: PartFeatures
+  * Module content is not encoded in the user route but inferred from the available context. */
+ readonly modules: PartModules
  /** The operating system theme selector.
   * 
   * Theme content is encoded by the host of the user route. */
@@ -324,7 +322,7 @@ declare class PartUser extends PartMix {
  readonly route: Route
  /** Initializes the entire part hierarchy which handles mapping URIs to app state.
   * 
-  * Sets all of the client features. Those features will only initialize if we are in the window environment. */
+  * Sets all of the client modules. Those modules will only initialize if we are in the window environment. */
  distributeInitializePart(): void
  /** Gets the nested toolbar's shadow root. */
  getNestedToolbar(): ShadowRoot

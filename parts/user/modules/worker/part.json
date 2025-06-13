@@ -1,0 +1,6 @@
+{
+ "typename": "module.user.parts",
+ "async-register": [],
+ "async-bootstrap": [],
+ "server-create-local": []
+}

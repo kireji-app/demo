@@ -13,6 +13,8 @@ declare class Part extends Iterable<Part> {
  readonly subdomains: string[]
  /** The list of static assets for the part whose source code is currently being evaluated. */
  readonly filenames: string[]
+ /** The array of subdomain names corresponding to `part.host` split along ".". */
+ readonly domains: string[]
  /** The number of routes the part has, used heavily to compute routing across the user space. */
  readonly cardinality: bigint
  /** The path to the part in its instance hierarchy. */
@@ -61,7 +63,7 @@ declare class Part extends Iterable<Part> {
  readonly [".."]: Part
  /** A display name for the part.
   * 
-  * The default name is "Untitled". */
+  * By default, this is the part's key. */
  readonly title: string
  /** A unicode character to identify the part.
   * 
@@ -162,3 +164,5 @@ declare const render: Part
 declare const inherit: Part
 /** The Property object describing this property. */
 declare const property: Property
+/** Whether or not the part is the one which owns the current script. */
+declare const isLeaf: boolean
