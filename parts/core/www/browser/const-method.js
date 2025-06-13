@@ -1,1 +1,0 @@
-const browser = this

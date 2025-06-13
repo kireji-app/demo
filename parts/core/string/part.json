@@ -1,7 +1,0 @@
-{
- "cardinality": "0",
- "typename": "part.core.parts",
- "routeID-collect": [
-  "CHANGED_CHARACTERS"
- ]
-}

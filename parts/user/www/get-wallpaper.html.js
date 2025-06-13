@@ -1,1 +1,1 @@
-return root.parts.user.themes.map(arm => arm["theme.svg"]).join("")
+return root.parts.user.themes.map(arm => arm["theme.png"]).join("")

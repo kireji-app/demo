@@ -1,3 +1,4 @@
 Object.defineProperties(match, {
- offsets: { value: new Map(), configurable: true, writable: true }
+ offsets: { value: new Map(), writable: true },
+ arm: { value: undefined, writable: true }
 })

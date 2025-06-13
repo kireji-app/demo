@@ -1,1 +1,1 @@
-return "dns-root:"
+return "dns:"

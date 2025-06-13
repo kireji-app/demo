@@ -1,1 +1,0 @@
-return `<wallpaper- tabIndex=1 ${root.parts.user.themes.arm.target["wallpaperAttributes"] ?? ""}>${root.parts.user.themes.arm.target["wallpaper.html"]}</wallpaper->`

@@ -1,10 +1,10 @@
 if (clip.pendingFrame) {
  cancelAnimationFrame(clip.pendingFrame)
- delete clip.pendingFrame
+ clip.pendingFrame = undefined
 }
 
-delete clip.playbackStartTime
-delete clip.playbackStartFrame
-delete clip.elapsedTime
-delete clip.elapsedFrames
+clip.playbackStartTime = undefined
+clip.playbackStartFrame = undefined
+clip.elapsedTime = undefined
+clip.elapsedFrames = undefined
 clip.playing = false

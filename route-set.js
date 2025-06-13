@@ -1,4 +1,4 @@
-user.route = ROUTE
+root.route = ROUTE
 
 if (root.parts.user.themes.arm?.key !== root.parts.user.route.host)
  root.parts.user.themes.setArm(root.parts.user.route.host)

@@ -1,3 +1,6 @@
 {
- "typename": "mix.core.parts"
+ "typename": "mix.core.parts",
+ "route-set": [
+  "ROUTE"
+ ]
 }
