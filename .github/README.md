@@ -116,7 +116,7 @@ Like [React](https://react.dev/) and similar modern front-end frameworks, this p
 
 This project goes far beyond front-end DOM updates to encompass all runtime objects across all four environments (cloud build, server/serverless function, service worker and client window) including all function calls, buffers and primitives.
 
-This is made possible by the way that each domain provides a branch delineation that is entirely based on whether or not the primitives that the domain uses will mutate or not. The act of navigating from one state to another follows from the branches that must be traveresed in order to get from one leaf to another on that tree.
+This is made possible by the way that each domain provides a branch delineation that is entirely based on whether or not the primitives that the domain uses will mutate or not. The act of navigating from one state to another follows from the branches that must be traversed in order to get from one leaf to another on that tree.
 
 ## Continuous Improvement
 
@@ -193,7 +193,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.22-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.23-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
