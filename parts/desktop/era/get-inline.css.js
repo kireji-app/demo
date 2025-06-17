@@ -1,1 +1,1 @@
-return root.parts.desktop.era.arm["inline.css"]
+return desktop.era.arm["inline.css"]

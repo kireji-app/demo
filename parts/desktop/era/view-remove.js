@@ -1,1 +1,1 @@
-delete root.parts.desktop.era.styleElement
+delete desktop.era.styleElement

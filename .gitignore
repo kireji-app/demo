@@ -16,4 +16,4 @@
 ## functions before it runs the build process. An empty placeholder was pushed
 ## to the remote repository and the file is assumed unchanged during the local
 ## build. Undo using `git update-index --no-assume-unchanged api/service.js`.
-api/service.js
+api/

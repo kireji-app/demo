@@ -1,1 +1,1 @@
-return root.parts.desktop.color.arm === root.parts.desktop.color.light ? root.parts.user.themes.arm.lightAccentTheme : root.parts.user.themes.arm.darkAccentTheme
+return desktop.color.arm === desktop.color.light ? desktop.theme.lightAccentTheme : desktop.theme.darkAccentTheme

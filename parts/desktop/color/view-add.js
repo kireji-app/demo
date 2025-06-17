@@ -1,1 +1,1 @@
-root.parts.desktop.color.styleElement = document.getElementById("color-css")
+desktop.color.styleElement = document.getElementById("color-css")

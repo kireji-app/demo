@@ -1,2 +1,2 @@
 document.body.classList.add("menu-pressed")
-super()
+base()

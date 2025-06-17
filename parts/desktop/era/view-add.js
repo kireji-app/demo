@@ -1,1 +1,1 @@
-root.parts.desktop.era.styleElement = document.getElementById("era-css")
+desktop.era.styleElement = document.getElementById("era-css")

@@ -1,2 +1,2 @@
-root.parts.desktop.menu.element.setAttribute("style", root.parts.desktop.menu.arm.styleAttr)
-super()
+desktop.menu.element.setAttribute("style", desktop.menu.arm.styleAttr)
+base()

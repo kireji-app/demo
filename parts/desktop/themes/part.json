@@ -1,7 +1,0 @@
-{
- "typename": "match.core.parts",
- "go": [
-  "EVENT",
-  "LINK"
- ]
-}

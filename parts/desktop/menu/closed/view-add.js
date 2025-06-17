@@ -1,1 +1,1 @@
-root.parts.desktop.menu.element.remove()
+desktop.menu.element.remove()

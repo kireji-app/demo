@@ -1,0 +1,7 @@
+{
+ "typename": "mix.core.parts",
+ "theme-set": [
+  "EVENT",
+  "LINK"
+ ]
+}

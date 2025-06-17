@@ -1,1 +1,1 @@
-return root.parts.user.themes.arm[`theme-${root.parts.desktop.color.arm === root.parts.desktop.color.light ? "light" : "dark"}-bg`]
+return desktop.theme[`theme-${desktop.color.arm === desktop.color.light ? "light" : "dark"}-bg`]

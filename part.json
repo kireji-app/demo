@@ -2,5 +2,6 @@
  "typename": "mix.core.parts",
  "route-set": [
   "ROUTE"
- ]
+ ],
+ "validate": []
 }

@@ -1,5 +1,5 @@
 {
- "typename": "module.user.parts",
+ "typename": "module.desktop.parts",
  "sync-fetch": [
   "REQUEST_URL"
  ]

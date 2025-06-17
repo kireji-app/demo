@@ -1,2 +1,2 @@
-user.menuButton.before(root.parts.desktop.menu.element)
-super()
+user.menuButton.before(desktop.menu.element)
+base()

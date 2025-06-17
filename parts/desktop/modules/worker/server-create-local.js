@@ -5,8 +5,8 @@ worker.controller = {
  },
  impart(host) {
   debug('received impart message')
-  if (root.parts.user.themes.arm?.key !== host)
-   root.parts.user.themes.setArm(host)
+  if (desktop.theme?.key !== host)
+   desktop.themes = desktop.themeHosts[host]
 
   root.defaultHost = host
   globalThis.skipWaiting()
@@ -23,16 +23,16 @@ worker.controller = {
 
   replacement.postMessage({
    code: 'impart',
-   payload: root.parts.user.themes.arm?.host ?? root.defaultHost
+   payload: desktop.theme?.host ?? root.defaultHost
   })
  },
  setTheme: host => {
-  debug('received setTheme message', host, root.parts.user.themes.arm?.key)
-  if (root.parts.user.themes.arm?.key === host)
+  debug('received setTheme message', host, desktop.theme?.key)
+  if (desktop.theme?.key === host)
    return
 
   root.defaultHost = host
-  root.parts.user.themes.setArm(host)
+  desktop.themes = desktop.themeHosts[host]
   const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)
   channel.close()

@@ -1,1 +1,0 @@
-return isLeaf ? part.prototype.render("max") : part[".."].render("max-" + part.domains[0])

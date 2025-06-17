@@ -1,1 +1,1 @@
-return root.parts.user.themes.map(arm => arm["theme.png"]).join("")
+return desktop.themes.map(theme => theme["theme.png"]).join("")

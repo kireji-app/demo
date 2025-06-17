@@ -1,4 +1,4 @@
-if (root.parts.desktop.menu.closed.enabled)
+if (desktop.menu.closed.enabled)
  return ""
 
 return menu["menu.html"]

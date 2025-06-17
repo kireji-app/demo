@@ -1,1 +1,1 @@
-root.parts.desktop.era.styleElement.innerHTML = era["inline.css"]
+desktop.era.styleElement.innerHTML = era["inline.css"]

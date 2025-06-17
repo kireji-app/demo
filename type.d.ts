@@ -11,17 +11,13 @@ declare const root: PartMix & {
  /** The git branch for this build version. */
  readonly branch: string
  /** The hash of the most recent git commit at build time. */
- readonly hash: string
+ readonly gitSHA: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string
  /** The single-cardinality mix of environment-specific modules.
   * 
   * Module content is not encoded in the user route but inferred from the available context. */
  readonly modules: PartModules
- /** The operating system theme selector.
-  * 
-  * Theme content is encoded by the host of the user route. */
- readonly themes: PartThemes
  /** The string of optional processes which are currently running on the operating system.
   * 
   * Task content is encoded by all segments appearing after the first segment in the user route pathname. */
@@ -255,7 +251,7 @@ declare class Property {
   * Uses `niceName` directly if valid, otherwise wraps it in brackets/quotes (`["niceName"]`).
   * Example: `myMethod`, `[Symbol.iterator]`, `["property-with-hyphens"]`. */
  readonly propertyReference: string;
- /** The string representation used to access the property via `this` or `super`.
+ /** The string representation used to access the property in source code.
   * Uses dot notation (`.niceName`) if possible, otherwise bracket notation (`["niceName"]`).
   * Example: `.myMethod`, `[Symbol.iterator]`, `["property-with-hyphens"]`. */
  readonly propertyAccessor: string;

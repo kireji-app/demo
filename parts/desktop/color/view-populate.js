@@ -1,1 +1,1 @@
-root.parts.desktop.color.styleElement.innerHTML = color["inline.css"]
+desktop.color.styleElement.innerHTML = color["inline.css"]

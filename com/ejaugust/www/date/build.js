@@ -1,0 +1,1 @@
+debug("get the date list here", blog.subdomains)

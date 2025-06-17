@@ -1,29 +1,41 @@
 function boot(root) {
  const environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : process?.argv[1]?.split("/").pop() === "build.js" ? "build" : "server"
+ const encoder = new TextEncoder()
  if (environment === "build") {
   globalThis.$ = require("child_process").execSync
-  root.size = 0
   if (!process.env.VERCEL || !!process.env.__VERCEL_DEV_RUNNING) {
    root.local = true
    root.branch = $("git branch --show-current").toString().trim()
-   root.hash = $("git rev-parse HEAD").toString().trim()
-   root.version = "'" + $("git log -1 --pretty=%s").toString().split("\n")[0] + "'"
-   throw root.version
+   root.gitSHA = $("git rev-parse HEAD").toString().trim()
+   root.version = $("git log -1 --pretty=%s").toString().split("\n")[0]
   } else {
    root.local = false
    root.branch = process.env.VERCEL_GIT_COMMIT_REF
-   root.hash = process.env.VERCEL_GIT_COMMIT_SHA
+   root.gitSHA = process.env.VERCEL_GIT_COMMIT_SHA
    root.version = process.env.VERCEL_GIT_COMMIT_MESSAGE.split("\n")[0]
-   throw "'" + root.version + "'"
   }
  }
  const production = !root.local && root.branch === "main"
- const conditionalLog = (verbosity, data, method) => !production && verbosity <= root.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data))
  const log = (verbosity, ...data) => conditionalLog(verbosity, data, "log")
+ const hang = timeInMilliseconds => {
+  warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
+  const start = performance.now()
+  let iteration = -1, elapsedMilliseconds, remainingMilliseconds
+  do {
+   elapsedMilliseconds = Math.trunc(performance.now() - start)
+   const newRemainingMilliseconds = timeInMilliseconds - elapsedMilliseconds
+   Math.sin(iteration++)
+   if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100)) log(0, "t: -" + newRemainingMilliseconds)
+   remainingMilliseconds = newRemainingMilliseconds
+  } while (remainingMilliseconds > 0)
+  warn(`Main thread hang finished at iteration ${iteration}.`)
+ }
  const warn = (...data) => conditionalLog(0, data, "warn")
  const debug = (...data) => conditionalLog(0, data, "debug")
  const openLog = (verbosity, ...data) => conditionalLog(verbosity, data, "group")
  const closeLog = verbosity => { log(verbosity, ""); conditionalLog(verbosity, [], "groupEnd") }
+ const toCharms = x => (x = Math.ceil(x.toString(2).length / 6)) + " charm" + (x !== 1 ? "s" : "")
+ const serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1)
  const logMeasure = (verbosity, measure, unit, columnWidth = 0) => {
   if (!["bigint", "number"].includes(typeof measure))
    throw new TypeError(`Logging a measure requires a bigint or number (got ${typeof measure}.`)
@@ -42,21 +54,28 @@ function boot(root) {
   else measureString = measureString.padStart(columnWidth, " ")
   log(verbosity, "| " + measureString + " " + unit + " |")
  }
+ const scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`)
  const btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), ""))
- const serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1)
- const hang = timeInMilliseconds => {
-  warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
-  const start = performance.now()
-  let iteration = -1, elapsedMilliseconds, remainingMilliseconds
-  do {
-   elapsedMilliseconds = Math.trunc(performance.now() - start)
-   const newRemainingMilliseconds = timeInMilliseconds - elapsedMilliseconds
-   Math.sin(iteration++)
-   if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100)) log(0, "t: -" + newRemainingMilliseconds)
-   remainingMilliseconds = newRemainingMilliseconds
-  } while (remainingMilliseconds > 0)
-  warn(`Main thread hang finished at iteration ${iteration}.`)
+ const logStringSize = (verbosity, string) => {
+  string = string.toString()
+  const n = encoder.encode(string).length
+  const bits = Math.ceil(n * 8)
+  const col1Width = bits.toLocaleString().length
+  const utf16Unit = "| ECMA-262 string indices "
+  const col2Width = utf16Unit.length
+  log(verbosity, "| Quantity".padEnd(col1Width + 3) + "| Unit Name   ".padEnd(col2Width) + "| Radix | Abbr. | Format |")
+  log(verbosity, "|-".padEnd(col1Width + 3, "-") + "|".padEnd(col2Width, "-") + "|-------|-------|--------|")
+  logMeasure(verbosity, n / 2 ** 20, "| mebibytes".padEnd(col2Width) + "| 2²⁰   | MiB   | UTF-8 ", col1Width)
+  logMeasure(verbosity + 4, n / 10 ** 6, "| megabytes".padEnd(col2Width) + "| 10⁶   | MB    | UTF-8 ", col1Width)
+  logMeasure(verbosity + 4, n / 2 ** 10, "| kibibytes".padEnd(col2Width) + "| 2¹⁰   | KiB   | UTF-8 ", col1Width)
+  logMeasure(verbosity + 4, n / 10 ** 3, "| kilobytes".padEnd(col2Width) + "| 10³   | KB    | UTF-8 ", col1Width)
+  logMeasure(verbosity + 1, [...string].length, "| Unicode code points".padEnd(col2Width) + "| ----- | UCP   | UTF-32", col1Width)
+  logMeasure(verbosity + 4, string.length, utf16Unit + "| ----- | chars | UTF-16", col1Width)
+  logMeasure(verbosity + 1, n, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
+  logMeasure(verbosity + 3, Math.ceil((n * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
+  logMeasure(verbosity + 2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
  }
+ const conditionalLog = (verbosity, data, method) => !production && verbosity <= root.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data))
  class SourceMappedFile {
   static radix = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
   static sourcePositionMarkPatternRegister = /@[a-z-]+@/g
@@ -184,37 +203,217 @@ function boot(root) {
    )
   }
  }
+ class FileHeader {
+  static useUTF8 = true
+  static textBasedPrefixes = [
+   'text/',
+   'application/json',
+   'application/xml',
+   'application/javascript',
+   'image/svg+xml'
+  ]
+  static mimeTypes = {
+   'png': 'image/png',
+   'gif': 'image/gif',
+   'svg': 'image/svg+xml',
+   'jpg': 'image/jpeg',
+   'jpeg': 'image/jpeg',
+   'webp': 'image/webp',
+   'ico': 'image/x-icon',
+   'html': 'text/html',
+   'htm': 'text/html',
+   'css': 'text/css',
+   'js': 'text/javascript',
+   'mjs': 'text/javascript',
+   'json': 'application/json',
+   'xml': 'application/xml',
+   'txt': 'text/plain',
+   'uri': 'text/uri-list',
+   'woff': 'font/woff',
+   'woff2': 'font/woff2',
+   'ttf': 'font/ttf',
+   'otf': 'font/otf',
+  }
+  #filename
+  #extension
+  #filetype
+  #binary
+  get extension() { return this.#extension }
+  get filetype() { return this.#filetype }
+  get binary() { return this.#binary }
+  constructor(filename) {
+   const lastDotIndex = filename.lastIndexOf('.')
+   this.#filename = filename
+   this.#extension = lastDotIndex === -1 || lastDotIndex === filename.length - 1 ? '' : filename.slice(lastDotIndex)
+   this.#filetype = FileHeader.mimeTypes[this.#extension.slice(1).toLowerCase()] || "text/plain"
+   this.#binary = !FileHeader.textBasedPrefixes.some(prefix => this.#filetype.startsWith(prefix))
+   if (!this.#binary && FileHeader.useUTF8 && !this.#filetype.includes('charset'))
+    this.#filetype += ';charset=UTF-8'
+  }
+  toString() {
+   return this.#filename
+  }
+  toJSON() {
+   return {
+    filename: this.#filename,
+    extension: this.extension,
+    filetype: this.filetype,
+    binary: this.binary
+   }
+  }
+ }
+ class Route {
+  static maxPathLength = 2000
+  static maxSegmentLength = 250
+  static defaultFilename = 'index.html'
+  static pathSegmentRadix = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0'
+  static segmentToRouteID(segment) {
+   let binaryValue = "0b0"
+   let binaryOffset = "0b0"
+   for (const character of segment) {
+    const index = Route.pathSegmentRadix.indexOf(character)
+    if (index === -1 || index >= 64) {
+     warn("Route Error: ignoring unused segment (segments cannot include '" + character + "'). (" + segment + ")")
+     binaryValue = "0b0"
+     binaryOffset = "0b0"
+     break;
+    }
+    binaryValue += index.toString(2).padStart(6, 0)
+    binaryOffset += "000001"
+   }
+   return BigInt(binaryValue) + BigInt(binaryOffset) - 1n
+  }
+  static segmentFromRouteID(routeID) {
+   routeID++
+   let binaryValue = ""
+   let segment = ""
+   let tempRoute = routeID
+   let chunkCount = 0n
+   while (tempRoute > 0n) {
+    const chunkAddend = 2n ** (chunkCount * 6n)
+    if (tempRoute >= chunkAddend) {
+     tempRoute -= chunkAddend
+     chunkCount++
+    } else {
+     break
+    }
+   }
+   let offset = 0n
+   for (let i = 0n; i < chunkCount; i++)
+    offset += 2n ** (i * 6n)
+   binaryValue = (routeID - offset).toString(2)
+   const finalLength = Number(chunkCount) * 6
+   const paddedBinaryString = binaryValue.padStart(finalLength, '0')
+   for (let i = 0; i < finalLength; i += 6) {
+    const hexad = paddedBinaryString.slice(i, i + 6)
+    segment += Route.pathSegmentRadix[parseInt(hexad, 2)]
+   }
+   return segment
+  }
+  #filename
+  #segments
+  #routeIDs
+  #path
+  #mark
+  #header
+  #url
+  #singletonRouteID
+  #taskRouteIDs
+  constructor(url, base) {
+   url ??= `https://${root.defaultHost}/${root.defaultSingletonSegment}/`
+   this.#url = new URL(url, base)
+   if (!(this.#url.host in desktop.themes)) {
+    this.#url.port &&= ''
+    this.#url.host = root.defaultHost
+   }
+   this.pathname = this.#url.pathname
+  }
+  get header() { return this.#header }
+  get protocol() { return this.#url.protocol }
+  set protocol(value) { this.#url.protocol = value }
+  get username() { return this.#url.username }
+  set username(value) { this.#url.username = value }
+  get password() { return this.#url.password }
+  set password(value) { this.#url.password = value }
+  get hostname() { return this.#url.hostname }
+  set hostname(value) {
+   if (!(value in desktop.themes))
+    value = root.defaultHost
+   this.#url.hostname = value
+  }
+  get host() { return this.#url.host }
+  set host(value) {
+   if (!(value in desktop.themes))
+    value = root.defaultHost
+   this.#url.host = value
+  }
+  get origin() { return this.#url.origin }
+  get pathname() { return this.#url.pathname }
+  set pathname(pathname) {
+   this.#path = String(pathname) || '/'
+   this.#filename = ''
+   this.#mark = ''
+   if (this.#path.endsWith('!')) {
+    const lastSlashIndex = this.#path.lastIndexOf('/')
+    const filenameSegment = this.#path.substring(lastSlashIndex + 1, this.#path.length - 1)
+    if (filenameSegment && filenameSegment !== Route.defaultFilename) {
+     if (!/^[A-Za-z0-9_.-]+$/.test(filenameSegment))
+      throw new TypeError("Route Error: filename contained invalid characters. " + filenameSegment)
+     this.#filename = filenameSegment
+     this.#mark = '!'
+    }
+    this.#path = this.#path.substring(0, lastSlashIndex + 1)
+   }
+   this.#routeIDs = []
+   this.#segments = this.#path.split('/').filter(segment => {
+    if (!segment)
+     return
+    const routeID = Route.segmentToRouteID(segment)
+    if (routeID === -1n)
+     return
+    this.#routeIDs.push(routeID)
+    return true
+   })
+   if (!this.#segments.length || this.#routeIDs[0] >= root.cardinality) {
+    this.#routeIDs[0] = BigInt(Route.defaultSingletonRouteID)
+    this.#segments[0] = root.defaultSingletonSegment
+    warn(new RangeError('Encountered out-of-range aperiodic routeID while setting pathname of Route.'), { route: this, pathname })
+   }
+   this.#path = `/${this.#segments.join("/")}${this.#segments.length ? "/" : ""}`
+   this.#header = new FileHeader(this.#filename || Route.defaultFilename)
+   this.#url.pathname = `${this.#path}${this.#filename}${this.#mark}`
+   this.#taskRouteIDs = [...this.#routeIDs]
+   this.#singletonRouteID = this.#taskRouteIDs.shift()
+  }
+  get filename() { return this.#filename || Route.defaultFilename }
+  set filename(value) { this.pathname = `${this.#path}${value}!` }
+  get singletonRouteID() { return this.#singletonRouteID }
+  get taskRouteIDs() { return this.#taskRouteIDs }
+  get extension() { return this.#header.extension }
+  get filetype() { return this.#header.filetype }
+  get binary() { return this.#header.binary }
+  get segments() { return [...this.#segments] }
+  set segments(segments) { this.pathname = `/${segments.join("/")}${segments.length ? "/" : ""}${this.#filename}${this.#mark}` }
+  get routeIDs() { return [...this.#routeIDs] }
+  set routeIDs(newRouteIDs) { this.segments = newRouteIDs.map(routeID => Route.segmentFromRouteID(routeID)) }
+  get path() { return this.#path }
+  set path(path) { this.pathname = `${path}${this.#filename}${this.#mark}` }
+  get search() { return this.#url.search }
+  set search(value) { this.#url.search = value }
+  get searchParams() { return this.#url.searchParams }
+  get hash() { return this.#url.hash }
+  set hash(value) { this.#url.hash = value }
+  get href() { return this.#url.href }
+  set href(value) { this.#url.href = value }
+  toJSON() { return this.#url.toJSON() }
+  toString() { return this.#url.toString() }
+ }
+ Route.defaultSingletonRouteID ??= Route.segmentToRouteID(root.defaultSingletonSegment)
+ Route.maxSegmentCardinality ??= (64n ** 251n - 64n) / 63n
  openLog(0, `Booting Operating System (${root.local ? "local" : "cloud"})`)
  if (environment === "build") {
   const { extname } = require("path"),
-   { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile, writeFileSync: writeFile, mkdirSync: makeFolder } = require("fs")
-  if (root.local) {
-   configure_git_behavior: {
-    openLog(1, "Initializing git configuration.")
-    log(3, `This process configures the git repository to hide output file(s) during local development. It is idempotent.`)
-    const commands = ["git update-index --assume-unchanged api/service.js"]
-    commands.forEach(command => {
-     log(2, `Executing the following command: \`${command}\``)
-     $(command)
-     log(2, "Command succeeded.")
-    })
-    closeLog(1)
-   }
-   increment_version: {
-    const ver = root.version.split(".")
-    if (ver[0] && root.change === "major") {
-     ver[0]++; ver[1] = ver[2] = 0
-    } else if (root.change === "minor" || (!ver[0] && root.change === "major")) {
-     ver[1]++; ver[2] = 0
-    } else ver[2]++
-    root.version = ver.join(".")
-   }
-   update_readme: {
-    root["README.md"] = root["README.md"].replace(/version-\d+\.\d+\.\d+/, `version-${root.version}`)
-    log(2, `Outputting the project README.md which has been modified to reflect the correct version number.\n`)
-    writeFile("README.md", root["README.md"])
-   }
-  }
+   { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs")
   pack_domains: {
    log(0, `Version ${root.branch}/${root.version}`)
    openLog(1, "Packing Repository")
@@ -225,65 +424,37 @@ function boot(root) {
     if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
     const filenames = []
     for (const itemName of readFolder(folderPath)) {
-     const folderPath = host ? host.split(".").reverse().join("/") : "",
-      filePath = folderPath + "/" + itemName
+     if (!host && ["api", ".git"].includes(itemName)) continue
+     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
      if (itemExists(filePath)) {
-      const stats = getItemStats(filePath)
-      if (stats.isDirectory()) {
-       openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
-       readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
-       closeLog(2)
-      } else if (stats.isFile()) filenames.push([itemName, filePath])
+      try {
+       if (!$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
+       log(2, `\x1b[38;5;27m/\x1b[38;5;239m${itemName} ignored\x1b[0m`)
+      } catch {
+       const stats = getItemStats(filePath)
+       if (stats.isDirectory()) {
+        openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
+        readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
+        closeLog(2)
+       } else if (stats.isFile()) filenames.push([itemName, filePath])
+      }
      }
     }
     for (const [filename, filePath] of filenames) {
      const extension = extname(filePath)
-     try {
-      if (!$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
-      log(2, `\x1b[38;5;27m/\x1b[38;5;239m${filename} ignored\x1b[0m`)
-     } catch {
-      const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
-      log(2, `\x1b[38;5;28m/\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
-      part[filename] = content
-      fileCount++
-     }
+     const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
+     log(2, `\x1b[38;5;28m/\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
+     part[filename] = content
+     fileCount++
     }
     domainCount++
    }
    readRecursive("", "./", root)
-   log(2, `The process succeeded. It packed ${fileCount} files across ${domainCount} domains (including the dns-root and ${TLDs.length} top-level domains).`)
-   closeLog(1)
-  }
-  output_service_file: {
-   if (!itemExists("api")) makeFolder("api")
-   const outputPath = "api/service.js"
-   log(2, `Outputting the ECMA-262 repository to ${outputPath}.\n`)
-   openLog(1, "Computing Size Statistics.\n")
-   log(3, "The size is initially missing from the output file\n  because the file size is determined after the file is saved.\n\nAdditional write operations allow us to quickly converge\n  on a correct measurement of the file's size,\n  including the size of the measurement itself.\n")
-   writeFile(outputPath, root.parts.user["service.js"])
-   root.size = getItemStats("api/service.js").size
-   writeFile("api/service.js", root.parts.user["service.js"])
-   root.size = getItemStats("api/service.js").size
-   const finalBody = root.parts.user["service.js"]
-   writeFile("api/service.js", finalBody)
-   const bits = Math.ceil(root.size * 8)
-   const col1Width = bits.toLocaleString().length
-   const utf16Unit = "| ECMA-262 string indices "
-   const col2Width = utf16Unit.length
-   log(0, "| Quantity".padEnd(col1Width + 3) + "| Unit Name   ".padEnd(col2Width) + "| Radix | Abbr. | Format |")
-   log(0, "|-".padEnd(col1Width + 3, "-") + "|".padEnd(col2Width, "-") + "|-------|-------|--------|")
-   logMeasure(0, root.size / 2 ** 20, "| mebibytes".padEnd(col2Width) + "| 2²⁰   | MiB   | UTF-8 ", col1Width)
-   logMeasure(4, root.size / 10 ** 6, "| megabytes".padEnd(col2Width) + "| 10⁶   | MB    | UTF-8 ", col1Width)
-   logMeasure(4, root.size / 2 ** 10, "| kibibytes".padEnd(col2Width) + "| 2¹⁰   | KiB   | UTF-8 ", col1Width)
-   logMeasure(4, root.size / 10 ** 3, "| kilobytes".padEnd(col2Width) + "| 10³   | KB    | UTF-8 ", col1Width)
-   logMeasure(1, [...finalBody].length, "| Unicode code points".padEnd(col2Width) + "| ----- | UCP   | UTF-32", col1Width)
-   logMeasure(4, finalBody.length, utf16Unit + "| ----- | chars | UTF-16", col1Width)
-   logMeasure(1, root.size, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
-   logMeasure(3, Math.ceil((root.size * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
-   logMeasure(2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
+   log(2, `The process succeeded. It packed ${fileCount} files across ${domainCount} domains (including the dns-root and all top-level domains).`)
    closeLog(1)
   }
  }
+ const preHydrationArchive = serialize(root)
  Object.defineProperties(root, {
   fps: { value: 1, configurable: true, writable: true },
   meanFrameTime: { value: 1000, configurable: true, writable: true },
@@ -363,7 +534,7 @@ function boot(root) {
     const property = Property[PROPERTY_ID] = this
     property.id = PROPERTY_ID
     property.filename = `${PROPERTY_ID}.js`
-    property.content = part[property.filename]
+    property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
     property.isAlias = PROPERTY_ID.startsWith("alias-")
     property.isView = PROPERTY_ID.startsWith("view-")
     property.isAsync = PROPERTY_ID.startsWith("async-")
@@ -427,6 +598,7 @@ function boot(root) {
       constant.used = true
      },
     }
+    if (typeof property.content !== "string") return
     property.source = sourceFile.addSource(property.filename, property.content)
     property.lines = property.content ? property.content.split("\n") : []
     property.hasValidPropertyName = property.isSymbol || property.isGetOrSet || Property.identifierPattern.test(property.niceName)
@@ -437,22 +609,8 @@ function boot(root) {
     property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGetOrSet || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
     sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
     Property.collectConstants(part, property)
-    if (property.isAlias) {
-     sourceFile.addLine(`return this["${PROPERTY_ID.slice(6)}"]`, buildSource, null, null, "    ")
-    } else {
-     if (!prototype) sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
-     else {
-      let hasSuper = false
-      property.lines.forEach((methodLine, ln) => {
-       const firstMatch = [...methodLine.matchAll(/(?<=[^\w]|^)super\s*\(/g)][0]
-       if (firstMatch) {
-        hasSuper = true
-        methodLine = methodLine.slice(0, firstMatch.index) + `super${property.propertyAccessor}(` + methodLine.slice(firstMatch.index + firstMatch[0].length)
-        sourceFile.addLine(methodLine, property.source, ln, 0, "   ", false)
-       } else sourceFile.addLine(methodLine, property.source, ln, 0, "   ")
-      })
-     }
-    }
+    if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(6)}"]`, buildSource, null, null, "    ")
+    else sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
     sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
    }
   }
@@ -468,6 +626,7 @@ function boot(root) {
   for (const methodID in part.manifest)
    if (!["cardinality", "typename"].includes(methodID))
     Property.ids.add(methodID)
+
   sourceFile.part = part
   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
   for (const id of Property.ids) new Property(id)
@@ -478,27 +637,25 @@ function boot(root) {
   subdomains.forEach((subdomain, index) => {
    const subpart = part[subdomain]
    Object.defineProperties(subpart, {
-    index: { value: index, configurable: true, writable: true },
-    "..": { value: part, configurable: true, writable: true },
+    index: { value: index },
+    "..": { value: part },
    })
    recursiveDistributeHydration(subpart, [subdomain, ...domains])
-   Object.defineProperties(part, {
-    cardinality: {
-     value: part.count(part.cardinality, subpart, index, subdomains),
-     configurable: true, writable: true
-    },
-    [index]: { value: subpart, configurable: true, writable: true }
-   })
-   if (typeof part.cardinality !== "bigint")
-    throw new Error("part.count() returned invalid cardinality. " + part.host)
+   Object.defineProperty(part, index, { value: subpart })
   })
-  log(5, "Building...")
-  if (part !== root) // The root is already the one building.
-   part.build()
-  if (typeof part.cardinality !== "bigint")
+  // log(5, "Building...")
+  const buildSteps = []
+  let buildMethodOwner = part === root ? prototype : part
+  while (buildMethodOwner) {
+   if (Object.hasOwn(buildMethodOwner, "build"))
+    buildSteps.unshift(buildMethodOwner.build)
+   buildMethodOwner = buildMethodOwner.prototype
+  }
+  buildSteps.forEach(fn => fn.call(part))
+  if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
    throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
-  log(5, "Build succeeded.")
-  if (!part[".."]) { // The part was first hydrated as a prototype, not a subdomain.
+  log(10, `\x1b[38;5;39m𝑘\x1b[0m = \x1b[38;5;74m${scientific(part.cardinality)}\x1b[0m = \x1b[38;5;108m${toCharms(part.cardinality)}\x1b[0m = \x1b[38;5;153m${part.cardinality}\x1b[0m`);
+  if (!Object.hasOwn(part, "..")) { // The part was first hydrated as a prototype, not a subdomain.
    const parentDomains = [...domains]
    const subdomain = parentDomains.shift()
    const parent = part === root ? null : getPartFromDomains(parentDomains)
@@ -517,7 +674,39 @@ function boot(root) {
  recursiveDistributeHydration()
  log(1, "Part hydration complete.")
  closeLog(3)
- root.parts.user.modules.install()
+ if (environment === "build") {
+  const { writeFileSync: writeFile, existsSync: itemExists, statSync: getItemStats, mkdirSync: makeFolder, rmSync: removeFile } = require("fs")
+  if (root.local) {
+   const ver = root.version.split(".")
+   if (ver[0] && root.change === "major") {
+    ver[0]++; ver[1] = ver[2] = 0
+   } else if (root.change === "minor" || (!ver[0] && root.change === "major")) {
+    ver[1]++; ver[2] = 0
+   } else ver[2]++
+   root.version = ver.join(".")
+   root["README.md"] = root["README.md"].replace(/version-\d+\.\d+\.\d+/, `version-${root.version}`)
+   log(2, `Outputting the project README.md which has been modified to reflect the correct version number.\n`)
+   writeFile("README.md", root["README.md"])
+  }
+  if (!itemExists("api")) makeFolder("api")
+  else if (itemExists("api/service.js")) removeFile(`api/service.js`)
+  globalThis.outputJS = root["service.js"]
+  writeFile("api/service.js", outputJS)
+  log(2, `Saved the UTF-8 encoded ECMA-262 repository to "api/service.js".\n`)
+  openLog(1, "Size\n")
+  logStringSize(0, outputJS)
+  closeLog(1)
+  openLog(1, "Entropy")
+  const u = root.cardinality
+  const v = root.parts.user.task.cardinality
+  log(0, "")
+  log(0, `| Domain     | Entropy       | Cardinality   |`)
+  log(0, `|------------|---------------|---------------|`)
+  log(0, `| Singleton  | ${toCharms(u).padEnd(13, " ")} | ${scientific(u).padEnd(13, " ")} |`)
+  log(0, `| Instanced  | ${toCharms(v).padEnd(13, " ")} | ${scientific(v).padEnd(13, " ")} |\n`)
+  closeLog(1)
+ }
+ desktop.modules.install()
  root.validate()
  log(0, "Boot successful.")
  closeLog(0)
@@ -528,5 +717,5 @@ boot({
  verbosity: "100",
  mapping: "0",
  defaultHost: "www.core.parts",
- defaultDesktopRouteID: "0",
+ defaultSingletonSegment: "hello-world"
 })
