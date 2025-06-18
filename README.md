@@ -10,14 +10,16 @@ The O/S takes the form of a [multi-tenant](https://vercel.com/docs/multi-tenant)
 
 These PWAs benefit from [server-](https://en.wikipedia.org/wiki/Server-side_scripting#Server-side_rendering) and [client-side file rendering](https://www.patterns.dev/react/client-side-rendering/), [SEO](https://en.wikipedia.org/wiki/Search_engine_optimization) tools, [perfect entropy coding](https://en.wikipedia.org/wiki/Entropy_coding), and [exhaustive](https://en.wikipedia.org/wiki/Collectively_exhaustive_events) [deep linking](https://en.wikipedia.org/wiki/Deep_linking).
 
-It provides a [permalink](https://en.wikipedia.org/wiki/Permalink) to all [ℵ₀](https://en.wikipedia.org/wiki/Aleph_number#Aleph-zero) points of its [configuration space](https://en.wikipedia.org/wiki/Configuration_space_(physics)), bounded in practice by [URI length limits](https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers) and [system resources](https://en.wikipedia.org/wiki/System_resource). 
+The same O/S boots on every domain and in all four environments (build, server, service worker, client window).
 
 The project has one author and does not import any libraries. See below for [the motivation behind that decision](#vanilla-language-features).
 
 The project is currently in alpha. See below for [live demos](#live-demo-domains).
 
 ## Stateful Data Compression
-Users can share everything they create in the operating system. They aren't sharing individual files. Instead, they're sharing an exact operating system state.
+The O/S features a [permalink](https://en.wikipedia.org/wiki/Permalink) to all [ℵ₀](https://en.wikipedia.org/wiki/Aleph_number#Aleph-zero) points of its [configuration space](https://en.wikipedia.org/wiki/Configuration_space_(physics)) (bounded in practice by [URI length limits](https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers) and [system resources](https://en.wikipedia.org/wiki/System_resource)). 
+
+Users can share a link to anything they do in the O/S. They aren't sharing individual files. Instead, they're sharing an exact operating system state.
 
 This does not involve databases, accounts/authentication, user tracking, user uploads, a content management system, or any other activity that would risk changing the state of the static backend.
 
@@ -205,7 +207,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.32-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.33-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
