@@ -63,7 +63,7 @@ declare class Part extends Iterable<Part> {
  readonly deltaRouteID: bigint
  /** The parent part.
   * 
-  * *Note: There is no* `root[".."]`. */
+  * *Note: There is no* `_[".."]`. */
  readonly [".."]: Part
  /** A display name for the part.
   * 

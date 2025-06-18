@@ -1,2 +1,2 @@
-// root.parts.user.colorModeButton.removeAttribute("data-state")
+// _.parts.user.colorModeButton.removeAttribute("data-state")
 debug('add light mode here')

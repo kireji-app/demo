@@ -8,4 +8,4 @@ user.manifestLink.href ??= "/manifest.json!"
 user.wallpaper = document.querySelector("wallpaper-")
 user.taskbar = document.querySelector("task-bar")
 user.menuButton = document.querySelector("menu-button")
-user.taskbarSpacer = root.parts.user.taskbar.querySelector("flex-spacer")
+user.taskbarSpacer = _.parts.user.taskbar.querySelector("flex-spacer")

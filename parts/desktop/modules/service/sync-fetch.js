@@ -1,10 +1,10 @@
 if (environment === "window")
  throw "Calling fetchSync in the window environment is not supported."
 
-if (root.route?.href !== REQUEST_URL)
- root.parts.user.setRoute(new Route(REQUEST_URL))
+if (_.route?.href !== REQUEST_URL)
+ _.parts.user.setRoute(new Route(REQUEST_URL))
 
-return root.parts.user.render({
- request: environment === "worker" ? root.route.filename + root.route.search : "index.html",
+return _.parts.user.render({
+ request: environment === "worker" ? _.route.filename + _.route.search : "index.html",
  format: "response"
 })

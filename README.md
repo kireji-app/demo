@@ -31,7 +31,9 @@ This allows the URI to act as a tiny file storing all of the user's content in a
 
 Pathname encoding uses an alphabet of $`b = 64`$ characters to encode/decode integers as an array of variable-length pathname segments (each segment up to $`250`$ characters long). Each path segment can represent $`k_{\text{segment}} = (64^{251}-64)/63 ≈ 3.56 * 10^{451} ≈ 2^{1500}`$ unique values (about $`1500`$ bits of storage space). The computation is similar to a numeral [base conversion](https://en.wikipedia.org/wiki/Positional_notation#Base_conversion) with some added complexity which takes advantage of the storage potential of a variable-length string.
 
-$`\begin{alignat}{3} &{{u_T}_v}_n &\leftrightarrow{} &(\;\text{d}_T, \text{v}, n_0, n_1, \ldots, n_m\;) \\ {\text{e.g., }}&{\text{``https://two-digit.example.com/v123/0t''}} & &{[{\text{``two-digit.example.com''}}{,} {123}, {\text{``0t''}}]}\\\;\\\;\\\;\\\;\\&\text{d}_{\text{T}} &\leftrightarrow{} &\text{T} = \{\;{P_T}_0,\;{P_T}_1,\;{P_T}_2,\;\ldots,\;{P_T}_{k-1}\;\} \\ {\text{e.g., }}&{\text{``two-digit.example.com''}} & &{{\text{const}}\;{\text{part}}\text{ = }{\text{new class}}\;{\text{TwoDigit}}\;{\text{extends}}\;{\text{Mix}}\;{\text{\{}}} \\ & & &\quad \text{state = -1n} \\ & & &\quad \text{// compiled from dns-root/com/example/two-digit } \\ & & &\text{\}()}\\\;\\\;\\\;\\\;\\&(\;n_0, n_1, \ldots, n_m\;) &\leftrightarrow{} &n \\ {\text{e.g., }}&\text{``0t''} & &\text{94n} \end{alignat}`$
+### Figures
+
+$`\begin{alignat}{3} &{{u_T}_v}_n &\leftrightarrow{} &(\;\text{d}_T, \text{v}, n_0, n_1, \ldots, n_m\;) \\ {\text{e.g., }}&{\text{``https://two-digit.example.com/v123/0t''}} & &{[{\text{``two-digit.example.com''}}{,} {123}, {\text{``0t''}}]}\\\;\\\;\\\;\\\;\\&\text{d}_{\text{T}} &\leftrightarrow{} &\text{T} = \{\;{P_T}_0,\;{P_T}_1,\;{P_T}_2,\;\ldots,\;{P_T}_{k-1}\;\} \\ {\text{e.g., }}&{\text{``two-digit.example.com''}} & &{{\text{const}}\;{\text{part}}\text{ = }{\text{new class}}\;{\text{TwoDigit}}\;{\text{extends}}\;{\text{Mix}}\;{\text{\{}}} \\ & & &\quad \text{state = -1n} \\ & & &\quad \text{// compiled from ./com/example/two-digit } \\ & & &\text{\}()}\\\;\\\;\\\;\\\;\\&(\;n_0, n_1, \ldots, n_m\;) &\leftrightarrow{} &n \\ {\text{e.g., }}&\text{``0t''} & &\text{94n} \end{alignat}`$
 
 $`\begin{alignat}{3} &{{u_T}_v}_n &\leftrightarrow{} &{P_{\text{T}}}_n \\ {\text{e.g., }}&{\text{``https://two-digit.example.com/v123/0t''}} & &{{\text{part}}.{\text{state}}\text{ === }{\text{94}}{\text{n}}}\\\;\\\;\\\;\\\;\\&{P_{\text{T}}}_n &\leftrightarrow{} &\{\;{{P_{\text{T}}}_n}_0, {{P_{\text{T}}}_n}_1, \ldots \} \\ {\text{e.g., }}&{{\text{part}}.{\text{state}}\text{ === }{\text{94}}{\text{n}}} & &\text{[} \\ & & &\quad \text{tensPlace.routeID === 9n,} \\ & & &\quad \text{onesPlace.routeID === 4n} \\ & & &\text{]} \end{alignat}`$
 
@@ -74,9 +76,9 @@ The "mix and match" core parts perform the majority of the perfect hash arithmet
 
 Each part is responsible for inheriting or overriding its prototype part's cardinality - or the number of states that the part can be in - and this number is immutable for each part.
 
-This forms a type tree whose root is `"part.core.parts"`.
+This forms a prototype tree whose root is `"part.core.parts"` and which contains all of the parts.
 
-The framework initializes the root part whose name is the empty string, `""`, representing the DNS root. This defines the entire user-configurable state space.
+This is distinct from the DNS root, which is an instance of `"mix.core.parts"` and defines the entire user-configurable state space. The framework uses the empty string - `""` - as the domain name of the DNS root. The root part can be set by both an integer routeID like all other parts, or it can be assigned a URL via setRoute(). This is always the operating system's state is initialized for the first time, in all environments; using a default URI in `"build"`, using the request URI passed to any `"server"` or `"worker"` fetch; using `location.href` in the `"window"` environment.
 
 #### State Propagation, Frame Rate and Address Bar Synchronizing
 
@@ -193,7 +195,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.26-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.27-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\

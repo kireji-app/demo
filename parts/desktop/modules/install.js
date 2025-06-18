@@ -1,8 +1,6 @@
-openLog(1, `Installing ${modules.title}.`)
+openLog(1, `\x1b[32m\x1b[1m${modules.title}\x1b[0m`)
 
 for (const module of modules)
  module.install()
 
-log(0, `${modules.title} installed successfully.`)
-
-closeLog(1)
+closeLogSpaced(1)

@@ -1,81 +1,5 @@
-function boot(root) {
- const environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : process?.argv[1]?.split("/").pop() === "build.js" ? "build" : "server"
- const encoder = new TextEncoder()
- if (environment === "build") {
-  globalThis.$ = require("child_process").execSync
-  if (!process.env.VERCEL || !!process.env.__VERCEL_DEV_RUNNING) {
-   root.local = true
-   root.branch = $("git branch --show-current").toString().trim()
-   root.gitSHA = $("git rev-parse HEAD").toString().trim()
-   root.version = $("git log -1 --pretty=%s").toString().split("\n")[0]
-  } else {
-   root.local = false
-   root.branch = process.env.VERCEL_GIT_COMMIT_REF
-   root.gitSHA = process.env.VERCEL_GIT_COMMIT_SHA
-   root.version = process.env.VERCEL_GIT_COMMIT_MESSAGE.split("\n")[0]
-  }
- }
- const production = !root.local && root.branch === "main"
- const log = (verbosity, ...data) => conditionalLog(verbosity, data, "log")
- const hang = timeInMilliseconds => {
-  warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
-  const start = performance.now()
-  let iteration = -1, elapsedMilliseconds, remainingMilliseconds
-  do {
-   elapsedMilliseconds = Math.trunc(performance.now() - start)
-   const newRemainingMilliseconds = timeInMilliseconds - elapsedMilliseconds
-   Math.sin(iteration++)
-   if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100)) log(0, "t: -" + newRemainingMilliseconds)
-   remainingMilliseconds = newRemainingMilliseconds
-  } while (remainingMilliseconds > 0)
-  warn(`Main thread hang finished at iteration ${iteration}.`)
- }
- const warn = (...data) => conditionalLog(0, data, "warn")
- const debug = (...data) => conditionalLog(0, data, "debug")
- const openLog = (verbosity, ...data) => conditionalLog(verbosity, data, "group")
- const closeLog = verbosity => { log(verbosity, ""); conditionalLog(verbosity, [], "groupEnd") }
- const toCharms = x => (x = Math.ceil(x.toString(2).length / 6)) + " charm" + (x !== 1 ? "s" : "")
- const serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1)
- const logMeasure = (verbosity, measure, unit, columnWidth = 0) => {
-  if (!["bigint", "number"].includes(typeof measure))
-   throw new TypeError(`Logging a measure requires a bigint or number (got ${typeof measure}.`)
-  let measureIntegerString, measureString
-  const isBigInt = typeof measure === "bigint"
-  const measureInteger = isBigInt ? measure : Math.trunc(measure)
-  if (isBigInt || measureInteger === measure) {
-   measureIntegerString = measureString = measureInteger.toLocaleString()
-  } else {
-   measureIntegerString = measureInteger.toLocaleString().split(".")[0]
-   measureString = measureIntegerString + "." + (measure - measureInteger).toString().slice(2)
-  }
-  if (measureIntegerString.length > columnWidth) throw new RangeError(`Cannot fit ${measureIntegerString.length} characters into a ${columnWidth}-character column (while logging measure "${measureString} ${unit}").`)
-  if (measureString.length > columnWidth) measureString = measureString.slice(0, columnWidth)
-  else if (measureString.includes(".")) measureString = measureString.padEnd(columnWidth, "0")
-  else measureString = measureString.padStart(columnWidth, " ")
-  log(verbosity, "| " + measureString + " " + unit + " |")
- }
- const scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`)
- const btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), ""))
- const logStringSize = (verbosity, string) => {
-  string = string.toString()
-  const n = encoder.encode(string).length
-  const bits = Math.ceil(n * 8)
-  const col1Width = bits.toLocaleString().length
-  const utf16Unit = "| ECMA-262 string indices "
-  const col2Width = utf16Unit.length
-  log(verbosity, "| Quantity".padEnd(col1Width + 3) + "| Unit Name   ".padEnd(col2Width) + "| Radix | Abbr. | Format |")
-  log(verbosity, "|-".padEnd(col1Width + 3, "-") + "|".padEnd(col2Width, "-") + "|-------|-------|--------|")
-  logMeasure(verbosity, n / 2 ** 20, "| mebibytes".padEnd(col2Width) + "| 2²⁰   | MiB   | UTF-8 ", col1Width)
-  logMeasure(verbosity + 4, n / 10 ** 6, "| megabytes".padEnd(col2Width) + "| 10⁶   | MB    | UTF-8 ", col1Width)
-  logMeasure(verbosity + 4, n / 2 ** 10, "| kibibytes".padEnd(col2Width) + "| 2¹⁰   | KiB   | UTF-8 ", col1Width)
-  logMeasure(verbosity + 4, n / 10 ** 3, "| kilobytes".padEnd(col2Width) + "| 10³   | KB    | UTF-8 ", col1Width)
-  logMeasure(verbosity + 1, [...string].length, "| Unicode code points".padEnd(col2Width) + "| ----- | UCP   | UTF-32", col1Width)
-  logMeasure(verbosity + 4, string.length, utf16Unit + "| ----- | chars | UTF-16", col1Width)
-  logMeasure(verbosity + 1, n, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
-  logMeasure(verbosity + 3, Math.ceil((n * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
-  logMeasure(verbosity + 2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
- }
- const conditionalLog = (verbosity, data, method) => !production && verbosity <= root.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data))
+function boot(_) {
+
  class SourceMappedFile {
   static radix = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
   static sourcePositionMarkPatternRegister = /@[a-z-]+@/g
@@ -142,7 +66,7 @@ function boot(root) {
   packAndMap(url) {
    const sourceFile = this
    const script = sourceFile.lines.join("\n")
-   return root.mapping === "1"
+   return _.mapping === "1"
     ? script +
     `
 //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url
@@ -267,6 +191,7 @@ function boot(root) {
   static maxSegmentLength = 250
   static defaultFilename = 'index.html'
   static pathSegmentRadix = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0'
+  static maxSegmentCardinality = (64n ** 251n - 64n) / 63n
   static segmentToRouteID(segment) {
    let binaryValue = "0b0"
    let binaryOffset = "0b0"
@@ -320,11 +245,11 @@ function boot(root) {
   #singletonRouteID
   #taskRouteIDs
   constructor(url, base) {
-   url ??= `https://${root.defaultHost}/${root.defaultSingletonSegment}/`
+   url ??= `https://${_.defaultHost}/${_.defaultSingletonSegment}/`
    this.#url = new URL(url, base)
    if (!(this.#url.host in desktop.themes)) {
     this.#url.port &&= ''
-    this.#url.host = root.defaultHost
+    this.#url.host = _.defaultHost
    }
    this.pathname = this.#url.pathname
   }
@@ -338,13 +263,13 @@ function boot(root) {
   get hostname() { return this.#url.hostname }
   set hostname(value) {
    if (!(value in desktop.themes))
-    value = root.defaultHost
+    value = _.defaultHost
    this.#url.hostname = value
   }
   get host() { return this.#url.host }
   set host(value) {
    if (!(value in desktop.themes))
-    value = root.defaultHost
+    value = _.defaultHost
    this.#url.host = value
   }
   get origin() { return this.#url.origin }
@@ -374,9 +299,8 @@ function boot(root) {
     this.#routeIDs.push(routeID)
     return true
    })
-   if (!this.#segments.length || this.#routeIDs[0] >= root.cardinality) {
-    this.#routeIDs[0] = BigInt(Route.defaultSingletonRouteID)
-    this.#segments[0] = root.defaultSingletonSegment
+   if (!this.#segments.length || this.#routeIDs[0] >= _.cardinality) {
+    this.#routeIDs[0] = BigInt(Route.segmentToRouteID(this.#segments[0] = _.defaultSingletonSegment))
     warn(new RangeError('Encountered out-of-range aperiodic routeID while setting pathname of Route.'), { route: this, pathname })
    }
    this.#path = `/${this.#segments.join("/")}${this.#segments.length ? "/" : ""}`
@@ -408,306 +332,365 @@ function boot(root) {
   toJSON() { return this.#url.toJSON() }
   toString() { return this.#url.toString() }
  }
- Route.defaultSingletonRouteID ??= Route.segmentToRouteID(root.defaultSingletonSegment)
- Route.maxSegmentCardinality ??= (64n ** 251n - 64n) / 63n
- openLog(0, `Booting Operating System (${root.local ? "local" : "cloud"})`)
+
+ const
+  environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : process?.argv[1]?.split("/").pop() !== "build.js" ? "server" : (
+   globalThis.$ = (f => x => f(x).toString().trim())(require("child_process").execSync),
+   process.env.VERCEL && !process.env.__VERCEL_DEV_RUNNING ? (
+    _.local = false,
+    _.branch = process.env.VERCEL_GIT_COMMIT_REF,
+    _.gitSHA = process.env.VERCEL_GIT_COMMIT_SHA,
+    _.version = process.env.VERCEL_GIT_COMMIT_MESSAGE.split("\n")[0]
+   ) : (
+    _.local = true,
+    _.branch = $("git branch --show-current").toString().trim(),
+    _.gitSHA = $("git rev-parse HEAD").toString().trim(),
+    _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)($("git log -1 --pretty=%s").toString().trim().split("."), _.change)
+   ),
+   "build"
+  ),
+  production = !_.local && _.branch === "main",
+  log = (verbosity, ...data) => logAny(verbosity, data, "log"),
+  warn = (...data) => logAny(0, data, "warn"),
+  debug = (...data) => logAny(0, data, "debug"),
+  logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
+  openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
+  closeLog = verbosity => logAny(verbosity, [], "groupEnd"),
+  closeLogSpaced = verbosity => (log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
+  toCharms = x => (x = Math.ceil(x.toString(2).length / 6)) + " charm" + (x !== 1 ? "s" : ""),
+  serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
+  scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
+  btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
+  logEntropy = (verbosity, ...parts) => {
+   openLog(verbosity, "\x1b[32m\x1b[1mDomain Entropy\x1b[0m")
+   log(verbosity, `| Display Name                          | Entropy       | Cardinality   |`)
+   log(verbosity, `|---------------------------------------|---------------|---------------|`)
+   parts.forEach(part => log(1, `| ${(part.title ?? part.host).padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(13, " ")} |`))
+   closeLogSpaced(verbosity)
+  },
+  logStringSize = (verbosity, string) => {
+   openLog(verbosity, "\x1b[32m\x1b[1mString Size\x1b[0m")
+   string = string.toString()
+   const n = new TextEncoder().encode(string).length
+   const bits = Math.ceil(n * 8)
+   const col1Width = bits.toLocaleString().length
+   const utf16Unit = "| ECMA-262 string indices "
+   const col2Width = utf16Unit.length
+   const logRow = (secondaryVerbosity, measure, unit, columnWidth = 0) => {
+    if (!["bigint", "number"].includes(typeof measure))
+     throw new TypeError(`Logging a measure requires a bigint or number (got ${typeof measure}.`)
+    let measureIntegerString, measureString
+    const isBigInt = typeof measure === "bigint"
+    const measureInteger = isBigInt ? measure : Math.trunc(measure)
+    if (isBigInt || measureInteger === measure) {
+     measureIntegerString = measureString = measureInteger.toLocaleString()
+    } else {
+     measureIntegerString = measureInteger.toLocaleString().split(".")[0]
+     measureString = measureIntegerString + "." + (measure - measureInteger).toString().slice(2)
+    }
+    if (measureIntegerString.length > columnWidth) throw new RangeError(`Cannot fit ${measureIntegerString.length} characters into a ${columnWidth}-character column (while logging measure "${measureString} ${unit}").`)
+    if (measureString.length > columnWidth) measureString = measureString.slice(0, columnWidth)
+    else if (measureString.includes(".")) measureString = measureString.padEnd(columnWidth, "0")
+    else measureString = measureString.padStart(columnWidth, " ")
+    log(verbosity + secondaryVerbosity, "| " + measureString + " " + unit + " |")
+   }
+   log(verbosity, "| Quantity".padEnd(col1Width + 3) + "| Unit Name   ".padEnd(col2Width) + "| Radix | Abbr. | Format |")
+   log(verbosity, "|-".padEnd(col1Width + 3, "-") + "|".padEnd(col2Width, "-") + "|-------|-------|--------|")
+   logRow(0, n / 2 ** 20, "| mebibytes".padEnd(col2Width) + "| 2²⁰   | MiB   | UTF-8 ", col1Width)
+   logRow(4, n / 10 ** 6, "| megabytes".padEnd(col2Width) + "| 10⁶   | MB    | UTF-8 ", col1Width)
+   logRow(4, n / 2 ** 10, "| kibibytes".padEnd(col2Width) + "| 2¹⁰   | KiB   | UTF-8 ", col1Width)
+   logRow(4, n / 10 ** 3, "| kilobytes".padEnd(col2Width) + "| 10³   | KB    | UTF-8 ", col1Width)
+   logRow(1, [...string].length, "| Unicode code points".padEnd(col2Width) + "| ----- | UCP   | UTF-32", col1Width)
+   logRow(4, string.length, utf16Unit + "| ----- | chars | UTF-16", col1Width)
+   logRow(1, n, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
+   logRow(3, Math.ceil((n * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
+   logRow(2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
+   closeLogSpaced(verbosity)
+  }
+
+ openLog(0, `\x1b[33m\n     ▌ ▘     ▘▘   \x1b[0m\x1b[32m${_.branch}\x1b[0m\x1b[33m\n \x1b[0m\x1b[36m𝒌 = \x1b[0m\x1b[33m▙▘▌▛▘█▌ ▌▌   \x1b[0m\x1b[32m${_.version}\x1b[0m\x1b[33m\n     ▛▖▌▌ ▙▖ ▌▌   \x1b[0m\x1b[32m${_.local ? "local" : "cloud"}\x1b[0m\x1b[33m\n            ▙▌    \x1b[0m\x1b[32m${environment}\x1b[0m\x1b[33m\n\n\x1b[0m\x1b[32m\x1b[1mBooting O/S\x1b[0m`)
  if (environment === "build") {
   const { extname } = require("path"),
    { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs")
-  pack_domains: {
-   log(0, `Version ${root.branch}/${root.version}`)
-   openLog(1, "Packing Repository")
-   log(2, "This recursive process makes the project portable by packing a shallow clone of the git repository into a valid ECMA-262 file.")
-   let fileCount = 0, domainCount = 0
-   function readRecursive(host, folderPath, part) {
-    if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
-    if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
-    const filenames = []
-    for (const itemName of readFolder(folderPath)) {
-     if (!host && ["api", ".git"].includes(itemName)) continue
-     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
-     if (itemExists(filePath)) {
-      try {
-       if (!$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
-       log(2, `\x1b[38;5;27m/\x1b[38;5;239m${itemName} ignored\x1b[0m`)
-      } catch {
-       const stats = getItemStats(filePath)
-       if (stats.isDirectory()) {
-        openLog(2, `\x1b[38;5;27m/\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
-        readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
-        closeLog(2)
-       } else if (stats.isFile()) filenames.push([itemName, filePath])
-      }
+  openLog(1, "\x1b[32m\x1b[1mScanning Repository\x1b[0m")
+  let fileCount = 0, domainCount = 0
+  function readRecursive(host, folderPath, part) {
+   if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
+   if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
+   const filenames = []
+   for (const itemName of readFolder(folderPath)) {
+    if (!host && ["api", ".git"].includes(itemName)) continue
+    const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
+    if (itemExists(filePath)) {
+     try {
+      if (!$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
+      log(2, `\x1b[38;5;239m${itemName} ignored\x1b[0m`)
+     } catch {
+      const stats = getItemStats(filePath)
+      if (stats.isDirectory()) {
+       openLog(2, `\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
+       readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
+       closeLog(2)
+      } else if (stats.isFile()) filenames.push([itemName, filePath])
      }
     }
-    for (const [filename, filePath] of filenames) {
-     const extension = extname(filePath)
-     const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
-     log(2, `\x1b[38;5;28m/\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
-     part[filename] = content
-     fileCount++
-    }
-    domainCount++
    }
-   readRecursive("", "./", root)
-   log(2, `The process succeeded. It packed ${fileCount} files across ${domainCount} domains (including the dns-root and all top-level domains).`)
-   closeLog(1)
-  }
- }
- const preHydrationArchive = serialize(root)
- Object.defineProperties(root, {
-  fps: { value: 1, configurable: true, writable: true },
-  meanFrameTime: { value: 1000, configurable: true, writable: true },
- })
- function getPartFromDomains(domains) {
-  return domains.reduceRight((currentFolder, name, index) => {
-   if (!currentFolder[name])
-    throw new ReferenceError(`There is no folder called '${name}' in ${[...domains].slice(index + 1).reverse().join("/")} (trying to create ${domains.join(".")}).`)
-   return currentFolder[name]
-  }, root)
- }
- openLog(3, "Recursive Domain Hydration")
- function recursiveDistributeHydration(part = root, domains = []) {
-  let host
-  if (typeof part === "string") {
-   if (domains.length) throw 'unexpected domains'
-   host = part
-   domains = host.split(".")
-   part = getPartFromDomains(domains)
-  } else host = domains.join(".")
-  if (part.host)
-   return part
-  openLog(2, `\x1b[38;5;27m"\x1b[38;5;75m${host}\x1b[38;5;27m"\x1b[0m`)
-  const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
-  const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
-  const pathToRepo = new Array(domains.length).fill("..").join("/")
-  const pathFromRepo = [...domains].reverse().join("/")
-  Object.defineProperties(part, {
-   manifest: { value: JSON.parse(part["part.json"] ?? "{}"), configurable: true, writable: true },
-   host: { value: host },
-   subdomains: { value: subdomains },
-   filenames: { value: filenames },
-   length: { value: subdomains.length },
-   domains: { value: domains }
-  })
-  const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
-  const prototype = typename ? recursiveDistributeHydration(typename ?? "part.core.parts") : null
-  if (prototype) {
-   Object.setPrototypeOf(part.manifest, prototype.manifest)
-   Object.setPrototypeOf(part, prototype)
-   Object.defineProperty(part, "prototype", { value: prototype })
-  }
-  const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
-  const buildSource = sourceFile.addSource(pathToRepo + "/build.js", boot.toString())
-  class Property {
-   static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
-   static ids = new Set()
-   // static addConstants(targetFile) {
-   //  const filename = "const-class.js"
-   //  const pathPrefix = targetFile === sourceFile ? "" : targetFile.pathToRepo + "/" + pathFromRepo + "/"
-   //  const path = pathPrefix + filename
-   //  const body = part[filename]
-   //  if (body) targetFile.addSection(body, targetFile.addSource(path, body), 0, 0, " ")
-   // }
-   static collectConstants(targetPart, targetProperty) {
-    if (targetPart === part) {
-     if (targetProperty.content === "") {
-      targetProperty.content = "// Do nothing."
-      targetProperty.lines = [targetProperty.content]
-      return
-     }
-    }
-    prototype?.Property.collectConstants(targetPart, targetProperty)
-    function collectOwnConstants(FILENAME) {
-     if (!filenames.includes(FILENAME)) return
-     const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
-     const path = pathPrefix + FILENAME
-     const body = part[FILENAME]
-     const lines = body.split("\n")
-     for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
-    }
-    collectOwnConstants("const-method.js")
-    if (targetProperty.isGetOrSet) collectOwnConstants("const-get-or-set.js")
-    if (targetProperty.isView) collectOwnConstants("const-view.js")
+   for (const [filename, filePath] of filenames) {
+    const extension = extname(filePath)
+    const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
+    log(2, `\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
+    part[filename] = content
+    fileCount++
    }
-   constructor(PROPERTY_ID) {
-    const property = Property[PROPERTY_ID] = this
-    property.id = PROPERTY_ID
-    property.filename = `${PROPERTY_ID}.js`
-    property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
-    property.isAlias = PROPERTY_ID.startsWith("alias-")
-    property.isView = PROPERTY_ID.startsWith("view-")
-    property.isAsync = PROPERTY_ID.startsWith("async-")
-    property.isSymbol = PROPERTY_ID.startsWith("symbol-")
-    property.isGetOrSet = PROPERTY_ID.startsWith("get-") || PROPERTY_ID.startsWith("set-")
-    property.niceName = (() => {
-     if (PROPERTY_ID.includes("-")) {
-      if (property.isSymbol)
-       return `[Symbol.${PROPERTY_ID.slice(7)}]`
-      if (PROPERTY_ID.includes(".")) {
-       if (property.isGetOrSet)
-        return `["${PROPERTY_ID.slice(4)}"]`
-      }
-      let temp = PROPERTY_ID.split("-")
-      let firstWordBecomesLastWord = temp.shift()
-      if (property.isGetOrSet || property.isAlias) firstWordBecomesLastWord = temp.shift()
-      temp.push(firstWordBecomesLastWord)
-      return temp.map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join("")
-     }
-     return PROPERTY_ID
-    })()
-    property.MethodConstant = class MethodConstant {
-     static all = {}
-     static unused = {}
-     used = false
-     requirements = []
-     constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
-      const constant = this
-      constant.path = SOURCE_PATH
-      constant.line = SOURCE_LINE
-      constant.lineNumber = SOURCE_LINE_NUMBER
-      constant.source = sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
-      if (!SOURCE_LINE.startsWith("const ")) throw "invalid const line: " + SOURCE_LINE
-      constant.equalsIndex = SOURCE_LINE.indexOf("=")
-      constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
-      if (constant.identifier in property.MethodConstant.all) throw "Duplicate definition of constant " + constant.identifier + " (" + host + ")."
-      for (const previousConstantIdentifier in property.MethodConstant.unused) {
-       const previousConstant = property.MethodConstant.unused[previousConstantIdentifier]
-       if (previousConstant.usageRegExp.test(SOURCE_LINE)) constant.requirements.push(property.MethodConstant.unused[previousConstantIdentifier])
-      }
-      property.MethodConstant.all[constant.identifier] = constant
-      property.MethodConstant.unused[constant.identifier] = constant
-      constant.usageRegExp = new RegExp(`(?:^|[^.])\\b${constant.identifier}\\b`)
-      for (const methodBodyLine of property.lines) if (constant.usageRegExp.test(methodBodyLine)) constant.ensureDeclarationAndDependencies()
-     }
-     ensureDeclarationAndDependencies() {
-      const constant = this
-      if (constant.used) return
-      for (const requiredConstant of constant.requirements) requiredConstant.ensureDeclarationAndDependencies()
-      sourceFile.addSection(constant.line, constant.source, constant.lineNumber, 0, "   ")
-      constant.used = true
-      delete property.MethodConstant.unused[constant.identifier]
-     }
-    }
-    property.MethodConstant.all.PROPERTY_ID = property.MethodConstant.unused.PROPERTY_ID = {
-     identifier: "PROPERTY_ID",
-     usageRegExp: /(?:^|[^.])\bPROPERTY_ID\b/g,
-     ensureDeclarationAndDependencies() {
-      const constant = this
-      sourceFile.addLine(`@method-i-d-literal@  const PROPERTY_ID = "${PROPERTY_ID}"`, buildSource)
-      constant.used = true
-     },
-    }
-    if (typeof property.content !== "string") return
-    property.source = sourceFile.addSource(property.filename, property.content)
-    property.lines = property.content ? property.content.split("\n") : []
-    property.hasValidPropertyName = property.isSymbol || property.isGetOrSet || Property.identifierPattern.test(property.niceName)
-    property.propertyReference = property.hasValidPropertyName ? property.niceName : `["${property.niceName}"]`
-    property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
-    property.argumentString = "(" + (part.manifest[PROPERTY_ID]?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
-    property.modifiers = property.isAsync ? "async " : (property.isGetOrSet ? PROPERTY_ID.slice(0, 3) + " " : (property.isAlias ? "get " : ""))
-    property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGetOrSet || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
-    sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
-    Property.collectConstants(part, property)
-    if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(6)}"]`, buildSource, null, null, "    ")
-    else sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
-    sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
-   }
+   domainCount++
   }
-  Object.defineProperties(part, {
-   Property: { value: Property, configurable: true, writable: true }
-  })
-  for (const fn of filenames) {
-   if (!fn.includes(".") && fn.includes("-")) {
-    Property.ids.add("alias-" + fn)
-   } else if (fn.endsWith(".js") && (fn.startsWith("get-") || fn.startsWith("set-") || fn.startsWith("view-")))
-    Property.ids.add(fn.slice(0, -3))
-  }
-  for (const methodID in part.manifest)
-   if (!["cardinality", "typename"].includes(methodID))
-    Property.ids.add(methodID)
+  readRecursive("", "./", _)
+  closeLogSpaced(1)
 
-  sourceFile.part = part
-  sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
-  for (const id of Property.ids) new Property(id)
-  sourceFile.addLine("@descriptor-map-close@})", buildSource)
-  const propertyDescriptorScript = sourceFile.packAndMap()
-  const propertyDescriptor = eval(propertyDescriptorScript)
-  Object.defineProperties(part, propertyDescriptor)
-  subdomains.forEach((subdomain, index) => {
-   const subpart = part[subdomain]
-   Object.defineProperties(subpart, {
-    index: { value: index },
-    "..": { value: part },
-   })
-   recursiveDistributeHydration(subpart, [subdomain, ...domains])
-   Object.defineProperty(part, index, { value: subpart })
-  })
-  // log(5, "Building...")
-  const buildSteps = []
-  let buildMethodOwner = part === root ? prototype : part
-  while (buildMethodOwner) {
-   if (Object.hasOwn(buildMethodOwner, "build"))
-    buildSteps.unshift(buildMethodOwner.build)
-   buildMethodOwner = buildMethodOwner.prototype
-  }
-  buildSteps.forEach(fn => fn.call(part))
-  if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
-   throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
-  log(10, `\x1b[38;5;39m𝑘\x1b[0m = \x1b[38;5;74m${scientific(part.cardinality)}\x1b[0m = \x1b[38;5;108m${toCharms(part.cardinality)}\x1b[0m = \x1b[38;5;153m${part.cardinality}\x1b[0m`);
-  if (!Object.hasOwn(part, "..")) { // The part was first hydrated as a prototype, not a subdomain.
-   const parentDomains = [...domains]
-   const subdomain = parentDomains.shift()
-   const parent = part === root ? null : getPartFromDomains(parentDomains)
-   Object.defineProperty(part, "..", { value: parent, configurable: true, writable: true })
-   if (part !== root)
-    Object.defineProperty(part, "index", {
-     value: (
-      part[".."].subdomains ?? Object.keys(part[".."]).filter(n => typeof part[n] === "object")
-     ).indexOf(subdomain),
-     configurable: true, writable: true
-    })
-  }
-  closeLog(2)
-  return part
+  openLog(2, "\x1b[32m\x1b[1mDomain Stats\x1b[0m")
+  log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
+  closeLogSpaced(2)
  }
- recursiveDistributeHydration()
- log(1, "Part hydration complete.")
- closeLog(3)
- if (environment === "build") {
-  const { writeFileSync: writeFile, existsSync: itemExists, statSync: getItemStats, mkdirSync: makeFolder, rmSync: removeFile } = require("fs")
-  if (root.local) {
-   const ver = root.version.split(".")
-   if (ver[0] && root.change === "major") {
-    ver[0]++; ver[1] = ver[2] = 0
-   } else if (root.change === "minor" || (!ver[0] && root.change === "major")) {
-    ver[1]++; ver[2] = 0
-   } else ver[2]++
-   root.version = ver.join(".")
-   root["README.md"] = root["README.md"].replace(/version-\d+\.\d+\.\d+/, `version-${root.version}`)
-   log(2, `Outputting the project README.md which has been modified to reflect the correct version number.\n`)
-   writeFile("README.md", root["README.md"])
+ Hydrate_Archive: {
+  const preHydrationArchive = serialize(_)
+  Object.defineProperties(_, {
+   fps: { value: 1, configurable: true, writable: true },
+   meanFrameTime: { value: 1000, configurable: true, writable: true },
+  })
+  function getPartFromDomains(domains) {
+   return domains.reduceRight((currentFolder, name, index) => {
+    if (!currentFolder[name])
+     throw new ReferenceError(`There is no folder called '${name}' in ${[...domains].slice(index + 1).reverse().join("/")} (trying to create ${domains.join(".")}).`)
+    return currentFolder[name]
+   }, _)
   }
-  if (!itemExists("api")) makeFolder("api")
-  else if (itemExists("api/service.js")) removeFile(`api/service.js`)
-  globalThis.outputJS = root["service.js"]
-  writeFile("api/service.js", outputJS)
-  log(2, `Saved the UTF-8 encoded ECMA-262 repository to "api/service.js".\n`)
-  openLog(1, "Size\n")
+  openLog(3, "\x1b[32m\x1b[1mHydrating Domains\x1b[0m")
+  function recursiveDistributeHydration(part = _, domains = []) {
+   let host
+   if (typeof part === "string") {
+    if (domains.length) throw 'unexpected domains'
+    host = part
+    domains = host.split(".")
+    part = getPartFromDomains(domains)
+   } else host = domains.join(".")
+   if (part.host) return part
+   openLog(2, `\x1b[38;5;27m"\x1b[38;5;75m${host}\x1b[38;5;27m"\x1b[0m`)
+   const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
+   const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
+   const pathToRepo = new Array(domains.length).fill("..").join("/")
+   const pathFromRepo = [...domains].reverse().join("/")
+   Object.defineProperties(part, {
+    manifest: { value: JSON.parse(part["part.json"] ?? "{}"), configurable: true, writable: true },
+    host: { value: host },
+    subdomains: { value: subdomains },
+    filenames: { value: filenames },
+    length: { value: subdomains.length },
+    domains: { value: domains }
+   })
+   const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
+   const prototype = typename ? recursiveDistributeHydration(typename ?? "part.core.parts") : null
+   if (prototype) {
+    Object.setPrototypeOf(part.manifest, prototype.manifest)
+    Object.setPrototypeOf(part, prototype)
+    Object.defineProperty(part, "prototype", { value: prototype })
+   }
+   const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
+   const buildSource = sourceFile.addSource(pathToRepo + "/build.js", boot.toString())
+   class Property {
+    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+    static ids = new Set()
+    static collectConstants(targetPart, targetProperty) {
+     if (targetPart === part) {
+      if (targetProperty.content === "") {
+       targetProperty.content = "// Do nothing."
+       targetProperty.lines = [targetProperty.content]
+       return
+      }
+     }
+     prototype?.Property.collectConstants(targetPart, targetProperty)
+     function collectOwnConstants(FILENAME) {
+      if (!filenames.includes(FILENAME)) return
+      const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
+      const path = pathPrefix + FILENAME
+      const body = part[FILENAME]
+      const lines = body.split("\n")
+      for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
+     }
+     collectOwnConstants("const-method.js")
+     if (targetProperty.isGetOrSet) collectOwnConstants("const-get-or-set.js")
+     if (targetProperty.isView) collectOwnConstants("const-view.js")
+    }
+    constructor(PROPERTY_ID) {
+     const property = Property[PROPERTY_ID] = this
+     property.id = PROPERTY_ID
+     property.filename = `${PROPERTY_ID}.js`
+     property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
+     property.isAlias = PROPERTY_ID.startsWith("alias-")
+     property.isView = PROPERTY_ID.startsWith("view-")
+     property.isAsync = PROPERTY_ID.startsWith("async-")
+     property.isSymbol = PROPERTY_ID.startsWith("symbol-")
+     property.isGetOrSet = PROPERTY_ID.startsWith("get-") || PROPERTY_ID.startsWith("set-")
+     property.niceName = (() => {
+      if (PROPERTY_ID.includes("-")) {
+       if (property.isSymbol)
+        return `[Symbol.${PROPERTY_ID.slice(7)}]`
+       if (PROPERTY_ID.includes(".")) {
+        if (property.isGetOrSet)
+         return `["${PROPERTY_ID.slice(4)}"]`
+       }
+       let temp = PROPERTY_ID.split("-")
+       let firstWordBecomesLastWord = temp.shift()
+       if (property.isGetOrSet || property.isAlias) firstWordBecomesLastWord = temp.shift()
+       temp.push(firstWordBecomesLastWord)
+       return temp.map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join("")
+      }
+      return PROPERTY_ID
+     })()
+     property.MethodConstant = class MethodConstant {
+      static all = {}
+      static unused = {}
+      used = false
+      requirements = []
+      constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
+       const constant = this
+       constant.path = SOURCE_PATH
+       constant.line = SOURCE_LINE
+       constant.lineNumber = SOURCE_LINE_NUMBER
+       constant.source = sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
+       if (!SOURCE_LINE.startsWith("const ")) throw "invalid const line: " + SOURCE_LINE
+       constant.equalsIndex = SOURCE_LINE.indexOf("=")
+       constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
+       if (constant.identifier in property.MethodConstant.all) throw "Duplicate definition of constant " + constant.identifier + " (" + host + ")."
+       for (const previousConstantIdentifier in property.MethodConstant.unused) {
+        const previousConstant = property.MethodConstant.unused[previousConstantIdentifier]
+        if (previousConstant.usageRegExp.test(SOURCE_LINE)) constant.requirements.push(property.MethodConstant.unused[previousConstantIdentifier])
+       }
+       property.MethodConstant.all[constant.identifier] = constant
+       property.MethodConstant.unused[constant.identifier] = constant
+       constant.usageRegExp = new RegExp(`(?:^|[^.])\\b${constant.identifier}\\b`)
+       for (const methodBodyLine of property.lines) if (constant.usageRegExp.test(methodBodyLine)) constant.ensureDeclarationAndDependencies()
+      }
+      ensureDeclarationAndDependencies() {
+       const constant = this
+       if (constant.used) return
+       for (const requiredConstant of constant.requirements) requiredConstant.ensureDeclarationAndDependencies()
+       sourceFile.addSection(constant.line, constant.source, constant.lineNumber, 0, "   ")
+       constant.used = true
+       delete property.MethodConstant.unused[constant.identifier]
+      }
+     }
+     property.MethodConstant.all.PROPERTY_ID = property.MethodConstant.unused.PROPERTY_ID = {
+      identifier: "PROPERTY_ID",
+      usageRegExp: /(?:^|[^.])\bPROPERTY_ID\b/g,
+      ensureDeclarationAndDependencies() {
+       const constant = this
+       sourceFile.addLine(`@method-i-d-literal@  const PROPERTY_ID = "${PROPERTY_ID}"`, buildSource)
+       constant.used = true
+      },
+     }
+     if (typeof property.content !== "string") return
+     property.source = sourceFile.addSource(property.filename, property.content)
+     property.lines = property.content ? property.content.split("\n") : []
+     property.hasValidPropertyName = property.isSymbol || property.isGetOrSet || Property.identifierPattern.test(property.niceName)
+     property.propertyReference = property.hasValidPropertyName ? property.niceName : `["${property.niceName}"]`
+     property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
+     property.argumentString = "(" + (part.manifest[PROPERTY_ID]?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
+     property.modifiers = property.isAsync ? "async " : (property.isGetOrSet ? PROPERTY_ID.slice(0, 3) + " " : (property.isAlias ? "get " : ""))
+     property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGetOrSet || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
+     sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
+     Property.collectConstants(part, property)
+     if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(6)}"]`, buildSource, null, null, "    ")
+     else sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
+     sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
+    }
+   }
+   Object.defineProperties(part, {
+    Property: { value: Property, configurable: true, writable: true }
+   })
+   for (const fn of filenames) {
+    if (!fn.includes(".") && fn.includes("-")) {
+     Property.ids.add("alias-" + fn)
+    } else if (fn.endsWith(".js") && (fn.startsWith("get-") || fn.startsWith("set-") || fn.startsWith("view-")))
+     Property.ids.add(fn.slice(0, -3))
+   }
+   for (const methodID in part.manifest)
+    if (!["cardinality", "typename"].includes(methodID))
+     Property.ids.add(methodID)
+
+   sourceFile.part = part
+   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
+   for (const id of Property.ids) new Property(id)
+   sourceFile.addLine("@descriptor-map-close@})", buildSource)
+   const propertyDescriptorScript = sourceFile.packAndMap()
+   const propertyDescriptor = eval(propertyDescriptorScript)
+   Object.defineProperties(part, propertyDescriptor)
+   subdomains.forEach((subdomain, index) => {
+    const subpart = part[subdomain]
+    Object.defineProperties(subpart, {
+     index: { value: index },
+     "..": { value: part },
+    })
+    recursiveDistributeHydration(subpart, [subdomain, ...domains])
+    Object.defineProperty(part, index, { value: subpart })
+   })
+   Build: {
+    const buildSteps = []
+    let buildMethodOwner = part === _ ? prototype : part
+    while (buildMethodOwner) {
+     if (Object.hasOwn(buildMethodOwner, "build"))
+      buildSteps.unshift(buildMethodOwner.build)
+     buildMethodOwner = buildMethodOwner.prototype
+    }
+    buildSteps.forEach(fn => fn.call(part))
+   }
+   if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
+    throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
+   log(10, `\x1b[38;5;39m𝑘\x1b[0m = \x1b[38;5;74m${scientific(part.cardinality)}\x1b[0m = \x1b[38;5;108m${toCharms(part.cardinality)}\x1b[0m = \x1b[38;5;153m${part.cardinality}\x1b[0m`);
+   if (!Object.hasOwn(part, "..")) { // The part was first hydrated as a prototype, not a subdomain.
+    const parentDomains = [...domains]
+    const subdomain = parentDomains.shift()
+    const parent = part === _ ? null : getPartFromDomains(parentDomains)
+    Object.defineProperty(part, "..", { value: parent, configurable: true, writable: true })
+    if (part !== _)
+     Object.defineProperty(part, "index", {
+      value: (
+       part[".."].subdomains ?? Object.keys(part[".."]).filter(n => typeof part[n] === "object")
+      ).indexOf(subdomain),
+      configurable: true, writable: true
+     })
+   }
+   closeLog(2)
+   return part
+  }
+  recursiveDistributeHydration()
+  closeLogSpaced(3)
+ }
+
+ logEntropy(0, _, _.parts.user.task)
+
+ if (environment === "build") {
+  openLog(1, "\x1b[32m\x1b[1mWriting Output Files\x1b[0m")
+  const { writeFileSync: writeFile, existsSync: itemExists, statSync: getItemStats, mkdirSync: makeFolder, rmSync: removeFile } = require("fs")
+  if (_.local) {
+   const currentReadme = _["README.md"]
+   const updatedReadme = currentReadme.replace(/version-\d+\.\d+\.\d+/, `version-${_.version}`)
+   if (currentReadme !== updatedReadme) {
+    _["README.md"] = updatedReadme
+    writeFile("README.md", _["README.md"])
+    log(2, `./README.md (to update version number)`)
+   }
+   if (!itemExists("api")) makeFolder("api")
+   else if (itemExists("api/service.js")) removeFile(`api/service.js`)
+   globalThis.outputJS = _["service.js"]
+   writeFile("api/service.js", outputJS)
+   log(2, `./api/service.js`)
+   closeLogSpaced(1)
+  }
+
   logStringSize(0, outputJS)
-  closeLog(1)
-  openLog(1, "Entropy")
-  const u = root.cardinality
-  const v = root.parts.user.task.cardinality
-  log(0, "")
-  log(0, `| Domain     | Entropy       | Cardinality   |`)
-  log(0, `|------------|---------------|---------------|`)
-  log(0, `| Singleton  | ${toCharms(u).padEnd(13, " ")} | ${scientific(u).padEnd(13, " ")} |`)
-  log(0, `| Instanced  | ${toCharms(v).padEnd(13, " ")} | ${scientific(v).padEnd(13, " ")} |\n`)
-  closeLog(1)
  }
  desktop.modules.install()
- root.validate()
+ _.validate()
  log(0, "Boot successful.")
  closeLog(0)
 }

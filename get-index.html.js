@@ -14,7 +14,7 @@ const links =
  `<link rel="apple-touch-icon" href="${iconDataURI}"/>`
 
 const styles =
- `<style id="user-css">${root.parts.user["inline.css"]}</style>` +
+ `<style id="user-css">${_.parts.user["inline.css"]}</style>` +
  `<style id="era-css">${desktop.era["inline.css"]}</style>` +
  `<style id="color-css">${desktop.color["inline.css"]}</style>` +
  `<style id="theme-css">${desktop.theme["theme.css"]}</style>`
@@ -25,7 +25,7 @@ const title =
 const head =
  `<head>${title}${meta}${links}${styles}</head>`
 
-const debugHTML = root.debug ?
+const debugHTML = _.debug ?
  `<debug->` + (
   `<div><label for=debug-theme>Theme</label><select id=debug-theme>${desktop.themes.map(subpart =>
    `<option${subpart === desktop.theme ? ` selected` : ""}>${subpart.key}</option>`
@@ -39,7 +39,7 @@ const debugHTML = root.debug ?
   `<div><label for=debug-menu-clip>Menu Clip</label><select id=debug-menu-clip>${desktop.menu.map(subpart =>
    `<option${subpart === desktop.menu.arm ? ` selected` : ""}>${subpart.key}</option>`
   ).join("")}</select></div>` +
-  `<div><label for=debug-menu-frame>Menu Frame</label><select id=debug-menu-frame>${new Array(Number(desktop.menu.arm.cardinality)).fill(0).map((_, index) =>
+  `<div><label for=debug-menu-frame>Menu Frame</label><select id=debug-menu-frame>${new Array(Number(desktop.menu.arm.cardinality)).fill(0).map((__, index) =>
    `<option${BigInt(index) === desktop.menu.arm.routeID ? ` selected` : ""}>${index}</option>`
   ).join("")}</select></div>`
  ) +

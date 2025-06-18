@@ -1,5 +1,5 @@
-root.parts.user.agent.isMac = nav.userAgent.indexOf("Mac") > -1
-root.parts.user.agent.isSafari = /^((?!chrome|android).)*safari/i.test(nav.userAgent)
+_.parts.user.agent.isMac = nav.userAgent.indexOf("Mac") > -1
+_.parts.user.agent.isSafari = /^((?!chrome|android).)*safari/i.test(nav.userAgent)
 
 Object.defineProperties(globalThis, {
  element: {

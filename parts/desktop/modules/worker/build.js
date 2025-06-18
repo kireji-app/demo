@@ -7,6 +7,8 @@ if (globalThis.worker && globalThis.worker !== module)
   })
  }
 
+globalThis.worker = module
+
 Object.defineProperties(module, {
  environments: { value: ["window", "worker"], configurable: true, writable: true }
 })

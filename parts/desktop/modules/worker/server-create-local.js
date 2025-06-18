@@ -8,7 +8,7 @@ worker.controller = {
   if (desktop.theme?.key !== host)
    desktop.themes = desktop.themeHosts[host]
 
-  root.defaultHost = host
+  _.defaultHost = host
   globalThis.skipWaiting()
 
   globalThis.imparted = true
@@ -23,7 +23,7 @@ worker.controller = {
 
   replacement.postMessage({
    code: 'impart',
-   payload: desktop.theme?.host ?? root.defaultHost
+   payload: desktop.theme?.host ?? _.defaultHost
   })
  },
  setTheme: host => {
@@ -31,7 +31,7 @@ worker.controller = {
   if (desktop.theme?.key === host)
    return
 
-  root.defaultHost = host
+  _.defaultHost = host
   desktop.themes = desktop.themeHosts[host]
   const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)

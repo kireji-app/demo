@@ -1,13 +1,10 @@
-/** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
- * 
- * The serialized version should not include any values that are added *after* hydration. */
-declare const root: PartMix & {
+declare class PartDNSRoot extends PartMix {
  /** One of three strings representing the severity of the API change. Used to automatically compute the correct semantic version at build time. */
  readonly change: "major" | "minor" | "patch"
  /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
  readonly verbosity: number
  /** Whether or not this is a local build. */
- readonly local: boolean,
+ readonly local: boolean
  /** The git branch for this build version. */
  readonly branch: string
  /** The hash of the most recent git commit at build time. */
@@ -28,8 +25,6 @@ declare const root: PartMix & {
  readonly time: DOMHighResTimeStamp
  /** The average length of time each frame is on screen in milliseconds. */
  readonly meanFrameTime: number
- /** The root element for the user's live wallpaper. */
- readonly wallpaper: ShadowRoot
  /** The main CSS stylesheet for the user space. */
  readonly styleSheet: CSSStyleSheet
  /** The main taskbar element. */
@@ -78,22 +73,22 @@ declare const root: PartMix & {
   * 
   * Sets all of the client modules. Those modules will only initialize if we are in the window environment. */
  distributeInitializePart(): void
- /** Gets the nested toolbar's shadow root. */
- getNestedToolbar(): ShadowRoot
- /** Destroys the nested toolbar. */
- destroyNestedToolbar(): void
  /** Sets the configuration space to match the given Route object. */
  setRoute(ROUTE: Route): void
  /** The most recent route passed to setRoute. */
  readonly route: Route
 }
+/** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
+ * 
+ * The serialized version should not include any values that are added *after* hydration. */
+declare const _: PartDNSRoot
 /** A function which simplifies the process of deploying to four environments
  * (build, server, service worker, window) by giving them all the same
  * routing functions, virtual DOM and synchronous fetch method which can
  * produce both static assets and dynamically generated files.
  * 
  * It populates the global object and then boots the user configuration space. */
-declare function boot(root): void
+declare function boot(_): void
 /** The source code of the boot function, as an array of strings representing each line. */
 declare const sourceLines: string[]
 /** Data about the locator symbols marks that determine the source mappings for code originating as string literals. */
@@ -110,7 +105,7 @@ declare const script: string
  * The object is parsed from the file `part.json` (or `{}` if no file is found).
  * Its prototype is the prototype part's own partManifest or null, if it is the Core. */
 declare const partManifest: PartData
-/** The inverse of pathToRoot. The path "back up" to the repository/dns root from the directory containing the source code the part used. */
+/** The inverse of pathToRoot. The path "back up" to the repository root from the directory containing the source code the part used. */
 declare const pathToRepo: string
 /** All of the data collected about the source of each property added to the part during hydration. */
 declare const property: Property<PropertyEntry>
