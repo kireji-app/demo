@@ -73,17 +73,17 @@ Parts can have their state read from and written to as an integer. They can also
 
 A domain's records and source files define its behavior. Its subdomains define its subparts. Every domain can be a prototype for an extension domain so that all of its behaviors, assets and subparts are inherited by the extension without needing to add any records or files to the domain except for the file that specifies its prototype domain. Each of these things can then be overwritten by the extension domain by introducing correctly formatted source files, records and subdomains to the extension part.
 
-This gives domains a familiar [class inheritance](<https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)>) behavior.
+This gives domains a familiar [inheritance](<https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)>) behavior.
 
 The following parts are the most common prototypes:
 
 1. `"part.core.parts"` - The default prototype if none is given. This represents a part with no subparts. It has a cardinality of one. That one state maps to the integer value zero. It is the only part with no prototype object (at runtime, its prototype is `null`).
-1. `"mix.core.parts"` - A multiplicative function for handling independently mutable factors. It controls a set of subparts (called mix factors), all of which are enabled whenever the part itself is enabled. This acts like a tuple or an $`n`$-dimensional point selected from a cartesian product space whose dimensions are the mix factors.
+1. `"mix.core.parts"` - A multiplicative function for defining [independent](https://en.wikipedia.org/wiki/Dependent_and_independent_variables) [dimensions](https://en.wikipedia.org/wiki/Coordinate_line). It controls a set of subparts (called mix factors), all of which are enabled whenever the part itself is enabled. This acts like a [tuple](https://en.wikipedia.org/wiki/Tuple) or an $`n`$-dimensional point selected from a [cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) space whose dimensions are the mix factors.
 1. `"match.core.parts"` - An additive function for handling mutually exclusive options. Only one of its subparts (called match arms) can be enabled at a time, behaving like a single option selected from a set.
 
-The "mix and match" core parts perform the majority of the perfect hash arithmetic so that the rest of the domains can focus on their own responsibilities, like providing unique game logic or multimedia assets.
+The `"mix"` and `"match"` core parts perform the majority of the perfect hash arithmetic so that the rest of the domains can focus on their own responsibilities, like providing unique game logic or multimedia assets.
 
-Each part is responsible for inheriting or overriding its prototype part's cardinality - or the number of states that the part can be in - and this number is immutable for each part.
+Each part is responsible for inheriting or overriding its prototype part's [cardinality](https://en.wikipedia.org/wiki/Cardinality) and this number is [immutable](https://en.wikipedia.org/wiki/Immutable_characteristic) for each part.
 
 This forms a prototype tree whose root is `"part.core.parts"` and which contains all of the parts.
 
@@ -207,7 +207,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.33-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.34-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
