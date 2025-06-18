@@ -1,5 +1,5 @@
 return `
-<task-menu style="${desktop.menu.arm.styleAttr}" onclick=desktop.menu.go()>
+<task-menu style="${desktop.menu.arm.styleAttr}" onclick="_.parts.desktop.menu.go()">
  <sidebar- onclick="noop(event)">
  <ul id=theme-control>${desktop.themes.map(themePart => {
  return `
