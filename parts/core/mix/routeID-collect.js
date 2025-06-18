@@ -15,7 +15,6 @@ for (const changedFactor of CHANGED_FACTORS) {
   if (!reportsAtLeastOneEnabledFactor)
    reportsAtLeastOneEnabledFactor = true
 
-  console.trace(deltaMixRouteID, mix.host, changedFactor === _, [...mix.placeValues.keys()].map(part => part.host))
   deltaMixRouteID += changedFactor.deltaRouteID * mix.placeValues.get(changedFactor)
  } else {
 

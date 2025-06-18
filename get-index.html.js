@@ -14,7 +14,7 @@ const links =
  `<link rel="apple-touch-icon" href="${iconDataURI}"/>`
 
 const styles =
- `<style id="user-css">${_.parts.user["inline.css"]}</style>` +
+ `<style id="user-css">${_["inline.css"]}</style>` +
  `<style id="era-css">${desktop.era["inline.css"]}</style>` +
  `<style id="color-css">${desktop.color["inline.css"]}</style>` +
  `<style id="theme-css">${desktop.theme["theme.css"]}</style>`

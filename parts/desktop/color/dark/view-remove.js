@@ -1,2 +1,2 @@
-// _.parts.user.colorModeButton.setAttribute("data-state", part.stateData)
+// desktop.colorModeButton.setAttribute("data-state", part.stateData)
 debug('remove dark mode here')

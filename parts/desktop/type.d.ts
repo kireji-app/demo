@@ -9,9 +9,18 @@ declare class PartDesktop extends PartMix {
  readonly themes: Part[]
  /** The operating system theme.
   * 
-  * This selection is encoded by the host of the user route. */
+  * This selection is encoded by the host of the current route. */
  readonly theme: Part
  readonly themeHosts: Part
+
+ // Facets.
+ readonly gpu: PartGpu
+ readonly agent: PartAgent
+ readonly share: PartShare
+ readonly hotKeys: PartHotKeys
+ readonly hydration: PartHydration
+ readonly addressBar: PartAddressBar
+ readonly serviceWorker: PartServiceWorker
 }
 
 declare const desktop: PartDesktop

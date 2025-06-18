@@ -20,8 +20,8 @@ return `
   ...(_.local ? ["local"] : [])
  ].map(tag => `<span>${tag}</span>`).join("")}</span>
    </span>
-   ${color["control.html"]}
-   ${era["control.html"]}
+   ${desktop.color["control.html"]}
+   ${desktop.era["control.html"]}
   </section>
  </sidebar->
 </task-menu>`

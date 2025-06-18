@@ -1,4 +1,4 @@
 if (desktop.menu.closed.enabled)
  return ""
 
-return menu["menu.html"]
+return desktop.menu["menu.html"]

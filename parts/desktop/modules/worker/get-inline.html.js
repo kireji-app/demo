@@ -1,1 +1,0 @@
-return `<script${environment === "worker" ? ` src="/service.js!">` : `>({${worker.bootstrapAsync}}.bootstrapAsync())`}</script>`

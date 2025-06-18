@@ -11,10 +11,6 @@ declare class PartDNSRoot extends PartMix {
  readonly gitSHA: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string
- /** The single-cardinality mix of environment-specific modules.
-  * 
-  * Module content is not encoded in the user route but inferred from the available context. */
- readonly modules: PartModules
  /** The string of optional processes which are currently running on the operating system.
   * 
   * Task content is encoded by all segments appearing after the first segment in the user route pathname. */
@@ -43,8 +39,6 @@ declare class PartDNSRoot extends PartMix {
  readonly menuButton: HTMLButtonElement
  /** The fullscreen button element (if shown). */
  readonly fullscreenButton?: HTMLButtonElement
- /** The main menu part. */
- readonly menu: PartMenu
  /** The sidebar element within the menu. */
  readonly sidebar: HTMLDivElement
  /** A line containing the tags label and the tags themselves. */
@@ -71,7 +65,7 @@ declare class PartDNSRoot extends PartMix {
  readonly manifestLink: HTMLLinkElement
  /** Initializes the entire part hierarchy which handles mapping URIs to app state.
   * 
-  * Sets all of the client modules. Those modules will only initialize if we are in the window environment. */
+  * Sets all of the client facets. Those facets will only initialize if we are in the window environment. */
  distributeInitializePart(): void
  /** Sets the configuration space to match the given Route object. */
  setRoute(ROUTE: Route): void
@@ -87,9 +81,9 @@ declare const _: PartDNSRoot
  * routing functions, virtual DOM and synchronous fetch method which can
  * produce both static assets and dynamically generated files.
  * 
- * It populates the global object and then boots the user configuration space. */
-declare function boot(_): void
-/** The source code of the boot function, as an array of strings representing each line. */
+ * It creates a function scope in which all other .js files execute. It then boots the operating system. */
+declare function ƒ(_): void
+/** The source code of the ƒ function, as an array of strings representing each line. */
 declare const sourceLines: string[]
 /** Data about the locator symbols marks that determine the source mappings for code originating as string literals. */
 declare const sourcePositionMarks: object

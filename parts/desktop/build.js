@@ -1,5 +1,3 @@
-globalThis.desktop = part
-
 Object.defineProperties(desktop, {
  themes: { value: [] },
  themeHosts: { value: {} }

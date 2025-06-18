@@ -1,0 +1,6 @@
+{
+ "typename": "facet.core.parts",
+ "sync-fetch": [
+  "REQUEST_URL"
+ ]
+}

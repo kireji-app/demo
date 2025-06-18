@@ -1,2 +1,2 @@
-user.menuButton.before(desktop.menu.element)
+_.menuButton.before(desktop.menu.element)
 base()

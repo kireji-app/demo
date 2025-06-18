@@ -1,1 +1,1 @@
-desktop.color.styleElement.innerHTML = color["inline.css"]
+desktop.color.styleElement.innerHTML = desktop.color["inline.css"]

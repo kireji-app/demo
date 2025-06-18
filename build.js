@@ -1,4 +1,6 @@
-function boot(_) {
+function ƒ(_) {
+
+ globalThis._ = _
 
  class SourceMappedFile {
   static radix = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
@@ -335,7 +337,7 @@ function boot(_) {
 
  const
   environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : process?.argv[1]?.split("/").pop() !== "build.js" ? "server" : (
-   globalThis.$ = (f => x => f(x).toString().trim())(require("child_process").execSync),
+   Object.defineProperty(_, "$", { value: (f => x => f(x).toString().trim())(require("child_process").execSync) }),
    process.env.VERCEL && !process.env.__VERCEL_DEV_RUNNING ? (
     _.local = false,
     _.branch = process.env.VERCEL_GIT_COMMIT_REF,
@@ -343,9 +345,9 @@ function boot(_) {
     _.version = process.env.VERCEL_GIT_COMMIT_MESSAGE.split("\n")[0]
    ) : (
     _.local = true,
-    _.branch = $("git branch --show-current").toString().trim(),
-    _.gitSHA = $("git rev-parse HEAD").toString().trim(),
-    _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)($("git log -1 --pretty=%s").toString().trim().split("."), _.change)
+    _.branch = _.$("git branch --show-current").toString().trim(),
+    _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
+    _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change)
    ),
    "build"
   ),
@@ -353,6 +355,7 @@ function boot(_) {
   log = (verbosity, ...data) => logAny(verbosity, data, "log"),
   warn = (...data) => logAny(0, data, "warn"),
   debug = (...data) => logAny(0, data, "debug"),
+  error = (...data) => logAny(0, data, "error"),
   logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = verbosity => logAny(verbosity, [], "groupEnd"),
@@ -408,6 +411,7 @@ function boot(_) {
    closeLogSpaced(verbosity)
   }
 
+
  openLog(0, `\x1b[33m\n     ▌ ▘     ▘▘   \x1b[0m\x1b[32m${_.branch}\x1b[0m\x1b[33m\n \x1b[0m\x1b[36m𝒌 = \x1b[0m\x1b[33m▙▘▌▛▘█▌ ▌▌   \x1b[0m\x1b[32m${_.version}\x1b[0m\x1b[33m\n     ▛▖▌▌ ▙▖ ▌▌   \x1b[0m\x1b[32m${_.local ? "local" : "cloud"}\x1b[0m\x1b[33m\n            ▙▌    \x1b[0m\x1b[32m${environment}\x1b[0m\x1b[33m\n\n\x1b[0m\x1b[32m\x1b[1mBooting O/S\x1b[0m`)
  if (environment === "build") {
   const { extname } = require("path"),
@@ -423,7 +427,7 @@ function boot(_) {
     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
     if (itemExists(filePath)) {
      try {
-      if (!$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
+      if (!_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
       log(2, `\x1b[38;5;239m${itemName} ignored\x1b[0m`)
      } catch {
       const stats = getItemStats(filePath)
@@ -451,6 +455,11 @@ function boot(_) {
   log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
   closeLogSpaced(2)
  }
+
+ const desktop = _.parts.desktop, { service, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
+
+ if (environment === "window")
+  var element, noop, svg
  Hydrate_Archive: {
   const preHydrationArchive = serialize(_)
   Object.defineProperties(_, {
@@ -495,7 +504,7 @@ function boot(_) {
     Object.defineProperty(part, "prototype", { value: prototype })
    }
    const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
-   const buildSource = sourceFile.addSource(pathToRepo + "/build.js", boot.toString())
+   const buildSource = sourceFile.addSource(pathToRepo + "/build.js", ƒ.toString())
    class Property {
     static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
     static ids = new Set()
@@ -669,6 +678,7 @@ function boot(_) {
  logEntropy(0, _, _.parts.user.task)
 
  if (environment === "build") {
+  let outputJS
   openLog(1, "\x1b[32m\x1b[1mWriting Output Files\x1b[0m")
   const { writeFileSync: writeFile, existsSync: itemExists, statSync: getItemStats, mkdirSync: makeFolder, rmSync: removeFile } = require("fs")
   if (_.local) {
@@ -681,24 +691,29 @@ function boot(_) {
    }
    if (!itemExists("api")) makeFolder("api")
    else if (itemExists("api/service.js")) removeFile(`api/service.js`)
-   globalThis.outputJS = _["service.js"]
+   outputJS = _["service.js"]
    writeFile("api/service.js", outputJS)
    log(2, `./api/service.js`)
    closeLogSpaced(1)
   }
-
   logStringSize(0, outputJS)
  }
- desktop.modules.install()
- _.validate()
- log(0, "Boot successful.")
+
+ for (const subdomain of desktop.subdomains) {
+  if (desktop[subdomain].prototype.host === "facet.core.parts")
+   desktop[subdomain].install()
+ }
+
+ // _.validate()
+ log(0, "Boot completed.")
  closeLog(0)
+ log(1, "End of synchronous script execution.")
 }
 
-boot({
+ƒ({
  change: "patch",
  verbosity: "100",
  mapping: "0",
- defaultHost: "www.core.parts",
+ defaultHost: "www.ejaugust.com",
  defaultSingletonSegment: "hello-world"
 })

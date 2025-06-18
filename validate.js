@@ -20,6 +20,6 @@ closeLog(5)
 */
 
 openLog(5, "Reading index.html.")
-log(5, _["index.html"])
+// log(5, _["index.html"])
 closeLog(5)
 closeLog(5)

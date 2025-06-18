@@ -1,6 +1,0 @@
-{
- "typename": "module.desktop.parts",
- "sync-fetch": [
-  "REQUEST_URL"
- ]
-}

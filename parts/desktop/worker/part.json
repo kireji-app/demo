@@ -1,0 +1,6 @@
+{
+ "typename": "facet.core.parts",
+ "async-register": [],
+ "async-bootstrap": [],
+ "server-create-local": []
+}

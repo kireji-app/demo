@@ -1,6 +1,6 @@
 desktop.menu.element = document.querySelector("task-menu") ?? (() => {
  const offscreen = document.createElement("div")
- offscreen.innerHTML = menu["menu.html"]
+ offscreen.innerHTML = desktop.menu["menu.html"]
  return offscreen.querySelector("task-menu")
 })()
 

@@ -1,1 +1,1 @@
-desktop.era.styleElement.innerHTML = era["inline.css"]
+desktop.era.styleElement.innerHTML = desktop.era["inline.css"]

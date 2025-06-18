@@ -1,2 +1,2 @@
-// _.parts.user.colorModeButton.removeAttribute("data-state")
+// desktop.colorModeButton.removeAttribute("data-state")
 debug('remove light mode here')

@@ -28,6 +28,3 @@ declare class PartMenu extends PartMatch {
  /** The part dedicated to the currently selected menu clip. */
  readonly arm: Part
 }
-
-/** The task menu that lets users change the theme and access settings. */
-declare const menu: PartMenu
