@@ -8,5 +8,10 @@
    "source": "/api",
    "destination": "/api/service"
   }
- ]
+ ],
+ "git": {
+  "deploymentEnabled": {
+   "main": false
+  }
+ }
 }
