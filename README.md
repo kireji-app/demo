@@ -77,13 +77,13 @@ This gives domains a familiar [inheritance](<https://en.wikipedia.org/wiki/Inher
 
 The following parts are the most common prototypes:
 
-1. `"part.core.parts"` - The default prototype if none is given. This represents a part with no subparts. It has a cardinality of one. That one state maps to the integer value zero. It is the only part with no prototype object (at runtime, its prototype is `null`).
+1. `"part.core.parts"` - The default prototype if none is given. This represents a part with no subparts. It has a [cardinality](https://en.wikipedia.org/wiki/Cardinality) of one. That one state maps to the integer value zero. It is the only part with no prototype object (at runtime, its prototype is `null`).
 1. `"mix.core.parts"` - A multiplicative part that flattens each [independent](https://en.wikipedia.org/wiki/Dependent_and_independent_variables) subpart space into a [coordinate line](https://en.wikipedia.org/wiki/Coordinate_line), creating a [Euclidean](https://en.wikipedia.org/wiki/Euclidean_space) space that is the [cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) of those lines. This acts like a [tuple](https://en.wikipedia.org/wiki/Tuple) or an $`n`$-[dimensional](https://en.wikipedia.org/wiki/Dimension) point whose [coordinates](https://en.wikipedia.org/wiki/Cartesian_coordinate_system) are the mix factors.
 1. `"match.core.parts"` - An additive function that treats its subparts as [mutually exclusive](https://en.wikipedia.org/wiki/Mutual_exclusivity) options. It [partitions](https://en.wikipedia.org/wiki/Integer_partition) its own cardinality as the sum of each subpart cardinality. Only one of its subparts (called match arms) can be enabled at a time, behaving like a single option selected from a set.
 
-The `"mix"` and `"match"` core parts perform the majority of the perfect hash arithmetic so that the rest of the domains can focus on their own responsibilities, like providing unique game logic or multimedia assets.
+The `"mix"` and `"match"` core parts perform the majority of the perfect hash arithmetic so that the rest of the domains can [focus on their own responsibilities](https://en.wikipedia.org/wiki/Single-responsibility_principle), like providing unique game logic or multimedia assets.
 
-Each part is responsible for inheriting or overriding its prototype part's [cardinality](https://en.wikipedia.org/wiki/Cardinality) and this number is [immutable](https://en.wikipedia.org/wiki/Immutable_characteristic) for each part.
+Each part is responsible for inheriting or overriding its prototype part's cardinality and this number is [immutable](https://en.wikipedia.org/wiki/Immutable_characteristic) for each part.
 
 This forms a prototype tree whose root is `"part.core.parts"` and which contains all of the parts.
 
@@ -207,7 +207,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.35-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.36-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
