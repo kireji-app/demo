@@ -87,7 +87,7 @@ Each part is responsible for inheriting or overriding its prototype part's cardi
 
 This forms a prototype tree whose root is `"part.core.parts"` and which contains all of the parts.
 
-This is distinct from the [DNS root](https://en.wikipedia.org/wiki/DNS_root_zone), which this framework assigns the prototype `"mix.core.parts"` and which defines the entire user-configurable state space. The framework uses the empty string - `""` - as the domain name of the DNS root. The root part can be set by both an integer routeID like all other parts, or it can be assigned a URL via setRoute(). This is always the operating system's state is initialized for the first time, in all environments; using a default URI in `"build"`, using the request URI passed to any `"server"` or `"worker"` fetch; using `location.href` in the `"window"` environment.
+This is distinct from the [DNS root](https://en.wikipedia.org/wiki/DNS_root_zone), which this framework assigns the prototype `"mix.core.parts"` and which defines the entire user-configurable state space. The framework uses the empty string - `""` - as the domain name of the DNS root. The root part can be set by both an integer routeID like all other parts, or it can be assigned a URL via setRoute(). This is always how the operating system's state is initialized for the first time, in all environments; using a default URI in `"build"`, using the request URI passed to any `"server"` or `"worker"` fetch; using `location.href` in the `"window"` environment.
 
 #### State Propagation, Frame Rate and Address Bar Synchronizing
 
@@ -207,7 +207,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.37-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.38-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
