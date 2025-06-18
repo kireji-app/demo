@@ -6,7 +6,7 @@
 
 This project combines a [piecewise-defined](https://en.wikipedia.org/wiki/Piecewise_function) [minimal perfect hash function (MPHF)](https://en.wikipedia.org/wiki/Perfect_hash_function#Minimal_perfect_hash_function), the [Domain Name System (DNS)](https://en.wikipedia.org/wiki/Domain_Name_System) and a [reactive](https://en.wikipedia.org/wiki/Reactive_programming) [component-based](https://en.wikipedia.org/wiki/Component-based_software_engineering) [full-stack](https://en.wikipedia.org/wiki/Frontend_and_backend) [web framework](https://en.wikipedia.org/wiki/Web_framework) to build and deploy a single [source-mapped](https://en.wikipedia.org/wiki/source_mapping) file encoding a web-based [operating system](https://en.wikipedia.org/wiki/Operating_system).
 
-The O/S takes the form of a [multi-tenant](https://vercel.com/docs/multi-tenant), [front-controlled](https://en.wikipedia.org/wiki/Front_controller) [serverless function](https://vercel.com/docs/functions) that serves [static](https://en.wikipedia.org/wiki/Static_web_page) [single-page](https://en.wikipedia.org/wiki/Single-page_application) [progressive web applications (PWAs)](https://en.wikipedia.org/wiki/Progressive_web_app) accessible from many domains.
+The O/S takes the form of a [multi-tenant](https://vercel.com/docs/multi-tenant), [front-controlled](https://en.wikipedia.org/wiki/Front_controller) [cloud service](https://vercel.com/docs/functions) that serves [static](https://en.wikipedia.org/wiki/Static_web_page) [single-page](https://en.wikipedia.org/wiki/Single-page_application) [progressive web applications (PWAs)](https://en.wikipedia.org/wiki/Progressive_web_app) accessible from many domains.
 
 These PWAs benefit from [server-](https://en.wikipedia.org/wiki/Server-side_scripting#Server-side_rendering) and [client-side file rendering](https://www.patterns.dev/react/client-side-rendering/), [SEO](https://en.wikipedia.org/wiki/Search_engine_optimization) tools, [perfect entropy coding](https://en.wikipedia.org/wiki/Entropy_coding), and [exhaustive](https://en.wikipedia.org/wiki/Collectively_exhaustive_events) [deep linking](https://en.wikipedia.org/wiki/Deep_linking).
 
@@ -207,7 +207,7 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.38-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.39-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
