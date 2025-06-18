@@ -19,7 +19,6 @@ function ƒ(_) {
   }
   addSource(source, script) {
    const sourceFile = this
-   if (production) return
    let srcIndex = sourceFile.sources.indexOf(source)
    if (srcIndex === -1) {
     srcIndex = sourceFile.sources.length
@@ -46,7 +45,6 @@ function ƒ(_) {
     ogLn = sourceFile.marks[srcIndex][mark].ln
    }
    sourceFile.lines.push(indent + string)
-   if (production) return
    if (string && mapTokens) sourceFile.mappings.push([...string.matchAll(/\w+|\s+|\W+/g)].map(({ index: col }) => [indent.length + col, srcIndex, ogLn, ogCol + col]))
    else sourceFile.mappings.push([[indent.length, srcIndex, ogLn, ogCol]])
   }
@@ -356,7 +354,7 @@ function ƒ(_) {
   warn = (...data) => logAny(0, data, "warn"),
   debug = (...data) => logAny(0, data, "debug"),
   error = (...data) => logAny(0, data, "error"),
-  logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
+  logAny = (verbosity, data, method) => verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = verbosity => logAny(verbosity, [], "groupEnd"),
   closeLogSpaced = verbosity => (log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
@@ -365,14 +363,14 @@ function ƒ(_) {
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   logEntropy = (verbosity, ...parts) => {
-   openLog(verbosity, "\x1b[32m\x1b[1mDomain Entropy\x1b[0m")
+   openLog(verbosity, "Domain Entropy")
    log(verbosity, `| Display Name                          | Entropy       | Cardinality   |`)
    log(verbosity, `|---------------------------------------|---------------|---------------|`)
    parts.forEach(part => log(1, `| ${(part.title ?? part.host).padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(13, " ")} |`))
    closeLogSpaced(verbosity)
   },
   logStringSize = (verbosity, string) => {
-   openLog(verbosity, "\x1b[32m\x1b[1mString Size\x1b[0m")
+   openLog(verbosity, "String Size")
    string = string.toString()
    const n = new TextEncoder().encode(string).length
    const bits = Math.ceil(n * 8)
@@ -412,11 +410,11 @@ function ƒ(_) {
   }
 
 
- openLog(0, `\x1b[33m\n     ▌ ▘     ▘▘   \x1b[0m\x1b[32m${_.branch}\x1b[0m\x1b[33m\n \x1b[0m\x1b[36m𝒌 = \x1b[0m\x1b[33m▙▘▌▛▘█▌ ▌▌   \x1b[0m\x1b[32m${_.version}\x1b[0m\x1b[33m\n     ▛▖▌▌ ▙▖ ▌▌   \x1b[0m\x1b[32m${_.local ? "local" : "cloud"}\x1b[0m\x1b[33m\n            ▙▌    \x1b[0m\x1b[32m${environment}\x1b[0m\x1b[33m\n\n\x1b[0m\x1b[32m\x1b[1mBooting O/S\x1b[0m`)
+ openLog(0, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   ${_.local ? "local" : "cloud"}\n            ▙▌    ${environment}\n\nBooting O/S`)
  if (environment === "build") {
   const { extname } = require("path"),
    { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs")
-  openLog(1, "\x1b[32m\x1b[1mScanning Repository\x1b[0m")
+  openLog(1, "Scanning Repository")
   let fileCount = 0, domainCount = 0
   function readRecursive(host, folderPath, part) {
    if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
@@ -428,11 +426,11 @@ function ƒ(_) {
     if (itemExists(filePath)) {
      try {
       if (!_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
-      log(2, `\x1b[38;5;239m${itemName} ignored\x1b[0m`)
+      log(2, `📄 ${itemName.padEnd(20, " ")} ❌ ignored`)
      } catch {
       const stats = getItemStats(filePath)
       if (stats.isDirectory()) {
-       openLog(2, `\x1b[38;5;75m${itemName}\x1b[38;5;27m\x1b[0m`)
+       openLog(2, `📁 ${itemName}`)
        readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
        closeLog(2)
       } else if (stats.isFile()) filenames.push([itemName, filePath])
@@ -442,7 +440,7 @@ function ƒ(_) {
    for (const [filename, filePath] of filenames) {
     const extension = extname(filePath)
     const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
-    log(2, `\x1b[38;5;76m${filename}\x1b[38;5;28m"\x1b[0m`)
+    log(2, `📄 ${filename}"`)
     part[filename] = content
     fileCount++
    }
@@ -451,7 +449,7 @@ function ƒ(_) {
   readRecursive("", "./", _)
   closeLogSpaced(1)
 
-  openLog(2, "\x1b[32m\x1b[1mDomain Stats\x1b[0m")
+  openLog(2, "Domain Stats")
   log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
   closeLogSpaced(2)
  }
@@ -473,7 +471,7 @@ function ƒ(_) {
     return currentFolder[name]
    }, _)
   }
-  openLog(3, "\x1b[32m\x1b[1mHydrating Domains\x1b[0m")
+  openLog(3, "Hydrating Domains")
   function recursiveDistributeHydration(part = _, domains = []) {
    let host
    if (typeof part === "string") {
@@ -483,7 +481,7 @@ function ƒ(_) {
     part = getPartFromDomains(domains)
    } else host = domains.join(".")
    if (part.host) return part
-   openLog(2, `\x1b[38;5;27m"\x1b[38;5;75m${host}\x1b[38;5;27m"\x1b[0m`)
+   openLog(2, `"${host}"`)
    const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
    const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
    const pathToRepo = new Array(domains.length).fill("..").join("/")
@@ -654,7 +652,7 @@ function ƒ(_) {
    }
    if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
     throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
-   log(10, `\x1b[38;5;39m𝑘\x1b[0m = \x1b[38;5;74m${scientific(part.cardinality)}\x1b[0m = \x1b[38;5;108m${toCharms(part.cardinality)}\x1b[0m = \x1b[38;5;153m${part.cardinality}\x1b[0m`);
+   log(10, `𝑘 = ${scientific(part.cardinality)} = ${toCharms(part.cardinality)} = ${part.cardinality}`);
    if (!Object.hasOwn(part, "..")) { // The part was first hydrated as a prototype, not a subdomain.
     const parentDomains = [...domains]
     const subdomain = parentDomains.shift()
@@ -679,7 +677,7 @@ function ƒ(_) {
 
  if (environment === "build") {
   let outputJS
-  openLog(1, "\x1b[32m\x1b[1mWriting Output Files\x1b[0m")
+  openLog(1, "Writing Output Files")
   const { writeFileSync: writeFile, existsSync: itemExists, statSync: getItemStats, mkdirSync: makeFolder, rmSync: removeFile } = require("fs")
   if (_.local) {
    const currentReadme = _["README.md"]
@@ -695,18 +693,20 @@ function ƒ(_) {
    writeFile("api/service.js", outputJS)
    log(2, `./api/service.js`)
    closeLogSpaced(1)
-  }
+  } else outputJS = _["service.js"]
   logStringSize(0, outputJS)
  }
 
+ openLog(0, "Installing Facets")
  for (const subdomain of desktop.subdomains) {
   if (desktop[subdomain].prototype.host === "facet.core.parts")
    desktop[subdomain].install()
  }
+ closeLogSpaced(0)
 
  // _.validate()
  log(0, "Boot completed.")
- closeLog(0)
+ closeLogSpaced(0)
  log(1, "End of synchronous script execution.")
 }
 

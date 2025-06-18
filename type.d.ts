@@ -83,7 +83,7 @@ declare const _: PartDNSRoot
  * 
  * It creates a function scope in which all other .js files execute. It then boots the operating system. */
 declare function ƒ(_): void
-/** The source code of the ƒ function, as an array of strings representing each line. */
+/** The source code of the boot function, as an array of strings representing each line. */
 declare const sourceLines: string[]
 /** Data about the locator symbols marks that determine the source mappings for code originating as string literals. */
 declare const sourcePositionMarks: object

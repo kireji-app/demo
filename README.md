@@ -1,20 +1,25 @@
 <sup><i>I use my [profile repository to host my flagship project](https://github.com/EJAugust/EJAugust) so that I can feature this document on my profile without duplicating it. [More details.](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme)</i></sub>
 
-# A Static Client-Rendered DNS-based Operating System That Uses a Perfect Hash Tree to Provide Optimal Data Compression and a Permalink to Every Possible State
+# A Static Client-Rendered Operating System Where A Perfect Hash Tree of DNS-Mapped Components Provides Optimal Data Compression and a Permalink to Every Possible State
 
 <sup><i>Note: This is a living document. The project and this document have been in progress for many years and are constantly evolving. You may see typos or mistakes.</i></sub>
 
-This project combines a [piecewise-defined](https://en.wikipedia.org/wiki/Piecewise_function) [_minimal_ perfect hash function](https://en.wikipedia.org/wiki/Perfect_hash_function), the [Domain Name System](https://en.wikipedia.org/wiki/Domain_Name_System), a novel [operating system](https://en.wikipedia.org/wiki/Operating_system), and a [reactive](https://en.wikipedia.org/wiki/Reactive_programming) [component-based](https://en.wikipedia.org/wiki/Component-based_software_engineering) [full-stack](https://en.wikipedia.org/wiki/Frontend_and_backend) [framework](https://en.wikipedia.org/wiki/Web_framework).
+This project combines a [piecewise-defined](https://en.wikipedia.org/wiki/Piecewise_function) [minimal perfect hash function (MPHF)](https://en.wikipedia.org/wiki/Perfect_hash_function#Minimal_perfect_hash_function), the [Domain Name System](https://en.wikipedia.org/wiki/Domain_Name_System) and a [reactive](https://en.wikipedia.org/wiki/Reactive_programming) [component-based](https://en.wikipedia.org/wiki/Component-based_software_engineering) [full-stack](https://en.wikipedia.org/wiki/Frontend_and_backend) [framework](https://en.wikipedia.org/wiki/Web_framework) to deploy an [operating system](https://en.wikipedia.org/wiki/Operating_system).
 
-To end users, it is a [static](https://en.wikipedia.org/wiki/Static_web_page) [single-page](https://en.wikipedia.org/wiki/Single-page_application) [progressive web application](https://en.wikipedia.org/wiki/Progressive_web_app) with [server-](https://en.wikipedia.org/wiki/Server-side_scripting#Server-side_rendering) and [client-side file rendering](https://www.patterns.dev/react/client-side-rendering/) with powerful compression capabilities, search engine optimization and truly comprehensive routing (every possible operating system state has a [permalink](https://en.wikipedia.org/wiki/Permalink)/[deep link](https://en.wikipedia.org/wiki/Deep_linking) directly to it).
+It deploys a single [front-controlled](https://en.wikipedia.org/wiki/Front_controller) [serverless function](https://vercel.com/docs/functions) that serves [static](https://en.wikipedia.org/wiki/Static_web_page) [single-page](https://en.wikipedia.org/wiki/Single-page_application) [progressive web applications](https://en.wikipedia.org/wiki/Progressive_web_app) with [server-](https://en.wikipedia.org/wiki/Server-side_scripting#Server-side_rendering) and [client-side file rendering](https://www.patterns.dev/react/client-side-rendering/), [SEO](https://en.wikipedia.org/wiki/Search_engine_optimization) features, [perfect entropy coding](https://en.wikipedia.org/wiki/Entropy_coding), and [exhaustive](https://en.wikipedia.org/wiki/Collectively_exhaustive_events) [deep linking](https://en.wikipedia.org/wiki/Deep_linking).
 
-The project does not import any libraries. See below for [the motivation behind that decision](#vanilla-language-features).
+It provides a [permalink](https://en.wikipedia.org/wiki/Permalink) to all [ℵ₀](https://en.wikipedia.org/wiki/Aleph_number#Aleph-zero) points of its [configuration space](https://en.wikipedia.org/wiki/Configuration_space_(physics)), bounded in practice by [URI length limits](https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers) and [system resources](https://en.wikipedia.org/wiki/System_resource). 
+
+The project has one author and does not import any libraries. See below for [the motivation behind that decision](#vanilla-language-features).
 
 The project is currently in alpha. See below for [live demos](#live-demo-domains).
 
 ## Stateful Data Compression
+Users can share everything they create in the operating system. They aren't sharing individual files. Instead, they're sharing an exact operating system state.
 
-The use of a perfect hash function allows the app to encode its runtime state as a [URI](https://datatracker.ietf.org/doc/html/rfc3986):
+This does not involve databases, accounts/authentication, user tracking, user uploads, a content management system, or any other activity that would risk changing the state of the static backend.
+
+Instead, the entire state is stored in the user's address bar. The use of a perfect hash function allows the app to encode its entire runtime state as a [URI](https://datatracker.ietf.org/doc/html/rfc3986) with entropy-perfect encoding:
 
 ```
 ╭──────────────────────────/──────────────────────────────╮
@@ -92,7 +97,10 @@ The value in the address bar is the one most likely to be bookmarked or shared b
 
 ## Operating System
 
-An operating system concept is employed primarily to demonstrate the capabilities of the perfect hash function and secondarily to give users the ability to explore the entire architecture of my project in a familiar and intuitive way.
+An operating system concept is employed for three reasons:
+1. It demonstrates and stress-tests the perfect hash function
+1. It gives users the ability to explore the entire architecture of my project in a familiar and intuitive way.
+1. It is a milestone on the [roadmap](#roadmap) to a more complex application
 
 ### Tasks and Windows
 
@@ -195,22 +203,31 @@ Large multimedia assets can theoretically be served by pairing the system with a
 
 ## Roadmap
 
-[![version](https://img.shields.io/badge/version-0.115.29-silver)](https://github.com/EJAugust/EJAugust)
+[![version](https://img.shields.io/badge/version-0.115.30-silver)](https://github.com/EJAugust/EJAugust)
 [![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
 [![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)\
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A7WQ6V4)
 
-Version `1.0.0` is under development.
+Version `1.0.0` is under development. If I can complete the project, it will become a video game that is also [an integrated development environment](https://en.wikipedia.org/wiki/Integrated_development_environment) and [game engine](https://en.wikipedia.org/wiki/Game_engine) (allowing in-world authoring).
+
 |Phase|Status
 |-|-
 |**Framework and core functionality**|Completed
 |**CI/CD pipeline**|Completed
+|**LTS plan**|Completed
 |**Debug tools, docs**|In progress
+|**Transfinite state space**|In Progress
+|**Operating system**|In Progress
 |**Example applications**|In progress
-|**LTS plan**|In progress
+|**World Building**|In Progress
 |**Advanced DNS integration**|Planned
-|**Community-curated content**|Planned
+|**Community-owned content**|Planned
+|**Universal (self-editing) IDE (UIDE)**|Planned
+|**No-code UIDE**|Planned
+|**Gamified UIDE (GUIDE)**|Planned
+|**Cross-Version asset sharing**|Planned
+|**Immersive Game Campaign**|Planned
 
 ## Live Demo Domains
 

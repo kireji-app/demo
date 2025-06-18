@@ -1,4 +1,4 @@
-openLog(1, "\x1b[32m\x1b[1mTests\x1b[0m")
+openLog(1, "Tests")
 
 openLog(5, "Applying Default Route")
 const route = new Route()
