@@ -1,4 +1,6 @@
 {
+ "abstract": true,
+ "inherit": true,
  "build": [],
  "cardinality": "1",
  "symbol-iterator": [],

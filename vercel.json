@@ -1,12 +1,12 @@
 {
- "rewrites": [
+ "routes": [
   {
-   "source": "/(.*?)",
-   "destination": "/api/service"
+   "src": "/(.*)(?:\\.(.*)|[^/])$",
+   "status": 404
   },
   {
-   "source": "/api",
-   "destination": "/api/service"
+   "src": "/(.*)",
+   "dest": "/api/service"
   }
  ],
  "git": {

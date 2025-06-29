@@ -1,4 +1,5 @@
 {
+ "abstract": true,
  "typename": "part.core.parts",
  "cardinality": "0",
  "routeID-collect": [

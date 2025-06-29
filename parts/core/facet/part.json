@@ -1,4 +1,5 @@
 {
+ "abstract": true,
  "install": [],
  "sync-install": [],
  "async-install": [],

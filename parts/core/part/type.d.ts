@@ -25,6 +25,15 @@ declare class Part extends Iterable<Part> {
  readonly instancePath: string
  /** The subdomain name used to identify the part in its parent domain. */
  readonly key: string
+ /** The object created by parsing this part's "part.json" file. */
+ readonly manifest: {
+  /** Whether or not this part should be considered a subpart of its parent part (abstract = false) or an uninstancable prototype for other parts (abstract = true). */
+  readonly abstract?: boolean
+  /** Whether or not this part will be instanced (inherit = false) or retained (inherit = true) during the create step. */
+  readonly inherit?: boolean
+  /** A string representation of the BigInt value used as the starting point when calculating this part's cardinality during the build step. */
+  readonly cardinality: string
+ }
  /** The part's index in it's parent domain. */
  readonly index: number
  /** The number of subparts the part has. */

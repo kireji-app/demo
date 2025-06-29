@@ -1,5 +1,5 @@
 {
- "typename": "mix.core.parts",
+ "typename": "match.core.parts",
  "route-set": [
   "ROUTE"
  ],

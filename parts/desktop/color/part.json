@@ -1,4 +1,5 @@
 {
+ "inherit": true,
  "typename": "match.core.parts",
  "hex-rgb-from": [
   "HEX"
