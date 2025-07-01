@@ -1,7 +1,8 @@
 {
  "abstract": true,
- "inherit": true,
+ "singleton": true,
  "build": [],
+ "build-start": [],
  "cardinality": "1",
  "symbol-iterator": [],
  "routeID-set": [

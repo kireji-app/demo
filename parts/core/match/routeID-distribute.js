@@ -1,11 +1,13 @@
 match.updateRouteID(ROUTE_ID)
 
-for (let index = 0; index < match.length; index++) {
+const arms = [...match]
+
+for (let index = 0; index < arms.length; index++) {
  const nextIndex = index + 1
 
- if (nextIndex === match.length || ROUTE_ID < match.offsets.get(nextIndex)) {
+ if (nextIndex === arms.length || ROUTE_ID < match.offsets.get(arms[nextIndex])) {
   const oldArm = match.arm
-  const newArm = match[index]
+  const newArm = arms[index]
   const armRouteID = ROUTE_ID - match.offsets.get(newArm)
 
   if (oldArm !== newArm)

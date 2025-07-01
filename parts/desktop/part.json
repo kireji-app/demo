@@ -1,6 +1,5 @@
 {
  "typename": "mix.core.parts",
- "file": true,
  "theme-set": [
   "EVENT",
   "LINK"

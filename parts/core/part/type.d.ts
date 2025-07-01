@@ -9,10 +9,10 @@ declare class Part extends Iterable<Part> {
  map(MAP_FUNCTION: (subpart: Part, index: number, part: Part) => T): T[]
  /** The domain name used to identify the part whose code is currently executing. */
  readonly host: string
- /** The function which computes the cardinality of this part from its subparts.
-  * 
-  * This function takes in an existing cardinality and introduces a new subpart. It is ideal for using in a reduce function. */
- readonly count(COUNT, SUBPART, INDEX, SUBPARTS): bigint
+ /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
+ readonly build(COUNT, SUBPART, INDEX, SUBPARTS): bigint
+ /** Collects every build function in its prototype chain and then calls them all on itself. */
+ readonly startBuild(COUNT, SUBPART, INDEX, SUBPARTS): bigint
  /** The list of subdomains for the part whose source code is currently being evaluated. */
  readonly subdomains: string[]
  /** The list of static assets for the part whose source code is currently being evaluated. */
@@ -104,8 +104,6 @@ declare class Part extends Iterable<Part> {
    * instead of this value.  */
   fallback?: string | Response
  }): any | string | Response
- /** Sets the part's factory settings, subparts and cardinality. */
- distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: Function): void
  /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */
  setRouteID(ROUTE_ID: bigint): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.

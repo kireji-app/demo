@@ -6,9 +6,6 @@ declare class PartMix extends Part {
   * Used to speed up computation. */
  readonly placeValues: Map<Part, bigint>
 
- /** Sets the list of factors for the mix and computes place values.*/
- distributeInitializePart(PART_MANIFEST: object, CARDINALITY_CALLBACK: function): void
-
  /** Updates the mix's routeID and bubbles the update rootward. */
  collectRouteID(SUBPARTS: T[]): void
 

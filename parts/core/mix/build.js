@@ -1,16 +1,13 @@
 const placeValues = new Map()
 
+let cardinality = 1n
+
+for (const subpart of mix) {
+ placeValues.set(subpart, cardinality)
+ cardinality *= subpart.cardinality
+}
+
 Object.defineProperties(mix, {
  placeValues: { value: placeValues },
- cardinality: {
-  value: mix.subdomains.reduce((count, subdomain, index) => {
-   const subpart = mix[subdomain]
-
-   placeValues.set(subpart, count)
-   placeValues.set(index, count)
-   placeValues.set(subpart.key, count)
-
-   return count * subpart.cardinality
-  }, mix.cardinality)
- }
+ cardinality: { value: cardinality }
 })

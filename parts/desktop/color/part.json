@@ -1,5 +1,5 @@
 {
- "inherit": true,
+ "singleton": true,
  "typename": "match.core.parts",
  "hex-rgb-from": [
   "HEX"

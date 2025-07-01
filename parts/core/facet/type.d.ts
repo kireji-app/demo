@@ -20,7 +20,5 @@ declare class OSFacet extends Part {
  install?(): void
  /** Returns whether the given facet is supported. */
  checkSupport(): boolean
- /** Checks if the facet is supported using facet.checkSupport(). If it is, installs it. */
- distributeInitializePart(): void
 }
 declare const facet: OSFacet

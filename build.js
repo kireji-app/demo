@@ -354,20 +354,22 @@ function ƒ(_) {
   error = (...data) => logAny(0, data, "error"),
   logAny = (verbosity, data, method) => verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
-  closeLog = verbosity => logAny(verbosity, [], "groupEnd"),
-  closeLogSpaced = verbosity => (log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
+  closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   toCharms = x => (x = Math.ceil(x.toString(2).length / 6)) + " charm" + (x !== 1 ? "s" : ""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
-  scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
+  scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   logEntropy = (verbosity, ...parts) => {
+   if (verbosity > _.verbosity) return
    openLog(verbosity, "Domain Entropy")
-   log(verbosity, `| Display Name                          | Entropy       | Cardinality   |`)
-   log(verbosity, `|---------------------------------------|---------------|---------------|`)
-   parts.forEach(part => log(1, `| ${(part.title).padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(13, " ")} |`))
-   closeLogSpaced(verbosity)
+   log(verbosity, `| Display Name                          | Entropy       | Cardinality |`)
+   log(verbosity, `|---------------------------------------|---------------|-------------|`)
+   for (const part of parts)
+    log(verbosity, `| ${part.title.length > 37 ? part.title.slice(0, 34) + "..." : part.title.padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(11, " ")} |`)
+   closeLog(verbosity, true)
   },
   logStringSize = (verbosity, string) => {
+   if (verbosity > _.verbosity) return
    openLog(verbosity, "String Size")
    string = string.toString()
    const n = new TextEncoder().encode(string).length
@@ -404,15 +406,13 @@ function ƒ(_) {
    logRow(1, n, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
    logRow(3, Math.ceil((n * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
    logRow(2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
-   closeLogSpaced(verbosity)
+   closeLog(verbosity, true)
   },
   swap = (x, b = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0", V, O, i, Y, k, c, o, fl, ps) =>
    Array.isArray(x) ?
-
     `/` + (
      x.join("") === "0" ? "" : (x.map(f => f.map(y => { V = x = ""; Y = y; k = 0n; while (Y > 0n) { c = 2n ** (k * 6n); if (Y >= c) { Y -= c; k++ } else break } o = 0n; for (i = 0n; i < k; i++)o += 2n ** (i * 6n); V = (y - o).toString(2); fl = Number(k) * 6; ps = V.padStart(fl, "0"); for (i = 0; i < fl; i += 6)x += b[parseInt(ps.slice(i, i + 6), 2)]; return x }).join("~")).join("/")) + `/`
     ) :
-
     x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = b.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O))))
  openLog(0, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   ${_.local ? "local" : "cloud"}\n            ▙▌    ${environment}\n\nBooting O/S`)
  if (environment === "build") {
@@ -425,16 +425,16 @@ function ƒ(_) {
    if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
    const filenames = []
    for (const itemName of readFolder(folderPath)) {
-    if (!host && ["api", ".git"].includes(itemName)) continue
+    if (!host && (["api"].includes(itemName) || itemName.startsWith("."))) continue
     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
     if (itemExists(filePath)) {
      try {
       if (!_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
-      log(2, `📄 ${itemName.padEnd(20, " ")} ❌ ignored`)
+      log(2, `❌ ${itemName.padEnd(20, " ")} - ignored`)
      } catch {
       const stats = getItemStats(filePath)
       if (stats.isDirectory()) {
-       openLog(2, `📁 ${itemName}`)
+       openLog(2, `📦 ${itemName}/`)
        readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
        closeLog(2)
       } else if (stats.isFile()) filenames.push([itemName, filePath])
@@ -444,20 +444,21 @@ function ƒ(_) {
    for (const [filename, filePath] of filenames) {
     const extension = extname(filePath)
     const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
-    log(2, `📄 ${filename}"`)
+    // log(2, `${{ ".js": "🔧", "json": "⚙️", ".ts": "🧱", ".png": "🎨", ".gif": "🎨" }[extension] ?? "📄"} ${filename}`)
+    log(2, `📄 ${filename}`)
     part[filename] = content
     fileCount++
    }
    domainCount++
   }
   readRecursive("", "./", _)
-  closeLogSpaced(1)
-
+  closeLog(1, true)
   openLog(2, "Domain Stats")
   log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
-  closeLogSpaced(2)
+  closeLog(2, true)
  }
  const preHydrationArchive = serialize(_)
+ // These are scope variables for evaluated method bodies.
  const desktop = _.parts.desktop, { service, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
  if (environment === "window") var element, noop, svg
  Object.defineProperties(_, {
@@ -472,10 +473,10 @@ function ƒ(_) {
   }, _)
  }
  openLog(3, "Hydrating Domains")
- function recursiveDistributeHydration(part = _, domains = []) {
+ const instances = []
+ function recursiveDistributeHydration(part, domains = []) {
   let host
   if (typeof part === "string") {
-   if (domains.length) throw 'unexpected domains'
    host = part
    domains = host.split(".")
    part = getPartFromDomains(domains)
@@ -483,6 +484,7 @@ function ƒ(_) {
   if (part.host) return part
   openLog(2, `"${host}"`)
   const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
+  const subpartKeys = [...subdomains]
   const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
   const pathToRepo = new Array(domains.length).fill("..").join("/")
   const pathFromRepo = [...domains].reverse().join("/")
@@ -490,12 +492,13 @@ function ƒ(_) {
    manifest: { value: JSON.parse(part["part.json"] ?? "{}"), configurable: true, writable: true },
    host: { value: host },
    subdomains: { value: subdomains },
+   subpartKeys: { value: subpartKeys },
    filenames: { value: filenames },
-   length: { value: subdomains.length },
-   domains: { value: domains }
+   domains: { value: domains },
   })
   const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
   const prototype = typename ? recursiveDistributeHydration(typename ?? "part.core.parts") : null
+  const isAbstract = part.manifest.abstract
   if (prototype) {
    Object.setPrototypeOf(part.manifest, prototype.manifest)
    Object.setPrototypeOf(part, prototype)
@@ -612,7 +615,8 @@ function ƒ(_) {
    }
   }
   Object.defineProperties(part, {
-   Property: { value: Property, configurable: true, writable: true }
+   Property: { value: Property, configurable: true, writable: true },
+   isAbstract: { value: isAbstract }
   })
   for (const fn of filenames) {
    if (!fn.includes(".") && fn.includes("-")) {
@@ -621,9 +625,8 @@ function ƒ(_) {
     Property.ids.add(fn.slice(0, -3))
   }
   for (const methodID in part.manifest)
-   if (!["cardinality", "typename"].includes(methodID))
+   if (!["cardinality", "typename", "abstract", "singleton"].includes(methodID))
     Property.ids.add(methodID)
-
   sourceFile.part = part
   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
   for (const id of Property.ids) new Property(id)
@@ -631,78 +634,29 @@ function ƒ(_) {
   const propertyDescriptorScript = sourceFile.packAndMap()
   const propertyDescriptor = eval(propertyDescriptorScript)
   Object.defineProperties(part, propertyDescriptor)
-  subdomains.forEach((subdomain, index) => {
+  let subpartIndex = 0
+  for (const subdomain of subdomains) {
    const subpart = part[subdomain]
-   Object.defineProperties(subpart, {
-    index: { value: index },
-    "..": { value: part },
-   })
+   Object.defineProperty(subpart, "..", { value: part })
    recursiveDistributeHydration(subpart, [subdomain, ...domains])
-   Object.defineProperty(part, index, { value: subpart })
-  })
-  Build: {
-   const buildSteps = []
-   let buildMethodOwner = part === _ ? prototype : part
-   while (buildMethodOwner) {
-    if (Object.hasOwn(buildMethodOwner, "build"))
-     buildSteps.unshift(buildMethodOwner.build)
-    buildMethodOwner = buildMethodOwner.prototype
+   if (subpart.isAbstract) {
+    subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
+    continue
    }
-   buildSteps.forEach(fn => fn.call(part))
+   Object.defineProperty(part, subpartIndex++, { value: subpart })
   }
-  if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
-   throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
-  log(10, `𝑘 = ${scientific(part.cardinality)} = ${toCharms(part.cardinality)} = ${part.cardinality}`);
-  if (!Object.hasOwn(part, "..")) { // The part was first hydrated as a prototype, not a subdomain.
-   const parentDomains = [...domains]
-   const subdomain = parentDomains.shift()
-   const parent = part === _ ? null : getPartFromDomains(parentDomains)
-   Object.defineProperty(part, "..", { value: parent, configurable: true, writable: true })
-   if (part !== _)
-    Object.defineProperty(part, "index", {
-     value: (
-      part[".."].subdomains ?? Object.keys(part[".."]).filter(n => typeof part[n] === "object")
-     ).indexOf(subdomain),
-     configurable: true, writable: true
-    })
-  }
+  if (!isAbstract) instances.push(part)
   closeLog(2)
   return part
  }
- recursiveDistributeHydration()
- closeLogSpaced(3)
- logEntropy(0, _)
- if (environment === "build") {
-  let outputJS
-  openLog(1, "Writing Output Files")
-  const { writeFileSync: writeFile, existsSync: itemExists, statSync: getItemStats, mkdirSync: makeFolder, rmSync: removeFile } = require("fs")
-  if (_.local) {
-   const currentReadme = _["README.md"]
-   const updatedReadme = currentReadme.replace(/version-\d+\.\d+\.\d+/, `version-${_.version}`)
-   if (currentReadme !== updatedReadme) {
-    _["README.md"] = updatedReadme
-    writeFile("README.md", _["README.md"])
-    log(2, `./README.md (to update version number)`)
-   }
-   if (!itemExists("api")) makeFolder("api")
-   else if (itemExists("api/service.js")) removeFile(`api/service.js`)
-   outputJS = _["service.js"]
-   writeFile("api/service.js", outputJS)
-   log(2, `./api/service.js`)
-   closeLogSpaced(1)
-  } else outputJS = _["service.js"]
-  logStringSize(0, outputJS)
- }
- openLog(0, "Installing Facets")
- for (const subdomain of desktop.subdomains) {
-  if (desktop[subdomain].prototype.host === "facet.core.parts")
-   desktop[subdomain].install()
- }
- closeLogSpaced(0)
- // _.validate()
- log(0, "Boot completed.")
- closeLogSpaced(0)
- log(1, "End of synchronous script execution.")
+ recursiveDistributeHydration(_)
+ closeLog(3, true)
+ openLog(3, "Building Parts")
+ for (const part of instances) part.startBuild()
+ closeLog(3)
+ _.validate()
+ closeLog(0, true)
+ log(0, "Boot Completed (end of synchronous script execution).")
 }
 
 ƒ({

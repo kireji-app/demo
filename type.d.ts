@@ -63,10 +63,6 @@ declare class PartDNSRoot extends PartMix {
  readonly colorModeStyleSheet: CSSStyleSheet
  /** The link element for the web app manifest. */
  readonly manifestLink: HTMLLinkElement
- /** Initializes the entire part hierarchy which handles mapping URIs to app state.
-  * 
-  * Sets all of the client facets. Those facets will only initialize if we are in the window environment. */
- distributeInitializePart(): void
  /** Sets the configuration space to match the given Route object. */
  setRoute(ROUTE: Route): void
  /** The most recent route passed to setRoute. */

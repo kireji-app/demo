@@ -1,5 +1,5 @@
 {
- "inherit": true,
+ "singleton": true,
  "typename": "facet.core.parts",
  "performance-simulate-slow": [
   "DELAY_IN_MS = 0"

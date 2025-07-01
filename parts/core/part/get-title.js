@@ -1,1 +1,1 @@
-return part.key
+return `Untitled (${part.host})`

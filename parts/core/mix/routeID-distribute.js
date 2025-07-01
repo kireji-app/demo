@@ -1,8 +1,10 @@
 mix.updateRouteID(ROUTE_ID)
 
-for (let i = mix.length - 1; i >= 0; i--) {
- const placeValue = mix.placeValues.get(i)
- const factor = mix[i]
+const factors = [...mix]
+
+for (let i = factors.length - 1; i >= 0; i--) {
+ const factor = factors[i]
+ const placeValue = mix.placeValues.get(factor)
  const routeID = ROUTE_ID / placeValue
 
  if (factor.routeID !== routeID)

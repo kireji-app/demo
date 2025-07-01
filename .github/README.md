@@ -20,6 +20,7 @@
   All routes render to HTML on the server and are hydrated on the client. This dual-mode rendering ensures SEO compatibility and a fast first-paint experience.
 
 ## **How It Works**
+> For technical deep dives, see [Architecture](ARCHITECTURE.md), [Versioning](VERSIONING.md), and [Environment Model](ENVIRONMENTS.md).
 
 ### **Perfect Entropy Encoding**
 
@@ -31,7 +32,7 @@ Example:
 https://www.example.com/ghc3w_hi4-5g4w3/ab52fa-...
 ```
 
-This URL represents the full state of the application. When visited, it restores every component - down to its subparts - to its exact configuration at the time the link was created.
+This URL represents the full state of the application. When visited, it restores the hierarchy of parts to its exact configuration at the time the link was created.
 
 ### **Modeled DNS-Based Component Hierarchy**
 
@@ -105,5 +106,3 @@ Each of these domains is backed by the same framework and renders a different th
 ## **License and Attribution**
 
 <sub>© 2013–2025 Eric Augustinowicz. All Rights Reserved.</sub> <sub>This is a personal research project in active development. It is not production-ready. Please do not copy or redistribute this codebase or its methods. All content is considered prior art.</sub>
-
-> For technical deep dives, see [Architecture](ARCHITECTURE.md), [Versioning](VERSIONING.md), and [Environment Model](ENVIRONMENTS.md).

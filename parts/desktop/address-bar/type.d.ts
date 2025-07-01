@@ -10,8 +10,6 @@ declare class PartAddressBar extends OSFacet {
  readonly hostname: string
  /** The route object that was created from `location.href` when the address bar facet was first installed. */
  readonly route: Route
- /** Parses the given url (or the address bar itself) and uses it to instantiate factors. */
- distributeInitializePart(LOCATION?: URL): void
 }
 /** Represents a single point in the operating system's configuration space.
  * 
