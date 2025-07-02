@@ -1,5 +1,5 @@
 Object.defineProperties(desktop, {
- theme: { value: getPartFromDomains(_.defaultHost.split(".")), writable: true },
+ theme: { value: getPartFromDomains(_.themeHost.split(".")), writable: true },
  themes: { value: [] },
  themeHosts: { value: {} },
  wallpaper: { value: environment === "window" ? document.querySelector("wallpaper-") : null },

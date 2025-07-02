@@ -9,7 +9,7 @@ Object.defineProperty(worker, "controller", {
    if (desktop.theme?.key !== host)
     desktop.theme = desktop.themeHosts[host]
 
-   _.defaultHost = host
+   _.themeHost = host
    globalThis.skipWaiting()
   },
   resign() {
@@ -22,7 +22,7 @@ Object.defineProperty(worker, "controller", {
 
    replacement.postMessage({
     code: 'impart',
-    payload: desktop.theme?.host ?? _.defaultHost
+    payload: desktop.theme?.host ?? _.themeHost
    })
   },
   setTheme: host => {
@@ -30,7 +30,7 @@ Object.defineProperty(worker, "controller", {
    if (desktop.theme?.key === host)
     return
 
-   _.defaultHost = host
+   _.themeHost = host
    desktop.theme = desktop.themeHosts[host]
    const channel = new BroadcastChannel("theme-reload")
    channel.postMessage(1)

@@ -5,5 +5,3 @@ if (!facet.button) {
  offscreen.innerHTML = facet.render("inline.html")
  facet.button = offscreen.querySelector("#fullscreen-button")
 }
-
-document.addEventListener('fullscreenchange', () => document.fullscreenElement || (_.doKioskNavigation(_.pendingHost), delete _.pendingHost));

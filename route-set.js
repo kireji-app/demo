@@ -1,6 +1,6 @@
 const url = new URL(REQUEST_URL)
 const pathname = url.pathname
-const host = _.local ? _.defaultHost : url.host
+const host = _.local ? _.themeHost : url.host
 const themeDomains = host.split(".")
 _.routeIDs = swap(pathname)
 const rootRouteIDs = _.routeIDs[0]

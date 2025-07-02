@@ -25,10 +25,13 @@ wallpaper- :is(part-explorer, part-browser)>h2 {
  background-color: var(--bg-un-mode);
  line-height: var(--line-height);
  font-size: calc(var(--line-height) * 2 / 3);
+ white-space: pre;
+ text-overflow: ellipsis;
+ overflow: hidden;
 }
 
 width-handle {
- --handle-thickness: calc(var(--spacing) / 2);
+ --handle-thickness: calc(var(--spacing) / 1.5);
  position: absolute;
  left: calc(var(--explorer-width) - var(--handle-thickness) / 2);
  top: 0;
@@ -39,12 +42,17 @@ width-handle {
 }
 
 body.dragging {
- cursor: ew-resize;
+ cursor: ew-resize !important;
+}
+
+body.dragging * {
+ pointer-events: none;
 }
 
 width-handle:hover,
 body.dragging width-handle {
  background-color: var(--fg-mode-er);
+ cursor: ew-resize;
 }
 
 part-browser>h2 {
@@ -80,29 +88,26 @@ part-browser>h2>svg:hover {
 }
 
 part-explorer>details {
- flex: 1 1;
  overflow: hidden;
  width: fit-content;
  min-width: var(--explorer-width);
  padding-bottom: min(calc(var(--h) / 2), calc(var(--line-height) * 3));
 }
 
-wallpaper- details {
- display: flex;
- flex-flow: column;
+part-explorer details {
  margin: 0;
  padding: 0;
  /* border-left: 1px dashed var(--fg-mode-est); */
 }
 
-wallpaper- summary {
- color: var(--fg-mode-er);
- display: flex;
- padding: 0;
- gap: calc((var(--line-height) - var(--icon-size2)) / 2);
- flex: 0;
- font-weight: 500;
+part-explorer summary {
+ display: block;
+ height: var(--line-height);
  line-height: var(--line-height);
+ color: var(--fg-mode-er);
+ padding: 0;
+ white-space: pre;
+ font-weight: 500;
  cursor: pointer;
  position: relative;
 }
@@ -112,22 +117,22 @@ wallpaper- summary:hover {
  background-color: var(--bg-un-mode-er);
 }
 
+wallpaper- summary>.explore-toggle,
 wallpaper- summary>img,
-wallpaper- .explore-toggle,
-wallpaper- .spacer,
-wallpaper- summary>span>img {
+wallpaper- summary>span>img,
+wallpaper- summary>span,
+wallpaper- .spacer {
+ vertical-align: top;
+ display: inline-block;
+ line-height: var(--icon-size2);
  height: var(--icon-size2);
  width: var(--icon-size2);
  border-radius: calc(var(--icon-size2) * 0.4 / 3);
- top: calc((var(--line-height) - var(--icon-size2)) / 2);
-}
-
-wallpaper- summary>span {
+ margin: calc((var(--line-height) - var(--icon-size2)) / 2);
  position: relative;
 }
 
 wallpaper- .prototype-icon {
- display: none;
  height: calc(2 / 3 * var(--icon-size2));
  width: calc(2 / 3 * var(--icon-size2));
  border-radius: calc(var(--icon-size2) * 0.8 / 9);
@@ -136,7 +141,7 @@ wallpaper- .prototype-icon {
  bottom: 0;
 }
 
-wallpaper- .label {
+summary .label {
  padding-left: calc((var(--line-height) - var(--icon-size2)) / 2);
  padding-right: calc(var(--line-height) - var(--icon-size2));
 }

@@ -518,6 +518,5 @@ function ƒ(_) {
  change: "patch",
  verbosity: "100",
  mapping: "0",
- defaultHost: "www.ejaugust.com",
- defaultSingletonSegment: "hello-world"
+ themeHost: "www.ejaugust.com"
 })

@@ -68,7 +68,7 @@ declare class PartDNSRoot extends PartMix {
  /** The most recent routeID array parsed by setRoute. */
  readonly routeIDs: bigint[][]
  /** The default theme provider assigned to the operating system. */
- readonly defaultHost: string
+ readonly themeHost: string
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
