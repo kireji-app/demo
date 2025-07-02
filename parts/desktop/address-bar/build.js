@@ -1,0 +1,1 @@
+Object.defineProperty(addressBar, "timer", { value: undefined, writable: true })
