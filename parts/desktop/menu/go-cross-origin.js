@@ -1,5 +1,5 @@
 if (production) {
- location = HOST + PATHNAME
+ location = "https://" + HOST + location.pathname
  return
 }
 
