@@ -1,1 +1,1 @@
-return `<script${environment === "worker" ? ` src="/service.js">` : `>({${worker.bootstrapAsync}}.value())`}</script>`
+return `<script defer${environment === "worker" ? ` src="/service.js">` : `>({${worker.bootstrapAsync}}.value())`}</script>`

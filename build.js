@@ -205,7 +205,7 @@ function ƒ(_) {
   warn = (...data) => logAny(0, data, "warn"),
   debug = (...data) => logAny(0, data, "debug"),
   error = (...data) => logAny(0, data, "error"),
-  logAny = (verbosity, data, method) => verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
+  logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   toCharms = x => (x = Math.ceil(x.toString(2).length / 6)) + " charm" + (x !== 1 ? "s" : ""),
