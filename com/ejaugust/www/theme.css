@@ -4,19 +4,18 @@ wallpaper- {
  flex-flow: column;
 }
 
-wallpaper- footer,
 wallpaper- menu {
  display: flex;
  gap: var(--spacing);
- padding: var(--spacing);
  width: 100%;
- justify-content: center;
+ padding: 0;
  margin: 0;
+ justify-content: center;
 }
 
 wallpaper- header {
  background: var(--fg-un-accent);
- padding: 0 var(--padding);
+ padding: var(--spacing) var(--padding);
  flex: 0;
 }
 
@@ -24,19 +23,8 @@ wallpaper- .blog-title {
  font-weight: 800;
 }
 
-wallpaper- :is(h1, article, footer) {
- margin: 0;
- padding: var(--spacing);
-}
-
-wallpaper- footer p {
- margin: 0;
- padding: 0;
-}
-
 wallpaper- h1 {
  font-size: 2.2em;
- font-weight: 800;
 }
 
 wallpaper- article {
@@ -76,9 +64,9 @@ wallpaper- article a[target="_blank"]::after {
 }
 
 wallpaper- pre {
- border-left: 4px solid var(--fg);
- background-color: var(--bg-un-mode);
- color: var(--fg-mode);
+ border-left: 4px solid var(--fg-un-mode);
+ background-color: var(--fg-mode-est);
+ color: var(--fg-un-mode);
  padding: 15px;
  border-radius: 5px;
  white-space: pre-wrap;
@@ -86,6 +74,18 @@ wallpaper- pre {
  font-family: 'Courier New', Courier, monospace;
  line-height: 1.4;
  margin-bottom: 1.5em;
+}
+
+wallpaper- h1,
+wallpaper- h2,
+wallpaper- h3,
+wallpaper- h4,
+wallpaper- h5,
+wallpaper- h6 {
+ font-weight: 800;
+ color: var(--fg-un-mode-er);
+ line-height: 1.3;
+ margin: 0.75em 0;
 }
 
 /*
@@ -101,16 +101,6 @@ wallpaper- pre {
   align-items: center;
  }
 
- wallpaper- h1,
- wallpaper- h2,
- wallpaper- h3,
- wallpaper- h4,
- wallpaper- h5,
- wallpaper- h6 {
-  color: var(--fg-mode-er);
-  line-height: 1.3;
-  margin-bottom: 0.75em;
- }
 
  wallpaper- h1 {
   font-size: 2.5em;

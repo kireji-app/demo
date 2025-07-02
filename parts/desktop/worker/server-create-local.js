@@ -1,41 +1,43 @@
-worker.controller = {
- claim() {
-  debug('received claim message')
-  globalThis.clients.claim()
- },
- impart(host) {
-  debug('received impart message')
-  if (desktop.theme?.key !== host)
+Object.defineProperty(worker, "controller", {
+ value: {
+  claim() {
+   debug('received claim message')
+   globalThis.clients.claim()
+  },
+  impart(host) {
+   debug('received impart message')
+   if (desktop.theme?.key !== host)
+    desktop.theme = desktop.themeHosts[host]
+
+   _.defaultHost = host
+   globalThis.skipWaiting()
+  },
+  resign() {
+   if (interval)
+    clearInterval(interval)
+
+   const replacement = registration.installing
+
+   debug('received resign message. sending impart message', replacement)
+
+   replacement.postMessage({
+    code: 'impart',
+    payload: desktop.theme?.host ?? _.defaultHost
+   })
+  },
+  setTheme: host => {
+   debug('received setTheme message', host, desktop.theme?.key)
+   if (desktop.theme?.key === host)
+    return
+
+   _.defaultHost = host
    desktop.theme = desktop.themeHosts[host]
-
-  _.defaultHost = host
-  globalThis.skipWaiting()
- },
- resign() {
-  if (interval)
-   clearInterval(interval)
-
-  const replacement = registration.installing
-
-  debug('received resign message. sending impart message', replacement)
-
-  replacement.postMessage({
-   code: 'impart',
-   payload: desktop.theme?.host ?? _.defaultHost
-  })
- },
- setTheme: host => {
-  debug('received setTheme message', host, desktop.theme?.key)
-  if (desktop.theme?.key === host)
-   return
-
-  _.defaultHost = host
-  desktop.theme = desktop.themeHosts[host]
-  const channel = new BroadcastChannel("theme-reload")
-  channel.postMessage(1)
-  channel.close()
+   const channel = new BroadcastChannel("theme-reload")
+   channel.postMessage(1)
+   channel.close()
+  }
  }
-}
+})
 
 // TODO: Large files won't be inlined soon. Fetch or stream them into the cache first, them provide them.
 globalThis.onfetch = e => e.respondWith(service.fetchSync(e.request.url))

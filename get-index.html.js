@@ -20,7 +20,7 @@ const styles =
  `<style id="theme-css">${desktop.theme["theme.css"]}</style>`
 
 const title =
- `<title>${desktop.theme.title}</title>`
+ `<title>${desktop.theme.title ?? "Untitled App"}</title>`
 
 const head =
  `<head>${title}${meta}${links}${styles}</head>`

@@ -1,5 +1,7 @@
-hotKeys.shiftKeysDown = 0
-hotKeys.contextKeysDown = 0
+Object.defineProperties(hotKeys, {
+ shiftKeysDown: { value: 0 },
+ contextKeysDown: { value: 0 }
+})
 
 Object.defineProperties(globalThis, {
  onblur: {

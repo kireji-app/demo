@@ -6,7 +6,6 @@ wallpaper- {
  --line-height: 25px;
  --icon-size: inherit;
  --icon-size2: calc(var(--icon-size) * 2 / 3);
- position: relative;
 }
 
 part-explorer {
@@ -114,7 +113,7 @@ wallpaper- summary:hover {
 }
 
 wallpaper- summary>img,
-wallpaper- .handle,
+wallpaper- .explore-toggle,
 wallpaper- .spacer,
 wallpaper- summary>span>img {
  height: var(--icon-size2);

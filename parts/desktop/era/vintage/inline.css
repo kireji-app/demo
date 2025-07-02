@@ -97,7 +97,8 @@
 }
 
 body {
- --sidebar-height: 256px;
+ /* TODO: don't hard code domain and settings count here */
+ --sidebar-height: calc(((var(--icon-size) + (2px * 2)) * 8) + (26px * 3) + (3px * 2) + (4px * 2) + 2px);
  --spacing: 12px;
  --task-bar-height: 28px;
  --icon-size: var(--task-bar-height);

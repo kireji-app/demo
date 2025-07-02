@@ -1,5 +1,5 @@
 if (part.isAbstract)
- throw new Error(`You cannot set the route ID of an abstract part. (${part.host})`)
+ throw new Error(`You can't set the route ID of an abstract part. (${part.host})`)
 
 if (typeof ROUTE_ID !== "bigint" || ROUTE_ID < -1n)
  throw new Error(`Route ID is invalid. ` + part.host)
@@ -17,6 +17,6 @@ part.justDisabled = !part.enabled && part.wasEnabled
 part.deltaRouteID = part.routeID - part.previousRouteID
 
 if (part.deltaRouteID === 0n)
- throw new Error(`Reassigned route ID (${part.routeID}) to part.\n ${part[".."] ? `${part[".."].key} {\n  ${part.key} : "${part.host}" // <--- this part \n }` : part.host}`)
+ error(`Reassigned route ID (${part.routeID}) to part.\n ${part[".."] ? `${part[".."].key} {\n  ${part.key} : "${part.host}" // <--- this part \n }` : part.host}`)
 
 part.dirty = true

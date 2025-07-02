@@ -1,4 +1,4 @@
-openLog(5, `🛠️ Building ${part.title}.`)
+openLog(5, `🛠️ Building ${part.title ?? `Untitled (${part.host})`}.`)
 
 const buildMethodOwners = []
 

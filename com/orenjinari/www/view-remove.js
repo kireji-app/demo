@@ -1,2 +1,2 @@
 if (desktop.theme === orenjinari)
- removeEventListener("wheel", orenjinari.onwheel, { passive: "false" })
+ desktop.wallpaper.removeEventListener("wheel", orenjinari.onwheel, { passive: "false" })

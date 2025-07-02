@@ -11,7 +11,7 @@
  const [filename, search = ""] = OPTIONS.request.split("?")
 
  if (!filename)
-  throw part.host + " Render Error: cannot handle render request without a filename. " + serialize(OPTIONS)
+  throw part.host + " Render Error: can't handle render request without a filename. " + serialize(OPTIONS)
 
  // Some information is needed to handle encoding later.
  const { filetype, binary, extension } = new FileHeader(filename)
@@ -29,8 +29,8 @@
  if (search)
   warn("Render ignored params: " + OPTIONS.request)
 
- if (body === undefined || body === "undefined")
-  warn("undefined body", part.host, filename)
+ // if (body === undefined || body === "undefined")
+ //  warn("undefined body", part.host, filename)
 
  // Process the raw result into the requested format.
  if (OPTIONS.format === "raw")

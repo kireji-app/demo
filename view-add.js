@@ -5,7 +5,6 @@ if (!hydration.supported)
 
 Object.defineProperties(_, {
  manifestLink: { value: document.querySelector('link[rel="manifest"]') },
- wallpaper: { value: document.querySelector("wallpaper-") },
  taskbar: { value: document.querySelector("task-bar") },
  menuButton: { value: document.querySelector("menu-button") },
 })

@@ -217,8 +217,10 @@ function ƒ(_) {
    openLog(verbosity, "Domain Entropy")
    log(verbosity, `| Display Name                          | Entropy       | Cardinality |`)
    log(verbosity, `|---------------------------------------|---------------|-------------|`)
-   for (const part of parts)
-    log(verbosity, `| ${part.title.length > 37 ? part.title.slice(0, 34) + "..." : part.title.padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(11, " ")} |`)
+   for (const part of parts) {
+    const title = part.title ?? "Untitled - " + part.host
+    log(verbosity, `| ${title.length > 37 ? title.slice(0, 34) + "..." : title.padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(11, " ")} |`)
+   }
    closeLog(verbosity, true)
   },
   logStringSize = (verbosity, string) => {
@@ -242,7 +244,7 @@ function ƒ(_) {
      measureIntegerString = measureInteger.toLocaleString().split(".")[0]
      measureString = measureIntegerString + "." + (measure - measureInteger).toString().slice(2)
     }
-    if (measureIntegerString.length > columnWidth) throw new RangeError(`Cannot fit ${measureIntegerString.length} characters into a ${columnWidth}-character column (while logging measure "${measureString} ${unit}").`)
+    if (measureIntegerString.length > columnWidth) throw new RangeError(`Can't fit ${measureIntegerString.length} characters into a ${columnWidth}-character column (while logging measure "${measureString} ${unit}").`)
     if (measureString.length > columnWidth) measureString = measureString.slice(0, columnWidth)
     else if (measureString.includes(".")) measureString = measureString.padEnd(columnWidth, "0")
     else measureString = measureString.padStart(columnWidth, " ")

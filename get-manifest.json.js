@@ -1,8 +1,8 @@
 const src = desktop.theme.render({ request: "theme.png", format: "datauri" })
 
 return serialize({
- name: desktop.theme.title,
- short_name: desktop.theme.title,
+ name: desktop.theme.title ?? "Untitled App",
+ short_name: desktop.theme.title ?? "untitled",
  start_url: "/",
  display: "standalone",
  theme_color: desktop.color.accent,

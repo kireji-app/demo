@@ -11,17 +11,14 @@ return `wallpaper- {
   radial-gradient(ellipse 14.194vw 20.968vw at 94.327vw 5.053vw, white 99.5%, transparent 100%),
   /* url(${orenjinari.render({ request: "mockup.png", format: "datauri" })}) 0 0/100% auto, */
   #F8D2AC;
- display: flex;
- flex-flow: column;
- gap: var(--section-gap);
- padding-top: calc(var(--h) + var(--section-gap)) !important;
+ background-attachment: local;
+ overflow-y: scroll;
 }
 
 body.modern task-bar {
  background: transparent;
  box-shadow: none;
 }
-
 
 body.vintage sidebar-::after {
  content: "orenjinari";
@@ -59,9 +56,14 @@ wallpaper- #about {
 
 wallpaper- .placeholder {
  width: 100vw;
- height: var(--h);
+ height: calc(var(--h) - var(--task-bar-height));
  box-shadow: inset 0 0 0 8vw var(--fg-mode-er);
  position: relative;
+ margin-top: var(--section-gap);
+}
+
+wallpaper- .placeholder.bunny-about {
+ margin-top: calc(var(--h) + var(--section-gap));
 }
 
 wallpaper- .placeholder img {

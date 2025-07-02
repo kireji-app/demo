@@ -6,4 +6,4 @@ for (const subpart of ejaugust)
   dates.push(subpart.key)
 
 warn('ejaugust blog - this arm setup is a temporary band aid')
-date.arm = ejaugust[dates[2]]
+Object.defineProperty(date, "arm", { value: ejaugust[dates[2]] })

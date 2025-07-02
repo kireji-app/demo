@@ -1,1 +1,1 @@
-return desktop.color.arm === desktop.color.light ? desktop.color.fgLightEst : desktop.color.fgDarkEst
+return desktop.color.arm === desktop.color.light ? desktop.color.lightEstFg : desktop.color.darkEstFg

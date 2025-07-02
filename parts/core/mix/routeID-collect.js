@@ -10,7 +10,7 @@ for (const changedFactor of CHANGED_FACTORS) {
  if (changedFactor.enabled) {
 
   if (reportsAtLeastOneDisabledFactor)
-   throw new Error("Cannot enable some factors and disable others.")
+   throw new Error("Can't enable some factors and disable others.")
 
   if (!reportsAtLeastOneEnabledFactor)
    reportsAtLeastOneEnabledFactor = true
@@ -19,7 +19,7 @@ for (const changedFactor of CHANGED_FACTORS) {
  } else {
 
   if (reportsAtLeastOneEnabledFactor)
-   throw new Error("Cannot enable some factors and disable others.")
+   throw new Error("Can't enable some factors and disable others.")
 
   if (!reportsAtLeastOneDisabledFactor)
    reportsAtLeastOneDisabledFactor = true

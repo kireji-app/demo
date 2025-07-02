@@ -1,7 +1,7 @@
 return (
  "<header>" + (
   "<menu>" + (
-   "<span class=blog-title>" + blog.title + "</span>" +
+   "<span class=blog-title>" + (blog.title ?? "Untitled Note") + "</span>" +
    "<flex-spacer></flex-spacer>" +
    "<a target=_blank href=https://github.com/EJAugust>GitHub</a>" +
    "<a target=_blank href=https://github.com/sponsors/EJAugust>♡ Support</a>"
