@@ -1,10 +1,10 @@
 return `
 <task-menu style="${desktop.menu.arm.styleAttr}" onclick="_.parts.desktop.menu.go()">
- <sidebar- onclick="noop(event)">
+ <sidebar- onclick="_noop(event)">
  <ul id=theme-control>${desktop.themes.map(themePart => {
  return `
   <li class=task-link${themePart === desktop.theme ? ` data-here` : ""}>
-   <a href="https://${themePart.host}" onclick="_.setTheme(event, this)">
+   <a href="https://${themePart.host}" onclick="_.parts.desktop.theme.setTheme(event, this)">
     <img src="${themePart.render({ request: "theme.png", format: "datauri" })}" class=part-icon />
     <span class=label>${themePart.render("title")}</span>
    </a>

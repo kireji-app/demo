@@ -63,10 +63,12 @@ declare class PartDNSRoot extends PartMix {
  readonly colorModeStyleSheet: CSSStyleSheet
  /** The link element for the web app manifest. */
  readonly manifestLink: HTMLLinkElement
- /** Sets the configuration space to match the given Route object. */
- setRoute(ROUTE: Route): void
- /** The most recent route passed to setRoute. */
- readonly route: Route
+ /** Sets the configuration space to match the given request url string. */
+ setRoute(REQUEST_URL: string): void
+ /** The most recent routeID array parsed by setRoute. */
+ readonly routeIDs: bigint[][]
+ /** The default theme provider assigned to the operating system. */
+ readonly defaultHost: string
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
@@ -296,7 +298,12 @@ declare class MethodConstant {
   * are declared (added to the source file output). Marks the constant as used. */
  ensureDeclarationAndDependencies(): void;
 }
-/** The incoming Route object.
+/** The incoming request url string.
  * 
  * Available only in user.setRoute(). */
-declare const ROUTE: Route
+declare const REQUEST_URL: string
+/** Gets a part instance from the root, given its array of domain parts. */
+declare function getPartFromDomains(domains): Part
+/** Trades a string pathname for a routeIDs array or vice-versa. */
+declare function swap(input: string): bigint[][]
+declare function swap(input: bigint[][]): string

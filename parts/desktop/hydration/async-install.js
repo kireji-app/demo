@@ -23,7 +23,7 @@ await worker.promise
 
 */
 
-_.setRoute(addressBar.route)
+_.setRoute(location.href)
 document.body.removeAttribute("inert")
 facet.hydrated = true
 log(1, "Hydrated.")

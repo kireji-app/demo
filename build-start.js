@@ -20,3 +20,8 @@ for (const subpart of desktop)
  if (subpart.prototype.host === "facet.core.parts")
   subpart.install()
 closeLog(0, true)
+
+Object.defineProperties(_, {
+ routeIDs: { value: [[]], writable: true },
+ "..": { value: null }
+})

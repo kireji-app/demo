@@ -6,7 +6,7 @@ worker.controller = {
  impart(host) {
   debug('received impart message')
   if (desktop.theme?.key !== host)
-   desktop.themes = desktop.themeHosts[host]
+   desktop.theme = desktop.themeHosts[host]
 
   _.defaultHost = host
   globalThis.skipWaiting()
@@ -30,7 +30,7 @@ worker.controller = {
    return
 
   _.defaultHost = host
-  desktop.themes = desktop.themeHosts[host]
+  desktop.theme = desktop.themeHosts[host]
   const channel = new BroadcastChannel("theme-reload")
   channel.postMessage(1)
   channel.close()

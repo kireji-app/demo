@@ -2,7 +2,7 @@
 if (facet.supported) {
  openLog(1, facet.title)
  if (facet.isAsync) {
-  facet.promise = facet.installAsync().then(() => { log(2, `Facet "${facet.instancePath}" installed asynchronously.`), log(3, `${facet.title} install callback.`) })
+  facet.promise = facet.installAsync().then(() => { log(2, `${facet.title}: Facet installed asynchronously.`) })
   log(2, `Facet enqueued.`)
  } else {
   facet.installSync()

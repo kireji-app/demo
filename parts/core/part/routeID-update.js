@@ -1,3 +1,6 @@
+if (part.isAbstract)
+ throw new Error(`You cannot set the route ID of an abstract part. (${part.host})`)
+
 if (typeof ROUTE_ID !== "bigint" || ROUTE_ID < -1n)
  throw new Error(`Route ID is invalid. ` + part.host)
 

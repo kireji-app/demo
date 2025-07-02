@@ -1,7 +1,7 @@
 {
  "typename": "mix.core.parts",
  "route-set": [
-  "ROUTE"
+  "REQUEST_URL"
  ],
  "validate": []
 }

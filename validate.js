@@ -1,25 +1,16 @@
 openLog(1, "Tests")
 
-// openLog(5, "Applying Default Route")
-// const route = new Route()
-// log(5, "URI: " + route)
-// log(5, "Singleton RouteID: " + route.singletonRouteID)
-// _.setRoute(route)
-// closeLog(5)
+if (environment === "build") {
+ const testURL = "https://www.desktop.parts/hello/"
+ openLog(1, "Routing Test: " + testURL)
+ openLog(1, "Setting route.")
+ _.setRoute(testURL)
+ closeLog(1)
+ openLog(1, "Reading index.html.")
+ const result = _["index.html"]
+ // log(1, result)
+ closeLog(1)
+ closeLog(1)
+}
 
-/* Someday, users will be able to change domain files and then `serialize(_)` will need to reflect those changes.
-
- if (environment === "build") {
-  openLog(5, "Testing for hydration artifacts")
-  const postHydrationArchive = serialize(_)
-  if (preHydrationArchive.length !== postHydrationArchive.length)
-   throw new Error(`The second output file was not the same size as the first. Check for accidental parameters.\n\tUnhydrated Archive Length: ${preHydrationArchive.length}\n\tHydrated Archive Length: ${postHydrationArchive.length}`)
-  closeLog(5)
- }
- 
- openLog(5, "Reading index.html.")
- // log(5, _["index.html"])
- closeLog(5)
-
-*/
-closeLog(5)
+closeLog(1)

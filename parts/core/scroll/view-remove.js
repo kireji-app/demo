@@ -1,1 +1,0 @@
-removeEventListener("wheel", part.onwheel, { passive: "false" })

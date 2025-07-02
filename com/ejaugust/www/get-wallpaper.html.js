@@ -8,7 +8,7 @@ return (
   ) +
   "</menu>" +
   blog.date.arm["heading.html"] +
-  blog.date.arm["footer.html"]
+  blog.date.arm["credit.html"]
  ) +
  "</header>"
 ) + blog.date.arm["article.html"]

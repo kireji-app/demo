@@ -29,5 +29,5 @@ if (!𝓌.registration.active) {
 
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
-newScript.setAttribute("src", "/service.js!")
+newScript.setAttribute("src", "/service.js")
 oldScript.replaceWith(newScript)

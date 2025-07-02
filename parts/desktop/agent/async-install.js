@@ -3,10 +3,12 @@ agent.isSafari = /^((?!chrome|android).)*safari/i.test(nav.userAgent)
 
 element = (parentElement, tagname) => parentElement.appendChild(document.createElement(tagname))
 
-noop = event => {
- event.preventDefault()
- event.stopPropagation()
-}
+Object.defineProperty(_, "noop", {
+ value(event) {
+  event.preventDefault()
+  event.stopPropagation()
+ }
+})
 
 svg = (parentElement, ...paths) => {
  const result = parentElement.appendChild(document.createElementNS("http://www.w3.org/2000/svg", "svg"))

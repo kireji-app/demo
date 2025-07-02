@@ -1,1 +1,1 @@
-return environment === "worker" ? ' href="/manifest.json!"' : ""
+return environment === "worker" ? ' href="/manifest.json"' : ""

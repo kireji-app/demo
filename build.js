@@ -184,153 +184,6 @@ function ƒ(_) {
    }
   }
  }
- class Route {
-  static maxPathLength = 2000
-  static maxSegmentLength = 250
-  static defaultFilename = 'index.html'
-  static pathSegmentRadix = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0'
-  static maxSegmentCardinality = (64n ** 251n - 64n) / 63n
-  static segmentToRouteID(segment) {
-   let binaryValue = "0b0"
-   let binaryOffset = "0b0"
-   for (const character of segment) {
-    const index = Route.pathSegmentRadix.indexOf(character)
-    if (index === -1 || index >= 64) {
-     if ([".well-known", "favicon.ico"].includes(segment)) throw segment
-     warn("Route Error: segment included invalid character '" + character + "'. (" + segment + ")")
-     binaryValue = "0b0"
-     binaryOffset = "0b0"
-     break;
-    }
-    binaryValue += index.toString(2).padStart(6, 0)
-    binaryOffset += "000001"
-   }
-   return BigInt(binaryValue) + BigInt(binaryOffset) - 1n
-  }
-  static segmentFromRouteID(routeID) {
-   routeID++
-   let binaryValue = ""
-   let segment = ""
-   let tempRoute = routeID
-   let chunkCount = 0n
-   while (tempRoute > 0n) {
-    const chunkAddend = 2n ** (chunkCount * 6n)
-    if (tempRoute >= chunkAddend) {
-     tempRoute -= chunkAddend
-     chunkCount++
-    } else {
-     break
-    }
-   }
-   let offset = 0n
-   for (let i = 0n; i < chunkCount; i++)
-    offset += 2n ** (i * 6n)
-   binaryValue = (routeID - offset).toString(2)
-   const finalLength = Number(chunkCount) * 6
-   const paddedBinaryString = binaryValue.padStart(finalLength, '0')
-   for (let i = 0; i < finalLength; i += 6) {
-    const hexad = paddedBinaryString.slice(i, i + 6)
-    segment += Route.pathSegmentRadix[parseInt(hexad, 2)]
-   }
-   return segment
-  }
-  #filename
-  #segments
-  #routeIDs
-  #path
-  #mark
-  #header
-  #url
-  #singletonRouteID
-  #taskRouteIDs
-  constructor(url, base) {
-   url ??= `https://${_.defaultHost}/${_.defaultSingletonSegment}/`
-   this.#url = new URL(url, base)
-   if (!(this.#url.host in desktop.themes)) {
-    this.#url.port &&= ''
-    this.#url.host = _.defaultHost
-   }
-   this.pathname = this.#url.pathname
-  }
-  get header() { return this.#header }
-  get protocol() { return this.#url.protocol }
-  set protocol(value) { this.#url.protocol = value }
-  get username() { return this.#url.username }
-  set username(value) { this.#url.username = value }
-  get password() { return this.#url.password }
-  set password(value) { this.#url.password = value }
-  get hostname() { return this.#url.hostname }
-  set hostname(value) {
-   if (!(value in desktop.themes))
-    value = _.defaultHost
-   this.#url.hostname = value
-  }
-  get host() { return this.#url.host }
-  set host(value) {
-   if (!(value in desktop.themes))
-    value = _.defaultHost
-   this.#url.host = value
-  }
-  get origin() { return this.#url.origin }
-  get pathname() { return this.#url.pathname }
-  set pathname(pathname) {
-   this.#path = String(pathname) || '/'
-   this.#filename = ''
-   this.#mark = ''
-   if (this.#path.endsWith('!')) {
-    const lastSlashIndex = this.#path.lastIndexOf('/')
-    const filenameSegment = this.#path.substring(lastSlashIndex + 1, this.#path.length - 1)
-    if (filenameSegment && filenameSegment !== Route.defaultFilename) {
-     if (!/^[A-Za-z0-9_.-]+$/.test(filenameSegment))
-      throw new TypeError("Route Error: filename contained invalid characters. " + filenameSegment)
-     this.#filename = filenameSegment
-     this.#mark = '!'
-    }
-    this.#path = this.#path.substring(0, lastSlashIndex + 1)
-   }
-   this.#routeIDs = []
-   this.#segments = this.#path.split('/').filter(segment => {
-    if (!segment)
-     return
-    const routeID = Route.segmentToRouteID(segment)
-    if (routeID === -1n)
-     return
-    this.#routeIDs.push(routeID)
-    return true
-   })
-   if (!this.#segments.length || this.#routeIDs[0] >= _.cardinality) {
-    this.#routeIDs[0] = BigInt(Route.segmentToRouteID(this.#segments[0] = _.defaultSingletonSegment))
-    warn({ route: this, pathname }, new RangeError('Encountered out-of-range routeID while setting pathname of Route.'))
-   }
-   this.#path = `/${this.#segments.join("/")}${this.#segments.length ? "/" : ""}`
-   this.#header = new FileHeader(this.#filename || Route.defaultFilename)
-   this.#url.pathname = `${this.#path}${this.#filename}${this.#mark}`
-   this.#taskRouteIDs = [...this.#routeIDs]
-   this.#singletonRouteID = this.#taskRouteIDs.shift()
-  }
-  get filename() { return this.#filename || Route.defaultFilename }
-  set filename(value) { this.pathname = `${this.#path}${value}!` }
-  get singletonRouteID() { return this.#singletonRouteID }
-  get taskRouteIDs() { return this.#taskRouteIDs }
-  get extension() { return this.#header.extension }
-  get filetype() { return this.#header.filetype }
-  get binary() { return this.#header.binary }
-  get segments() { return [...this.#segments] }
-  set segments(segments) { this.pathname = `/${segments.join("/")}${segments.length ? "/" : ""}${this.#filename}${this.#mark}` }
-  get routeIDs() { return [...this.#routeIDs] }
-  set routeIDs(newRouteIDs) { this.segments = newRouteIDs.map(routeID => Route.segmentFromRouteID(routeID)) }
-  get path() { return this.#path }
-  set path(path) { this.pathname = `${path}${this.#filename}${this.#mark}` }
-  get search() { return this.#url.search }
-  set search(value) { this.#url.search = value }
-  get searchParams() { return this.#url.searchParams }
-  get hash() { return this.#url.hash }
-  set hash(value) { this.#url.hash = value }
-  get href() { return this.#url.href }
-  set href(value) { this.#url.href = value }
-  toJSON() { return this.#url.toJSON() }
-  toString() { return this.#url.toString() }
- }
  const
   environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : process?.argv[1]?.split("/").pop() !== "build.js" ? "server" : (
    Object.defineProperty(_, "$", { value: (f => x => f(x).toString().trim())(require("child_process").execSync) }),
@@ -460,7 +313,7 @@ function ƒ(_) {
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
  const desktop = _.parts.desktop, { service, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
- if (environment === "window") var element, noop, svg
+ if (environment === "window") var element, svg
  Object.defineProperties(_, {
   fps: { value: 1, configurable: true, writable: true },
   meanFrameTime: { value: 1000, configurable: true, writable: true },
@@ -533,13 +386,13 @@ function ƒ(_) {
    constructor(PROPERTY_ID) {
     const property = Property[PROPERTY_ID] = this
     property.id = PROPERTY_ID
-    property.filename = `${PROPERTY_ID}.js`
-    property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
     property.isAlias = PROPERTY_ID.startsWith("alias-")
     property.isView = PROPERTY_ID.startsWith("view-")
     property.isAsync = PROPERTY_ID.startsWith("async-")
     property.isSymbol = PROPERTY_ID.startsWith("symbol-")
     property.isGetOrSet = PROPERTY_ID.startsWith("get-") || PROPERTY_ID.startsWith("set-")
+    property.filename = property.isAlias ? PROPERTY_ID.slice(6) : `${PROPERTY_ID}.js`
+    property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
     property.niceName = (() => {
      if (PROPERTY_ID.includes("-")) {
       if (property.isSymbol)

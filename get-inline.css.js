@@ -51,6 +51,7 @@ wallpaper- {
  bottom: var(--task-bar-height);
  left: 0;
  right: 0;
+ overflow: hidden;
 }
 
 debug- {

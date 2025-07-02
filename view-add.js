@@ -1,4 +1,4 @@
-// This base HTML is always server-rendered, making this a hydrating task.
+// Some HTML is always server-rendered, making this a hydrating task.
 
 if (!hydration.supported)
  throw "Unrecoverable: call to the root view function without the necessary facet support."
@@ -14,4 +14,7 @@ Object.defineProperties(_, {
  taskbarSpacer: { value: _.taskbar.querySelector("flex-spacer") }
 })
 
-_.manifestLink.ref ??= "/manifest.json!"
+if (!_.manifestLink.hasAttribute("href"))
+ _.manifestLink.setAttribute("href", "/manifest.json")
+
+warn("render all inline images here")

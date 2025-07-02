@@ -1,12 +1,15 @@
-_.route = ROUTE
+const url = new URL(REQUEST_URL)
+const pathname = url.pathname
+const host = _.local ? _.defaultHost : url.host
+const themeDomains = host.split(".")
+_.routeIDs = swap(pathname)
+const rootRouteIDs = _.routeIDs[0]
+const rootRouteID = rootRouteIDs[0]
 
-if (desktop.theme?.key !== ROUTE.host)
- desktop.theme = desktop.themeHosts[ROUTE.host]
+if (desktop.theme?.key !== host)
+ desktop.theme = getPartFromDomains(themeDomains)
 
-// if (ROUTE.singletonRouteID !== _.routeID) {
-//  // _.setRouteID(ROUTE.singletonRouteID)
-//  debug("temporarily stopped standard flow")
-// }
-
-for (const routeID of ROUTE.routeIDs)
- warn("Do something with this URL route ID.", routeID)
+if (_.routeID !== _.routeIDs[0][0]) {
+ log(5, `Setting the DNS root route ID: ${_.routeID} => ${_.routeIDs[0][0]}`)
+ _.setRouteID(_.routeIDs[0][0])
+}

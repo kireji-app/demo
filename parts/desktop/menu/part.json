@@ -5,8 +5,5 @@
  ],
  "go": [
   "EVENT"
- ],
- "noop": [
-  "EVENT"
  ]
 }

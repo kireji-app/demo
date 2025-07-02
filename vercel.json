@@ -1,6 +1,12 @@
 {
  "routes": [
   {
+   "src": "/service.js",
+   "headers": {
+    "Cache-Control": "public, max-age=31536000, immutable"
+   }
+  },
+  {
    "src": "/(.*)(?:[.%$#&,;!:=+\\(\\)\\[\\]](.*)|[^/])$",
    "status": 404
   },
