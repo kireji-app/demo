@@ -4,7 +4,7 @@ await agent.promise
 await hotKeys.promise
 await worker.promise
 
-//* Simulate long init.
+/* Simulate long init.
 
 function hang(timeInMilliseconds) {
  warn(`Intentionally hanging the main thread for ${timeInMilliseconds} milliseconds.`)
