@@ -219,6 +219,13 @@ tray- {
  width: auto;
 }
 
+#clock {
+ vertical-align: middle;
+ display: inline-block;
+ line-height: 16px;
+ overflow: hidden;
+}
+
 task-bar {
  gap: 3px;
  padding: 4px 2px 2px;

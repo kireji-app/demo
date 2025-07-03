@@ -160,3 +160,20 @@ task-bar {
  box-shadow: var(--task-bar-accent);
  background: var(--bg);
 }
+
+tray- {
+ position: relative;
+ display: flex;
+ flex-flow: row nowrap;
+ gap: var(--spacing);
+ height: 100%;
+ margin: 0;
+ width: auto;
+}
+
+#clock {
+ vertical-align: top;
+ display: inline-block;
+ overflow: hidden;
+ line-height: var(--icon-size);
+}
