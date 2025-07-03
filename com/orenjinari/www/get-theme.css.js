@@ -73,8 +73,8 @@ wallpaper- #about {
 
 wallpaper- .placeholder {
  width: 100vw;
- height: var(--scroll-height);
- box-shadow: inset 0 0 0 8vw var(--fg-mode-er);
+ height: var(--scroll-height);${production ? "" :
+  "box-shadow: inset 0 0 0 8vw #0003"}
  position: relative;
  margin-top: var(--section-gap);
 }
@@ -95,6 +95,7 @@ wallpaper- .placeholder h1 {
  padding: 0;
  font-size: 25vw;
  color: var(--fg-mode-est);
+ opacity: 25%;
 }
 
 wallpaper- .placeholder .thin {
