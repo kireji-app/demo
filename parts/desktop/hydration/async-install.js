@@ -24,6 +24,7 @@ hang(1000)
 //*/
 
 _.setRoute(location.href)
+debug('hydration: did it happen before or after the population?')
 document.body.removeAttribute("inert")
 facet.hydrated = true
 log(1, "Hydrated.")

@@ -8,4 +8,4 @@ sectionNames.forEach((bunnyName, bunnyIndex) => {
  areas.push(`<div class="placeholder bunny-${bunnyName}">${production ? "" : `<h1>Area ${bunnyIndex + 1}</h1>`}<span class=float><img src="${src}"><span class=thin>is </span><span>coming soon.</span></span></div>`)
 })
 
-return links.join("") + areas.join("")
+return `<outer-wrapper><inner-wrapper>` + links.join("") + areas.join("") + `</inner-wrapper></outer-wrapper>`

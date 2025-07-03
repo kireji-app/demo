@@ -64,7 +64,7 @@ function ƒ(_) {
   packAndMap(url) {
    const sourceFile = this
    const script = sourceFile.lines.join("\n")
-   return _.mapping === "1"
+   return _.mapping
     ? script +
     `
 //${"#"} sourceMappingURL=data:application/json;charset=utf-8;base64,${btoaUnicode(sourceFile.getMap())}${url
@@ -208,60 +208,34 @@ function ƒ(_) {
   logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
-  toCharms = x => (x = Math.ceil(x.toString(2).length / 6)) + " charm" + (x !== 1 ? "s" : ""),
+  toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   logEntropy = (verbosity, ...parts) => {
    if (verbosity > _.verbosity) return
-   openLog(verbosity, "Domain Entropy")
-   log(verbosity, `| Display Name                          | Entropy       | Cardinality |`)
-   log(verbosity, `|---------------------------------------|---------------|-------------|`)
-   for (const part of parts) {
-    const title = part.title ?? "Untitled - " + part.host
-    log(verbosity, `| ${title.length > 37 ? title.slice(0, 34) + "..." : title.padEnd(37, " ")} | ${toCharms(part.cardinality).padEnd(13, " ")} | ${scientific(part.cardinality).padEnd(11, " ")} |`)
-   }
-   closeLog(verbosity, true)
+   logAny(verbosity, [
+    parts.reduce((table, part) => (table[part.host] = {
+     "Entropy": toCharms(part.cardinality),
+     "Cardinality": scientific(part.cardinality)
+    }, table), {})
+   ], "table")
   },
   logStringSize = (verbosity, string) => {
    if (verbosity > _.verbosity) return
-   openLog(verbosity, "String Size")
    string = string.toString()
    const n = new TextEncoder().encode(string).length
-   const bits = Math.ceil(n * 8)
-   const col1Width = bits.toLocaleString().length
-   const utf16Unit = "| ECMA-262 string indices "
-   const col2Width = utf16Unit.length
-   const logRow = (secondaryVerbosity, measure, unit, columnWidth = 0) => {
-    if (!["bigint", "number"].includes(typeof measure))
-     throw new TypeError(`Logging a measure requires a bigint or number (got ${typeof measure}.`)
-    let measureIntegerString, measureString
-    const isBigInt = typeof measure === "bigint"
-    const measureInteger = isBigInt ? measure : Math.trunc(measure)
-    if (isBigInt || measureInteger === measure) {
-     measureIntegerString = measureString = measureInteger.toLocaleString()
-    } else {
-     measureIntegerString = measureInteger.toLocaleString().split(".")[0]
-     measureString = measureIntegerString + "." + (measure - measureInteger).toString().slice(2)
-    }
-    if (measureIntegerString.length > columnWidth) throw new RangeError(`Can't fit ${measureIntegerString.length} characters into a ${columnWidth}-character column (while logging measure "${measureString} ${unit}").`)
-    if (measureString.length > columnWidth) measureString = measureString.slice(0, columnWidth)
-    else if (measureString.includes(".")) measureString = measureString.padEnd(columnWidth, "0")
-    else measureString = measureString.padStart(columnWidth, " ")
-    log(verbosity + secondaryVerbosity, "| " + measureString + " " + unit + " |")
-   }
-   log(verbosity, "| Quantity".padEnd(col1Width + 3) + "| Unit Name   ".padEnd(col2Width) + "| Radix | Abbr. | Format |")
-   log(verbosity, "|-".padEnd(col1Width + 3, "-") + "|".padEnd(col2Width, "-") + "|-------|-------|--------|")
-   logRow(0, n / 2 ** 20, "| mebibytes".padEnd(col2Width) + "| 2²⁰   | MiB   | UTF-8 ", col1Width)
-   logRow(4, n / 10 ** 6, "| megabytes".padEnd(col2Width) + "| 10⁶   | MB    | UTF-8 ", col1Width)
-   logRow(4, n / 2 ** 10, "| kibibytes".padEnd(col2Width) + "| 2¹⁰   | KiB   | UTF-8 ", col1Width)
-   logRow(4, n / 10 ** 3, "| kilobytes".padEnd(col2Width) + "| 10³   | KB    | UTF-8 ", col1Width)
-   logRow(1, [...string].length, "| Unicode code points".padEnd(col2Width) + "| ----- | UCP   | UTF-32", col1Width)
-   logRow(4, string.length, utf16Unit + "| ----- | chars | UTF-16", col1Width)
-   logRow(1, n, "| bytes".padEnd(col2Width) + "| 2⁸    | B     | UTF-8 ", col1Width)
-   logRow(3, Math.ceil((n * 8) / 6), "| charms (base-64 length)".padEnd(col2Width) + "| 2⁶    | chm   | UTF-8 ", col1Width)
-   logRow(2, bits, "| bits".padEnd(col2Width) + "| 2¹    | b     | UTF-8 ", col1Width)
-   closeLog(verbosity, true)
+   logAny(verbosity, [{
+    Mebibytes: { Quantity: n / 2 ** 20, Radix: '2²⁰', "Abbr.": 'MiB', Format: 'UTF-8' },
+    Megabytes: { Quantity: n / 10 ** 6, Radix: '10⁶', "Abbr.": 'MB', Format: 'UTF-8' },
+    Kibibytes: { Quantity: n / 2 ** 10, Radix: '2¹⁰', "Abbr.": 'KiB', Format: 'UTF-8' },
+    Kilobytes: { Quantity: n / 10 ** 3, Radix: '10³', "Abbr.": 'KB', Format: 'UTF-8' },
+    "Unicode code points": { Quantity: [...string].length, "Abbr.": 'UCP', Format: 'UTF-32' },
+    "ECMA-262 string indices": { Quantity: string.length, "Abbr.": 'chars', Format: 'UTF-16' },
+    "Bytes": { Quantity: n, Radix: '2⁸', "Abbr.": 'B', Format: 'UTF-8' },
+    "Charms  (base-64 length)": { Quantity: Math.ceil((n * 8) / 6), Radix: '2⁶', "Abbr.": 'chm', Format: 'UTF-8' },
+    "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
+   }], "table")
   },
   swap = (x, b = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0", V, O, i, Y, k, c, o, fl, ps) =>
    Array.isArray(x) ?
@@ -269,7 +243,7 @@ function ƒ(_) {
      x.join("") === "0" ? "" : (x.map(f => f.map(y => { V = x = ""; Y = y; k = 0n; while (Y > 0n) { c = 2n ** (k * 6n); if (Y >= c) { Y -= c; k++ } else break } o = 0n; for (i = 0n; i < k; i++)o += 2n ** (i * 6n); V = (y - o).toString(2); fl = Number(k) * 6; ps = V.padStart(fl, "0"); for (i = 0; i < fl; i += 6)x += b[parseInt(ps.slice(i, i + 6), 2)]; return x }).join("~")).join("/")) + `/`
     ) :
     x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = b.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O))))
- openLog(0, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   ${_.local ? "local" : "cloud"}\n            ▙▌    ${environment}\n\nBooting O/S`)
+ openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   ${_.local ? "local" : "cloud"}\n            ▙▌    ${environment}\n\nBooting O/S`)
  if (environment === "build") {
   const { extname } = require("path"),
    { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs")
@@ -510,13 +484,13 @@ function ƒ(_) {
  for (const part of instances) part.startBuild()
  closeLog(3)
  _.validate()
- closeLog(0, true)
- log(0, "Boot Completed (end of synchronous script execution).")
+ closeLog(1, true)
+ log(1, "Boot Completed (end of synchronous script execution).")
 }
 
 ƒ({
  change: "patch",
- verbosity: "100",
- mapping: "0",
- themeHost: "www.ejaugust.com"
+ verbosity: 0,
+ mapping: false,
+ themeHost: "www.orenjinari.com"
 })

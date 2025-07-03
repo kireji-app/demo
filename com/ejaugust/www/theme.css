@@ -33,6 +33,15 @@ wallpaper- article {
  flex: 1;
 }
 
+wallpaper->article,
+wallpaper->article *,
+wallpaper->header>:not(menu),
+wallpaper->header>:not(menu) * {
+ -webkit-user-select: text;
+ -ms-user-select: text;
+ user-select: text;
+}
+
 wallpaper- article p {
  font-size: 1.1em;
  color: var(--fg-mode);

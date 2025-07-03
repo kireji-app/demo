@@ -51,17 +51,6 @@ declare class PartDNSRoot extends PartMix {
  readonly tagElements: HTMLSpanElement[]
  /** The element holding the task menu. */
  readonly menuElement: HTMLElement
- /** The first label for the color mode control. */
- readonly colorModeLabel1: HTMLSpanElement
- /** The second label for the color mode control. */
- readonly colorModeLabel2: HTMLSpanElement
- /** The base element of the color mode slider. */
- readonly colorModeBase: HTMLSpanElement
- /** The handle element of the color mode slider. */
- readonly colorModeHandle: HTMLSpanElement
- /** The CSS stylesheet for the color mode. */
- readonly colorModeStyleSheet: CSSStyleSheet
- /** The link element for the web app manifest. */
  readonly manifestLink: HTMLLinkElement
  /** Sets the configuration space to match the given request url string. */
  setRoute(REQUEST_URL: string): void

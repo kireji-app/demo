@@ -11,11 +11,12 @@ wallpaper- {
 part-explorer {
  height: 100%;
  overflow: auto;
- background-color: var(--bg-un-mode);
+ background-color: var(--bg-mode-est);
 }
 
 wallpaper- :is(part-explorer, part-browser)>h2 {
  position: sticky;
+ z-index: 10;
  left: 0;
  top: 0;
  margin: 0;
@@ -38,7 +39,7 @@ width-handle {
  bottom: 0;
  width: var(--handle-thickness);
  border-radius: calc(var(--handle-thickness) / 2);
- z-index: 10;
+ z-index: 100;
 }
 
 body.dragging {
@@ -51,7 +52,7 @@ body.dragging * {
 
 width-handle:hover,
 body.dragging width-handle {
- background-color: var(--fg-mode-er);
+ background-color: var(--fg-accent);
  cursor: ew-resize;
 }
 
@@ -104,7 +105,7 @@ part-explorer summary {
  display: block;
  height: var(--line-height);
  line-height: var(--line-height);
- color: var(--fg-mode-er);
+ color: var(--fg);
  padding: 0;
  white-space: pre;
  font-weight: 500;
@@ -113,18 +114,17 @@ part-explorer summary {
 }
 
 wallpaper- summary:hover {
- color: var(--fg-mode);
- background-color: var(--bg-un-mode-er);
+ color: var(--fg-accent);
+ background-color: var(--bg-mode);
 }
 
 wallpaper- summary>.explore-toggle,
 wallpaper- summary>img,
-wallpaper- summary>span>img,
-wallpaper- summary>span,
+wallpaper- svg,
 wallpaper- .spacer {
+ stroke: var(--fg);
  vertical-align: top;
  display: inline-block;
- line-height: var(--icon-size2);
  height: var(--icon-size2);
  width: var(--icon-size2);
  border-radius: calc(var(--icon-size2) * 0.4 / 3);
@@ -144,8 +144,4 @@ wallpaper- .prototype-icon {
 summary .label {
  padding-left: calc((var(--line-height) - var(--icon-size2)) / 2);
  padding-right: calc(var(--line-height) - var(--icon-size2));
-}
-
-wallpaper- svg {
- stroke: var(--fg-mode-er)
 }

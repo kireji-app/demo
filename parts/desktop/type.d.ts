@@ -21,6 +21,9 @@ declare class PartDesktop extends PartMix {
  readonly hydration: PartHydration
  readonly addressBar: PartAddressBar
  readonly serviceWorker: PartServiceWorker
+
+ // Views.
+ readonly wallpaper: HTMLElement
 }
 
 declare const desktop: PartDesktop

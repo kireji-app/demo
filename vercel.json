@@ -12,12 +12,20 @@
   },
   {
    "src": "/(.*)",
-   "dest": "/api/service"
+   "dest": "/api/service",
+   "headers": {
+    "Document-Policy": "force-load-at-top"
+   }
   }
  ],
  "git": {
   "deploymentEnabled": {
    "main": true
+  }
+ },
+ "functions": {
+  "api/service.js": {
+   "excludeFiles": "**/*"
   }
  }
 }

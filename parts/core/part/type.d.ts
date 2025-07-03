@@ -143,17 +143,17 @@ declare class Part extends Iterable<Part> {
  /** If the part was enabled, calls distributeRemoveView on any subparts that were also enabled, passing the signal leafward.
   * Then, if the part is no longer enabled, calls removeView on itself.*/
  distributeRemoveView(): void
- /** One of the six theme colors for this part. This is the accent/hover color when the color mode is dark. */
+ /** One of the six theme colors for this part. This is the accent/hover color when dark mode is enabled. */
  readonly darkAccentTheme: string
- /** One of the six theme colors for this part. This is the background color when the color mode is dark. */
+ /** One of the six theme colors for this part. This is the background color when dark mode is enabled. */
  readonly darkBgTheme: string
- /** One of the six theme colors for this part. This is the foreground color when the color mode is dark. */
+ /** One of the six theme colors for this part. This is the foreground color when dark mode is enabled. */
  readonly darkFgTheme: string
- /** One of the six theme colors for this part. This is the accent/hover color when the color mode is light. */
+ /** One of the six theme colors for this part. This is the accent/hover color when the dark is disabled. */
  readonly lightAccentTheme: string
- /** One of the six theme colors for this part. This is the background color when the color mode is light. */
+ /** One of the six theme colors for this part. This is the background color when the dark is disabled. */
  readonly lightBgTheme: string
- /** One of the six theme colors for this part. This is the foreground color when the color mode is light. */
+ /** One of the six theme colors for this part. This is the foreground color when the dark is disabled. */
  readonly lightFgTheme: string
  /** True if the routeID of this part just changed in the current, still incomplete route propagation cycle.
   * 

@@ -1,9 +1,22 @@
-return `wallpaper- {
+return `
+wallpaper- {
+ --scroll-height: calc(var(--h) - var(--task-bar-height));
+ overflow-y: scroll;
+}
+
+wallpaper->outer-wrapper {
+ display: block;
+ position: relative;
+ top: 0;
+}
+
+wallpaper->outer-wrapper>inner-wrapper {
+ padding-top: calc(var(--scroll-height) + var(--section-gap));
  --sections: 5;
  --section-gap: 128px;
  background:
   url(${orenjinari.render({ request: "signature.png", format: "datauri" })}) 36.5vw 8vw/27vw 7.78vw no-repeat,
-  url(${orenjinari.render({ request: "ground.png", format: "datauri" })}) 12.5vw calc(.8 * var(--h))/75vw 3.75vw no-repeat,
+  url(${orenjinari.render({ request: "ground.png", format: "datauri" })}) 12.5vw calc(.8 * var(--scroll-height))/75vw 3.75vw no-repeat,
   radial-gradient(ellipse 17.597vw 20.968vw at 7.735vw 5.433vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 12.477vw 20.968vw at 28.291vw 2.626vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
@@ -12,7 +25,11 @@ return `wallpaper- {
   /* url(${orenjinari.render({ request: "mockup.png", format: "datauri" })}) 0 0/100% auto, */
   #F8D2AC;
  background-attachment: local;
- overflow-y: scroll;
+ display: block;
+}
+
+body[inert] wallpaper->outer-wrapper>inner-wrapper {
+ transform: translateY(-${100 * Number(orenjinari.routeID) / Number(orenjinari.cardinality - 1n)}%);
 }
 
 body.modern task-bar {
@@ -32,38 +49,34 @@ wallpaper- .bunny {
 
 wallpaper- #connect {
  left: calc(75vw - 3.7vw);
- top: calc(calc(.8 * var(--h)) - 7.6vw);
+ top: calc(calc(.8 * var(--scroll-height)) - 7.6vw);
  width: 7.4vw;
 }
 
 wallpaper- #others {
  left: calc(57.5vw - 4vw);
- top: calc(calc(.8 * var(--h)) - 9.3vw);
+ top: calc(calc(.8 * var(--scroll-height)) - 9.3vw);
  width: 8vw;
 }
 
 wallpaper- #portfolio {
  left: calc(42.5vw - 5vw);
- top: calc(calc(.8 * var(--h)) - 10.5vw);
+ top: calc(calc(.8 * var(--scroll-height)) - 10.5vw);
  width: 10vw;
 }
 
 wallpaper- #about {
  left: calc(25vw - 4vw);
- top: calc(.8 * var(--h) - 8vw);
+ top: calc(.8 * var(--scroll-height) - 8vw);
  width: 8vw;
 }
 
 wallpaper- .placeholder {
  width: 100vw;
- height: calc(var(--h) - var(--task-bar-height));
+ height: var(--scroll-height);
  box-shadow: inset 0 0 0 8vw var(--fg-mode-er);
  position: relative;
  margin-top: var(--section-gap);
-}
-
-wallpaper- .placeholder.bunny-about {
- margin-top: calc(var(--h) + var(--section-gap));
 }
 
 wallpaper- .placeholder img {
@@ -72,7 +85,7 @@ wallpaper- .placeholder img {
 
 wallpaper- .placeholder h1 {
  text-align: center;
- line-height: calc(var(--h) - var(--task-bar-height));
+ line-height: var(--scroll-height);
  height: 100%;
  position: absolute;
  width: 100%;
@@ -101,7 +114,7 @@ wallpaper- .float {
 
 @media (width < 500px) {
  wallpaper- .float {
-  font-size: max(min(5vw, calc(.05 * var(--h))), 16px);
+  font-size: max(min(5vw, calc(.05 * var(--scroll-height))), 16px);
  }
 }
 

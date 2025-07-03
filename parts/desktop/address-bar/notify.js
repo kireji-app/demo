@@ -9,6 +9,7 @@ addressBar.timer = setTimeout(
  () => {
   if (_.routeID !== _.routeIDs[0][0]) {
    _.routeIDs[0][0] = _.routeID
+   debug(swap(_.routeIDs), _.routeIDs, _.routeID)
    history.replaceState({}, null, swap(_.routeIDs))
    addressBar.throttleStartTime = performance.now()
    addressBar.timer = undefined
