@@ -22,7 +22,7 @@ declare class PartClip extends Part {
  /** Stops the playback started by `clip.initiatePlayback()`. */
  stopPlayback(): void
  /** A utility function used to handle reaching the end of a clip. */
- handlePlaybackEnd(): void
+ handleEndPlayback(): void
 }
 
 declare const clip: PartClip

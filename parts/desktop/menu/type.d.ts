@@ -26,5 +26,5 @@ declare class PartMenu extends PartMatch {
  /** The section in the menu listing themes to choose from. */
  readonly themeSection: HTMLUListElement
  /** The part dedicated to the currently selected menu clip. */
- readonly arm: Part
+ readonly arm: PartMenuClip
 }

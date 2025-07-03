@@ -13,10 +13,7 @@ if (clip.playing) {
  else {
   clip.elapsedFrames = newElapsedFrames
   const nextFrame = clip.playbackStartFrame + BigInt(clip.elapsedFrames)
-  if (nextFrame < clip.cardinality)
-   nextFrameCallback = () => clip.setRouteID(nextFrame)
-  else
-   nextFrameCallback = () => clip.handleEndPlayback()
+  nextFrameCallback = nextFrame < clip.cardinality ? () => clip.setRouteID(nextFrame) : () => clip.handleEndPlayback()
  }
 
  clip.pendingFrame = requestAnimationFrame(nextFrameCallback)

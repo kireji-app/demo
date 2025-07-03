@@ -1,1 +1,1 @@
-desktop.menu.setRouteID(1n, true)
+desktop.menu.arm.handleEndPlayback()
