@@ -25,26 +25,6 @@ const title =
 const head =
  `<head>${title}${meta}${links}${styles}</head>`
 
-const debugHTML = _.debug ?
- `<debug->` + (
-  `<div><label for=debug-theme>Theme</label><select id=debug-theme>${desktop.themes.map(subpart =>
-   `<option${subpart === desktop.theme ? ` selected` : ""}>${subpart.key}</option>`
-  ).join("")}</select></div>` +
-  `<div><label for=debug-color>Color Mode</label><select id=debug-color>${desktop.color.map(subpart =>
-   `<option${subpart === desktop.color.arm ? ` selected` : ""}>${subpart.key}</option>`
-  ).join("")}</select></div>` +
-  `<div><label for=debug-era>Era</label><select id=debug-era>${desktop.era.map(subpart =>
-   `<option${subpart === desktop.era.arm ? ` selected` : ""}>${subpart.key}</option>`
-  ).join("")}</select></div>` +
-  `<div><label for=debug-menu-clip>Menu Clip</label><select id=debug-menu-clip>${desktop.menu.map(subpart =>
-   `<option${subpart === desktop.menu.arm ? ` selected` : ""}>${subpart.key}</option>`
-  ).join("")}</select></div>` +
-  `<div><label for=debug-menu-frame>Menu Frame</label><select id=debug-menu-frame>${new Array(Number(desktop.menu.arm.cardinality)).fill(0).map((__, index) =>
-   `<option${BigInt(index) === desktop.menu.arm.routeID ? ` selected` : ""}>${index}</option>`
-  ).join("")}</select></div>`
- ) +
- `</debug->` : ''
-
 const bodyClassList = [desktop.era.arm.key]
 
 if (desktop.menu.arm?.key === "open")
@@ -54,6 +34,6 @@ if (desktop.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
 const body =
- `<body inert class="${bodyClassList.join(" ")}">${desktop["wallpaper.html"]}${debugHTML}<!-- windows -->${desktop["task-bar"]["inline.html"]}${worker["inline.html"]}</body>`
+ `<body inert class="${bodyClassList.join(" ")}">${desktop["wallpaper.html"]}<!-- windows -->${desktop["task-bar"]["inline.html"]}${worker["inline.html"]}</body>`
 
 return `<!DOCTYPE html><html lang=en>${head}${body}</html>`

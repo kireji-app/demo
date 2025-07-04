@@ -499,8 +499,8 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "patch",
+ change: "major",
  verbosity: 1,
  mapping: false,
- themeHost: "www.ejaugust.com"
+ themeHost: "www.orenjinari.com"
 })

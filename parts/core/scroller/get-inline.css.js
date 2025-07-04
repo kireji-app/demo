@@ -1,7 +1,7 @@
-return `body[inert] ${scroller.query}>outer-wrapper>inner-wrapper {
- transform: translateY(-${100 * Number(scroller.routeID) / Number(scroller.cardinality - 1n)}%);
+return `body[inert] ${scroller.query}>scroller- {
+ transform: translateY(-${100 * scroller.fraction}%);
 }
 
-${scroller.query}>outer-wrapper>inner-wrapper {
- display: block;
+${scroller.query}>scroller- {
+ display: flow-root;
 }`

@@ -7,5 +7,7 @@ declare class PartScroller extends Part {
  readonly outputScroll: boolean
  /** The CSS selector query that uniquely idenfies the scroller's container in the page. */
  readonly query: string
+ /** A number between 0 and 1 obtained by dividing the scroller's current route ID by it's highest possible route ID (one less than its cardinality). */
+ readonly fraction: number
 }
 declare const scroller: PartScroller

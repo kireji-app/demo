@@ -1,1 +1,1 @@
-return "<outer-wrapper><inner-wrapper>" + post["post.html"] + "</inner-wrapper></outer-wrapper>"
+return "<scroller->" + post["post.html"] + "</scroller->"

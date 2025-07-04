@@ -1,8 +1,0 @@
-{
- "go": [
-  "SCROLL_POSITION"
- ],
- "onscroll": [
-  "EVENT"
- ]
-}
