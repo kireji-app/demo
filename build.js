@@ -212,6 +212,23 @@ function ƒ(_) {
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
+  hang = ms => {
+   warn(`Intentionally hanging the main thread for ${ms} milliseconds.`)
+   const start = performance.now()
+   let iteration = -1, elapsedMilliseconds, remainingMilliseconds
+   do {
+    elapsedMilliseconds = Math.trunc(performance.now() - start)
+    const newRemainingMilliseconds = ms - elapsedMilliseconds
+    Math.sin(iteration++)
+    if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100)) log(0, "t: -" + newRemainingMilliseconds)
+    remainingMilliseconds = newRemainingMilliseconds
+   } while (remainingMilliseconds > 0)
+   warn(`Main thread hang finished at iteration ${iteration}.`)
+  },
+  swap = (x, b = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0", V, O, i, Y, k, c, o, fl, ps) => {
+   // TODO: Undo premature minification.
+   return Array.isArray(x) ? `/` + (x.join("") === "0" ? "" : (x.map(f => f.map(y => { V = x = ""; Y = y; k = 0n; while (Y > 0n) { c = 2n ** (k * 6n); if (Y >= c) { Y -= c; k++ } else break } o = 0n; for (i = 0n; i < k; i++)o += 2n ** (i * 6n); V = (y - o).toString(2); fl = Number(k) * 6; ps = V.padStart(fl, "0"); for (i = 0; i < fl; i += 6)x += b[parseInt(ps.slice(i, i + 6), 2)]; return x }).join("~")).join("/")) + `/`) : x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = b.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O))))
+  },
   logEntropy = (verbosity, ...parts) => {
    if (verbosity > _.verbosity) return
    logAny(verbosity, [
@@ -236,13 +253,7 @@ function ƒ(_) {
     "Charms  (base-64 length)": { Quantity: Math.ceil((n * 8) / 6), Radix: '2⁶', "Abbr.": 'chm', Format: 'UTF-8' },
     "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
    }], "table")
-  },
-  swap = (x, b = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0", V, O, i, Y, k, c, o, fl, ps) =>
-   Array.isArray(x) ?
-    `/` + (
-     x.join("") === "0" ? "" : (x.map(f => f.map(y => { V = x = ""; Y = y; k = 0n; while (Y > 0n) { c = 2n ** (k * 6n); if (Y >= c) { Y -= c; k++ } else break } o = 0n; for (i = 0n; i < k; i++)o += 2n ** (i * 6n); V = (y - o).toString(2); fl = Number(k) * 6; ps = V.padStart(fl, "0"); for (i = 0; i < fl; i += 6)x += b[parseInt(ps.slice(i, i + 6), 2)]; return x }).join("~")).join("/")) + `/`
-    ) :
-    x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = b.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O))))
+  }
  openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   ${_.local ? "local" : "cloud"}\n            ▙▌    ${environment}\n\nBooting O/S`)
  if (environment === "build") {
   const { extname } = require("path"),
@@ -273,7 +284,6 @@ function ƒ(_) {
    for (const [filename, filePath] of filenames) {
     const extension = extname(filePath)
     const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
-    // log(2, `${{ ".js": "🔧", "json": "⚙️", ".ts": "🧱", ".png": "🎨", ".gif": "🎨" }[extension] ?? "📄"} ${filename}`)
     log(2, `📄 ${filename}`)
     part[filename] = content
     fileCount++
@@ -490,7 +500,7 @@ function ƒ(_) {
 
 ƒ({
  change: "patch",
- verbosity: 0,
+ verbosity: 1,
  mapping: false,
- themeHost: "www.orenjinari.com"
+ themeHost: "www.ejaugust.com"
 })

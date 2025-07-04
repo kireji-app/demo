@@ -1,0 +1,1 @@
+return blog["static.css"] + "\n" + ejaugust.scroller["inline.css"]

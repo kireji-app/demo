@@ -18,7 +18,12 @@ a:visited {
 }
 
 #theme-control {
- display: contents;
+ display: block;
+ margin: 0;
+ padding: 0;
+ flex: 1 1;
+ height: auto;
+ overflow-y: scroll;
 }
 
 html,

@@ -98,7 +98,8 @@
 
 body {
  /* TODO: don't hard code domain and settings count here */
- --sidebar-height: calc(((var(--icon-size) + (2px * 2)) * 8) + (26px * 3) + (3px * 2) + (4px * 2) + 2px);
+ --bottom: calc(var(--task-bar-height) - 4px);
+ --sidebar-height: min(calc(((var(--icon-size) + (2px * 2)) * 8) + (26px * 3) + (3px * 2) + (4px * 2) + 2px), calc(var(--h) - var(--bottom)));
  --spacing: 12px;
  --task-bar-height: 28px;
  --icon-size: var(--task-bar-height);
@@ -119,7 +120,7 @@ sidebar- {
  height: calc(var(--menu-tween) * var(--sidebar-height));
  min-width: 164px;
  left: 2px;
- bottom: calc(var(--task-bar-height) - 4px);
+ bottom: var(--bottom);
  line-height: 18px;
  padding: 3px 3px 3px 24px;
  background: var(--bg);

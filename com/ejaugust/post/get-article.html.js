@@ -1,1 +1,1 @@
-return "<article>" + post["post.html"] + "</article>"
+return "<outer-wrapper><inner-wrapper>" + post["post.html"] + "</inner-wrapper></outer-wrapper>"

@@ -43,8 +43,8 @@
 <p>Furthermore, how do we account for the variable-length of pathnames? We’d have to add the number of 2-character pathnames to the number of 3-character pathnames to the number of 4-character pathnames and so on.</p>
 <p>To compute that, we require a <a href="https://en.wikipedia.org/wiki/Geometric_series" target="_blank">geometric series</a>. That’s too rich for my blood, so lets just remove <em>every URI whose pathname is not exactly 1737 characters long</em>. Again, we just removed almost every URI from our already stripped-down set.</p>
 <h3>No Special Characters</h3>
-<p>URI pathnames support 76+ characters (once you include the percent symbol, comma, period, exclamation point, etc.), suggesting it <em>might</em> be possible to approach base 76.</p>
-<p>Sadly, though, many of these special symbol combinations will get stripped away/normalized down to others during URI resolution. Others will cause an error if used incorrectly. It isn’t trivial to compute the cardinality of that.</p>
+<p>Modern browsers support 85+ characters in the URI pathname (once you include the percent symbol, comma, parenthesis, square brackets, period, exclamation point, etc.), suggesting it <em>might</em> be possible to approach base 85.</p>
+<p>Sadly, though, many of these special symbol combinations will get stripped away/normalized down to others during URI resolution. Some will be treated inconsistently in platforms that let you embed links. Others will cause an error if used incorrectly. It isn’t trivial to compute the cardinality of that.</p>
 <p>The solution? You guessed it. We’ll remove most of the URIs from our set! Let’s only consider URIs that use the following 64 character alphabet to spell out their pathname segments:</p>
 <pre>abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_</pre>
 <p>But we can’t just string together 1737 of these bad boys and call it a day…</p>

@@ -47,10 +47,12 @@ sidebar- {
  box-shadow: 0px 0px 22px var(--spacing) #0001;
  background: var(--bg-light);
  padding: 0;
+ --bottom: calc(var(--task-bar-height) - var(--spacing) / 2);
  border-radius: calc(var(--spacing) / 2);
- bottom: calc(var(--task-bar-height) - var(--spacing) / 2);
+ bottom: var(--bottom);
  left: calc(var(--spacing) + (var(--menu-tween) - 1) * 256px);
  height: auto;
+ max-height: calc(var(--h) - var(--bottom) - var(--spacing));
  width: auto;
 }
 

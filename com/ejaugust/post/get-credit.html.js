@@ -1,3 +1,1 @@
-return (post.editDate ? `<p>Edited ${blog.niceDate(post.editDate)}` : "") +
- `<p>Posted ${blog.niceDate(post.date)}` +
- `<p>~${Math.ceil(post.readingLength)} minute read`
+return (post.editTimestamp ? `Edited ${blog.niceDate(post.editTimestamp)} | ` : "") + `Posted ${blog.niceDate(post.unixTimestamp)} | ~${Math.ceil(post.readingLength)} minute read`

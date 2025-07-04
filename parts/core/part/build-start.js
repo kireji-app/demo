@@ -18,6 +18,6 @@ buildMethodOwners.forEach((owner, index) => {
 })
 
 if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
- throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${host}).`)
+ throw new Error(`Part hydration ended with invalid cardinality: ${part.cardinality} (${part.host}).`)
 
 closeLog(5, true)

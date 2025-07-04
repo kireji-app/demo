@@ -1,0 +1,9 @@
+{
+ "abstract": true,
+ "go": [
+  "SCROLL_POSITION"
+ ],
+ "onscroll": [
+  "EVENT"
+ ]
+}

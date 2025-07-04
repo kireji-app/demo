@@ -8,7 +8,6 @@ if (environment === "build") {
  closeLog(1)
  openLog(1, "Reading index.html.")
  const result = _["index.html"]
- // log(1, result)
  closeLog(1)
  closeLog(1, true)
 }

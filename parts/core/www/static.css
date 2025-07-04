@@ -98,7 +98,6 @@ part-explorer>details {
 part-explorer details {
  margin: 0;
  padding: 0;
- /* border-left: 1px dashed var(--fg-mode-est); */
 }
 
 part-explorer summary {
@@ -114,8 +113,15 @@ part-explorer summary {
 }
 
 wallpaper- summary:hover {
- color: var(--fg-accent);
  background-color: var(--bg-mode);
+}
+
+wallpaper- summary:hover:not(:has(svg:hover)) {
+ color: var(--fg-accent);
+}
+
+wallpaper- summary>svg:hover {
+ stroke: var(--fg-accent);
 }
 
 wallpaper- summary>.explore-toggle,

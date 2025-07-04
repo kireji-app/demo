@@ -6,6 +6,6 @@ const estimatedWordCharacters = post["post.html"].length * markupReductionFactor
 const averageCharactersPerMinute = averageWordLength * averageWordsPerMinute
 
 Object.defineProperties(post, {
- date: { value: parseInt(post.domains[0]) },
+ unixTimestamp: { value: parseInt(post.domains[0]) },
  readingLength: { value: estimatedWordCharacters / averageCharactersPerMinute },
 })
