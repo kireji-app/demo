@@ -1,4 +1,7 @@
 return `html, body {
+ --invert-on-light: ${desktop.color.arm === desktop.color.light ? "100%" : "0%"};
+ --invert-on-dark: ${desktop.color.arm === desktop.color.light ? "0%" : "100%"};
+
  --light-fg: ${desktop.theme.lightFgTheme};
  --light-bg: ${desktop.theme.lightBgTheme};
  --light-accent: ${desktop.theme.lightAccentTheme};

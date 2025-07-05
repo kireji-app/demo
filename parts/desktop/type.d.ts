@@ -1,7 +1,7 @@
 /** The core operating system GUI. */
 declare interface IDesktop extends IPartsApexDomain {
  readonly www: IDesktopTheme
- readonly color: IColorMode
+ readonly color: IColor
  readonly era: IEra
  readonly menu: IMenu
  readonly menuClip: IMenu
