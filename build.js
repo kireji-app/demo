@@ -499,8 +499,9 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
- verbosity: 1,
+ change: "patch",
+ verbosity: 0,
  mapping: false,
+ hangHydration: false,
  themeHost: "www.orenjinari.com"
 })

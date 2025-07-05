@@ -5,7 +5,7 @@ await hotKeys.promise
 await worker.promise
 
 // To preview FOUC
-hang(1000)
+if (_.hangHydration && !production) hang(1000)
 
 _.setRoute(location.href)
 document.body.removeAttribute("inert")
