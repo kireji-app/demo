@@ -1,2 +1,2 @@
-if (desktop.theme === blog)
+if (desktop.theme === _.com.ejaugust.www)
  base()

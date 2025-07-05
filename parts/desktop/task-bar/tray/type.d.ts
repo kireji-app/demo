@@ -1,3 +1,3 @@
-declare class PartTray extends Part {
+declare interface ITray extends IPart {
 
 }

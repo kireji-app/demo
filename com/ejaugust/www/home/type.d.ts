@@ -1,0 +1,1 @@
+declare interface IEJAugustThemeHome extends IEJAugustThemeArm, IPart { }

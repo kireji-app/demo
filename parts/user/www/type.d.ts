@@ -1,2 +1,3 @@
-declare class PartUserTheme extends PartTheme {
+declare interface IUserTheme extends ITheme {
+ readonly "..": IUser
 }

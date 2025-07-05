@@ -1,4 +1,4 @@
-declare class PartClip extends Part {
+declare interface IClip extends IPart {
  /** The framerate at which to play this movie clip. */
  readonly frameRate: number
  /** The amount of time each frame would be on the screen, given ideal performance. */
@@ -25,4 +25,4 @@ declare class PartClip extends Part {
  handleEndPlayback(): void
 }
 
-declare const clip: PartClip
+declare const clip: IClip

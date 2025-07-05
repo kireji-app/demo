@@ -1,1 +1,0 @@
-const blog = this[".."].www

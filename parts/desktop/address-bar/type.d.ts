@@ -1,4 +1,4 @@
-declare class PartAddressBar extends OSFacet {
+declare interface IAddressBar extends IFacet {
  /** The minimum time between address bar changes, used to throttle them
   * to prevent from triggering the browser's own, much more aggressive throttle. */
  readonly throttleDuration: number
@@ -22,4 +22,4 @@ declare class FileHeader {
  readonly binary: boolean
 }
 /** A window facet representing the browser address bar that provides `pathname <=> route ID` mapping to all environments. */
-declare const addressBar: PartAddressBar
+declare const addressBar: IAddressBar

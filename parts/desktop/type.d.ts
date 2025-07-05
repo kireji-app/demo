@@ -1,29 +1,29 @@
-/** The core operating system GUI.*/
-declare class PartDesktop extends PartMix {
- readonly color: PartColorMode
- readonly era: PartEra
- readonly menu: PartMenu
- readonly menuClip: PartMenu
- readonly taskBar: PartTaskbar
- readonly www: PartDesktopTheme
- readonly themes: Part[]
+/** The core operating system GUI. */
+declare interface IDesktop extends IPartsApexDomain {
+ readonly www: IDesktopTheme
+ readonly color: IColorMode
+ readonly era: IEra
+ readonly menu: IMenu
+ readonly menuClip: IMenu
+ readonly taskBar: ITaskbar
+ readonly themes: IPart[]
  /** The operating system theme.
   * 
   * This selection is encoded by the host of the current route. */
- readonly theme: Part
- readonly themeHosts: Part
+ readonly theme: IPart
+ readonly themeHosts: IPart
 
  // Facets.
- readonly gpu: PartGpu
- readonly agent: PartAgent
- readonly share: PartShare
- readonly hotKeys: PartHotKeys
- readonly hydration: PartHydration
- readonly addressBar: PartAddressBar
- readonly serviceWorker: PartServiceWorker
+ readonly gpu: IGpu
+ readonly agent: IAgent
+ readonly share: IShare
+ readonly hotKeys: IHotKeys
+ readonly hydration: IHydration
+ readonly addressBar: IAddressBar
+ readonly serviceWorker: IServiceWorker
 
  // Views.
  readonly wallpaper: HTMLElement
 }
 
-declare const desktop: PartDesktop
+declare const desktop: IDesktop

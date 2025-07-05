@@ -1,2 +1,6 @@
 /** Orenjinari's artist profile. */
-declare const orenjinari: Part
+declare interface IOrenjinariTheme extends ITheme {
+ readonly "..": IOrenjinari
+}
+
+declare const orenjinari: IOrenjinariTheme

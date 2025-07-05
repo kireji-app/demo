@@ -10,15 +10,15 @@
  *   menu.dismiss
  * ]
  * ```*/
-declare class PartMenu extends PartMatch {
+declare interface IMenu extends IMatch {
  /** A movie clip that represents the closed position. It plays once and freezes on its last frame. */
- readonly closed: PartMenuClip
+ readonly closed: IMenuClip
  /** The movie clip that tweens the menu from the closed position to the opened position. */
- readonly introduce: PartMenuClip
+ readonly introduce: IMenuClip
  /** A movie clip that represents the opened position. It plays once and freezes on its last frame. */
- readonly opened: PartMenuClip
+ readonly opened: IMenuClip
  /** The movie clip that tweens the menu from the opened position to the closed position. */
- readonly dismiss: PartMenuClip
+ readonly dismiss: IMenuClip
  /** When enabled, the fullscreen element that contains the menu. */
  readonly element: HTMLElement
  /** The settings section in the sidebar. */
@@ -26,5 +26,5 @@ declare class PartMenu extends PartMatch {
  /** The section in the menu listing themes to choose from. */
  readonly themeSection: HTMLUListElement
  /** The part dedicated to the currently selected menu clip. */
- readonly arm: PartMenuClip
+ readonly arm: IMenuClip
 }

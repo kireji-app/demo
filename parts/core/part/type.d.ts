@@ -1,12 +1,11 @@
-declare class Part extends Iterable<Part> {
- constructor(): Part
- [Symbol.iterator](): IterableIterator<Part>
+declare interface IPart extends Iterable<IPart> {
+ [Symbol.iterator](): IterableIterator<IPart>
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
- filter(FILTER_FUNCTION: (subpart: Part, index: number, part: Part) => Part): Part[]
+ filter(FILTER_FUNCTION: (subpart: IPart, index: number, part: IPart) => IPart): IPart[]
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
- includes(SUBPART: Part): boolean
+ includes(SUBPART: IPart): boolean
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
- map(MAP_FUNCTION: (subpart: Part, index: number, part: Part) => T): T[]
+ map(MAP_FUNCTION: (subpart: IPart, index: number, part: IPart) => T): T[]
  /** The domain name used to identify the part whose code is currently executing. */
  readonly host: string
  /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
@@ -41,7 +40,7 @@ declare class Part extends Iterable<Part> {
  /** The part that is this part's prototype object.
   * 
   * *Note: The part `part.core.parts` does not have a prototype part.* */
- readonly prototype?: Part
+ readonly prototype?: IPart
  /** Whether or not the part has a running task */
  readonly running: boolean
  /** Whether or not the part has a routeID greater than `-1n`. */
@@ -73,11 +72,11 @@ declare class Part extends Iterable<Part> {
  /** The parent part.
   * 
   * *Note: There is no* `_[".."]`. */
- readonly [".."]: Part
- /** A display name for the part.
-  * 
-  * By default, this is the part's key. */
- readonly title: string
+ readonly "..": IPart
+ /** The raw JSON string used to construct the object at `part.manifest`. */
+ readonly "part.json": string
+ /** A optional display name for the part. */
+ readonly title?: string
  /** A unicode character to identify the part.
   * 
   * The default unicode character is the Mathematical Small Cursive form of the first letter of the part's domain name. */
@@ -109,7 +108,7 @@ declare class Part extends Iterable<Part> {
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
- collectRouteID(SUBPARTS: Part[]): void
+ collectRouteID(SUBPARTS: IPart[]): void
  /** Updates the part's routeID to ROUTE_ID and then recomputes all subpart routeIDs to match.
   * 
   * For any active subparts, it calls distributeRoute on them, passing the signal leafward.
@@ -162,17 +161,16 @@ declare class Part extends Iterable<Part> {
   * so that view functions are not run multiple times. */
  readonly dirty: true | undefined
 }
-declare class Error extends Error { }
 /** The part instance on which the current script is being called.
  * 
  * Alias for `this` to disambiguate it from globalThis in IDEs.*/
-declare const part: Part
+declare const part: IPart
 /** The value of `performance.now()` around the time this method was called. */
 declare const now: DOMHighResTimeStamp
 /** Alias for `part.render`. */
-declare const render: Part
+declare function render(): any
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part[".."].exampleProperty`.  */
-declare const inherit: Part
+declare const inherit: IPart
 /** The Property object describing this property. */
 declare const property: Property
 /** Whether or not the part is the one which owns the current script. */

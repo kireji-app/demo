@@ -1,7 +1,7 @@
-declare class PartColor extends PartMatch {
- readonly device: Part
- readonly light: Part
- readonly dark: Part
+declare interface IColor extends IMatch {
+ readonly device: IPart
+ readonly light: IPart
+ readonly dark: IPart
  /** Blends two color hex codes (A and B) using the given MODE.
   * 
   * The default MODE is "screen". */
@@ -11,7 +11,7 @@ declare class PartColor extends PartMatch {
  /** Converts three RGB component values to a single hex string. */
  rgbToHex(R: number, G: number, B: number): string
  /** The part for the currently selected color mode. */
- readonly arm: Part & {
+ readonly arm: IPart & {
   /** The current color mode as a state string, which can be used for controlling UI components. */
   readonly stateData: string
  }
@@ -53,4 +53,4 @@ declare class PartColor extends PartMatch {
  readonly unModeErBg: string
  readonly unModeEstBg: string
 }
-declare const color: PartColor
+declare const color: IColor

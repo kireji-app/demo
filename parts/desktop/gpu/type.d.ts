@@ -1,5 +1,5 @@
-class PartGpu extends OSFacet {
+class IGpu extends IFacet {
  readonly adapter: GPUAdapter
  readonly device: GPUDevice
 }
-declare const gpu: PartGpu
+declare const gpu: IGpu

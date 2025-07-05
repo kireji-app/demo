@@ -1,4 +1,9 @@
-declare class PartDNSRoot extends PartMix {
+declare interface IDNSRoot extends IMix {
+ readonly app: IApp
+ readonly click: IClick
+ readonly com: ICom
+ readonly io: IIo
+ readonly parts: IParts
  /** One of three strings representing the severity of the API change. Used to automatically compute the correct semantic version at build time. */
  readonly change: "major" | "minor" | "patch"
  /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
@@ -14,7 +19,7 @@ declare class PartDNSRoot extends PartMix {
  /** The string of optional processes which are currently running on the operating system.
   * 
   * Task content is encoded by all segments appearing after the first segment in the user route pathname. */
- readonly tasks: PartTasks
+ readonly tasks: ITasks
  /** The computed framerate of the application. */
  readonly fps: number
  /** The current session time. */
@@ -59,10 +64,32 @@ declare class PartDNSRoot extends PartMix {
  /** The default theme provider assigned to the operating system. */
  readonly themeHost: string
 }
+
+declare interface ITopLevelDomain extends IMix {
+ readonly "..": IDNSRoot
+}
+
+/** Represents any domain which is a direct subdomain of a top level domain (e.g. `example.com`). */
+declare interface IApexDomain extends IMix {
+ /** The apex domain's theme - used to set the wallpaper and override the css of the desktop when accessing the O/S via the apex domain's host. */
+ readonly www: ITheme
+}
+
+/** Represents the `www` subdomain of any apex domain.
+ * 
+ * It represents a domain which has an `A` record that points to a server implementing the project's build artifact. */
+declare interface ITheme extends IPart {
+ /** The favicon of the theme part, used for the O/S task menu button, browser tab, pogressive web application, and when showing the theme in lists. */
+ readonly "theme.png"
+ /** The stylesheet for the theme, which comes after other stylesheets. */
+ readonly "inline.css"
+ /** The html which becomes the desktop wallpaper for the theme. */
+ readonly "inline.html"
+}
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
  * The serialized version should not include any values that are added *after* hydration. */
-declare const _: PartDNSRoot
+declare const _: IDNSRoot
 /** A function which simplifies the process of deploying to four environments
  * (build, server, service worker, window) by giving them all the same
  * routing functions, virtual DOM and synchronous fetch method which can
@@ -85,7 +112,7 @@ declare const script: string
 /** An object that serializes method signatures and meta data during part object hydration.
  * The object is parsed from the file `part.json` (or `{}` if no file is found).
  * Its prototype is the prototype part's own partManifest or null, if it is the Core. */
-declare const partManifest: PartData
+declare const partManifest: IPartData
 /** The inverse of pathToRoot. The path "back up" to the repository root from the directory containing the source code the part used. */
 declare const pathToRepo: string
 /** All of the data collected about the source of each property added to the part during hydration. */
@@ -100,9 +127,9 @@ declare const pathFromRepo: string
 declare const subdomains: string[]
 /** The list of static assets for the part whose source code is currently being evaluated. */
 declare const filenames: string[]
-declare interface SourceDirectory<T> {
+declare interface ISourceDirectory<T> {
 }
-declare interface PropertyTable<T> {
+declare interface IPropertyTable<T> {
  readonly ["render"]: T
 
  readonly ["route-set"]: T
@@ -117,7 +144,7 @@ declare interface PropertyTable<T> {
  readonly ["view-distribute-end"]: T
 }
 
-declare interface PartData extends PropertyTable<string[]> {
+declare interface IPartData extends IPropertyTable<string[]> {
  readonly typename: string
 }
 /** A type used for source mapping and packing data from one or more files into a single new file. */
@@ -128,7 +155,7 @@ class SourceMappedFile {
  readonly mappings: []
  readonly sources: string[]
  readonly scripts: [string | null]
- readonly part: Part
+ readonly part: IPart
  addLine(string: string, srcIndex: number, ogLn: number, ogCol: number, indent: string, mapTokens: boolean): void
  addLines(strings: string[], srcIndex: number, ogLn: number, ogCol: number, indent: string, mapTokens: boolean): void
  addSource(source: string, script: string | null = null): number
@@ -292,7 +319,7 @@ declare class MethodConstant {
  * Available only in user.setRoute(). */
 declare const REQUEST_URL: string
 /** Gets a part instance from the root, given its array of domain parts. */
-declare function getPartFromDomains(domains): Part
+declare function getPartFromDomains(domains): IPart
 /** Trades a string pathname for a routeIDs array or vice-versa. */
 declare function swap(input: string): bigint[][]
 declare function swap(input: bigint[][]): string

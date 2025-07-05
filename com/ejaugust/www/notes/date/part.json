@@ -1,0 +1,6 @@
+{
+ "typename": "match.core.parts",
+ "go": [
+  "UNIX_TIMESTAMP"
+ ]
+}

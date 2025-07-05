@@ -1,25 +1,7 @@
 wallpaper- {
  --padding: max(calc((100vw - 640px) / 2), var(--spacing));
- display: grid;
- grid-template-rows: auto 1fr;
- grid-template-columns: 1fr auto;
- gap: var(--spacing);
-}
-
-#dates {
  display: flex;
  flex-flow: column;
- padding: 0 var(--padding) 0 0;
- max-width: min(33vw, 256px);
- min-height: 0;
- box-sizing: content-box;
- overflow-y: scroll;
-}
-
-@media (width < 500px) {
- #dates {
-  display: none
- }
 }
 
 wallpaper- menu {
@@ -29,10 +11,10 @@ wallpaper- menu {
  padding: 0;
  margin: 0;
  justify-content: center;
+ flex: 0;
 }
 
 wallpaper- header {
- grid-column: 1 / -1;
  background: var(--fg-un-accent);
  padding: var(--spacing) var(--padding);
 }
@@ -46,7 +28,7 @@ wallpaper- h1 {
 }
 
 wallpaper->article {
- padding: 0 0 0 var(--padding);
+ padding: 0 var(--padding);
  overflow-y: scroll;
  flex: 1;
  min-height: 0;

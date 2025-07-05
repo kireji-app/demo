@@ -43,7 +43,7 @@ Each version of the hash tree can be treated as its own schema for URI encoding 
 This allows developers to:
 
 * Pin content to a specific version
-* Maintain deep links in blog posts or docs
+* Maintain deep links in notes or docs
 * Add new routes or applications without breaking old ones
 
 In the future, the version number will be encoded directly in the URI and parsed at runtime to ensure compatibility.

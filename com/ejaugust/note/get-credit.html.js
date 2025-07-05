@@ -1,0 +1,1 @@
+return (note.editTimestamp ? `Edited ${note.niceDate(note.editTimestamp)} | ` : "") + `Posted ${note.niceDate(note.unixTimestamp)} | ~${Math.ceil(note.readingLength)} minute read`

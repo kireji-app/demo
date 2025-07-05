@@ -1,1 +1,0 @@
-return `<wallpaper- tabIndex=1 ${desktop.theme["wallpaperAttributes"] ?? ""}>${desktop.theme["wallpaper.html"]}</wallpaper->`

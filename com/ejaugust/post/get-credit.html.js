@@ -1,1 +1,0 @@
-return (post.editTimestamp ? `Edited ${blog.niceDate(post.editTimestamp)} | ` : "") + `Posted ${blog.niceDate(post.unixTimestamp)} | ~${Math.ceil(post.readingLength)} minute read`

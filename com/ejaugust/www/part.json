@@ -1,5 +1,3 @@
 {
- "date-nice": [
-  "UNIX_TIMESTAMP"
- ]
+ "typename": "match.core.parts"
 }

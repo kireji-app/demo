@@ -1,0 +1,1 @@
+return (ejaugust["static.css"] ?? "") + "\n" + ejaugust.arm["inline.css"]

@@ -1,3 +1,3 @@
-declare class PartTaskBar extends Part {
+declare interface ITaskBar extends IPart {
 
 }

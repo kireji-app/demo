@@ -1,8 +1,4 @@
-declare class PartEJAugust extends PartMix {
- readonly date: PartDate
- readonly post: BlogPost
- readonly scroller: PartScroller
- readonly www: PartEjaugustTheme
+declare interface IEJAugust extends IComApexDomain {
+ readonly scroller: IEJAugustScroller
+ readonly www: IEJAugustTheme
 }
-/** The ejaugust apex domain, which contains all of the logic and posts for the blog there. */
-declare const ejaugust: PartEJAugust

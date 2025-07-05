@@ -1,10 +1,10 @@
-declare class PartEra extends PartMatch {
- readonly vintage: Part
- readonly modern: Part
+declare interface IEra extends IMatch {
+ readonly vintage: IPart
+ readonly modern: IPart
  /** The toggle button for vintage/modern mode. */
  readonly button: HTMLButtonElement
  /** The part for the currently selected era. */
- readonly arm: Part & {
+ readonly arm: IPart & {
   /** The current era as a state string, which can be used for controlling UI components. */
   readonly stateData: string
  }
@@ -12,4 +12,4 @@ declare class PartEra extends PartMatch {
  readonly styleElement: HTMLStyleElement
 }
 /** A toggle between a Windows 98-inspired theme and a modern web app style. */
-declare const era: PartEra
+declare const era: IEra

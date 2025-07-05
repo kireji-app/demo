@@ -1,7 +1,7 @@
 /** A type of single-cardinality part which requires an installation step that
  * can only take place within a proper subset of the four environments and only
  * after the user part has distributed it's initialization. */
-declare class OSFacet extends Part {
+declare interface IFacet extends IPart {
  /** Whether or not the facet is supported. */
  readonly supported: boolean
  /** Whether or not the facet requires an asynchronous installation. */
@@ -21,4 +21,4 @@ declare class OSFacet extends Part {
  /** Returns whether the given facet is supported. */
  checkSupport(): boolean
 }
-declare const facet: OSFacet
+declare const facet: IFacet

@@ -1,4 +1,4 @@
-class PartAgent extends OSFacet {
+class IAgent extends IFacet {
  readonly isMac: boolean
  readonly isSafari: boolean
  readonly shiftKeysDown: number
@@ -6,4 +6,4 @@ class PartAgent extends OSFacet {
 }
 declare function element(parent: HTMLElement, tagname: string): HTMLElement
 declare function svg(parent: HTMLElement, ...paths: string[]): SVGElement
-declare const agent: PartAgent
+declare const agent: IAgent

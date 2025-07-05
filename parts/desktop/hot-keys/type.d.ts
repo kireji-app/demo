@@ -1,4 +1,4 @@
-declare class PartHotKeys extends OSFacet {
+declare interface IHotKeys extends IFacet {
 
  /** The number of shift keys the user is holding down. */
  readonly shiftKeysDown: number
@@ -7,4 +7,4 @@ declare class PartHotKeys extends OSFacet {
  readonly contextKeysDown: number
 }
 
-declare const hotKeys: PartHotKeys
+declare const hotKeys: IHotKeys

@@ -1,4 +1,4 @@
-declare class PartMenuClip extends PartClip {
+declare interface IMenuClip extends IClip {
  /** Sets the menu element's style to a string based on the playback progress of the movie clip. */
  populateView(): void
  /** Returns the correct style attribute for the menu, computed from the clip's routeID.
@@ -8,5 +8,5 @@ declare class PartMenuClip extends PartClip {
  /** The key for the clip which should play next when autoplaying this clip. */
  readonly nextKey: string
 }
-declare const menuClip: PartMenuClip
-declare const menu: PartMenu
+declare const menuClip: IMenuClip
+declare const menu: IMenu

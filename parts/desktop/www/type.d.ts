@@ -1,2 +1,3 @@
-declare class PartDesktopTheme extends PartTheme {
+declare interface IDesktopTheme extends ITheme {
+ readonly "..": IDesktop
 }

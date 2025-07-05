@@ -1,0 +1,1 @@
+return "<scroller->" + note["inline.html"] + "</scroller->"
