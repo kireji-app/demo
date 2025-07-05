@@ -1,11 +1,11 @@
-const sectionNames = ["about", "portfolio", "others", "connect"]
+const zoneNames = ["about", "portfolio", "others", "connect"]
 const links = []
 const areas = []
 
-sectionNames.forEach((bunnyName, bunnyIndex) => {
- const src = orenjinari.render({ request: `${bunnyName}-up.gif`, format: "datauri" })
- links.push(`<img id=${bunnyName} class=bunny src="${src}" onclick="_.com.orenjinari.www.go(${BigInt(bunnyIndex + 1) * 25000n - 1n}n)"/>`)
- areas.push(`<div class="placeholder bunny-${bunnyName}">${production ? "" : `<h1>Area ${bunnyIndex + 1}</h1>`}<span class=float><img src="${src}"><span class=thin>is </span><span>coming soon.</span></span></div>`)
+zoneNames.forEach((zoneName, zoneIndex) => {
+ const src = orenjinari.render({ request: `${zoneName}-up.gif`, format: "datauri" })
+ links.push(`<img id=${zoneName}-btn class=bunny src="${src}" onclick="_.com.orenjinari.www.go('#${zoneName}')"/>`)
+ areas.push(`<div id=${zoneName} class="zone bunny-${zoneName}">${production ? "" : `<h1>Area ${zoneIndex + 1}</h1>`}<span class=float><img src="${src}"><span class=thin>is </span><span>coming soon.</span></span></div>`)
 })
 
 return `<scroller->` + links.join("") + areas.join("") + `</scroller->`

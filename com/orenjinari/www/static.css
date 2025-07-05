@@ -34,42 +34,42 @@ wallpaper- .bunny {
  cursor: pointer;
 }
 
-wallpaper- #connect {
+wallpaper- #connect-btn {
  left: calc(75vw - 3.7vw);
  top: calc(calc(.8 * var(--wallpaper-height)) - 7.6vw);
  width: 7.4vw;
 }
 
-wallpaper- #others {
+wallpaper- #others-btn {
  left: calc(57.5vw - 4vw);
  top: calc(calc(.8 * var(--wallpaper-height)) - 9.3vw);
  width: 8vw;
 }
 
-wallpaper- #portfolio {
+wallpaper- #portfolio-btn {
  left: calc(42.5vw - 5vw);
  top: calc(calc(.8 * var(--wallpaper-height)) - 10.5vw);
  width: 10vw;
 }
 
-wallpaper- #about {
+wallpaper- #about-btn {
  left: calc(25vw - 4vw);
  top: calc(.8 * var(--wallpaper-height) - 8vw);
  width: 8vw;
 }
 
-wallpaper- .placeholder {
+wallpaper- .zone {
  width: 100vw;
  height: var(--wallpaper-height);
  position: relative;
  margin-top: var(--section-gap);
 }
 
-wallpaper- .placeholder img {
+wallpaper- .zone img {
  width: 64px;
 }
 
-wallpaper- .placeholder h1 {
+wallpaper- .zone h1 {
  text-align: center;
  line-height: var(--wallpaper-height);
  height: 100%;
@@ -84,7 +84,7 @@ wallpaper- .placeholder h1 {
  opacity: 25%;
 }
 
-wallpaper- .placeholder .thin {
+wallpaper- .zone .thin {
  font-weight: 200;
 }
 
