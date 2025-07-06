@@ -18,29 +18,31 @@ declare interface IColor extends IMatch {
  /** The style element which holds the CSS that this part uses to drive UI changes. */
  readonly styleElement: HTMLStyleElement
 
- readonly lightFg: string
- readonly lightBg: string
- readonly lightAccent: string
- readonly lightErAccent: string
  readonly lightEstAccent: string
- readonly darkFg: string
- readonly darkBg: string
+ readonly lightErAccent: string
+ readonly lightAccent: string
+ readonly accent: string
  readonly darkAccent: string
  readonly darkErAccent: string
  readonly darkEstAccent: string
- readonly accent: string
+ readonly unLightEstAccent: string
+ readonly unLightErAccent: string
+ readonly unLightAccent: string
  readonly unAccent: string
- readonly fg: string
- readonly bg: string
+ readonly unDarkAccent: string
+ readonly unDarkErAccent: string
+ readonly unDarkEstAccent: string
  readonly lightEstFg: string
  readonly lightErFg: string
  readonly lightFg: string
+ readonly fg: string
  readonly darkFg: string
  readonly darkErFg: string
  readonly darkEstFg: string
  readonly lightEstBg: string
  readonly lightErBg: string
  readonly lightBg: string
+ readonly bg: string
  readonly darkBg: string
  readonly darkErBg: string
  readonly darkEstBg: string

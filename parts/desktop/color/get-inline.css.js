@@ -16,9 +16,13 @@ return `html, body {
  --accent-dark: ${desktop.color.darkAccent};
  --accent-dark-er: ${desktop.color.darkErAccent};
  --accent-dark-est: ${desktop.color.darkEstAccent};
-
- --fg-un-accent: ${desktop.color.unAccent};
-
+ --accent-un-light-est: ${desktop.color.unLightEstAccent};
+ --accent-un-light-er: ${desktop.color.unLightErAccent};
+ --accent-un-light: ${desktop.color.unLightAccent};
+ --accent-un: ${desktop.color.unAccent};
+ --accent-un-dark: ${desktop.color.unDarkAccent};
+ --accent-un-dark-er: ${desktop.color.unDarkErAccent};
+ --accent-un-dark-est: ${desktop.color.unDarkEstAccent};
  --fg-light-est: ${desktop.color.lightEstFg};
  --fg-light-er: ${desktop.color.lightErFg};
  --fg-light: ${desktop.color.lightFg};

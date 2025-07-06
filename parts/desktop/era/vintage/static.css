@@ -130,23 +130,23 @@ sidebar- {
 
 sidebar-::after {
  pointer-events: none;
- font-smooth: never;
- -webkit-font-smoothing: none;
+ /* font-smooth: never;
+ -webkit-font-smoothing: none; */
  display: block;
  writing-mode: tb-rl;
  transform: rotate(-180deg);
  line-height: 21px;
  font-size: 18px;
  font-weight: 200;
- color: var(--accent-light-est);
+ color: var(--accent-un-light-est);
  padding-top: 4px;
  position: absolute;
  left: 3px;
  top: 3px;
  height: calc(var(--sidebar-height) - 6px);
  background:
-  linear-gradient(rgba(0, 200, 255, 0), var(--accent-dark) 12.5%, rgba(0, 200, 255, 0) 70.71%),
-  var(--accent-dark-est);
+  linear-gradient(rgba(0, 200, 255, 0), var(--accent-un-dark) 12.5%, rgba(0, 200, 255, 0) 70.71%),
+  var(--accent-un-dark-est);
  width: 21px
 }
 

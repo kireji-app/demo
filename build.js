@@ -503,5 +503,5 @@ function ƒ(_) {
  verbosity: 0,
  mapping: false,
  hangHydration: false,
- themeHost: "www.orenjinari.com"
+ themeHost: "www.core.parts"
 })

@@ -15,7 +15,7 @@ wallpaper- menu {
 }
 
 wallpaper- header {
- background: var(--fg-un-accent);
+ background: var(--accent-un);
  padding: var(--spacing) var(--padding);
 }
 
