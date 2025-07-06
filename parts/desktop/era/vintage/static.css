@@ -55,7 +55,7 @@
 }
 
 .task-link>a:hover {
- background: var(--fg-accent);
+ background: var(--accent);
  color: var(--bg-mode-est);
 }
 
@@ -129,7 +129,6 @@ sidebar- {
 }
 
 sidebar-::after {
- content: "𝗱𝗲𝘀𝗸𝘁𝗼𝗽.𝑝𝑎𝑟𝑡𝑠";
  pointer-events: none;
  font-smooth: never;
  -webkit-font-smoothing: none;
@@ -139,15 +138,15 @@ sidebar-::after {
  line-height: 21px;
  font-size: 18px;
  font-weight: 200;
- color: var(--dark-fg);
+ color: var(--accent-light-est);
  padding-top: 4px;
  position: absolute;
  left: 3px;
  top: 3px;
  height: calc(var(--sidebar-height) - 6px);
  background:
-  linear-gradient(rgba(0, 200, 255, 0), var(--dark-accent) 12.5%, rgba(0, 200, 255, 0) 70.71%),
-  var(--light-accent);
+  linear-gradient(rgba(0, 200, 255, 0), var(--accent-dark) 12.5%, rgba(0, 200, 255, 0) 70.71%),
+  var(--accent-dark-est);
  width: 21px
 }
 

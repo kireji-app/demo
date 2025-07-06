@@ -1,9 +1,9 @@
-#error>.thin {
+return `#error>.thin {
  font-weight: 200;
 }
 
 #error {
- font-size: 32px;
+ font-size: ${Math.trunc(200 / ((part.title?.length ?? 9) + 18))}vw;
  height: 100%;
  align-items: center;
  justify-content: center;
@@ -15,7 +15,7 @@
 wallpaper->h1 {
  font-size: 35vw;
  text-align: center;
- color: var(--bg-mode-est);
+ color: var(--bg-un-mode);
  line-height: var(--wallpaper-height);
  height: 100%;
  position: absolute;
@@ -26,4 +26,4 @@ wallpaper->h1 {
  padding: 0px;
  opacity: 50%;
  z-index: -1;
-}
+}`

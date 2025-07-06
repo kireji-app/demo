@@ -9,8 +9,16 @@ return `html, body {
  --dark-bg: ${desktop.theme.darkBgTheme};
  --dark-accent: ${desktop.theme.darkAccentTheme};
 
- --fg-accent: ${desktop.color.accent};
+ --accent-light-est: ${desktop.color.lightEstAccent};
+ --accent-light-er: ${desktop.color.lightErAccent};
+ --accent-light: ${desktop.color.lightAccent};
+ --accent: ${desktop.color.accent};
+ --accent-dark: ${desktop.color.darkAccent};
+ --accent-dark-er: ${desktop.color.darkErAccent};
+ --accent-dark-est: ${desktop.color.darkEstAccent};
+
  --fg-un-accent: ${desktop.color.unAccent};
+
  --fg-light-est: ${desktop.color.lightEstFg};
  --fg-light-er: ${desktop.color.lightErFg};
  --fg-light: ${desktop.color.lightFg};

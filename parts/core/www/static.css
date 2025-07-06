@@ -52,7 +52,7 @@ body.dragging * {
 
 width-handle:hover,
 body.dragging width-handle {
- background-color: var(--fg-accent);
+ background-color: var(--accent);
  cursor: ew-resize;
 }
 
@@ -117,11 +117,11 @@ wallpaper- summary:hover {
 }
 
 wallpaper- summary:hover:not(:has(svg:hover)) {
- color: var(--fg-accent);
+ color: var(--accent);
 }
 
 wallpaper- summary>svg:hover {
- stroke: var(--fg-accent);
+ stroke: var(--accent);
 }
 
 wallpaper- summary>.explore-toggle,

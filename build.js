@@ -416,7 +416,7 @@ function ƒ(_) {
       }
       property.MethodConstant.all[constant.identifier] = constant
       property.MethodConstant.unused[constant.identifier] = constant
-      constant.usageRegExp = new RegExp(`(?:^|[^.])\\b${constant.identifier}\\b`)
+      constant.usageRegExp = new RegExp(`(?:^|[^.]|\.{3})\\b${constant.identifier}\\b`)
       for (const methodBodyLine of property.lines) if (constant.usageRegExp.test(methodBodyLine)) constant.ensureDeclarationAndDependencies()
      }
      ensureDeclarationAndDependencies() {

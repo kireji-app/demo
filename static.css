@@ -153,12 +153,12 @@ task-bar>.btn {
 }
 
 task-bar>.btn:hover {
- color: var(--fg-accent);
+ color: var(--accent);
 }
 
 button:hover,
 menu-button:hover {
- color: var(--fg-accent);
+ color: var(--accent);
 }
 
 #nested button {

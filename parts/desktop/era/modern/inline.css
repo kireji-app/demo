@@ -136,7 +136,7 @@ sidebar->* {
  top: 0;
  bottom: 0;
  width: 8px;
- background: var(--fg-accent);
+ background: var(--accent);
 }
 
 .task-link>a,
@@ -148,11 +148,11 @@ sidebar->* {
 }
 
 .task-link[data-here]>a {
- color: var(--fg-accent);
+ color: var(--accent);
 }
 
 .task-link:not([data-here]):hover {
- color: var(--fg-accent);
+ color: var(--accent);
  cursor: pointer;
 }
 

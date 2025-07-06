@@ -53,11 +53,6 @@ body.modern task-bar {
  box-shadow: none;
 }
 
-body.vintage sidebar-::after {
- content: "orenjinari";
- font-weight: 900;
-}
-
 wallpaper- .bunny {
  position: absolute;
  cursor: pointer;

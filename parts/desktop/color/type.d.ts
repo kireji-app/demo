@@ -21,9 +21,13 @@ declare interface IColor extends IMatch {
  readonly lightFg: string
  readonly lightBg: string
  readonly lightAccent: string
+ readonly lightErAccent: string
+ readonly lightEstAccent: string
  readonly darkFg: string
  readonly darkBg: string
  readonly darkAccent: string
+ readonly darkErAccent: string
+ readonly darkEstAccent: string
  readonly accent: string
  readonly unAccent: string
  readonly fg: string
