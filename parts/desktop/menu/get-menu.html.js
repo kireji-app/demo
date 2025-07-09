@@ -14,11 +14,11 @@ return `
   <section id="settings">
    <span id=version tabIndex=6>
     <span class="label">Version:</span>
-    <span id="tags">${[
+    <a id="tags" href="https://github.com/EJAugust/EJAugust/tree/${_.gitSHA}" onclick="window.open(this.href, '_blank')">${[
   _.version,
   ...(_.branch === "main" ? [] : [_.branch]),
   ...(_.local ? ["local"] : [])
- ].map(tag => `<span>${tag}</span>`).join("")}</span>
+ ].map(tag => `<span>${tag}</span>`).join("")}</a>
    </span>
    ${desktop.color["control.html"]}
    ${desktop.era["control.html"]}

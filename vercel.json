@@ -13,7 +13,9 @@
   {
    "src": "/(.*)",
    "dest": "/api/service",
+   "status": 429,
    "headers": {
+    "Retry-After": "86400",
     "Document-Policy": "force-load-at-top"
    }
   }
