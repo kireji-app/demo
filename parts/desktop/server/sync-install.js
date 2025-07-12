@@ -10,7 +10,7 @@ const securityHeader = {
 const serviceHeader = {
  ETag,
  'Content-Type': 'application/javascript;charset=UTF-8',
- 'Cache-Control': 'public, max-age=604800',
+ 'Cache-Control': 'public, max-age=604800, immutable',
  ...securityHeader
 }
 
