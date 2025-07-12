@@ -29,23 +29,29 @@ function serverLog(status, request) {
 }
 
 require('http').createServer((request, response) => {
- let status, head, body
+ let status, head = {}, body
 
- if (request.url === "/kireji.js") {
-  if (request.headers['if-none-match'] === ETag) {
-   status = 304
-   head = { ETag }
+ try {
+  if (request.url === "/kireji.js") {
+   if (request.headers['if-none-match'] === ETag) {
+    status = 304
+    head = { ETag }
+   } else {
+    _.setRoute(`https://${request.headers.host}/`)
+    status = 200
+    head = serviceHeader
+    body = _["kireji.js"]
+   }
   } else {
-   _.setRoute(`https://${request.headers.host}/`)
-   status = 200
-   head = serviceHeader
-   body = _["kireji.js"]
+   status = 429
+   head = indexHeader
+   _.setRoute(`https://${request.headers.host}${request.url}`)
+   body = _["index.html"]
   }
- } else {
-  status = 429
-  head = indexHeader
-  _.setRoute(`https://${request.headers.host}${request.url}`)
-  body = _["index.html"]
+ } catch (e) {
+  status = 444
+  error(e)
+  head = {}
  }
 
  serverLog(status, request)
