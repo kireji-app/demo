@@ -18,8 +18,8 @@ const indexHeader = {
  "Retry-After": "86400",
  'Content-Type': 'text/html;charset=UTF-8',
  "Document-Policy": "force-load-at-top",
- 'Content-Security-Policy': "default-src 'none'; worker-src 'self'; style-src 'unsafe-inline'; img-src data:; script-src 'unsafe-inline'",
- 'Permissions-Policy': '(), web-share=(self), full-screen=(self)',
+ // 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; img-src data:; script-src self 'unsafe-inline'",
+ // 'Permissions-Policy': '(), web-share=(self), full-screen=(self)',
  'Cross-Origin-Embedder-Policy': 'require-corp',
  ...securityHeader
 }
@@ -30,6 +30,8 @@ function serverLog(status, request) {
 
 require('http').createServer((request, response) => {
  let status, head, body
+
+ _.setRoute(`https://${request.headers.host}${request.url}`)
 
  if (request.url === "/kireji.js") {
   if (request.headers['if-none-match'] === ETag) {
