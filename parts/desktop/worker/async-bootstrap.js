@@ -5,7 +5,7 @@ globalThis.𝓌 ??= {}
 
 𝓌.startupRegistration = 𝓌.registration = await nav.serviceWorker.getRegistration()
 
-𝓌.registration ??= await nav.serviceWorker.register("/kireji.js")
+𝓌.registration ??= await nav.serviceWorker.register("/kireji.js", { updateViaCache: "all" })
 
 if (!𝓌.registration.active) {
  await new Promise(resolve => {
