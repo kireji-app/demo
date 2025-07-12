@@ -31,13 +31,12 @@ function serverLog(status, request) {
 require('http').createServer((request, response) => {
  let status, head, body
 
- _.setRoute(`https://${request.headers.host}${request.url}`)
-
  if (request.url === "/kireji.js") {
   if (request.headers['if-none-match'] === ETag) {
    status = 304
    head = { ETag }
   } else {
+   _.setRoute(`https://${request.headers.host}/`)
    status = 200
    head = serviceHeader
    body = _["kireji.js"]
@@ -45,6 +44,7 @@ require('http').createServer((request, response) => {
  } else {
   status = 429
   head = indexHeader
+  _.setRoute(`https://${request.headers.host}${request.url}`)
   body = _["index.html"]
  }
 
