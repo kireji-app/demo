@@ -15,7 +15,13 @@ if (!isFileRequest) {
     'Content-Type': 'text/plain'
    }
   })
- else _.setRoute(REQUEST_URL)
+ else {
+  try {
+   _.setRoute(REQUEST_URL)
+  } catch (e) {
+   return Promise.reject(e)
+  }
+ }
 }
 
 return _.render({
