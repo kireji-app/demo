@@ -49,8 +49,8 @@ require('http').createServer((request, response) => {
  serverLog(status, request)
  response.writeHead(status, head)
  response.end(body)
- logMem()
 }).listen(3000, () => log(1, "https://localhost:3000"))
 
-logMem()
-setInterval(logMem, 1000)
+const logRAM = () => log(7, 'Memory Usage:', process.memoryUsage().rss.toLocaleString())
+logRAM()
+setInterval(logRAM, 1000)

@@ -202,15 +202,6 @@ function ƒ(_) {
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
-  logMem = () => {
-   const memoryUsage = process.memoryUsage();
-   console.log('Memory Usage:', {
-    rss: (memoryUsage.rss / 1024 / 1024).toFixed(2) + ' MB',
-    heapTotal: (memoryUsage.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
-    heapUsed: (memoryUsage.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
-    external: (memoryUsage.external / 1024 / 1024).toFixed(2) + ' MB'
-   });
-  },
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   hang = ms => {
@@ -255,7 +246,6 @@ function ƒ(_) {
     "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
    }], "table")
   }
- logMem()
  openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   \n            ▙▌    ${environment}\n\nBooting O/S`)
  if (environment === "server") {
   const { extname } = require("path"),
@@ -298,7 +288,6 @@ function ƒ(_) {
   log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
   closeLog(2, true)
  }
- logMem()
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
  const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
@@ -314,7 +303,6 @@ function ƒ(_) {
    return currentFolder[name]
   }, _)
  }
- logMem()
  openLog(3, "Hydrating Domains")
  const instances = []
  function recursiveDistributeHydration(part, domains = []) {
@@ -491,10 +479,8 @@ function ƒ(_) {
   if (!isAbstract) instances.push(part)
   closeLog(2)
   return part
-  logMem()
  }
  recursiveDistributeHydration(_)
- logMem()
  closeLog(3, true)
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
@@ -502,7 +488,6 @@ function ƒ(_) {
  _.validate()
  closeLog(1, true)
  log(1, "Boot Completed (end of synchronous script execution).")
- logMem()
 }
 
 ƒ({
