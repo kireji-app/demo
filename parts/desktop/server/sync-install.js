@@ -32,14 +32,6 @@ require('http').createServer((request, response) => {
  let status, head, body
 
  if (request.url === "/kireji.js") {
-  debug({
-   'if-match': request.headers['if-match'],
-   'if-modified-since': request.headers['if-modified-since'],
-   'if-range': request.headers['if-range'],
-   'if-none-modified-since': request.headers['if-none-modified-since'],
-   'etag': request.headers.etag,
-   'server ETag': ETag
-  })
   if (request.headers['if-none-match'] === ETag) {
    status = 304
    head = { ETag }
