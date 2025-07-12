@@ -4,8 +4,7 @@ wallpaper- {
  --ground: url(${orenjinari.render({ request: "ground.png", format: "datauri" })});
 }
 
-${_.local ? `
 wallpaper- .zone {
  box-shadow: inset 0 0 0 8vw #0003;
-}` : ""}
+}
 ` + orenjinari[".."].scroller["inline.css"]

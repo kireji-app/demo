@@ -16,8 +16,7 @@ return `
     <span class="label">Version:</span>
     <a id="tags" href="https://github.com/EJAugust/EJAugust/tree/${_.gitSHA}" onclick="window.open(this.href, '_blank')">${[
   _.version,
-  ...(_.branch === "main" ? [] : [_.branch]),
-  ...(_.local ? ["local"] : [])
+  ...(_.branch === "main" ? [] : [_.branch])
  ].map(tag => `<span>${tag}</span>`).join("")}</a>
    </span>
    ${desktop.color["control.html"]}

@@ -24,7 +24,7 @@ Each environment has specific responsibilities, yet all operate on the same stat
 - **Executes unit tests at build time** by simulating runtime logic across all environments using the static hash model
 - **Static analysis of source files**
 - **Hash tree construction and cardinality computation**
-- **Inlines component definitions into `./api/service.js`**
+- **Inlines component definitions into `/kireji.js`**
 
 ### Features:
 
@@ -34,7 +34,7 @@ Each environment has specific responsibilities, yet all operate on the same stat
 
 ### Output:
 
-- Fully packed and source-mapped script (`service.js`) that powers all subsequent environments
+- Fully packed and source-mapped script (`/kireji.js`) that powers all subsequent environments
 
 ---
 

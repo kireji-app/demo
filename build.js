@@ -185,22 +185,14 @@ function ƒ(_) {
   }
  }
  const
-  environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : process?.argv[1]?.split("/").pop() !== "build.js" ? "server" : (
+  environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : (
    Object.defineProperty(_, "$", { value: (f => x => f(x).toString().trim())(require("child_process").execSync) }),
-   process.env.VERCEL && !process.env.__VERCEL_DEV_RUNNING ? (
-    _.local = false,
-    _.branch = process.env.VERCEL_GIT_COMMIT_REF,
-    _.gitSHA = process.env.VERCEL_GIT_COMMIT_SHA,
-    _.version = process.env.VERCEL_GIT_COMMIT_MESSAGE.split("\n")[0]
-   ) : (
-    _.local = true,
-    _.branch = _.$("git branch --show-current").toString().trim(),
-    _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
-    _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change)
-   ),
-   "build"
+   _.branch = _.$("git branch --show-current").toString().trim(),
+   _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
+   _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change),
+   "server"
   ),
-  production = !_.local && _.branch === "main",
+  production = _.branch === "main" && environment !== "server",
   log = (verbosity, ...data) => logAny(verbosity, data, "log"),
   warn = (...data) => logAny(0, data, "warn"),
   debug = (...data) => logAny(0, data, "debug"),
@@ -210,6 +202,15 @@ function ƒ(_) {
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
+  logMem = () => {
+   const memoryUsage = process.memoryUsage();
+   console.log('Memory Usage:', {
+    rss: (memoryUsage.rss / 1024 / 1024).toFixed(2) + ' MB',
+    heapTotal: (memoryUsage.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
+    heapUsed: (memoryUsage.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
+    external: (memoryUsage.external / 1024 / 1024).toFixed(2) + ' MB'
+   });
+  },
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   hang = ms => {
@@ -254,8 +255,9 @@ function ƒ(_) {
     "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
    }], "table")
   }
- openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   ${_.local ? "local" : "cloud"}\n            ▙▌    ${environment}\n\nBooting O/S`)
- if (environment === "build") {
+ logMem()
+ openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   \n            ▙▌    ${environment}\n\nBooting O/S`)
+ if (environment === "server") {
   const { extname } = require("path"),
    { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs")
   openLog(1, "Scanning Repository")
@@ -265,7 +267,7 @@ function ƒ(_) {
    if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
    const filenames = []
    for (const itemName of readFolder(folderPath)) {
-    if (!host && (["api"].includes(itemName) || itemName.startsWith("."))) continue
+    if (!host && itemName.startsWith(".")) continue
     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
     if (itemExists(filePath)) {
      try {
@@ -296,9 +298,10 @@ function ƒ(_) {
   log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
   closeLog(2, true)
  }
+ logMem()
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
- const desktop = _.parts.desktop, { service, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
+ const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
  if (environment === "window") var element, svg
  Object.defineProperties(_, {
   fps: { value: 1, configurable: true, writable: true },
@@ -311,6 +314,7 @@ function ƒ(_) {
    return currentFolder[name]
   }, _)
  }
+ logMem()
  openLog(3, "Hydrating Domains")
  const instances = []
  function recursiveDistributeHydration(part, domains = []) {
@@ -487,8 +491,10 @@ function ƒ(_) {
   if (!isAbstract) instances.push(part)
   closeLog(2)
   return part
+  logMem()
  }
  recursiveDistributeHydration(_)
+ logMem()
  closeLog(3, true)
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
@@ -496,11 +502,12 @@ function ƒ(_) {
  _.validate()
  closeLog(1, true)
  log(1, "Boot Completed (end of synchronous script execution).")
+ logMem()
 }
 
 ƒ({
  change: "patch",
- verbosity: 0,
+ verbosity: 100,
  mapping: false,
  hangHydration: false,
  themeHost: "www.core.parts"

@@ -1,6 +1,6 @@
 openLog(1, "Tests")
 
-if (environment === "build") {
+if (environment === "server") {
  const testURL = "https://www.desktop.parts/hello/"
  openLog(1, "Routing Test: " + testURL)
  openLog(1, "Setting route.")

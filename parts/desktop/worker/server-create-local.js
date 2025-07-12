@@ -40,7 +40,7 @@ Object.defineProperty(worker, "controller", {
 })
 
 // TODO: Large files won't be inlined soon. Fetch or stream them into the cache first, them provide them.
-globalThis.onfetch = e => e.respondWith(service.fetchSync(e.request.url))
+globalThis.onfetch = e => e.respondWith(server.fetchSync(e.request.url))
 globalThis.onactivate = e => globalThis.clients.claim()
 globalThis.onmessage = ({ data: { code, payload } }) => worker.controller[code](payload)
 

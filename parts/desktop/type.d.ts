@@ -11,7 +11,7 @@ declare interface IDesktop extends IPartsApexDomain {
   * 
   * This selection is encoded by the host of the current route. */
  readonly theme: IPart
- readonly themeHosts: IPart
+ readonly themeHosts: object
 
  // Facets.
  readonly gpu: IGpu

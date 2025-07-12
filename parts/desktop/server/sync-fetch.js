@@ -2,7 +2,7 @@ if (environment === "window")
  throw "Calling fetchSync in the window environment is not supported."
 
 const { pathname } = new URL(REQUEST_URL)
-const isFileRequest = ["/service.js", "/manifest.json"].includes(pathname)
+const isFileRequest = ["/kireji.js", "/manifest.json"].includes(pathname)
 const filename = isFileRequest ? pathname.slice(1) : "index.html"
 const pattern = /^\/(.*)(?:[.%$#&,;!:=+\\(\\)\\[\\]](.*)|[^/])$/
 

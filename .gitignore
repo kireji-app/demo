@@ -1,19 +1,7 @@
-# NOTE: Ignored files are skipped by the build process.
+# NOTE: Ignored files are skipped by the server's packing process.
 
-## O/S clutter
-**/.DS_Store
-**/Icon
-
-## IDE configuration
+.git/
 .vscode/
-
-## Local development files
-.archive/
-.env*.local
-.vercel/
-
-## The build process outputs `api/service.js` but Vercel looks for serverless
-## functions before it runs the build process. An empty placeholder was pushed
-## to the remote repository and the file is assumed unchanged during the local
-## build. Undo using `git update-index --no-assume-unchanged api/service.js`.
-api/
+.nginx/
+**/Icon
+**/.DS_Store

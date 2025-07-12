@@ -1,8 +1,8 @@
-if (environment === "build")
+if (environment === "server")
  return null
 
-if (environment === "server" || environment === "worker")
- return service.requestedHost
+if (environment === "worker")
+ return server.requestedHost
 
 if (environment === "window")
  return location.host

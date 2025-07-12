@@ -5,7 +5,7 @@ globalThis.𝓌 ??= {}
 
 𝓌.startupRegistration = 𝓌.registration = await nav.serviceWorker.getRegistration()
 
-𝓌.registration ??= await nav.serviceWorker.register("/service.js")
+𝓌.registration ??= await nav.serviceWorker.register("/kireji.js")
 
 if (!𝓌.registration.active) {
  await new Promise(resolve => {
@@ -29,6 +29,6 @@ if (!𝓌.registration.active) {
 
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
-newScript.setAttribute("src", "/service.js")
+newScript.setAttribute("src", "/kireji.js")
 newScript.setAttribute("defer", "")
 oldScript.replaceWith(newScript)

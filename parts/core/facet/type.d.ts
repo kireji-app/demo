@@ -18,7 +18,7 @@ declare interface IFacet extends IPart {
  installAsync?(): Promise<void>
  /** Installs the given facet synchronously. If it is not defined, installAsync() must be defined. */
  install?(): void
- /** Returns whether the given facet is supported. */
+ /** Returns whether the given facet is supported. Defaults to "true".*/
  checkSupport(): boolean
 }
 declare const facet: IFacet

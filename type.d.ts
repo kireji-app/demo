@@ -1,4 +1,6 @@
 declare interface IDNSRoot extends IMix {
+ readonly "kireji.js": string
+ readonly "index.html": string
  readonly app: IApp
  readonly click: IClick
  readonly com: ICom
@@ -8,8 +10,6 @@ declare interface IDNSRoot extends IMix {
  readonly change: "major" | "minor" | "patch"
  /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
  readonly verbosity: number
- /** Whether or not this is a local build. */
- readonly local: boolean
  /** The git branch for this build version. */
  readonly branch: string
  /** The hash of the most recent git commit at build time. */
@@ -90,8 +90,8 @@ declare interface ITheme extends IPart {
  * 
  * The serialized version should not include any values that are added *after* hydration. */
 declare const _: IDNSRoot
-/** A function which simplifies the process of deploying to four environments
- * (build, server, service worker, window) by giving them all the same
+/** A function which simplifies the process of deploying to three environments
+ * (server, service worker, window) by giving them all the same
  * routing functions, virtual DOM and synchronous fetch method which can
  * produce both static assets and dynamically generated files.
  * 
@@ -162,21 +162,18 @@ class SourceMappedFile {
  packAndMap(url?: string): string
  getMap(): string
 }
-/** A string representing which of four known environments the framework is running on.
- * 1. "build"
+/** A string representing which of three known environments the framework is running on.
+ * 1. "server"
  *     - Unpacked in clone (shallow in the production environment) of the project git repo in node.
- *     - It was called by `node build.js`.
+ *     - It is called by `node build.js`.
  *     - It's task is to pack and deploy itself.
- * 2. "server"
- *     - Packed and deployed as a serverless function in node.
- *     - It was created by Vercel and its state is set for and by the URL of a window network request.
  * 3. "worker"
  *     - Packed and deployed as the browser's ServiceWorker.
  *     - It was created by a window and its state is set for and by the URL of a window network request.
  * 3. "window"
  *     - Packed and deployed as a front-end framework in the browser window.
  *     - It was created by a server-rendered script to transfer rendering control from server to client. */
-declare const environment: "build" | "server" | "worker" | "window"
+declare const environment: "server" | "worker" | "window"
 /** True if the framework was built on the cloud from the main branch. */
 declare const production: boolean
 /** The host of the currently evaluating script. */
