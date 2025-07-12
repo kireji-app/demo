@@ -1,1 +1,0 @@
-const inherit = new Proxy(part, { get: (__, p) => Object.defineProperty(part, p, { value: part[".."][p], writable: true })[p] })

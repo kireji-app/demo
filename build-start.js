@@ -3,8 +3,7 @@ _.prototype.startBuild.call(_)
 
 if (environment === "server") {
  openLog(1, "Creating Script")
- const outputJS = _["kireji.js"]
- logStringSize(1, outputJS)
+ logStringSize(1, _["kireji.js"])
  closeLog(1, true)
 }
 

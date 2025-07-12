@@ -370,8 +370,6 @@ function ƒ(_) {
      for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
     }
     collectOwnConstants("const-method.js")
-    if (targetProperty.isGetOrSet) collectOwnConstants("const-get-or-set.js")
-    if (targetProperty.isView) collectOwnConstants("const-view.js")
    }
    constructor(PROPERTY_ID) {
     const property = Property[PROPERTY_ID] = this
@@ -380,20 +378,22 @@ function ƒ(_) {
     property.isView = PROPERTY_ID.startsWith("view-")
     property.isAsync = PROPERTY_ID.startsWith("async-")
     property.isSymbol = PROPERTY_ID.startsWith("symbol-")
-    property.isGetOrSet = PROPERTY_ID.startsWith("get-") || PROPERTY_ID.startsWith("set-")
+    property.isGenerated = PROPERTY_ID.startsWith("*")
     property.filename = property.isAlias ? PROPERTY_ID.slice(6) : `${PROPERTY_ID}.js`
     property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
     property.niceName = (() => {
-     if (PROPERTY_ID.includes("-")) {
+     if (PROPERTY_ID.includes("-") || property.isGenerated) {
+
+      if (property.isGenerated && (PROPERTY_ID.includes(".")))
+       return `["${PROPERTY_ID.slice(1)}"]`
+
       if (property.isSymbol)
        return `[Symbol.${PROPERTY_ID.slice(7)}]`
-      if (PROPERTY_ID.includes(".")) {
-       if (property.isGetOrSet)
-        return `["${PROPERTY_ID.slice(4)}"]`
-      }
+
       let temp = PROPERTY_ID.split("-")
       let firstWordBecomesLastWord = temp.shift()
-      if (property.isGetOrSet || property.isAlias) firstWordBecomesLastWord = temp.shift()
+      if (property.isAlias) firstWordBecomesLastWord = temp.shift()
+      else if (property.isGenerated) firstWordBecomesLastWord = firstWordBecomesLastWord.slice(1)
       temp.push(firstWordBecomesLastWord)
       return temp.map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join("")
      }
@@ -444,12 +444,12 @@ function ƒ(_) {
     if (typeof property.content !== "string") return
     property.source = sourceFile.addSource(property.filename, property.content)
     property.lines = property.content ? property.content.split("\n") : []
-    property.hasValidPropertyName = property.isSymbol || property.isGetOrSet || Property.identifierPattern.test(property.niceName)
-    property.propertyReference = property.hasValidPropertyName ? property.niceName : `["${property.niceName}"]`
+    property.niceNameIsValidIdentifier = property.isSymbol || property.isGenerated || Property.identifierPattern.test(property.niceName)
+    property.propertyReference = property.niceNameIsValidIdentifier ? property.niceName : `["${property.niceName}"]`
     property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
     property.argumentString = "(" + (part.manifest[PROPERTY_ID]?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
-    property.modifiers = property.isAsync ? "async " : (property.isGetOrSet ? PROPERTY_ID.slice(0, 3) + " " : (property.isAlias ? "get " : ""))
-    property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGetOrSet || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
+    property.modifiers = property.isAsync ? "async " : (property.isGenerated || property.isAlias ? "get " : "")
+    property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGenerated || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
     sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
     Property.collectConstants(part, property)
     if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(6)}"]`, buildSource, null, null, "    ")
@@ -464,7 +464,7 @@ function ƒ(_) {
   for (const fn of filenames) {
    if (!fn.includes(".") && fn.includes("-")) {
     Property.ids.add("alias-" + fn)
-   } else if (fn.endsWith(".js") && (fn.startsWith("get-") || fn.startsWith("set-") || fn.startsWith("view-")))
+   } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-")))
     Property.ids.add(fn.slice(0, -3))
   }
   for (const methodID in part.manifest)
