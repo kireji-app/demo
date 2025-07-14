@@ -1,6 +1,5 @@
 return _["static.css"] + `
-img[src="${part.render({ request: "blank.png", format: "datauri" })}"],
-img[src="${part.render({ request: "blank.gif", format: "datauri" })}"] {
+img[inert] {
  overflow: hidden;
  animation: loading-gradient 1.7s infinite linear;
  background: linear-gradient(to right, var(--bg-dark) 0%, var(--bg-light) 50%, var(--bg-dark) 100%), var(--bg-dark);

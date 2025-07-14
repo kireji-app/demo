@@ -37,12 +37,12 @@ body {
  margin: 0;
  height: var(--h);
  font-synthesis: weight style;
- --sidebar-width: 256px;
  color: var(--fg);
  background: var(--bg);
 }
 
-img {
+img,
+svg {
  fill: var(--fg);
 }
 

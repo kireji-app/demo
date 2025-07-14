@@ -23,8 +23,8 @@ const indexHeader = {
  "Retry-After": "86400",
  'Content-Type': 'text/html;charset=UTF-8',
  "Document-Policy": "force-load-at-top",
- // 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; img-src data:; script-src self 'unsafe-inline'",
- // 'Permissions-Policy': '(), web-share=(self), full-screen=(self)',
+ // 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; image-src data:; script-src self 'unsafe-inline'",
+ // 'Permissions-Policy': 'microphone=(), camera=(), web-share=(self), full-screen=(self)',
  'Cross-Origin-Embedder-Policy': 'require-corp',
  ...securityHeader
 }
@@ -81,4 +81,4 @@ require('http').createServer((request, response) => {
  serverLog(status, request)
  response.writeHead(status, head)
  response.end(body)
-}).listen(internalPort, () => log(1, "Server ready. ETag: " + ETag))
+}).listen(internalPort, () => log(0, "Server ready. ETag: " + ETag))

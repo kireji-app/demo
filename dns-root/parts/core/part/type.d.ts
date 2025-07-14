@@ -89,10 +89,7 @@ declare interface IPart extends Iterable<IPart> {
    * the "value" format will return a base64 encoded string and the "response" and "datauri"
    * formats will return a file or file literal with the corresponding content-type.*/
  render(REQUEST: string | {
-  /** The name of the file to render, which can include URI parameters, such as
-   * ```
-   * "icon.png?size=64"
-   * ``` */
+  /** The name of the file to render */
   request: string,
   /** How to package the rendered value. All values are converted to string before becoming a datauri or response.
    * 

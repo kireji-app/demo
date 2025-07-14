@@ -1,9 +1,11 @@
 if (part.dirty) {
 
  // Always populate own view before populating child.
- part.populateView()
+ if (part.enabled) {
+  part.populateView()
 
- for (const subpart of part)
-  subpart.distributePopulateView()
+  for (const subpart of part)
+   subpart.distributePopulateView()
+ }
 
 }

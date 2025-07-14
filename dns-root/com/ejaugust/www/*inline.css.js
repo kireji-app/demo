@@ -1,1 +1,1 @@
-return (ejaugust["static.css"] ?? "") + "\n" + ejaugust.arm["inline.css"]
+return ejaugust["static.css"] + "\n" + (ejaugust.arm["inline.css"] ?? "")

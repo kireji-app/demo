@@ -1,7 +1,17 @@
 wallpaper- {
- --padding: max(calc((100vw - 640px) / 2), var(--spacing));
+ --padding: 48px;
+ padding: var(--padding) max(calc((100vw - 640px) / 2), var(--spacing));
  display: flex;
  flex-flow: column;
+ overflow-y: scroll;
+ min-height: 0;
+}
+
+@media (width < 640px) {
+ wallpaper- {
+  padding: var(--padding);
+  --padding: var(--spacing);
+ }
 }
 
 wallpaper- menu {
@@ -14,9 +24,14 @@ wallpaper- menu {
  flex: 0;
 }
 
+/*
+ small: 16px outer, 24px inner
+ large: 48px outer, 32px inner
+*/
+
 wallpaper- header {
  background: var(--accent-un);
- padding: var(--spacing) var(--padding);
+ padding: var(--spacing);
 }
 
 wallpaper- h1 {
@@ -24,10 +39,8 @@ wallpaper- h1 {
 }
 
 wallpaper->article {
- padding: 0 var(--padding);
- overflow-y: scroll;
+ padding: 0;
  flex: 1;
- min-height: 0;
 }
 
 wallpaper->article,
@@ -98,4 +111,14 @@ wallpaper- h6 {
 wallpaper- .notebook-title {
  font-weight: 800;
  border: none;
+}
+
+details {
+ padding: var(--spacing);
+ border-radius: 8px
+}
+
+summary {
+ display: block;
+ cursor: pointer;
 }

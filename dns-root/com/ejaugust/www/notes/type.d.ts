@@ -1,4 +1,4 @@
-declare interface IEJAugustApplicationNotes extends IMatch, IEJAugustApplicationArm {
+declare interface IEJAugustApplicationNotes extends IMix, IEJAugustApplicationSection {
  /** The match that selects a date for ejaugust. */
  readonly date: IEJAugustApplicationNotesDate
  readonly "..": IEJAugustApplication

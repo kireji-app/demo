@@ -32,10 +32,6 @@
  position: relative;
 }
 
-#label2::before {
- content: "Mode: ";
-}
-
 #settings>*:focus>.label::after {
  border: 1px dotted var(--bg-un-mode-est);
  content: "";
@@ -74,7 +70,7 @@
 
 .task-link>a>.label {
  font-weight: 300;
- padding: 0px 4px;
+ padding: 0 32px 0 4px;
 }
 
 .part-icon {

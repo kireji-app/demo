@@ -30,7 +30,7 @@ if (environment === "worker") {
   }
  }
  globalThis.onactivate = e => globalThis.clients.claim()
- globalThis.oninstall = e => globalThis.skipWaiting()
+ // globalThis.oninstall = e => globalThis.skipWaiting()
  globalThis.onmessage = ({ data: { code, payload } }) => {
   switch (code) {
 

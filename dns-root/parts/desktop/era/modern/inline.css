@@ -18,9 +18,9 @@ body {
 #era-control .base {
  width: 100%;
  border-radius: var(--spacing);
- background: var(--bg-dark-er);
+ background: var(--light-bg);
  width: calc(var(--spacing) * 2);
- box-shadow: inset 0px 0px 6px #000;
+ box-shadow: inset 0px 0px 12px #000;
  flex: 0 0 auto;
  overflow: hidden;
  display: flex;
@@ -86,7 +86,8 @@ sidebar->* {
 
 #settings>span {
  gap: 1ch;
- height: var(--icon-size);
+ height: var(--spacing);
+ box-sizing: content-box;
 }
 
 #tags {
@@ -96,36 +97,31 @@ sidebar->* {
 #tags>* {
  display: inline-flex;
  font-weight: 100;
- line-height: 20px;
  padding: 0 4px;
  font-family: var(--system-ui-mono);
- background: rgb(97, 36, 23);
-}
-
-#tags> :first-child {
- background: var(--bg-light);
- border-radius: 8px 0 0 8px;
-}
-
-#tags> :last-child {
- border-radius: 0 8px 8px 0;
-}
-
-#tags> :only-child {
  border-radius: 8px;
 }
 
 .handle {
  display: block;
- background: var(--bg-mode-er);
+ position: relative;
+ background: var(--light-bg);
  box-shadow: 0px 0px 6px #000;
  width: calc(var(--spacing) - 4px);
  height: calc(var(--spacing) - 4px);
  text-align: center;
  border-radius: var(--spacing);
- /* TODO: --color-mode was removed. use new state attr method */
- left: calc(.5 * var(--spacing) * var(--color-mode) + 2px);
+ left: 2px;
  top: 2px;
+}
+
+
+#settings>span[data-state="enabled"] .handle {
+ left: calc(var(--spacing) + 2px);
+}
+
+#settings>span[data-state="partial"] .handle {
+ left: calc(.5 * var(--spacing) + 2px);
 }
 
 .task-link[data-here]>a::before {

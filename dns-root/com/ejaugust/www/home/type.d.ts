@@ -1,1 +1,3 @@
-declare interface IEJAugustApplicationHome extends IEJAugustApplicationArm, IPart { }
+declare interface IEJAugustApplicationHome extends IEJAugustApplicationSection, IPart {
+
+}

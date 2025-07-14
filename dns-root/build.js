@@ -1,3 +1,5 @@
+const { start } = require("repl")
+
 function ƒ(_) {
  globalThis._ = _
  class SourceMappedFile {
@@ -248,6 +250,7 @@ function ƒ(_) {
     "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
    }], "table")
   }
+
  openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   \n            ▙▌    ${environment}\n\nBooting O/S`)
  if (environment === "server") {
   const { extname } = require("path"),
@@ -310,7 +313,7 @@ function ƒ(_) {
  }
  openLog(3, "Hydrating Domains")
  const instances = []
- function recursiveDistributeHydration(part, domains = []) {
+ function distributeHydration(part, domains = []) {
   let host
   if (typeof part === "string") {
    host = part
@@ -333,7 +336,7 @@ function ƒ(_) {
    domains: { value: domains },
   })
   const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
-  const prototype = typename ? recursiveDistributeHydration(typename ?? "part.core.parts") : null
+  const prototype = typename ? distributeHydration(typename ?? "part.core.parts") : null
   const isAbstract = part.manifest.abstract
   if (prototype) {
    Object.setPrototypeOf(part.manifest, prototype.manifest)
@@ -360,7 +363,11 @@ function ƒ(_) {
     const path = pathPrefix + "constants.js"
     const body = part["constants.js"]
     const lines = body.split("\n")
-    for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
+    for (let ln = 0; ln < lines.length; ln++) {
+     if (lines[ln].startsWith("const "))
+      new targetProperty.MethodConstant(path, lines[ln], ln)
+     // else throw "invalid const line: " + SOURCE_LINE
+    }
    }
    constructor(PROPERTY_ID) {
     const property = Property[PROPERTY_ID] = this
@@ -381,7 +388,7 @@ function ƒ(_) {
       if (property.isSymbol)
        return `[Symbol.${PROPERTY_ID.slice(7)}]`
 
-      // First word of kabab-case property name becomes last word of camelCase identifier.
+      // First word of kebab-case property name becomes last word of camelCase identifier.
       const words = PROPERTY_ID.slice(+(property.isGenerated || property.isAlias)).split("-")
       words.push(words.shift())
       return camelCase(words)
@@ -399,7 +406,6 @@ function ƒ(_) {
       constant.line = SOURCE_LINE
       constant.lineNumber = SOURCE_LINE_NUMBER
       constant.source = sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
-      if (!SOURCE_LINE.startsWith("const ")) throw "invalid const line: " + SOURCE_LINE
       constant.equalsIndex = SOURCE_LINE.indexOf("=")
       constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
       if (constant.identifier in property.MethodConstant.all) throw "Duplicate definition of constant " + constant.identifier + " (" + host + ")."
@@ -431,7 +437,7 @@ function ƒ(_) {
      },
     }
     if (typeof property.content !== "string") return
-    property.source = sourceFile.addSource(property.filename, property.content)
+    property.source = sourceFile.addSource(pathToRepo + "/" + pathFromRepo + "/" + property.filename, property.content)
     property.lines = property.content ? property.content.split("\n") : []
     property.niceNameIsValidIdentifier = property.isSymbol || property.isGenerated || Property.identifierPattern.test(property.niceName)
     property.propertyReference = property.niceNameIsValidIdentifier ? property.niceName : `["${property.niceName}"]`
@@ -480,7 +486,7 @@ function ƒ(_) {
     Object.defineProperty(part, identifier, { value: subpart })
    }
    Object.defineProperty(subpart, "..", { value: part })
-   recursiveDistributeHydration(subpart, [subdomain, ...domains])
+   distributeHydration(subpart, [subdomain, ...domains])
    if (subpart.isAbstract) {
     subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
     continue
@@ -491,7 +497,7 @@ function ƒ(_) {
   closeLog(2)
   return part
  }
- recursiveDistributeHydration(_)
+ distributeHydration(_)
  closeLog(3, true)
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
@@ -503,7 +509,7 @@ function ƒ(_) {
 
 ƒ({
  change: "patch",
- verbosity: 100,
+ verbosity: 0,
  mapping: true,
- hangHydration: false
+ hangHydration: true
 })

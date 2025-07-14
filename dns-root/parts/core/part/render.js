@@ -17,7 +17,9 @@
 
  // TODO: Remove legacy search params code.
 
- let body = part[binary /*&& environment === "server" */ ? "blank" + extension : filename]
+ let body = part[filename]
+
+ warn('use new technique on this image', part.host + "/" + filename)
 
  if (search)
   warn("Render ignored params: " + OPTIONS.request)
