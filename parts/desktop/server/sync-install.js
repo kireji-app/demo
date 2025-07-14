@@ -1,6 +1,6 @@
 const path = require('path')
 
-const ETag = `"${_.version}.${_.branch}.${_.local ? Math.random() : ""}"`
+const ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}`
 
 const internalPort = 3000
 
@@ -80,4 +80,4 @@ require('http').createServer((request, response) => {
  serverLog(status, request)
  response.writeHead(status, head)
  response.end(body)
-}).listen(internalPort, () => log(1, "https://localhost:" + internalPort))
+}).listen(internalPort, () => log(1, "Server ready. ETag: " + ETag))

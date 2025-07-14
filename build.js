@@ -187,10 +187,10 @@ function ƒ(_) {
  const
   environment = globalThis.constructor === globalThis.Window ? "client" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : (
    Object.defineProperty(_, "$", { value: (f => x => f(x).toString().trim())(require("child_process").execSync) }),
+   _.local = process.env.LOCAL,
    _.branch = _.$("git rev-parse --abbrev-ref HEAD").toString().trim(),
    _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
-   _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change),
-   _.local = process.env.LOCAL,
+   _.version = (([M, m, p], c) => !_.local ? `${M}.${m}.${p}` : +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change),
    "server"
   ),
   production = _.branch === "main" && environment !== "server" && !_.local,
@@ -502,7 +502,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "minor",
+ change: "patch",
  verbosity: 100,
  mapping: true,
  hangHydration: false
