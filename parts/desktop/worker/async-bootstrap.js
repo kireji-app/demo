@@ -24,9 +24,6 @@ if (!𝓌.registration.active) {
  𝓌.registration.active.postMessage({ code: "claim" })
 })
 
-𝓌.channel = new BroadcastChannel("theme-reload")
-𝓌.channel.onmessage = nav.serviceWorker.oncontrollerchange = () => location.reload()
-
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
 newScript.setAttribute("src", "/kireji.js")

@@ -185,14 +185,15 @@ function ƒ(_) {
   }
  }
  const
-  environment = globalThis.constructor === globalThis.Window ? "window" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : (
+  environment = globalThis.constructor === globalThis.Window ? "client" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : (
    Object.defineProperty(_, "$", { value: (f => x => f(x).toString().trim())(require("child_process").execSync) }),
    _.branch = _.$("git rev-parse --abbrev-ref HEAD").toString().trim(),
    _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
    _.version = (([M, m, p], c) => +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change),
+   _.local = process.env.LOCAL,
    "server"
   ),
-  production = _.branch === "main" && environment !== "server",
+  production = _.branch === "main" && environment !== "server" && !_.local,
   log = (verbosity, ...data) => logAny(verbosity, data, "log"),
   warn = (...data) => logAny(0, data, "warn"),
   debug = (...data) => logAny(0, data, "debug"),
@@ -201,6 +202,7 @@ function ƒ(_) {
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
+  camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
@@ -290,16 +292,19 @@ function ƒ(_) {
  }
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
- const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, hydration } = desktop
- if (environment === "window") var element, svg
+ const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client } = desktop
+ if (environment === "client") var element, svg
  Object.defineProperties(_, {
   fps: { value: 1, configurable: true, writable: true },
   meanFrameTime: { value: 1000, configurable: true, writable: true },
+  application: { value: null, writable: true },
+  applications: { value: {} },
  })
+
  function getPartFromDomains(domains) {
   return domains.reduceRight((currentFolder, name, index) => {
    if (!currentFolder[name])
-    throw new ReferenceError(`There is no folder called '${name}' in ${[...domains].slice(index + 1).reverse().join("/")} (trying to create ${domains.join(".")}).`)
+    throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
    return currentFolder[name]
   }, _)
  }
@@ -349,25 +354,23 @@ function ƒ(_) {
      }
     }
     prototype?.Property.collectConstants(targetPart, targetProperty)
-    function collectOwnConstants(FILENAME) {
-     if (!filenames.includes(FILENAME)) return
-     const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
-     const path = pathPrefix + FILENAME
-     const body = part[FILENAME]
-     const lines = body.split("\n")
-     for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
-    }
-    collectOwnConstants("const-method.js")
+
+    if (!filenames.includes("constants.js")) return
+    const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
+    const path = pathPrefix + "constants.js"
+    const body = part["constants.js"]
+    const lines = body.split("\n")
+    for (let ln = 0; ln < lines.length; ln++) new targetProperty.MethodConstant(path, lines[ln], ln)
    }
    constructor(PROPERTY_ID) {
     const property = Property[PROPERTY_ID] = this
     property.id = PROPERTY_ID
-    property.isAlias = PROPERTY_ID.startsWith("alias-")
+    property.isAlias = PROPERTY_ID.startsWith("@")
     property.isView = PROPERTY_ID.startsWith("view-")
     property.isAsync = PROPERTY_ID.startsWith("async-")
     property.isSymbol = PROPERTY_ID.startsWith("symbol-")
     property.isGenerated = PROPERTY_ID.startsWith("*")
-    property.filename = property.isAlias ? PROPERTY_ID.slice(6) : `${PROPERTY_ID}.js`
+    property.filename = property.isAlias ? PROPERTY_ID.slice(1) : `${PROPERTY_ID}.js`
     property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
     property.niceName = (() => {
      if (PROPERTY_ID.includes("-") || property.isGenerated) {
@@ -378,12 +381,10 @@ function ƒ(_) {
       if (property.isSymbol)
        return `[Symbol.${PROPERTY_ID.slice(7)}]`
 
-      let temp = PROPERTY_ID.split("-")
-      let firstWordBecomesLastWord = temp.shift()
-      if (property.isAlias) firstWordBecomesLastWord = temp.shift()
-      else if (property.isGenerated) firstWordBecomesLastWord = firstWordBecomesLastWord.slice(1)
-      temp.push(firstWordBecomesLastWord)
-      return temp.map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join("")
+      // First word of kabab-case property name becomes last word of camelCase identifier.
+      const words = PROPERTY_ID.slice(+(property.isGenerated || property.isAlias)).split("-")
+      words.push(words.shift())
+      return camelCase(words)
      }
      return PROPERTY_ID
     })()
@@ -440,7 +441,7 @@ function ƒ(_) {
     property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGenerated || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
     sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
     Property.collectConstants(part, property)
-    if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(6)}"]`, buildSource, null, null, "    ")
+    if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(1)}"]`, buildSource, null, null, "    ")
     else sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
     sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
    }
@@ -451,7 +452,7 @@ function ƒ(_) {
   })
   for (const fn of filenames) {
    if (!fn.includes(".") && fn.includes("-")) {
-    Property.ids.add("alias-" + fn)
+    Property.ids.add("@" + fn)
    } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-")))
     Property.ids.add(fn.slice(0, -3))
   }
@@ -462,12 +463,22 @@ function ƒ(_) {
   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
   for (const id of Property.ids) new Property(id)
   sourceFile.addLine("@descriptor-map-close@})", buildSource)
-  const propertyDescriptorScript = sourceFile.packAndMap()
-  const propertyDescriptor = eval(propertyDescriptorScript)
-  Object.defineProperties(part, propertyDescriptor)
+  try {
+   const propertyDescriptorScript = sourceFile.packAndMap()
+   const propertyDescriptor = eval(propertyDescriptorScript)
+   Object.defineProperties(part, propertyDescriptor)
+  } catch (e) {
+   throw new Error(`Failed to construct property descriptor for ${host}.\n${e}`)
+  }
   let subpartIndex = 0
   for (const subdomain of subdomains) {
    const subpart = part[subdomain]
+   if (subdomain.includes("-")) {
+    const identifier = camelCase(subdomain)
+    if (identifier in part)
+     throw `Computed camelCase name ${identifier} for ${subdomain}.${host} conflicts with existing property ${identifier} on ${host}.`
+    Object.defineProperty(part, identifier, { value: subpart })
+   }
    Object.defineProperty(subpart, "..", { value: part })
    recursiveDistributeHydration(subpart, [subdomain, ...domains])
    if (subpart.isAbstract) {
@@ -485,15 +496,14 @@ function ƒ(_) {
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
  closeLog(3)
- _.validate()
+ if (_.local) _.validate()
  closeLog(1, true)
  log(1, "Boot Completed (end of synchronous script execution).")
 }
 
 ƒ({
- change: "patch",
+ change: "minor",
  verbosity: 100,
- mapping: false,
- hangHydration: false,
- themeHost: "www.core.parts"
+ mapping: true,
+ hangHydration: false
 })

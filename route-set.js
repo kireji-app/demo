@@ -1,15 +1,17 @@
 const url = new URL(REQUEST_URL)
+const devSuffix = "localhost:3000"
+const host = url.host.endsWith(devSuffix) ? url.host.slice(0, -1 - devSuffix.length) : url.host
+
+if (!(host in _.applications))
+ throw `Unsupported application '${host}'.`
+
 const pathname = url.pathname
-const host = url.host
-const themeDomains = host.split(".")
 _.routeIDs = swap(pathname)
 const rootRouteIDs = _.routeIDs[0]
 const rootRouteID = rootRouteIDs[0]
 
-if (desktop.theme?.key !== host)
- desktop.theme = getPartFromDomains(themeDomains)
+if (_.application?.key !== host)
+ _.application = getPartFromDomains(host.split("."))
 
-if (_.routeID !== _.routeIDs[0][0]) {
- log(5, `Setting the DNS root route ID: ${_.routeID} => ${_.routeIDs[0][0]}`)
+if (_.routeID !== _.routeIDs[0][0])
  _.setRouteID(_.routeIDs[0][0])
-}

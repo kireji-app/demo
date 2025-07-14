@@ -5,7 +5,7 @@ const areas = []
 zoneNames.forEach((zoneName, zoneIndex) => {
  const src = orenjinari.render({ request: `${zoneName}-up.gif`, format: "datauri" })
  links.push(`<img id=${zoneName}-btn class=bunny src="${src}" onclick="_.com.orenjinari.www.go('#${zoneName}')"/>`)
- areas.push(`<div id=${zoneName} class="zone bunny-${zoneName}">${production ? "" : `<h1>Area ${zoneIndex + 1}</h1>`}<span class=float><img src="${src}"><span class=thin>is </span><span>coming soon.</span></span></div>`)
+ areas.push(`<div id=${zoneName} class="zone bunny-${zoneName}">${_.local ? `<h1>Area ${zoneIndex + 1}</h1>` : ""}<span class=float><img src="${src}"><span class=thin>is </span><span>coming soon.</span></span></div>`)
 })
 
 return `<scroller->` + links.join("") + areas.join("") + `</scroller->`

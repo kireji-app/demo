@@ -1,2 +1,2 @@
-if (desktop.theme === core)
- document.getElementById("theme-css").innerHTML = core["inline.css"]
+if (_.application === core)
+ document.getElementById("application-css").innerHTML = core["inline.css"]

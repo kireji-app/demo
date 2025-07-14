@@ -1,3 +1,3 @@
 declare interface IUser extends IPartsApexDomain {
- readonly www: IUserTheme
+ readonly www: IUserApplication
 }

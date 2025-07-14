@@ -1,1 +1,0 @@
-return document.body.hasAttribute("inert")

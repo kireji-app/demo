@@ -1,1 +1,0 @@
-delete desktop.era.styleElement

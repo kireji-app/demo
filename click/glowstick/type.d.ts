@@ -1,3 +1,3 @@
 declare interface IGlowstick extends IClickApexDomain {
- readonly www: IGlowstickTheme
+ readonly www: IGlowstickApplication
 }

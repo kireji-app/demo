@@ -1,3 +1,3 @@
-declare interface IGlowstickTheme extends ITheme {
+declare interface IGlowstickApplication extends IApplication {
  readonly "..": IGlowstick
 }

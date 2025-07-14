@@ -1,11 +1,11 @@
-const updateTime = () => document.getElementById("clock").innerHTML =
- new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' }).format(Date.now())
+const clockElement = document.getElementById("clock")
 
-updateTime()
+const oneMinute = 60000
 
-Object.defineProperty(part, "clockTimer", {
- value: setTimeout(() => {
-  updateTime()
-  part.clockTimer = setInterval(updateTime, 60000)
- }, 60000 - new Date().getSeconds() + 120), configurable: true, writable: true
-})
+/** Added because `new Date` is imprecise for security reasons. */
+const securityDelay = 10
+
+setTimeout(() => {
+ clockElement.textContent = tray.time;
+ setInterval(() => clockElement.textContent = tray.time, oneMinute)
+}, oneMinute - new Date().getSeconds() * 1000 + securityDelay)

@@ -85,7 +85,7 @@ The project is currently in alpha, with the following milestones completed:
 
 ## **Live Demos**
 
-Each of these domains is backed by the same framework and renders a different themed application:
+Each of these domains points to the same deployment but renders a different application:
 
 * [**www.core.parts**](https://www.core.parts) – Interactive documentation
 * [**www.desktop.parts**](https://www.desktop.parts) – Browser-based operating system shell

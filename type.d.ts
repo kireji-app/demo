@@ -16,53 +16,22 @@ declare interface IDNSRoot extends IMix {
  readonly gitSHA: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string
- /** The string of optional processes which are currently running on the operating system.
-  * 
-  * Task content is encoded by all segments appearing after the first segment in the user route pathname. */
- readonly tasks: ITasks
  /** The computed framerate of the application. */
  readonly fps: number
  /** The current session time. */
  readonly time: DOMHighResTimeStamp
  /** The average length of time each frame is on screen in milliseconds. */
  readonly meanFrameTime: number
- /** The main CSS stylesheet for the user space. */
- readonly styleSheet: CSSStyleSheet
- /** The main taskbar element. */
- readonly taskbar: HTMLElement
- /** The home button element. */
- readonly homeButton: HTMLButtonElement
- /** A spacer element in the taskbar. */
- readonly taskbarSpacer: HTMLSpanElement
- /** Whether or not to show the fullscreen control. */
- readonly showFullScreenControl: boolean
- /** Whether or not to show the share button. */
- readonly showShareButton: boolean
- /** The share button element (if shown). */
- readonly shareButton?: HTMLButtonElement
- /** The menu button element. */
- readonly menuButton: HTMLButtonElement
- /** The fullscreen button element (if shown). */
- readonly fullscreenButton?: HTMLButtonElement
- /** The sidebar element within the menu. */
- readonly sidebar: HTMLDivElement
- /** A line containing the tags label and the tags themselves. */
- readonly tagsLine: HTMLSpanElement
- /** The label for the version tags. */
- readonly tagsLabel: HTMLSpanElement
- /** A container for the version tags. */
- readonly tags: HTMLSpanElement
- /** An array of elements representing the version tags. */
- readonly tagElements: HTMLSpanElement[]
- /** The element holding the task menu. */
- readonly menuElement: HTMLElement
- readonly manifestLink: HTMLLinkElement
  /** Sets the configuration space to match the given request url string. */
  setRoute(REQUEST_URL: string): void
  /** The most recent routeID array parsed by setRoute. */
  readonly routeIDs: bigint[][]
- /** The default theme provider assigned to the operating system. */
- readonly themeHost: string
+ /** The operating system's currently assigned root application.
+  * 
+  * This selection is encoded by the host of the current route. */
+ readonly application: IPart
+ /** A host-keyed object with all of the applications that are available. */
+ readonly applications: Record<string, IApplication>
 }
 
 declare interface ITopLevelDomain extends IMix {
@@ -71,27 +40,25 @@ declare interface ITopLevelDomain extends IMix {
 
 /** Represents any domain which is a direct subdomain of a top level domain (e.g. `example.com`). */
 declare interface IApexDomain extends IMix {
- /** The apex domain's theme - used to set the wallpaper and override the css of the desktop when accessing the O/S via the apex domain's host. */
- readonly www: ITheme
+ /** The apex domain's application - used to set the wallpaper and override the css of the desktop when accessing the O/S via the apex domain's host. */
+ readonly www: IApplication
 }
 
 /** Represents the `www` subdomain of any apex domain.
  * 
  * It represents a domain which has an `A` record that points to a server implementing the project's build artifact. */
-declare interface ITheme extends IPart {
- /** The favicon of the theme part, used for the O/S task menu button, browser tab, pogressive web application, and when showing the theme in lists. */
- readonly "theme.png"
- /** The stylesheet for the theme, which comes after other stylesheets. */
+declare interface IApplication extends IPart {
+ /** The stylesheet for the application, which comes after other stylesheets. */
  readonly "inline.css"
- /** The html which becomes the desktop wallpaper for the theme. */
+ /** The html which becomes the desktop wallpaper for the application. */
  readonly "inline.html"
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
- * The serialized version should not include any values that are added *after* hydration. */
+ * The serialized version should not include any values that are added *before* recursively hydrating the part tree. */
 declare const _: IDNSRoot
 /** A function which simplifies the process of deploying to three environments
- * (server, service worker, window) by giving them all the same
+ * (server, worker, client) by giving them all the same
  * routing functions, virtual DOM and synchronous fetch method which can
  * produce both static assets and dynamically generated files.
  * 
@@ -164,16 +131,18 @@ class SourceMappedFile {
 }
 /** A string representing which of three known environments the framework is running on.
  * 1. "server"
- *     - Unpacked in clone (shallow in the production environment) of the project git repo in node.
- *     - It is called by `node build.js`.
- *     - It's task is to pack and deploy itself.
+ *     - Unpacked in a clone of the project git repo in node.
+ *     - It is called by `node build` in order to pack the repo into a single client artifact and run as a backend to serve that artifact and to server-render HTML.
+ *     = Its state is set by http requests on port 3000.
  * 3. "worker"
  *     - Packed and deployed as the browser's ServiceWorker.
- *     - It was created by a window and its state is set for and by the URL of a window network request.
- * 3. "window"
- *     - Packed and deployed as a front-end framework in the browser window.
- *     - It was created by a server-rendered script to transfer rendering control from server to client. */
-declare const environment: "server" | "worker" | "window"
+ *     - It is booted by the browser after a client registers it.
+ *     - Its state is set by client fetch requests.
+ * 3. "client"
+ *     - Packed and deployed as a front-end framework hydrating a browser tab.
+ *     - It is booted by a script tag added to the server- or worker-rendered html file.
+ *     - Its state is initially set by `location.href` (whatever is in the address bar) and then set by user interaction thereafter. */
+declare const environment: "server" | "worker" | "client"
 /** True if the framework was built on the cloud from the main branch. */
 declare const production: boolean
 /** The host of the currently evaluating script. */

@@ -1,5 +1,5 @@
 /** A type of single-cardinality part which requires an installation step that
- * can only take place within a proper subset of the four environments and only
+ * can only take place within a proper subset of the three environments and only
  * after the user part has distributed it's initialization. */
 declare interface IFacet extends IPart {
  /** Whether or not the facet is supported. */

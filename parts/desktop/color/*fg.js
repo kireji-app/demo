@@ -1,1 +1,1 @@
-return desktop.theme[`theme-${desktop.color.arm === desktop.color.light ? "light" : "dark"}-fg`]
+return _.application[`theme-${desktop.color.arm === desktop.color.light ? "light" : "dark"}-fg`]

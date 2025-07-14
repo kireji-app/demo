@@ -1,1 +1,1 @@
-return desktop.color.arm === desktop.color.light ? desktop.theme.darkAccentTheme : desktop.theme.lightAccentTheme
+return desktop.color.arm === desktop.color.light ? _.application.darkAccentTheme : _.application.lightAccentTheme

@@ -2,12 +2,12 @@ return `html, body {
  --invert-on-light: ${desktop.color.arm === desktop.color.light ? "100%" : "0%"};
  --invert-on-dark: ${desktop.color.arm === desktop.color.light ? "0%" : "100%"};
 
- --light-fg: ${desktop.theme.lightFgTheme};
- --light-bg: ${desktop.theme.lightBgTheme};
- --light-accent: ${desktop.theme.lightAccentTheme};
- --dark-fg: ${desktop.theme.darkFgTheme};
- --dark-bg: ${desktop.theme.darkBgTheme};
- --dark-accent: ${desktop.theme.darkAccentTheme};
+ --light-fg: ${_.application.lightFgTheme};
+ --light-bg: ${_.application.lightBgTheme};
+ --light-accent: ${_.application.lightAccentTheme};
+ --dark-fg: ${_.application.darkFgTheme};
+ --dark-bg: ${_.application.darkBgTheme};
+ --dark-accent: ${_.application.darkAccentTheme};
 
  --accent-light-est: ${desktop.color.lightEstAccent};
  --accent-light-er: ${desktop.color.lightErAccent};

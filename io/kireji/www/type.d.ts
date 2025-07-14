@@ -1,3 +1,3 @@
-declare interface IKirejiIoTheme extends ITheme {
+declare interface IKirejiIoApplication extends IApplication {
  readonly "..": IKirejiIo
 }

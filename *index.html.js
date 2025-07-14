@@ -1,5 +1,5 @@
-const iconDataURI = desktop.theme.render({
- request: "theme.png",
+const iconDataURI = _.application.render({
+ request: "part.png",
  fallback: "data:image/png;base64,iVBORw0KGgo=",
  format: "datauri"
 })
@@ -17,23 +17,23 @@ const styles =
  `<style id="user-css">${_["inline.css"]}</style>` +
  `<style id="era-css">${desktop.era["inline.css"]}</style>` +
  `<style id="color-css">${desktop.color["inline.css"]}</style>` +
- `<style id="theme-css">${desktop.theme["inline.css"]}</style>`
+ `<style id="application-css">${_.application["inline.css"]}</style>`
 
 const title =
- `<title>${desktop.theme.title ?? "Untitled App"}</title>`
+ `<title>${_.application.title ?? "Untitled App"}</title>`
 
 const head =
  `<head>${title}${meta}${links}${styles}</head>`
 
 const bodyClassList = [desktop.era.arm.key]
 
-if (desktop.menu.arm?.key === "open")
+if (desktop.taskBar.menu.arm?.key === "open")
  bodyClassList.push("menu-fully-open")
 
-if (desktop.menu.arm?.key !== "closed")
+if (desktop.taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
 const body =
- `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${desktop["task-bar"]["inline.html"]}${worker["inline.html"]}</body>`
+ `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${desktop.taskBar["inline.html"]}${worker["inline.html"]}</body>`
 
 return `<!DOCTYPE html><html lang=en>${head}${body}</html>`

@@ -1,3 +1,3 @@
 declare interface ICore extends IPartsApexDomain {
- readonly www: ICoreTheme
+ readonly www: ICoreApplication
 }

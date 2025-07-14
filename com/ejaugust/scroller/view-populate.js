@@ -1,2 +1,2 @@
-if (desktop.theme === _.com.ejaugust.www)
+if (_.application === _.com.ejaugust.www)
  base()

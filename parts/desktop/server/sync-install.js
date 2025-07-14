@@ -1,4 +1,8 @@
-const ETag = `"${_.version}.${_.branch}"`
+const path = require('path')
+
+const ETag = `"${_.version}.${_.branch}.${_.local ? Math.random() : ""}"`
+
+const internalPort = 3000
 
 const securityHeader = {
  'request-Content-Type-Options': 'nosniff',
@@ -25,27 +29,46 @@ const indexHeader = {
 }
 
 function serverLog(status, request) {
- log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${status} ${request.headers["x-real-ip"].padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
+ log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${status} ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
 }
 
 require('http').createServer((request, response) => {
  let status, head = {}, body
+ let host = request.headers.host
+ const pathname = request.url
+ const devSuffix = "localhost:3000"
 
  try {
-  if (request.url === "/kireji.js") {
-   if (request.headers['if-none-match'] === ETag) {
-    status = 304
-    head = { ETag }
-   } else {
-    _.setRoute(`https://${request.headers.host}/`)
+  setRoute: {
+   if (host.endsWith(devSuffix)) {
+    host = host.slice(0, -1 - devSuffix.length)
+    if (!(host in _.applications)) {
+     if (host) warn(`Unsuported application '${host}'. Forwarding to www.desktop.parts.`)
+     status = 301
+     head = { 'Location': `http://www.desktop.parts.${devSuffix}${pathname}` }
+     break setRoute
+    }
+   }
+
+   if (pathname === "/kireji.js") {
+
+    if (request.headers['if-none-match'] === ETag) {
+     status = 304
+     head = { ETag }
+     break setRoute
+    }
+
+    _.setRoute(`https://${host}/`)
     status = 200
     head = serviceHeader
     body = _["kireji.js"]
+    break setRoute
+
    }
-  } else {
+
    status = 429
    head = indexHeader
-   _.setRoute(`https://${request.headers.host}${request.url}`)
+   _.setRoute(`https://${host}${pathname}`)
    body = _["index.html"]
   }
  } catch (e) {
@@ -57,4 +80,4 @@ require('http').createServer((request, response) => {
  serverLog(status, request)
  response.writeHead(status, head)
  response.end(body)
-}).listen(3000, () => log(1, "https://localhost:3000"))
+}).listen(internalPort, () => log(1, "https://localhost:" + internalPort))

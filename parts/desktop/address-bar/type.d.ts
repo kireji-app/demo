@@ -21,5 +21,5 @@ declare class FileHeader {
  /** Whether or not the file's content type refers to binary data. */
  readonly binary: boolean
 }
-/** A window facet representing the browser address bar that provides `pathname <=> route ID` mapping to all environments. */
+/** A client facet representing the browser address bar that provides `pathname <=> route ID` mapping to all environments. */
 declare const addressBar: IAddressBar

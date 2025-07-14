@@ -1,3 +1,3 @@
-declare interface IDesktopTheme extends ITheme {
+declare interface IDesktopApplication extends IApplication {
  readonly "..": IDesktop
 }

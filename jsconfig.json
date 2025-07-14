@@ -6,6 +6,6 @@
  },
  "exclude": [
   "build.js",
-  "*/**/const-*.js",
+  "*/**/constants.js",
  ]
 }

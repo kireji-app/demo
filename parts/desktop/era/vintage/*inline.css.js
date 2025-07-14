@@ -1,4 +1,4 @@
 return part["static.css"] + `
 sidebar-::after {
- content: "${desktop.theme.fancyTitle}";
+ content: "${_.application.fancyTitle}";
 }`

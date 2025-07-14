@@ -1,4 +1,4 @@
-class IAgent extends IFacet {
+interface IAgent extends IFacet {
  readonly isMac: boolean
  readonly isSafari: boolean
  readonly shiftKeysDown: number

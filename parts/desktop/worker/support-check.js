@@ -1,1 +1,1 @@
-return environment === "worker" || (environment === "window" && nav.serviceWorker)
+return environment === "worker" || (environment === "client" && nav.serviceWorker)

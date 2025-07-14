@@ -1,26 +1,20 @@
 /** The core operating system GUI. */
 declare interface IDesktop extends IPartsApexDomain {
- readonly www: IDesktopTheme
  readonly color: IColor
  readonly era: IEra
- readonly menu: IMenu
- readonly menuClip: IMenu
- readonly taskBar: ITaskbar
- readonly themes: IPart[]
- /** The operating system theme.
-  * 
-  * This selection is encoded by the host of the current route. */
- readonly theme: IPart
- readonly themeHosts: object
+ readonly taskBar: ITaskBar
+ readonly www: IDesktopApplication
 
  // Facets.
- readonly gpu: IGpu
- readonly agent: IAgent
- readonly share: IShare
- readonly hotKeys: IHotKeys
- readonly hydration: IHydration
  readonly addressBar: IAddressBar
- readonly serviceWorker: IServiceWorker
+ readonly agent: IAgent
+ readonly client: IClient
+ readonly fullscreen: IFullscreen
+ readonly gpu: IGpu
+ readonly hotKeys: IHotKeys
+ readonly server: IServer
+ readonly share: IShare
+ readonly worker: IWorker
 
  // Views.
  readonly wallpaper: HTMLElement

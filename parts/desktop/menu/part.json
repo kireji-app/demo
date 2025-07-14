@@ -1,9 +1,0 @@
-{
- "typename": "match.core.parts",
- "go-cross-origin": [
-  "HOST"
- ],
- "go": [
-  "EVENT"
- ]
-}

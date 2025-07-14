@@ -1,1 +1,0 @@
-delete desktop.color.styleElement

@@ -1,3 +1,3 @@
-declare interface IUserTheme extends ITheme {
+declare interface IUserApplication extends IApplication {
  readonly "..": IUser
 }

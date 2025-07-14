@@ -32,6 +32,8 @@ declare interface IPart extends Iterable<IPart> {
   readonly inherit?: boolean
   /** A string representation of the BigInt value used as the starting point when calculating this part's cardinality during the build step. */
   readonly cardinality: string
+  /** The icon of the part, used whenever possible to represent the part throughout the O/S. */
+  readonly "part.png"
  }
  /** The part's index in it's parent domain. */
  readonly index: number
@@ -75,7 +77,7 @@ declare interface IPart extends Iterable<IPart> {
  readonly "..": IPart
  /** The raw JSON string used to construct the object at `part.manifest`. */
  readonly "part.json": string
- /** A optional display name for the part. */
+ /** An optional display name for the part. */
  readonly title?: string
  /** A unicode character to identify the part.
   * 

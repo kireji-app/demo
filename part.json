@@ -3,5 +3,9 @@
  "route-set": [
   "REQUEST_URL"
  ],
+ "application-set": [
+  "EVENT",
+  "LINK"
+ ],
  "validate": []
 }

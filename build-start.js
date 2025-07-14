@@ -1,11 +1,12 @@
 _.prototype.startBuild.call(_)
 
+for (const tld of _.subdomains)
+ for (const apex of _[tld].subdomains)
+  if (_[tld][apex].www)
+   _.applications["www." + apex + "." + tld] = _[tld][apex].www
 
-if (environment === "server") {
- openLog(1, "Creating Script")
+if (environment === "server")
  logStringSize(1, _["kireji.js"])
- closeLog(1, true)
-}
 
 logEntropy(1, ...instances)
 

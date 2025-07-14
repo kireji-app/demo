@@ -1,8 +1,8 @@
-declare interface IEJAugustThemeNotes extends IMatch, IEJAugustThemeArm {
+declare interface IEJAugustApplicationNotes extends IMatch, IEJAugustApplicationArm {
  /** The match that selects a date for ejaugust. */
- readonly date: IEJAugustThemeNotesDate
- readonly "..": IEJAugustTheme
+ readonly date: IEJAugustApplicationNotesDate
+ readonly "..": IEJAugustApplication
 }
 
 /** The mix representing the state of ejaugust whenever there is a note activated (rather than the home page). */
-declare const notes: IEJAugustThemeNotes
+declare const notes: IEJAugustApplicationNotes

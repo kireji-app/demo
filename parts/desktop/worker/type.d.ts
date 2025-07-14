@@ -3,7 +3,6 @@ declare interface IWorker extends IFacet {
  readonly registration: ServiceWorkerRegistration
  readonly incomingServiceWorker?: ServiceWorker
  readonly controller: ServiceWorker
- readonly channel: BroadcastChannel
 }
 
 declare const worker: IWorker

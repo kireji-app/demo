@@ -1,18 +1,18 @@
-declare interface IEJAugustTheme extends ITheme, IMatch {
+declare interface IEJAugustApplication extends IApplication, IMatch {
  readonly "..": IEJAugust
- readonly home: IEJAugustThemeHome
- readonly notes: IEJAugustThemeNotes
- /** The portion of the stylesheet that doesn't change with the theme's state. */
+ readonly home: IEJAugustApplicationHome
+ readonly notes: IEJAugustApplicationNotes
+ /** The portion of the stylesheet that doesn't change with the application's state. */
  readonly "static.css": string
- readonly arm: IEJAugustThemeArm
+ readonly arm: IEJAugustApplicationArm
 }
 
-declare interface IEJAugustThemeArm {
+declare interface IEJAugustApplicationArm {
  /** The css overrides for ejaugust's arm. */
  readonly "inline.css": string
  /** The html article content of ejaugust's current arm. */
  readonly "inline.html": string
 }
 
-/** The entire www.ejaugust.com theme, including home page and all notes. */
-declare const ejaugust: IEJAugustTheme
+/** The entire www.ejaugust.com application, including home page and all notes. */
+declare const ejaugust: IEJAugustApplication

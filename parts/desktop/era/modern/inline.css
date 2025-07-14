@@ -65,7 +65,7 @@ sidebar->* {
  line-height: var(--spacing);
 }
 
-#theme-control,
+#application-control,
 #settings {
  padding: var(--spacing);
  display: flex;
@@ -73,7 +73,7 @@ sidebar->* {
  flex-flow: column;
 }
 
-#theme-control {
+#application-control {
  counter-reset: item;
  flex: 0 1 auto;
  line-height: var(--icon-size);

@@ -1,1 +1,1 @@
-desktop.color.styleElement.innerHTML = desktop.color["inline.css"]
+document.getElementById("color-css").innerHTML = desktop.color["inline.css"]

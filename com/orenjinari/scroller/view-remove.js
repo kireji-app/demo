@@ -1,2 +1,2 @@
-if (desktop.theme === this[".."].www)
+if (_.application === this[".."].www)
  base()
