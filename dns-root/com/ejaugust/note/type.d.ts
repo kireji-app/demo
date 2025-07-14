@@ -1,5 +1,5 @@
 declare interface IEJAugustNote extends IPart {
- /** Outputs unix timestamps as a human-readable date, for consistent date formats across the blog. */
+ /** Outputs unix timestamps as a human-readable date, for consistent date formats across the notebook. */
  niceDate(UNIX_TIMESTAMP: string | number): string
  /** A real number representing the estimated number of minutes that it might take the average person to read the note. */
  readonly readingLength: number

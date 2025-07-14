@@ -14,9 +14,10 @@ const securityHeader = {
 const serviceHeader = {
  ETag,
  'Content-Type': 'application/javascript;charset=UTF-8',
- 'Cache-Control': 'public, max-age=86300, immutable',
+ 'Cache-Control': 'public, max-age=0, immutable',
  ...securityHeader
 }
+
 
 const indexHeader = {
  "Retry-After": "86400",
