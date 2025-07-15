@@ -1,1 +1,1 @@
-return core.explorer["inline.html"] + core.browser["inline.html"]
+return core.explorer["inline.html"] + core.browser["inline.html"] + core.explorer.width["inline.html"]

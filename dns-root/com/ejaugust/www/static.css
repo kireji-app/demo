@@ -27,7 +27,7 @@ wallpaper- menu {
 }
 
 
-@media (width < 640px) {
+@media (width < 650px) {
  wallpaper- {
   padding: var(--padding);
   --padding: var(--spacing);

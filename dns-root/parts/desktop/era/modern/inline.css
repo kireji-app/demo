@@ -156,7 +156,17 @@ task-bar {
  gap: var(--spacing);
  padding: var(--spacing);
  box-shadow: var(--task-bar-accent);
- background: var(--bg);
+}
+
+task-bar:before {
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ content: "";
+ background: var(--bg)07;
+ backdrop-filter: blur(15px);
 }
 
 tray- {

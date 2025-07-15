@@ -12,13 +12,19 @@ part-explorer {
  height: 100%;
  overflow: auto;
  background-color: var(--bg-mode-est);
+ position: relative;
+}
+
+part-browser {
+ position: relative;
 }
 
 wallpaper- h2 {
- position: sticky;
+ position: absolute;
  z-index: 10;
  left: 0;
  top: 0;
+ right: 0;
  margin: 0;
  padding: calc(var(--spacing) / 3);
  font-weight: 300;
@@ -92,6 +98,7 @@ part-explorer>scroller->details {
  overflow: hidden;
  width: fit-content;
  min-width: var(--explorer-width);
+ padding-top: calc(var(--icon-size) + var(--spacing) / 3);
  padding-bottom: min(calc(var(--h) / 2), calc(var(--line-height) * 3));
 }
 
