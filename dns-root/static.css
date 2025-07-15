@@ -161,29 +161,6 @@ menu-button:hover {
  color: var(--accent);
 }
 
-#nested button {
- font-size: 100px;
-}
-
 flex-spacer {
  flex: 1;
-}
-
-#nested {
- line-height: var(--icon-size);
- padding: 0;
- display: flex;
- height: var(--icon-size);
- gap: 6px;
-}
-
-@media (width < 500px) {
- #nested {
-  position: fixed;
-  bottom: var(--task-bar-height);
-  left: 0;
-  right: 0;
-  width: 100vw;
-  box-shadow: var(--task-bar-accent);
- }
 }

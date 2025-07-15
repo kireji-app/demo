@@ -1,0 +1,1 @@
+return desktop.color.arm === desktop.color.light ? desktop.color.lightEstAccent : desktop.color.darkEstAccent

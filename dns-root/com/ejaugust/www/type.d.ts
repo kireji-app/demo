@@ -6,5 +6,7 @@ declare interface IEJAugustApplication extends IApplication, IMatch {
  readonly "static.css": string
  readonly arm: IEJAugustApplicationSection
 }
+
 /** The entire www.ejaugust.com application, including home page and all notes. */
 declare const ejaugust: IEJAugustApplication
+declare const section = ejaugust.arm

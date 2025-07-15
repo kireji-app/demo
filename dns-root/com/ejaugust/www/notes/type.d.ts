@@ -1,8 +1,11 @@
-declare interface IEJAugustApplicationNotes extends IMix, IEJAugustApplicationSection {
- /** The match that selects a date for ejaugust. */
- readonly date: IEJAugustApplicationNotesDate
+declare interface IEJAugustApplicationNotes extends IMatch, IEJAugustApplicationSection {
  readonly "..": IEJAugustApplication
+ readonly arm: IEJAugustNote
+ /** Sets the note for ejaugust based on the incoming date. */
+ go(UNIX_TIMESTAMP): void
 }
 
-/** The mix representing the state of ejaugust whenever there is a note activated (rather than the home page). */
+/** The mix representing the section of ejaugust that shows individual notes (rather than the home section). */
 declare const notes: IEJAugustApplicationNotes
+declare const note = notes.arm
+declare const ejaugust = notes[".."]

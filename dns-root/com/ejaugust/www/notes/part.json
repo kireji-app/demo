@@ -1,6 +1,9 @@
 {
- "typename": "mix.core.parts",
+ "typename": "match.core.parts",
  "date-nice": [
+  "UNIX_TIMESTAMP"
+ ],
+ "go": [
   "UNIX_TIMESTAMP"
  ]
 }

@@ -1,7 +1,7 @@
 return orenjinari["static.css"] + `
 wallpaper- {
- --signature: url(${orenjinari.render({ request: "signature.png", format: "datauri" })});
- --ground: url(${orenjinari.render({ request: "ground.png", format: "datauri" })});
+ --signature: var(--www-orenjinari-com--signature-png);
+ --ground: var(--www-orenjinari-com--ground-png);
 }
 
 wallpaper- .zone {

@@ -28,13 +28,12 @@ wallpaper->scroller- {
  --section-gap: 128px;
  background:
   var(--signature) 36.5vw 8vw/27vw 7.78vw no-repeat,
-  /*var(--ground) 12.5vw calc(.8 * var(--wallpaper-height))/75vw 3.75vw no-repeat,*/
   radial-gradient(ellipse 17.597vw 20.968vw at 7.735vw 5.433vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 12.477vw 20.968vw at 28.291vw 2.626vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 20.255vw 20.968vw at 80.029vw 6.956vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 14.194vw 20.968vw at 94.327vw 5.053vw, white 99.5%, transparent 100%);
- background-attachment: local;
+ /*background-attachment: local;*/
  display: block;
  position: relative;
 }

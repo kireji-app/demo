@@ -1,3 +1,1 @@
-return core["static.css"] + `wallpaper- {
- --explorer-width: ${width.arm === width.open ? width.open.routeID + 128n + "px" : 0};
-}`
+return core["static.css"] + core.explorer["inline.css"]

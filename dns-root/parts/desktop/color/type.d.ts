@@ -23,6 +23,7 @@ declare interface IColor extends IMatch {
  readonly darkAccent: string
  readonly darkErAccent: string
  readonly darkEstAccent: string
+
  readonly unLightEstAccent: string
  readonly unLightErAccent: string
  readonly unLightAccent: string
@@ -30,6 +31,7 @@ declare interface IColor extends IMatch {
  readonly unDarkAccent: string
  readonly unDarkErAccent: string
  readonly unDarkEstAccent: string
+
  readonly lightEstFg: string
  readonly lightErFg: string
  readonly lightFg: string
@@ -37,6 +39,7 @@ declare interface IColor extends IMatch {
  readonly darkFg: string
  readonly darkErFg: string
  readonly darkEstFg: string
+
  readonly lightEstBg: string
  readonly lightErBg: string
  readonly lightBg: string
@@ -44,12 +47,21 @@ declare interface IColor extends IMatch {
  readonly darkBg: string
  readonly darkErBg: string
  readonly darkEstBg: string
+
+ readonly modeEstAccent: string
+ readonly modeErAccent: string
+ readonly modeAccent: string
+ readonly unModeAccent: string
+ readonly unModeErAccent: string
+ readonly unModeEstAccent: string
+
  readonly modeEstFg: string
  readonly modeErFg: string
  readonly modeFg: string
  readonly unModeFg: string
  readonly unModeErFg: string
  readonly unModeEstFg: string
+
  readonly modeEstBg: string
  readonly modeErBg: string
  readonly modeBg: string

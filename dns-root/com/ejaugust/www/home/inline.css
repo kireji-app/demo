@@ -1,0 +1,18 @@
+wallpaper- header {
+ padding-bottom: calc(5.75 * var(--spacing));
+}
+
+wallpaper- .topic {
+ font-weight: 400;
+ text-transform: uppercase;
+ font-size: 0.75em;
+ color: var(--fg-mode-er);
+}
+
+#notebook-title {
+ display: none;
+}
+
+#notebook-section {
+ padding-top: calc(3.75 * var(--spacing));
+}

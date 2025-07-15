@@ -77,8 +77,12 @@ declare interface IPart extends Iterable<IPart> {
  readonly "..": IPart
  /** The raw JSON string used to construct the object at `part.manifest`. */
  readonly "part.json": string
+ /** A png icon that can represent the part and - for application parts - used as the application's icon and browser favicon. */
+ readonly "part.png": string
  /** An optional display name for the part. */
  readonly title?: string
+ /** An optional short description of the part. */
+ readonly description?: string
  /** A unicode character to identify the part.
   * 
   * The default unicode character is the Mathematical Small Cursive form of the first letter of the part's domain name. */

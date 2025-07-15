@@ -1,2 +1,2 @@
-const notesDate = this[".."].notes.date
+const notes = this[".."].notes
 const home = this

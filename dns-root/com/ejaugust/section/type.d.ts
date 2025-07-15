@@ -5,4 +5,4 @@ declare interface IEJAugustApplicationSection {
  readonly "inline.html": string
 }
 
-declare const page: IEJAugustApplicationSection
+declare const section: IEJAugustApplicationSection

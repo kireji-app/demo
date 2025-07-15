@@ -1,2 +1,2 @@
-const page = this
+const section = this
 const ejaugust = this[".."]

@@ -14,7 +14,7 @@ part-explorer {
  background-color: var(--bg-mode-est);
 }
 
-wallpaper- :is(part-explorer, part-browser)>h2 {
+wallpaper- h2 {
  position: sticky;
  z-index: 10;
  left: 0;
@@ -88,7 +88,7 @@ part-browser>h2>svg:hover {
  background-color: var(--bg-fade-2);
 }
 
-part-explorer>details {
+part-explorer>scroller->details {
  overflow: hidden;
  width: fit-content;
  min-width: var(--explorer-width);

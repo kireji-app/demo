@@ -31,11 +31,19 @@ if (environment === "worker") {
  }
  globalThis.onactivate = e => globalThis.clients.claim()
  // globalThis.oninstall = e => globalThis.skipWaiting()
- globalThis.onmessage = ({ data: { code, payload } }) => {
+ globalThis.onmessage = ({ data: { code, payload }, source }) => {
   switch (code) {
 
    case "claim":
     globalThis.clients.claim()
+    break
+
+   case "activate":
+    globalThis.skipWaiting()
+    break
+
+   case "version":
+    source.postMessage({ code: "version", payload: _.version })
     break
 
    default:
@@ -61,9 +69,21 @@ if (environment === "worker") {
   nav.serviceWorker.oncontrollerchange = () => location.reload()
  }
 
+ worker.registration.onupdatefound = event => {
+  const target = worker.registration.installing || worker.registration.waiting
+  nav.serviceWorker.onmessage = ({ data: { code, payload } }) => {
+   if (code !== "version") return
+   nav.serviceWorker.onmessage = null
+   // if (confirm(`Service Worker Update available ${payload}.\n\nIt will be activated once all activate tabs in this origin are closed. \n\nWould you like to install it immediately instead? This will refresh all activate tabs in this origin.`))
+   target.postMessage({ code: "activate" })
+  }
+  target.postMessage({ code: "version" })
+ }
+
+
  if (!production)
   addEventListener("focus", () => {
-   log(0, 'Checking for updates.')
+   log(2, 'Checking for updates.')
    worker.registration.update().catch(() => location.reload())
   })
 }

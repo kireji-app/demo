@@ -1,0 +1,8 @@
+#note-subtitle:empty {
+ display: none;
+}
+
+#note-credit {
+ color: var(--bg-un-mode);
+ font-weight: 300;
+}

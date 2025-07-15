@@ -1,4 +1,5 @@
 // TODO: Enable multi-object inheritance so this mix.core.parts can also be a section.ejaugust.com.
-const page = this
-const note = this.date.arm
+const notes = this
+const note = this.arm
 const ejaugust = this[".."]
+const section = this

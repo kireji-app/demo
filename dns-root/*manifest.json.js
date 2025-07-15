@@ -1,4 +1,4 @@
-const src = _.application.render({ request: "part.png", format: "datauri" })
+const src = `data:image/png;base64,${_.application["part.png"]}`
 
 return serialize({
  name: _.application.title ?? "Untitled App",
@@ -21,7 +21,7 @@ return serialize({
    purpose: "any maskable"
   }
  ],
- description: _.application.description,
+ description: _.application.description ?? "This is a part of something bigger.",
  display_override: ["window-controls-overlay"],
  categories: ["entertainment", "games", "utilities"],
 }, null, 1)
