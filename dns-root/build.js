@@ -515,7 +515,7 @@ function ƒ(_) {
 
 ƒ({
  change: "patch",
- verbosity: 0,
+ verbosity: 100,
  mapping: true,
  hangHydration: true
 })
