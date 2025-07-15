@@ -266,7 +266,7 @@ function ƒ(_) {
     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
     if (itemExists(filePath)) {
      try {
-      if (!_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
+      if (!itemName.endsWith(".ts") && !_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
       log(2, `❌ ${itemName.padEnd(20, " ")} - ignored`)
      } catch {
       const stats = getItemStats(filePath)
@@ -516,6 +516,6 @@ function ƒ(_) {
 ƒ({
  change: "patch",
  verbosity: 100,
- mapping: true,
- hangHydration: true
+ mapping: false,
+ hangHydration: false
 })
