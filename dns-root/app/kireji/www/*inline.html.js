@@ -1,0 +1,1 @@
+return kirejiApp.explorer["inline.html"] + kirejiApp.browser["inline.html"] + kirejiApp.explorer.width["inline.html"]

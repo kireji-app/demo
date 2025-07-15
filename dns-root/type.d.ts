@@ -83,7 +83,7 @@ declare const partManifest: IPartData
 /** The inverse of pathToRoot. The path "back up" to the repository root from the directory containing the source code the part used. */
 declare const pathToRepo: string
 /** All of the data collected about the source of each property added to the part during hydration. */
-declare const property: Property<PropertyEntry>
+declare const property: Property
 /** The dedicated SourceMappedFile for the object which was created to hydrate the part. */
 declare const sourceFile: SourceMappedFile
 /** The index of build.js in the list of source mapping files for the part's dedicated SourceMappedFile instance. */

@@ -1,1 +1,0 @@
-return core["static.css"] + core.explorer["inline.css"]

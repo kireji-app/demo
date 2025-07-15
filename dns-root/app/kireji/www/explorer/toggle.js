@@ -1,4 +1,3 @@
-
 const container = ELEMENT.parentElement.parentElement
 const closing = container.hasAttribute("open")
 container[`${closing ? "remove" : "set"}Attribute`]("open", "")

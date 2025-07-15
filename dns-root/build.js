@@ -514,7 +514,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "patch",
+ change: "major",
  verbosity: 100,
  mapping: false,
  hangHydration: false
