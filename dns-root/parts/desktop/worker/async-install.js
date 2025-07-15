@@ -74,8 +74,10 @@ if (environment === "worker") {
   nav.serviceWorker.onmessage = ({ data: { code, payload } }) => {
    if (code !== "version") return
    nav.serviceWorker.onmessage = null
-   // if (confirm(`Service Worker Update available ${payload}.\n\nIt will be activated once all activate tabs in this origin are closed. \n\nWould you like to install it immediately instead? This will refresh all activate tabs in this origin.`))
-   target.postMessage({ code: "activate" })
+   if (!production) {
+    if (confirm(`Service Worker Update available ${payload}.\n\nIt will be activated once all activate tabs in this origin are closed. \n\nWould you like to install it immediately instead? This will refresh all activate tabs in this origin.`))
+     target.postMessage({ code: "activate" })
+   }
   }
   target.postMessage({ code: "version" })
  }
