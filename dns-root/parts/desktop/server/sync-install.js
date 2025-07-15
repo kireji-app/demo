@@ -71,6 +71,7 @@ require('http').createServer((request, response) => {
    head = indexHeader
    _.setRoute(`https://${host}${pathname}`)
    body = _["index.html"]
+   logStringSize(0, body)
   }
  } catch (e) {
   status = 444

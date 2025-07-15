@@ -17,7 +17,7 @@ declare class FileHeader {
  /** The filetype extension (including the dot). */
  readonly extension: string
  /** The content-type of the file, based on its extension. */
- readonly type: string
+ readonly filetype: string
  /** Whether or not the file's content type refers to binary data. */
  readonly binary: boolean
 }

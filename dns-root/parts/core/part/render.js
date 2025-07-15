@@ -10,7 +10,9 @@
  if (!filename)
   throw part.host + " Render Error: can't handle render request without a filename. " + serialize(OPTIONS)
 
- const { filetype, binary, extension } = new FileHeader(filename)
+ const header = new FileHeader(filename)
+ const { binary, extension } = header
+ let { filetype } = header
 
  const searchParams = new URLSearchParams(search)
  const requestHasParameters = searchParams.size > 0
@@ -19,7 +21,21 @@
 
  let body = part[filename]
 
- warn('use new technique on this image', part.host + "/" + filename)
+ if (/*(environment !== "client" || !client.hydrated) && */[".gif", ".png"].includes(extension)) {
+  const placeholder = _["1x1.gif"]
+  let sizeBlock
+  if (extension === ".gif")
+   sizeBlock = atob(body.slice(8, 16)).slice(0, 4)
+  else if (extension === ".png") {
+   const x = atob(body.slice(20, 32)).slice(1)
+   sizeBlock = x[3] + x[2] + x[7] + x[6]
+  }
+  body = placeholder.slice(0, 8) + btoa(sizeBlock + atob(placeholder.slice(8, 16)).slice(4)) + placeholder.slice(16)
+  let imgOwner = part
+  while (imgOwner && !imgOwner.filenames.includes(filename))
+   imgOwner = imgOwner.prototype
+  filetype = `image/gif;inert;${imgOwner.host}/${filename}`
+ }
 
  if (search)
   warn("Render ignored params: " + OPTIONS.request)

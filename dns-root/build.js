@@ -313,6 +313,7 @@ function ƒ(_) {
  }
  openLog(3, "Hydrating Domains")
  const instances = []
+ const imgSources = []
  function distributeHydration(part, domains = []) {
   let host
   if (typeof part === "string") {
@@ -459,8 +460,13 @@ function ƒ(_) {
   for (const fn of filenames) {
    if (!fn.includes(".") && fn.includes("-")) {
     Property.ids.add("@" + fn)
-   } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-")))
+   } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-"))) {
     Property.ids.add(fn.slice(0, -3))
+
+    if (fn.startsWith("*") && (fn.endsWith(".png.js") || fn.endsWith(".gif.js")))
+     imgSources.push([part, fn.slice(1, -3)])
+   } else if (fn.endsWith(".png") || fn.endsWith(".gif"))
+    imgSources.push([part, fn])
   }
   for (const methodID in part.manifest)
    if (!["cardinality", "typename", "abstract", "singleton"].includes(methodID))

@@ -17,7 +17,8 @@ const styles =
  `<style id="user-css">${_["inline.css"]}</style>` +
  `<style id="era-css">${desktop.era["inline.css"]}</style>` +
  `<style id="color-css">${desktop.color["inline.css"]}</style>` +
- `<style id="application-css">${_.application["inline.css"]}</style>`
+ `<style id="application-css">${_.application["inline.css"]}</style>` +
+ `<style id="img-css">${environment === "server" ? "" : _["images.css"]}</style>`
 
 const title =
  `<title>${_.application.title ?? "Untitled App"}</title>`
