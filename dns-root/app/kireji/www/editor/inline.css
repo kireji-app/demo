@@ -4,7 +4,7 @@ editor-container {
 }
 
 part-editor {
- padding: var(--padding) max(calc((100vw - var(--outliner-width) - 640px) / 2), var(--spacing));
+ padding: var(--padding) max(calc((100vw - var(--outliner-width) - 800px) / 2), var(--spacing));
  display: flex;
  flex-flow: column;
  gap: var(--padding);
@@ -26,7 +26,7 @@ part-editor>* {
 part-data {
  --cols: 2;
  display: grid;
- grid-template-columns: repeat(var(--cols), auto);
+ grid-template-columns: repeat(var(--cols), 1fr);
  grid-template-rows: repeat(auto-fill, calc(var(--icon-size) + var(--spacing)));
  width: 100%;
 }

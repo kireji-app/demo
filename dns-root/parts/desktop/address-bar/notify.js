@@ -4,16 +4,11 @@ if (!facet.supported)
 if (addressBar.timer)
  clearTimeout(addressBar.timer)
 
-addressBar.timer = setTimeout(
-
- () => {
-  if (_.routeID !== _.routeIDs[0][0]) {
-   _.routeIDs[0][0] = _.routeID
-   history.replaceState({}, null, swap(_.routeIDs))
-   addressBar.throttleStartTime = performance.now()
-   addressBar.timer = undefined
-  }
- },
-
- addressBar.throttleDuration + addressBar.throttleStartTime - now
-)
+addressBar.timer = setTimeout(() => {
+ if (_.routeID !== addressBar.routeIDCache) {
+  addressBar.routeIDCache = _.routeID
+  history.replaceState({}, null, encodeRoute(_.routeID))
+  addressBar.throttleStartTime = performance.now()
+  addressBar.timer = undefined
+ }
+}, addressBar.throttleDuration + addressBar.throttleStartTime - now)

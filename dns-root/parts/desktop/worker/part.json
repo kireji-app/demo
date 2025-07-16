@@ -1,5 +1,7 @@
 {
  "typename": "facet.core.parts",
  "async-register": [],
- "async-bootstrap": []
+ "async-bootstrap": [
+  "VERSION"
+ ]
 }

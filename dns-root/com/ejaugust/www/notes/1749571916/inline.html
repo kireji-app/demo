@@ -1,0 +1,49 @@
+<p>Can only configurable properties be deleted? Can only writable properties be deleted? In this note we will make a very simple test case to find out.</p>
+<h2>Defining Our Test Case</h2>
+<p>We will declare <code>myObject</code> and give it some configurable and non-configurable properties like this:</p>
+<pre>globalThis.myObject = { configurableA: 1 }
+Object.defineProperties(myObject, {
+ configurableB: { value: 1, configurable: true },
+ configurableC: { value: 1, configurable: true, writable: true },
+ nonConfigurableA: { value: 1 },
+ nonConfigurableB: { value: 1, writable: true }
+})</pre>
+<p>Now, we can read the properties to see if everything worked:</p>
+<pre>myObject.configurableA === 1
+myObject.configurableB === 1
+myObject.configurableC === 1
+myObject.nonConfigurableA === 1
+myObject.nonConfigurableB === 1</pre>
+<h2>After Assigning</h2>
+<p>Next, we will modify all of these properties one by one like this:</p>
+<pre>myObject.configurableA = 2
+myObject.configurableB = 2
+myObject.configurableC = 2
+myObject.nonConfigurableA = 2
+myObject.nonConfigurableB = 2</pre>
+<p>Now, we can see what changed:</p>
+<pre>myObject.configurableA === 2
+myObject.configurableB === 1
+myObject.configurableC === 2
+myObject.nonConfigurableA === 1
+myObject.nonConfigurableB === 2</pre>
+<p>Note that <em>no error was thrown</em> even though only the writable properties were able to be reassigned.</p>
+<h2>After Deleting</h2>
+<p>Finally, we will delete all of these properties one by one like this:</p>
+<pre>delete myObject.configurableA
+delete myObject.configurableB
+delete myObject.configurableC
+delete myObject.nonConfigurableA
+delete myObject.nonConfigurableB</pre>
+<p>Now, let's get the results:</p>
+<pre>myObject.configurableA === undefined
+myObject.configurableB === undefined
+myObject.configurableC === undefined
+myObject.nonConfigurableA === 1
+myObject.nonConfigurableB === 2</pre>
+<p>Yet again, no error was thrown.
+</p>
+<p>Deleting didn't do anything to the non-configurable properties - whether they were writable or not.
+</p>
+<h2>Conclusion</h2> Only configurable properties can be deleted and all configurable properties - even ones that aren't writable - can be deleted.
+<p>This makes sense, since deleting a property actually configures it.</p>

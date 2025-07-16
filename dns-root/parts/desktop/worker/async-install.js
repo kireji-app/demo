@@ -6,14 +6,14 @@ if (environment === "worker") {
    if (hash || search)
     throw 'Requests with a fragment or query are not supported.'
 
-   const isFileRequest = ["/kireji.js", "/manifest.json"].includes(pathname)
+   const isFileRequest = [`/${_.version}/kireji.js`, `/${_.version}/manifest.json`].includes(pathname)
 
-   const filename = isFileRequest ? pathname.slice(1) : "index.html"
+   const filename = isFileRequest ? pathname.split("/")[2] : "index.html"
 
    if (isFileRequest)
-    _.setRoute(`https://${host}`)
+    _.setRoute(`https://${host}/${_.version}/${landingHash}/`)
    else {
-    if (!/^\/(?:[\w-]*\/)?$/.test(pathname))
+    if (!/^\/\d+\.\d+.\d+\/(?:[\w-]*\/)?$/.test(pathname))
      throw `Pathname '${pathname}' is not valid.`
 
     _.setRoute(`https://${host}${pathname}`)
@@ -36,6 +36,7 @@ if (environment === "worker") {
 
    case "claim":
     globalThis.clients.claim()
+    debug("just claimed clients", source)
     break
 
    case "activate":
@@ -81,7 +82,6 @@ if (environment === "worker") {
   }
   target.postMessage({ code: "version" })
  }
-
 
  if (!production)
   addEventListener("focus", () => {

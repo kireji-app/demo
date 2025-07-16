@@ -1,6 +1,9 @@
 declare interface IDNSRoot extends IMix {
  readonly "kireji.js": string
  readonly "index.html": string
+ readonly "images.css": string
+ readonly "static.css": string
+ readonly "inline.css": string
  readonly app: IApp
  readonly click: IClick
  readonly com: ICom
@@ -24,8 +27,6 @@ declare interface IDNSRoot extends IMix {
  readonly meanFrameTime: number
  /** Sets the configuration space to match the given request url string. */
  setRoute(REQUEST_URL: string): void
- /** The most recent routeID array parsed by setRoute. */
- readonly routeIDs: bigint[][]
  /** The operating system's currently assigned root application.
   * 
   * This selection is encoded by the host of the current route. */
@@ -286,8 +287,13 @@ declare class MethodConstant {
 declare const REQUEST_URL: string
 /** Gets a part instance from the root, given its array of domain parts. */
 declare function getPartFromDomains(domains): IPart
-/** Trades a string pathname for a routeIDs array or vice-versa. */
-declare function swap(input: string): bigint[][]
-declare function swap(input: bigint[][]): string
+/** Trades a string pathname for the bigint routeID. */
+declare function decodeRoute(pathname: string): bigint
+/** Trades a bigint routeID for a string pathname. */
+declare function encodeRoute(routeID: bigint): string
+/** Trades a bigint routeID for a string segment. */
+declare function encodeSegment(routeID: bigint): string
 /** The immutable list of runtime instances for the root space. */
 declare const instances: IPart[]
+/** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
+declare const landingHash: string

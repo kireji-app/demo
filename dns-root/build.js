@@ -1,5 +1,3 @@
-const { start } = require("repl")
-
 function ƒ(_) {
  globalThis._ = _
  class SourceMappedFile {
@@ -205,7 +203,7 @@ function ƒ(_) {
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   // toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
-  toCharms = (x, unit = true) => toSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
+  toCharms = (x, unit = true) => encodeSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
@@ -223,7 +221,7 @@ function ƒ(_) {
    } while (remainingMilliseconds > 0)
    warn(`Main thread hang finished at iteration ${iteration}.`)
   },
-  toSegment = routeID => {
+  encodeSegment = routeID => {
    let charmCount = 0n
    let charmIndex
    let reducedRouteID = routeID
@@ -251,9 +249,25 @@ function ƒ(_) {
     segment += pathRadix[parseInt(charmRoundedBinaryString.slice(i, i + 6), 2)]
 
    return segment
-
   },
-  swap = (x, V, O, i) => Array.isArray(x) ? `/` + (x.join("") === "0" ? "" : (x.map(f => f.map(toSegment).join("~")).join("/")) + `/`) : x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = pathRadix.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O)))),
+  encodeRoute = routeID => `/${_.version}/${encodeSegment(routeID)}/`,
+  decodeRoute = pathname => {
+   const segments = pathname.slice(1, -1).split("/")
+   const versionSegment = segments.shift()
+   const rootSegment = segments.shift()
+
+   let charmRoundedBinaryString = "0b0"
+   let charmLengthOffsetBinaryString = "0b0"
+
+   for (const character of [...rootSegment]) {
+    const characterValue = pathRadix.indexOf(character)
+    if (characterValue === -1 || characterValue >= 64) throw character
+    charmRoundedBinaryString += characterValue.toString(2).padStart(6, 0)
+    charmLengthOffsetBinaryString += "000001"
+   }
+
+   return BigInt(charmRoundedBinaryString) + BigInt(charmLengthOffsetBinaryString)
+  },
   logEntropy = (verbosity, ...parts) => {
    if (verbosity > _.verbosity) return
    logAny(verbosity, [
@@ -281,7 +295,7 @@ function ƒ(_) {
   }
 
  openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   \n            ▙▌    ${environment}\n\nBooting O/S`)
- if (environment === "server") {
+ if (environment === "server" && require.main === module) {
   const { extname } = require("path"),
    { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs")
   openLog(1, "Scanning Repository")
@@ -295,7 +309,7 @@ function ƒ(_) {
     const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
     if (itemExists(filePath)) {
      try {
-      if (!itemName.endsWith(".ts") && !_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
+      if (filePath !== "build.js" && !itemName.endsWith(".ts") && !_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
       log(2, `❌ ${itemName.padEnd(20, " ")} - ignored`)
      } catch {
       const stats = getItemStats(filePath)
@@ -340,9 +354,11 @@ function ƒ(_) {
    return currentFolder[name]
   }, _)
  }
+
  openLog(3, "Hydrating Domains")
  const instances = []
  const imgSources = []
+ let landingHash
  function distributeHydration(part, domains = []) {
   let host
   if (typeof part === "string") {
@@ -537,13 +553,17 @@ function ƒ(_) {
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
  closeLog(3)
+ openLog(3, "Computing Landing Hash")
+ landingHash = 'hello'
+ log(3, "Computed output: " + landingHash)
+ closeLog(3)
  if (_.local) _.validate()
  closeLog(1, true)
  log(1, "Boot Completed (end of synchronous script execution).")
 }
 
 ƒ({
- change: "patch",
+ change: "major",
  verbosity: 100,
  mapping: false,
  hangHydration: false

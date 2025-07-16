@@ -4,10 +4,10 @@ declare interface IAddressBar extends IFacet {
  readonly throttleDuration: number
  /** The last time the address bar throttle function allowed the address bar to be set. */
  readonly throttleStartTime: number
- /** The routeIDs most recently written to or read from the address bar. */
- readonly routeIDs: bigint[]
  /** The hostname most recently written to or read from the address bar. */
  readonly hostname: string
+ /** The most recent routeID set to the address bar. */
+ readonly routeIDCache: bigint
 }
 declare class FileHeader {
  static readonly mimeTypes: string[]

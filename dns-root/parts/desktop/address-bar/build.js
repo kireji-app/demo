@@ -1,1 +1,4 @@
-Object.defineProperty(addressBar, "timer", { value: undefined, writable: true })
+Object.defineProperties(addressBar, {
+ routeIDCache: { value: null, writable: true },
+ timer: { value: undefined, writable: true }
+})

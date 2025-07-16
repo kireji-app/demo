@@ -3,6 +3,6 @@
 const manifestLink = document.querySelector('link[rel="manifest"]')
 
 if (!manifestLink.hasAttribute("href"))
- manifestLink.setAttribute("href", "/manifest.json")
+ manifestLink.setAttribute("href", `/${_.version}/manifest.json`)
 
 document.getElementById("img-css").innerHTML ||= _["images.css"]

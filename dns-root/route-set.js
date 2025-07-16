@@ -6,12 +6,10 @@ if (!(host in _.applications))
  throw `Unsupported application '${host}'.`
 
 const pathname = url.pathname
-_.routeIDs = swap(pathname)
-const rootRouteIDs = _.routeIDs[0]
-const rootRouteID = rootRouteIDs[0]
+const newRouteID = decodeRoute(pathname)
 
 if (_.application?.key !== host)
  _.application = getPartFromDomains(host.split("."))
 
-if (_.routeID !== _.routeIDs[0][0])
- _.setRouteID(_.routeIDs[0][0])
+if (_.routeID !== newRouteID)
+ _.setRouteID(newRouteID)

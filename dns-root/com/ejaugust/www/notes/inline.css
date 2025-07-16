@@ -6,3 +6,17 @@
  color: var(--bg-un-mode);
  font-weight: 300;
 }
+
+#notebook-section h2,
+#notebook-section h3:not(#note-subtitle),
+#notebook-section h4,
+#notebook-section h5,
+#notebook-section h6 {
+ padding-top: calc(2 * var(--spacing));
+}
+
+#notebook-section h2 {
+ padding-top: calc(2 * var(--spacing));
+ margin-top: calc(2 * var(--spacing));
+ border-top: 1px solid var(--bg-un-mode);
+}

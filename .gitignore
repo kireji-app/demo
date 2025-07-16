@@ -3,5 +3,6 @@
 .git/
 .vscode/
 .nginx/
+.versions/
 **/Icon
 **/.DS_Store

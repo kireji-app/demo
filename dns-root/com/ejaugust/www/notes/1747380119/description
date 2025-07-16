@@ -1,0 +1,1 @@
+This quick demo shows you how Object.defineProperty can be used to hydrate a parsed JSON object and then re-stringify it without serializing runtime-only properties.

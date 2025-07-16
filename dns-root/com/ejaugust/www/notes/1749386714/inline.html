@@ -1,0 +1,53 @@
+<p>This is a simple demonstration of the way that an object will inherit its prototype value until something causes it to shadow that value.</p>
+<p>The <code>state1</code> property is created via <code>&lt;some object&gt;.state1 = 0</code><br><code>state2</code> is created via <code>Object.defineProperty(&lt;some object&gt;, { state2: { value: 0 } })</code></p>
+<p><code>a</code> and <code>b</code> inherit from <code>prototype</code>.</p>
+<h2>Before increment:</h2>
+<p><code>a</code> shadows <code>state1</code> and <code>state2</code>.<br><code>b</code> does not.</p>
+<div>prototype state1: 0state2: 0</div>
+<div>astate1: 0state2: 0</div>
+<div>bstate1: 0state2: 0</div>
+<h2><code>prototype.state1++</code></h2>
+<p>Notice how <code>b</code> changes but <code>a</code> stays the same.</p>
+<div>prototype state1: 1state2: 0</div>
+<div>astate1: 0state2: 0</div>
+<div>bstate1: 1state2: 0</div>
+<h2><code>a.state1++</code></h2>
+<p><code>a</code> still shadows <code>prototype</code>.</p>
+<div>prototype state1: 1state2: 0</div>
+<div>astate1: 1state2: 0</div>
+<div>bstate1: 1state2: 0</div>
+<h2><code>b.state1++</code></h2>
+<p>Here, the increment operation reads from <code>prototype.state1</code> and then writes to <code>b.state1</code>. Now, <code>b</code> shadows <code>prototype</code>.</p>
+<div>prototype state1: 1state2: 0</div>
+<div>astate1: 1state2: 0</div>
+<div>bstate1: 2state2: 0</div>
+<h2><code>prototype.state1++</code></h2>
+<p>Demonstrating that <code>a</code> and <code>b</code> are both isolated from <code>prototype</code>.</p>
+<div>prototype state1: 2state2: 0</div>
+<div>astate1: 1state2: 0</div>
+<div>bstate1: 2state2: 0</div>
+<h2><code>prototype.state1++</code></h2>
+<div>prototype state1: 3state2: 0</div>
+<div>astate1: 1state2: 0</div>
+<div>bstate1: 2state2: 0</div>
+<h2><code>prototype.state2++</code></h2>
+<p><code>state2</code> behaves the same way as <code>state1</code>.</p>
+<div>prototype state1: 3state2: 1</div>
+<div>astate1: 1state2: 0</div>
+<div>bstate1: 2state2: 1</div>
+<h2><code>a.state2++</code></h2>
+<div>prototype state1: 3state2: 1</div>
+<div>astate1: 1state2: 1</div>
+<div>bstate1: 2state2: 1</div>
+<h2><code>b.state2++</code></h2>
+<div>prototype state1: 3state2: 1</div>
+<div>astate1: 1state2: 1</div>
+<div>bstate1: 2state2: 2</div>
+<h2><code>prototype.state2++</code></h2>
+<div>prototype state1: 3state2: 2</div>
+<div>astate1: 1state2: 1</div>
+<div>bstate1: 2state2: 2</div>
+<h2><code>prototype.state2++</code></h2>
+<div>prototype state1: 3state2: 3</div>
+<div>astate1: 1state2: 1</div>
+<div>bstate1: 2state2: 2</div>

@@ -1,5 +1,17 @@
 wallpaper- header {
- padding-bottom: calc(5.75 * var(--spacing));
+ padding-bottom: calc(6 * var(--spacing));
+ position: relative;
+}
+
+wallpaper- header::after {
+ content: "";
+ position: absolute;
+ top: var(--gap);
+ left: var(--gap);
+ height: calc(10 * var(--spacing));
+ width: calc(10 * var(--spacing));
+ background-image: var(--www-ejaugust-com--part-png);
+ background-size: 100%;
 }
 
 wallpaper- .topic {

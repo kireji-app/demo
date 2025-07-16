@@ -5,7 +5,7 @@ globalThis.𝓌 ??= {}
 
 𝓌.startupRegistration = 𝓌.registration = await nav.serviceWorker.getRegistration()
 
-𝓌.registration ??= await nav.serviceWorker.register("/kireji.js", { updateViaCache: "all" })
+𝓌.registration ??= await nav.serviceWorker.register(`/${VERSION}/kireji.js`, { updateViaCache: "all", scope: `/${VERSION}/` })
 
 if (!𝓌.registration.active) {
  await new Promise(resolve => {
@@ -19,6 +19,8 @@ if (!𝓌.registration.active) {
 
 𝓌.controller = nav.serviceWorker.controller
 
+console.log(𝓌.controller)
+
 𝓌.controller ??= await new Promise(resolve => {
  nav.serviceWorker.oncontrollerchange = resolve
  𝓌.registration.active.postMessage({ code: "claim" })
@@ -26,6 +28,7 @@ if (!𝓌.registration.active) {
 
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
-newScript.setAttribute("src", "/kireji.js")
+newScript.setAttribute("src", `/${VERSION}/kireji.js`)
 newScript.setAttribute("defer", "")
 oldScript.replaceWith(newScript)
+console.warn("replaced script!")

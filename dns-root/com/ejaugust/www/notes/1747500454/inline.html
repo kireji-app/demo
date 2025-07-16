@@ -1,0 +1,446 @@
+<p>Observe that JavaScript classes don't stringify as objects, but their instances usually do.</p>
+<h2>Native Class Example</h2>First, we start with some native classes to see how they serialize.<p><code>JSON.stringify(Object)</code></p>
+<pre>undefined</pre>
+<code>JSON.stringify(Array)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(Function)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(String)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(Number)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(Boolean)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(Promise)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(Date)</code>
+<pre>undefined</pre>
+<code>JSON.stringify(RegExp)</code>
+<pre>undefined</pre>
+<p>As you can see, we always get <code>undefined</code>.</p>
+<p>Note that <code>JSON</code> itself is not a class but a global helper object.</p>
+<p><code>JSON.stringify(JSON)</code></p>
+<pre>{}</pre>
+<p>This happens because classes are functions and - by default - functions can't be serialized as JSON because they don't correspond to any meaningful JSON value. Take notice of the difference in type:</p>
+<p><code>typeof Array</code></p>
+<pre>function</pre>
+<p><code>typeof JSON</code></p>
+<pre>object</pre>
+<h2>Trying it on Our Own Class </h2>
+<p>Let's give it a try on a class we created ourself to see what happens.</p><code>JSON.stringify(class {
+ myProperty=7;
+ static myOtherProperty = 8
+})</code>
+<pre>undefined</pre>
+<p>Still nothing.</p>
+<p>Of course, we can usually stringify an <i>instance</i> of a class we created:</p><code>JSON.stringify(new class {
+ myProperty=7;
+ static myOtherProperty = 8
+})</code>
+<pre>{"myProperty":7}</pre>
+<h2>Using <code>toString</code></h2>
+<p>If you really need to serialize a class (for example, when debugging), we have a couple of different options. The first is to simply use <code>toString()</code>:</p>
+<p><code>Object.toString()</code></p>
+<pre>function Object() { [native code] }</pre>
+<code>Array.toString()</code>
+<pre>function Array() { [native code] }</pre>
+<code>Function.toString()</code>
+<pre>function Function() { [native code] }</pre>
+<code>String.toString()</code>
+<pre>function String() { [native code] }</pre>
+<code>Number.toString()</code>
+<pre>function Number() { [native code] }</pre>
+<code>Boolean.toString()</code>
+<pre>function Boolean() { [native code] }</pre>
+<code>Promise.toString()</code>
+<pre>function Promise() { [native code] }</pre>
+<code>Date.toString()</code>
+<pre>function Date() { [native code] }</pre>
+<code>RegExp.toString()</code>
+<pre>function RegExp() { [native code] }</pre>
+<p>This is more information than <code>undefined</code> but it still doesn't get us very far. Using this technique <i>does</i> give us the source code used to create a function (and by extension, a class), which can occasionally be helpful:</p>
+<p><code>class {
+  myProperty = 7;
+  static myOtherProperty = 8;
+ }.toString()</code></p>
+<pre>class {
+  myProperty = 7;
+  static myOtherProperty = 8;
+ }</pre>
+<p>Yet, it would be difficult to adapt these results to produce a valid JSON value, especially if we want to serialize nested property values. Furthermore, we can't output any properties we added after the class was evaluated:</p>
+<p><code>class Test {
+  myProperty = 7;
+  static myOtherProperty = 8;
+ };<br>Test.newProperty = 19;<br>Test.toString()</code></p>
+<pre>class Test {
+ myProperty = 7;
+ static myOtherProperty = 8;
+}</pre>
+<h2>Using <code>static toJson</code></h2>
+<p>By adding a static property on a class called "toJSON", we can tell <code>JSON.stringify</code> to output anything we want when we serialize it:</p>
+<p><code>JSON.stringify(class {
+ static toJSON(){
+  return { name: "MyCoolClass", isCool: true }
+ }
+}, null ,1)</code></p>
+<pre>{
+ "name": "MyCoolClass",
+ "isCool": true
+}</pre>
+<h3>Enumerating Properties Manually</h3>What happens when we try creating a more useful helper function that enumerates class properties manually?<code>JSON.stringify(class SerializableClass {
+ static toJSON() {
+  const info = {};
+  const printValue = (value) =&gt;
+   ({ function: "[Function]", symbol: String(value) }[typeof value] ?? value);
+  let instance = this;
+
+  if (typeof this === "function") {
+   instance = this.prototype;
+   info.className = this.name || "AnonymousClass";
+   info.classProperties = Reflect.ownKeys(this).reduce((props, key) =&gt; {
+    if (
+     typeof key === "string" &amp;&amp;
+     !["prototype", "name", "length", "arguments", "caller"].includes(key)
+    )
+     props[key] = printValue(this[key]);
+    return props;
+   }, {});
+  }
+
+  info.instancProperties = Reflect.ownKeys(instance).reduce((props, key) =&gt; {
+   if (typeof key === "string" &amp;&amp; key !== "constructor")
+    props[key] = printValue(
+     Object.getOwnPropertyDescriptor(instance, key).value
+    );
+   return props;
+  }, {});
+
+  return info;
+ }
+}, null, 1)</code>
+<pre>{
+ "className": "SerializableClass",
+ "classProperties": {
+  "toJSON": "[Function]"
+ },
+ "instancProperties": {}
+}</pre>Just out of curiousity, I turned the same function into a global method and called it on each of our native class examples:<p><code>toJSON(Object)</code></p>
+<pre>{
+ "className": "Object",
+ "classProperties": {
+  "assign": "[Function]",
+  "getOwnPropertyDescriptor": "[Function]",
+  "getOwnPropertyDescriptors": "[Function]",
+  "getOwnPropertyNames": "[Function]",
+  "getOwnPropertySymbols": "[Function]",
+  "hasOwn": "[Function]",
+  "is": "[Function]",
+  "preventExtensions": "[Function]",
+  "seal": "[Function]",
+  "create": "[Function]",
+  "defineProperties": "[Function]",
+  "defineProperty": "[Function]",
+  "freeze": "[Function]",
+  "getPrototypeOf": "[Function]",
+  "setPrototypeOf": "[Function]",
+  "isExtensible": "[Function]",
+  "isFrozen": "[Function]",
+  "isSealed": "[Function]",
+  "keys": "[Function]",
+  "entries": "[Function]",
+  "fromEntries": "[Function]",
+  "values": "[Function]",
+  "groupBy": "[Function]"
+ },
+ "instancProperties": {
+  "__defineGetter__": "[Function]",
+  "__defineSetter__": "[Function]",
+  "hasOwnProperty": "[Function]",
+  "__lookupGetter__": "[Function]",
+  "__lookupSetter__": "[Function]",
+  "isPrototypeOf": "[Function]",
+  "propertyIsEnumerable": "[Function]",
+  "toString": "[Function]",
+  "valueOf": "[Function]",
+  "toLocaleString": "[Function]"
+ }
+}</pre>
+<code>toJSON(Array)</code>
+<pre>{
+ "className": "Array",
+ "classProperties": {
+  "isArray": "[Function]",
+  "from": "[Function]",
+  "fromAsync": "[Function]",
+  "of": "[Function]"
+ },
+ "instancProperties": {
+  "length": 0,
+  "at": "[Function]",
+  "concat": "[Function]",
+  "copyWithin": "[Function]",
+  "fill": "[Function]",
+  "find": "[Function]",
+  "findIndex": "[Function]",
+  "findLast": "[Function]",
+  "findLastIndex": "[Function]",
+  "lastIndexOf": "[Function]",
+  "pop": "[Function]",
+  "push": "[Function]",
+  "reverse": "[Function]",
+  "shift": "[Function]",
+  "unshift": "[Function]",
+  "slice": "[Function]",
+  "sort": "[Function]",
+  "splice": "[Function]",
+  "includes": "[Function]",
+  "indexOf": "[Function]",
+  "join": "[Function]",
+  "keys": "[Function]",
+  "entries": "[Function]",
+  "values": "[Function]",
+  "forEach": "[Function]",
+  "filter": "[Function]",
+  "flat": "[Function]",
+  "flatMap": "[Function]",
+  "map": "[Function]",
+  "every": "[Function]",
+  "some": "[Function]",
+  "reduce": "[Function]",
+  "reduceRight": "[Function]",
+  "toReversed": "[Function]",
+  "toSorted": "[Function]",
+  "toSpliced": "[Function]",
+  "with": "[Function]",
+  "toLocaleString": "[Function]",
+  "toString": "[Function]"
+ }
+}</pre>
+<code>toJSON(Function)</code>
+<pre>{
+ "className": "Function",
+ "classProperties": {},
+ "instancProperties": {
+  "length": 0,
+  "name": "",
+  "apply": "[Function]",
+  "bind": "[Function]",
+  "call": "[Function]",
+  "toString": "[Function]"
+ }
+}</pre>
+<code>toJSON(String)</code>
+<pre>{
+ "className": "String",
+ "classProperties": {
+  "fromCharCode": "[Function]",
+  "fromCodePoint": "[Function]",
+  "raw": "[Function]"
+ },
+ "instancProperties": {
+  "length": 0,
+  "anchor": "[Function]",
+  "at": "[Function]",
+  "big": "[Function]",
+  "blink": "[Function]",
+  "bold": "[Function]",
+  "charAt": "[Function]",
+  "charCodeAt": "[Function]",
+  "codePointAt": "[Function]",
+  "concat": "[Function]",
+  "endsWith": "[Function]",
+  "fontcolor": "[Function]",
+  "fontsize": "[Function]",
+  "fixed": "[Function]",
+  "includes": "[Function]",
+  "indexOf": "[Function]",
+  "isWellFormed": "[Function]",
+  "italics": "[Function]",
+  "lastIndexOf": "[Function]",
+  "link": "[Function]",
+  "localeCompare": "[Function]",
+  "match": "[Function]",
+  "matchAll": "[Function]",
+  "normalize": "[Function]",
+  "padEnd": "[Function]",
+  "padStart": "[Function]",
+  "repeat": "[Function]",
+  "replace": "[Function]",
+  "replaceAll": "[Function]",
+  "search": "[Function]",
+  "slice": "[Function]",
+  "small": "[Function]",
+  "split": "[Function]",
+  "strike": "[Function]",
+  "sub": "[Function]",
+  "substr": "[Function]",
+  "substring": "[Function]",
+  "sup": "[Function]",
+  "startsWith": "[Function]",
+  "toString": "[Function]",
+  "toWellFormed": "[Function]",
+  "trim": "[Function]",
+  "trimStart": "[Function]",
+  "trimLeft": "[Function]",
+  "trimEnd": "[Function]",
+  "trimRight": "[Function]",
+  "toLocaleLowerCase": "[Function]",
+  "toLocaleUpperCase": "[Function]",
+  "toLowerCase": "[Function]",
+  "toUpperCase": "[Function]",
+  "valueOf": "[Function]"
+ }
+}</pre>
+<code>toJSON(Number)</code>
+<pre>{
+ "className": "Number",
+ "classProperties": {
+  "isFinite": "[Function]",
+  "isInteger": "[Function]",
+  "isNaN": "[Function]",
+  "isSafeInteger": "[Function]",
+  "parseFloat": "[Function]",
+  "parseInt": "[Function]",
+  "MAX_VALUE": 1.7976931348623157e+308,
+  "MIN_VALUE": 5e-324,
+  "NaN": null,
+  "NEGATIVE_INFINITY": null,
+  "POSITIVE_INFINITY": null,
+  "MAX_SAFE_INTEGER": 9007199254740991,
+  "MIN_SAFE_INTEGER": -9007199254740991,
+  "EPSILON": 2.220446049250313e-16
+ },
+ "instancProperties": {
+  "toExponential": "[Function]",
+  "toFixed": "[Function]",
+  "toPrecision": "[Function]",
+  "toString": "[Function]",
+  "valueOf": "[Function]",
+  "toLocaleString": "[Function]"
+ }
+}</pre>
+<code>toJSON(Boolean)</code>
+<pre>{
+ "className": "Boolean",
+ "classProperties": {},
+ "instancProperties": {
+  "toString": "[Function]",
+  "valueOf": "[Function]"
+ }
+}</pre>
+<code>toJSON(Promise)</code>
+<pre>{
+ "className": "Promise",
+ "classProperties": {
+  "all": "[Function]",
+  "allSettled": "[Function]",
+  "any": "[Function]",
+  "race": "[Function]",
+  "resolve": "[Function]",
+  "reject": "[Function]",
+  "withResolvers": "[Function]",
+  "try": "[Function]"
+ },
+ "instancProperties": {
+  "then": "[Function]",
+  "catch": "[Function]",
+  "finally": "[Function]"
+ }
+}</pre>
+<code>toJSON(Date)</code>
+<pre>{
+ "className": "Date",
+ "classProperties": {
+  "now": "[Function]",
+  "parse": "[Function]",
+  "UTC": "[Function]"
+ },
+ "instancProperties": {
+  "toString": "[Function]",
+  "toDateString": "[Function]",
+  "toTimeString": "[Function]",
+  "toISOString": "[Function]",
+  "toUTCString": "[Function]",
+  "toGMTString": "[Function]",
+  "getDate": "[Function]",
+  "setDate": "[Function]",
+  "getDay": "[Function]",
+  "getFullYear": "[Function]",
+  "setFullYear": "[Function]",
+  "getHours": "[Function]",
+  "setHours": "[Function]",
+  "getMilliseconds": "[Function]",
+  "setMilliseconds": "[Function]",
+  "getMinutes": "[Function]",
+  "setMinutes": "[Function]",
+  "getMonth": "[Function]",
+  "setMonth": "[Function]",
+  "getSeconds": "[Function]",
+  "setSeconds": "[Function]",
+  "getTime": "[Function]",
+  "setTime": "[Function]",
+  "getTimezoneOffset": "[Function]",
+  "getUTCDate": "[Function]",
+  "setUTCDate": "[Function]",
+  "getUTCDay": "[Function]",
+  "getUTCFullYear": "[Function]",
+  "setUTCFullYear": "[Function]",
+  "getUTCHours": "[Function]",
+  "setUTCHours": "[Function]",
+  "getUTCMilliseconds": "[Function]",
+  "setUTCMilliseconds": "[Function]",
+  "getUTCMinutes": "[Function]",
+  "setUTCMinutes": "[Function]",
+  "getUTCMonth": "[Function]",
+  "setUTCMonth": "[Function]",
+  "getUTCSeconds": "[Function]",
+  "setUTCSeconds": "[Function]",
+  "valueOf": "[Function]",
+  "getYear": "[Function]",
+  "setYear": "[Function]",
+  "toJSON": "[Function]",
+  "toLocaleString": "[Function]",
+  "toLocaleDateString": "[Function]",
+  "toLocaleTimeString": "[Function]"
+ }
+}</pre>
+<code>toJSON(RegExp)</code>
+<pre>{
+ "className": "RegExp",
+ "classProperties": {
+  "input": "",
+  "$_": "",
+  "lastMatch": "",
+  "$&amp;": "",
+  "lastParen": "",
+  "$+": "",
+  "leftContext": "",
+  "$`": "",
+  "rightContext": "",
+  "$'": "",
+  "$1": "",
+  "$2": "",
+  "$3": "",
+  "$4": "",
+  "$5": "",
+  "$6": "",
+  "$7": "",
+  "$8": "",
+  "$9": "",
+  "escape": "[Function]"
+ },
+ "instancProperties": {
+  "exec": "[Function]",
+  "compile": "[Function]",
+  "toString": "[Function]",
+  "test": "[Function]"
+ }
+}</pre><code>toJSON(JSON)</code>
+<pre>{
+ "instancProperties": {
+  "parse": "[Function]",
+  "stringify": "[Function]",
+  "rawJSON": "[Function]",
+  "isRawJSON": "[Function]"
+ }
+}</pre>

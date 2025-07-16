@@ -1,0 +1,1 @@
+This is a quick demo of the use of Object.hasOwn, which can be used like in except that it doesn't search the prototype chain for the property value.

@@ -1,0 +1,16 @@
+<p>Here, we see two ways of checking for the existence of a certain property on an object: one which traverses the prototype chain and one which doesn't.</p>
+<pre>class Cat {
+ get legsCount() {
+  return 4
+ }
+}</pre>
+<pre>class TabbyCat extends Cat {
+ // No own "legsCount" property.
+}
+ 
+const cat = new Cat()</pre>
+<pre>console.log("legsCount" in cat)
+// true
+
+ console.log(Object.hasOwn(cat, "legsCount"))
+// false</pre>

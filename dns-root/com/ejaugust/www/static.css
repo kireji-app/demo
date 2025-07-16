@@ -1,10 +1,11 @@
 wallpaper- {
- padding: var(--padding) max(calc((100vw - 640px) / 2), var(--spacing));
+ padding: var(--padding) max(calc((100vw - 800px) / 2), var(--spacing));
  display: flex;
  flex-flow: column;
  overflow-y: scroll;
  min-height: 0;
  font-size: calc(1.2 * var(--spacing));
+ line-height: calc(1.75 * var(--spacing));
 }
 
 wallpaper- header {
@@ -32,7 +33,11 @@ wallpaper- menu {
 #latest {
  display: grid;
  gap: var(--spacing);
- grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ grid-template-columns: 1fr;
+}
+
+li~li {
+ margin-top: var(--spacing);
 }
 
 #latest>article {

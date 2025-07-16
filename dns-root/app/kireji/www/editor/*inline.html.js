@@ -46,7 +46,7 @@ return (
     "<div>State Integer</div>" +
     `<div>${selected.routeID.toLocaleString()}<sub class=marks>10</sub></div>` +
     "<div>State String</div>" +
-    `<div><span class=marks>"</span>${toSegment(selected.routeID)}<span class=marks>"</span></div>` +
+    `<div><span class=marks>"</span>${encodeSegment(selected.routeID)}<span class=marks>"</span></div>` +
     "<div>Prototype</div>" +
     `<div><span class=marks>"</span>${selected.prototype.domains.join("<span class=marks>.</span>")}<span class=marks>"</span></div>` +
     "<div>Subtitle</div>" +
