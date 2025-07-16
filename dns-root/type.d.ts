@@ -33,6 +33,8 @@ declare interface IDNSRoot extends IMix {
  readonly application: IPart
  /** A host-keyed object with all of the applications that are available. */
  readonly applications: Record<string, IApplication>
+ /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
+ readonly landingHash: string
 }
 
 declare interface ITopLevelDomain extends IMix {
@@ -295,5 +297,3 @@ declare function encodeRoute(routeID: bigint): string
 declare function encodeSegment(routeID: bigint): string
 /** The immutable list of runtime instances for the root space. */
 declare const instances: IPart[]
-/** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
-declare const landingHash: string

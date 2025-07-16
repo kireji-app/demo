@@ -1,7 +1,7 @@
 openLog(1, "Tests")
 
 if (environment === "server" && require.main === module) {
- const testURL = `https://www.kireji.app/${_.version}/${landingHash}/`
+ const testURL = `https://www.kireji.app/${_.version}/${_.landingHash}/`
  openLog(1, "Routing Test: " + testURL)
  openLog(1, "Setting route.")
  _.setRoute(testURL)

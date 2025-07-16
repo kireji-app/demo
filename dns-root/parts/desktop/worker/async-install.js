@@ -11,7 +11,7 @@ if (environment === "worker") {
    const filename = isFileRequest ? pathname.split("/")[2] : "index.html"
 
    if (isFileRequest)
-    _.setRoute(`https://${host}/${_.version}/${landingHash}/`)
+    _.setRoute(`https://${host}/${_.version}/${_.landingHash}/`)
    else {
     if (!/^\/\d+\.\d+.\d+\/(?:[\w-]*\/)?$/.test(pathname))
      throw `Pathname '${pathname}' is not valid.`

@@ -360,7 +360,6 @@ function ƒ(_) {
  openLog(3, "Hydrating Domains")
  const instances = []
  const imgSources = []
- let landingHash
  function distributeHydration(part, domains = []) {
   let host
   if (typeof part === "string") {
@@ -556,8 +555,8 @@ function ƒ(_) {
  for (const part of instances) part.startBuild()
  closeLog(3)
  openLog(3, "Computing Landing Hash")
- landingHash = 'hello'
- log(3, "Computed output: " + landingHash)
+ _.landingHash ??= 'test-123'
+ log(3, "Computed output: " + _.landingHash)
  closeLog(3)
  if (_.local) _.validate()
  closeLog(1, true)
@@ -568,5 +567,6 @@ function ƒ(_) {
  change: "patch",
  verbosity: 100,
  mapping: false,
- hangHydration: false
+ hangHydration: false,
+ landingHash: "2cK_PM4aoIif018"
 })

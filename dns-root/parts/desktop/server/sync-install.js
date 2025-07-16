@@ -36,7 +36,7 @@ module.exports = {
      break respond
     }
 
-    _.setRoute(`https://${host}/${_.version}/${landingHash}/`)
+    _.setRoute(`https://${host}/${_.version}/${_.landingHash}/`)
     status = 200
     head = serviceHeader
     body = _["kireji.js"]
@@ -98,7 +98,7 @@ if (environment === "server" && require.main === module) {
 
     if (pathname === '/') {
      status = 302
-     head = { 'Location': `/${_.version}/${landingHash}/` }
+     head = { 'Location': `/${_.version}/${_.landingHash}/` }
      break respond
     }
 
