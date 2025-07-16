@@ -120,8 +120,8 @@ if (environment === "server" && require.main === module) {
    error(e)
    head = {}
   }
-
-  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${status} ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
+  const memory = (process.memoryUsage().rss / 1024 / 1024) + " MiB";
+  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${memory} ${status} ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
   response.writeHead(status, head)
   response.end(body)
  }).listen(internalPort, () => log(0, "HTTP Server " + ETag))
