@@ -1,0 +1,40 @@
+editor-container {
+ container-type: inline-size;
+ container-name: editor-container;
+}
+
+part-editor {
+ padding: var(--padding) max(calc((100vw - var(--outliner-width) - 640px) / 2), var(--spacing));
+ display: flex;
+ flex-flow: column;
+ gap: var(--padding);
+}
+
+@container editor-container (width < 650px) {
+ part-editor {
+  --padding: var(--spacing);
+  --gap: calc(1.5 * var(--spacing));
+ }
+}
+
+part-editor>* {
+ background: var(--bg-mode-est);
+ padding: var(--gap);
+ border-radius: var(--radius) var(--radius);
+}
+
+part-data {
+ --cols: 2;
+ display: grid;
+ grid-template-columns: repeat(var(--cols), auto);
+ grid-template-rows: repeat(auto-fill, calc(var(--icon-size) + var(--spacing)));
+ width: 100%;
+}
+
+part-data div {
+ padding: calc(var(--spacing) / 2);
+ border-radius: 4px;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+ overflow: hidden;
+}

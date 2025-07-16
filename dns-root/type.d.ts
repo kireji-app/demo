@@ -289,3 +289,5 @@ declare function getPartFromDomains(domains): IPart
 /** Trades a string pathname for a routeIDs array or vice-versa. */
 declare function swap(input: string): bigint[][]
 declare function swap(input: bigint[][]): string
+/** The immutable list of runtime instances for the root space. */
+declare const instances: IPart[]

@@ -1,4 +1,4 @@
 const kirejiApp = this
-const explorer = this.explorer
-const browser = this.browser
-const width = this.explorer.width
+const outliner = this.outliner
+const editor = this.editor
+const width = this.outliner.width

@@ -196,6 +196,7 @@ function ƒ(_) {
    "server"
   ),
   production = _.branch === "main" && environment !== "server" && !_.local,
+  pathRadix = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0",
   log = (verbosity, ...data) => logAny(verbosity, data, "log"),
   warn = (...data) => logAny(0, data, "warn"),
   debug = (...data) => logAny(0, data, "debug"),
@@ -203,7 +204,8 @@ function ƒ(_) {
   logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
-  toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
+  // toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
+  toCharms = (x, unit = true) => toSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
   scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
@@ -221,10 +223,37 @@ function ƒ(_) {
    } while (remainingMilliseconds > 0)
    warn(`Main thread hang finished at iteration ${iteration}.`)
   },
-  swap = (x, b = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0", V, O, i, Y, k, c, o, fl, ps) => {
-   // TODO: Undo premature minification.
-   return Array.isArray(x) ? `/` + (x.join("") === "0" ? "" : (x.map(f => f.map(y => { V = x = ""; Y = y; k = 0n; while (Y > 0n) { c = 2n ** (k * 6n); if (Y >= c) { Y -= c; k++ } else break } o = 0n; for (i = 0n; i < k; i++)o += 2n ** (i * 6n); V = (y - o).toString(2); fl = Number(k) * 6; ps = V.padStart(fl, "0"); for (i = 0; i < fl; i += 6)x += b[parseInt(ps.slice(i, i + 6), 2)]; return x }).join("~")).join("/")) + `/`) : x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = b.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O))))
+  toSegment = routeID => {
+   let charmCount = 0n
+   let charmIndex
+   let reducedRouteID = routeID
+
+   while (reducedRouteID > 0n) {
+    charmIndex = 2n ** (charmCount * 6n)
+    if (reducedRouteID >= charmIndex) {
+     reducedRouteID -= charmIndex
+     charmCount++
+    } else break
+   }
+
+   let charmLengthOffset = 0n
+
+   for (i = 0n; i < charmCount; i++)
+    charmLengthOffset += 2n ** (i * 6n)
+
+   const binaryString = (routeID - charmLengthOffset).toString(2)
+   const charmRoundedBinaryLength = Number(charmCount) * 6
+   const charmRoundedBinaryString = binaryString.padStart(charmRoundedBinaryLength, "0")
+
+   let segment = ""
+
+   for (i = 0; i < charmRoundedBinaryLength; i += 6)
+    segment += pathRadix[parseInt(charmRoundedBinaryString.slice(i, i + 6), 2)]
+
+   return segment
+
   },
+  swap = (x, V, O, i) => Array.isArray(x) ? `/` + (x.join("") === "0" ? "" : (x.map(f => f.map(toSegment).join("~")).join("/")) + `/`) : x.slice(1, -1).split("/").map(f => f.split("~").map(y => (V = O = "0b0", [...y].map(c => { i = pathRadix.indexOf(c); if (i === -1 || i >= 64) throw c; V += i.toString(2).padStart(6, 0); O += "000001" }), BigInt(V) + BigInt(O)))),
   logEntropy = (verbosity, ...parts) => {
    if (verbosity > _.verbosity) return
    logAny(verbosity, [
@@ -475,12 +504,12 @@ function ƒ(_) {
   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
   for (const id of Property.ids) new Property(id)
   sourceFile.addLine("@descriptor-map-close@})", buildSource)
+  const propertyDescriptorScript = sourceFile.packAndMap()
   try {
-   const propertyDescriptorScript = sourceFile.packAndMap()
    const propertyDescriptor = eval(propertyDescriptorScript)
    Object.defineProperties(part, propertyDescriptor)
   } catch (e) {
-   throw new Error(`Failed to construct property descriptor for ${host}.\n${e}`)
+   throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
   }
   let subpartIndex = 0
   for (const subdomain of subdomains) {
@@ -514,7 +543,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
+ change: "patch",
  verbosity: 100,
  mapping: false,
  hangHydration: false

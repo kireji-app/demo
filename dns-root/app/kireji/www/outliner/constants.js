@@ -1,2 +1,2 @@
-const explorer = this
+const outliner = this
 const width = this.width

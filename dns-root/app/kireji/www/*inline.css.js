@@ -1,1 +1,1 @@
-return kirejiApp["static.css"] + kirejiApp.explorer["inline.css"]
+return kirejiApp["static.css"] + kirejiApp.outliner["inline.css"] + kirejiApp.editor["inline.css"]

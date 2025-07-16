@@ -1,7 +1,4 @@
 wallpaper- {
- --padding: calc(3.5 * var(--spacing));
- --gap: calc(2.5 * var(--spacing));
- --radius: calc(var(--spacing) / 2.5);
  padding: var(--padding) max(calc((100vw - 640px) / 2), var(--spacing));
  display: flex;
  flex-flow: column;
@@ -26,12 +23,9 @@ wallpaper- menu {
  flex: 0;
 }
 
-
 @media (width < 650px) {
  wallpaper- {
   padding: var(--padding);
-  --padding: var(--spacing);
-  --gap: calc(1.5 * var(--spacing));
  }
 }
 

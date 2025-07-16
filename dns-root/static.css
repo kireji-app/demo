@@ -41,18 +41,23 @@ body {
  background: var(--bg);
 }
 
-img,
-svg {
- fill: var(--fg);
-}
-
 wallpaper- {
+ --padding: calc(3.5 * var(--spacing));
+ --gap: calc(2.5 * var(--spacing));
+ --radius: calc(var(--spacing) / 2.5);
  position: fixed;
  top: 0;
  height: var(--wallpaper-height);
  left: 0;
  right: 0;
  overflow: hidden;
+}
+
+@media (width < 650px) {
+ wallpaper- {
+  --padding: var(--spacing);
+  --gap: calc(1.5 * var(--spacing));
+ }
 }
 
 @supports (height: 100dvh) {
@@ -125,6 +130,10 @@ sidebar- {
 
 .task-link>a>.label {
  flex: 1 1;
+}
+
+.marks {
+ color: var(--accent);
 }
 
 .part-icon {

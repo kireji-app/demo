@@ -1,6 +1,6 @@
 declare interface IKirejiAppApplication extends IApplication {
  readonly "..": IKirejiApp
- readonly explorer: IKirejiAppApplicationExplorer
- readonly browser: IKirejiAppApplicationBrowser
+ readonly outliner: IKirejiAppApplicationOutliner
+ readonly editor: IKirejiAppApplicationEditor
 }
 declare const kirejiApp: IKirejiAppApplication

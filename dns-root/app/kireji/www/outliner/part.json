@@ -5,9 +5,11 @@
  ],
  "itemHTML-recursive": [
   "SUBJECT",
-  "DEPTH = 0"
+  "DEPTH",
+  "IS_LAST_OF_TYPE"
  ],
  "toggle": [
-  "ELEMENT"
+  "ELEMENT",
+  "FOLDER_INDEX"
  ]
 }

@@ -1,35 +1,41 @@
 wallpaper- {
- display: grid;
- grid-template-columns: var(--explorer-width) 1fr;
- grid-template-rows: 1fr;
  font: inherit;
- --line-height: 25px;
- --icon-size: inherit;
- --icon-size2: calc(var(--icon-size) * 2 / 3);
+ --line-height: calc(var(--spacing) * 1.75);
+ --icon-size: calc(var(--line-height) * 2 / 3);
+ --header-height: calc(var(--line-height) + var(--spacing) / 1.5);
 }
 
-part-explorer {
- height: 100%;
+part-outliner {
+ position: fixed;
+ top: var(--header-height);
+ width: var(--outliner-width);
+ bottom: var(--task-bar-height);
+ left: 0;
  overflow: auto;
  background-color: var(--bg-mode-est);
- position: relative;
 }
 
-part-browser {
- position: relative;
-}
-
-wallpaper- h2 {
- position: absolute;
- z-index: 10;
- left: 0;
- top: 0;
+editor-container {
+ position: fixed;
+ top: var(--header-height);
+ left: var(--outliner-width);
  right: 0;
+ bottom: var(--task-bar-height);
+ overflow: hidden;
+ overflow-y: auto;
+}
+
+#outliner-header,
+#editor-header {
+ position: fixed;
+ z-index: 10;
+ top: 0;
  margin: 0;
  padding: calc(var(--spacing) / 3);
  font-weight: 300;
  box-shadow: var(--bottom-shadow);
  background-color: var(--bg-un-mode);
+ backdrop-filter: blur(10px);
  line-height: var(--line-height);
  font-size: calc(var(--line-height) * 2 / 3);
  white-space: pre;
@@ -37,10 +43,20 @@ wallpaper- h2 {
  overflow: hidden;
 }
 
+#outliner-header {
+ left: 0;
+ width: var(--outliner-width);
+}
+
+#editor-header {
+ right: 0;
+ left: var(--outliner-width);
+}
+
 width-handle {
  --handle-thickness: calc(var(--spacing) / 1.5);
  position: absolute;
- left: calc(var(--explorer-width) - var(--handle-thickness) / 2);
+ left: calc(var(--outliner-width) - var(--handle-thickness) / 2);
  top: 0;
  bottom: 0;
  width: var(--handle-thickness);
@@ -62,23 +78,7 @@ body.dragging width-handle {
  cursor: ew-resize;
 }
 
-part-browser>h2 {
- padding: calc(var(--spacing) / 6);
- display: flex;
- align-items: center;
-}
-
-part-browser>h2>input {
- margin: 0;
- padding: calc(var(--spacing) / 6);
- line-height: var(--line-height);
- border: none;
- outline: none;
- flex: 1;
- border-radius: calc((var(--line-height) + var(--spacing) / 6) / 2);
-}
-
-part-browser>h2>svg {
+#editor-header>svg {
  height: var(--line-height);
  width: var(--line-height);
  stroke: var(--fg-mode-er);
@@ -89,25 +89,24 @@ part-browser>h2>svg {
  outline: none;
 }
 
-part-browser>h2>svg:hover {
+#editor-header>svg:hover {
  stroke: var(--fg-mode);
  background-color: var(--bg-fade-2);
 }
 
-part-explorer>scroller->details {
+part-outliner>scroller->details {
  overflow: hidden;
  width: fit-content;
- min-width: var(--explorer-width);
- padding-top: calc(var(--icon-size) + var(--spacing) / 3);
- padding-bottom: min(calc(var(--h) / 2), calc(var(--line-height) * 3));
+ min-width: var(--outliner-width);
+ padding: 0;
 }
 
-part-explorer details {
+part-outliner details {
  margin: 0;
  padding: 0;
 }
 
-part-explorer summary {
+part-outliner summary {
  display: block;
  height: var(--line-height);
  line-height: var(--line-height);
@@ -134,27 +133,59 @@ wallpaper- summary>svg:hover {
 wallpaper- summary>.explore-toggle,
 wallpaper- summary>img,
 wallpaper- svg,
-wallpaper- .spacer {
+outliner-spacer {
  stroke: var(--fg);
  vertical-align: top;
  display: inline-block;
- height: var(--icon-size2);
- width: var(--icon-size2);
+ height: var(--line-height);
+ width: var(--line-height);
  border-radius: calc(var(--icon-size2) * 0.4 / 3);
- margin: calc((var(--line-height) - var(--icon-size2)) / 2);
+ /*margin: calc((var(--line-height) - var(--icon-size2)) / 2);*/
+ margin: 0;
  position: relative;
 }
 
-wallpaper- .prototype-icon {
- height: calc(2 / 3 * var(--icon-size2));
- width: calc(2 / 3 * var(--icon-size2));
- border-radius: calc(var(--icon-size2) * 0.8 / 9);
- position: absolute;
- right: -25%;
- bottom: 0;
+
+wallpaper- summary>.explore-toggle,
+wallpaper- summary>img,
+wallpaper- svg {
+ height: var(--icon-size);
+ width: var(--icon-size);
+ margin: calc(var(--line-height) * 1 / 6)
 }
 
-summary .label {
+outliner-spacer {
+ width: calc(var(--line-height) / 2);
+ border-radius: 0;
+ transition: border 0.3s ease;
+ border-right: 1px solid var(--bg);
+}
+
+part-outliner:hover outliner-spacer
+
+/*:has(+ :is(svg, outliner-spacer))*/
+ {
+ border-color: var(--bg-un-mode);
+}
+
+outliner-spacer:has(+ img) {
+ margin-right: calc(var(--line-height) / 2);
+}
+
+/*
+ #lastOutlinerItem outliner-spacer:has(+ outliner-spacer) {
+  border-image:
+   linear-gradient(to bottom, transparent, transparent) 1 100%;
+ }
+
+ part-outliner:hover details:last-of-type:not(:has(>details))>summary>outliner-spacer:has(+ outliner-spacer:last-of-type), 
+ part-outliner:hover #lastOutlinerItem outliner-spacer:has(+ outliner-spacer) {
+  border-image:
+  linear-gradient(to bottom, var(--bg-un-mode), transparent) 1 100%;
+ }
+*/
+
+part-outliner summary .label {
  padding-left: calc((var(--line-height) - var(--icon-size2)) / 2);
  padding-right: calc(var(--line-height) - var(--icon-size2));
 }
