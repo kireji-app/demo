@@ -23,6 +23,15 @@ part-editor>* {
  border-radius: var(--radius) var(--radius);
 }
 
+part-editor>h1>* {
+ vertical-align: middle;
+}
+
+part-editor>h1>img {
+ width: 48px;
+ margin-right: var(--spacing);
+}
+
 part-data {
  --cols: 2;
  display: grid;

@@ -118,11 +118,15 @@ part-outliner summary {
  position: relative;
 }
 
-wallpaper- summary:hover {
+part-outliner summary:hover {
  background-color: var(--bg-mode);
 }
 
-wallpaper- summary:hover:not(:has(svg:hover)) {
+part-outliner summary[data-selected] {
+ background-color: var(--accent-mode-est);
+}
+
+wallpaper- summary:hover:not(:has(svg:hover)):not([data-selected]) {
  color: var(--accent);
 }
 
@@ -144,7 +148,6 @@ outliner-spacer {
  margin: 0;
  position: relative;
 }
-
 
 wallpaper- summary>.explore-toggle,
 wallpaper- summary>img,
