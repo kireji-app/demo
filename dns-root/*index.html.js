@@ -1,6 +1,5 @@
 const iconDataURI = _.application.render({
  request: "part.png",
- fallback: "data:image/png;base64,iVBORw0KGgo=",
  format: "datauri"
 })
 
@@ -10,13 +9,13 @@ const meta =
 
 const links =
  `<link rel="manifest"${worker["link-manifest.txt"]}/>` +
- `<link rel=icon href="${iconDataURI}"/>` +
- `<link rel="apple-touch-icon" href="${iconDataURI}"/>`
+ `<link class=favicon rel=icon href="${iconDataURI}"/>` +
+ `<link class=favicon rel="apple-touch-icon" href="${iconDataURI}"/>`
 
 const styles =
  `<style id="user-css">${_["inline.css"]}</style>` +
- `<style id="era-css">${desktop.era["inline.css"]}</style>` +
- `<style id="color-css">${desktop.color["inline.css"]}</style>` +
+ `<style id="era-css">${era["inline.css"]}</style>` +
+ `<style id="color-css">${color["inline.css"]}</style>` +
  `<style id="application-css">${_.application["inline.css"]}</style>` +
  `<style id="img-css">${environment === "server" ? "" : _["images.css"]}</style>`
 
@@ -26,7 +25,7 @@ const title =
 const head =
  `<head>${title}${meta}${links}${styles}</head>`
 
-const bodyClassList = [desktop.era.arm.key]
+const bodyClassList = [era.arm.key, color.isLight ? "light" : "dark"]
 
 if (desktop.taskBar.menu.arm?.key === "open")
  bodyClassList.push("menu-fully-open")

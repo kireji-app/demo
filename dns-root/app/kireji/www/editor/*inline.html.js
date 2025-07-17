@@ -33,9 +33,9 @@ return (
    "<part-data>" + (
     "<div>Title</div>" +
     `<div>${selected.title ?? "<span class=marks>untitled</span>"}</div>` +
-    "<div>Name</div>" +
-    `<div>${selected.key ?? "<span class=marks>The root has no name</span>"}</div>` +
-    "<div>Domain Name</div>" +
+    "<div>Subdomain Name</div>" +
+    `<div>${selected.key ?? "<span class=marks>The root is not a subdomain.</span>"}</div>` +
+    "<div>Full Domain Name</div>" +
     `<div><span class=marks>"</span>${selected.domains.join("<span class=marks>.</span>")}<span class=marks>"</span></div>` +
     "<div>Description</div>" +
     `<div>${selected.description ?? "<span class=marks>No description set.</span>"}</div>` +

@@ -3,8 +3,10 @@ const internalPort = 3000
 const securityHeader = {
  'request-Content-Type-Options': 'nosniff',
  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
- 'request-Frame-Options': 'DENY',
- 'Referrer-Policy': 'strict-origin-when-cross-origin'
+ 'X-Frame-Options': 'DENY',
+ 'Referrer-Policy': 'strict-origin-when-cross-origin',
+ "Accept-CH": "Sec-CH-Prefers-Color-Scheme",
+ "Critical-CH": "Sec-CH-Prefers-Color-Scheme",
 }
 const serviceHeader = {
  ETag,
@@ -16,6 +18,7 @@ const indexHeader = {
  "Retry-After": "86400",
  'Content-Type': 'text/html;charset=UTF-8',
  "Document-Policy": "force-load-at-top",
+ "Vary": "Sec-CH-Prefers-Color-Scheme",
  // 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; image-src data:; script-src self 'unsafe-inline'",
  // 'Permissions-Policy': 'microphone=(), camera=(), web-share=(self), full-screen=(self)',
  'Cross-Origin-Embedder-Policy': 'require-corp',
@@ -23,7 +26,7 @@ const indexHeader = {
 }
 
 module.exports = {
- proxy(host, pathname, ifNoneMatch) {
+ proxy(host, pathname, ifNoneMatch, prefersDarkMode) {
 
   let status, head, body
 
@@ -32,7 +35,7 @@ module.exports = {
 
     if (ifNoneMatch === ETag) {
      status = 304
-     head = { ETag }
+     head = { ETag, ...securityHeader }
      break respond
     }
 
@@ -43,6 +46,8 @@ module.exports = {
     break respond
 
    }
+
+   color.device.light = !prefersDarkMode
 
    status = 200
    head = indexHeader
@@ -81,24 +86,29 @@ if (environment === "server" && require.main === module) {
 
     if (pathname === '/-v') {
      status = 200
-     head = { 'Content-Type': 'application/json' }
-     body = `{"version":${_.version},"nonce":"$1/$2!"}`
+     head = { 'Content-Type': 'application/json', ...securityHeader }
+     body = `{\n "version": "${_.version}",\n "nonce": "$1/$2!"\n}`
      break respond
     }
 
     if (host.endsWith(devSuffix)) {
      host = host.slice(0, -1 - devSuffix.length)
      if (!(host in _.applications)) {
-      if (host) warn(`Unsuported application '${host}'. Forwarding to www.desktop.parts.`)
-      status = 301
-      head = { 'Location': `http://www.desktop.parts.${devSuffix}${pathname}` }
+      if (host && !host.startsWith("www."))
+       host = "www." + host
+      if (!(host in _.applications)) {
+       warn(`Unsupported application '${host}'. Forwarding to www.desktop.parts.`)
+       host = "www.desktop.parts"
+      }
+      status = 302
+      head = { 'Location': `http://${host}.${devSuffix}${pathname}`, ...securityHeader }
       break respond
      }
     }
 
     if (pathname === '/') {
      status = 302
-     head = { 'Location': `/${_.version}/${_.landingHash}/` }
+     head = { 'Location': `/${_.version}/${_.landingHash}/`, ...securityHeader }
      break respond
     }
 
@@ -112,15 +122,19 @@ if (environment === "server" && require.main === module) {
      else throw "Unsupported pathname format: " + pathname
     }
 
-    ({ status, head, body } = serverModule.proxy(host, pathname, request.headers['if-none-match']))
-
+    ({ status, head, body } = serverModule.proxy(
+     host,
+     pathname,
+     request.headers['if-none-match'],
+     request.headers["sec-ch-prefers-color-scheme"] === 'dark'
+    ))
    }
   } catch (e) {
    status = 444
    error(e)
-   head = {}
+   head = securityHeader
   }
-  const memory = (process.memoryUsage().rss / 1024 / 1024) + " MiB";
+  const memory = Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB";
   log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${memory} ${status} ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
   response.writeHead(status, head)
   response.end(body)

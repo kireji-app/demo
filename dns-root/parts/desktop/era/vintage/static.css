@@ -50,7 +50,8 @@
  position: relative;
 }
 
-.task-link>a:hover {
+.task-link>a:hover,
+#update-control:hover {
  background: var(--accent);
  color: var(--bg-mode-est);
 }
@@ -93,9 +94,7 @@
 }
 
 body {
- /* TODO: don't hard code domain and settings count here */
  --bottom: calc(var(--task-bar-height) - 4px);
- --sidebar-height: min(calc(((var(--icon-size) + (2px * 2)) * 8) + (26px * 3) + (3px * 2) + (4px * 2) + 2px), calc(var(--h) - var(--bottom)));
  --spacing: 12px;
  --task-bar-height: 28px;
  --icon-size: var(--task-bar-height);
@@ -146,7 +145,7 @@ sidebar-::after {
  width: 21px
 }
 
-sidebar->hr {
+sidebar- hr {
  height: 2px;
  border-top: 1px solid var(--bg-dark);
  border-bottom: 1px solid var(--bg-light-er);

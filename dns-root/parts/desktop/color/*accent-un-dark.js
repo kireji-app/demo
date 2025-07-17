@@ -1,1 +1,1 @@
-return "#" + desktop.color.blendHex(desktop.color.unAccent.slice(1), "cfcfcf", "multiply")
+return "#" + color.blendHex(color.unAccent.slice(1), "cfcfcf", "multiply")

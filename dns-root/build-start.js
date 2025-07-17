@@ -1,9 +1,15 @@
 _.prototype.startBuild.call(_)
 
 for (const tld of _.subdomains)
- for (const apex of _[tld].subdomains)
-  if (_[tld][apex].www)
-   _.applications["www." + apex + "." + tld] = _[tld][apex].www
+ for (const apex of _[tld].subdomains) {
+  /** @type {IApplication} */
+  const application = _[tld][apex].www
+  if (application) {
+   _.applications[application.host] = application
+   if (application.prototype.host !== "error-501.core.parts")
+    _.liveApplications[application.host] = application
+  }
+ }
 
 openLog(1, "Installing Facets")
 for (const subpart of desktop)

@@ -1,1 +1,1 @@
-return "#" + desktop.color.blendHex(desktop.color.unAccent.slice(1), "1f1f1f", "screen")
+return "#" + color.blendHex(color.unAccent.slice(1), "1f1f1f", "screen")

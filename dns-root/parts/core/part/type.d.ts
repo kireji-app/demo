@@ -81,6 +81,8 @@ declare interface IPart extends Iterable<IPart> {
  readonly "part.png": string
  /** An optional display name for the part. */
  readonly title?: string
+ /** An decorative title that uses unicode bold and mathematical characters to render the part's host name. */
+ readonly fancyTitle?: string
  /** An optional short description of the part. */
  readonly description?: string
  /** A unicode character to identify the part.

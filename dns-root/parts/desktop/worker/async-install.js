@@ -19,6 +19,8 @@ if (environment === "worker") {
     _.setRoute(`https://${host}${pathname}`)
    }
 
+   color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
+
    event.respondWith(_.render({
     request: filename,
     format: "response"
@@ -36,15 +38,10 @@ if (environment === "worker") {
 
    case "claim":
     globalThis.clients.claim()
-    debug("just claimed clients", source)
     break
 
    case "activate":
     globalThis.skipWaiting()
-    break
-
-   case "version":
-    source.postMessage({ code: "version", payload: _.version })
     break
 
    default:
@@ -72,15 +69,8 @@ if (environment === "worker") {
 
  worker.registration.onupdatefound = event => {
   const target = worker.registration.installing || worker.registration.waiting
-  nav.serviceWorker.onmessage = ({ data: { code, payload } }) => {
-   if (code !== "version") return
-   nav.serviceWorker.onmessage = null
-   if (!production) {
-    if (confirm(`Service Worker Update available ${payload}.\n\nIt will be activated once all activate tabs in this origin are closed. \n\nWould you like to install it immediately instead? This will refresh all activate tabs in this origin.`))
-     target.postMessage({ code: "activate" })
-   }
-  }
-  target.postMessage({ code: "version" })
+  if (!production)
+   target.postMessage({ code: "activate" })
  }
 
  if (!production)

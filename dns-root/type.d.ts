@@ -31,8 +31,10 @@ declare interface IDNSRoot extends IMix {
   * 
   * This selection is encoded by the host of the current route. */
  readonly application: IPart
- /** A host-keyed object with all of the applications that are available. */
+ /** A host-keyed object with all of the applications that are available from the web at their host thanks to DNS records. */
  readonly applications: Record<string, IApplication>
+ /** A host-keyed object with all of the applications that are available and which are not using the placeholder error 501 prototype. */
+ readonly liveApplications: Record<string, IApplication>
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
 }

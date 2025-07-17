@@ -1,1 +1,1 @@
-return desktop.color.arm === desktop.color.light ? desktop.color.lightErFg : desktop.color.darkErFg
+return color.isLight ? color.lightErFg : color.darkErFg

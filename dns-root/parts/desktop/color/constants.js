@@ -1,1 +1,0 @@
-const light = this.arm === this.disabled || this.arm === this.device && this.device.light

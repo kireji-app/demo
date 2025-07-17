@@ -3,6 +3,7 @@ declare interface IDesktop extends IPartsApexDomain {
  readonly color: IColor
  readonly era: IEra
  readonly taskBar: ITaskBar
+ readonly version: IVersion
  readonly www: IDesktopApplication
 
  // Facets.

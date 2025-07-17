@@ -191,7 +191,7 @@ function ƒ(_) {
    require.main === module && (
     _.branch = _.$("git rev-parse --abbrev-ref HEAD").toString().trim(),
     _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
-    _.version = require.main === module ? (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change) : require.main.filename.slice(0, -3)
+    _.version = (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change)
    ),
    "server"
   ),
@@ -204,7 +204,6 @@ function ƒ(_) {
   logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
   openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
-  // toCharms = (x, unit = true) => (x = Math.ceil(x.toString(2).length / 6)) + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   toCharms = (x, unit = true) => encodeSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
@@ -340,13 +339,14 @@ function ƒ(_) {
  }
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
- const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client } = desktop
+ const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era } = desktop
  if (environment === "client") var element, svg
  Object.defineProperties(_, {
   fps: { value: 1, configurable: true, writable: true },
   meanFrameTime: { value: 1000, configurable: true, writable: true },
   application: { value: null, writable: true },
   applications: { value: {} },
+  liveApplications: { value: {} }
  })
 
  function getPartFromDomains(domains) {
@@ -413,7 +413,6 @@ function ƒ(_) {
     for (let ln = 0; ln < lines.length; ln++) {
      if (lines[ln].startsWith("const "))
       new targetProperty.MethodConstant(path, lines[ln], ln)
-     // else throw "invalid const line: " + SOURCE_LINE
     }
    }
    constructor(PROPERTY_ID) {
@@ -568,5 +567,5 @@ function ƒ(_) {
  verbosity: 100,
  mapping: false,
  hangHydration: false,
- landingHash: "2cK_PM4aoIif018"
+ landingHash: "PBwyq1XTXiv019"
 })

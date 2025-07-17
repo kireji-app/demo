@@ -17,10 +17,16 @@ wallpaper->scroller-:after {
  top: 0;
 }
 
-wallpaper->scroller-:before {
- background: var(--bg);
- z-index: -2;
+wallpaper- {
+ --signature: var(--www-orenjinari-com--signature-png);
+ --ground: var(--www-orenjinari-com--ground-png);
 }
+
+/*
+ wallpaper- .zone {
+   box-shadow: inset 0 0 0 8vw #0003;
+ }
+*/
 
 wallpaper->scroller- {
  padding-top: calc(var(--wallpaper-height) + var(--section-gap));
@@ -41,10 +47,13 @@ wallpaper->scroller- {
 wallpaper->scroller-:after {
  background:
   var(--ground) 12.5vw calc(.8 * var(--wallpaper-height))/75vw 3.75vw no-repeat;
- background-attachment: local;
- filter: invert(var(--invert-on-dark));
- -webkit-filter: invert(var(--invert-on-dark));
+ /*background-attachment: local;*/
  z-index: -1;
+}
+
+body.dark wallpaper->scroller-:after {
+ filter: invert(100%);
+ -webkit-filter: invert(100%);
 }
 
 body.modern task-bar {
@@ -126,8 +135,4 @@ wallpaper- .float {
  wallpaper- .float {
   font-size: max(min(5vw, calc(.05 * var(--wallpaper-height))), 16px);
  }
-}
-
-body {
- overflow-y: scroll;
 }

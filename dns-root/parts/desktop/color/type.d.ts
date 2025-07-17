@@ -1,5 +1,5 @@
 declare interface IColor extends IMatch {
- readonly device: IPart
+ readonly device: IDeviceColorMode
  readonly light: IPart
  readonly dark: IPart
  /** Blends two color hex codes (A and B) using the given MODE.
@@ -11,10 +11,7 @@ declare interface IColor extends IMatch {
  /** Converts three RGB component values to a single hex string. */
  rgbToHex(R: number, G: number, B: number): string
  /** The part for the currently selected color mode. */
- readonly arm: IPart & {
-  /** The current color mode as a state string, which can be used for controlling UI components. */
-  readonly stateData: string
- }
+ readonly arm: IColorMode
 
  readonly lightEstAccent: string
  readonly lightErAccent: string

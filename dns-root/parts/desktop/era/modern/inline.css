@@ -56,7 +56,7 @@ sidebar- {
  width: auto;
 }
 
-sidebar->hr {
+sidebar- hr {
  display: none;
 }
 
@@ -147,7 +147,8 @@ sidebar->* {
  color: var(--accent);
 }
 
-.task-link:not([data-here]):hover {
+.task-link:not([data-here]):hover,
+#update-control:hover {
  color: var(--accent);
  cursor: pointer;
 }
@@ -165,8 +166,7 @@ task-bar:before {
  left: 0;
  right: 0;
  content: "";
- background: var(--bg)07;
- backdrop-filter: blur(15px);
+ background: var(--bg);
 }
 
 tray- {

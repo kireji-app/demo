@@ -5,17 +5,17 @@ return serialize({
  short_name: _.application.title ?? "untitled",
  start_url: "/",
  display: "standalone",
- theme_color: desktop.color.accent,
- background_color: desktop.color.bg,
+ theme_color: color.accent,
+ background_color: color.bg,
  icons: [
   {
-   src, // request: "part.png?size=192"
+   src,
    sizes: "192x192",
    type: "image/png",
    purpose: "any maskable"
   },
   {
-   src, // request: "part.png?size=512"
+   src,
    sizes: "512x512",
    type: "image/png",
    purpose: "any maskable"
