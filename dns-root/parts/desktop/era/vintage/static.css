@@ -152,6 +152,14 @@ sidebar- hr {
  margin: 4px 0;
 }
 
+sidebar- [disabled] {
+ pointer-events: none;
+ text-shadow:
+  -1px -1px var(--bg-dark),
+  1px 1px var(--bg-light-er);
+ color: transparent;
+}
+
 .task>.icon {
  width: 16px;
  height: 16px;

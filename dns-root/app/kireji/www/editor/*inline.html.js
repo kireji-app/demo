@@ -26,7 +26,7 @@ const recordTable = selected.filenames.map((filename, index) => {
 }).join("")
 
 return (
- "<editor-container><part-editor>" + (
+ "<part-editor>" + (
   `<h1><img src="${selected.render({ request: "part.png", format: "datauri" })}"/><span>${selected.title || selected.key}</span></h1>` +
   "<section>" + (
    "<h2>Common Properties</h2>" +
@@ -66,5 +66,5 @@ return (
   ) +
   "</section>"
  ) +
- "</part-editor></editor-container>"
+ "</part-editor>"
 )

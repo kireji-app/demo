@@ -56,6 +56,10 @@ sidebar- {
  width: auto;
 }
 
+sidebar- [disabled] {
+ display: none !important;
+}
+
 sidebar- hr {
  display: none;
 }

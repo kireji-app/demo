@@ -1,3 +1,7 @@
+#notebook-section * {
+ margin: 0;
+}
+
 #note-subtitle:empty {
  display: none;
 }
@@ -15,8 +19,11 @@
  padding-top: calc(2 * var(--spacing));
 }
 
-#notebook-section h2 {
- padding-top: calc(2 * var(--spacing));
- margin-top: calc(2 * var(--spacing));
- border-top: 1px solid var(--bg-un-mode);
+#notebook-section>h2 {
+ padding-top: calc(1.5 * var(--spacing));
+ box-shadow: 0 -1px 0 0 var(--bg-un-mode);
+}
+
+#notebook-section>*:has(+ h2) {
+ padding-bottom: calc(1.5 * var(--spacing));
 }

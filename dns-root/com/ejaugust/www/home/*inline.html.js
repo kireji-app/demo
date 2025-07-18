@@ -1,8 +1,7 @@
 
 return (
- `<h1>${ejaugust.title}</h1>` +
- "<p>I am a software engineer building new technology for the web.</p>" +
- "<h2>Latest Notes</h2>" +
+ `<section><h1>${ejaugust.title}</h1>` +
+ "<p>I am a software engineer building new technology for the web.</p></section>" +
  "<section>" + (
   "<div id=latest>" + (
    [...notes].reverse().map(note => {

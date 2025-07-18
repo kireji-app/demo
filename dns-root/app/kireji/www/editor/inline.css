@@ -3,6 +3,10 @@ editor-container {
  container-name: editor-container;
 }
 
+body.vintage editor-container {
+ scrollbar-width: none;
+}
+
 part-editor {
  padding: var(--padding) max(calc((100vw - var(--outliner-width) - 800px) / 2), var(--spacing));
  display: flex;
@@ -17,10 +21,20 @@ part-editor {
  }
 }
 
-part-editor>* {
+body.modern part-editor>* {
  background: var(--bg-mode-est);
  padding: var(--gap);
  border-radius: var(--radius) var(--radius);
+}
+
+body.vintage part-data {
+ border: 2px groove var(--bg-mode-er);
+}
+
+part-editor>h1 {
+ text-overflow: ellipsis;
+ white-space: nowrap;
+ overflow: hidden;
 }
 
 part-editor>h1>* {
@@ -46,4 +60,8 @@ part-data div {
  text-overflow: ellipsis;
  white-space: nowrap;
  overflow: hidden;
+}
+
+part-editor h1 {
+ margin: 0;
 }

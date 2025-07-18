@@ -3,6 +3,11 @@ wallpaper- {
  --line-height: calc(var(--spacing) * 1.75);
  --icon-size: calc(var(--line-height) * 2 / 3);
  --header-height: calc(var(--line-height) + var(--spacing) / 1.5);
+ --handle-thickness: calc(var(--spacing) / 1.5);
+}
+
+body.vintage wallpaper- {
+ --handle-thickness: 4px;
 }
 
 part-outliner {
@@ -35,7 +40,6 @@ editor-container {
  font-weight: 300;
  box-shadow: var(--bottom-shadow);
  background-color: var(--bg-un-mode);
- backdrop-filter: blur(10px);
  line-height: var(--line-height);
  font-size: calc(var(--line-height) * 2 / 3);
  white-space: pre;
@@ -54,7 +58,6 @@ editor-container {
 }
 
 width-handle {
- --handle-thickness: calc(var(--spacing) / 1.5);
  position: absolute;
  left: calc(var(--outliner-width) - var(--handle-thickness) / 2);
  top: 0;
@@ -62,6 +65,10 @@ width-handle {
  width: var(--handle-thickness);
  border-radius: calc(var(--handle-thickness) / 2);
  z-index: 100;
+}
+
+body.vintage width-handle {
+ background-color: var(--bg);
 }
 
 body.dragging {
@@ -110,28 +117,83 @@ part-outliner summary {
  display: block;
  height: var(--line-height);
  line-height: var(--line-height);
- color: var(--fg);
+ color: var(--fg-mode);
  padding: 0;
  white-space: pre;
- font-weight: 500;
+ font-weight: 200;
  cursor: pointer;
  position: relative;
 }
 
-part-outliner summary:hover {
- background-color: var(--bg-mode);
-}
+/* part-outliner summary:hover {} */
 
 part-outliner summary[data-selected] {
- background-color: var(--accent-mode-est);
+ background-color: var(--accent);
+ color: var(--bg-mode-est);
+ font-weight: 500;
 }
 
 wallpaper- summary:hover:not(:has(svg:hover)):not([data-selected]) {
- color: var(--accent);
+ background-color: var(--bg-mode-est);
+ color: var(--fg-un-mode-est);
 }
 
 wallpaper- summary>svg:hover {
  stroke: var(--accent);
+}
+
+body.light part-outliner {
+ background-color: white;
+}
+
+body.dark part-outliner {
+ background-color: black;
+}
+
+body.vintage :is(editor-container, part-outliner) {
+ top: calc(4px + var(--header-height));
+ bottom: calc(4px + var(--task-bar-height));
+}
+
+body.vintage :is(editor-container, part-outliner):after {
+ content: "";
+ position: fixed;
+ box-shadow: var(--deep-inset);
+ top: calc(2px);
+ bottom: calc(2px + var(--task-bar-height));
+ pointer-events: none;
+}
+
+body.vintage editor-container {
+ left: calc(2px + var(--outliner-width) + (var(--handle-thickness) / 2));
+ right: 2px;
+}
+
+body.vintage editor-container:after {
+ left: calc(var(--outliner-width) + (var(--handle-thickness) / 2));
+ right: 0;
+}
+
+body.vintage #editor-header {
+ left: calc(2px + var(--outliner-width) + (var(--handle-thickness) / 2));
+ right: 2px;
+}
+
+body.vintage part-outliner,
+body.vintage #outliner-header {
+ width: calc(var(--outliner-width) - (var(--handle-thickness) / 2) - 4px);
+ left: 2px;
+}
+
+body.vintage :is(#outliner-header, #editor-header) {
+ box-shadow: var(--deep-outset);
+ background-color: var(--bg);
+ top: 4px;
+}
+
+body.vintage part-outliner:after {
+ left: 0;
+ width: calc(var(--outliner-width) - (var(--handle-thickness) / 2));
 }
 
 wallpaper- summary>.explore-toggle,

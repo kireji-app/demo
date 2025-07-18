@@ -563,9 +563,9 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "patch",
+ change: "major",
  verbosity: 100,
  mapping: false,
  hangHydration: false,
- landingHash: "PBwyq1XTXiv019"
+ landingHash: "cLQhpuQjwf___0"
 })

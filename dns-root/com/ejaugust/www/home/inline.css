@@ -1,6 +1,5 @@
 wallpaper- header {
  padding-bottom: calc(6 * var(--spacing));
- position: relative;
 }
 
 wallpaper- header::after {
@@ -12,6 +11,11 @@ wallpaper- header::after {
  width: calc(10 * var(--spacing));
  background-image: var(--www-ejaugust-com--part-png);
  background-size: 100%;
+ box-shadow:
+  10px 8px 12px -6px #0004,
+  0 0 13px -3px #0002,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ border-radius: 50%;
 }
 
 wallpaper- .topic {
@@ -26,5 +30,5 @@ wallpaper- .topic {
 }
 
 #notebook-section {
- padding-top: calc(3.75 * var(--spacing));
+ padding-top: calc((3 * var(--spacing)) - 2px);
 }

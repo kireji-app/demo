@@ -1,17 +1,55 @@
 wallpaper- {
- padding: var(--padding) max(calc((100vw - 800px) / 2), var(--spacing));
+ padding: var(--padding) var(--outer-pad);
  display: flex;
  flex-flow: column;
  overflow-y: scroll;
  min-height: 0;
  font-size: calc(1.2 * var(--spacing));
- line-height: calc(1.75 * var(--spacing));
+ line-height: calc(2 * var(--spacing));
+ --spacing: 12px;
+ --outer-pad: calc((100vw - var(--w-unit)) / 2);
+ --max-width: 804px;
+ --w-unit: calc(min(calc(round(down, 100vw, var(--spacing)) - (2 * var(--spacing))), var(--max-width)) - 4px);
+ --radius: calc(var(--spacing) / 2);
+ background-color: var(--bg-dark);
+ --surface: var(--bg-light-est);
+ --edge-color: #ffffff1f;
+ --graphic-opacity: 50%;
+}
+
+body.dark wallpaper- {
+ --surface: var(--bg);
+ --edge-color: #ffffff04;
+ --graphic-opacity: 30%;
+}
+
+body.vintage wallpaper- {
+ --spacing: 10px;
+ --max-width: 640px;
 }
 
 wallpaper- header {
- background: var(--accent-mode-est);
+ position: relative;
  padding: var(--gap);
- border-radius: var(--radius) var(--radius) 0 0;
+ border-radius: calc(var(--radius) * 0.5) calc(var(--radius) * 0.2) 0 var(--radius);
+ margin-left: -2px;
+ margin-right: -0.5px;
+ box-shadow:
+  1px 2px 7px -1px #0003,
+  0px 0.5px 2px -1px #0001,
+  inset -6px -7px 3px -6px #0001,
+  inset 5px 8px 3px -4px #fff2;
+}
+
+wallpaper- header:before {
+ background:
+  var(--www-ejaugust-com--spine-png),
+  var(--accent-mode-est);
+ background-size: 100% 100%;
+}
+
+body.dark wallpaper- header:before {
+ filter: saturate(1.3) brightness(0.5) contrast(1.2);
 }
 
 wallpaper- menu {
@@ -24,10 +62,14 @@ wallpaper- menu {
  flex: 0;
 }
 
-@media (width < 650px) {
- wallpaper- {
-  padding: var(--padding);
- }
+wallpaper->scroller- {
+ box-shadow:
+  10px 8px 12px -6px #0004,
+  0 0 13px -3px #0002,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ border-radius: var(--radius);
+ background-color: var(--surface);
+ z-index: 1;
 }
 
 #latest {
@@ -37,34 +79,99 @@ wallpaper- menu {
 }
 
 li~li {
- margin-top: var(--spacing);
+ padding-top: var(--spacing);
 }
 
 #latest>article {
- padding: calc(0.75 * var(--gap));
- background-color: var(--bg-mode-er);
+ margin: 2px;
+ padding: calc(var(--spacing) - 2px);
  cursor: pointer;
  transform-origin: center;
  display: flex;
  flex-flow: column;
- gap: var(--spacing);
  border-radius: var(--radius);
- transition: transform 0.3s ease, background-color 0.3s ease;
+ transition: transform 0.15s ease, box-shadow 0.15s ease;
+ box-shadow:
+  1px 1px 2px -1px #0005,
+  0 0 8px 3px #0001,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ position: relative;
+ overflow: hidden;
+ background-color: var(--surface);
+}
+
+#latest>article:before {
+ content: "";
+ position: absolute;
+ left: 0;
+ top: 0;
+ bottom: 0;
+ right: 0;
+ z-index: 0 !important;
 }
 
 #latest>article:hover {
- transform: scale(110%);
- background-color: var(--accent-mode-est);
+ transform: scale(101%) translate(-5px, -4px);
+ box-shadow:
+  10px 8px 12px -6px #0004,
+  0 0 13px -3px #0002,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
  z-index: 10;
 }
 
 #notebook-section {
- padding: var(--gap);
- background-color: var(--bg-mode-est);
+ padding: calc((2 * var(--spacing)) - 2px);
  display: flex;
- gap: var(--spacing);
+ /* gap: 0; */
  flex-flow: column;
  border-radius: 0 0 var(--radius) var(--radius);
+ position: relative;
+ padding-bottom: calc((6 * var(--spacing)) - 4px);
+ overflow: hidden;
+}
+
+wallpaper- header:before,
+#notebook-section:before,
+#notebook-section:after {
+ content: "";
+ position: absolute;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ top: 0;
+ z-index: -1;
+}
+
+#latest>article:before,
+#notebook-section:before {
+ pointer-events: none;
+ background: var(--www-ejaugust-com--grid-png);
+ background-size: var(--spacing);
+ background-position: left -2px top -2px;
+ opacity: var(--graphic-opacity);
+ z-index: -2;
+}
+
+#notebook-section:after {
+ background-image: var(--www-ejaugust-com--chart_b-png);
+ --scaled-pixel: calc(var(--spacing) / (615 / 31));
+ background-size: calc(var(--scaled-pixel) * 640) calc(var(--scaled-pixel) * 120);
+ background-position: bottom calc(var(--scaled-pixel) * 4) right calc(var(--scaled-pixel) * 5);
+ background-repeat: no-repeat;
+ z-index: -1;
+}
+
+body.vintage #notebook-section:after {
+ background-position: bottom calc(var(--scaled-pixel) * 3) right calc(var(--scaled-pixel) * 3);
+}
+
+body.dark #notebook-section:after {
+ filter: hue-rotate(-130deg) saturate(2);
+}
+
+body.dark #notebook-section:before,
+body.dark #latest>article:before {
+ filter: invert();
 }
 
 #notebook-section,
@@ -74,8 +181,12 @@ li~li {
  user-select: text;
 }
 
-wallpaper- p {
- color: var(--fg-mode);
+#notebook-section>* {
+ padding: calc(var(--spacing) / 2);
+}
+
+wallpaper- :is(p, h1, h2, h3, h4, h5, h6) {
+ color: var(--fg-light);
  margin: 0;
 }
 
@@ -106,7 +217,7 @@ wallpaper- article a[target="_blank"]::after {
 
 wallpaper- pre {
  border-left: calc(var(--spacing) / 4) solid var(--fg-un-mode);
- background-color: var(--fg-mode-est);
+ background-color: var(--bg-dark);
  color: var(--fg-un-mode);
  padding: var(--spacing);
  border-radius: var(--radius);
@@ -139,8 +250,8 @@ wallpaper- h6 {
 }
 
 wallpaper- h1 {
- font-size: calc(2.75 * var(--spacing));
- line-height: calc(2.75 * var(--spacing));
+ font-size: calc(3 * var(--spacing));
+ line-height: calc(3 * var(--spacing));
  font-weight: 400;
  color: var(--fg-un-mode-est);
 }
