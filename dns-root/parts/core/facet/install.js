@@ -9,4 +9,4 @@ if (facet.supported) {
   log(2, `Facet installed synchronously.`)
  }
  closeLog(1)
-} else log(1, `${facet.title} skipped: ${facet.error}`)
+} else log(2, `${facet.title} skipped: ${facet.error}`)

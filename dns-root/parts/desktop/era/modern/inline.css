@@ -26,6 +26,29 @@ body {
  display: flex;
 }
 
+scroller- {
+ width: 100%;
+}
+
+scroll-bar>thumb- {
+ transition: background-color 0.3s ease;
+ background-color: transparent;
+ --track-height: 100%;
+ --thumb-start: 0px;
+}
+
+:hover>scroll-bar>thumb- {
+ background-color: #fff3;
+}
+
+scroll-bar>:is(up-, down-) {
+ display: none;
+}
+
+body.light :hover>scroll-bar>thumb- {
+ background-color: #0003;
+}
+
 task-menu {
  opacity: var(--menu-tween);
 }

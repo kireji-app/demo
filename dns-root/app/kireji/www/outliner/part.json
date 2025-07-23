@@ -1,8 +1,5 @@
 {
  "typename": "mix.core.parts",
- "drag": [
-  "EVENT"
- ],
  "itemHTML-recursive": [
   "SUBJECT",
   "DEPTH",

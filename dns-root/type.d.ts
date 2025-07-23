@@ -63,7 +63,7 @@ declare const isCore: boolean
 declare const script: string
 /** An object that serializes method signatures and meta data during part object hydration.
  * The object is parsed from the file `part.json` (or `{}` if no file is found).
- * Its prototype is the prototype part's own partManifest or null, if it is the Core. */
+ * Its prototype is the prototype part's own partManifest or null, if it's the Core. */
 declare const partManifest: IPartData
 /** The inverse of pathToRoot. The path "back up" to the repository root from the directory containing the source code the part used. */
 declare const pathToRepo: string
@@ -117,15 +117,15 @@ class SourceMappedFile {
 /** A string representing which of three known environments the framework is running on.
  * 1. "server"
  *     - Unpacked in a clone of the project git repo in node.
- *     - It is called by `node build` in order to pack the repo into a single client artifact and run as a backend to serve that artifact and to server-render HTML.
+ *     - It's called by `node build` in order to pack the repo into a single client artifact and run as a backend to serve that artifact and to server-render HTML.
  *     = Its state is set by http requests on port 3000.
  * 3. "worker"
  *     - Packed and deployed as the browser's ServiceWorker.
- *     - It is booted by the browser after a client registers it.
+ *     - It's booted by the browser after a client registers it.
  *     - Its state is set by client fetch requests.
  * 3. "client"
  *     - Packed and deployed as a front-end framework hydrating a browser tab.
- *     - It is booted by a script tag added to the server- or worker-rendered html file.
+ *     - It's booted by a script tag added to the server- or worker-rendered html file.
  *     - Its state is initially set by `location.href` (whatever is in the address bar) and then set by user interaction thereafter. */
 declare const environment: "server" | "worker" | "client"
 /** True if the framework was built on the cloud from the main branch. */
@@ -277,6 +277,8 @@ declare function decodeRoute(pathname: string): bigint
 declare function encodeRoute(routeID: bigint): string
 /** Trades a bigint routeID for a string segment. */
 declare function encodeSegment(routeID: bigint): string
+/** Returns a string representing the given bigint in scientific notation (a coefficient times 10 to some power). When html is true, the power will be wrapped in a superscript tag. Otherwise, it will use unicode superscript characters. */
+declare function scientific(x: bigint, html: boolean = false): string
 /** The immutable list of runtime instances for the root space, in order of when they were fully hydrated. */
 declare const instances: IPart[]
 /** The immutable list of every part in the root space, in order of when they were fully hydrated. */

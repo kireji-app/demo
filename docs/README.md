@@ -105,4 +105,4 @@ Each of these domains points to the same deployment but renders a different appl
 
 ## **License and Attribution**
 
-<sub>© 2013–2025 Eric Augustinowicz. All Rights Reserved.</sub> <sub>This is a personal research project in active development. It is not production-ready. Please do not copy or redistribute this codebase or its methods. All content is considered prior art.</sub>
+<sub>© 2013–2025 Eric Augustinowicz. All Rights Reserved.</sub> <sub>This is a personal research project in active development. It's not production-ready. Please do not copy or redistribute this codebase or its methods. All content is considered prior art.</sub>

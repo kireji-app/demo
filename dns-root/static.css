@@ -51,10 +51,10 @@ wallpaper- {
  left: 0;
  right: 0;
  overflow: hidden;
- --scrollbar-width: 24px;
+ --scrollbar-width: 20px;
 }
 
-@media (width < 800px) {
+@media (width < 640px) {
  wallpaper- {
   --padding: var(--spacing);
   --gap: calc(1.5 * var(--spacing));
@@ -72,7 +72,6 @@ wallpaper- {
 scroller- {
  display: flow-root;
  transform: translateY(0);
- margin-right: var(--scrollbar-width);
  overflow: hidden;
  scrollbar-width: none;
 }
@@ -93,51 +92,25 @@ scroll-bar>:is(up-, thumb-, down-) {
  position: absolute;
  right: 0;
  width: var(--scrollbar-width);
- background-color: magenta;
-}
-
-scroll-bar>:is(up-, down-) {
- height: var(--scrollbar-width);
-}
-
-scroll-bar>:is(up-, down-):after {
- content: var(--symbol);
- position: absolute;
- width: 100%;
- height: calc(100% / 60%);
- top: 0;
- left: 0;
- line-height: var(--scrollbar-width);
- text-align: center;
- transform: scaleY(60%);
- transform-origin: center;
-}
-
-scroll-bar>up- {
- --symbol: "▲";
- top: 0;
-}
-
-scroll-bar>down- {
- --symbol: "▼";
- bottom: 0;
 }
 
 scroll-bar>thumb- {
- --track-height: calc(100% - 2 * var(--scrollbar-width));
- top: calc(var(--scrollbar-width) + var(--track-height) * var(--fraction));
+ top: min(calc(var(--track-height) - var(--thumb-start)), calc(var(--thumb-start) + var(--track-height) * var(--fraction)));
  height: max(var(--scrollbar-width), calc(var(--track-height) / var(--ratio)))
 }
 
 body:not([inert]) scroller- {
  overflow-y: auto;
  height: 100%;
- width: calc(100% - var(--scrollbar-width));
 }
 
 scroll-content {
  display: block;
  height: fit-content;
+}
+
+scroll-bar[disabled] {
+ pointer-events: none;
 }
 
 scroll-bar[disabled]>thumb- {

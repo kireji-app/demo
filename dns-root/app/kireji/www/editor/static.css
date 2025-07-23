@@ -6,7 +6,7 @@ part-editor>scroller->scroll-content {
 }
 
 body.modern part-editor>scroller->scroll-content {
- padding: var(--padding) max(calc((100vw - var(--outliner-width) - 800px) / 2), var(--spacing));
+ padding: var(--padding) max(calc((100vw - var(--outliner-width) - 696px) / 2), var(--spacing));
  gap: var(--padding);
 }
 
@@ -15,7 +15,7 @@ body.modern part-editor {
  container-name: modern-editor;
 }
 
-@container modern-editor (width < 800px) {
+@container modern-editor (width < 696px) {
  part-editor>scroller->scroll-content {
   --padding: var(--spacing);
   --gap: calc(1.5 * var(--spacing));

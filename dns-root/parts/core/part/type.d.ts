@@ -169,6 +169,8 @@ declare interface IPart extends Iterable<IPart> {
   * if that change occurred one or more cycles ago, this property is always cleared at the end of the cycle
   * so that view functions are not run multiple times. */
  readonly dirty: true | undefined
+ /** Whether or not the part is an abstract part. All parts can be extended, but abstract parts don't participate in the routing function or run a build step. They also can't be listened to. */
+ readonly isAbstract: boolean
  /** The record of all event callbacks currently attached to the part. */
  readonly callbacks: Record<string, Set<Function>>
 }

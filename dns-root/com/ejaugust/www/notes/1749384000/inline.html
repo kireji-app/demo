@@ -1,13 +1,13 @@
-<p>I find metaphors to be a useful way to develop and present new data structures. The <a href="https://en.wikipedia.org/wiki/Directory_(computing)#Folder_metaphor" target="_blank">file folder metaphor</a> is perhaps one of the most obvious examples of this utility. There are, of course, no paper files or folders inside the computer’s case.</p>
-<p>In this note, I explore the <a href="https://en.wikipedia.org/wiki/Multiverse" target="_blank">multiverse</a> as a metaphor for a highly dynamic (but currently hypothetical) web technology I’m designing. This metaphor helps me keep two kinds of data separate in my mind.</p>
+<p>I find metaphors to be a useful way to develop and present new data structures. The <a href="https://en.wikipedia.org/wiki/Directory_(computing)#Folder_metaphor" target="_blank">file folder metaphor</a> is perhaps one of the most obvious examples of this utility. There are, of course, no paper files or folders inside the computer's case.</p>
+<p>In this note, I explore the <a href="https://en.wikipedia.org/wiki/Multiverse" target="_blank">multiverse</a> as a metaphor for a highly dynamic (but currently hypothetical) web technology I'm designing. This metaphor helps me keep two kinds of data separate in my mind.</p>
 <h2>Two Kinds of Change</h2>
-<p>Users are used to interacting with a web app <em>without</em> those interactions changing the whole experience in fundamental ways. Typically, users are familiar with interactions like browsing to different pages and changing basic settings.</p>
+<p>Users typically interact with a web app <em>without</em> those interactions changing the whole experience in fundamental ways. They're familiar with actions like browsing pages, adjusting basic settings, and seeing the current location reflected in the address bar.</p>
 <p>They are also used to seeing the current page location reflected in their address bar, thanks to a routing system.</p>
 <p>What sets our hypothetical project apart, however, is that the user can also modify the source code of the web app itself, right in their browser. </p>
-<p>If <em>the source code</em> of the app is stored in the address bar (or, conversely, if the page you’re on could only be changed by editing the source code) we would lose the separation between <em>browsing</em> and <em>software engineering</em>.</p>
-<p>This would be a massive technical challenge. The URI might have to embed a significant amount of code. A note I wrote last week hints at how this might be achieved - if it can be achieved at all.</p>
+<p>If <em>the source code</em> of the app is stored in the address bar (or, conversely, if the page you're on could only be changed by editing the source code) we would lose the separation between <em>browsing</em> and <em>software engineering</em>.</p>
+<p>That would demand rethinking how routing, persistence, and security work on the web. The URL might have to embed a significant amount of code. A note I wrote last week hints at how this might be achieved - if it <em>is</em> achievable.</p>
 <p>In addition to this problem, depending on what changes they make, the user could crash the app or make it impossible to use. The lack of distinction between safe and normal browsing activity and doing <em>surgery</em> to the application might confuse users.</p>
-<p>That’s where the multiverse metaphor comes in…</p>
+<p>That's where the multiverse metaphor comes in…</p>
 <h2>Which Universe Am I In?</h2>
 <p>We can split all modifications to the source code into two distinct categories:</p>
 <ol>
@@ -19,12 +19,12 @@
  </li>
 </ol>
 <p>My hope is that this division will be helpful in explaining to users the difference between normal routing and source code changes (and hint at some of the consequences of editing an app while its still running).</p>
-<p>An empty document is just an empty document. The behavior of the web app doesn’t appear until you add the source code. When you change that source code from within the app itself, you are basically changing the “laws of physics” for that web app universe.</p>
-<p>If <em>all</em> of the web app’s source code can be modified by the user, then they can easily <em>destroy the universe. </em>They can also <em>improve it</em>. The application, however, is static (as static as the blank document). So, the universe can never change. Instead, the user is traveling the multiverse - moving from one universe to the next.</p>
-<p>Luckily, in this case, we’re just talking about a web application and not the actual universe. However, you never know …</p>
-<p>In a <em>safe, reliable</em> universe, you should be able to move anywhere you want without destroying that universe (I think that’s reasonable).</p>
-<p>Nobody wants to <em>accidentally</em> change the laws of physics. This metaphor creates the illusion of two kinds of change - <em><a href="https://en.wiktionary.org/wiki/intra-" target="_blank">intra-</a>universal</em> change and <em><a href="https://en.wiktionary.org/wiki/inter-" target="_blank">inter-</a>universal </em>change - when in fact their is only one - the user’s current address.</p>
+<p>An empty document is just an empty document. The behavior of the web app doesn't appear until you add the source code. When you change that source code from within the app itself, you are basically changing the “laws of physics” for that web app universe.</p>
+<p>If <em>all</em> of the web app's source code can be modified by the user, then they can easily <em>destroy the universe. </em>They can also <em>improve it</em>. The application, however, is static (as static as the blank document). So, the universe can never change. Instead, the user is traveling the multiverse - moving from one universe to the next.</p>
+<p>Luckily, we're only talking about a web app — not the actual universe. Then again, you never know…</p>
+<p>In a <em>safe, reliable</em> universe, you should be able to move anywhere you want without destroying that universe (I think that's reasonable).</p>
+<p>Nobody wants to <em>accidentally</em> change the laws of physics. This metaphor creates the illusion of two kinds of change — one within a universe, and one between universes — when in reality, there's only one: the user's current address.</p>
 <h2>Conclusion</h2>
-<p>My dream is to make software engineering easy and accessible to <em>everyone</em>. Whether it’s real or not, the multiverse may be able to serve as a useful metaphor for introducing new experiences to users.</p>
-<p>This conversation is one of many ongoing threads that I’m exploring. Time will tell which of them pans out.</p>
+<p>My dream is to make software engineering easy and accessible to <em>everyone</em>. Whether it's real or not, the multiverse may be able to serve as a useful metaphor for introducing new experiences to users.</p>
+<p>This conversation is one of many ongoing threads that I'm exploring. Time will tell which of them pans out.</p>
 <p>Thanks for reading!</p>

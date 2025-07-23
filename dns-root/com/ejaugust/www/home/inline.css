@@ -30,7 +30,7 @@ wallpaper- .topic {
 }
 
 #notebook-section {
- padding-top: calc((3 * var(--spacing)) - 2px);
+ padding-top: calc((5 * var(--spacing)) - 2px);
 }
 
 #bio>p {

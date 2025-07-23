@@ -19,6 +19,43 @@ scroll-bar[disabled]>*:after {
  text-shadow: 1px 1px var(--bg-light-er);
 }
 
+scroller- {
+ margin-right: var(--scrollbar-width);
+ width: calc(100% - var(--scrollbar-width));
+}
+
+scroll-bar>:is(up-, down-) {
+ height: var(--scrollbar-width);
+}
+
+scroll-bar>:is(up-, down-):after {
+ content: var(--symbol);
+ position: absolute;
+ width: 100%;
+ height: calc(100% / 60%);
+ top: 0;
+ left: 0;
+ line-height: var(--scrollbar-width);
+ text-align: center;
+ transform: scaleY(60%);
+ transform-origin: center;
+}
+
+scroll-bar>up- {
+ --symbol: "▲";
+ top: 0;
+}
+
+scroll-bar>down- {
+ --symbol: "▼";
+ bottom: 0;
+}
+
+scroll-bar>thumb- {
+ --track-height: calc(100% - 2 * var(--scrollbar-width));
+ --thumb-start: var(--scrollbar-width);
+}
+
 #color-control .base,
 #era-control .base {
  background: white;

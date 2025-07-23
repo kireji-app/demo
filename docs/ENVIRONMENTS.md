@@ -25,7 +25,7 @@ Each environment has specific responsibilities, yet all operate on the same stat
 - **Hash tree construction and cardinality computation**
 - **Inlines component definitions into `/${_.version}/kireji.js`**
 - **Responds to initial HTTP requests**
-- **Renders full HTML snapshot for any valid URI**
+- **Renders full HTML snapshot for any valid URL**
 
 ### Features:
 
@@ -73,18 +73,18 @@ Each environment has specific responsibilities, yet all operate on the same stat
 
 - Throttles address bar updates to remain in sync with application state
 - Manages user interaction, animations, and local rendering
-- Encodes new state changes back into the URI without needing a backend
+- Encodes new state changes back into the URL without needing a backend
 
 ---
 
 ## Shared Behavior Across Environments
 
 - **Immutable State Roots**: All environments operate on the same root hash model
-- **State Derivation**: Given a URI, all environments reconstruct the same application state
-- **Hydration Logic**: Service worker and client window bootstrap from the static state encoded in the URI
+- **State Derivation**: Given a URL, all environments reconstruct the same application state
+- **Hydration Logic**: Service worker and client window bootstrap from the static state encoded in the URL
 
 ---
 
 ## Summary
 
-`kireji.js` achieves full-stack consistency by applying the same hash-based logic across three distinct environments. Each environment is stateless, reactive, and bound by a shared contract: the application’s entire state must be fully described and derived from the URI alone. This approach eliminates backend dependencies while enabling SEO, PWA functionality, and real-time interaction—all from a single, static build artifact.
+`kireji.js` achieves full-stack consistency by applying the same hash-based logic across three distinct environments. Each environment is stateless, reactive, and bound by a shared contract: the application's entire state must be fully described and derived from the URL alone. This approach eliminates backend dependencies while enabling SEO, PWA functionality, and real-time interaction—all from a single, static build artifact.

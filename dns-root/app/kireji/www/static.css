@@ -1,9 +1,16 @@
 wallpaper- {
  font: inherit;
- --line-height: calc(var(--spacing) * 1.75);
- --icon-size: calc(var(--line-height) * 2 / 3);
+ /* --line-height: calc(var(--spacing) * 1.75);
+  --icon-size: calc(var(--line-height) * 2 / 3); */
+ --line-height: 20px;
+ --icon-size: 16px;
  --header-height: calc(var(--line-height) + var(--spacing) / 1.5);
  --handle-thickness: calc(var(--spacing) / 1.5);
+}
+
+body.modern wallpaper- {
+ --line-height: 26px;
+ --icon-size: 20px;
 }
 
 body.vintage wallpaper- {
@@ -206,8 +213,8 @@ outliner-spacer {
  display: inline-block;
  height: var(--line-height);
  width: var(--line-height);
- border-radius: calc(var(--icon-size2) * 0.4 / 3);
- /*margin: calc((var(--line-height) - var(--icon-size2)) / 2);*/
+ border-radius: calc(var(--icon-size) * 0.4 / 3);
+ /*margin: calc((var(--line-height) - var(--icon-size)) / 2);*/
  margin: 0;
  position: relative;
 }
@@ -217,7 +224,8 @@ wallpaper- summary>img,
 wallpaper- svg {
  height: var(--icon-size);
  width: var(--icon-size);
- margin: calc(var(--line-height) * 1 / 6)
+ margin: calc((var(--line-height) - var(--icon-size)) / 2);
+ /* margin: calc(var(--line-height) * 1 / 6) */
 }
 
 outliner-spacer {
@@ -252,6 +260,6 @@ outliner-spacer:has(+ img) {
 */
 
 part-outliner summary .label {
- padding-left: calc((var(--line-height) - var(--icon-size2)) / 2);
- padding-right: calc(var(--line-height) - var(--icon-size2));
+ padding-left: calc((var(--line-height) - var(--icon-size)) / 2);
+ padding-right: calc(var(--line-height) - var(--icon-size));
 }

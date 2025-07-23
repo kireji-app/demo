@@ -1,10 +1,5 @@
 Object.defineProperties(selected, {
  cardinality: { value: BigInt(allParts.length) },
- partListener: {
-  value: () => {
-   debug(`ima firin' mah callback`)
-   selected.replaceContent()
-  }
- },
+ partListener: { value: () => selected.replaceContent() },
  previousPart: { value: null, writable: true }
 })

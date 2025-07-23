@@ -1,14 +1,10 @@
-#notebook-section * {
- margin: 0;
-}
-
 #note-subtitle:empty {
  display: none;
 }
 
 #note-credit {
- color: var(--bg-un-mode);
- font-weight: 300;
+ color: var(--fg-mode-er);
+ font-weight: 400;
 }
 
 #notebook-section h2,
@@ -16,7 +12,7 @@
 #notebook-section h4,
 #notebook-section h5,
 #notebook-section h6 {
- padding-top: calc(2 * var(--spacing));
+ padding-top: calc(2.5 * var(--spacing));
 }
 
 #notebook-section>h2 {
@@ -26,4 +22,58 @@
 
 #notebook-section>*:has(+ h2) {
  padding-bottom: calc(1.5 * var(--spacing));
+}
+
+#notebook-section ol {
+ padding-right: calc(3.5 * var(--spacing));
+ padding-left: calc(3.5 * var(--spacing));
+}
+
+#notebook-section pre {
+ --edge-color: #ffffff0f !important;
+ --paper-color: var(--light-bg);
+ --text-color: var(--light-accent);
+ box-shadow:
+  1px 1px 2px -1px #0005,
+  0 0 8px 3px #0001,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color),
+  calc(var(--spacing) / -4) 0 var(--text-color)
+  /*
+  calc(var(--spacing) * -1) 0 var(--paper-color),
+  inset calc(var(--spacing) / -2) calc(var(--spacing) / 2) 0 calc(var(--spacing) / 2 - 0.5px) var(--paper-color),
+  inset calc(var(--spacing) / -2) calc(var(--spacing) / -2) 0 calc(var(--spacing) / 2 - 0.5px) var(--paper-color),*/
+ ;
+ /*background: var(--grid);
+ background-color: var(--paper-color);*/
+ color: var(--text-color);
+ border-radius: var(--radius);
+ white-space: pre-wrap;
+ word-break: break-all;
+ font-family: var(--system-ui-mono);
+ line-height: inherit;
+ margin: calc(var(--spacing) / 2 + 2px);
+ padding: calc(var(--spacing) - 2px);
+ padding-left: calc(2 * var(--spacing) - 2px);
+ position: relative;
+ overflow: hidden;
+}
+
+#notebook-section pre:before {
+ background: var(--paper-color);
+}
+
+#notebook-section pre:after {
+ z-index: 0;
+ filter: invert(1);
+}
+
+
+body.light #notebook-section pre:after {
+ filter: contrast(0.1) sepia(1) hue-rotate(188deg) saturate(10) brightness(0.5);
+}
+
+body.dark #notebook-section pre {
+ --edge-color: #ffffff03 !important;
+ --paper-color: var(--light-accent);
+ --text-color: var(--light-bg);
 }

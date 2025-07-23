@@ -50,17 +50,17 @@ return (
  "<section>" + (
   "<h2>File Size Properties</h2>" +
   "<p>All sizes are in bytes.</p>" +
-  '<part-data>' + (
-   "<div><b>Total Size (including subparts)</b></div>" +
-   `<div>${totalSize.toLocaleString()}</div>` +
-   "<div><b>Own Record Size</b></div>" +
-   `<div>${ownRecordSize.toLocaleString()}</div>`
-  ) +
-  '</part-data>' +
+  // '<part-data>' + (
+  //"<div><b>Total Size (including subparts)</b></div>" +
+  //`<div>${totalSize.toLocaleString()}</div>` +
+  // "<div><b>Own Record Size</b></div>" +
+  // `<div>${ownRecordSize.toLocaleString()}</div>`
+  // ) +
+  // '</part-data>' +
   '<part-data style="--cols: 3">' + (
    "<div><b>Record Name</b></div>" +
-   `<div><b><span class=marks>Raw Size (bytes)</span></b></div>` +
-   `<div><b><span class=marks>Archive Size (bytes)</span></b></div>` +
+   `<div><b><span class=marks>Raw Size</span></b></div>` +
+   `<div><b><span class=marks>Archive Size</span></b></div>` +
    recordTable
   ) +
   "</part-data>"

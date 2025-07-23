@@ -1,6 +1,6 @@
 # `kireji.js` – Architecture Overview
 
-This document provides a technical deep dive into the inner workings of `kireji.js`. It supplements the main README with details on the hashing model, URI compression strategy, and state representation.
+This document provides a technical deep dive into the inner workings of `kireji.js`. It supplements the main README with details on the hashing model, URL compression strategy, and state representation.
 
 ---
 
@@ -18,9 +18,9 @@ n <--> Component State Object
 
 Each component (or "part") declares its cardinality $`k_P`$, which defines the number of possible states it can occupy. The system ensures that every part maps deterministically to a unique number within its cardinality range.
 
-### 1.2 URI Path Encoding
+### 1.2 URL Path Encoding
 
-Each full application state is encoded into a URI using variable-length base-64 segments. A typical path looks like:
+Each full application state is encoded into a URL using variable-length base-64 segments. A typical path looks like:
 
 ```
 https://www.example.com/ghc3w_hi4-5g4w3/ab52fa...
@@ -61,7 +61,7 @@ https://two-digit.example.com/v123/0t
 
 `kireji.js` supports rootward and leafward propagation of state changes. Any state mutation in a subpart triggers a full recalculation of parent route identifiers up to the DNS root. This model ensures full consistency across nested component hierarchies.
 
-The URI in the address bar always reflects the root part’s state and is updated at throttled intervals (to align with browser frame rate limits and avoid DoS mitigation mechanisms).
+The URL in the address bar always reflects the root part's state and is updated at throttled intervals (to align with browser frame rate limits and avoid DoS mitigation mechanisms).
 
 ## 4. Prototype Tree and Inheritance
 

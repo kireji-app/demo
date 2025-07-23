@@ -14,9 +14,9 @@ declare interface IFacet extends IPart {
  readonly environments: string[]
  /** The reason, if any, that the facet is not supported. */
  readonly error?: string
- /** Installs the given facet asynchronously. If it is not defined, install() must be defined. */
+ /** Installs the given facet asynchronously. If it's not defined, install() must be defined. */
  installAsync?(): Promise<void>
- /** Installs the given facet synchronously. If it is not defined, installAsync() must be defined. */
+ /** Installs the given facet synchronously. If it's not defined, installAsync() must be defined. */
  install?(): void
  /** Returns whether the given facet is supported. Defaults to "true".*/
  checkSupport(): boolean

@@ -1,6 +1,6 @@
 /** A type that generates an animated menu.
  * 
- * It is a seamless looping sequence of
+ * It's a seamless looping sequence of
  * four movie clips:
  * ```
  * [

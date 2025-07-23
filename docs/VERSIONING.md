@@ -6,7 +6,7 @@ This document outlines the versioning strategy used by `kireji.js` to maintain c
 
 ## 1. Why Versioning Matters in `kireji.js`
 
-Unlike traditional applications that store state on the backend, `kireji.js` encodes all runtime state directly into the URI. This creates a powerful feature—**permalinks to any exact state**—but also a responsibility: we must ensure that old links continue to work as the framework evolves.
+Unlike traditional applications that store state on the backend, `kireji.js` encodes all runtime state directly into the URL. This creates a powerful feature—**permalinks to any exact state**—but also a responsibility: we must ensure that old links continue to work as the framework evolves.
 
 To solve this, `kireji.js` provides a **semantic versioning model** for its core hash function.
 
@@ -24,7 +24,7 @@ MAJOR.MINOR.PATCH
 | ----- | ------------------------------------------------------ |
 | Major | Breaking change to existing state mappings             |
 | Minor | New components/routes added, existing links still work |
-| Patch | Bugfixes, small adjustments, no impact on URI behavior |
+| Patch | Bugfixes, small adjustments, no impact on URL behavior |
 
 ### Example:
 
@@ -38,7 +38,7 @@ Until version `1.0.0`, `kireji.js` is in **alpha** and the hash tree may change 
 
 ## 3. State Stability and Backward Compatibility
 
-Each version of the hash tree can be treated as its own schema for URI encoding and decoding. `kireji.js` sets aside a small reserved namespace for routing to a specific version of the tree.
+Each version of the hash tree can be treated as its own schema for URL encoding and decoding. `kireji.js` sets aside a small reserved namespace for routing to a specific version of the tree.
 
 This allows developers to:
 
@@ -46,7 +46,7 @@ This allows developers to:
 * Maintain deep links in notes or docs
 * Add new routes or applications without breaking old ones
 
-In the future, the version number will be encoded directly in the URI and parsed at runtime to ensure compatibility.
+In the future, the version number will be encoded directly in the URL and parsed at runtime to ensure compatibility.
 
 ---
 
@@ -72,7 +72,7 @@ Archived versions will include:
 | `1.x.x`        | Non-breaking extensions                          |
 | `2.0.0`        | First intentional breaking change                |
 
-Until `1.0.0`, version information is not embedded in the URI itself. Developers working with alpha versions should treat permalinks as non-durable.
+Until `1.0.0`, version information is not embedded in the URL itself. Developers working with alpha versions should treat permalinks as non-durable.
 
 ---
 
@@ -82,6 +82,6 @@ Until `1.0.0`, version information is not embedded in the URI itself. Developers
 
 ## Summary
 
-`kireji.js` treats the application state as a form of typed data and commits to preserving that data over time through semantic versioning. The versioning system ensures that every URI, once published, can remain a valid and functional entry point into the application—without requiring a database or server persistence.
+`kireji.js` treats the application state as a form of typed data and commits to preserving that data over time through semantic versioning. The versioning system ensures that every URL, once published, can remain a valid and functional entry point into the application—without requiring a database or server persistence.
 
 As the framework matures, this commitment to permalink durability will allow users and developers to build confidently on top of a stable, compressive foundation.
