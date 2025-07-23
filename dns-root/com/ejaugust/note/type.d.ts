@@ -9,7 +9,7 @@ declare interface IEJAugustNote extends IPart {
  readonly editTimestamp?: string
  /** An optional tagline appearing as a subheading below the note's title. */
  readonly subtitle?: string
- /** The content of the note, wrapped in a `<scroller->` tag. */
+ /** The content of the note. */
  readonly "article.html": string
  /** The full date and reading time description line for the note. */
  readonly "credit.html": string

@@ -1,1 +1,0 @@
-return instances[Number(editor.routeID)]

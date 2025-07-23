@@ -1,0 +1,1 @@
+selectedPart.removeEventListener("populate", selected.partListener)

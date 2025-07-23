@@ -10,7 +10,8 @@ await worker.promise
 if (_.hangHydration && !production)
  hang(1000)
 
-_.setRoute(location.href)
+globalThis.onpopstate = () => _.setRoute(location.href)
+onpopstate()
 document.body.removeAttribute("inert")
 client.hydrated = true
 

@@ -4,6 +4,7 @@
   "UNIX_TIMESTAMP"
  ],
  "go": [
-  "UNIX_TIMESTAMP"
+  "EVENT",
+  "NOTE_ROUTE_ID"
  ]
 }

@@ -1,27 +1,28 @@
-editor-container {
- container-type: inline-size;
- container-name: editor-container;
-}
-
-body.vintage editor-container {
- scrollbar-width: none;
-}
-
-part-editor {
- padding: var(--padding) max(calc((100vw - var(--outliner-width) - 800px) / 2), var(--spacing));
+part-editor>scroller->scroll-content {
+ padding: var(--spacing);
+ gap: var(--spacing);
  display: flex;
  flex-flow: column;
+}
+
+body.modern part-editor>scroller->scroll-content {
+ padding: var(--padding) max(calc((100vw - var(--outliner-width) - 800px) / 2), var(--spacing));
  gap: var(--padding);
 }
 
-@container editor-container (width < 650px) {
- part-editor {
+body.modern part-editor {
+ container-type: inline-size;
+ container-name: modern-editor;
+}
+
+@container modern-editor (width < 800px) {
+ part-editor>scroller->scroll-content {
   --padding: var(--spacing);
   --gap: calc(1.5 * var(--spacing));
  }
 }
 
-body.modern part-editor>* {
+body.modern part-editor>scroller->scroll-content>* {
  background: var(--bg-mode-est);
  padding: var(--gap);
  border-radius: var(--radius) var(--radius);
@@ -31,17 +32,21 @@ body.vintage part-data {
  border: 2px groove var(--bg-mode-er);
 }
 
-part-editor>h1 {
+part-editor>scroller->scroll-content>section>h1 {
  text-overflow: ellipsis;
  white-space: nowrap;
  overflow: hidden;
 }
 
-part-editor>h1>* {
+part-editor>scroller->scroll-content>section>h1>* {
  vertical-align: middle;
 }
 
-part-editor>h1>img {
+#description {
+ white-space: pre-wrap;
+}
+
+part-editor>scroller->scroll-content>section>h1>img {
  width: 48px;
  margin-right: var(--spacing);
 }
@@ -62,6 +67,6 @@ part-data div {
  overflow: hidden;
 }
 
-part-editor h1 {
+part-editor>scroller->scroll-content h1 {
  margin: 0;
 }

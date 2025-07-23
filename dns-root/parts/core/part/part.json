@@ -37,5 +37,13 @@
   "SUBPART",
   "INDEX",
   "SUBDOMAINS"
+ ],
+ "listener-add-event": [
+  "EVENT_TYPE",
+  "CALLBACK"
+ ],
+ "listener-remove-event": [
+  "EVENT_TYPE",
+  "CALLBACK"
  ]
 }

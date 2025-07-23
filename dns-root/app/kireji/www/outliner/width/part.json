@@ -2,5 +2,8 @@
  "typename": "match.core.parts",
  "drag-mouse": [
   "EVENT"
+ ],
+ "toggle": [
+  "EVENT"
  ]
 }

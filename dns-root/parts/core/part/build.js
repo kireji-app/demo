@@ -8,5 +8,6 @@ Object.defineProperties(part, {
  routeID: { value: -1n, configurable: true, writable: true },
  previousRouteID: { value: -1n, configurable: true, writable: true },
  deltaRouteID: { value: 0n, configurable: true, writable: true },
- cardinality: { value: BigInt(part.manifest.cardinality), configurable: true, writable: true }
+ cardinality: { value: BigInt(part.manifest.cardinality), configurable: true, writable: true },
+ callbacks: { value: { populate: new Set() } }
 })

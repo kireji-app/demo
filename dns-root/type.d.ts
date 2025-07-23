@@ -38,26 +38,6 @@ declare interface IDNSRoot extends IMix {
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
 }
-
-declare interface ITopLevelDomain extends IMix {
- readonly "..": IDNSRoot
-}
-
-/** Represents any domain which is a direct subdomain of a top level domain (e.g. `example.com`). */
-declare interface IApexDomain extends IMix {
- /** The apex domain's application - used to set the wallpaper and override the css of the desktop when accessing the O/S via the apex domain's host. */
- readonly www: IApplication
-}
-
-/** Represents the `www` subdomain of any apex domain.
- * 
- * It represents a domain which has an `A` record that points to a server implementing the project's build artifact. */
-declare interface IApplication extends IPart {
- /** The stylesheet for the application, which comes after other stylesheets. */
- readonly "inline.css"
- /** The html which becomes the desktop wallpaper for the application. */
- readonly "inline.html"
-}
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
  * The serialized version should not include any values that are added *before* recursively hydrating the part tree. */
@@ -297,5 +277,7 @@ declare function decodeRoute(pathname: string): bigint
 declare function encodeRoute(routeID: bigint): string
 /** Trades a bigint routeID for a string segment. */
 declare function encodeSegment(routeID: bigint): string
-/** The immutable list of runtime instances for the root space. */
+/** The immutable list of runtime instances for the root space, in order of when they were fully hydrated. */
 declare const instances: IPart[]
+/** The immutable list of every part in the root space, in order of when they were fully hydrated. */
+declare const allParts: IPart[]

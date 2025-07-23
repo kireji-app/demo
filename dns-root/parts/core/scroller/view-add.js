@@ -1,2 +1,6 @@
-scroller.container = document.querySelector(scroller.query)
-scroller.container.addEventListener("scroll", e => scroller.onscroll(e), { passive: true })
+scroller.container = document.querySelector(scroller.query + ">scroller-")
+scroller.scrollBar = document.querySelector(scroller.query + ">scroll-bar")
+scroller.content = document.querySelector(scroller.query + ">scroller->scroll-content")
+scroller.container.addEventListener("scroll", scroller.listener, { passive: true })
+scroller.observer = new ResizeObserver(() => scroller.onresize())
+scroller.observer.observe(scroller.content)

@@ -1,0 +1,1 @@
+return `<scroller-><scroll-content>${INNER_HTML}</scroll-content></scroller-><scroll-bar style="--fraction:${scroller.fraction};--ratio:1" disabled><up-></up-><thumb-></thumb-><down-></down-></scroll-bar>`

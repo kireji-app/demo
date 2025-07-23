@@ -2,7 +2,6 @@ wallpaper- {
  padding: var(--padding) var(--outer-pad);
  display: flex;
  flex-flow: column;
- overflow-y: scroll;
  min-height: 0;
  font-size: calc(1.2 * var(--spacing));
  line-height: calc(2 * var(--spacing));
@@ -62,7 +61,7 @@ wallpaper- menu {
  flex: 0;
 }
 
-wallpaper->scroller- {
+wallpaper->scroller->scroll-content {
  box-shadow:
   10px 8px 12px -6px #0004,
   0 0 13px -3px #0002,

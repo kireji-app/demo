@@ -6,6 +6,10 @@ declare interface IPart extends Iterable<IPart> {
  includes(SUBPART: IPart): boolean
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
  map(MAP_FUNCTION: (subpart: IPart, index: number, part: IPart) => T): T[]
+ /** Adds a listener that calls the given callback when the given event occurs. */
+ addEventListener(EVENT_TYPE: string, CALLBACK): void
+ /** Removes the listener that calls the given callback when the given event occurs. */
+ removeEventListener(EVENT_TYPE: string, CALLBACK): void
  /** The domain name used to identify the part whose code is currently executing. */
  readonly host: string
  /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
@@ -165,6 +169,8 @@ declare interface IPart extends Iterable<IPart> {
   * if that change occurred one or more cycles ago, this property is always cleared at the end of the cycle
   * so that view functions are not run multiple times. */
  readonly dirty: true | undefined
+ /** The record of all event callbacks currently attached to the part. */
+ readonly callbacks: Record<string, Set<Function>>
 }
 /** The part instance on which the current script is being called.
  * 

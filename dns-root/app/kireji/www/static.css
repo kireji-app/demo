@@ -16,18 +16,17 @@ part-outliner {
  width: var(--outliner-width);
  bottom: var(--task-bar-height);
  left: 0;
- overflow: auto;
+ overflow: hidden;
  background-color: var(--bg-mode-est);
 }
 
-editor-container {
+part-editor {
  position: fixed;
  top: var(--header-height);
  left: var(--outliner-width);
  right: 0;
  bottom: var(--task-bar-height);
  overflow: hidden;
- overflow-y: auto;
 }
 
 #outliner-header,
@@ -101,10 +100,10 @@ body.dragging width-handle {
  background-color: var(--bg-fade-2);
 }
 
-part-outliner>scroller->details {
+part-outliner>scroller->scroll-content>details {
  overflow: hidden;
  width: fit-content;
- min-width: var(--outliner-width);
+ width: 100%;
  padding: 0;
 }
 
@@ -123,6 +122,8 @@ part-outliner summary {
  font-weight: 200;
  cursor: pointer;
  position: relative;
+ text-overflow: ellipsis;
+ overflow: hidden;
 }
 
 /* part-outliner summary:hover {} */
@@ -150,12 +151,12 @@ body.dark part-outliner {
  background-color: black;
 }
 
-body.vintage :is(editor-container, part-outliner) {
+body.vintage :is(part-editor, part-outliner) {
  top: calc(4px + var(--header-height));
  bottom: calc(4px + var(--task-bar-height));
 }
 
-body.vintage :is(editor-container, part-outliner):after {
+body.vintage :is(part-editor, part-outliner):after {
  content: "";
  position: fixed;
  box-shadow: var(--deep-inset);
@@ -164,12 +165,12 @@ body.vintage :is(editor-container, part-outliner):after {
  pointer-events: none;
 }
 
-body.vintage editor-container {
+body.vintage part-editor {
  left: calc(2px + var(--outliner-width) + (var(--handle-thickness) / 2));
  right: 2px;
 }
 
-body.vintage editor-container:after {
+body.vintage part-editor:after {
  left: calc(var(--outliner-width) + (var(--handle-thickness) / 2));
  right: 0;
 }

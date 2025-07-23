@@ -23,7 +23,7 @@ a:visited {
  padding: 0;
  flex: 1 1;
  height: auto;
- overflow-y: scroll;
+ overflow: hidden;
 }
 
 html,
@@ -51,9 +51,10 @@ wallpaper- {
  left: 0;
  right: 0;
  overflow: hidden;
+ --scrollbar-width: 24px;
 }
 
-@media (width < 650px) {
+@media (width < 800px) {
  wallpaper- {
   --padding: var(--spacing);
   --gap: calc(1.5 * var(--spacing));
@@ -66,6 +67,81 @@ wallpaper- {
  body {
   --h: 100dvh;
  }
+}
+
+scroller- {
+ display: flow-root;
+ transform: translateY(0);
+ margin-right: var(--scrollbar-width);
+ overflow: hidden;
+ scrollbar-width: none;
+}
+
+scroller-::-webkit-scrollbar {
+ display: none;
+}
+
+scroll-bar {
+ position: absolute;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ width: var(--scrollbar-width);
+}
+
+scroll-bar>:is(up-, thumb-, down-) {
+ position: absolute;
+ right: 0;
+ width: var(--scrollbar-width);
+ background-color: magenta;
+}
+
+scroll-bar>:is(up-, down-) {
+ height: var(--scrollbar-width);
+}
+
+scroll-bar>:is(up-, down-):after {
+ content: var(--symbol);
+ position: absolute;
+ width: 100%;
+ height: calc(100% / 60%);
+ top: 0;
+ left: 0;
+ line-height: var(--scrollbar-width);
+ text-align: center;
+ transform: scaleY(60%);
+ transform-origin: center;
+}
+
+scroll-bar>up- {
+ --symbol: "▲";
+ top: 0;
+}
+
+scroll-bar>down- {
+ --symbol: "▼";
+ bottom: 0;
+}
+
+scroll-bar>thumb- {
+ --track-height: calc(100% - 2 * var(--scrollbar-width));
+ top: calc(var(--scrollbar-width) + var(--track-height) * var(--fraction));
+ height: max(var(--scrollbar-width), calc(var(--track-height) / var(--ratio)))
+}
+
+body:not([inert]) scroller- {
+ overflow-y: auto;
+ height: 100%;
+ width: calc(100% - var(--scrollbar-width));
+}
+
+scroll-content {
+ display: block;
+ height: fit-content;
+}
+
+scroll-bar[disabled]>thumb- {
+ display: none;
 }
 
 task-menu {

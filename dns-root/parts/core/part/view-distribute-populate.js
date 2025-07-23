@@ -4,6 +4,9 @@ if (part.dirty) {
  if (part.enabled) {
   part.populateView()
 
+  for (const callback of part.callbacks.populate)
+   callback()
+
   for (const subpart of part)
    subpart.distributePopulateView()
  }

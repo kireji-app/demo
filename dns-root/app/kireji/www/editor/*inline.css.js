@@ -1,0 +1,1 @@
+return editor.scroller["inline.css"] + editor["static.css"]

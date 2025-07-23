@@ -1,4 +1,4 @@
-const arm = notes[UNIX_TIMESTAMP]
-
-if (notes.arm !== arm)
- notes.setRouteID(notes.offsets.get(arm))
+_.noop(EVENT)
+history.pushState(null, null, location.href)
+_.com.ejaugust.scroller.setRouteID(0n)
+ejaugust.setRouteID(NOTE_ROUTE_ID)

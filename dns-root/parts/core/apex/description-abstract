@@ -1,0 +1,1 @@
+Represents any domain which is a direct subdomain of a top-level domain (e.g. `example.com`). All apex domains have an application located at their "www" subdomain, which is publically available thanks to an A record on the DNS.

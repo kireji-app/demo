@@ -1,8 +1,8 @@
 const folderIndex = new Map()
 const folderParts = []
 
-for (let i = 0; i < instances.length; i++) {
- const instance = instances[i]
+for (let i = 0; i < allParts.length; i++) {
+ const instance = allParts[i]
 
  if (!instance.subdomains.length)
   continue

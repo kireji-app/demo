@@ -1,1 +1,1 @@
-return `<wallpaper- tabIndex=1 ${_.application["wallpaperAttributes"] ?? ""}>${_.application["inline.html"]}</wallpaper->`
+return `<wallpaper- tabIndex=1 style="${_.application.style ?? ""}">${_.application["inline.html"]}</wallpaper->`

@@ -1,5 +1,5 @@
 return (
- `<part-outliner><scroller->` + (
-  outliner.recursiveItemHTML([_], 0, true)
- ) + "</scroller-></part-outliner>"
+ `<part-outliner>` + outliner.scroller.wrap(
+  outliner.recursiveItemHTML({ subdomains: [""], "": _ }, 0, true)
+ ) + "</part-outliner>"
 )

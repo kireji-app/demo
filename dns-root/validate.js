@@ -14,7 +14,7 @@ if (environment === "server" && require.main === module) {
  openLog(1, "Checking Serialization")
  const postHydrationArchive = serialize(_)
  if (postHydrationArchive !== preHydrationArchive) {
-  warn(`The post-hydration archive was ${postHydrationArchive.length - preHydrationArchive.length} longer than the pre-hydration archive.`)
+  warn(`The post-hydration archive was ${postHydrationArchive.length - preHydrationArchive.length} bytes longer than the pre-hydration archive.`)
   const lines1 = preHydrationArchive.split('\n')
   const lines2 = postHydrationArchive.split('\n')
   const maxLength = Math.max(lines1.length, lines2.length)

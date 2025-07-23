@@ -1,3 +1,6 @@
 {
- "typename": "section.ejaugust.com"
+ "typename": "section.ejaugust.com",
+ "go": [
+  "EVENT"
+ ]
 }

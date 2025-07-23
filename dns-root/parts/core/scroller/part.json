@@ -3,7 +3,9 @@
  "go": [
   "SCROLL_POSITION"
  ],
- "onscroll": [
-  "EVENT"
+ "onscroll": [],
+ "onresize": [],
+ "wrap": [
+  "INNER_HTML"
  ]
 }

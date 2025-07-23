@@ -1,6 +1,6 @@
 declare interface IKirejiAppApplicationOutliner extends IMix {
  readonly width: IKirejiAppApplicationOutlinerWidth
- readonly scroller: IKirejiAppApplicationOutlinerScroller
+ readonly scroller: IScroller
  readonly folders: IKirejiAppApplicationOutlinerFolders
 }
 declare const outliner: IKirejiAppApplicationOutliner

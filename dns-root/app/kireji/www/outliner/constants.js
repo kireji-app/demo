@@ -1,3 +1,3 @@
 const outliner = this
 const width = this.width
-const selected = this[".."].editor.selectedPart
+const selected = this[".."].editor.selected.part

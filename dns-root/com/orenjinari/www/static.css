@@ -3,12 +3,8 @@ body {
  background-color: var(--bg);
 }
 
-wallpaper- {
- overflow-y: scroll;
-}
-
-wallpaper->scroller-:before,
-wallpaper->scroller-:after {
+wallpaper->scroller->scroll-content:before,
+wallpaper->scroller->scroll-content:after {
  position: absolute;
  width: 100%;
  height: 100%;
@@ -28,7 +24,7 @@ wallpaper- {
  }
 */
 
-wallpaper->scroller- {
+wallpaper->scroller->scroll-content {
  padding-top: calc(var(--wallpaper-height) + var(--section-gap));
  --sections: 5;
  --section-gap: 128px;
@@ -44,14 +40,14 @@ wallpaper->scroller- {
  position: relative;
 }
 
-wallpaper->scroller-:after {
+wallpaper->scroller->scroll-content:after {
  background:
   var(--ground) 12.5vw calc(.8 * var(--wallpaper-height))/75vw 3.75vw no-repeat;
  /*background-attachment: local;*/
  z-index: -1;
 }
 
-body.dark wallpaper->scroller-:after {
+body.dark wallpaper->scroller->scroll-content:after {
  filter: invert(100%);
  -webkit-filter: invert(100%);
 }

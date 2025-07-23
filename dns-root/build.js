@@ -207,7 +207,7 @@ function ƒ(_) {
   toCharms = (x, unit = true) => encodeSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
-  scientific = x => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${[...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
+  scientific = (x, html = false) => (x = x.toString(10), `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${x[3] ?? 0} × 10${html ? `<sup>${x.length - 1}</sup>` : [...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("")}`),
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   hang = ms => {
    warn(`Intentionally hanging the main thread for ${ms} milliseconds.`)
@@ -359,6 +359,7 @@ function ƒ(_) {
 
  openLog(3, "Hydrating Domains")
  const instances = []
+ const allParts = []
  const imgSources = []
  function distributeHydration(part, domains = []) {
   let host
@@ -545,6 +546,7 @@ function ƒ(_) {
    Object.defineProperty(part, subpartIndex++, { value: subpart })
   }
   if (!isAbstract) instances.push(part)
+  allParts.push(part)
   closeLog(2)
   return part
  }
@@ -553,10 +555,12 @@ function ƒ(_) {
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
  closeLog(3)
- openLog(3, "Computing Landing Hash")
- _.landingHash ??= 'test-123'
- log(3, "Computed output: " + _.landingHash)
- closeLog(3)
+ // if (environment === "server" && require.main === module) {
+ //  openLog(3, "Computing Landing Hash")
+ //  _.landingHash = '0bZIqVlfoxYg2uIg'
+ //  log(3, "Computed output: " + _.landingHash)
+ //  closeLog(3)
+ // }
  if (_.local) _.validate()
  closeLog(1, true)
  log(1, "Boot Completed (end of synchronous script execution).")
@@ -565,7 +569,6 @@ function ƒ(_) {
 ƒ({
  change: "major",
  verbosity: 100,
- mapping: false,
- hangHydration: false,
- landingHash: "cLQhpuQjwf___0"
+ landingHash: "0bZIqVlfoxYg2uIg",
+ mapping: true
 })

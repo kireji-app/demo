@@ -14,31 +14,32 @@
  const { binary, extension } = header
  let { filetype } = header
 
- const searchParams = new URLSearchParams(search)
- const requestHasParameters = searchParams.size > 0
-
- // TODO: Remove legacy search params code.
-
  let body = part[filename]
 
- if (/*(environment !== "client" || !client.hydrated) && */[".gif", ".png"].includes(extension)) {
-  const placeholder = _["1x1.gif"]
-  let sizeBlock
-  if (extension === ".gif")
-   sizeBlock = atob(body.slice(8, 16)).slice(0, 4)
-  else if (extension === ".png") {
-   const x = atob(body.slice(20, 32)).slice(1)
-   sizeBlock = x[3] + x[2] + x[7] + x[6]
+ if ([".gif", ".png"].includes(extension)) {
+  let width, height
+  if (extension === ".gif") {
+   const sizeBlock = atob(body.slice(8, 16)).slice(0, 4)
+   width = sizeBlock.charCodeAt(0) | (sizeBlock.charCodeAt(1) << 8)
+   height = sizeBlock.charCodeAt(2) | (sizeBlock.charCodeAt(3) << 8)
+  } else if (extension === ".png") {
+   const sizeBlock = atob(body.slice(20, 32)).slice(1)
+   width = (sizeBlock.charCodeAt(0) << 24) |
+    (sizeBlock.charCodeAt(1) << 16) |
+    (sizeBlock.charCodeAt(2) << 8) |
+    sizeBlock.charCodeAt(3);
+   height = (sizeBlock.charCodeAt(4) << 24) |
+    (sizeBlock.charCodeAt(5) << 16) |
+    (sizeBlock.charCodeAt(6) << 8) |
+    sizeBlock.charCodeAt(7);
   }
-  body = placeholder.slice(0, 8) + btoa(sizeBlock + atob(placeholder.slice(8, 16)).slice(4)) + placeholder.slice(16)
+
+  body = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"/>`
   let imgOwner = part
   while (imgOwner && !imgOwner.filenames.includes(filename))
    imgOwner = imgOwner.prototype
-  filetype = `image/gif;inert;${imgOwner.host}/${filename}`
+  filetype = `image/svg+xml;inert;${imgOwner.host}/${filename}`
  }
-
- if (search)
-  warn("Render ignored params: " + OPTIONS.request)
 
  // if (body === undefined || body === "undefined")
  //  warn("undefined body", part.host, filename)
@@ -47,10 +48,10 @@
   return body
 
  if (OPTIONS.format === "datauri") {
-  if (!binary)
-   body = btoaUnicode(body)
+  if (binary && !filetype.startsWith("image/svg+xml"))
+   return `data:${filetype};base64,${body}`
 
-  return `data:${filetype};base64,${body}`
+  return `data:${filetype},${encodeURIComponent(body)}`
  }
 
  if (OPTIONS.format === "response") {

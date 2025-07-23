@@ -1,6 +1,3 @@
 {
- "go": [
-  "EVENT",
-  "INSTANCE_INDEX"
- ]
+ "typename": "mix.core.parts"
 }

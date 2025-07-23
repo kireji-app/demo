@@ -11,4 +11,4 @@ zoneNames.forEach((zoneName, zoneIndex) => {
  areas.push(`<div id=${zoneName} class="zone bunny-${zoneName}">${_.local ? `<h1>Area ${zoneIndex + 1}</h1>` : ""}<span class=float><img src="${src}"/><span class=thin>is </span><span>coming soon.</span></span></div>`)
 })
 
-return `<scroller->` + links.join("") + areas.join("") + `</scroller->`
+return orenjinari[".."].scroller.wrap(links.join("") + areas.join(""))

@@ -32,3 +32,7 @@ wallpaper- .topic {
 #notebook-section {
  padding-top: calc((3 * var(--spacing)) - 2px);
 }
+
+#bio>p {
+ padding-top: var(--spacing);
+}
