@@ -1,0 +1,1 @@
+This client-only facet provides an abstraction around the user agent, allowing us to use familiar interaction methods on each user agent. For example, this part can provide information about whether or not the client is on macOS, which determines whether the control or command key are used for hot keys.

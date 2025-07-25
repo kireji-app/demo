@@ -1,0 +1,1 @@
+This client-only facet does not install unless the user's browser supports entering fullscreen mode. It can be used to hide and show full screen controls elsewhere in the application.

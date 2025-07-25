@@ -1,1 +1,3 @@
-Operating System Facets are subparts which undergo a special installation step, depending on the deployment environment. A facet can only be installed on a proper subset of the three environments (server, service worker, and client). The operating system only accepts requests and user interaction after all applicable facets have been installed.
+Operating System Facets are subparts which undergo a special installation step, depending on the deployment environment.
+
+A facet can only be installed on a proper subset of the three environments (server, service worker, and client). The operating system only accepts requests and user interaction after all applicable facets have been installed.

@@ -4,8 +4,9 @@ return serialize({
  name: _.application.title ?? "Untitled App",
  short_name: _.application.title ?? "untitled",
  start_url: "/",
+ scope: `/${_.version}/`,
  display: "standalone",
- theme_color: color.accent,
+ theme_color: color.bg,
  background_color: color.bg,
  icons: [
   {

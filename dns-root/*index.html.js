@@ -5,7 +5,9 @@ const iconDataURI = _.application.render({
 
 const meta =
  `<meta name=robots content=noindex />` +
- `<meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>`
+ `<meta name=viewport content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>` /*+
+ `<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">` +
+ `<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">`*/
 
 const links =
  `<link rel="manifest"${worker["link-manifest.txt"]}/>` +
