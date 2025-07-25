@@ -3,7 +3,7 @@ const src = `data:image/png;base64,${_.application["part.png"]}`
 return serialize({
  name: _.application.title ?? "Untitled App",
  short_name: _.application.title ?? "untitled",
- start_url: "/",
+ start_url: `/${_.version}/${_.landingHash}/`,
  scope: `/${_.version}/`,
  display: "standalone",
  theme_color: color.bg,
