@@ -41,7 +41,7 @@ scroll-bar>thumb- {
  background-color: #fff3;
 }
 
-scroll-bar>:is(up-, down-) {
+scroll-bar>:is(.scroll-up, .scroll-down) {
  display: none;
 }
 
@@ -115,6 +115,11 @@ sidebar->* {
  gap: 1ch;
  height: var(--spacing);
  box-sizing: content-box;
+}
+
+#settings .label2 {
+ min-width: 3.5em;
+ text-align: right;
 }
 
 #tags {

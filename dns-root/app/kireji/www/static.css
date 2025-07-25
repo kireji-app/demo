@@ -126,7 +126,6 @@ part-outliner summary {
  color: var(--fg-mode);
  padding: 0;
  white-space: pre;
- font-weight: 200;
  cursor: pointer;
  position: relative;
  text-overflow: ellipsis;
@@ -262,4 +261,10 @@ outliner-spacer:has(+ img) {
 part-outliner summary .label {
  padding-left: calc((var(--line-height) - var(--icon-size)) / 2);
  padding-right: calc(var(--line-height) - var(--icon-size));
+ font-weight: 300;
+}
+
+part-outliner summary .label.abstract {
+ font-style: italic;
+ font-weight: 100;
 }

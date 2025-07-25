@@ -9,9 +9,13 @@ scroll-bar {
  background: var(--pressed-checker);
 }
 
-scroll-bar>:is(up-, down-, thumb-) {
+scroll-bar>:is(.scroll-up, .scroll-down, thumb-) {
  background-color: var(--bg);
  box-shadow: var(--deep-outset);
+}
+
+scroll-bar>:is(.scroll-up, .scroll-down):active {
+ box-shadow: var(--deep-inset);
 }
 
 scroll-bar[disabled]>*:after {
@@ -24,11 +28,11 @@ scroller- {
  width: calc(100% - var(--scrollbar-width));
 }
 
-scroll-bar>:is(up-, down-) {
+scroll-bar>:is(.scroll-up, .scroll-down) {
  height: var(--scrollbar-width);
 }
 
-scroll-bar>:is(up-, down-):after {
+scroll-bar>:is(.scroll-up, .scroll-down):after {
  content: var(--symbol);
  position: absolute;
  width: 100%;
@@ -41,12 +45,12 @@ scroll-bar>:is(up-, down-):after {
  transform-origin: center;
 }
 
-scroll-bar>up- {
+scroll-bar>.scroll-up {
  --symbol: "▲";
  top: 0;
 }
 
-scroll-bar>down- {
+scroll-bar>.scroll-down {
  --symbol: "▼";
  bottom: 0;
 }

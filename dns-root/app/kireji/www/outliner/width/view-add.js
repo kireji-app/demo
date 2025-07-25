@@ -1,54 +1,38 @@
 if (_.application === _.app.kireji.www) {
- const element = document.querySelector("width-handle")
- element.onmousedown = e => {
-  e.preventDefault()
-  const backupOnMouseUp = globalThis.onmouseup
-  const backupOnMouseMove = globalThis.onmousemove
 
-  document.body.classList.add("dragging")
-
-  globalThis.onmousemove = e => {
+ const
+  element = document.querySelector("width-handle"),
+  start = e => {
+   e.preventDefault()
+   if (pointerID !== null) return
+   element.setPointerCapture(pointerID = e.pointerId)
+   document.body.classList.add("dragging")
+   document.addEventListener("pointermove", drag)
+   document.addEventListener("pointerup", end)
+   document.addEventListener("pointercancel", end)
+  },
+  drag = e => {
+   if (e.pointerId !== pointerID) return
    e.preventDefault()
    if (e.clientX < 64) {
-    if (width.arm === width.open)
-     width.setRouteID(0n)
+    if (width.arm === width.open) width.setRouteID(0n)
    } else {
-    const targetRouteID = width.offsets.get(width.open) + BigInt(Math.min(895, Math.max(0, Math.trunc(e.clientX) - 128)))
-
-    if (width.routeID !== targetRouteID)
-     width.setRouteID(targetRouteID)
+    const targetWidth = Math.min(895, Math.max(0, Math.trunc(e.clientX) - 128))
+    const targetRouteID = width.offsets.get(width.open) + BigInt(targetWidth)
+    if (width.routeID !== targetRouteID) width.setRouteID(targetRouteID)
    }
-  }
-
-  globalThis.onmouseup = e => {
-   e.preventDefault()
-   globalThis.onmouseup = backupOnMouseUp
-   globalThis.onmousemove = backupOnMouseMove
+  },
+  end = e => {
+   if (e.pointerId !== pointerID) return
    document.body.classList.remove("dragging")
-  }
- }
- element.ontouchstart = e => {
-  const backupOnTouchEnd = globalThis.ontouchend
-  const backupOnTouchMove = globalThis.ontouchmove
-
-  document.body.classList.add("dragging")
-
-  globalThis.ontouchmove = e => {
-   if (e.touches[0].clientX < 64) {
-    if (width.arm === width.open)
-     width.setRouteID(0n)
-   } else {
-    const targetRouteID = width.offsets.get(width.open) + BigInt(Math.min(895, Math.max(0, Math.trunc(e.touches[0].clientX) - 128)))
-
-    if (width.routeID !== targetRouteID)
-     width.setRouteID(targetRouteID)
-   }
+   document.removeEventListener("pointermove", drag)
+   document.removeEventListener("pointerup", end)
+   document.removeEventListener("pointercancel", end)
+   element.releasePointerCapture(pointerID)
+   pointerID = null
   }
 
-  globalThis.ontouchend = e => {
-   globalThis.ontouchend = backupOnTouchEnd
-   globalThis.ontouchmove = backupOnTouchMove
-   document.body.classList.remove("dragging")
-  }
- }
+ let pointerID = null
+
+ element.onpointerdown = start
 }

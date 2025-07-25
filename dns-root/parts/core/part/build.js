@@ -9,5 +9,5 @@ Object.defineProperties(part, {
  previousRouteID: { value: -1n, configurable: true, writable: true },
  deltaRouteID: { value: 0n, configurable: true, writable: true },
  cardinality: { value: BigInt(part.manifest.cardinality), configurable: true, writable: true },
- callbacks: { value: { populate: new Set() } }
+ callbacks: { value: { populate: new Set(), remove: new Set() } }
 })

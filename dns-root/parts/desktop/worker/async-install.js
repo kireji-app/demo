@@ -75,7 +75,10 @@ if (environment === "worker") {
 
  if (!production)
   addEventListener("focus", () => {
-   log(2, 'Checking for updates.')
-   worker.registration.update().catch(() => location.reload())
+   log(1, 'Checking for updates.')
+   worker.registration.update().catch((e) => {
+    warn(e)
+    // location.reload()
+   })
   })
 }

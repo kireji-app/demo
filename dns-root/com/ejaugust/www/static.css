@@ -214,12 +214,10 @@ wallpaper- :is(p, h1, h2, h3, h4, h5, h6) {
  color: var(--fg-mode);
 }
 
-wallpaper- a,
-wallpaper- a:visited {
+#notebook-section a,
+#notebook-section a:visited {
  color: var(--accent-light);
- text-decoration: none;
- border-bottom: 1px dotted var(--accent-light);
- transition: color 0.3s ease, border-bottom-color 0.3s ease;
+ text-decoration: underline;
  cursor: pointer;
 }
 
@@ -285,18 +283,59 @@ summary {
 }
 
 wallpaper- footer {
- text-align: right;
- background-color: var(--fg-mode);
+ background-color: var(--fg);
  border-radius: 0 0 var(--radius) var(--radius);
- padding: var(--spacing);
-}
-
-wallpaper- footer,
-wallpaper- footer * {
  margin: 0;
- color: var(--bg-mode) !important;
+ padding: var(--spacing);
+ display: flex;
+ justify-content: space-between;
 }
 
-wallpaper- footer a {
+wallpaper- footer>img {
+ display: none;
+}
+
+#social {
+ display: flex;
+}
+
+#k-logo>pre {
+ margin: 0;
+}
+
+#k-logo {
+ display: flex;
+ font-family: var(--system-ui-mono);
+ font-size: var(--spacing);
+ line-height: var(--spacing);
+}
+
+@media (width < 256px) {
+ #k-logo {
+  display: none;
+ }
+}
+
+#social>a {
+ margin: calc(var(--spacing) / 2);
+ display: block;
+ font-size: calc(3 * var(--spacing));
+ line-height: calc(3 * var(--spacing));
+}
+
+#social>:is(a, a>svg) {
+ width: calc(3 * var(--spacing));
+ height: calc(3 * var(--spacing));
+}
+
+:is(#k-logo, #social>:is(a, a>svg)) {
+ fill: var(--bg);
+ color: var(--bg);
+ text-decoration: none;
  border: none;
+}
+
+:is(#k-logo, #social>:is(a, a>svg)):hover {
+ fill: var(--accent-un);
+ color: var(--accent-un);
 }

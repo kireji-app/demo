@@ -9,11 +9,26 @@ return ejaugust[".."].scroller.wrap(
   "<article id=notebook-section>" + section["inline.html"] + "</article>"
  ) +
  "<footer>" + (
-  "<h3>Learn More</h3>" +
-  "<p><a target=_blank href=https://github.com/EJAugust>My Github Profile</a></p>" +
-  "<p><a target=_blank href=https://github.com/kireji-app/alpha>My Project on GitHub</a></p>" +
-  "<p><a target=_blank href=https://github.com/sponsors/EJAugust>♡ Support</a></p>" // +
-  // "<p><a target=_blank href=https://github.com/sponsors/EJAugust>Site Map</a></p>"
+  '<a id=k-logo target=_blank href="https://github.com/kireji-app/alpha"><pre>' + (
+   " \n" +
+   "𝑘\n" +
+   " \n" +
+   " \n"
+  ) +
+  '</pre><pre>' + (
+   "   ▌ ▘     ▘▘ \n" +
+   " = ▙▘▌▛▘█▌ ▌▌ \n" +
+   "   ▛▖▌▌ ▙▖ ▌▌ \n" +
+   "          ▙▌  \n"
+  ) +
+  "</pre></a>" +
+  `<img src="${_.app.kireji.www.render({ request: "part.png", format: "datauri" })}"/>` +
+  "<section id=social>" + (
+   `<a target=_blank href=https://github.com/EJAugust>${ejaugust["github.svg"]}</a>` +
+   `<a target=_blank href=https://linkedin.com/in/kireji>${ejaugust["linkedin.svg"]}</a>` +
+   "<a target=_blank href=https://github.com/sponsors/EJAugust>♡</a>"
+  ) +
+  "</section>"
  ) +
  "</footer>"
 )

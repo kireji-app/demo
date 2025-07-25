@@ -88,15 +88,15 @@ scroll-bar {
  width: var(--scrollbar-width);
 }
 
-scroll-bar>:is(up-, thumb-, down-) {
+scroll-bar>:is(.scroll-up, thumb-, .scroll-down) {
  position: absolute;
  right: 0;
  width: var(--scrollbar-width);
 }
 
 scroll-bar>thumb- {
- top: min(calc(var(--track-height) - var(--thumb-start)), calc(var(--thumb-start) + var(--track-height) * var(--fraction)));
- height: max(var(--scrollbar-width), calc(var(--track-height) / var(--ratio)))
+ top: calc(var(--thumb-start) + var(--track-height) * var(--fraction));
+ height: calc(var(--track-height) / var(--ratio));
 }
 
 body:not([inert]) scroller- {
