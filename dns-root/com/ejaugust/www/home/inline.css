@@ -36,3 +36,7 @@ wallpaper- .topic {
 #bio>p {
  padding-top: var(--spacing);
 }
+
+#footer-home {
+ display: none;
+}

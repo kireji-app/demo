@@ -1,18 +1,20 @@
-const dynamicSection = _.built ? `<p>This notebook app is represented by a controller with the host name <code>"ejaugust.com"</code>. Here's how many states it has:</p>
-<pre>${_.com.ejaugust.cardinality}</pre>
-<p>Right now, this is which state its in, as an integer:</p>
+const dynamicSection = _.built ? `<pre>${_.com.ejaugust.cardinality}</pre>
+<p>Right now, this is the state it's in, as an integer:</p>
 <pre id=current-state-app>${_.com.ejaugust.routeID}</pre>
 <p>In base64, that gives us the following hash:</p>
 <pre id=current-hash-app>${encodeSegment(_.com.ejaugust.routeID)}</pre>
-<p>When you interact with the platform you're changing that state, even when if you're just scrolling the page.</p>
-<p>The entire platform includes a handful of apps, each one reachable at its own domain name. The total cardinality of the platform is about ${scientific(_.cardinality, true)}. The exact number looks like this:</p>
+<p>When you interact with this app, you're changing its state, even if you're just scrolling the page. However, that's not the hash you see in your address bar. That's because this website is embedded into a larger platform.</p>
+<h3>Beyond the Notebook</h3>
+<p>Try opening the menu in the bottom left and visiting another app. Don't worry - everything on <i>this</i> app will remain just as you left it, including your scroll position. Likewise, changes you make in another one of my apps will be retained when you come back to this one.</p>
+<p>This is not accomplished using any storage API in javascript and you certainly aren't uploading your activity to any server. It's all stored in your address bar, in the URL itself.</p>
+<p><b>Kireji</b> is a platform that unites a collection of apps into a single minimal perfect hash function. The cardinality of all of those apps together is about ${scientific(_.cardinality, true)}. As an integer, it looks like this:</p>
 <pre>${_.cardinality}</pre>
-<p>It is currently in the following state:</p>
+<p>Here's the state you've assigned to the platform:</p>
 <pre id=current-state-platform>${_.routeID}</pre>
-<p>That state, when rendered in base 64, gives us the following hash:</p>
+<p>Here's how it looks as a hash in base 64:</p>
 <pre id=current-hash-platform>${encodeSegment(_.routeID)}</pre>
-<p>If you look at the URL in your addressbar, you'll see the very same hash.</p>
-` : ""
+<p>Now, we add the domain of the app you're in along with a semantic version number to obtain the exact URL you currently have in your address bar:</p>
+<pre id=current-hash-platform>https://www.ejaugust.com<output id=current-encoded-route>${encodeRoute(_.routeID)}</output></pre>` : ""
 return `<h2>Background</h2>
 <p>For the past three years I've been trying to build an operating system that can do everything you expect an operating system to do while also encoding its entire state as a single URL. That way, we get a permalink to every state and achieve truly comprehensive deep linking.</p>
 <p>For a long time, I struggled with finding a solid approach to achieving this goal. A user-friendly operating system involves many independent, dependent and otherwise tightly coupled components - especially when you want it to be a platform that supports third-party app development. I tried a variety of different methods to store that data in a URL without any redundancy.</p>
@@ -21,7 +23,7 @@ return `<h2>Background</h2>
 <h2>The URL Space: Bigger Than the Universe</h2>
 <p>According to some very lazy research I just did, the estimated number of particles in the observable universe is <math><msup><mn>10</mn><mn>96</mn></msup></math>. That's a 97-digit number. Have a look:</p>
 <pre>1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pre>
-<p>Even though that's an unfathomably large number (imagine having to count to it), its not <i>that</i> long – it barely fills two lines of text on my screen.</p>
+<p>Even though that's an unfathomably large number (imagine having to count to it), it's not <i>that</i> long – it barely fills two lines of text on my screen.</p>
 <p>If you could assign a unique natural number (or <i>hash</i>) to every particle in the known universe you'd never need more than 97 digits to do it.</p>
 <p>If we change the base from 10 to 64, <math><msup><mn>10</mn><mn>96</mn></msup></math> items is fewer than <math><msup><mn>64</mn><mn>54</mn></msup></math>. That means you never need more than 54 characters to assign a unique base 64 hash to every particle in the known universe.</p>
 <p>That's an incredibly short string of text for such a big feat. Here's a sample I made by mashing my keyboard 54 times:</p>
@@ -43,7 +45,7 @@ return `<h2>Background</h2>
 <h3>Worst-Case Length</h3>
 <p>First, we start with the length. Let's use a hard limit of 2000 characters. Since Chrome supports 2MB, we just <em>removed 99.9% of the URLs from our set</em>. Even so, there is still a lot of nuance to computing the cardinality of that <em>remaining 0.1%</em>.</p>
 <h3>No Protocol Mutability</h3>
-<p>For the <a href="https://datatracker.ietf.org/doc/html/rfc3986#section-3.1" target="_blank">scheme/protocol</a>, forget about any cardinality imparted by that. I only want to think about secure browsing contexts (“https://”). We subtract those 8 characters, leaving us with 1992 characters.</p>
+<p>For the <a href="https://datatracker.ietf.org/doc/html/rfc3986#section-3.1" target="_blank">scheme/protocol</a>, forget about any cardinality imparted by that. I only want to think about secure browsing contexts ("https://"). We subtract those 8 characters, leaving us with 1992 characters.</p>
 <h3>Worst Possible Host</h3>
 <p>What about the host name? Well, what's the worst case we could possibly run in to?</p>
 <p>Many projects and apps are meant to exist on only one origin, so let's not even allow any mutability in the host.</p>
@@ -59,7 +61,7 @@ return `<h2>Background</h2>
 <p>To compute that, we require a <a href="https://en.wikipedia.org/wiki/Geometric_series" target="_blank">geometric series</a>. That's too rich for my blood, so let's just remove <em>every URL whose pathname is not exactly 1737 characters long</em>. Again, we just removed almost every URL from our already stripped-down set.</p>
 <h3>No Special Characters</h3>
 <p>Modern browsers support 85+ characters in the URL pathname (once you include the percent symbol, comma, parenthesis, square brackets, period, exclamation point, etc.), suggesting it <em>might</em> be possible to approach base 85.</p>
-<p>Sadly, though, many of these special symbol combinations will get stripped away/normalized down to others during URL resolution. Some will be treated inconsistently in platforms that let you embed links. Others will cause an error if used incorrectly. It isn't trivial to compute the cardinality of that.</p>
+<p>There's just one problem: a lot of these special symbol combinations will get stripped away/normalized down to others during URL resolution. Some will be treated inconsistently in platforms that let you embed links. Others will cause an error if used incorrectly. It isn't trivial to compute the cardinality of that.</p>
 <p>The solution? You guessed it. We'll remove most of the URLs from our set! Let's only consider URLs that use the following 64 character alphabet to spell out their pathname segments:</p>
 <pre>abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_</pre>
 <p>But we can't just string together 1737 of these bad boys and call it a day…</p>
@@ -69,7 +71,7 @@ return `<h2>Background</h2>
 <p>Seven fixed-length segments: six 250-character segments followed by one 230 character segment.</p>
 <p>This requires seven slashes to split it all up; 1737 minus 7 leaves us with an even 1730 segment characters.</p>
 <p>Not to sound like a broken record, but almost none of the URLs in our set had this exact arrangement. We just removed <em>almost everything we had left, yet again</em>.</p>
-<p>Just for fun, here is a “random” sample from our set:</p>
+<p>Just for fun, here is a "random" sample from our set:</p>
 <pre>https://heres.a.huge.domain.name.as.long.as.it.can.possibly.be.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.abcdefghijklmnopqrstuvwxyz.example.com/ld9370LC9uzp83Mklv90dujd9v7774n0V7p7em5078B7S790dkb094977au9D07B098yAV76ouyf79J7uft7d5f77g90jki98765dc7hkji7865d7dgy77yuhjkIk8Kgf567hj9ny7GVNjn7677V9jbvr567bj099efbn49efg776ft5x4rxi7T8Yoih0n7hv6r4d657d8g9u8b779ub8yf7t7d75d674s77743s2a1a7772zqzdtcuhbi/007opkolpp7m777ko7n777ou77h8yvtcr7tds5es5241awzsx7dfchvj7jkhboi78g8765c6e4x421s576y57t6fv8iub9ub87ytvc64dc768fv897b9ub9yv7tc7tv8ybhvutF64d52as2zfxcghvbhininIonoi0ih9ubgiI0P1MS07vmllp0097f74d2wa1asswextyvunimlljo00987643212wzqz1a12aswzz23sxerc34dfcrvr/5fvtby65g67buh7nu98m09k0,00k9jubyuhubvtctvubuvtdcrd4dxw23314152375786e6d976f70867f97743d8742a13s7278rf97vtiyfcdtd7xtrwSte7wrxztewzyrTUCtivuyvbOUyv77utrs462s67546rv9vbyv8rtc6X4s13A2ezwrexrcYdexwa2WESDfgtyu789iujhnmko9iujhbVFdre321qasxcfvghuiuytr432was/zxcvfghyui9o876543wsaxcdfghyuI9Oijnjiuygtftdrezwertrytfugyhiu8978gtf7r6d53s64512zwxetCRYtfughioYG87f564dsetrcyvubhij9i8u7t6f5r7743217aqwezsxdcrft7gyh77ujikJHgt5432177777qwertyhj7kJHgre321qaszxcvghjio987654321QWErfcv7bhuyTRfdfgtyui987654321qwerfv77798/bnhjHGv7fghjio09oiujhn7b7VCxsaq12we7rty7u8Ikj7hgFD777seRTyu876YT7r4ewsDFghJiuy6543721Qas7zxcVBnjio9876574321qasDFGhbnJUytrfdsERtyuJHgbvfdeRthBVGCFdsw34543212qaszxcVbghjkio0987654321qasZXcvbnhJKo0987654ERD7sw21qas7ZXcfghyuI9O0okmjki87uyhgbvgt54edsxzsa/Q12qwasXCfrt56tygBnhjio909OIKjmnko09iujhY76tfgcder321q7aszxCvgbhjui7uY6T5r4e321234567879i8UytrfdsXcvbghjIuyTRewqA7SzxcvbgHJik7oKjmjI7UyhgfrEwszx7sAWaszxcdftYUijkmjNHBGfrtYuiuYTredFCghyui89876543eDfgyuytr43edfgyuhbghJUI987654321qaszxCVghui9o876543wErt/fGHYBUtcu63s312asydu6IYUTYVbokuvhtExt42at4wrexcutyvbo8ygoiyrc53yr3254Sdu6rfvoyboiybiutyvyuCtycurc6u5c865777ctycuyut7ityd7i6757DE7U7674s5u74s54sd7xry7txc7jyrfxd7j7yrDujdI7775edu77564st427as13szr7ezUT7rxiYGCkyuC77FJut7ykm79OM0p7978t</pre>
 <p>I mashed my keyboard as fast as I could and didn't bother adding any underscores or dashes, and it still took a surprisingly long time to type this out.</p>
 <h3>Final Cardinality of our Set</h3>
@@ -79,10 +81,10 @@ return `<h2>Background</h2>
 <p>First, recall this number:</p>
 <pre>1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pre>
 <p>You can hash <em>every particle in the universe</em> with this.</p>
-<p>Now look at the number of URLs in our “tiny” worst-case set:</p>
+<p>Now look at the number of URLs in our "tiny" worst-case set:</p>
 <pre>${64n ** 1730n}</pre>
 <p>Imagine what you could hash with <em>this</em>!</p>
-<p>In the case of my project, the “<em>things</em>" I need to hash are <em>application states</em>.</p>
+<p>In the case of my project, the "<em>things</em>" I need to hash are <em>application states</em>.</p>
 <p><em>Do I really need this many application states to make an operating system?</em></p>
 <p>My guess was <em>no way</em> (especially if I embrace a minimalist approach to UI interaction design).</p>
 <p>However, to take full advantage of all of that storage space, I would need to create a MPHF that could integrate naturally into today's web app technology stack.</p>
@@ -91,10 +93,13 @@ return `<h2>Background</h2>
 <p>Think of an MVC controller object as a piece of the piecewise-defined hash function. Whether you assign a hash (which acts as the data model) to a controller or manipulate the controller directly (for example, in response to user interaction), the application state and the model are always be kept in sync.</p>
 <p>Each controller is a reusable component. It has its own hash range from 0 to k-1, where k is the cardinality of the component's model.</p>
 <p>These components assemble together like LEGO® blocks, and no matter what assembly you make with them, the result is still a minimal perfect hash function over the assembly's state domain.</p>
-<p>This isn't just a theoretical exercise — the very notebook you're reading this in runs a minimal perfect hash function, perfectly encoding every possible app state in real time. It's proof that what sounds complex on paper can actually power smooth, practical web experiences.</p>
-<p>The algorithm is fast (fast enough for 60Hz interaction) and powers my whole platform. Now, I'm having trouble <em>filling</em> the available space.</p>
 <p>Leveraging the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain" target="_blank">JavaScript prototype chain</a>, I was able to add object-oriented concepts like inheritance into the equation.</p>
-${dynamicSection}<p>These numbers may seem large, but the resulting URLs are really small for what they encode. I'm still adding features to the platform, though, like movable windows, the ability to have arbitrarily many windows open, and even a full read-write file system that behaves in the familiar way.</p>
+<h2>A Real-World Demonstration</h2>
+<p>This isn't just a theoretical exercise. I put these methods into practice to create this website and the surrounding platform. Within the platform, this notebook is represented by a controller called <code>"ejaugust.com"</code>. This is how many states it has:</p>
+${dynamicSection}
+<p>It's quite short, all things considered.</p>
+<p>It gives you a robust link back to this exact state - and any other on the platform - so that you can bookmark, share and/or analyze it. </p>
+<p>I'm still adding features to the platform like movable windows, the ability to have arbitrarily many windows open, and even a full read-write file system that behaves in the familiar way. These features will lengthen the URL, but we've got plenty of room to grow.</p>
 <h2>Conclusion</h2>
 <p>Thanks for reading! Hopefully, this shows you just how powerful a minimal perfect hash function is when employed for the purposes of data compression. The way that it overlays with MVC architecture is also very satisfying.</p>
 <p>I look forward to writing more about the project soon!</p>`

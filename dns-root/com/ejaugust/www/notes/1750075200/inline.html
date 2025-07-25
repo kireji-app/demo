@@ -1,50 +1,105 @@
-<p>An <a href="https://en.wikipedia.org/wiki/Integrated_development_environment" target="_blank">Integrated Development Environment (IDE)</a> is an app that provides tools to streamline the development of other apps.</p>
-<p>Last week, I published a note about the multiverse metaphor for software engineering. This is a metaphor that explains the difference between explains the difference between using an app and editing the app live.</p>
-<p>In case you didn't see it, here's a refresher:</p>
+<p>An <a href="https://en.wikipedia.org/wiki/Integrated_development_environment" target="_blank">Integrated Development Environment (IDE)</a> is an app that helps build other apps. An IDE that can rewrite itself while running is called a <em>Universal Integrated Development Environment (UIDE)</em> because you can change it into whatever you need it to be.</p>
+<p>Last week, I wrote about the multiverse metaphor for software engineering. Its an abstraction that draws the line between <em>using</em> a UIDE and <em>changing</em> it. Here's a quick refresher:</p>
 <ol>
- <li>
-  <p>When you use the IDE to build an application, you can think of that as navigating the IDE's state. You're <em>navigating the known universe.</em> 🧑‍💻</p>
- </li>
- <li>
-  <p>When you use that IDE to change its own source code, you can think of that as changing the laws of physics for the IDE. The available state space changes. You're <em>navigating the multiverse.</em> 🧑‍🚀 🚀</p>
- </li>
+ <li>Using a UIDE to build a separate app is like navigating a normal IDE - you're <em>navigating the known universe.</em></li>
+ <li>Using the UIDE to changing itself is like rewriting the laws of physics. The possibility space changes as you go. You're <em>traveling between all possible universes.</em></li>
 </ol>
-<p>But what do we call an IDE that has everything you need to modify its own code while it's still running? Let's call it: a <em>Universal Integrated Development Environment (UIDE) </em>because it can, in theory, be transformed into whatever you need it to be.</p>
-<p>A UIDE is an application that lets you explore the multiverse like a starship captain. Pretty cool, right?</p>
-<p>Wrong.</p>
-<h2>SDKs and Package Managers Aren't Fun</h2>
-<p>Imagine that exploring the multiverse meant opening a terminal window, installing some third party package managers, fixing a bunch of issues, and typing a bunch of code in an editor that looks like <em>this</em>:</p>
+<p>A UIDE lets you explore the multiverse like a starship captain. Pretty cool, right? There's just one problem...</p>
+<h2>IDE's Aren't Star Trek</h2>
+<p>When I imagine traveling the multiverse, I don't think about opening a terminal window, installing third party package managers, working around local compatibility issues, and running a ten minute build every time I want to test a change.</p>
+<p>In Star Trek, the captain's chair doesn't look like <em>this</em>:</p>
 <figure>
- <picture>
-  <img src="#" alt="A very boring user interface." title="A very boring user interface.">
- </picture>
+ <div class="boring-container">
+  <h1>Multiverse Explorer v.1.24.7</h1>
+  <div class="boring-section">
+   <span class=label>Data Field 1:</span>
+   <span class=input>use-value-from-table</span>
+  </div>
+  <div class="boring-section">
+   <span class=label>Data Field 2:</span>
+   <span class=input>use-value-from-table</span>
+  </div>
+  <div class="boring-section">
+   <span class=label>Cell INI Data:</span>
+   <textarea disabled>[Labels]
+en-US="Parameters Menu"
+en-GB="Parameters Menu"
+en-CA="Parameters Menu"
+fr-FR="Menu des Paramètres"
+es-ES="Menú de Parámetros"
+de-DE="Parametermenü"</textarea>
+  </div>
+  <div class="boring-section">
+   <span class=label>Registry IDs:</span>
+   <span class=input>952346-1456 A</span>
+   <span class=input>952346-1456 B</span>
+  </div>
+  <div class="boring-buttons">
+   <button>Cancel</button>
+   <button>Submit</button>
+  </div>
+ </div>
  <figcaption class="image-caption">Does this make you feel like Captain Kirk?</figcaption>
 </figure>
-<p><em>This</em> is not the UIDE of my dreams.</p>
-<p>The universe is a <em>grand place</em>, the <em>multiverse</em> perhaps more so. Exploring <a href="https://www.youtube.com/watch?v=WFbuxleCu2k" target="_blank">strange new worlds</a> should be a stunning, gratifying experience. What we need is something <em>fun</em>, something<em> immersive.</em> What we need is a <em>Gamified </em>Universal Integrated Development Environment - a <em>GUIDE</em>.<br></p>
-<h3>Adding Gems Doesn't Make It Fun</h3>
+<p>This is not a <a href="https://youtu.be/HnDtvZXYHgE" target="_blank">strange new world</a>. Exploring the multiverse could be a stunning, gratifying experience. We need something <em>immersive</em>. We need a <em>Gamified </em>Universal Integrated Development Environment - a <em>GUIDE</em>.<br></p>
+<h3>Adding 💎 Gems 💎 Doesn't Make It Fun</h3>
 <p>Increasingly, designers are seeing the need for <a href="https://en.wikipedia.org/wiki/Gamification#Technology_design" target="_blank">gameplay features in order to add intrinsic value</a> to their applications.</p>
-<p>Many serious applications (including <em>workplace</em> applications) now include fictional currency (<em>You just got 10 Gems!</em>, <em>Invite a friend to earn 5 Coins</em>), badges (<em>Top Contributor</em>, <em>5 Day Streak!</em>) and confetti every time you “submit”.</p>
-<p>Maybe it's just me, but those things aren't enough to make an app fun all by themselves. They've been used as a bandaid for tedious (and at times, downright exploitative) user experiences, so I've already learned to associate them with tedium.</p>
+<p>Many serious applications (including <em>workplace</em> applications) now include fictional currency (<em>You just got 10 Gems!</em>, <em>Invite a friend to earn 5 Coins</em>), badges (<em>Top Contributor</em>, <em>5 Day Streak!</em>) and confetti every time you submit.</p>
+<p>Maybe it’s just me, but those things don’t make an app fun on their own. They’re often just band-aids for tedious, sometimes exploitative, user experiences.</p>
 <figure>
- <picture>
-  <img src="#" alt="A very boring user interface... with confetti." title="A very boring user interface... with confetti.">
- </picture>
- <figcaption class="image-caption">I added confetti... <em>Now</em> do you feel like Captain Kirk?</figcaption>
+ <div class="boring-container">
+  <h1>Multiverse Explorer v2.63 - <span id=boring-but-fun><span>Fun Edition</span></span></h1>
+  <div class="boring-section">
+   <span class=label>Data Field 1:</span>
+   <span class=input>use-value-from-table</span>
+  </div>
+  <div class="boring-section">
+   <span class=label>Data Field 2:</span>
+   <span class=input>gems-incentive=5</span>
+  </div>
+  <div class="boring-section">
+   <span class=label>Cell INI Data:</span>
+   <textarea disabled>[RewardMessages]
+en-US="Congratulations! Here is some digital confetti."
+en-GB="Jolly good show! Enjoy this digital confetti."
+en-CA="Eh, you did it! Have some digital confetti, buddy."
+fr-FR="Félicitations ! Voici des confettis numériques."
+es-ES="¡Enhorabuena! Aquí tienes unos confeti digitales."
+de-DE="Herzlichen Glückwunsch! Hier ist etwas digitaler Konfetti."</textarea>
+  </div>
+  <div class="boring-section">
+   <span class=label>Registry IDs:</span>
+   <span class=input>952346-1456 A</span>
+   <span class=input>952346-1456 B</span>
+  </div>
+  <div class="boring-buttons">
+   <button>Cancel</button>
+   <button id="fun-submit">Submit! <span id=boring-reward>💎 5</span></button>
+  </div>
+ </div>
+ <div class="confetti-wrapper">
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+  <div class="confetti"></div>
+ </div>
+ <figcaption class="image-caption">I added confetti. Now do you feel like Captain Kirk?</figcaption>
 </figure>
 <h2>My Dream <em>GUIDE</em></h2>
-<p>Those things aren't what I crave in a game. It's the <em>story</em>, the <em>characters,</em> the <em>exploration</em>, the <em>creativity</em>, and perhaps even some <em>crazy physics.</em></p>
-<p>That's what gets my blood pumping.</p>
-<p>That's what drew me to the sci-fi classics — Star Trek, Stargate, Star Wars, etc. and that's also what drew me to writing this note.</p>
-<p>Imagine a game that wasn't trying to cover up that it's secretly an <em>IDE</em> as much as it was trying to just be a game.</p>
-<p>But this game lets the community <a href="https://en.wikipedia.org/wiki/Video_game_modding" target="_blank">create and play mods</a> for it, from within the game, without having to close the game.</p>
-<p>This concept is a bit like a desktop operating system. You can change the behavior of it by adding, modifying and removing system files. You can often see these changes reflected even without shutting the computer down.</p>
-<p>I get an unusual amount of joy from playing around with <a href="https://en.wikipedia.org/wiki/Windows_3.1" target="_blank">vintage operating systems</a>. For me, they already are a kind of game. But I'm willing to admit that this isn't everybody's cup of tea. By gamifying the operating system, we can nurture a diverse group of contributors who will take the game to the next level.</p>
+<p>Those things aren't what I crave in a game. It's the <em>story</em>, the <em>characters,</em> the <em>exploration</em>, the <em>creativity</em>, and perhaps even some <em>crazy physics.</em> That's what drew me to the sci-fi classics — Star Trek, Stargate, Star Wars, etc.</p>
+<p>Imagine a game that wasn't trying to cover up that it's secretly an <em>IDE</em> as much as it was trying to just be a game. Only, this game lets the community <a href="https://en.wikipedia.org/wiki/Video_game_modding" target="_blank">create and play the next version</a> from within the game, without having to close the game.</p>
+<p>This concept is a bit like a desktop operating system. You can change the behavior of it from within by adding, modifying and removing files. I'll admit, I get an unusual amount of joy from tinkering with <a href="https://en.wikipedia.org/wiki/Windows_3.1" target="_blank">vintage operating systems</a>, but it's still not a video game. Making it a game will encourage a diverse group of contributors to take that game to the next level.</p>
 <h3>Next-Level Sandbox Game</h3>
-<p>There are already some fantastic precedents for turning art, architecture, design and engineering into an engaging and collaborative gameplay experience - exactly what I want my GUIDE to be able to do.</p>
-<p>One of my favorite examples of this is <a href="https://en.wikipedia.org/wiki/Minecraft" target="_blank">Minecraft</a>. In that game, players get to break their world into small parts and reassemble them however they want. <a href="https://minecraft.fandom.com/wiki/Redstone_Dust" target="_blank">Redstone</a> allows players to create circuits and machines which can automate complex tasks.</p>
+<p>There are already precedents for turning art, architecture, design and engineering into an engaging and collaborative gameplay experience - exactly what I want my GUIDE to be able to do.</p>
+<p>One of my favorite examples is <a href="https://en.wikipedia.org/wiki/Minecraft" target="_blank">Minecraft</a>. Players break their world into parts and rebuild it however they want. <a href="https://minecraft.fandom.com/wiki/Redstone_Dust" target="_blank">Redstone</a> allows players to create circuits and machines which can automate complex tasks.</p>
 <p>Fans of Minecraft have done some amazing things with it. A <a href="https://www.youtube.com/results?search_query=redstone+engineering" target="_blank">quick search on YouTube</a> will show you mind-boggling creations, including low-level engineering (like making <a href="https://www.youtube.com/watch?v=3gBZHXqnleU" target="_blank">working computers</a>).</p>
-<p><a href="https://en.wikipedia.org/wiki/Sandbox_game" target="_blank">Sandbox games</a> are fun, but you can't edit the source code of the Minecraft executable by placing redstone. As a software architect, what I really want is a game that directly maps its fictional technology and narrative structure to the game's <em>real </em>source code and development methodology - and then lets me engage with those things at <em>native</em> speed.</p>
+<p><a href="https://en.wikipedia.org/wiki/Sandbox_game" target="_blank">Sandbox games</a> are fun, but you can’t rewrite Minecraft’s code with redstone. As a software architect, what I really want is a game that directly maps its fictional technology and narrative structure to the game's <em>real </em>source code and development methodology - and then lets me engage with those things at <em>native</em> speed.</p>
 <p>Dare I say… <em>warp</em> speed.</p>
 <h3>A Familiar Danger</h3>
 <p>A good game usually has at least a little bit of danger. In Minecraft, depending on the difficulty, <a href="https://minecraft.fandom.com/wiki/Mob#Hostile_mobs" target="_blank">hostile mobs</a> will spawn, attack the player and <a href="https://www.youtube.com/watch?v=0TTR6W6B43U" target="_blank">destroy their hard work</a>.</p>
@@ -55,68 +110,85 @@
 <p>In addition to helping users understand the two kinds of change that can take place in the app, the multiverse metaphor also helps because:</p>
 <ol>
  <li>
-  <p>It's a compelling tie-in to a fictional narrative - more so than <em>file folders</em>.</p>
+  <p>The tie-in to fiction is stronger than <em>file folders</em>.</p>
  </li>
  <li>
   <p>The <a href="https://warhammer40k.fandom.com/wiki/Immaterium" target="_blank">risks and rewards</a> are baked into our cultural consciousness.</p>
  </li>
  <li>
-  <p>Its an all encompassing metaphor that is just begging to have all of its extensions mapped out.</p>
+  <p>Its a rich metaphor that begs to be extended.</p>
  </li>
 </ol>
-<p>There aren't a lot of movies about the risks of importing the wrong <a href="https://en.wikipedia.org/wiki/Software_development_kit" target="_blank">third-party SDK</a> into a <a href="https://en.wikipedia.org/wiki/Git" target="_blank">git</a> repository. There are a lot of movies about <a href="https://en.wikipedia.org/wiki/Ant-Man_and_the_Wasp:_Quantumania" target="_blank">playing around with the universe</a> and <a href="https://en.wikipedia.org/wiki/The_Fly_(1986_film)" target="_blank">the dangers</a> of toying with science and technology.</p>
+<p>There aren't a lot of movies about the risks of importing the wrong third-party SDK into a git repository. There are a lot of movies about <a href="https://en.wikipedia.org/wiki/Ant-Man_and_the_Wasp:_Quantumania" target="_blank">playing around with the laws of physics</a> and <a href="https://en.wikipedia.org/wiki/The_Fly_(1986_film)" target="_blank">the dangers</a> of advanced technology.</p>
 <h3>You Are the Hero</h3>
-<p>Picture this.</p>
-<p>You've just arrived at a massive, high-tech research facility.</p>
-<p>Everybody's glad you're here - they <em>need</em> your help to operate the giant, mysterious<em> </em>machine they built.</p>
-<p>Everything about the facility demands exploration, but the shot callers are waiting for you in the briefing room.</p>
-<p>There's an air of mystery and a bit of suspense as you make your way there.</p>
-<p>That's when they tell you just what this machine is capable of.</p>
-<p>It's a doorway to the <em>multiverse.</em></p>
-<p>And <em>you're</em> going to be the one that pilots it.</p>
-<h4>“This facility is divided into three sections.”</h4>
-<p>You find out that the research facility you work at is broken into three major sections.</p>
-<p>You start out in Section 1 - a study area for new hires. Here, you'll prove that you can fix a few broken things and enhance a few other things and you earn your way to Section 2.</p>
+<p>Picture this. You've just arrived at a massive, high-tech research facility. Everybody's glad you're here - they <em>need</em> your help on something big and secretive.</p>
+<p>Everything about the facility demands exploration, but your new team is waiting for you in the briefing room. There's an air of mystery and a bit of suspense as you make your way there.</p>
+<p>That's where they tell you about the giant, mysterious machine they built. It's a doorway to the <em>multiverse</em> and <em>you're</em> the one that gets to operate it.</p>
+<h4>Welcome to the Facility</h4>
+<p>The facility is divided into three sections. You start out in Section 1 - a study area for new hires. Here, you'll prove that you can fix a few broken things and enhance a few other things and you earn your way to Section 2.</p>
 <p>Section 2 introduces you to experimental devices that let you to control time and space - within a sandbox. You can go into that sandbox as an avatar, like the <a href="https://assassinscreed.fandom.com/wiki/Animus" target="_blank">Animus in Assassins Creed</a>. The outside world is shielded from the effects of your work, in case you make a mistake.</p>
 <p>You make people. You make fictional creatures. You bring historical figures to life. All the while, you hear whispers about the top secret work they're doing in Section 3…</p>
-<h4>Welcome to Section 3 - Where The Sky is the Limit</h4>
+<h4>Section 3 - Where The Sky is the Limit</h4>
 <p>One day you're approached by a mysterious man. It turns out, he's the facilities manager for Section 3. They know about you in Section 3. In fact, you've been recruited for a special project there.</p>
-<p>As soon as you arrive, a new world opens up. All across the walls are giant banners that say “The sky is the limit!”</p>
+<p>As soon as you arrive, a new world opens up. Banners cover the walls, saying "The sky is the limit!"</p>
 <p>To your right you see a 2 acre terrarium filled with dinosaurs.</p>
 <p>To your left you see creatures from another world coming through a portal.</p>
 <p>Before you know what's going on, a 12-legged robot climbs over the top of you</p>
-<p>“You have to be careful where you're going down here” they say. “After all, the sky is the limit.”</p>
+<p>"You have to be careful where you're going down here" they say. "After all, the sky is the limit."</p>
 <p>You learn to bring your creations out of the sandbox and into the real world. You bring imaginary animals, plants, vehicles and technology and out of the sandbox. After you <a href="https://www.halopedia.org/Forge" target="_blank">forge</a> your own research office, you move on to having bigger and bigger lab space and more and more dangerous reality-editing tools.</p>
 <p>At this point, you're modifying the <em>research facility itself</em>. In regards to the code base of the game, you're replacing the art assets of the facility. You're making your own 3D models, rigs and animations. You're changing where NPCs spawn, making your own trigger volumes, and creating your own particle effects.</p>
-<p>In short order, you find yourself in charge. You are now <em>running all of section 3.</em></p>
+<p>In short order, you find yourself in charge. You are now <em>running all of Section 3.</em></p>
 <p>But one thing keeps nagging you and you finally decide to ask the Section 3 facility manager.</p>
-<p>“Why do you always say that the sky is the limit?”</p>
-<p>He takes you up the elevator back outside the facility. “See the sky up there?” he says. “We have a lot of great technology in section 3. But we don't have a machine that can change that sky.”</p>
-<p>“That machine,” he says, “is down in Section 4.”</p>
+<p>"Why do you always say that the sky is the limit?"</p>
+<p>He takes you up the elevator back outside the facility. "See the sky up there?" he says. "We have a lot of great technology in Section 3, but we don't have a machine that can change the sky. <b>That machine is in Section 4</b>."</p>
 <h4>The Growth Never Ends</h4>
-<p>One of the most important aspects to making a game fun is about balancing its pacing. The difficulty has to ramp up to meet the player's performance. The same is true about education. In fact, that's what a challenging, well-paced game is doing - it's teaching gameplay mechanics to players who started completely from scratch.</p>
-<p>In the GUIDE, those mechanics are software engineering mechanics.</p>
-<p>The ideal narrative is one that provides players with a <em>ladder</em> - a journey that lets them advance one step at a time from <a href="https://en.wikipedia.org/wiki/Newbie" target="_blank">newbie</a> to <a href="https://en.wikipedia.org/wiki/Journeyman" target="_blank">journeyman</a> to <a href="https://en.wikipedia.org/wiki/Power_user" target="_blank">power user</a> to <a href="https://en.wikipedia.org/wiki/Superhero" target="_blank">someone that can completely transform their world</a>.</p>
+<p>One of the most important elements of game design is pacing. The difficulty has to ramp up to match the player's growing skills. The same is true about education. In fact, that's what a well-paced game does - it teaches new mechanics.</p>
+<p>In the GUIDE, those mechanics are software engineering mechanics. It gives players a <em>ladder</em> to ascend from <a href="https://en.wikipedia.org/wiki/Newbie" target="_blank">newbie</a> to <a href="https://en.wikipedia.org/wiki/Journeyman" target="_blank">journeyman</a> to <a href="https://en.wikipedia.org/wiki/Power_user" target="_blank">power user</a> to <a href="https://en.wikipedia.org/wiki/Superhero" target="_blank">someone who can change the world</a>.</p>
 <h2>The Challenge</h2>
 <p>It may require a little inspiration (and a lot of math) but I believe that creating such a GUIDE is both doable and worth doing.</p>
 <p>The biggest challenges of this project are in creating a framework that can match 1:1 all of its actual software components with in-game fictional components and preventing malicious misuse.</p>
 <p>For the last three years, I've been researching and developing a quantitative framework that I intend to accomplish exactly this. But it's not easy, and it takes time.</p>
-<p>But here's the coolest thing about a <em>UIDE</em>…</p>
+<p>But that's the best part of a <em>UIDE…</em></p>
 <h3>The Power of Continuous Improvement</h3>
-<p>One more time, lets bring back our sad-looking, UIDE image from earlier:</p>
+<p>Lets bring back our sad-looking UIDE one more time:</p>
 <figure>
- <picture>
-  <img src="#" alt="The very boring user interface, again." title="The very boring user interface, again.">
- </picture>
- <figcaption>Welcome to Trury Doarring Surd Clole. The <em>first</em> thing we'll change is the name.</figcaption>
+ <div class="boring-container">
+  <h1>Multiverse Explorer - Alpha</h1>
+  <div class="boring-section">
+   <span class=label>Data Field 1:</span>
+   <span class=input>use-value-from-table</span>
+   <span class=label>To-Do: <span class=input>Improve this.</span></span>
+  </div>
+  <div class="boring-section">
+   <span class=label>Data Field 2:</span>
+   <span class=input>use-value-from-table</span>
+   <span class=label>To-Do: <span class=input>Make this fun for real</span></span>
+  </div>
+  <div class="boring-section">
+   <span class=label>Cell INI Data:</span>
+   <textarea disabled>[Labels]
+en-US="Every great journey begins with a first step, even a boring one."
+en-GB="Every grand endeavour commences with a single stride, even a rather dull one."
+en-CA="Every big project starts somewhere, eh? Even with a simple interface."
+fr-FR="Chaque grand voyage commence par un premier pas, même ennuyeux."
+es-ES="Todo gran viaje comienza con un primer paso, incluso uno aburrido."
+de-DE="Jede große Reise beginnt mit einem ersten Schritt, auch einem langweiligen."</textarea>
+  </div>
+  <div class="boring-section">
+   <span class=label>Registry IDs:</span>
+   <span class=input>952346-1456 A</span>
+   <span class=input>952346-1456 B</span>
+  </div>
+  <div class="boring-buttons">
+   <button>Cancel</button>
+   <button>Submit</button>
+  </div>
+ </div>
+ <figcaption>Welcome to my boring UIDE. The first thing we'll change is the background color.</figcaption>
 </figure>
 <p>I'll admit, this doesn't look like much, but it might be <em>enough</em> to get the ball rolling.</p>
 <p>After all, the whole idea behind a UIDE is that we can instantly start trial-and-error development with it. Just as soon as we have version 1.0.0, we can rapidly prototype version 2.0.0 <em>without closing version 1.0.0.</em></p>
-<p>It <em>will</em> crash. Work <em>will</em> get lost, especially in the early days. The entire code base may need to be refactored <em>again and again</em> before our <em>UIDE</em> becomes a bona fide (fun) <em>GUIDE</em>.</p>
-<p>They say the sky is the limit. But with a <em>GUIDE</em>, if you don't like the sky, you can replace it with something else.</p>
+<p>It will crash. Work will get lost, especially in the early days. The entire code base may need to be refactored <em>again and again</em> before our <em>UIDE</em> becomes a bona fide (fun) <em>GUIDE</em>.</p>
 <h2>Conclusion</h2>
 <p>Thanks for reading. My dream is to make software engineering easy and accessible to <em>everyone</em>. All of my work goes directly into making that happen, including this note.</p>
-<p>I hope these ideas make you as excited as I am. I hope it inspires you to explore operating systems, software engineering and gamification,.</p>
-<p>I'm excited to take these metaphors to the next level.</p>
-<p>I'm excited to take <em>software development</em> to the next level.</p>
-<p>I look forward to writing more soon!</p>
+<p>I hope these ideas inspire you to explore operating systems, software engineering and gamification. I'm excited to take these metaphors to the next level and I look forward to writing more soon!</p>

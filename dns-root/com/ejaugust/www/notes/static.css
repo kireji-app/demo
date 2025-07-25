@@ -62,13 +62,13 @@
  background: var(--paper-color);
 }
 
-#notebook-section pre:after {
+#notebook-section pre::after {
  z-index: 0;
  filter: invert(1);
 }
 
 
-body.light #notebook-section pre:after {
+body.light #notebook-section pre::after {
  filter: contrast(0.1) sepia(1) hue-rotate(188deg) saturate(10) brightness(0.5);
 }
 

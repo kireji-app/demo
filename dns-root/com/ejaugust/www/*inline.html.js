@@ -9,6 +9,11 @@ return ejaugust[".."].scroller.wrap(
   "<article id=notebook-section>" + section["inline.html"] + "</article>"
  ) +
  "<footer>" + (
+  "<section id=quick-links>" + (
+   "<a id=footer-home href=https://www.ejaugust.com onclick=_.com.ejaugust.www.home.go(event)><span class=unicode-icon>⌂</span> Home</a>" +
+   "<a href=# onclick=_.com.ejaugust.www.notes.go(event)><span class=unicode-icon>↑</span> Back to Top</a>"
+  ) +
+  "</section>" +
   '<a id=k-logo target=_blank href="https://github.com/kireji-app/alpha"><pre>' + (
    " \n" +
    "𝑘\n" +

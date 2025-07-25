@@ -18,7 +18,7 @@ scroll-bar>:is(.scroll-up, .scroll-down):active {
  box-shadow: var(--deep-inset);
 }
 
-scroll-bar[disabled]>*:after {
+scroll-bar[disabled]>*::after {
  color: var(--bg-dark);
  text-shadow: 1px 1px var(--bg-light-er);
 }
@@ -32,7 +32,7 @@ scroll-bar>:is(.scroll-up, .scroll-down) {
  height: var(--scrollbar-width);
 }
 
-scroll-bar>:is(.scroll-up, .scroll-down):after {
+scroll-bar>:is(.scroll-up, .scroll-down)::after {
  content: var(--symbol);
  position: absolute;
  width: 100%;
@@ -338,10 +338,6 @@ desktop-icon:focus .label::before {
 
 menu-button::after {
  content: "Menu";
-}
-
-#tags> :not(:first-child)::before {
- content: "-";
 }
 
 .handle {

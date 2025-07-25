@@ -19,8 +19,6 @@ if (!𝓌.registration.active) {
 
 𝓌.controller = nav.serviceWorker.controller
 
-console.log(𝓌.controller)
-
 𝓌.controller ??= await new Promise(resolve => {
  nav.serviceWorker.oncontrollerchange = resolve
  𝓌.registration.active.postMessage({ code: "claim" })
@@ -31,4 +29,3 @@ const newScript = document.createElement("script")
 newScript.setAttribute("src", `/${VERSION}/kireji.js`)
 newScript.setAttribute("defer", "")
 oldScript.replaceWith(newScript)
-console.warn("replaced script!")

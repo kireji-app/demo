@@ -11,12 +11,6 @@ html:has(body[inert]) {
  cursor: wait;
 }
 
-a,
-a:visited {
- text-decoration: none;
- color: inherit;
-}
-
 #application-control {
  display: block;
  margin: 0;
@@ -67,6 +61,29 @@ wallpaper- {
  body {
   --h: 100dvh;
  }
+}
+
+a,
+a:visited {
+ color: var(--accent-light);
+ text-decoration: underline;
+ cursor: pointer;
+}
+
+a:hover {
+ color: var(--fg-un-mode-er);
+}
+
+a[target="_blank"]::after {
+ content: '↗';
+ color: inherit;
+ display: inline-block;
+ font-size: inherit;
+ font-weight: 900;
+ height: 1ch;
+ width: 1ch;
+ margin: 0 0.5ch;
+ text-decoration: none;
 }
 
 scroller- {
@@ -169,6 +186,8 @@ sidebar- {
 
 .task-link>a,
 .task-link>a:visited {
+ text-decoration: none;
+ color: inherit;
  display: flex;
  flex: 0;
  font-weight: 500;
@@ -181,9 +200,9 @@ sidebar- {
  flex: 1 1;
 }
 
-.marks {
+/*.marks {
  color: var(--accent);
-}
+}*/
 
 .part-icon {
  height: var(--icon-size);

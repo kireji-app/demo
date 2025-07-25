@@ -122,18 +122,6 @@ sidebar->* {
  text-align: right;
 }
 
-#tags {
- display: flex;
-}
-
-#tags>* {
- display: inline-flex;
- font-weight: 100;
- padding: 0 4px;
- font-family: var(--system-ui-mono);
- border-radius: 8px;
-}
-
 .handle {
  display: block;
  position: relative;
