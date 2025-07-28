@@ -515,7 +515,7 @@ function ƒ(_) {
     imgSources.push([part, fn])
   }
   for (const methodID in part.manifest)
-   if (!["cardinality", "typename", "abstract", "singleton"].includes(methodID))
+   if (!["typename", "abstract", "singleton"].includes(methodID))
     Property.ids.add(methodID)
   sourceFile.part = part
   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)

@@ -3,7 +3,6 @@
  "singleton": true,
  "build": [],
  "build-start": [],
- "cardinality": "1",
  "symbol-iterator": [],
  "routeID-set": [
   "ROUTE_ID",
@@ -45,5 +44,8 @@
  "listener-remove-event": [
   "EVENT_TYPE",
   "CALLBACK"
+ ],
+ "image-placeholder": [
+  "IMAGE_NAME"
  ]
 }

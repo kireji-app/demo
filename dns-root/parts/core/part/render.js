@@ -16,43 +16,14 @@
 
  let body = part[filename]
 
- if ([".gif", ".png"].includes(extension)) {
-  let width, height
-  if (extension === ".gif") {
-   const sizeBlock = atob(body.slice(8, 16)).slice(0, 4)
-   width = sizeBlock.charCodeAt(0) | (sizeBlock.charCodeAt(1) << 8)
-   height = sizeBlock.charCodeAt(2) | (sizeBlock.charCodeAt(3) << 8)
-  } else if (extension === ".png") {
-   const sizeBlock = atob(body.slice(20, 32)).slice(1)
-   width = (sizeBlock.charCodeAt(0) << 24) |
-    (sizeBlock.charCodeAt(1) << 16) |
-    (sizeBlock.charCodeAt(2) << 8) |
-    sizeBlock.charCodeAt(3);
-   height = (sizeBlock.charCodeAt(4) << 24) |
-    (sizeBlock.charCodeAt(5) << 16) |
-    (sizeBlock.charCodeAt(6) << 8) |
-    sizeBlock.charCodeAt(7);
-  }
-
-  body = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"/>`
-  let imgOwner = part
-  while (imgOwner && !imgOwner.filenames.includes(filename))
-   imgOwner = imgOwner.prototype
-  filetype = `image/svg+xml;inert;${imgOwner.host}/${filename}`
- }
-
  // if (body === undefined || body === "undefined")
  //  warn("undefined body", part.host, filename)
 
  if (OPTIONS.format === "raw")
   return body
 
- if (OPTIONS.format === "datauri") {
-  if (binary && !filetype.startsWith("image/svg+xml"))
-   return `data:${filetype};base64,${body}`
-
-  return `data:${filetype},${encodeURIComponent(body)}`
- }
+ if (OPTIONS.format === "datauri")
+  return `data:${binary ? `${filetype};base64,${body}` : `${filetype},${encodeURIComponent(body)}`}`
 
  if (OPTIONS.format === "response") {
   if (binary) {

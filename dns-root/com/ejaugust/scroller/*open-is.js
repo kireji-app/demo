@@ -1,0 +1,1 @@
+return _.application === _.com.ejaugust.www

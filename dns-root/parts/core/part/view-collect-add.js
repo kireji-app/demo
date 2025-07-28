@@ -3,5 +3,9 @@ if (part.dirty && part.justEnabled) {
  // Add parent view before adding own.
  part[".."]?.collectAddView()
 
- part.addView()
+ if (part.isOpen)
+  part.addView()
+
+ for (const callback of part.callbacks.add)
+  callback()
 }

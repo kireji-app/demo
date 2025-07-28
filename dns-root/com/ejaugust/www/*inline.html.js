@@ -27,7 +27,7 @@ return ejaugust[".."].scroller.wrap(
    "          ▙▌  \n"
   ) +
   "</pre></a>" +
-  `<img src="${_.app.kireji.www.render({ request: "part.png", format: "datauri" })}"/>` +
+  `<img src="${_.app.kireji.www.placeholderImage("part.png")}"/>` +
   "<section id=social>" + (
    `<a target=_blank href=https://github.com/EJAugust>${ejaugust["github.svg"]}</a>` +
    `<a target=_blank href=https://linkedin.com/in/kireji>${ejaugust["linkedin.svg"]}</a>` +

@@ -1,7 +1,4 @@
-const iconDataURI = _.application.render({
- request: "part.png",
- format: "datauri"
-})
+const placeholderIcon = _.application.placeholderImage("part.png")
 
 const meta =
  `<meta name=robots content=noindex />` +
@@ -11,8 +8,8 @@ const meta =
 
 const links =
  `<link rel="manifest"${worker["link-manifest.txt"]}/>` +
- `<link class=favicon rel=icon href="${iconDataURI}"/>` +
- `<link class=favicon rel="apple-touch-icon" href="${iconDataURI}"/>`
+ `<link class=favicon rel=icon href="${placeholderIcon}"/>` +
+ `<link class=favicon rel="apple-touch-icon" href="${placeholderIcon}"/>`
 
 const styles =
  `<style id="user-css">${_["inline.css"]}</style>` +

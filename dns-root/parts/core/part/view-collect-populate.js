@@ -1,10 +1,12 @@
-if (part.dirty) { // Always true, but included for clarity.
+if (part.dirty) {
 
  // Populate parent view before populating own.
  part[".."]?.collectPopulateView()
 
  if (part.enabled) {
-  part.populateView()
+
+  if (part.isOpen)
+   part.populateView()
 
   for (const callback of part.callbacks.populate)
    callback()

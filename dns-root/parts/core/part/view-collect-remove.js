@@ -1,7 +1,8 @@
 if (part.dirty && part.justDisabled) {
 
  // Remove own view before removing parent.
- part.removeView()
+ if (part.isOpen)
+  part.removeView()
 
  for (const callback of part.callbacks.remove)
   callback()

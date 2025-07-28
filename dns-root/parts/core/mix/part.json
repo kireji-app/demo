@@ -1,6 +1,5 @@
 {
  "abstract": true,
- "cardinality": "1",
  "routeID-collect": [
   "CHANGED_FACTORS"
  ]

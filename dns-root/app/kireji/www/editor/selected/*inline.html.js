@@ -26,7 +26,7 @@ const recordTable = selectedPart.filenames.map((filename, index) => {
 }).join("")
 
 return (
- `<section><h1><img src="${selectedPart.render({ request: "part.png", format: "datauri" })}"/>${selectedPart.title || selectedPart.key}</h1><p><span class=marks>Part "</span>${selectedPart.domains.join("<span class=marks>.</span>")}<span class=marks>" ${selectedPart.host === "part.core.parts" ? "is the type root and has no prototype.</span>" : `extends </span><a href="#" onclick="_.app.kireji.www.editor.selected.go(event, ${allParts.indexOf(selectedPart.prototype)})"><span class=marks>"</span>` + selectedPart.prototype.domains.join("<span class=marks>.</span>") + '<span class=marks>"</span></a>'}<p><p id=description>${selectedPart.description ?? "<span class=marks>This part has no description.</span>"}</p></section>` +
+ `<section><h1><img src="${selectedPart.placeholderImage("part.png")}"/>${selectedPart.title || selectedPart.key}</h1><p><span class=marks>Part "</span>${selectedPart.domains.join("<span class=marks>.</span>")}<span class=marks>" ${selectedPart.host === "part.core.parts" ? "is the type root and has no prototype.</span>" : `extends </span><a href="#" onclick="_.app.kireji.www.editor.selected.go(event, ${allParts.indexOf(selectedPart.prototype)})"><span class=marks>"</span>` + selectedPart.prototype.domains.join("<span class=marks>.</span>") + '<span class=marks>"</span></a>'}<p><p id=description>${selectedPart.description ?? "<span class=marks>This part has no description.</span>"}</p></section>` +
  "<section>" + (
   `<h2><a href="https://en.wikipedia.org/wiki/Perfect_hash_function#Minimal_perfect_hash_function" target="_blank">MPFH</a> Properties</h2>` +
   (instances.includes(selectedPart) ? ("<part-data>" + (

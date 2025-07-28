@@ -1,8 +1,10 @@
 if (part.dirty) {
 
- // Always populate own view before populating child.
+ // Populate own view before populating child.
  if (part.enabled) {
-  part.populateView()
+
+  if (part.isOpen)
+   part.populateView()
 
   for (const callback of part.callbacks.populate)
    callback()
@@ -10,5 +12,4 @@ if (part.dirty) {
   for (const subpart of part)
    subpart.distributePopulateView()
  }
-
 }

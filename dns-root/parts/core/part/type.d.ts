@@ -83,6 +83,8 @@ declare interface IPart extends Iterable<IPart> {
  readonly "part.json": string
  /** A png icon that can represent the part and - for application parts - used as the application's icon and browser favicon. */
  readonly "part.png": string
+ /** A URI-encoded svg data segment that can represent the bounding box of a part image but is small enough to be inlined in image-heavy server-rendered views. */
+ readonly placeholderImage(IMAGE_NAME: string): string
  /** An optional display name for the part. */
  readonly title?: string
  /** An decorative title that uses unicode bold and mathematical characters to render the part's host name. */
@@ -169,6 +171,8 @@ declare interface IPart extends Iterable<IPart> {
   * if that change occurred one or more cycles ago, this property is always cleared at the end of the cycle
   * so that view functions are not run multiple times. */
  readonly dirty: true | undefined
+ /** Whether or not the part is connected to the dns-root for the purpose of view method propagation. If false, the part should be ignored from view functions but should retain all other functionality including being able to be enabled, contributing to cardinality, and having route changes propagate. */
+ readonly isOpen: boolean
  /** Whether or not the part is an abstract part. All parts can be extended, but abstract parts don't participate in the routing function or run a build step. They also can't be listened to. */
  readonly isAbstract: boolean
  /** The record of all event callbacks currently attached to the part. */

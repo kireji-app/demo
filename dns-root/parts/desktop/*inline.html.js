@@ -1,1 +1,3 @@
-return `<wallpaper- tabIndex=1 style="${_.application.style ?? ""}">${_.application["inline.html"]}</wallpaper->`
+const { attributes, style, "inline.html": inlineHTML } = _.application
+
+return `<wallpaper- tabIndex=1${attributes ? ` ${attributes}` : ""}${style ? ` style="${style}"` : ""}>${inlineHTML}</wallpaper->`

@@ -1,4 +1,4 @@
-if (_.application === _.com.ejaugust.www && client.hydrated) {
+if (client.hydrated) {
  document.querySelector("#notebook-section").innerHTML = note["article.html"]
  document.querySelector("#note-title").innerHTML = note.title ?? "Untitled Note"
  document.querySelector("#note-subtitle").innerHTML = note.subtitle ?? ""
