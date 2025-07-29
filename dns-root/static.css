@@ -7,8 +7,30 @@
  user-select: none;
 }
 
-html:has(body[inert]) {
+html::after {
+ content: "Upgrading...";
+ pointer-events: none;
+ position: fixed;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ opacity: 0;
+ background-color: var(--dark-bg);
+ color: var(--dark-fg);
+ transition: opacity 0.5s ease;
+ line-height: var(--h);
+ text-align: center;
+ font-family: var(--system-ui);
+}
+
+html:has(body[inert], body.upgrading) {
  cursor: wait;
+ pointer-events: none;
+}
+
+html:has(body.upgrading)::after {
+ opacity: 100%;
 }
 
 #application-control {

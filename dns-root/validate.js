@@ -9,7 +9,7 @@ if (environment === "server" && require.main === module) {
  openLog(1, "Reading index.html.")
  const result = _["index.html"]
  closeLog(1)
- closeLog(1, true)
+ closeLog(1)
 
  openLog(1, "Checking Serialization")
  const postHydrationArchive = serialize(_)
@@ -33,4 +33,4 @@ if (environment === "server" && require.main === module) {
  closeLog(1)
 }
 
-closeLog(1, true)
+closeLog(1)

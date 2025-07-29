@@ -1,17 +1,38 @@
 // Prepare the necessary facets before allowing interaction.
-
-
-await addressBar.promise // Distributes the initial user route.
-await agent.promise
-await hotKeys.promise
-await worker.promise
+await Promise.all([
+ addressBar.promise,
+ agent.promise,
+ hotKeys.promise,
+ worker.promise
+])
 
 // To preview FOUC
 if (_.hangHydration && !production)
  hang(1000)
 
-globalThis.onpopstate = () => _.setRoute(location.href)
+globalThis.onpopstate = () => {
+ try {
+  _.setRoute(location.href)
+ } catch (e) {
+  error(e)
+  _.setRoute(`https://${location.host}/${_.version}/${_.landingHash}/`)
+ }
+}
+
+if (location.pathname.endsWith("!")) {
+ desktop.update.isUpgrading = true
+ client.promise.then(() => {
+  const model = JSON.parse(localStorage.getItem(location.pathname.split("/")[2].slice(0, -1)))
+  if (!model) throw 'missing model'
+  _.setRoute(`https://${location.host}${encodeRoute(_.modelToRouteID(model))}`)
+  document.body.classList.remove("upgrading")
+  desktop.update.isUpgrading &&= false
+  localStorage.clear()
+ })
+}
+
 onpopstate()
+
 document.body.removeAttribute("inert")
 client.hydrated = true
 

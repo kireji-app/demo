@@ -51,10 +51,19 @@ module.exports = {
 
    status = 200
    head = indexHeader
-   _.setRoute(`https://${host}${pathname}`)
+   const defaultRoute = `https://${host}/${_.version}/${_.landingHash}/`
+   if (pathname.endsWith("!")) {
+    desktop.update.isUpgrading = true
+    _.setRoute(defaultRoute)
+   } else try {
+    _.setRoute(`https://${host}${pathname}`)
+   } catch (e) {
+    error(e)
+    _.setRoute(defaultRoute)
+   }
    body = _['index.html']
+   desktop.update.isUpgrading &&= false
    break respond
-
   }
 
   return { status, head, body }
@@ -117,8 +126,8 @@ if (environment === "server" && require.main === module) {
     if (pathname.startsWith(`/${_.version}/`))
      serverModule = module.exports
     else {
-     const oldVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
-     if (oldVersion) serverModule = require(`../.versions/${oldVersion}.js`)
+     const alternateVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
+     if (alternateVersion) serverModule = require(`../.versions/${alternateVersion}.js`)
      else throw "Unsupported pathname format: " + pathname
     }
 
@@ -130,8 +139,8 @@ if (environment === "server" && require.main === module) {
     ))
    }
   } catch (e) {
-   status = 444
    error(e)
+   status = 444
    head = securityHeader
   }
   const memory = Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB";

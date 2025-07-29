@@ -177,6 +177,8 @@ declare interface IPart extends Iterable<IPart> {
  readonly isAbstract: boolean
  /** The record of all event callbacks currently attached to the part. */
  readonly callbacks: Record<string, Set<Function>>
+ /** The array of subdomains which correspond to concrete (non-abstract) subparts. */
+ readonly subpartKeys: string[]
 }
 /** The part instance on which the current script is being called.
  * 

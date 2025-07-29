@@ -1,0 +1,9 @@
+{
+ "check": [
+  "EVENT"
+ ],
+ "upgrade": [
+  "EVENT",
+  "NONCE_HREF"
+ ]
+}

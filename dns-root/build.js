@@ -191,7 +191,8 @@ function ƒ(_) {
    require.main === module && (
     _.branch = _.$("git rev-parse --abbrev-ref HEAD").toString().trim(),
     _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
-    _.version = (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change)
+    _.version = (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().trim().split("."), _.change),
+    _.modified = _.$('git show -s --format=%ci HEAD').toString().trim()
    ),
    "server"
   ),
@@ -202,7 +203,7 @@ function ƒ(_) {
   debug = (...data) => logAny(0, data, "debug"),
   error = (...data) => logAny(0, data, "error"),
   logAny = (verbosity, data, method) => !production && verbosity <= _.verbosity && console[method](...(environment === "worker" ? ["worker:", ...data] : data)),
-  openLog = (verbosity, ...data) => logAny(verbosity, data, "group"),
+  openLog = (verbosity, ...data) => logAny(verbosity, data, "groupCollapsed"),
   closeLog = (verbosity, spaced) => (spaced && log(verbosity, ""), logAny(verbosity, [], "groupEnd")),
   toCharms = (x, unit = true) => encodeSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
@@ -251,16 +252,11 @@ function ƒ(_) {
 
    return segment
   },
-  encodeRoute = routeID => `/${_.version}/${encodeSegment(routeID)}/`,
-  decodeRoute = pathname => {
-   const segments = pathname.slice(1, -1).split("/")
-   const versionSegment = segments.shift()
-   const rootSegment = segments.shift()
-
+  decodeSegment = segment => {
    let charmRoundedBinaryString = "0b0"
    let charmLengthOffsetBinaryString = "0b0"
 
-   for (const character of [...rootSegment]) {
+   for (const character of [...segment]) {
     const characterValue = pathRadix.indexOf(character)
     if (characterValue === -1 || characterValue >= 64) throw character
     charmRoundedBinaryString += characterValue.toString(2).padStart(6, 0)
@@ -269,6 +265,8 @@ function ƒ(_) {
 
    return BigInt(charmRoundedBinaryString) + BigInt(charmLengthOffsetBinaryString)
   },
+  encodeRoute = routeID => `/${_.version}/${encodeSegment(routeID)}/`,
+  decodeRoute = pathname => decodeSegment(pathname.slice(1, -1).split("/")[1]),
   logEntropy = (verbosity, ...parts) => {
    if (verbosity > _.verbosity) return
    logAny(verbosity, [
@@ -332,10 +330,10 @@ function ƒ(_) {
    domainCount++
   }
   readRecursive("", "./", _)
-  closeLog(1, true)
+  closeLog(1)
   openLog(2, "Domain Stats")
   log(2, `| Files | Parts |\n|-------|-------|\n| ${("" + fileCount).padEnd(5, " ")} | ${("" + domainCount).padEnd(5, " ")} |`)
-  closeLog(2, true)
+  closeLog(2)
  }
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
@@ -551,7 +549,7 @@ function ƒ(_) {
   return part
  }
  distributeHydration(_)
- closeLog(3, true)
+ closeLog(3)
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
  closeLog(3)
@@ -563,8 +561,8 @@ function ƒ(_) {
  //  closeLog(3)
  // }
  if (_.local) _.validate()
- closeLog(1, true)
  log(1, "Boot Completed (end of synchronous script execution).")
+ closeLog(1, false)
 }
 
 ƒ({

@@ -32,6 +32,9 @@ if (desktop.taskBar.menu.arm?.key === "open")
 if (desktop.taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
+if (desktop.update.isUpgrading)
+ bodyClassList.push("upgrading")
+
 const body =
  `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${desktop.taskBar["inline.html"]}${worker["inline.html"]}</body>`
 

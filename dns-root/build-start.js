@@ -15,7 +15,7 @@ openLog(1, "Installing Facets")
 for (const subpart of desktop)
  if (subpart.prototype.host === "facet.core.parts")
   subpart.install()
-closeLog(1, true)
+closeLog(1)
 
 Object.defineProperties(_, {
  "..": { value: null }

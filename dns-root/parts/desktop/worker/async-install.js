@@ -6,17 +6,28 @@ if (environment === "worker") {
    if (hash || search)
     throw 'Requests with a fragment or query are not supported.'
 
-   const isFileRequest = [`/${_.version}/kireji.js`, `/${_.version}/manifest.json`].includes(pathname)
+   if (pathname === '/-v') {
+    event.respondWith(fetch(event.request.url))
+    return
+   }
 
+   const isFileRequest = [`/${_.version}/kireji.js`, `/${_.version}/manifest.json`].includes(pathname)
    const filename = isFileRequest ? pathname.split("/")[2] : "index.html"
+   const fallbackRoute = `https://${host}/${_.version}/${_.landingHash}/`
 
    if (isFileRequest)
-    _.setRoute(`https://${host}/${_.version}/${_.landingHash}/`)
-   else {
+    _.setRoute(fallbackRoute)
+   else if (pathname.endsWith("!")) {
+    desktop.update.isUpgrading = true
+    _.setRoute(fallbackRoute)
+   } else try {
     if (!/^\/\d+\.\d+.\d+\/(?:[\w-]*\/)?$/.test(pathname))
      throw `Pathname '${pathname}' is not valid.`
 
     _.setRoute(`https://${host}${pathname}`)
+   } catch (e) {
+    error(e)
+    _.setRoute(fallbackRoute)
    }
 
    color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
@@ -25,6 +36,8 @@ if (environment === "worker") {
     request: filename,
     format: "response"
    }))
+
+   desktop.update.isUpgrading &&= false
 
   } catch (e) {
    error(e)

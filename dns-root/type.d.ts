@@ -142,7 +142,7 @@ declare function log(VERBOSITY: number, ...DATA: any[]): void
 declare function openLog(VERBOSITY: number, ...DATA: any[]): void
 declare function closeLog(VERBOSITY: number, ...DATA: any[]): void
 /** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
-declare function serialize(VERBOSITY: number, ...DATA: any[]): void
+declare function serialize(data: any): void
 /** Represents metadata and processing logic for a single property
  * of the part. If the property is a method or getter/setter, it
  * parses the method's ID and generates its signature, dynamic constants and body.
@@ -273,6 +273,8 @@ declare const REQUEST_URL: string
 declare function getPartFromDomains(domains): IPart
 /** Trades a string pathname for the bigint routeID. */
 declare function decodeRoute(pathname: string): bigint
+/** Trades a string segment for the bigint routeID. */
+declare function decodeSegment(pathname: string): bigint
 /** Trades a bigint routeID for a string pathname. */
 declare function encodeRoute(routeID: bigint): string
 /** Trades a bigint routeID for a string segment. */
