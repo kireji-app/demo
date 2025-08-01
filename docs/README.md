@@ -31,7 +31,7 @@ Each application state is assigned a unique variable-length base64 hash, derived
 Example:
 
 ```
-https://www.ejaugust.com/0.126.0/4lb5kAsH_R0Dv_UHg/
+https://www.ejaugust.com/0.126.3/4lb5kAsH_R0Dv_UHg/
 ```
 
 The hash function has no gaps, no duplicates, and no collisions.
@@ -78,11 +78,11 @@ Learn more about LTE and versioning in [VERSIONING.md].
 
 Explore the technical background and ideas that shape the Kireji platform:
 
-* [Entropy-Perfect Encoding](https://www.ejaugust.com/0.126.0/4lb5kAsH_R0Dv_UHg/) — on URL space, compression theory, and minimal perfect hash functions
-* [The Charm](https://www.ejaugust.com/0.126.0/4lbx0eM3oGi_v_UHg/) — on measuring entropy and URL information density
-* [The Multiverse and the Universal IDE](https://www.ejaugust.com/0.126.0/4lbeO3LCoWuDv_UHg/) — metaphors for self-rewriting environments
-* [The Gamified Universal IDE](https://www.ejaugust.com/0.126.0/4lbofz2wN-YDv_UHg/) — an aspirational vision of immersive development tools
-* [Why DNS?](https://www.ejaugust.com/0.126.0/4lbHaxElA7UDv_UHg/) — component namespacing and platform-wide coordination
+* [Entropy-Perfect Encoding](https://www.ejaugust.com/0.126.4/4lb5kAh4PhZXOKxrM/) — on URL space, compression theory, and minimal perfect hash functions
+* [The Charm](https://www.ejaugust.com/0.126.3/4lbxJ29P-vnXOKxrM/) — on measuring entropy and URL information density
+* [The Multiverse and the Universal IDE](https://www.ejaugust.com/0.126.4/4lbeO3z_cmrXOKxrM/) — metaphors for self-rewriting environments
+* [The Gamified Universal IDE](https://www.ejaugust.com/0.126.4/4lbofySVBqVXOKxrM/) — an aspirational vision of immersive development tools
+* [Why DNS?](https://www.ejaugust.com/0.126.4/4lbHaxsKnzRXOKxrM/) — component namespacing and platform-wide coordination
 
 ## **Technology Stack**
 
