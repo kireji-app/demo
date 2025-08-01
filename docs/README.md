@@ -129,4 +129,4 @@ The following milestones completed:
 
 ## **License and Attribution**
 
-<sub>© 2013–2025 Eric Augustinowicz. All Rights Reserved.</sub> <sub>This is a personal research project in active development. It's not production-ready. Please do not copy or redistribute this codebase or its methods. All content is considered prior art.</sub>
+<sub>© 2013–2025 Eric Augustinowicz and Kristina Soriano. All Rights Reserved.</sub> <sub>This is a personal research project in active development. It's not production-ready. Please do not copy or redistribute this codebase or its methods. All content is considered prior art.</sub>
