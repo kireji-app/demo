@@ -22,30 +22,30 @@ The hash function has no gaps, no duplicates, and no collisions.
 
 Kireji's architecture overlays Model-View-Controller (MVC) with a piecewise-defined minimal perfect hash function (MPHF):
 
-* Each controller is a stateful component with its own cardinality.
-* These components assemble like LEGO® bricks, producing a single composite hash.
-* JavaScript's prototype chain enables compositional inheritance between components.
+* Each controller is a stateful component (called a <strong>part</strong>) with its own cardinality.
+* Parts assemble like LEGO® bricks, producing a single composite hash.
+* JavaScript's prototype chain enables compositional inheritance between parts.
 
 ---
 
 ## DNS-Based Namespacing
 
-Each software component is assigned a name that follows DNS semantics so that a web application's URL (such as [www.ejaugust.com](https://www.ejaugust.com)) can be quickly discerned from a runtime reference to one of its components, such as:
+Each part is assigned a name that follows DNS semantics so that a web application's URL (such as [www.ejaugust.com](https://www.ejaugust.com)) can be quickly discerned from a runtime reference to one of its parts, such as:
 
 ```js
 _.com.ejaugust.www.notes["1753855231"]
 ```
 
-`_` is the only global object, which prevents poluting the global namespace while allowing all components to make absolute reference to eachother via the above scheme.
+The DNS root is represented by `_` which is the only global object. This prevents poluting the global namespace and allows all parts to make absolute reference to eachother by domain.
 
-Thanks to domain names like `"core.parts"` and `"desktop.parts"`, shared components that _all_ apps use have a fitting place to live at runtime:
+Thanks to domain names like `"core.parts"` and `"desktop.parts"`, shared parts that _all_ apps use have a fitting place to live at runtime:
 
 ```js
 _.parts.core    // Stores MVC abstracts and MPHF arithmetic
-_.parts.desktop // Holds shared system state components
+_.parts.desktop // Holds shared system state parts
 ```
 
-You can explore and learn about the component hierarchy by going to [www.kireji.app](https://www.kireji.app), whose own components are located at:
+You can explore and learn about the part hierarchy by going to [www.kireji.app](https://www.kireji.app), whose own parts are located at:
 
 ```js
 _.app.kireji
@@ -61,7 +61,7 @@ You can explore the platform now through these publicly deployed apps:
 * [kireji.app](https://www.kireji.app) – an entropy and hash-space explorer for the platform
 ### Coming Soon
 
-The following apps are not built yet, but their domain names, PWA components and landing pages have been added to the platform:
+The following apps are not built yet, but their domain names and landing pages have been added to the platform:
 * [core.parts](https://www.core.parts) – likely to become a web-based Universal IDE
 * [user.parts](https://www.user.parts) – potential editor for software parts
 * [glowstick.click](https://www.glowstick.click) – purpose TBD
@@ -82,7 +82,7 @@ Explore the technical background and ideas that shape the Kireji platform:
 * [The Charm](https://www.ejaugust.com/0.126.3/4lbxJ29P-vnXOKxrM/) — on measuring entropy and URL information density
 * [The Multiverse and the Universal IDE](https://www.ejaugust.com/0.126.4/4lbeO3z_cmrXOKxrM/) — metaphors for self-rewriting environments
 * [The Gamified Universal IDE](https://www.ejaugust.com/0.126.4/4lbofySVBqVXOKxrM/) — an aspirational vision of immersive development tools
-* [Why DNS?](https://www.ejaugust.com/0.126.4/4lbHaxsKnzRXOKxrM/) — component namespacing and platform-wide coordination
+* [Why DNS?](https://www.ejaugust.com/0.126.4/4lbHaxsKnzRXOKxrM/) — part namespacing and platform-wide coordination
 
 ---
 
@@ -114,10 +114,10 @@ The following milestones completed:
 * Core framework functionality
 * CI/CD pipeline
 * MVC + MPFH for stateless deep linking and data compression
-* Modeled DNS-based component tree
-* In-platform Component Inspector
-* Desktop O/S Preview
-* My Notebook - my blog which runs on the platform
+* Modeled DNS-based part tree
+* In-platform part inspector
+* Desktop O/S preview
+* Notebook - development blog which runs on the platform
 
 ### **Roadmap**
 

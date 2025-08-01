@@ -6,17 +6,17 @@ This document provides a technical deep dive into the inner workings of `kireji.
 
 ## 1. Minimal Perfect Hashing
 
-`kireji.js` employs a piecewise-defined, recursive **minimal perfect hash function (MPHF)** to compress component state information into compact, shareable URLs. Each application state is represented as a natural number $`n`$, with the MPHF ensuring a 1:1 mapping between $`n`$ and its respective component state configuration.
+`kireji.js` employs a piecewise-defined, recursive **minimal perfect hash function (MPHF)** to compress part state information into compact, shareable URLs. Each application state is represented as a natural number $`n`$, with the MPHF ensuring a 1:1 mapping between $`n`$ and its respective part state configuration.
 
 ### 1.1 Bijection Model
 
 The core mapping is:
 
 ```
-n <--> Component State Object
+n <--> Part State
 ```
 
-Each component (or "part") declares its cardinality $`k`$, which defines the number of possible states it can occupy. The system ensures that every part maps deterministically to a unique number $`0 < n < k`$ within its cardinality range.
+Each part declares its cardinality $`k`$, which defines the number of possible states it can occupy. The system ensures that every part maps deterministically to a unique number $`0 < n < k`$ within its cardinality range.
 
 ### 1.2 URL Path Encoding
 
@@ -34,7 +34,7 @@ $$
 
 This provides extremely dense representation of state without relying on query parameters or local storage, making states sharable and deep-linkable by permanent URLs.
 
-## 2. Component Model and State Composition
+## 2. Part Model and State Composition
 
 ### 2.1 Mix and Match Parts
 
@@ -43,7 +43,7 @@ This provides extremely dense representation of state without relying on query p
 * `mix.core.parts` performs **multiplicative composition** (Cartesian product of independent subparts)
 * `match.core.parts` performs **additive composition** (exclusive options / partitioning)
 
-These two operations enable arbitrarily complex state spaces to be built from small, reusable components.
+These two operations enable arbitrarily complex state spaces to be built from small, reusable parts.
 
 ### 2.2 Stateful Behavior
 
@@ -59,7 +59,7 @@ https://two-digit.example.com/v123/0t
 
 ## 3. State Propagation
 
-`kireji.js` supports rootward and leafward propagation of state changes. Any state mutation in a subpart triggers a full recalculation of parent route identifiers up to the DNS root. This model ensures full consistency across nested component hierarchies.
+`kireji.js` supports rootward and leafward propagation of state changes. Any state mutation in a subpart triggers a full recalculation of parent route identifiers up to the DNS root. This model ensures full consistency across nested part hierarchies.
 
 The URL in the address bar always reflects the root part's state and is updated at throttled intervals (to align with browser frame rate limits and avoid DoS mitigation mechanisms).
 

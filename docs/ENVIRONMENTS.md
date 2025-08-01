@@ -23,7 +23,7 @@ Each environment has unique responsibilities, but they all operate on the same s
 - **Execute unit tests at build time** 
 - **Static analysis of source files**
 - **Hash tree construction and cardinality computation**
-- **Inline and archive versioned component definitions into `/${version}.js`**
+- **Inline and archive versioned part definitions into `/${version}.js`**
 - **Respond to HTTP requests**
 - **Render full HTML snapshots for any valid hash**
 - **Serve the archived script**
@@ -31,7 +31,7 @@ Each environment has unique responsibilities, but they all operate on the same s
 ### Features:
 
 - Resolves the entire application structure into a single build artifact
-- Serializes all runtime component prototypes into JavaScript literals
+- Serializes all parts into JavaScript literals
 - Sets default application state to be rendered server-side
 - Enables SEO by server-rendered HTML for any permalink
 - Outputs CSS-inlined, DOM-complete pages for fast first paint
@@ -61,10 +61,10 @@ Each environment has unique responsibilities, but they all operate on the same s
 
 ### Responsibilities:
 
+- **Hydrates server renders and handles all DOM updates**
 - **Listens for user interaction events** such as clicks, keypresses, and pointer movements
 - **Reacts performantly to user input** by updating application state with minimal recomputation
 - **Interprets the full application state**
-- **Renders all DOM and component logic in real time**
 
 ### Features:
 

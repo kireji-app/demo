@@ -14,7 +14,7 @@ To solve this, `kireji.js` provides a **semantic versioning model** for its core
 
 ## 2. Semantic Versioning Scheme
 
-The hash function that defines component behavior and layout is versioned using the standard **major.minor.patch** format:
+The hash function that defines part behavior and layout is versioned using the standard **major.minor.patch** format:
 
 ```
 MAJOR.MINOR.PATCH
@@ -23,7 +23,7 @@ MAJOR.MINOR.PATCH
 | Level | When to Increment                                      |
 | ----- | ------------------------------------------------------ |
 | Major | Breaking change to existing state mappings             |
-| Minor | New components/routes added, existing links still work |
+| Minor | New routes added, existing links still work            |
 | Patch | Bugfixes, small adjustments, no impact on URL behavior |
 
 ### Example:
