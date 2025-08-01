@@ -23,7 +23,7 @@ The hash function has no gaps, no duplicates, and no collisions.
 Kireji's architecture overlays Model-View-Controller (MVC) with a piecewise-defined minimal perfect hash function (MPHF):
 
 * Each controller is a stateful component with its own cardinality.
-* These components assemble like LEGO® blocks, producing a single composite hash.
+* These components assemble like LEGO® bricks, producing a single composite hash.
 * JavaScript's prototype chain enables compositional inheritance between components.
 
 ---

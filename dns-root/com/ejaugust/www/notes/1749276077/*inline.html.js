@@ -92,7 +92,7 @@ return `<h2>Background</h2>
 <p>A breakthrough came when I realized that the structure I was building to support the bijection had a surprising amount in common with MVC architecture. In fact, the two ended up laying right on top of each other and being the <em>same thing</em>.</p>
 <p>Think of an MVC controller object as a piece of the piecewise-defined hash function. Whether you assign a hash (which acts as the data model) to a controller or manipulate the controller directly (for example, in response to user interaction), the application state and the model are always be kept in sync.</p>
 <p>Each controller is a reusable component. It has its own hash range from 0 to k-1, where k is the cardinality of the component's model.</p>
-<p>These components assemble together like LEGO® blocks, and no matter what assembly you make with them, the result is still a minimal perfect hash function over the assembly's state domain.</p>
+<p>These components assemble together like LEGO® bricks, and no matter what assembly you make with them, the result is still a minimal perfect hash function over the assembly's state domain.</p>
 <p>Leveraging the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain" target="_blank">JavaScript prototype chain</a>, I was able to add object-oriented concepts like inheritance into the equation.</p>
 <h2>A Real-World Demonstration</h2>
 <p>This isn't just a theoretical exercise. I put these methods into practice to create this website and the surrounding platform. Within the platform, this notebook is represented by a controller called <code>"ejaugust.com"</code>. This is how many states it has:</p>
