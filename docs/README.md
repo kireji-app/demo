@@ -24,9 +24,9 @@ The following apps are not built yet, but their domain names, PWA components and
 
 ---
 
-## 🔐 Entropy-Perfect Encoding
+## Entropy-Perfect Encoding
 
-Each application state is assigned a unique variable-length base64 hash, derived from a bijective minimal perfect hash function. This makes URLs both compact and maximally expressive.
+Each application state is assigned a unique variable-length base64 hash, derived from a bijective minimal perfect hash function. This makes URLs maximally compact and expressive.
 
 Example:
 
@@ -34,13 +34,7 @@ Example:
 https://www.ejaugust.com/0.126.0/4lb5kAsH_R0Dv_UHg/
 ```
 
-No duplicate states. No wasted space. No external state storage.
-
-## The Charm: Measuring Entropy
-
-Kireji introduces a unit of information called the **charm**, which measures entropy in terms of URL hash length. Charms reflect both the number of base64 digits and their variable-length structure. The current system's maximum hash length is 18 charms.
-
----
+The hash function has no gaps, no duplicates, and no collisions.
 
 ## MVC + MPHF Architecture
 
@@ -54,7 +48,7 @@ Kireji's architecture overlays Model-View-Controller (MVC) with a piecewise-defi
 
 ## DNS-Based Namespacing
 
-Each software component is assigned a name that follows DNS semantics so that a web application's URL (such as "www.ejaugust.com") can be quickly discerned from a runtime reference to one of its components, such as:
+Each software component is assigned a name that follows DNS semantics so that a web application's URL (such as [www.ejaugust.com](https://www.ejaugust.com)) can be quickly discerned from a runtime reference to one of its components, such as:
 
 ```js
 _.com.ejaugust.www.notes["1753855231"]
@@ -62,13 +56,18 @@ _.com.ejaugust.www.notes["1753855231"]
 
 `_` is the only global object, which prevents poluting the global namespace while allowing all components to make absolute reference to eachother via the above scheme.
 
-Thanks to the domain names like `"core.parts"` and `"desktop.parts"`, shared components that _all_ apps use have a fitting place to live at runtime:
+Thanks to domain names like `"core.parts"` and `"desktop.parts"`, shared components that _all_ apps use have a fitting place to live at runtime:
 
 ```js
 _.parts.core    // Stores MVC abstracts and MPHF arithmetic
 _.parts.desktop // Holds shared system state components
 ```
 
+You can explore and learn about the component hierarchy by going to [www.kireji.app](https://www.kireji.app), whose own components are located at:
+
+```js
+_.app.kireji
+```
 ---
 
 ## Learn More
