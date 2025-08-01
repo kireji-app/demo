@@ -557,28 +557,7 @@ function ƒ(_) {
  Object.defineProperties(_, {
   built: { value: true },
   landingHash: {
-   value: encodeSegment(_.modelToRouteID({
-    app: {
-     kireji: {
-      www: {
-       editor: {
-        selected: "1s"
-       },
-       outliner: {
-        folders: "1____",
-        width: {
-         open: "1F"
-        }
-       }
-      }
-     }
-    },
-    parts: {
-     desktop: {
-      color: "light"
-     }
-    }
-   }))
+   value: encodeSegment(_.modelToRouteID({ "app": { "kireji": { "www": { "editor": { "selected": "f" }, "outliner": { "folders": "__0M", "width": { "open": "_" } } } } }, "parts": { "desktop": { "color": "light" } } }))
   }
  })
  log(3, "Computed output: " + _.landingHash)
