@@ -10,15 +10,17 @@ All applications powered by Kireji are stateless in the traditional sense: their
 
 You can explore the platform now through these publicly deployed apps:
 
-* [ejaugust.com](https://www.ejaugust.com) – a document-style notebook application
+* [ejaugust.com](https://www.ejaugust.com) – a notebook-style blog about the platform
 * [desktop.parts](https://www.desktop.parts) – a preview of a GUI-based OS experience
 * [kireji.app](https://www.kireji.app) – an entropy and hash-space explorer for the platform
-* Other apps in development:
-  * [core.parts](https://www.core.parts) – likely to become a web-based Universal IDE
-  * [user.parts](https://www.user.parts) – potential editor for software parts
-  * [glowstick.click](https://www.glowstick.click) – purpose TBD
-  * [kireji.io](https://www.kireji.io) – the future gamified UIDE
-  * [orenjinari.com](https://www.orenjinari.com) – example of an artist's portfolio
+### Coming Soon
+
+The following apps are not built yet, but their domain names, PWA components and landing pages have been added to the platform:
+* [core.parts](https://www.core.parts) – likely to become a web-based Universal IDE
+* [user.parts](https://www.user.parts) – potential editor for software parts
+* [glowstick.click](https://www.glowstick.click) – purpose TBD
+* [kireji.io](https://www.kireji.io) – the future gamified UIDE
+* [orenjinari.com](https://www.orenjinari.com) – example of an artist's portfolio
 
 ---
 
@@ -42,7 +44,7 @@ Kireji introduces a unit of information called the **charm**, which measures ent
 
 ## MVC + MPHF Architecture
 
-Kireji's architecture overlays Model-View-Controller (MVC) with entropy-perfect hashing via the minimal perfect hash function (MPHF):
+Kireji's architecture overlays Model-View-Controller (MVC) with a piecewise-defined minimal perfect hash function (MPHF):
 
 * Each controller is a stateful component with its own cardinality.
 * These components assemble like LEGO blocks, producing a single composite hash.
@@ -52,29 +54,20 @@ Kireji's architecture overlays Model-View-Controller (MVC) with entropy-perfect 
 
 ## DNS-Based Namespacing
 
-Each software component is assigned a name that follows DNS semantics. For example:
+Each software component is assigned a name that follows DNS semantics so that a web application's URL (such as "www.ejaugust.com") can be quickly discerned from a runtime reference to one of its components, such as:
 
 ```js
 _.com.ejaugust.www.notes["1753855231"]
 ```
 
-* `_` is the root object (DNS root)
-* Top-level domains (TLDs) and subdomains mirror the structure of application components
-* This hierarchy provides semantic routing and zero-conf access between apps
+`_` is the only global object, which prevents poluting the global namespace while allowing all components to make absolute reference to eachother via the above scheme.
 
----
+Thanks to the domain names like `"core.parts"` and `"desktop.parts"`, shared components that _all_ apps use have a fitting place to live at runtime:
 
-## State Navigation
-
-The full platform state is compressed into a single hash and reflected in the URL:
-
-```text
-16469803715788800000000000000000 possible states
-→ max hash: "3fUcVjxmsbv_______"
-→ max entropy: 18 charms
+```js
+_.parts.core    // Stores MVC abstracts and MPHF arithmetic
+_.parts.desktop // Holds shared system state components
 ```
-
-Each URL is a permanent, deterministic, and restorable snapshot of the UI and all active components.
 
 ---
 
@@ -123,17 +116,17 @@ The following milestones completed:
 
 ### **Roadmap**
 
-| Phase                                 | Status       |
-| ------------------------------------- | ------------ |
-| **Framework and Core Functionality**  | Completed    |
-| **CI/CD Pipeline**                    | Completed    |
-| **LTS Strategy**                      | Completed    |
-| **Debug Tools, Docs**                 | In Progress  |
-| **Transfinite State Space**           | In Progress  |
-| **Operating System Concept**          | In Progress  |
-| **Advanced DNS Integration**          | Planned      |
-| **Integrated Development Environment** | Planned      |
-| **Changing the Game**                 | Planned      |
+| Phase                                  | Status      |
+| -------------------------------------- | ----------- |
+| **Framework and Core Functionality**   | Completed   |
+| **CI/CD Pipeline**                     | Completed   |
+| **LTS Strategy**                       | Completed   |
+| **Debug Tools, Docs**                  | In Progress |
+| **Transfinite State Space**            | In Progress |
+| **Operating System Concept**           | In Progress |
+| **Advanced DNS Integration**           | Planned     |
+| **Integrated Development Environment** | Planned     |
+| **Changing the Game**                  | Planned     |
 
 ## **License and Attribution**
 
