@@ -1,42 +1,96 @@
-# `kireji.js` – Advanced Cloud Framework for Scalable Component Management
+# Kireji: Entropy-Perfect Web Applications
 
-**`kireji.js`** is an advanced cloud framework designed to solve a critical challenge in modern web development: managing deeply nested, reusable components while optimizing URL-based state management. Built with scalability and performance in mind, `kireji.js` leverages cutting-edge techniques to create a fully reactive, front-controlled framework for building static applications with perfect data compression and SEO optimization - no backend needed.
+**Kireji** is a web-based software platform that compresses application state into the URL using minimal perfect hash functions (MPHFs). It unifies multiple applications under a single, composable, state-addressable architecture.
 
-## **Key Features**
+All applications powered by Kireji are stateless in the traditional sense: their complete state is encoded directly in the URL. This allows for deterministic, lossless deep linking, bookmarking, and historical replay — all without cookies, localStorage, or server synchronization.
 
-* **State Compression and Permalink Generation**
-  `kireji.js` uses a recursive minimal perfect hash function to encode component state into URLs with entropy-perfect compression. Every state transition results in a unique, shareable permalink that represents the entire application state, enabling seamless sharing of complex configurations.
+---
 
-* **Static, Backend-Free Architecture**
-  Applications built with `kireji.js` require no backend, no databases, and no user accounts. All state is stored locally and encoded directly into the address bar. Despite this, users can share exact snapshots of their work—text edits, graphic compositions, even small games—through a single URL. The illusion of user-uploaded content is created entirely within the browser.
+## Live Applications
 
-* **Optimized for Performance**
-  With just two network fetches on first visit - an HTML bootstrap and a service worker - `kireji.js` minimizes server activity and maximizes client performance. After the service worker is installed, the entire app runs offline with real-time rendering and hydration.
+You can explore the platform now through these publicly deployed apps:
 
-* **Unified Component Architecture**
-  Components in `kireji.js` can request their own URL space and encode their state independently. When deeply nested, their states are composed without conflict or manual orchestration. Each component fits within a deterministic MVC-like model and can act as a standalone module or be nested within others.
+* [ejaugust.com](https://www.ejaugust.com) – a document-style notebook application
+* [desktop.parts](https://www.desktop.parts) – a preview of a GUI-based OS experience
+* [kireji.app](https://www.kireji.app) – an entropy and hash-space explorer for the platform
+* Other apps in development:
+  * [core.parts](https://www.core.parts) – likely to become a web-based Universal IDE
+  * [user.parts](https://www.user.parts) – potential editor for software parts
+  * [glowstick.click](https://www.glowstick.click) – purpose TBD
+  * [kireji.io](https://www.kireji.io) – the future gamified UIDE
+  * [orenjinari.com](https://www.orenjinari.com) – example of an artist's portfolio
 
-* **SEO-Ready and Shareable**
-  All routes render to HTML on the server and are hydrated on the client. This dual-mode rendering ensures SEO compatibility and a fast first-paint experience.
+---
 
-## **How It Works**
-> For technical deep dives, see [Architecture](ARCHITECTURE.md), [Versioning](VERSIONING.md), and [Environment Model](ENVIRONMENTS.md).
+## 🔐 Entropy-Perfect Encoding
 
-### **Perfect Entropy Encoding**
-
-`kireji.js` encodes the entire runtime state of a web application into the URL using a recursive minimal perfect hash function. Each state has a 1:1 mapping to an integer, and these are translated into compact, readable URL paths using a variable-length base-64 alphabet.
+Each application state is assigned a unique variable-length base64 hash, derived from a bijective minimal perfect hash function. This makes URLs both compact and maximally expressive.
 
 Example:
 
 ```
-https://www.example.com/ghc3w_hi4-5g4w3/ab52fa-...
+https://www.ejaugust.com/0.126.0/4lb5kAsH_R0Dv_UHg/
 ```
 
-This URL represents the full state of the application. When visited, it restores the hierarchy of parts to its exact configuration at the time the link was created.
+No duplicate states. No wasted space. No external state storage.
 
-### **Modeled DNS-Based Component Hierarchy**
+## The Charm: Measuring Entropy
 
-`kireji.js` includes a modeled system of DNS-based component resolution. Domains are mapped to reusable components, and subdomains define their subcomponents. While DNS record fetching is currently only conceptual and commented out, this prototype lays the groundwork for future decentralized component configuration.
+Kireji introduces a unit of information called the **charm**, which measures entropy in terms of URL hash length. Charms reflect both the number of base64 digits and their variable-length structure. The current system's maximum hash length is 18 charms.
+
+---
+
+## MVC + MPHF Architecture
+
+Kireji's architecture overlays Model-View-Controller (MVC) with entropy-perfect hashing via the minimal perfect hash function (MPHF):
+
+* Each controller is a stateful component with its own cardinality.
+* These components assemble like LEGO blocks, producing a single composite hash.
+* JavaScript's prototype chain enables compositional inheritance between components.
+
+---
+
+## DNS-Based Namespacing
+
+Each software component is assigned a name that follows DNS semantics. For example:
+
+```js
+_.com.ejaugust.www.notes["1753855231"]
+```
+
+* `_` is the root object (DNS root)
+* Top-level domains (TLDs) and subdomains mirror the structure of application components
+* This hierarchy provides semantic routing and zero-conf access between apps
+
+---
+
+## State Navigation
+
+The full platform state is compressed into a single hash and reflected in the URL:
+
+```text
+16469803715788800000000000000000 possible states
+→ max hash: "3fUcVjxmsbv_______"
+→ max entropy: 18 charms
+```
+
+Each URL is a permanent, deterministic, and restorable snapshot of the UI and all active components.
+
+---
+
+## Learn More
+
+Learn more about LTE and versioning in [VERSIONING.md].
+
+<!-- Looking ahead? See [FUTURE.md](FUTURE.md) for a deep dive into what's coming next.-->
+
+Explore the technical background and ideas that shape the Kireji platform:
+
+* [Entropy-Perfect Encoding](https://www.ejaugust.com/0.126.0/4lb5kAsH_R0Dv_UHg/) — on URL space, compression theory, and minimal perfect hash functions
+* [The Charm](https://www.ejaugust.com/0.126.0/4lbx0eM3oGi_v_UHg/) — on measuring entropy and URL information density
+* [The Multiverse and the Universal IDE](https://www.ejaugust.com/0.126.0/4lbeO3LCoWuDv_UHg/) — metaphors for self-rewriting environments
+* [The Gamified Universal IDE](https://www.ejaugust.com/0.126.0/4lbofz2wN-YDv_UHg/) — an aspirational vision of immersive development tools
+* [Why DNS?](https://www.ejaugust.com/0.126.0/4lbHaxElA7UDv_UHg/) — component namespacing and platform-wide coordination
 
 ## **Technology Stack**
 
@@ -52,56 +106,34 @@ This URL represents the full state of the application. When visited, it restores
 
 > This choice was made to preserve full control over the build output and align closely with web standards - but it also reflects a deeper design philosophy: by writing the system from scratch, every optimization becomes an opportunity to simplify the equation that defines the entire runtime behavior. `kireji.js` can be reasoned about end-to-end, as a self-contained and self-descriptive system.
 
-## **Use Cases**
-
-`kireji.js` is ideal for:
-
-* Portfolio websites with rich customization and zero backend
-* Static tools like short-form editors, visual applications, or lightweight games
-* Component-based UIs with complex nesting
-* SEO-sensitive landing pages and documentation tools
-* Any project that benefits from instant sharability without user accounts or server-side persistence
-
 ## **Current Status**
+[![Project Status: Alpha](https://img.shields.io/badge/Project%20Status-Alpha-orange)](https://www.repostatus.org/#alpha)
+[![Commits](https://img.shields.io/github/commit-activity/t/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/EJAugust/EJAugust)](https://github.com/EJAugust/EJAugust)
 
-The project is currently in alpha, with the following milestones completed:
+The following milestones completed:
 
 * Core framework functionality
 * CI/CD pipeline
-* Stateless deep linking and state compression
+* MVC + MPFH for stateless deep linking and data compression
 * Modeled DNS-based component tree
+* In-platform Component Inspector
+* Desktop O/S Preview
+* My Notebook - my blog which runs on the platform
 
 ### **Roadmap**
 
-| Phase                                | Status         |
-| ------------------------------------ | -------------- |
-| **Framework and Core Functionality** | ✅ Completed    |
-| **CI/CD Pipeline**                   | ✅ Completed    |
-| **LTS Strategy**                     | ✅ Completed    |
-| **Debug Tools, Docs**                | 🚧 In Progress |
-| **Transfinite State Space**          | 🚧 In Progress |
-| **Operating System Concept**         | 🚧 In Progress |
-| **Advanced DNS Integration**         | ⏳ Planned      |
-
-## **Live Demos**
-
-Each of these domains points to the same deployment but renders a different application:
-
-* [**www.core.parts**](https://www.core.parts) – Interactive documentation
-* [**www.desktop.parts**](https://www.desktop.parts) – Browser-based operating system shell
-* [**www.kireji.io**](https://www.kireji.io) – Document editor
-* [**www.orenjinari.com**](https://www.orenjinari.com) – Third-party demo app
-
-## **Looking Ahead**
-
-* **WebRTC Collaboration**
-  Future versions may allow real-time collaboration by synchronizing application states across devices and users via WebRTC, without a central backend.
-
-* **Universal, No-Code IDE**
-  Plans include a no-code integrated development environment (IDE) for building and modifying `kireji.js` applications directly in the browser.
-
-* **Gamification and Extensibility**
-  The framework will eventually support world-building, campaign logic, and gamified authoring tools for educational or narrative experiences.
+| Phase                                 | Status       |
+| ------------------------------------- | ------------ |
+| **Framework and Core Functionality**  | Completed    |
+| **CI/CD Pipeline**                    | Completed    |
+| **LTS Strategy**                      | Completed    |
+| **Debug Tools, Docs**                 | In Progress  |
+| **Transfinite State Space**           | In Progress  |
+| **Operating System Concept**          | In Progress  |
+| **Advanced DNS Integration**          | Planned      |
+| **Integrated Development Environment** | Planned      |
+| **Changing the Game**                 | Planned      |
 
 ## **License and Attribution**
 

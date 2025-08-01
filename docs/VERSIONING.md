@@ -6,7 +6,7 @@ This document outlines the versioning strategy used by `kireji.js` to maintain c
 
 ## 1. Why Versioning Matters in `kireji.js`
 
-Unlike traditional applications that store state on the backend, `kireji.js` encodes all runtime state directly into the URL. This creates a powerful feature—**permalinks to any exact state**—but also a responsibility: we must ensure that old links continue to work as the framework evolves.
+Unlike traditional applications that store state on the backend, `kireji.js` encodes all runtime state directly into the URL. This creates a permalink to any exact state but also a challenge: ensuring old links continue to work as the framework evolves.
 
 To solve this, `kireji.js` provides a **semantic versioning model** for its core hash function.
 
@@ -46,21 +46,21 @@ This allows developers to:
 * Maintain deep links in notes or docs
 * Add new routes or applications without breaking old ones
 
-In the future, the version number will be encoded directly in the URL and parsed at runtime to ensure compatibility.
+Hashes can be translated across versions. This is achieved by allowing any previous version of the application to unpack a given hash into a serialized form that later versions can parse.
 
 ---
 
 ## 4. Archived Versions
 
-To preserve past behavior, older versions of the hash tree may be archived and bundled with builds marked as long-term support (LTS).
+To preserve past behavior, all previously deployed versions of the hash tree are still available, archived and bundled according to their version number.
 
-This ensures that even if the project evolves rapidly, any link shared with a previous version of the application can still reconstruct its corresponding UI state.
+This ensures that even if the project evolves rapidly, any link shared generated in a previous version of the application can still reconstruct its corresponding UI state.
 
-Archived versions will include:
+Archived versions include:
 
 * A frozen copy of the MPHF tree
-* Static metadata for all part cardinalities and prototypes
-* Version-tagged build artifacts (if necessary)
+* Static copy of all content
+* Git metadata to link back to that version's commit
 
 ---
 
@@ -72,16 +72,16 @@ Archived versions will include:
 | `1.x.x`        | Non-breaking extensions                          |
 | `2.0.0`        | First intentional breaking change                |
 
-Until `1.0.0`, version information is not embedded in the URL itself. Developers working with alpha versions should treat permalinks as non-durable.
+Developers working with the alpha version 0.x.x should treat permalinks as non-durable while the deployment strategy matures.
 
 ---
 
 ## 6. Automatic Versioning
 
-`kireji.js` includes an **automatic versioning system** built into its local development environment. At build time, if the environment is detected as local, the framework prompts the developer to specify the change severity—major, minor, or patch. Based on this input and the current version, the system automatically increments and outputs the appropriate next version number. This ensures consistent version tracking while allowing developers to focus on feature implementation.
+`kireji.js` includes an **automatic versioning system** built into its local development environment. At build time, if the environment is detected as local, the framework allows the developer to specify change severity (major, minor, or patch) and the system automatically increments and outputs the appropriate next version number in the console at build time. This ensures consistent version tracking and LTE backwards compatibility testing during feature implementation.
 
 ## Summary
 
 `kireji.js` treats the application state as a form of typed data and commits to preserving that data over time through semantic versioning. The versioning system ensures that every URL, once published, can remain a valid and functional entry point into the application—without requiring a database or server persistence.
 
-As the framework matures, this commitment to permalink durability will allow users and developers to build confidently on top of a stable, compressive foundation.
+As the framework matures, this commitment to permalink durability will allow users and developers to build confidently on top of a stable foundation.

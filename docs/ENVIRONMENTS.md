@@ -12,7 +12,7 @@ This document provides an overview of the three runtime environments supported b
 2. **`worker` (Creates a local backend via Service Worker)**
 3. **`client` (Creates the GUI in a browser window)**
 
-Each environment has specific responsibilities, yet all operate on the same static payload. The state is encoded, propagated, and hydrated using a consistent hash-based model across all layers.
+Each environment has unique responsibilities, but they all operate on the same static payload which bootstraps and renders hash-specific files identically across all three.
 
 ---
 
@@ -20,28 +20,24 @@ Each environment has specific responsibilities, yet all operate on the same stat
 
 ### Responsibilities:
 
-- **Executes unit tests at build time** by simulating runtime logic across all environments using the static hash model
+- **Execute unit tests at build time** 
 - **Static analysis of source files**
 - **Hash tree construction and cardinality computation**
-- **Inlines component definitions into `/${_.version}/kireji.js`**
-- **Responds to initial HTTP requests**
-- **Renders full HTML snapshot for any valid URL**
+- **Inline and archive versioned component definitions into `/${version}.js`**
+- **Respond to HTTP requests**
+- **Render full HTML snapshots for any valid hash**
+- **Serve the archived script**
 
 ### Features:
 
 - Resolves the entire application structure into a single build artifact
 - Serializes all runtime component prototypes into JavaScript literals
 - Sets default application state to be rendered server-side
-- Enables SEO by serving pre-rendered HTML for any permalink
+- Enables SEO by server-rendered HTML for any permalink
 - Outputs CSS-inlined, DOM-complete pages for fast first paint
 - Injects minimal bootstrap logic to register the service worker and transfer control to the client
 - Stateless; only computes a single frame of the app based on URL state
 - All logic is deterministic and derived from the hash tree
-
-
-### Output:
-
-- Fully packed and source-mapped script (`/${_.version}/kireji.js`) that powers all subsequent environments
 
 ---
 
@@ -55,8 +51,9 @@ Each environment has specific responsibilities, yet all operate on the same stat
 ### Features:
 
 - Ensures full offline support
+- Because all service workers are static and versioned, the app doesn't use network transactions
 - Manages asset caching and updates using browser-native SW APIs
-- Coordinates between different instances of the app across tabs and acts as the bridge between the server-rendered DOM and the live component model in the client window
+- Acts as the bridge between the server-rendered files and the client window
 
 ---
 
@@ -71,20 +68,22 @@ Each environment has specific responsibilities, yet all operate on the same stat
 
 ### Features:
 
-- Throttles address bar updates to remain in sync with application state
+- Presents the final local application
 - Manages user interaction, animations, and local rendering
 - Encodes new state changes back into the URL without needing a backend
+- Offers fast, smooth, and rich/stateful cross-origin navigation
+- Seamless rendering hand-off with no flash-of-unstyled-content (FOUC) on hydration.
 
 ---
 
 ## Shared Behavior Across Environments
 
 - **Immutable State Roots**: All environments operate on the same root hash model
-- **State Derivation**: Given a URL, all environments reconstruct the same application state
+- **State Derivation**: Given a URL, all environments reconstruct the same system state
 - **Hydration Logic**: Service worker and client window bootstrap from the static state encoded in the URL
 
 ---
 
 ## Summary
 
-`kireji.js` achieves full-stack consistency by applying the same hash-based logic across three distinct environments. Each environment is stateless, reactive, and bound by a shared contract: the application's entire state must be fully described and derived from the URL alone. This approach eliminates backend dependencies while enabling SEO, PWA functionality, and real-time interaction—all from a single, static build artifact.
+`kireji.js` achieves full-stack consistency by applying the same hash-based logic across three distinct environments. Each environment is stateless, reactive, and bound by a shared contract: the application's entire state must be fully described and derived from the URL alone. This approach eliminates backend dependency while enabling rich local state persistence and sharing, SEO, PWA functionality, real-time interaction and LTE version support.

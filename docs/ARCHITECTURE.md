@@ -16,14 +16,14 @@ The core mapping is:
 n <--> Component State Object
 ```
 
-Each component (or "part") declares its cardinality $`k_P`$, which defines the number of possible states it can occupy. The system ensures that every part maps deterministically to a unique number within its cardinality range.
+Each component (or "part") declares its cardinality $`k`$, which defines the number of possible states it can occupy. The system ensures that every part maps deterministically to a unique number $`0 < n < k`$ within its cardinality range.
 
 ### 1.2 URL Path Encoding
 
 Each full application state is encoded into a URL using variable-length base-64 segments. A typical path looks like:
 
 ```
-https://www.example.com/ghc3w_hi4-5g4w3/ab52fa...
+https://www.example.com/ghc3w_hi4-5g4w3/
 ```
 
 Each segment represents a portion of the application's state tree. Path segments can store \~1500 bits of entropy each, using the geometric series:
@@ -32,7 +32,7 @@ $$
 k_{segment} = (64^{251} - 64)/63 ≈ 2^{1500}
 $$
 
-This provides extremely dense representation of state without relying on query parameters or local storage.
+This provides extremely dense representation of state without relying on query parameters or local storage, making states sharable and deep-linkable by permanent URLs.
 
 ## 2. Component Model and State Composition
 

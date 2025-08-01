@@ -1,4 +1,4 @@
-const ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}`
+const ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`
 const internalPort = 3000
 const securityHeader = {
  'request-Content-Type-Options': 'nosniff',

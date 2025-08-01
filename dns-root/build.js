@@ -208,7 +208,7 @@ function ƒ(_) {
   toCharms = (x, unit = true) => encodeSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
-  scientific = (x, html = false) => { x = x.toString(10); const factor = `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${Math.round((x[3] ?? "0") + "." + (x[4] ?? "0"))}`; return html ? `<math><mn>${factor}</mn><mo>&times;</mo><msup><mn>10</mn><mn>${x.length - 1}</mn></msup></math>` : `${factor} × 10` + [...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("") },
+  scientific = (x, html = false) => { x = x.toString(10); const factor = `${x[0]}.${x[1] ?? 0}${x[2] ?? 0}${Math.round((x[3] ?? "0") + "." + (x[4] ?? "0")).toString()[0]}`; return html ? `<math><mn>${factor}</mn><mo>&times;</mo><msup><mn>10</mn><mn>${x.length - 1}</mn></msup></math>` : `${factor} × 10` + [...(x.length - 1).toString()].map(n => '⁰¹²³⁴⁵⁶⁷⁸⁹'[n]).join("") },
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   hang = ms => {
    warn(`Intentionally hanging the main thread for ${ms} milliseconds.`)
@@ -553,21 +553,43 @@ function ƒ(_) {
  openLog(3, "Building Parts")
  for (const part of instances) part.startBuild()
  closeLog(3)
- Object.defineProperty(_, "built", { value: true })
- // if (environment === "server" && require.main === module) {
- //  openLog(3, "Computing Landing Hash")
- //  _.landingHash = '0bZIqVlfoxYg2uIg'
- //  log(3, "Computed output: " + _.landingHash)
- //  closeLog(3)
- // }
+ openLog(3, "Computing Landing Hash")
+ Object.defineProperties(_, {
+  built: { value: true },
+  landingHash: {
+   value: encodeSegment(_.modelToRouteID({
+    app: {
+     kireji: {
+      www: {
+       editor: {
+        selected: "1s"
+       },
+       outliner: {
+        folders: "1____",
+        width: {
+         open: "1F"
+        }
+       }
+      }
+     }
+    },
+    parts: {
+     desktop: {
+      color: "light"
+     }
+    }
+   }))
+  }
+ })
+ log(3, "Computed output: " + _.landingHash)
+ closeLog(3)
  if (_.local) _.validate()
  log(1, "Boot Completed (end of synchronous script execution).")
  closeLog(1, false)
 }
 
 ƒ({
- change: "patch",
+ change: "major",
  verbosity: 1,
- landingHash: "2QU_ksXQjfb3iGT3M",
  mapping: true
 })

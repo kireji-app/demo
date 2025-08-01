@@ -1,1 +1,1 @@
-What if every web app state could be uniquely and perfectly encoded in a URL with no redundancy, gaps or collisions?
+What if every application state could be uniquely and perfectly encoded in a reversible hash with no redundancy, no gaps and no collisions?

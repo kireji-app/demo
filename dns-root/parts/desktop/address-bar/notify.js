@@ -7,7 +7,8 @@ if (addressBar.timer)
 addressBar.timer = setTimeout(() => {
  if (_.routeID !== addressBar.routeIDCache) {
   addressBar.routeIDCache = _.routeID
-  history.replaceState({}, null, encodeRoute(_.routeID))
+  const href = encodeRoute(_.routeID)
+  history.replaceState(null, null, href)
   addressBar.throttleStartTime = performance.now()
   addressBar.timer = undefined
  }

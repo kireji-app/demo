@@ -5,6 +5,6 @@
  ],
  "go": [
   "EVENT",
-  "NOTE_ROUTE_ID"
+  "TIMESTAMP"
  ]
 }
