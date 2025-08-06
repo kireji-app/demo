@@ -14,7 +14,7 @@ return ejaugust[".."].scroller.wrap(
    '<a href="#" onclick=_.com.ejaugust.www.notes.go(event)><span class=unicode-icon>↑</span> Back to Top</a>'
   ) +
   "</section>" +
-  '<a id=k-logo target=_blank href="https://github.com/kireji-app/alpha#readme"><pre>' + (
+  '<a id=k-logo target=_blank href="https://github.com/kireji-app/demo#readme"><pre>' + (
    " \n" +
    "𝑘\n" +
    " \n" +
