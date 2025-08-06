@@ -24,12 +24,12 @@ html::after {
  font-family: var(--system-ui);
 }
 
-html:has(body[inert], body.upgrading) {
+html:has(body[inert], body.upgrading, body.installing) {
  cursor: wait;
  pointer-events: none;
 }
 
-html:has(body.upgrading)::after {
+html:has(body.upgrading, body.installing)::after {
  opacity: 100%;
 }
 

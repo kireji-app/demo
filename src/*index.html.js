@@ -32,8 +32,11 @@ if (desktop.taskBar.menu.arm?.key === "open")
 if (desktop.taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
+// The "upgrading" state supercedes the "installing" state.
 if (desktop.update.isUpgrading)
  bodyClassList.push("upgrading")
+else if (environment === "server")
+ bodyClassList.push("installing")
 
 const body =
  `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${desktop.taskBar["inline.html"]}${worker["inline.html"]}</body>`

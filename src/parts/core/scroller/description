@@ -1,0 +1,1 @@
+A scroller is a part that tracks the scroll percentage of an HTML container element and replaces the native scroll bar with a custom element that can be server-rendered. The custom element features standard up button, down button, thumb drag and track click interaction.

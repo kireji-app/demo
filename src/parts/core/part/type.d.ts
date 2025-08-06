@@ -34,8 +34,6 @@ declare interface IPart extends Iterable<IPart> {
   readonly abstract?: boolean
   /** Whether or not this part will be instanced (inherit = false) or retained (inherit = true) during the create step. */
   readonly inherit?: boolean
-  /** A string representation of the BigInt value used as the starting point when calculating this part's cardinality during the build step. */
-  readonly cardinality: string
   /** The icon of the part, used whenever possible to represent the part throughout the O/S. */
   readonly "part.png"
  }
@@ -171,7 +169,7 @@ declare interface IPart extends Iterable<IPart> {
   * if that change occurred one or more cycles ago, this property is always cleared at the end of the cycle
   * so that view functions are not run multiple times. */
  readonly dirty: true | undefined
- /** Whether or not the part is connected to the dns-root for the purpose of view method propagation. If false, the part should be ignored from view functions but should retain all other functionality including being able to be enabled, contributing to cardinality, and having route changes propagate. */
+ /** Whether or not the part is connected to the view root for the purpose of view method propagation. If false, the part should be ignored from view functions but should retain all other functionality including being able to be enabled, contributing to cardinality, and having route changes propagate. */
  readonly isOpen: boolean
  /** Whether or not the part is an abstract part. All parts can be extended, but abstract parts don't participate in the routing function or run a build step. They also can't be listened to. */
  readonly isAbstract: boolean
