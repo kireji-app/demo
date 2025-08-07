@@ -30,7 +30,7 @@ declare interface IPart extends Iterable<IPart> {
  readonly key: string
  /** The object created by parsing this part's "part.json" file. */
  readonly manifest: {
-  /** Whether or not this part should be considered a subpart of its parent part (abstract = false) or an uninstancable prototype for other parts (abstract = true). */
+  /** Whether or not this part should be considered a subpart of its parent part (abstract = false) or an uninstanceable prototype for other parts (abstract = true). */
   readonly abstract?: boolean
   /** Whether or not this part will be instanced (inherit = false) or retained (inherit = true) during the create step. */
   readonly inherit?: boolean
