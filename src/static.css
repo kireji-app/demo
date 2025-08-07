@@ -8,7 +8,7 @@
 }
 
 html::after {
- content: "Upgrading...";
+ content: "Installing App...";
  pointer-events: none;
  position: fixed;
  top: 0;
@@ -22,6 +22,10 @@ html::after {
  line-height: var(--h);
  text-align: center;
  font-family: var(--system-ui);
+}
+
+html:has(body.upgrading)::after {
+ content: "Upgrading App...";
 }
 
 html:has(body[inert], body.upgrading, body.installing) {

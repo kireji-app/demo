@@ -29,7 +29,7 @@ if (location.pathname.endsWith("!")) {
   desktop.update.isUpgrading &&= false
   localStorage.clear()
  })
-}
+} else document.body.classList.remove("installing")
 
 onpopstate()
 
