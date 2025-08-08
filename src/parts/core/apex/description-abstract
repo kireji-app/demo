@@ -1,1 +1,3 @@
-Represents any domain which is a direct subdomain of a top-level domain (e.g. `example.com`). All apex domains have an application located at their "www" subdomain, which is publically available thanks to an A record on the DNS.
+An apex domain is any domain which whose records are under the control of this project. Because the project uses international top-level-domains, each apex domain is a direct subdomains of a top-level domain (e.g. `example.com` in TLD `com`).
+
+All apex domains have an application located at their "www" subdomain. Each apex domain and "www" subdomain are publically available thanks to an A record on the DNS. The server always forwards the "naked" or "bare" apex domain to its "www" subdomain.
