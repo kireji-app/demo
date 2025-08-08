@@ -7,7 +7,7 @@ return (
  ) +
  "</section>" +
  "<section>" + (
-  "<div id=latest>" + (
+  "<div id=note-links>" + (
    [...notes].reverse().map(note =>
     `<a href="/${note.short ?? note.key}" onclick="_.com.ejaugust.www.notes.go(event, '${note.key}')">` + (
      `<h4 class=topic>${note.topic ?? "No Topic"}</h4>` +

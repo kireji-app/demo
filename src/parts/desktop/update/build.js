@@ -1,3 +1,4 @@
 Object.defineProperties(part, {
- isUpgrading: { value: false, writable: true }
+ isUpgrading: { value: false, writable: true },
+ nonce: { value: null, writable: true }
 })

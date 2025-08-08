@@ -1,4 +1,3 @@
-// Prepare the necessary facets before allowing interaction.
 await Promise.all([
  addressBar.promise,
  agent.promise,
@@ -19,20 +18,11 @@ globalThis.onpopstate = () => {
  }
 }
 
-if (location.pathname.endsWith("!")) {
- desktop.update.isUpgrading = true
- client.promise.then(() => {
-  const model = JSON.parse(localStorage.getItem(location.pathname.split("/")[2].slice(0, -1)))
-  if (!model) throw 'missing model'
-  _.setRoute(`https://${location.host}${encodeRoute(_.modelToRouteID(model))}`)
-  document.body.classList.remove("upgrading")
-  desktop.update.isUpgrading &&= false
-  localStorage.clear()
- })
-} else document.body.classList.remove("installing")
+if (location.pathname.endsWith("!"))
+ desktop.update.finish()
 
 onpopstate()
-
+document.body.classList.remove("installing")
 document.body.removeAttribute("inert")
 client.hydrated = true
 

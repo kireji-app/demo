@@ -96,7 +96,7 @@ if (environment === "server" && require.main === module) {
     if (pathname === '/-v') {
      status = 200
      head = { 'Content-Type': 'application/json', ...securityHeader }
-     body = `{\n "version": "${_.version}",\n "nonce": "$1/$2!"\n}`
+     body = desktop.update["version.json"]
      break respond
     }
 

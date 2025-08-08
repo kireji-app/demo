@@ -1,9 +1,9 @@
 {
- "check": [
+ "version-is-newer": [
+  "INCOMING_VERSION"
+ ],
+ "go": [
   "EVENT"
  ],
- "upgrade": [
-  "EVENT",
-  "NONCE_HREF"
- ]
+ "finish": []
 }

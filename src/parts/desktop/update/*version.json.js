@@ -1,0 +1,1 @@
+return `{\n "version": "${_.version}",\n "nonceTemplate": "$1/${_.version}/$2!"\n}`
