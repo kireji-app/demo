@@ -291,6 +291,200 @@ function ƒ(_) {
     "Charms  (base-64 length)": { Quantity: Math.ceil((n * 8) / 6), Radix: '2⁶', "Abbr.": 'chm', Format: 'UTF-8' },
     "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
    }], "table")
+  },
+  getPartFromDomains = domains => domains.reduceRight((currentFolder, name, index) => {
+   if (!currentFolder[name])
+    throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
+   return currentFolder[name]
+  }, _),
+  distributeHydration = (part, domains = []) => {
+   let host
+   if (typeof part === "string") {
+    host = part
+    domains = host.split(".")
+    part = getPartFromDomains(domains)
+   } else host = domains.join(".")
+   if (part.host) return part
+   openLog(2, `"${host}"`)
+   const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
+   const subpartKeys = [...subdomains]
+   const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
+   const pathToRepo = new Array(domains.length).fill("..").join("/")
+   const pathFromRepo = [...domains].reverse().join("/")
+   Object.defineProperties(part, {
+    manifest: { value: JSON.parse(part["part.json"] ?? "{}"), configurable: true, writable: true },
+    host: { value: host },
+    subdomains: { value: subdomains },
+    subpartKeys: { value: subpartKeys },
+    filenames: { value: filenames },
+    domains: { value: domains },
+   })
+   const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
+   const prototype = typename ? distributeHydration(typename ?? "part.core.parts") : null
+   const isAbstract = part.manifest.abstract
+   if (prototype) {
+    Object.setPrototypeOf(part.manifest, prototype.manifest)
+    Object.setPrototypeOf(part, prototype)
+    Object.defineProperty(part, "prototype", { value: prototype })
+   }
+   const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
+   const buildSource = sourceFile.addSource(pathToRepo + "/build.js", ƒ.toString())
+   class Property {
+    static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
+    static ids = new Set()
+    static collectConstants(targetPart, targetProperty) {
+     if (targetPart === part) {
+      if (targetProperty.content === "") {
+       targetProperty.content = "// Do nothing."
+       targetProperty.lines = [targetProperty.content]
+       return
+      }
+     }
+     prototype?.Property.collectConstants(targetPart, targetProperty)
+
+     if (!filenames.includes("constants.js")) return
+     const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
+     const path = pathPrefix + "constants.js"
+     const body = part["constants.js"]
+     const lines = body.split("\n")
+     for (let ln = 0; ln < lines.length; ln++) {
+      if (lines[ln].startsWith("const "))
+       new targetProperty.MethodConstant(path, lines[ln], ln)
+     }
+    }
+    constructor(PROPERTY_ID) {
+     const property = Property[PROPERTY_ID] = this
+     property.id = PROPERTY_ID
+     property.isAlias = PROPERTY_ID.startsWith("@")
+     property.isView = PROPERTY_ID.startsWith("view-")
+     property.isAsync = PROPERTY_ID.startsWith("async-")
+     property.isSymbol = PROPERTY_ID.startsWith("symbol-")
+     property.isGenerated = PROPERTY_ID.startsWith("*")
+     property.filename = property.isAlias ? PROPERTY_ID.slice(1) : `${PROPERTY_ID}.js`
+     property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
+     property.niceName = (() => {
+      if (PROPERTY_ID.includes("-") || property.isGenerated) {
+
+       if (property.isGenerated && (PROPERTY_ID.includes(".")))
+        return `["${PROPERTY_ID.slice(1)}"]`
+
+       if (property.isSymbol)
+        return `[Symbol.${PROPERTY_ID.slice(7)}]`
+
+       // First word of kebab-case property name becomes last word of camelCase identifier.
+       const words = PROPERTY_ID.slice(+(property.isGenerated || property.isAlias)).split("-")
+       words.push(words.shift())
+       return camelCase(words)
+      }
+      return PROPERTY_ID
+     })()
+     property.MethodConstant = class MethodConstant {
+      static all = {}
+      static unused = {}
+      used = false
+      requirements = []
+      constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
+       const constant = this
+       constant.path = SOURCE_PATH
+       constant.line = SOURCE_LINE
+       constant.lineNumber = SOURCE_LINE_NUMBER
+       constant.source = sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
+       constant.equalsIndex = SOURCE_LINE.indexOf("=")
+       constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
+       if (constant.identifier in property.MethodConstant.all) throw "Duplicate definition of constant " + constant.identifier + " (" + host + ")."
+       for (const previousConstantIdentifier in property.MethodConstant.unused) {
+        const previousConstant = property.MethodConstant.unused[previousConstantIdentifier]
+        if (previousConstant.usageRegExp.test(SOURCE_LINE)) constant.requirements.push(property.MethodConstant.unused[previousConstantIdentifier])
+       }
+       property.MethodConstant.all[constant.identifier] = constant
+       property.MethodConstant.unused[constant.identifier] = constant
+       constant.usageRegExp = new RegExp(`(?:^|[^.]|\.{3})\\b${constant.identifier}\\b`)
+       for (const methodBodyLine of property.lines) if (constant.usageRegExp.test(methodBodyLine)) constant.ensureDeclarationAndDependencies()
+      }
+      ensureDeclarationAndDependencies() {
+       const constant = this
+       if (constant.used) return
+       for (const requiredConstant of constant.requirements) requiredConstant.ensureDeclarationAndDependencies()
+       sourceFile.addSection(constant.line, constant.source, constant.lineNumber, 0, "   ")
+       constant.used = true
+       delete property.MethodConstant.unused[constant.identifier]
+      }
+     }
+     property.MethodConstant.all.PROPERTY_ID = property.MethodConstant.unused.PROPERTY_ID = {
+      identifier: "PROPERTY_ID",
+      usageRegExp: /(?:^|[^.])\bPROPERTY_ID\b/g,
+      ensureDeclarationAndDependencies() {
+       const constant = this
+       sourceFile.addLine(`@method-i-d-literal@  const PROPERTY_ID = "${PROPERTY_ID}"`, buildSource)
+       constant.used = true
+      },
+     }
+     if (typeof property.content !== "string") return
+     property.source = sourceFile.addSource(pathToRepo + "/" + pathFromRepo + "/" + property.filename, property.content)
+     property.lines = property.content ? property.content.split("\n") : []
+     property.niceNameIsValidIdentifier = property.isSymbol || property.isGenerated || Property.identifierPattern.test(property.niceName)
+     property.propertyReference = property.niceNameIsValidIdentifier ? property.niceName : `["${property.niceName}"]`
+     property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
+     property.argumentString = "(" + (part.manifest[PROPERTY_ID]?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
+     property.modifiers = property.isAsync ? "async " : (property.isGenerated || property.isAlias ? "get " : "")
+     property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGenerated || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
+     sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
+     Property.collectConstants(part, property)
+     if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(1)}"]`, buildSource, null, null, "    ")
+     else sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
+     sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
+    }
+   }
+   Object.defineProperties(part, {
+    Property: { value: Property, configurable: true, writable: true },
+    isAbstract: { value: isAbstract }
+   })
+   for (const fn of filenames) {
+    if (!fn.includes(".") && fn.includes("-")) {
+     Property.ids.add("@" + fn)
+    } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-"))) {
+     Property.ids.add(fn.slice(0, -3))
+
+     if (fn.startsWith("*") && (fn.endsWith(".png.js") || fn.endsWith(".gif.js")))
+      imgSources.push([part, fn.slice(1, -3)])
+    } else if (fn.endsWith(".png") || fn.endsWith(".gif"))
+     imgSources.push([part, fn])
+   }
+   for (const methodID in part.manifest)
+    if (!["typename", "abstract", "singleton"].includes(methodID))
+     Property.ids.add(methodID)
+   sourceFile.part = part
+   sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
+   for (const id of Property.ids) new Property(id)
+   sourceFile.addLine("@descriptor-map-close@})", buildSource)
+   const propertyDescriptorScript = sourceFile.packAndMap()
+   try {
+    const propertyDescriptor = eval(propertyDescriptorScript)
+    Object.defineProperties(part, propertyDescriptor)
+   } catch (e) {
+    throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
+   }
+   let subpartIndex = 0
+   for (const subdomain of subdomains) {
+    const subpart = part[subdomain]
+    if (subdomain.includes("-")) {
+     const identifier = camelCase(subdomain)
+     if (identifier in part)
+      throw `Computed camelCase name ${identifier} for ${subdomain}.${host} conflicts with existing property ${identifier} on ${host}.`
+     Object.defineProperty(part, identifier, { value: subpart })
+    }
+    Object.defineProperty(subpart, "..", { value: part })
+    distributeHydration(subpart, [subdomain, ...domains])
+    if (subpart.isAbstract) {
+     subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
+     continue
+    }
+    Object.defineProperty(part, subpartIndex++, { value: subpart })
+   }
+   if (!isAbstract) instances.push(part)
+   allParts.push(part)
+   closeLog(2)
+   return part
   }
 
  openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   \n            ▙▌    ${environment}\n\nBooting O/S`)
@@ -347,207 +541,10 @@ function ƒ(_) {
   liveApplications: { value: {} }
  })
 
- function getPartFromDomains(domains) {
-  return domains.reduceRight((currentFolder, name, index) => {
-   if (!currentFolder[name])
-    throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
-   return currentFolder[name]
-  }, _)
- }
-
  openLog(3, "Hydrating Domains")
  const instances = []
  const allParts = []
  const imgSources = []
- function distributeHydration(part, domains = []) {
-  let host
-  if (typeof part === "string") {
-   host = part
-   domains = host.split(".")
-   part = getPartFromDomains(domains)
-  } else host = domains.join(".")
-  if (part.host) return part
-  openLog(2, `"${host}"`)
-  const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
-  const subpartKeys = [...subdomains]
-  const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
-  const pathToRepo = new Array(domains.length).fill("..").join("/")
-  const pathFromRepo = [...domains].reverse().join("/")
-  Object.defineProperties(part, {
-   manifest: { value: JSON.parse(part["part.json"] ?? "{}"), configurable: true, writable: true },
-   host: { value: host },
-   subdomains: { value: subdomains },
-   subpartKeys: { value: subpartKeys },
-   filenames: { value: filenames },
-   domains: { value: domains },
-  })
-  const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
-  const prototype = typename ? distributeHydration(typename ?? "part.core.parts") : null
-  const isAbstract = part.manifest.abstract
-  if (prototype) {
-   Object.setPrototypeOf(part.manifest, prototype.manifest)
-   Object.setPrototypeOf(part, prototype)
-   Object.defineProperty(part, "prototype", { value: prototype })
-  }
-  const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
-  const buildSource = sourceFile.addSource(pathToRepo + "/build.js", ƒ.toString())
-  class Property {
-   static identifierPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/
-   static ids = new Set()
-   static collectConstants(targetPart, targetProperty) {
-    if (targetPart === part) {
-     if (targetProperty.content === "") {
-      targetProperty.content = "// Do nothing."
-      targetProperty.lines = [targetProperty.content]
-      return
-     }
-    }
-    prototype?.Property.collectConstants(targetPart, targetProperty)
-
-    if (!filenames.includes("constants.js")) return
-    const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
-    const path = pathPrefix + "constants.js"
-    const body = part["constants.js"]
-    const lines = body.split("\n")
-    for (let ln = 0; ln < lines.length; ln++) {
-     if (lines[ln].startsWith("const "))
-      new targetProperty.MethodConstant(path, lines[ln], ln)
-    }
-   }
-   constructor(PROPERTY_ID) {
-    const property = Property[PROPERTY_ID] = this
-    property.id = PROPERTY_ID
-    property.isAlias = PROPERTY_ID.startsWith("@")
-    property.isView = PROPERTY_ID.startsWith("view-")
-    property.isAsync = PROPERTY_ID.startsWith("async-")
-    property.isSymbol = PROPERTY_ID.startsWith("symbol-")
-    property.isGenerated = PROPERTY_ID.startsWith("*")
-    property.filename = property.isAlias ? PROPERTY_ID.slice(1) : `${PROPERTY_ID}.js`
-    property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
-    property.niceName = (() => {
-     if (PROPERTY_ID.includes("-") || property.isGenerated) {
-
-      if (property.isGenerated && (PROPERTY_ID.includes(".")))
-       return `["${PROPERTY_ID.slice(1)}"]`
-
-      if (property.isSymbol)
-       return `[Symbol.${PROPERTY_ID.slice(7)}]`
-
-      // First word of kebab-case property name becomes last word of camelCase identifier.
-      const words = PROPERTY_ID.slice(+(property.isGenerated || property.isAlias)).split("-")
-      words.push(words.shift())
-      return camelCase(words)
-     }
-     return PROPERTY_ID
-    })()
-    property.MethodConstant = class MethodConstant {
-     static all = {}
-     static unused = {}
-     used = false
-     requirements = []
-     constructor(SOURCE_PATH, SOURCE_LINE, SOURCE_LINE_NUMBER) {
-      const constant = this
-      constant.path = SOURCE_PATH
-      constant.line = SOURCE_LINE
-      constant.lineNumber = SOURCE_LINE_NUMBER
-      constant.source = sourceFile.addSource(SOURCE_PATH, SOURCE_LINE)
-      constant.equalsIndex = SOURCE_LINE.indexOf("=")
-      constant.identifier = SOURCE_LINE.slice(5, constant.equalsIndex).trim()
-      if (constant.identifier in property.MethodConstant.all) throw "Duplicate definition of constant " + constant.identifier + " (" + host + ")."
-      for (const previousConstantIdentifier in property.MethodConstant.unused) {
-       const previousConstant = property.MethodConstant.unused[previousConstantIdentifier]
-       if (previousConstant.usageRegExp.test(SOURCE_LINE)) constant.requirements.push(property.MethodConstant.unused[previousConstantIdentifier])
-      }
-      property.MethodConstant.all[constant.identifier] = constant
-      property.MethodConstant.unused[constant.identifier] = constant
-      constant.usageRegExp = new RegExp(`(?:^|[^.]|\.{3})\\b${constant.identifier}\\b`)
-      for (const methodBodyLine of property.lines) if (constant.usageRegExp.test(methodBodyLine)) constant.ensureDeclarationAndDependencies()
-     }
-     ensureDeclarationAndDependencies() {
-      const constant = this
-      if (constant.used) return
-      for (const requiredConstant of constant.requirements) requiredConstant.ensureDeclarationAndDependencies()
-      sourceFile.addSection(constant.line, constant.source, constant.lineNumber, 0, "   ")
-      constant.used = true
-      delete property.MethodConstant.unused[constant.identifier]
-     }
-    }
-    property.MethodConstant.all.PROPERTY_ID = property.MethodConstant.unused.PROPERTY_ID = {
-     identifier: "PROPERTY_ID",
-     usageRegExp: /(?:^|[^.])\bPROPERTY_ID\b/g,
-     ensureDeclarationAndDependencies() {
-      const constant = this
-      sourceFile.addLine(`@method-i-d-literal@  const PROPERTY_ID = "${PROPERTY_ID}"`, buildSource)
-      constant.used = true
-     },
-    }
-    if (typeof property.content !== "string") return
-    property.source = sourceFile.addSource(pathToRepo + "/" + pathFromRepo + "/" + property.filename, property.content)
-    property.lines = property.content ? property.content.split("\n") : []
-    property.niceNameIsValidIdentifier = property.isSymbol || property.isGenerated || Property.identifierPattern.test(property.niceName)
-    property.propertyReference = property.niceNameIsValidIdentifier ? property.niceName : `["${property.niceName}"]`
-    property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
-    property.argumentString = "(" + (part.manifest[PROPERTY_ID]?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
-    property.modifiers = property.isAsync ? "async " : (property.isGenerated || property.isAlias ? "get " : "")
-    property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGenerated || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
-    sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
-    Property.collectConstants(part, property)
-    if (property.isAlias) sourceFile.addLine(`return this["${PROPERTY_ID.slice(1)}"]`, buildSource, null, null, "    ")
-    else sourceFile.addLines(property.lines, property.source, 0, 0, "   ")
-    sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
-   }
-  }
-  Object.defineProperties(part, {
-   Property: { value: Property, configurable: true, writable: true },
-   isAbstract: { value: isAbstract }
-  })
-  for (const fn of filenames) {
-   if (!fn.includes(".") && fn.includes("-")) {
-    Property.ids.add("@" + fn)
-   } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-"))) {
-    Property.ids.add(fn.slice(0, -3))
-
-    if (fn.startsWith("*") && (fn.endsWith(".png.js") || fn.endsWith(".gif.js")))
-     imgSources.push([part, fn.slice(1, -3)])
-   } else if (fn.endsWith(".png") || fn.endsWith(".gif"))
-    imgSources.push([part, fn])
-  }
-  for (const methodID in part.manifest)
-   if (!["typename", "abstract", "singleton"].includes(methodID))
-    Property.ids.add(methodID)
-  sourceFile.part = part
-  sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
-  for (const id of Property.ids) new Property(id)
-  sourceFile.addLine("@descriptor-map-close@})", buildSource)
-  const propertyDescriptorScript = sourceFile.packAndMap()
-  try {
-   const propertyDescriptor = eval(propertyDescriptorScript)
-   Object.defineProperties(part, propertyDescriptor)
-  } catch (e) {
-   throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
-  }
-  let subpartIndex = 0
-  for (const subdomain of subdomains) {
-   const subpart = part[subdomain]
-   if (subdomain.includes("-")) {
-    const identifier = camelCase(subdomain)
-    if (identifier in part)
-     throw `Computed camelCase name ${identifier} for ${subdomain}.${host} conflicts with existing property ${identifier} on ${host}.`
-    Object.defineProperty(part, identifier, { value: subpart })
-   }
-   Object.defineProperty(subpart, "..", { value: part })
-   distributeHydration(subpart, [subdomain, ...domains])
-   if (subpart.isAbstract) {
-    subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
-    continue
-   }
-   Object.defineProperty(part, subpartIndex++, { value: subpart })
-  }
-  if (!isAbstract) instances.push(part)
-  allParts.push(part)
-  closeLog(2)
-  return part
- }
  distributeHydration(_)
  closeLog(3)
  openLog(3, "Building Parts")
@@ -568,7 +565,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
+ change: "patch",
  verbosity: 1,
  mapping: true
 })
