@@ -6,7 +6,7 @@ declare interface IFacet extends IPart {
  readonly supported: boolean
  /** Whether or not the facet requires an asynchronous installation. */
  readonly isAsync: boolean
- /** A promise which is guaranteed to resolve when the facet installs.
+ /** A promise which resolves after the facet installs.
   * 
   * This is undefined if the facet installs synchronously. */
  readonly promise?: Promise<any>

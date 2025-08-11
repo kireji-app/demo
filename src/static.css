@@ -24,16 +24,12 @@ html::after {
  font-family: var(--system-ui);
 }
 
-html:has(body.upgrading)::after {
- content: "Upgrading App...";
-}
-
-html:has(body[inert], body.upgrading, body.installing) {
+html:has(body[inert], body.installing) {
  cursor: wait;
  pointer-events: none;
 }
 
-html:has(body.upgrading, body.installing)::after {
+html:has(body.installing)::after {
  opacity: 100%;
 }
 
@@ -59,6 +55,7 @@ body {
  font-synthesis: weight style;
  color: var(--fg);
  background: var(--bg);
+ image-rendering: pixelated;
 }
 
 wallpaper- {

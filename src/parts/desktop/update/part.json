@@ -1,9 +1,9 @@
 {
+ "typename": "facet.core.parts",
  "version-is-newer": [
   "INCOMING_VERSION"
  ],
  "go": [
   "EVENT"
- ],
- "finish": []
+ ]
 }

@@ -32,10 +32,7 @@ if (desktop.taskBar.menu.arm?.key === "open")
 if (desktop.taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
-// The "upgrading" state supercedes the "installing" state.
-if (desktop.update.isUpgrading)
- bodyClassList.push("upgrading")
-else if (environment === "server")
+if (environment === "server")
  bodyClassList.push("installing")
 
 const body =

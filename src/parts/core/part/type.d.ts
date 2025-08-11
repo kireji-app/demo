@@ -112,6 +112,10 @@ declare interface IPart extends Iterable<IPart> {
    * instead of this value.  */
   fallback?: string | Response
  }): any | string | Response
+ /** Converts the given model to a routeID without modifying the state of the part. */
+ modelToRouteID(MODEL: any): bigint
+ /** A getter that generates a model object from the state of the part and its subparts. */
+ readonly model: any
  /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */
  setRouteID(ROUTE_ID: bigint): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
@@ -194,5 +198,11 @@ declare const property: Property
 declare const isLeaf: boolean
 /** This function's prototype. */
 declare function base(...args): any
+/** This nearest prototype object which owns the same method or getter as the one that is executing now. */
+declare const basePropertyOwner: object
+/** The same-named property descriptor as the currently executing method or getter from the nearest prototype. */
+declare const basePropertyDescriptor: object
+/** A getter which gets the final value of the currently evaluating getter from the nearest prototype object which has the same getter. */
+declare const getBasePropertyValue: function
 /** The part on which the current method is actually defined. */
 declare const receiver

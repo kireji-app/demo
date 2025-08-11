@@ -365,16 +365,21 @@ function ƒ(_) {
      property.niceName = (() => {
       if (PROPERTY_ID.includes("-") || property.isGenerated) {
 
-       if (property.isGenerated && (PROPERTY_ID.includes(".")))
-        return `["${PROPERTY_ID.slice(1)}"]`
+       if (property.isGenerated && (PROPERTY_ID.includes("."))) {
+        property.key = PROPERTY_ID.slice(1)
+        return `["${property.key}"]`
+       }
 
-       if (property.isSymbol)
-        return `[Symbol.${PROPERTY_ID.slice(7)}]`
+       if (property.isSymbol) {
+        const symbolName = PROPERTY_ID.slice(7)
+        property.key = Symbol[symbolName]
+        return `[Symbol.${symbolName}]`
+       }
 
        // First word of kebab-case property name becomes last word of camelCase identifier.
        const words = PROPERTY_ID.slice(+(property.isGenerated || property.isAlias)).split("-")
        words.push(words.shift())
-       return camelCase(words)
+       return property.key = camelCase(words)
       }
       return PROPERTY_ID
      })()
@@ -531,7 +536,7 @@ function ƒ(_) {
  }
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
- const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era } = desktop
+ const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era, update } = desktop
  if (environment === "client") var element, svg
  Object.defineProperties(_, {
   fps: { value: 1, configurable: true, writable: true },
@@ -565,7 +570,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "patch",
+ change: "major",
  verbosity: 1,
  mapping: true
 })

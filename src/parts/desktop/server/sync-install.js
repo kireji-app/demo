@@ -52,25 +52,33 @@ module.exports = {
    status = 200
    head = indexHeader
    const defaultRoute = `https://${host}/${_.version}/${_.landingHash}/`
-   if (pathname.endsWith("!")) {
-    desktop.update.isUpgrading = true
-    _.setRoute(defaultRoute)
-   } else try {
+   try {
     _.setRoute(`https://${host}${pathname}`)
    } catch (e) {
     error(e)
     _.setRoute(defaultRoute)
    }
    body = _['index.html']
-   desktop.update.isUpgrading &&= false
    break respond
   }
 
   return { status, head, body }
+ },
+ decode(segment) {
+  try {
+   _.setRouteID(decodeSegment(segment))
+  } catch (e) {
+   error(e)
+   _.setRouteID(decodeSegment(_.landingHash))
+  }
+  return _.model
+ },
+ encode(model) {
+  return encodeSegment(_.modelToRouteID(model))
  }
 }
 
-if (environment === "server" && require.main === module) {
+if (require.main === module) {
  const { existsSync: itemExists, mkdirSync: makeFolder, writeFileSync: writeFile } = require("fs")
 
  const archiveFolder = '../.versions'
@@ -87,19 +95,20 @@ if (environment === "server" && require.main === module) {
  require('http').createServer((request, response) => {
   let status, head = {}, body
   let host = request.headers.host
-  const pathname = request.url
-  const devSuffix = "localhost:3000"
+  const { pathname, searchParams } = new URL(`https://${host}${request.url}`)
+  const [, version, segment] = pathname.split("/")
 
   try {
    respond: {
 
     if (pathname === '/-v') {
      status = 200
-     head = { 'Content-Type': 'application/json', ...securityHeader }
-     body = desktop.update["version.json"]
+     head = { 'Content-Type': 'text/plain', ...securityHeader }
+     body = _.version
      break respond
     }
 
+    const devSuffix = "localhost:3000"
     if (host.endsWith(devSuffix)) {
      host = host.slice(0, -1 - devSuffix.length)
      if (!(host in _.applications)) {
@@ -119,19 +128,28 @@ if (environment === "server" && require.main === module) {
      status = 302
      head = { 'Location': `/${_.version}/${_.landingHash}/`, ...securityHeader }
      break respond
+    } else {
+     // TODO: Handle more canonical pathnames
     }
 
-    let serverModule
+    const serverVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
+    if (!serverVersion) throw "Unsupported pathname: " + pathname
+    /** @type {IVersionedServer} */
+    const versionedServer = require(`../.versions/${serverVersion}.js`)
 
-    if (pathname.startsWith(`/${_.version}/`))
-     serverModule = module.exports
-    else {
-     const alternateVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
-     if (alternateVersion) serverModule = require(`../.versions/${alternateVersion}.js`)
-     else throw "Unsupported pathname format: " + pathname
+    const alternateModelVersion = searchParams.get("from")
+    if (alternateModelVersion) {
+     if (!/^\d+\.\d+\.\d+$/.test(alternateModelVersion))
+      throw "Unsupported `from` parameter: " + alternateModelVersion
+     /** @type {IVersionedServer} */
+     const modelProvider = require(`../.versions/${alternateModelVersion}.js`)
+     const model = modelProvider.decode(pathname.split("/")[2])
+     status = 302
+     head = { 'Location': `/${serverVersion}/${versionedServer.encode(model)}/`, ...securityHeader }
+     break respond
     }
 
-    ({ status, head, body } = serverModule.proxy(
+    ({ status, head, body } = versionedServer.proxy(
      host,
      pathname,
      request.headers['if-none-match'],

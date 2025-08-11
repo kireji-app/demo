@@ -47,7 +47,7 @@ part-editor>scroller->scroll-content>section>h1>* {
 }
 
 part-editor>scroller->scroll-content>section>h1>img {
- width: 48px;
+ width: 64px;
  margin-right: var(--spacing);
 }
 

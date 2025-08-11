@@ -2,6 +2,7 @@ await Promise.all([
  addressBar.promise,
  agent.promise,
  hotKeys.promise,
+ update.promise,
  worker.promise
 ])
 
@@ -9,7 +10,8 @@ await Promise.all([
 if (_.hangHydration && !production)
  hang(1000)
 
-globalThis.onpopstate = () => {
+const onpopstate = () => {
+ debug('popping state - applying the location href route')
  try {
   _.setRoute(location.href)
  } catch (e) {
@@ -18,12 +20,9 @@ globalThis.onpopstate = () => {
  }
 }
 
-if (location.pathname.endsWith("!"))
- desktop.update.finish()
-
+globalThis.addEventListener("popstate", onpopstate)
 onpopstate()
 document.body.classList.remove("installing")
 document.body.removeAttribute("inert")
 client.hydrated = true
-
 log(1, "Hydrated.")

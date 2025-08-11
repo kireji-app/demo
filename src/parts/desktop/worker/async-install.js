@@ -1,15 +1,11 @@
 if (environment === "worker") {
  globalThis.onfetch = event => {
   try {
-   const { host, pathname, search, hash } = new URL(event.request.url)
+   const { host, pathname, searchParams, hash } = new URL(event.request.url)
+   const alternateModelVersion = searchParams.get("from")
 
-   if (hash || search)
-    throw 'Requests with a fragment or query are not supported.'
-
-   if (pathname === '/-v') {
-    event.respondWith(fetch(event.request.url))
+   if (alternateModelVersion || pathname === '/-v')
     return
-   }
 
    const isFileRequest = [`/${_.version}/kireji.js`, `/${_.version}/manifest.json`].includes(pathname)
    const filename = isFileRequest ? pathname.split("/")[2] : "index.html"
@@ -17,13 +13,9 @@ if (environment === "worker") {
 
    if (isFileRequest)
     _.setRoute(fallbackRoute)
-   else if (pathname.endsWith("!")) {
-    desktop.update.isUpgrading = true
-    _.setRoute(fallbackRoute)
-   } else try {
+   else try {
     if (!/^\/\d+\.\d+.\d+\/(?:[\w-]*\/)?$/.test(pathname))
      throw `Pathname '${pathname}' is not valid.`
-
     _.setRoute(`https://${host}${pathname}`)
    } catch (e) {
     error(e)
@@ -36,8 +28,6 @@ if (environment === "worker") {
     request: filename,
     format: "response"
    }))
-
-   desktop.update.isUpgrading &&= false
 
   } catch (e) {
    error(e)
