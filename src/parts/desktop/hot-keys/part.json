@@ -1,4 +1,7 @@
 {
  "singleton": true,
- "typename": "facet.core.parts"
+ "typename": "facet.core.parts",
+ "string-get-combo": [],
+ "undo": [],
+ "redo": []
 }

@@ -1,0 +1,4 @@
+{
+ "context+z": "undo",
+ "context+shift+z": "redo"
+}

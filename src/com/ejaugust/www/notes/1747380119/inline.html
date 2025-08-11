@@ -59,7 +59,7 @@
  "host": "",
  "hydrated": true
 }</pre>
-<p>Notice the properties "host" and "hydrated" that weren't in the original JSON. The stringified result contains redundant runtime values that aren't needed in the archive. We only want to see them at runtime. These are properties which can be inefficient - or errenous - to send over the network. For example, including the "hydrated" property in the serialized archive would cause our hydration function to skip the hydration step, resulting in the wrong prototype assignments.
+<p>Notice the properties "host" and "hydrated" that weren't in the original JSON. The stringified result contains redundant runtime values that aren't needed in the archive. We only want to see them at runtime. These are properties which can be inefficient - or erroneous - to send over the network. For example, including the "hydrated" property in the serialized archive would cause our hydration function to skip the hydration step, resulting in the wrong prototype assignments.
 </p>
 <h2>Alternative: <code>Object.defineProperty(target, { ... })</code></h2>
 <p>By using a different approach, we can repeatedly hydrate and archive this object without bloating it with runtime values. To do this, we need control over how visible each property is during stringification.
@@ -93,7 +93,7 @@
 </p>
 <p>Compare this:
 </p>
-<pre>Object.definePropertes(part, {
+<pre>Object.defineProperties(part, {
  host: {
   value: domains.join("."),
   writeable: true
@@ -103,7 +103,7 @@
 <p>To this:
 </p>
 <pre>part.host = domains.join(".")</pre>
-<p>If we know the names of all the properties that we plan to assign but don't want to serialize, we may be able to find a good point during hydration to predine them.
+<p>If we know the names of all the properties that we plan to assign but don't want to serialize, we may be able to find a good point during hydration to predefine them.
 </p>
 <pre>const nonSerializableProperties = [
  ["host", null],
