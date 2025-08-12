@@ -1,0 +1,1 @@
+return region.xAxis.cardinality + 1n

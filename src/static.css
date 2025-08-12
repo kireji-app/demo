@@ -7,6 +7,10 @@
  user-select: none;
 }
 
+[tabIndex] {
+ outline: none;
+}
+
 html::after {
  content: "Installing App...";
  pointer-events: none;

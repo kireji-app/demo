@@ -1,16 +1,16 @@
-declare interface IPart extends Iterable<IPart> {
- [Symbol.iterator](): IterableIterator<IPart>
+declare interface IPartOf<T> extends Iterable<T> {
+ [Symbol.iterator](): IterableIterator<T>
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
- filter(FILTER_FUNCTION: (subpart: IPart, index: number, part: IPart) => IPart): IPart[]
+ filter(FILTER_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
- includes(SUBPART: IPart): boolean
+ includes(SUBPART: T): boolean
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
- map(MAP_FUNCTION: (subpart: IPart, index: number, part: IPart) => T): T[]
+ map(MAP_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
  /** Adds a listener that calls the given callback when the given event occurs. */
  addEventListener(EVENT_TYPE: string, CALLBACK): void
  /** Removes the listener that calls the given callback when the given event occurs. */
  removeEventListener(EVENT_TYPE: string, CALLBACK): void
- /** The domain name used to identify the part whose code is currently executing. */
+ /** The domain name used to identify the part. */
  readonly host: string
  /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
  readonly build(COUNT, SUBPART, INDEX, SUBPARTS): bigint
@@ -121,7 +121,7 @@ declare interface IPart extends Iterable<IPart> {
  /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
- collectRouteID(SUBPARTS: IPart[]): void
+ collectRouteID(SUBPARTS: T[]): void
  /** Updates the part's routeID to ROUTE_ID and then recomputes all subpart routeIDs to match.
   * 
   * For any active subparts, it calls distributeRoute on them, passing the signal leafward.
@@ -182,6 +182,7 @@ declare interface IPart extends Iterable<IPart> {
  /** The array of subdomains which correspond to concrete (non-abstract) subparts. */
  readonly subpartKeys: string[]
 }
+declare interface IPart extends IPartOf<IPart> { }
 /** The part instance on which the current script is being called.
  * 
  * Alias for `this` to disambiguate it from globalThis in IDEs.*/

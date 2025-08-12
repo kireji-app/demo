@@ -3,8 +3,5 @@
  "typename": "part.core.parts",
  "routeID-collect": [
   "CHANGED_ARMS"
- ],
- "arm-set": [
-  "ARM"
  ]
 }

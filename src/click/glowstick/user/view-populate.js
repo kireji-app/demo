@@ -1,0 +1,1 @@
+user.element.style.setProperty("--arrow", `"${user.arrow}"`)

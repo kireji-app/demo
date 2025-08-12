@@ -539,8 +539,6 @@ function ƒ(_) {
  const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era, update } = desktop
  if (environment === "client") var element, svg
  Object.defineProperties(_, {
-  fps: { value: 1, configurable: true, writable: true },
-  meanFrameTime: { value: 1000, configurable: true, writable: true },
   application: { value: null, writable: true },
   applications: { value: {} },
   liveApplications: { value: {} }

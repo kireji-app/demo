@@ -19,12 +19,6 @@ declare interface IDNSRoot extends IMix {
  readonly gitSHA: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string
- /** The computed framerate of the application. */
- readonly fps: number
- /** The current session time. */
- readonly time: DOMHighResTimeStamp
- /** The average length of time each frame is on screen in milliseconds. */
- readonly meanFrameTime: number
  /** Sets the configuration space to match the given request url string. */
  setRoute(REQUEST_URL: string): void
  /** The operating system's currently assigned root application.

@@ -1,0 +1,1 @@
+glowstick.frameRequest = requestAnimationFrame(() => glowstick.loop(performance.now()))

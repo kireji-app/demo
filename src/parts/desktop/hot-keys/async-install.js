@@ -11,25 +11,29 @@ Object.defineProperties(hotKeys, {
  * stores the non-modifier key code most recently pressed while the context
  * key is being held. This key will be removed from the pressed set when the
  * context key is released and replaced in the set the moment a different
- * non-modifier key is pressed while the context key is still being held. */
-let postContextNonModifierKey = null
+ * non-modifier key is pressed while the context key is still being held.
+ * 
+ * There is also some lagginess in key presses that makes gaming impossible
+ * unless we restrict the number of recognized terminal keys to one: the most
+ * recently pressed terminal key. */
+let nonModifierKey = null
 
 const
  isInPostContext = () => [...hotKeys.pressed].some(code => code.startsWith(hotKeys.contextPrefix)),
  isInPostShift = () => [...hotKeys.pressed].some(code => code.startsWith("Shift")),
- setPostContextNonModifierKey = code => {
-  hotKeys.pressed.delete(postContextNonModifierKey)
-  postContextNonModifierKey = code
+ setNonModifierKey = code => {
+  hotKeys.pressed.delete(nonModifierKey)
+  nonModifierKey = code
  }
 
 globalThis.addEventListener("blur", e => {
  hotKeys.pressed.clear()
- setPostContextNonModifierKey(null)
+ setNonModifierKey(null)
 })
 
 globalThis.addEventListener("keyup", e => {
  hotKeys.pressed.delete(e.code)
- setPostContextNonModifierKey(null)
+ setNonModifierKey(null)
 })
 
 globalThis.addEventListener("keydown", e => {
@@ -45,28 +49,30 @@ globalThis.addEventListener("keydown", e => {
   /* When the user presses a context key, drop all prior keys. The user is
    * required to press and hold a context key before they add on other keys.*/
   if (e.code.startsWith(hotKeys.contextPrefix)) {
-   setPostContextNonModifierKey(null)
+   setNonModifierKey(null)
    hotKeys.pressed.clear()
   }
-  /* While the user is holding a context key, only retain the most recently
-   * pushed non-modifier key, erasing all previous non-modifiers that may have
-   * been pressed since context was held. This allows the user to keep holding
-   * context and enter multiple commands, while enforcing that every keyboard
-   * shortcut can contain only one non-modifier character. */
+  /* When a context key is held, only retain the most recently pushed
+   * non-modifier key, erasing all previous non-modifiers that may have
+   * been pressed since context was held. This allows the user to enter
+   * multiple commands in rapid succession, while enforcing that every
+   * keyboard shortcut can contain only one non-modifier character. */
   else if (isInPostContext()) {
    const isModifier = e.code.startsWith("Shift") || e.code.startsWith("Option") || e.code.startsWith("Alt") || e.code.startsWith("Control") || e.code.startsWith("Meta")
-   setPostContextNonModifierKey(isModifier ? null : e.code)
+   setNonModifierKey(isModifier ? null : e.code)
   }
 
   hotKeys.pressed.add(e.code)
 
   const combo = hotKeys.getComboString()
-  const methodName = hotKeys.table[combo]
-  const method = methodName && hotKeys[methodName]
+  const methodName = JSON.parse(_.application["hot-keys.json"] ?? "{}")[combo] ?? hotKeys.table[combo]
+  const method = methodName && (_.application[methodName] ?? hotKeys[methodName])
 
-  if (typeof method === "function") {
+  if (methodName) {
    e.preventDefault()
-   method()
+   if (typeof method === "function")
+    method()
+   // else warn(`Hot Keys Warning: method called ${methodName} is not defined on either the hot keys manager or the current application.`)
   }
  }
 })

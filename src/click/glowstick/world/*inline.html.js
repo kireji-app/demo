@@ -1,0 +1,1 @@
+return `<world- style="---x:${user.x};---y:${user.y};--grid-color:${world.gridColor}">${world.map(region => region["inline.html"]).join("")}</world->`
