@@ -554,10 +554,14 @@ function ƒ(_) {
  for (const part of instances) part.startBuild()
  closeLog(3)
  openLog(3, "Computing Landing Hash")
+ const landingModel = { "app": { "kireji": { "www": { "editor": { "selected": "f" }, "outliner": { "folders": "g__0M", "width": { "open": "_" } } } } }, "click": { "glowstick": { "user": "4", "world": { "open-office": { "x-axis": "a", "y-axis": "9" } } } }, "parts": { "desktop": { "color": "light" } } }
  Object.defineProperties(_, {
   built: { value: true },
+  landingModel: {
+   value: landingModel
+  },
   landingHash: {
-   value: encodeSegment(_.modelToRouteID({ "app": { "kireji": { "www": { "editor": { "selected": "f" }, "outliner": { "folders": "__0M", "width": { "open": "_" } } } } }, "parts": { "desktop": { "color": "light" } } }))
+   value: encodeSegment(_.modelToRouteID(landingModel))
   }
  })
  log(3, "Computed output: " + _.landingHash)
@@ -568,7 +572,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
+ change: "patch",
  verbosity: 1,
  mapping: true
 })
