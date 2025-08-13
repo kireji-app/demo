@@ -36,13 +36,14 @@ region- {
 
 user- {
  position: absolute;
- top: calc(50% - var(--tile));
+ top: calc(50% - (3 * var(--tile)));
  left: calc(50% - var(--tile));
  width: calc(2 * var(--tile));
- height: calc(2 * var(--tile));
- border-radius: var(--tile);
+ height: calc(4 * var(--tile));
  overflow: hidden;
  z-index: 20;
+ background-image: var(--user-glowstick-click--down-png);
+ background-size: cover;
 }
 
 user-::before {
@@ -50,7 +51,7 @@ user-::before {
  text-align: center;
  position: absolute;
  font-size: calc(1.5 * var(--tile));
- line-height: calc(2 * var(--tile));
+ line-height: calc(4 * var(--tile));
  left: 0;
  top: 0;
  width: 100%;

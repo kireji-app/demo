@@ -1,1 +1,1 @@
-return region.yAxis.cardinality + 1n
+return region.yAxis.cardinality + user.h

@@ -10,5 +10,5 @@ Object.defineProperties(glowstick, {
  frameRequest: { value: null, writable: true },
  meanFrameTime: { value: 1000, writable: true },
  tilesPerSecond: { value: ftPerSec / ftPerTile },
- lastMoveVector: { value: null, writable: true }
+ thumbstickVector: { value: { x: null, y: null } }
 })

@@ -17,7 +17,7 @@ declare interface IGlowstickApplication extends IApplication {
  /** The walking speed of the user. */
  readonly tilesPerSecond: number
  /** A cache of the last direction of motion, used to detect a change in user direction. */
- readonly lastMoveVector: {
+ readonly thumbstickVector: {
   x: number,
   y: number
  }

@@ -1,1 +1,1 @@
-return region.xAxis.cardinality + 1n
+return region.xAxis.cardinality + user.w

@@ -1,10 +1,11 @@
 const keys = hotKeys.pressed
+
 const moveVector = { x: 0, y: 0 }
 
-if (keys.has("KeyA")) moveVector.x -= 1
-if (keys.has("KeyD")) moveVector.x += 1
-if (keys.has("KeyW")) moveVector.y -= 1
-if (keys.has("KeyS")) moveVector.y += 1
+if (keys.has("KeyA") || glowstick.thumbstickVector.x < -10) moveVector.x -= 1
+if (keys.has("KeyD") || glowstick.thumbstickVector.x > +10) moveVector.x += 1
+if (keys.has("KeyW") || glowstick.thumbstickVector.y < -10) moveVector.y -= 1
+if (keys.has("KeyS") || glowstick.thumbstickVector.y > +10) moveVector.y += 1
 
 const newUserRouteID = user.vectorToRouteID(moveVector)
 
@@ -50,8 +51,8 @@ if (newUserRouteID !== undefined) {
     if (neighbor.overlaps({ x, y, w: 0n, h: 0n }))
      world.setRouteID(world.modelToRouteID({
       [neighbor.key]: {
-       "x-axis": encodeSegment(x - neighbor.x - 1n),
-       "y-axis": encodeSegment(y - neighbor.y - 1n)
+       "x-axis": encodeSegment(x - neighbor.x - user.w),
+       "y-axis": encodeSegment(y - neighbor.y - user.h)
       }
      }))
    }
