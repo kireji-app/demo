@@ -1,11 +1,36 @@
 const keys = hotKeys.pressed
 
-const moveVector = { x: 0, y: 0 }
+const moveVector = { x: 0, y: 0, speed: 1 }
 
-if (keys.has("KeyA") || glowstick.thumbstickVector.x < -10) moveVector.x -= 1
-if (keys.has("KeyD") || glowstick.thumbstickVector.x > +10) moveVector.x += 1
-if (keys.has("KeyW") || glowstick.thumbstickVector.y < -10) moveVector.y -= 1
-if (keys.has("KeyS") || glowstick.thumbstickVector.y > +10) moveVector.y += 1
+if (glowstick.thumbstickStart) {
+ const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
+ const magnitude = Math.hypot(glowstick.thumbstickVector.x, glowstick.thumbstickVector.y)
+ if (magnitude > 6) {
+  moveVector.x = glowstick.thumbstickVector.x / magnitude
+  moveVector.y = glowstick.thumbstickVector.y / magnitude
+  if (magnitude > maxRadius) {
+   glowstick.thumbstickStart.x = glowstick.thumbstickStart.x + (glowstick.thumbstickVector.x - moveVector.x * maxRadius)
+   glowstick.thumbstickStart.y = glowstick.thumbstickStart.y + (glowstick.thumbstickVector.y - moveVector.y * maxRadius)
+   glowstick.thumbstickVector.x = moveVector.x * maxRadius
+   glowstick.thumbstickVector.y = moveVector.y * maxRadius
+   glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
+   glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
+  } else {
+   moveVector.speed = magnitude / maxRadius
+  }
+ }
+ glowstick.handleElement.style.setProperty("--x", moveVector.x * Math.min(magnitude, maxRadius) + "px")
+ glowstick.handleElement.style.setProperty("--y", moveVector.y * Math.min(magnitude, maxRadius) + "px")
+} else {
+ if (keys.has("KeyA")) moveVector.x -= 1
+ if (keys.has("KeyD")) moveVector.x += 1
+ if (keys.has("KeyW")) moveVector.y -= 1
+ if (keys.has("KeyS")) moveVector.y += 1
+ if (moveVector.x && moveVector.y) {
+  moveVector.x /= Math.SQRT2
+  moveVector.y /= Math.SQRT2
+ }
+}
 
 const newUserRouteID = user.vectorToRouteID(moveVector)
 
@@ -19,16 +44,17 @@ if (newUserRouteID !== undefined) {
 
  const elapsed = (TIME - (glowstick.walkMark ??= TIME)) / 1000
  const diagonal = (moveVector.x !== 0 && moveVector.y !== 0)
- const speed = glowstick.tilesPerSecond / (diagonal ? Math.SQRT2 : 1)
+ const speed = glowstick.tilesPerSecond * moveVector.speed
  const expectedTiles = elapsed * speed
  const difference = expectedTiles - (glowstick.tilesCount ??= -1)
 
  if (Math.trunc(difference) > 0) {
 
   let xCollide = 0n, yCollide = 0n
+
   if (moveVector.x) {
    const xAxis = region.xAxis
-   const xPotential = BigInt(moveVector.x)
+   const xPotential = BigInt(Math.sign(moveVector.x))
    const xRouteID = xAxis.routeID + xPotential
    if (xRouteID >= 0n && xRouteID < xAxis.cardinality)
     xAxis.setRouteID(xRouteID)
@@ -37,7 +63,7 @@ if (newUserRouteID !== undefined) {
 
   if (moveVector.y) {
    const yAxis = region.yAxis
-   const yPotential = BigInt(moveVector.y)
+   const yPotential = BigInt(Math.sign(moveVector.y))
    const yRouteID = yAxis.routeID + yPotential
    if (yRouteID >= 0n && yRouteID < yAxis.cardinality)
     yAxis.setRouteID(yRouteID)

@@ -1,5 +1,8 @@
+html,
+body,
 wallpaper- {
  --tile: 24px;
+ touch-action: none;
 }
 
 world-,
@@ -88,4 +91,29 @@ region- {
 region-.threshold {
  z-index: 10;
  box-shadow: none;
+}
+
+thumbstick-,
+handle- {
+ --large-radius: max(min(10vmin, 128px), 32px);
+ --radius: var(--large-radius);
+ display: block;
+ position: fixed;
+ border-radius: var(--radius);
+ box-sizing: 0 0 15px 1px black;
+ background-color: var(--bg-light);
+ z-index: 30;
+ width: calc(2 * var(--radius));
+ height: calc(2 * var(--radius));
+ top: calc(var(--y) - var(--large-radius));
+ left: calc(var(--x) - var(--large-radius));
+ box-shadow: 0 0 16px 1px var(--fg);
+ display: none;
+}
+
+handle- {
+ --radius: 24px;
+ top: calc((var(--large-radius) - var(--radius)) + var(--y));
+ left: calc((var(--large-radius) - var(--radius)) + var(--x));
+ position: absolute;
 }
