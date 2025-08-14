@@ -93,6 +93,7 @@ if (require.main === module) {
  logEntropy(1, ...instances)
 
  require('http').createServer((request, response) => {
+  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${memory} --> ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
   let status, head = {}, body
   let host = request.headers.host
   const { pathname, searchParams } = new URL(`https://${host}${request.url}`)
