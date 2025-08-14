@@ -5,7 +5,7 @@ const moveVector = { x: 0, y: 0, speed: 1 }
 if (glowstick.thumbstickStart) {
  const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
  const magnitude = Math.hypot(glowstick.thumbstickVector.x, glowstick.thumbstickVector.y)
- if (magnitude > 6) {
+ if (magnitude) {
   moveVector.x = glowstick.thumbstickVector.x / magnitude
   moveVector.y = glowstick.thumbstickVector.y / magnitude
   if (magnitude > maxRadius) {
@@ -16,45 +16,44 @@ if (glowstick.thumbstickStart) {
    glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
    glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
   } else {
-   moveVector.speed = magnitude / maxRadius
+   moveVector.speed = (magnitude / maxRadius) ** 1.5
   }
  }
  glowstick.handleElement.style.setProperty("--x", moveVector.x * Math.min(magnitude, maxRadius) + "px")
  glowstick.handleElement.style.setProperty("--y", moveVector.y * Math.min(magnitude, maxRadius) + "px")
+ moveVector.x = Math.abs(moveVector.x) >= Math.sin((Math.PI / 8)) ? Math.sign(moveVector.x) : 0
+ moveVector.y = Math.abs(moveVector.y) >= Math.sin((Math.PI / 8)) ? Math.sign(moveVector.y) : 0
 } else {
  if (keys.has("KeyA")) moveVector.x -= 1
  if (keys.has("KeyD")) moveVector.x += 1
  if (keys.has("KeyW")) moveVector.y -= 1
  if (keys.has("KeyS")) moveVector.y += 1
- if (moveVector.x && moveVector.y) {
-  moveVector.x /= Math.SQRT2
-  moveVector.y /= Math.SQRT2
- }
 }
 
 const newUserRouteID = user.vectorToRouteID(moveVector)
 
 if (newUserRouteID !== undefined) {
 
- if (newUserRouteID !== user.routeID) {
-  glowstick.walkMark = TIME
-  glowstick.tilesCount = -1
+ if (newUserRouteID !== user.routeID)
   user.setRouteID(newUserRouteID)
+
+ let takeStep = true
+
+ if (glowstick.walkMark) {
+  const diagonal = (moveVector.x !== 0 && moveVector.y !== 0)
+  const tilesPerSecond = glowstick.tilesPerSecond * moveVector.speed / (diagonal ? Math.SQRT2 : 1)
+  const secondsSinceLastMovement = (TIME - glowstick.walkMark) / 1000
+  takeStep = (secondsSinceLastMovement * tilesPerSecond) > 1
  }
 
- const elapsed = (TIME - (glowstick.walkMark ??= TIME)) / 1000
- const diagonal = (moveVector.x !== 0 && moveVector.y !== 0)
- const speed = glowstick.tilesPerSecond * moveVector.speed
- const expectedTiles = elapsed * speed
- const difference = expectedTiles - (glowstick.tilesCount ??= -1)
-
- if (Math.trunc(difference) > 0) {
+ if (takeStep) {
+  glowstick.walkMark = TIME
 
   let xCollide = 0n, yCollide = 0n
 
   if (moveVector.x) {
    const xAxis = region.xAxis
-   const xPotential = BigInt(Math.sign(moveVector.x))
+   const xPotential = BigInt(moveVector.x)
    const xRouteID = xAxis.routeID + xPotential
    if (xRouteID >= 0n && xRouteID < xAxis.cardinality)
     xAxis.setRouteID(xRouteID)
@@ -63,7 +62,7 @@ if (newUserRouteID !== undefined) {
 
   if (moveVector.y) {
    const yAxis = region.yAxis
-   const yPotential = BigInt(Math.sign(moveVector.y))
+   const yPotential = BigInt(moveVector.y)
    const yRouteID = yAxis.routeID + yPotential
    if (yRouteID >= 0n && yRouteID < yAxis.cardinality)
     yAxis.setRouteID(yRouteID)
@@ -83,16 +82,8 @@ if (newUserRouteID !== undefined) {
      }))
    }
   }
-
-  glowstick.tilesCount = expectedTiles
- } else {
-  // reflect partial progress?
  }
-
-} else {
- glowstick.walkMark = null
- glowstick.tilesCount = null
-}
+} else glowstick.walkMark = null
 
 glowstick.fps = Math.round(1000 / (glowstick.meanFrameTime += (TIME - (glowstick.time ?? TIME) - glowstick.meanFrameTime) / 20))
 glowstick.time = TIME

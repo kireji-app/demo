@@ -11,6 +11,7 @@ const
    glowstick.thumbstickElement = desktop.wallpaper.appendChild(document.createElement("thumbstick-"))
    glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
    glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
+   if (production) glowstick.thumbstickElement.style.display = "none"
    glowstick.handleElement = glowstick.thumbstickElement.appendChild(document.createElement("handle-"))
    glowstick.handleElement.style.setProperty("--x", "0px")
    glowstick.handleElement.style.setProperty("--y", "0px")

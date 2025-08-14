@@ -1,1 +1,1 @@
-user.element.style.setProperty("--arrow", `"${user.arrow}"`)
+glowstick.handleElement?.style.setProperty("--arrow", `"${user.arrow}"`)

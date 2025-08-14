@@ -49,19 +49,6 @@ user- {
  background-size: cover;
 }
 
-user-::before {
- content: var(--arrow);
- text-align: center;
- position: absolute;
- font-size: calc(1.5 * var(--tile));
- line-height: calc(4 * var(--tile));
- left: 0;
- top: 0;
- width: 100%;
- height: 100%;
- color: var(--accent-un-mode-est);
-}
-
 world- {
  position: absolute;
  left: calc(50% - var(---x) * var(--tile));
@@ -108,7 +95,6 @@ handle- {
  top: calc(var(--y) - var(--large-radius));
  left: calc(var(--x) - var(--large-radius));
  box-shadow: 0 0 16px 1px var(--fg);
- display: none;
 }
 
 handle- {
@@ -116,4 +102,17 @@ handle- {
  top: calc((var(--large-radius) - var(--radius)) + var(--y));
  left: calc((var(--large-radius) - var(--radius)) + var(--x));
  position: absolute;
+}
+
+handle-::before {
+ content: var(--arrow);
+ text-align: center;
+ position: absolute;
+ font-size: calc(2 * var(--radius));
+ line-height: calc(2 * var(--radius));
+ left: 0;
+ top: 0;
+ width: 100%;
+ height: 100%;
+ color: var(--fg);
 }

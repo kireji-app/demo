@@ -11,7 +11,6 @@ if (_.hangHydration && !production)
  hang(1000)
 
 const onpopstate = () => {
- debug('popping state - applying the location href route')
  try {
   _.setRoute(location.href)
  } catch (e) {

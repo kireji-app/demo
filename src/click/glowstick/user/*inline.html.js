@@ -1,1 +1,1 @@
-return `<user- style="--arrow:&quot;${user.arrow}&quot;"></user->`
+return `<user-></user->`
