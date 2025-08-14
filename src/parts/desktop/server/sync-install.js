@@ -93,7 +93,7 @@ if (require.main === module) {
  logEntropy(1, ...instances)
 
  require('http').createServer((request, response) => {
-  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${memory} --> ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
+  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB"} --> ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
   let status, head = {}, body
   let host = request.headers.host
   const { pathname, searchParams } = new URL(`https://${host}${request.url}`)
@@ -162,8 +162,7 @@ if (require.main === module) {
    status = 444
    head = securityHeader
   }
-  const memory = Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB";
-  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${memory} ${status} ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
+  log(0, `${new Date().toLocaleString().padEnd(21, " ")} ${Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB"} ${status} ${(request.headers["x-real-ip"] ?? "local-self").padEnd(24, " ")} <-- https://${request.headers.host}${request.url}`)
   response.writeHead(status, head)
   response.end(body)
  }).listen(internalPort, () => log(0, "HTTP Server " + ETag))
