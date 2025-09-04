@@ -16,5 +16,7 @@ declare interface IGlowstickUser extends IPart {
  readonly element: HTMLElement
  /** A unicode arrow character pointing in the same direction as the user. */
  readonly arrow: string
+ /** A string (either left, right, front or back) representing which direction the user is currently facing. */
+ readonly direction: string
 }
 declare const user: IGlowstickUser

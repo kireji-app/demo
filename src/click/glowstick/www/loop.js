@@ -37,6 +37,8 @@ if (newUserRouteID !== undefined) {
  if (newUserRouteID !== user.routeID)
   user.setRouteID(newUserRouteID)
 
+ user.element.classList.add("walking")
+
  let takeStep = true
 
  if (glowstick.walkMark) {
@@ -83,7 +85,10 @@ if (newUserRouteID !== undefined) {
    }
   }
  }
-} else glowstick.walkMark = null
+} else {
+ glowstick.walkMark = null
+ user.element.classList.remove("walking")
+}
 
 glowstick.fps = Math.round(1000 / (glowstick.meanFrameTime += (TIME - (glowstick.time ?? TIME) - glowstick.meanFrameTime) / 20))
 glowstick.time = TIME

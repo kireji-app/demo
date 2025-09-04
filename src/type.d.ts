@@ -31,6 +31,8 @@ declare interface IDNSRoot extends IMix {
  readonly liveApplications: Record<string, IApplication>
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
+ /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
+ readonly defaultApplication: string
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 

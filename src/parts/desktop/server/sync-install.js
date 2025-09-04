@@ -117,7 +117,7 @@ if (require.main === module) {
        host = "www." + host
       if (!(host in _.applications)) {
        warn(`Unsupported application '${host}'. Forwarding to www.desktop.parts.`)
-       host = "www.desktop.parts"
+       host = _.defaultApplication ?? Object.getOwnPropertyNames(_.applications)[0]
       }
       status = 302
       head = { 'Location': `http://${host}.${devSuffix}${pathname}`, ...securityHeader }

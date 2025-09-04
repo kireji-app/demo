@@ -1,1 +1,1 @@
-return `<user-></user->`
+return `<user- class="${user.direction}"></user->`
