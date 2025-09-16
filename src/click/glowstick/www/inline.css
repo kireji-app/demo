@@ -120,13 +120,13 @@ region-.threshold {
 }
 
 thumbstick- {
- mix-blend-mode: multiply;
+ /*mix-blend-mode: multiply;*/
  --color: black;
  --mask: white;
 }
 
 body.dark thumbstick- {
- mix-blend-mode: screen;
+ /*mix-blend-mode: screen;*/
  --color: white;
  --mask: black;
 }
