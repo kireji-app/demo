@@ -268,3 +268,7 @@ menu-button:hover {
 flex-spacer {
  flex: 1;
 }
+
+a[x-apple-data-detectors] {
+ display: contents !important;
+}
