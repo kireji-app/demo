@@ -33,6 +33,8 @@ declare interface IDNSRoot extends IMix {
  readonly landingHash: string
  /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
  readonly defaultApplication: string
+ /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
+ readonly frameRequest: number | null
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
@@ -93,7 +95,7 @@ declare interface IPropertyTable<T> {
 }
 
 declare interface IPartData extends IPropertyTable<string[]> {
- readonly typename: string
+ readonly extends: string
 }
 /** A type used for source mapping and packing data from one or more files into a single new file. */
 class SourceMappedFile {

@@ -319,7 +319,7 @@ function ƒ(_) {
     filenames: { value: filenames },
     domains: { value: domains },
    })
-   const typename = part.manifest.typename ?? (host !== "part.core.parts" ? "part.core.parts" : null)
+   const typename = part.manifest.extends ?? (host !== "part.core.parts" ? "part.core.parts" : null)
    const prototype = typename ? distributeHydration(typename ?? "part.core.parts") : null
    const isAbstract = part.manifest.abstract
    if (prototype) {
@@ -456,7 +456,7 @@ function ƒ(_) {
      imgSources.push([part, fn])
    }
    for (const methodID in part.manifest)
-    if (!["typename", "abstract", "singleton"].includes(methodID))
+    if (!["extends", "abstract", "singleton"].includes(methodID))
      Property.ids.add(methodID)
    sourceFile.part = part
    sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
@@ -536,12 +536,13 @@ function ƒ(_) {
  }
  const preHydrationArchive = serialize(_)
  // These are scope variables for evaluated method bodies.
- const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era, update } = desktop
+ const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era, stats, update } = desktop
  if (environment === "client") var element, svg
  Object.defineProperties(_, {
+  frameRequest: { value: null, writable: true },
   application: { value: null, writable: true },
   applications: { value: {} },
-  liveApplications: { value: {} }
+  liveApplications: { value: {} },
  })
 
  openLog(3, "Hydrating Domains")

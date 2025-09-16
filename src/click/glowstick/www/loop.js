@@ -9,12 +9,12 @@ if (glowstick.thumbstickStart) {
   moveVector.x = glowstick.thumbstickVector.x / magnitude
   moveVector.y = glowstick.thumbstickVector.y / magnitude
   if (magnitude > maxRadius) {
-   glowstick.thumbstickStart.x = glowstick.thumbstickStart.x + (glowstick.thumbstickVector.x - moveVector.x * maxRadius)
-   glowstick.thumbstickStart.y = glowstick.thumbstickStart.y + (glowstick.thumbstickVector.y - moveVector.y * maxRadius)
+   //  glowstick.thumbstickStart.x = glowstick.thumbstickStart.x + (glowstick.thumbstickVector.x - moveVector.x * maxRadius)
+   //  glowstick.thumbstickStart.y = glowstick.thumbstickStart.y + (glowstick.thumbstickVector.y - moveVector.y * maxRadius)
    glowstick.thumbstickVector.x = moveVector.x * maxRadius
    glowstick.thumbstickVector.y = moveVector.y * maxRadius
-   glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
-   glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
+   //  glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
+   //  glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
   } else {
    moveVector.speed = (magnitude / maxRadius) ** 1.5
   }
@@ -43,7 +43,7 @@ if (newUserRouteID !== undefined) {
 
  if (glowstick.walkMark) {
   const diagonal = (moveVector.x !== 0 && moveVector.y !== 0)
-  const tilesPerSecond = glowstick.tilesPerSecond * moveVector.speed / (diagonal ? Math.SQRT2 : 1)
+  const tilesPerSecond = user.tilesPerSecond * moveVector.speed / (diagonal ? Math.SQRT2 : 1)
   const secondsSinceLastMovement = (TIME - glowstick.walkMark) / 1000
   takeStep = (secondsSinceLastMovement * tilesPerSecond) > 1
  }
@@ -89,7 +89,3 @@ if (newUserRouteID !== undefined) {
  glowstick.walkMark = null
  user.element.classList.remove("walking")
 }
-
-glowstick.fps = Math.round(1000 / (glowstick.meanFrameTime += (TIME - (glowstick.time ?? TIME) - glowstick.meanFrameTime) / 20))
-glowstick.time = TIME
-glowstick.frameRequest = requestAnimationFrame(() => glowstick.loop(performance.now()))

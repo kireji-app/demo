@@ -1,4 +1,4 @@
-const clockElement = document.getElementById("clock")
+const clockElement = document.querySelector("clock-")
 
 const oneMinute = 60000
 

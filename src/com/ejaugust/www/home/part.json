@@ -1,5 +1,5 @@
 {
- "typename": "section.ejaugust.com",
+ "extends": "section.ejaugust.com",
  "go": [
   "EVENT"
  ]

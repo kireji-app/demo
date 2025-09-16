@@ -278,11 +278,34 @@ tray- {
  width: auto;
 }
 
-#clock {
+clock- {
+ overflow: hidden;
+}
+
+clock-,
+stats- {
  vertical-align: middle;
  display: inline-block;
  line-height: 16px;
- overflow: hidden;
+}
+
+stats- {
+ background-color: var(--fg);
+ color: var(--bg);
+ margin-right: calc(2 * var(--icon-size) / 3);
+ position: relative;
+ text-align: center;
+ width: calc(2 * var(--icon-size) / 3);
+}
+
+stats-::after {
+ background-color: var(--fg);
+ content: "FPS";
+ position: absolute;
+ left: calc(2 * var(--icon-size) / 3);
+ width: calc(2 * var(--icon-size) / 3);
+ text-align: center;
+ font-size: 75%;
 }
 
 task-bar {

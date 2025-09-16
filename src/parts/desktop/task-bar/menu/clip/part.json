@@ -1,4 +1,4 @@
 {
  "abstract": true,
- "typename": "clip.core.parts"
+ "extends": "clip.core.parts"
 }

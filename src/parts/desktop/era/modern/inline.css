@@ -199,9 +199,35 @@ tray- {
  width: auto;
 }
 
-#clock {
+clock- {
+ overflow: hidden;
+}
+
+clock-,
+stats- {
  vertical-align: top;
  display: inline-block;
- overflow: hidden;
  line-height: var(--icon-size);
+}
+
+stats- {
+ background-color: var(--fg);
+ color: var(--bg);
+ border-radius: 50%;
+ font-weight: 800;
+ margin-left: var(--icon-size);
+ position: relative;
+ text-align: center;
+ width: var(--icon-size);
+}
+
+stats-::before {
+ color: var(--fg);
+ content: "FPS";
+ position: absolute;
+ right: var(--icon-size);
+ width: var(--icon-size);
+ text-align: center;
+ font-weight: 500;
+ font-size: 75%;
 }

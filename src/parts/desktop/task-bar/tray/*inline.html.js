@@ -1,1 +1,1 @@
-return `<tray->${share["tray.html"]}${fullscreen["tray.html"]}<span id=clock>${tray.time}</span></tray->`
+return `<tray->${stats["tray.html"]}${share["tray.html"]}${fullscreen["tray.html"]}<clock->${tray.time}</clock-></tray->`

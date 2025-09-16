@@ -1,6 +1,6 @@
 {
  "singleton": true,
- "typename": "match.core.parts",
+ "extends": "match.core.parts",
  "hex-rgb-from": [
   "HEX"
  ],

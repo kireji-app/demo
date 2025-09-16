@@ -1,5 +1,5 @@
 {
- "typename": "match.core.parts",
+ "extends": "match.core.parts",
  "toggle": [
   "EVENT"
  ]

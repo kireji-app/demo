@@ -3,15 +3,15 @@
 <p>The following is an example JSON file which has some inline code meant to equip the parsed result with runtime functionality.
 </p>
 <pre id="i">{
- "typename": "mix.core.parts",
+ "extends": "mix.core.parts",
  "myFavoriteNumber": 7,
  "com": {
-  "typename": "mix.core.parts"
+  "extends": "mix.core.parts"
  },
  "parts": {
-  "typename": "mix.core.parts",
+  "extends": "mix.core.parts",
   "core": {
-   "typename": "mix.core.parts",
+   "extends": "mix.core.parts",
    "one": {
     "becomeAController.js":
      "dns.myFavoriteNumber = 9"
@@ -29,17 +29,17 @@
 <p>The following is the original JSON parsed and hydrated using standard assignment syntax like <code>object.property = value</code> and <code>Object.assign(target, source)</code> to expand the parsed object into its runtime form. Then, the hydrated object was stringified.
 </p>
 <pre id="o1">{
- "typename": "mix.core.parts",
+ "extends": "mix.core.parts",
  "myFavoriteNumber": 9,
  "com": {
-  "typename": "mix.core.parts",
+  "extends": "mix.core.parts",
   "host": "com",
   "hydrated": true
  },
  "parts": {
-  "typename": "mix.core.parts",
+  "extends": "mix.core.parts",
   "core": {
-   "typename": "mix.core.parts",
+   "extends": "mix.core.parts",
    "one": {
     "becomeAController.js": "dns.myFavoriteNumber = 9",
     "host": "one.core.parts",
@@ -67,15 +67,15 @@
 <p>For the below snippet, we first hydrated the original JSON using the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties"><code>Object.defineProperty</code></a> method. This allows us to control the visibility of the properties in a way that affects <code>JSON.stringify</code>. Compared to the previous attempt, we're getting the same controller behavior at runtime but when we call <code>JSON.stringify(...)</code> on it, we don't see any of the runtime values.
 </p>
 <pre id="o2">{
- "typename": "mix.core.parts",
+ "extends": "mix.core.parts",
  "myFavoriteNumber": 9,
  "com": {
-  "typename": "mix.core.parts"
+  "extends": "mix.core.parts"
  },
  "parts": {
-  "typename": "mix.core.parts",
+  "extends": "mix.core.parts",
   "core": {
-   "typename": "mix.core.parts",
+   "extends": "mix.core.parts",
    "one": {
     "becomeAController.js": "dns.myFavoriteNumber = 9"
    },
@@ -123,15 +123,15 @@ for (const [key, value] of nonSerializableProperties) {
 <p>Observe the results of using this method.
 </p>
 <pre id="o3">{
- "typename": "mix.core.parts",
+ "extends": "mix.core.parts",
  "myFavoriteNumber": 9,
  "com": {
-  "typename": "mix.core.parts"
+  "extends": "mix.core.parts"
  },
  "parts": {
-  "typename": "mix.core.parts",
+  "extends": "mix.core.parts",
   "core": {
-   "typename": "mix.core.parts",
+   "extends": "mix.core.parts",
    "one": {
     "becomeAController.js": "dns.myFavoriteNumber = 9"
    },

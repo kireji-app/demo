@@ -1,6 +1,6 @@
 {
  "abstract": true,
- "typename": "part.core.parts",
+ "extends": "part.core.parts",
  "routeID-collect": [
   "CHANGED_ARMS"
  ]

@@ -4,6 +4,10 @@ declare interface IPartOf<T> extends Iterable<T> {
  filter(FILTER_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
  includes(SUBPART: T): boolean
+ /** If defined, the per-frame update method for this part. Useful for implementing game features. */
+ loop?(TIME: DOMHighResTimeStamp): void
+ /** Calls loop on this part and then propagates the call leafward to all subparts. */
+ distributeLoop(): void
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
  map(MAP_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
  /** Adds a listener that calls the given callback when the given event occurs. */

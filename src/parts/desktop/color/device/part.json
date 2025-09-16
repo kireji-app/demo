@@ -1,3 +1,4 @@
 {
- "typename": "mode.color.desktop.parts"
+ "abstract": true,
+ "extends": "mode.color.desktop.parts"
 }

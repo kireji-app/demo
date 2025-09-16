@@ -1,4 +1,4 @@
 {
  "abstract": true,
- "typename": "region.glowstick.click"
+ "extends": "region.glowstick.click"
 }

@@ -1,5 +1,5 @@
 {
- "typename": "facet.core.parts",
+ "extends": "facet.core.parts",
  "async-register": [],
  "async-bootstrap": [
   "VERSION"

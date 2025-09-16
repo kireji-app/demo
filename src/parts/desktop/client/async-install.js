@@ -3,7 +3,8 @@ await Promise.all([
  agent.promise,
  hotKeys.promise,
  update.promise,
- worker.promise
+ worker.promise,
+ stats.promise
 ])
 
 // To preview FOUC
@@ -24,4 +25,8 @@ onpopstate()
 document.body.classList.remove("installing")
 document.body.removeAttribute("inert")
 client.hydrated = true
+
+log(0, "Starting Engine Loop")
+_.frameRequest = requestAnimationFrame(() => _.distributeLoop())
+
 log(1, "Hydrated.")

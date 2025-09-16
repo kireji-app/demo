@@ -1,4 +1,4 @@
 {
  "singleton": true,
- "typename": "facet.core.parts"
+ "extends": "facet.core.parts"
 }

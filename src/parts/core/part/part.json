@@ -50,5 +50,9 @@
  ],
  "image-placeholder": [
   "IMAGE_NAME"
+ ],
+ "loop-distribute": [],
+ "loop": [
+  "TIME"
  ]
 }

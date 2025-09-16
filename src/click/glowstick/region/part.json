@@ -1,6 +1,6 @@
 {
  "abstract": true,
- "typename": "mix.core.parts",
+ "extends": "mix.core.parts",
  "overlaps": [
   "REGION"
  ]

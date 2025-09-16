@@ -18,5 +18,7 @@ declare interface IGlowstickUser extends IPart {
  readonly arrow: string
  /** A string (either left, right, front or back) representing which direction the user is currently facing. */
  readonly direction: string
+ /** The walking speed of the user. */
+ readonly tilesPerSecond: number
 }
 declare const user: IGlowstickUser
