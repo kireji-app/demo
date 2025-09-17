@@ -269,6 +269,10 @@ flex-spacer {
  flex: 1;
 }
 
+/* This aims to fix Apple's nonstandard HTML link injections on iOS. */
 a[x-apple-data-detectors] {
  display: contents !important;
+ pointer-events: none !important;
+ color: inherit !important;
+ text-decoration: none !important;
 }

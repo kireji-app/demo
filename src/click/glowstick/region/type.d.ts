@@ -15,8 +15,8 @@ declare interface IGlowstickRegion extends IMix {
  readonly xAxis: IPart
  /** A part representing the height range of the region. */
  readonly yAxis: IPart
- /** The color of the grid when previewing the world. */
- readonly gridColor: string
+ /** The color of the grid when previewing the region, if one is defined. */
+ readonly gridColor?: string
  /** The DOM element (client only) representing this region. */
  readonly element: HTMLElement
  /** The list of regions which are overlapping this region. */

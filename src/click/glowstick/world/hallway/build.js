@@ -1,5 +1,4 @@
 Object.defineProperties(part, {
- x: { value: 41n },
- y: { value: 23n },
- gridColor: { value: "#167148" }
+ x: { value: 33n },
+ y: { value: 23n }
 })

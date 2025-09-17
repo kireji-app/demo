@@ -2,9 +2,14 @@ html,
 body,
 wallpaper- {
  --tile-width: 8px;
+ --tile-height: 6px;
  --ratio: 3;
+ --px: calc(1px * var(--ratio));
+ --px2: calc(2px * var(--ratio));
+ --px3: calc(var(--px) * var(--ratio));
+ --px4: calc(4px * var(--ratio));
  --tx: calc(var(--ratio) * var(--tile-width));
- --ty: calc(var(--tx) / sqrt(2));
+ --ty: calc(var(--ratio) * var(--tile-height));
  touch-action: none;
 }
 
@@ -13,40 +18,114 @@ region- {
  background-color: var(--bg);
  background-image:
   repeating-linear-gradient(90deg,
-   var(--grid-color),
-   var(--grid-color) 1px,
-   transparent 1px,
-   transparent var(--tx)),
+   var(--grid-color) 0 var(--px),
+   transparent 0 calc(var(--tx) - var(--px)),
+   var(--grid-color) calc(var(--tx) - var(--px)) var(--tx)),
   repeating-linear-gradient(0deg,
-   var(--grid-color),
-   var(--grid-color) 1px,
-   transparent 1px,
-   transparent var(--ty));
+   var(--grid-color) 0 var(--px),
+   transparent 0 calc(var(--ty) - var(--px)),
+   var(--grid-color) calc(var(--ty) - var(--px)) var(--ty));
  background-size: var(--tx) var(--ty);
- box-shadow:
-  inset 0 0 0 2px var(--grid-color),
-  0 0 0 2px var(--grid-color);
+
+ clip-path: polygon(0px calc(100% - var(--px2)),
+   var(--px) calc(100% - var(--px2)),
+   var(--px) calc(100% - var(--px)),
+   var(--px2) calc(100% - var(--px)),
+   var(--px2) 100%,
+   calc(100% - var(--px2)) 100%,
+   calc(100% - var(--px2)) calc(100% - var(--px)),
+   calc(100% - var(--px)) calc(100% - var(--px)),
+   calc(100% - var(--px)) calc(100% - var(--px2)),
+   100% calc(100% - var(--px2)),
+   100% var(--px2),
+   calc(100% - var(--px)) var(--px2),
+   calc(100% - var(--px)) var(--px),
+   calc(100% - var(--px2)) var(--px),
+   calc(100% - var(--px2)) 0px,
+   var(--px2) 0px,
+   var(--px2) var(--px),
+   var(--px) var(--px),
+   var(--px) var(--px2),
+   0px var(--px2));
 }
 
-/*
-:is(world-, region-, user-)::after {
- background-color: var(--grid-color);
- color: var(--bg);
- content: attr(data-key);
- padding: calc(var(--tx) / 4);
- border-radius: calc(var(--tx) / 8);
- line-height: calc(var(--tx) / 2);
+:is(world-, region-)::after {
+ content: "";
  position: absolute;
- top: calc(var(--tx) / 2);
- left: calc(var(--tx) / 2);
+ clip-path: polygon(0px calc(100% - var(--px2)),
+   var(--px) calc(100% - var(--px2)),
+   var(--px) calc(100% - var(--px)),
+   var(--px2) calc(100% - var(--px)),
+   var(--px2) 100%,
+   calc(100% - var(--px2)) 100%,
+   calc(100% - var(--px2)) calc(100% - var(--px)),
+   calc(100% - var(--px)) calc(100% - var(--px)),
+   calc(100% - var(--px)) calc(100% - var(--px2)),
+   100% calc(100% - var(--px2)),
+   100% var(--px2),
+   calc(100% - var(--px)) var(--px2),
+   calc(100% - var(--px)) var(--px),
+   calc(100% - var(--px2)) var(--px),
+   calc(100% - var(--px2)) 0px,
+   var(--px2) 0px,
+   var(--px2) var(--px),
+   var(--px) var(--px),
+   var(--px) var(--px2),
+   0px var(--px2),
+   0px 50%,
+   var(--px) 50%,
+   var(--px) var(--px2),
+   var(--px2) var(--px2),
+   var(--px2) var(--px),
+   calc(100% - var(--px2)) var(--px),
+   calc(100% - var(--px2)) var(--px2),
+   calc(100% - var(--px)) var(--px2),
+   calc(100% - var(--px)) calc(100% - var(--px2)),
+   calc(100% - var(--px2)) calc(100% - var(--px2)),
+   calc(100% - var(--px2)) calc(100% - var(--px)),
+   var(--px2) calc(100% - var(--px)),
+   var(--px2) calc(100% - var(--px2)),
+   var(--px) calc(100% - var(--px2)),
+   var(--px) 50%,
+   0px 50%);
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ background: var(--grid-color);
+ display: block;
  pointer-events: none;
+ margin: calc(0 - var(--px));
 }
 
-world-::after {
- content: "world";
+region- {
+ position: absolute;
+ left: calc(var(---x) * var(--tx));
+ top: calc(var(---y) * var(--ty));
+ width: calc(var(---w) * var(--tx));
+ height: calc(var(---h) * var(--ty));
+ /* Round grid dots
+  background-image: radial-gradient(ellipse var(--px) var(--px), var(--grid-color) 100%, transparent 0);
+  background-position: calc(var(--tx) / 2) calc(var(--ty) / 2);
+ */
+ background-color: var(--grid-color);
+ background-image:
+  linear-gradient(0,
+   transparent var(--px),
+   var(--bg) var(--px),
+   var(--bg) calc(var(--ty) - var(--px)),
+   transparent calc(var(--ty) - var(--px))),
+  linear-gradient(90deg,
+   transparent var(--px),
+   var(--bg) var(--px),
+   var(--bg) calc(var(--tx) - var(--px)),
+   transparent calc(var(--tx) - var(--px)));
 }
- 
-*/
+
+region-.threshold,
+region-[data-key="bridge"] {
+ z-index: 10;
+}
 
 user- {
  --width: calc(2 * var(--tx));
@@ -57,8 +136,21 @@ user- {
  height: calc(6 * var(--ty));
  overflow: hidden;
  z-index: 20;
- background-size: cover;
+ background-size: contain;
 }
+
+/*
+user-::after {
+ content: "";
+ position: absolute;
+ background-image: radial-gradient(ellipse calc(2 * var(--px)) calc(var(--px) * 2), var(--accent-un-mode) 100%, transparent 0);
+ width: 100%;
+ height: 100%;
+ background-size: var(--tx) var(--ty);
+ background-repeat: no-repeat;
+ background-position: center bottom calc(var(--ty) / 2);
+}
+*/
 
 user-.front {
  background-image: var(--user-glowstick-click--front-idle-png);
@@ -96,27 +188,14 @@ world- {
  position: absolute;
  left: calc(50% - var(---x) * var(--tx));
  top: calc(50% - var(---y) * var(--ty));
- width: calc(1000 * var(--tx));
- height: calc(1000 * var(--ty));
+ width: calc(101 * var(--tx));
+ height: calc(32 * var(--ty));
  transition: top 0.09s linear, left 0.09s linear;
  box-shadow: inset 0 0 calc(3 * var(--tx)) calc(3 * var(--tx)) var(--bg);
 }
 
 region-[selected] {
  --grid-color: var(--accent-un-mode) !important;
-}
-
-region- {
- position: absolute;
- left: calc(var(---x) * var(--tx));
- top: calc(var(---y) * var(--ty));
- width: calc(var(---w) * var(--tx));
- height: calc(var(---h) * var(--ty));
-}
-
-region-.threshold {
- z-index: 10;
- box-shadow: none;
 }
 
 thumbstick- {
@@ -144,7 +223,7 @@ handle- {
  height: calc(2 * var(--radius));
  top: calc(var(--y) - var(--large-radius));
  left: calc(var(--x) - var(--large-radius));
- box-shadow: 0 0 0 3px var(--color);
+ box-shadow: 0 0 0 var(--px) var(--color);
 }
 
 handle- {
@@ -153,18 +232,3 @@ handle- {
  left: calc((var(--large-radius) - var(--radius)) + var(--x));
  position: absolute;
 }
-
-/*
-handle-::before {
- content: var(--arrow);
- text-align: center;
- position: absolute;
- font-size: calc(2 * var(--radius));
- line-height: calc(2 * var(--radius));
- left: 0;
- top: 0;
- width: 100%;
- height: 100%;
- color: var(--fg);
-}
-*/

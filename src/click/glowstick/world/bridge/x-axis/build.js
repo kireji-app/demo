@@ -1,3 +1,3 @@
 Object.defineProperties(part, {
- cardinality: { value: 26n }
+ cardinality: { value: 30n }
 })
