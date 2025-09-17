@@ -1,20 +1,23 @@
 # Kireji Demo
-This project demonstrates the [kireji](https://github.com/kireji-app/kireji#readme) framework and acts as a future proving ground for the [Gamified Universal IDE (GUIDE)](https://github.com/kireji-app/demo/blob/main/docs/GUIDE.md). It builds an app ecosystem where cross-origin navigation feels like operating system task-switching.
+This project demonstrates the [kireji web framework](https://github.com/kireji-app/kireji#readme) and acts as a future proving ground for the [Gamified Universal IDE (GUIDE)](https://github.com/kireji-app/demo/blob/main/docs/GUIDE.md). It builds an app ecosystem where cross-origin navigation feels like operating system task-switching.
 
 Each app contributes to a unified platform state, which is encoded entirely in the URL. This acts as a portable save state, representing the full configuration of the running system.
 
-Users can bookmark and share links to preserve and resume their session without relying on cookies, databases, JavaScript storage APIs, user authentication, CORS, tracking or sending data to a server.
+Users can bookmark and share links to preserve and resume their cross-origin session without relying on cookies, databases, JavaScript storage APIs, user authentication, CORS, tracking or sending data to a server.
+
 ## Live Apps
-<h3><a href="https://www.kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.kireji.app<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Explore the parts that make up the platform</sub></sup></a></h3>
+These apps are working, but they are far from finished.
 <h3><a href="https://www.ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.ejaugust.com<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>A blog that runs on and talks about the platform</sub></sup></a></h3>
 <h3><a href="https://www.orenjinari.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/orenjinari/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.orenjinari.com<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Our resident artist's portfolio</sub></sup></a></h3>
+<h3><a href="https://www.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.glowstick.click<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>A game where you work as a software engineer</sub></sup></a></h3>
+<h3><a href="https://www.kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.kireji.app<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Explore the parts that make up the platform</sub></sup></a></h3>
 
 ## Upcoming Apps
+These apps don't do much, but check back later for updates!
 <h3><a href="https://www.desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.desktop.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>A familiar desktop operating system experience</sub></sup></a></h3>
-<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.core.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Future home of the kireji core part library</sub></sup></a></h3>
-<h3><a href="https://www.user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.user.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Future home of community-curated part library</sub></sup></a></h3>
-<h3><a href="https://www.kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.kireji.io<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Future home of a Gamified Universal IDE</sub></sup></a></h3>
-<h3><a href="https://www.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.glowstick.click<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>Future home of ... something.</sub></sup></a></h3>
+<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.core.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>TBD</sub></sup></a></h3>
+<h3><a href="https://www.user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.user.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>TBD</sub></sup></a></h3>
+<h3><a href="https://www.kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>www.kireji.io<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>TBD</sub></sup></a></h3>
 
 ## Stack
 [![Debian](https://img.shields.io/badge/Debian-Operating_System-212121?&labelColor=A81D33&style=for-the-badge&logo=Debian&logoColor=white)](https://www.debian.org/)
