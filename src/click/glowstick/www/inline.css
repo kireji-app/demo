@@ -133,10 +133,11 @@ user- {
  top: calc(50% - (5 * var(--ty)));
  left: calc(50% - var(--tx));
  width: var(--width);
- height: calc(6 * var(--ty));
+ height: calc(32 * var(--px));
  overflow: hidden;
  z-index: 20;
- background-size: contain;
+ background-size: cover;
+ background-repeat: no-repeat;
 }
 
 /*
