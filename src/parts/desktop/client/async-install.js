@@ -8,8 +8,8 @@ await Promise.all([
 ])
 
 // To preview FOUC
-if (_.hangHydration && !production)
- hang(1000)
+if (_.hangHydration > 0 && !production)
+ hang(_.hangHydration)
 
 const onpopstate = () => {
  try {

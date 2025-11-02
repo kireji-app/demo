@@ -1,60 +1,46 @@
 # Demo - *App Ecosystem*
-**Part of the Kireji Project**
-> *An application is the state it's in.*
-## Overview
+> **<sub>Part of the Kireji Project</sub>**<br><sup><i>omnia ex una linea</i></sup>
+
 The Demo App Ecosystem serves as the unified host for all applications demonstrating the Kireji Project. It represents a multi-origin app ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a powerful, portable save-state system.
 ## The Kireji Project
-The Kireji Project poses a question: **What if we could treat all functional software as points in a single, mathematically mapped, and traversable space?**
+The Kireji Project poses a question: **What if we could treat every web page as a point in a unified, mathematically mapped space?**
+
 | Repo | Purpose
 | ---- | -------
-| [MPHF](https://github.com/kireji-app/mphf#readme) | [Coordinate System<br><sub>Provides the bijective coordinate system</sub>](https://github.com/kireji-app/mphf#readme)
-| [Kireji](https://github.com/kireji-app/kireji#readme) | [Web Framework<br><sub>Uses MPHF to encode app state in URLs and manage cross-origin traversal</sub>](https://github.com/kireji-app/kireji#readme)
-| **Demo** | **App Ecosystem - ★ You are here<br><sub>Demonstrates practical applications of the Kireji Project</sub>**
+| [MPHF](https://github.com/kireji-app/mphf#readme) | [Coordinate System<br><sup>A bijective coordinate system for hashing structured data</sup>](https://github.com/kireji-app/mphf#readme)
+| [Kireji](https://github.com/kireji-app/kireji#readme) | [Web Framework<br><sup>A reactive web framework with MPHF routing</sup>](https://github.com/kireji-app/kireji#readme)
+| **Demo**| **App Ecosystem - ★ You are here<br><sup>An example app ecosystem demonstrating the project</sup>**
 
-## Explore the Dimensions
+## Demo Applications
+These applications are in *alpha* and still undergoing research and development.
 
-Explore the different dimensions of the Kireji ecosystem, each corresponding to a distinct domain and purpose:
+<h3><a href="https://www.ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>EJ's Notebook</sup></a></h3>
 
-### Active Apps
+- Essays and notes about the concepts that drive the project.
 
-<h3><a href="https://www.kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>MPHF Viewer<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The Technical Showcase</sub></sup></a></h3>
+<h3><a href="https://www.kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Demo Outliner</sup></a></h3>
 
-- Explore the app ecosystem and all of its component parts using a visual outliner and detail viewer.
+- Explore the demo app ecosystem and its component parts using a visual outliner and detail viewer.
 
-<h3><a href="https://www.ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>EJ's Notebook<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The Development Blog</sub></sup></a></h3>
+<h3><a href="https://www.orenjinari.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/orenjinari/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>orenjinari</sup></a></h3>
 
-- Philosophical essays, candid R&D notes, and the conceptual analogies that drive the project's vision.
+- The portfolio of the project's resident artist, showcasing the unique aesthetic she brings to the project.
 
-<h3><a href="https://www.orenjinari.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/orenjinari/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>orenjinari<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The Artwork</sub></sup></a></h3>
-
-- The portfolio of the project's resident artist, showcasing the unique aesthetic components that fill the project.
-
-### Coming Soon
-These apps are coming soon. Feel free to visit them anyways to see an Error 503 landing page or maybe catch a glimpse of some early work-in-progress structure.
-
-<h3><a href="https://www.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>glowstick.click<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The Meta Game</sub></sup></a></h3>
+<h3><a href="https://www.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Glowstick</sup></a></h3>
 
 - Explore the app ecosystem through the lens of an open-world pixel art game.
 
-<h3><a href="https://www.kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>kireji.io<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The G.U.I.D.E</sub></sup></a></h3>
+<h3><a href="https://www.desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts</sup></a></h3>
 
-- This is the future home of a gamified IDE for exploring, transforming, and contributing to the space of all possible applications.
+- Experience the app ecosystem as though it was a familiar operating system environment.
 
-<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The Documentation</sub></sup></a></h3>
-
-- Future home of documentation for the Kireji Web Framework and preview and learning tools for all of its pre-built components.
-
-<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The Community</sub></sup></a></h3>
-
-- Future home of a portal for sharing useful community-made components.
-
-<h3><a href="https://www.desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>⟍&nbsp;</sup><sub>The OS Experience</sub></sup></a></h3>
-
-- Experience the app ecosystem as though it was a familiar operating system environment, including a control panel, desktop icons, a task-bar and movable windows.
-
+### Coming Soon
+These applications coming soon!
+<h3><a href="https://www.kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>kireji.io</sup></a></h3>
+<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts</sup></a></h3>
+<h3><a href="https://www.user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
 
 ### Tech Stack
-
 This platform is built on a minimal dependency stack, powered by the **Kireji Web Framework** and uses **Vanilla JavaScript** to ensure a fully self-contained, auditable runtime environment.
 
 [![Debian](https://img.shields.io/badge/Debian-Operating_System-212121?&labelColor=A81D33&style=for-the-badge&logo=Debian&logoColor=white)](https://www.debian.org/)
@@ -67,7 +53,8 @@ This platform is built on a minimal dependency stack, powered by the **Kireji We
 <br>[![JavaScript](https://img.shields.io/badge/JavaScript-Logic-212121?labelColor=F7DF1E&style=for-the-badge&logo=javascript&logoColor=black)](https://262.ecma-international.org/)
 
 ### Status and License
-The Demo App Ecosystem is in **Alpha**\
+The Demo App Ecosystem is in **Alpha**
+
 The Kireji Project is in **early research and development**.
 
 [![Project Status: Alpha](https://img.shields.io/badge/status-alpha-212121?style=for-the-badge&labelColor=181717&logo=github&logoColor=white)](https://www.repostatus.org/#alpha)

@@ -1,2 +1,2 @@
-region.element = document.querySelector(`world->[data-key="${region.key}"]`)
 region.element.setAttribute("selected", "")
+region.neighbors.map(neighbor => neighbor.element.setAttribute("selected", ""))

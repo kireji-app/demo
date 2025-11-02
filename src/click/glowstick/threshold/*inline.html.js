@@ -1,2 +1,2 @@
 const { x, y, w, h, key, gridColor } = region
-return `<region- class="threshold" data-key=${key} ${region === world.arm ? "selected " : ""}style="---x:${x};---y:${y};---w:${w};---h:${h};--grid-color:${gridColor ?? "var(--fg-mode-er)"}"></region->`
+return `<region- class="threshold" data-key=${key} ${region === world.arm || world.arm.neighbors.includes(region) ? "selected " : ""}style="---x:${x};---y:${y};---w:${w};---h:${h};--grid-color:${gridColor ?? "var(--fg-mode-er)"}"></region->`
