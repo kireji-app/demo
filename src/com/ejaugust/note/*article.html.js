@@ -4,3 +4,5 @@ return note["heading.html"] +
  ) +
  "</p>" +
  note["inline.html"]
+
+// TODO: Somehow sanitize note html.

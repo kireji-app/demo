@@ -101,6 +101,10 @@ a:hover {
  color: var(--fg-un-mode-er);
 }
 
+a[target="_blank"] {
+ white-space: nowrap;
+}
+
 a[target="_blank"]::after {
  content: '↗';
  color: inherit;

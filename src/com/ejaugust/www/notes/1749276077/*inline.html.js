@@ -1,34 +1,11 @@
-const dynamicSection = _.built ? `<pre>${_.com.ejaugust.cardinality}</pre>
-<p>Right now, this is the state it's in, as an integer:</p>
-<pre id=current-state-app>${_.com.ejaugust.routeID}</pre>
-<p>In base64, that gives us the following hash:</p>
-<pre id=current-hash-app>${encodeSegment(_.com.ejaugust.routeID)}</pre>
-<p>When you interact with this app, you're changing its state, even if you're just scrolling the page. However, that's not the hash you see in your address bar. That's because this website is embedded into a larger platform.</p>
-<h3>Beyond the Notebook</h3>
-<p>Try opening the menu in the bottom left and visiting another app. Don't worry - everything on <i>this</i> app will remain just as you left it, including your scroll position. Likewise, changes you make in another one of my apps will be retained when you come back to this one.</p>
-<p>This is not accomplished using any storage API in javascript and you certainly aren't uploading your activity to any server. It's all stored in your address bar, in the URL itself.</p>
-<p><b>Kireji</b> is a platform that unites a collection of apps into a single minimal perfect hash function. The cardinality of all of those apps together is about ${scientific(_.cardinality, true)}. As an integer, it looks like this:</p>
-<pre>${_.cardinality}</pre>
-<p>Here's the state you've assigned to the platform:</p>
-<pre id=current-state-platform>${_.routeID}</pre>
-<p>Here's how it looks as a hash in base 64:</p>
-<pre id=current-hash-platform>${encodeSegment(_.routeID)}</pre>
-<p>Now, we add the domain of the app you're in along with a semantic version number to obtain the exact URL you currently have in your address bar:</p>
-<pre id=current-hash-platform>https://www.ejaugust.com<output id=current-encoded-route>${encodeRoute(_.routeID)}</output></pre>` : ""
 return `<h2>Background</h2>
 <p>For the past three years I've been trying to build an operating system that can do everything you expect an operating system to do while also encoding its entire state as a single URL. That way, we get a permalink to every state and achieve truly comprehensive deep linking.</p>
 <p>For a long time, I struggled with finding a solid approach to achieving this goal. A user-friendly operating system involves many independent, dependent and otherwise tightly coupled components - especially when you want it to be a platform that supports third-party app development. I tried a variety of different methods to store that data in a URL without any redundancy.</p>
 <p>Some of my attempts involved query parameters, some base64-encoded JSON objects, some domain-specific languages, and some my own custom syntax. They all had the same problem - they failed to capitalize on the <i>actual space available in URLs</i>.</p>
 <p>An incredible combinatorial explosion appears when you try to compute the number of unique URLs that can exist. Query params, JSON objects, domain-specific languages and any other syntax will always suffer from the same problem: it encodes duplicate information and requires delimiters that take up space in the URL.</p>
-<h2>The URL Space: Bigger Than the Universe</h2>
-<p>According to some very lazy research I just did, the estimated number of particles in the observable universe is <math><msup><mn>10</mn><mn>96</mn></msup></math>. That's a 97-digit number. Have a look:</p>
-<pre>1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</pre>
-<p>Even though that's an unfathomably large number (imagine having to count to it), it's not <i>that</i> long – it barely fills two lines of text on my screen.</p>
-<p>If you could assign a unique natural number (or <i>hash</i>) to every particle in the known universe you'd never need more than 97 digits to do it.</p>
-<p>If we change the base from 10 to 64, <math><msup><mn>10</mn><mn>96</mn></msup></math> items is fewer than <math><msup><mn>64</mn><mn>54</mn></msup></math>. That means you never need more than 54 characters to assign a unique base 64 hash to every particle in the known universe.</p>
-<p>That's an incredibly short string of text for such a big feat. Here's a sample I made by mashing my keyboard 54 times:</p>
-<pre>09m84COSM84wf897hos_t83740FW3M-8tdocs8374tyvsc9nc3b1nt</pre>
-<p>In theory, this could be the URL of a random particle in the universe. Hopefully, it's one close by.</p>
+
+
+
 <p>This kind of assignment, where each element in a set has an integer value and there are no gaps or collisions, is called a minimal perfect hash function (MPHF).</p>
 <p>Of course, URLs have a more structured syntax than base64 integers. For example, the domain name takes up a little bit of space in the address bar and you don't normally encode numerical data in a domain name.</p>
 <p>Yet, even if we add the longest possible domain name (255 characters)…</p>
@@ -88,17 +65,10 @@ return `<h2>Background</h2>
 <p><em>Do I really need this many application states to make an operating system?</em></p>
 <p>My guess was <em>no way</em> (especially if I embrace a minimalist approach to UI interaction design).</p>
 <p>However, to take full advantage of all of that storage space, I would need to create a MPHF that could integrate naturally into today's web app technology stack.</p>
-<h2>MVC + MPHF</h2>
-<p>A breakthrough came when I realized that the structure I was building to support the bijection had a surprising amount in common with MVC architecture. In fact, the two ended up laying right on top of each other and being the <em>same thing</em>.</p>
-<p>Think of an MVC controller object as a piece of the piecewise-defined hash function. Whether you assign a hash (which acts as the data model) to a controller or manipulate the controller directly (for example, in response to user interaction), the application state and the model are always be kept in sync.</p>
-<p>Each controller is a reusable component. It has its own hash range from 0 to k-1, where k is the cardinality of the component's model.</p>
-<p>These components assemble together like LEGO® bricks, and no matter what assembly you make with them, the result is still a minimal perfect hash function over the assembly's state domain.</p>
-<p>Leveraging the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain" target="_blank">JavaScript prototype chain</a>, I was able to add object-oriented concepts like inheritance into the equation.</p>
-<h2>A Real-World Demonstration</h2>
-<p>This isn't just a theoretical exercise. I put these methods into practice to create this website and the surrounding platform. Within the platform, this notebook is represented by a controller called <code>"ejaugust.com"</code>. This is how many states it has:</p>
-${dynamicSection}
-<p>It's quite short, all things considered.</p>
-<p>It gives you a robust link back to this exact state - and any other on the platform - so that you can bookmark, share and/or analyze it. </p>
+ Within the platform,
+
+...
+
 <p>I'm still adding features to the platform like movable windows, the ability to have arbitrarily many windows open, and even a full read-write file system that behaves in the familiar way. These features will lengthen the URL, but we've got plenty of room to grow.</p>
 <h2>Conclusion</h2>
 <p>Thanks for reading! Hopefully, this shows you just how powerful a minimal perfect hash function is when employed for the purposes of data compression. The way that it overlays with MVC architecture is also very satisfying.</p>

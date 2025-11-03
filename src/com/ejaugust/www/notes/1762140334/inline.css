@@ -1,0 +1,21 @@
+pre.copyable {
+ cursor: pointer;
+ user-select: none;
+}
+
+pre.copyable>span::before {
+ content: '📋';
+ margin-right: 0.5em;
+}
+
+pre.copyable>span::after {
+ content: '✅';
+ margin-left: 0.5em;
+ opacity: 0%;
+ transition: opacity 1s;
+}
+
+pre.copyable[data-copied]>span::after {
+ opacity: 100%;
+ transition: opacity 0.25s;
+}

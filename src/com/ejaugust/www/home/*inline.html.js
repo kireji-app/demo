@@ -1,10 +1,12 @@
 
 return (
- "<section id=bio>" + (
-  `<h1>${ejaugust.title}</h1>` +
-  "<p>Hello! Welcome to my notebook. I created this site so I'd have a place to write casually about the tech I'm working on.</p>" +
-  "<p>You can pick a topic from the list below or use the menu button at the bottom left to explore the rest of the platform.</p>"
- ) +
+ /* "<section id=bio>" + (
+  `<img src="${ejaugust.placeholderImage("part.png")}" title=Me>` +
+  `<img src="${ejaugust.placeholderImage("hw-design.png")}" title=Design>` +
+  `<img src="${ejaugust.placeholderImage("hw-engineering.png")}" title=Engineering>` +
+  `<img src="${ejaugust.placeholderImage("hw-math.png")}" title=Math>` +
+  `<img src="${ejaugust.placeholderImage("hw-research.png")}" title=Research>`
+ ) + */
  "</section>" +
  "<section>" + (
   "<div id=note-links>" + (

@@ -1,0 +1,1 @@
+_.removeEventListener("populate", note.listener)

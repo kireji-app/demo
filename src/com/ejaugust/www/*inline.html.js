@@ -1,9 +1,11 @@
 return ejaugust[".."].scroller.wrap(
  "<header>" + (
-  "<menu>" + (
-   `<a id=notebook-title href="https://www.ejaugust.com" onclick="_.com.ejaugust.www.home.go(event)">${ejaugust.title}</a><flex-spacer></flex-spacer>`
+  `<a id=notebook-title title="⌂ Home" href="https://www.ejaugust.com" onclick="_.com.ejaugust.www.home.go(event)">` + (
+   `<h1>` + (
+    `<img src="${ejaugust.placeholderImage("title.png")}" alt="${ejaugust.title}"></h1>`
+   ) + `</h1>`
   ) +
-  "</menu>"
+  `</a>`
  ) +
  "</header>" + (
   "\n<article id=notebook-section>" + section["inline.html"] + "\n</article>\n"
@@ -14,7 +16,7 @@ return ejaugust[".."].scroller.wrap(
    '<a href="#" onclick=_.com.ejaugust.www.notes.go(event)><span class=unicode-icon>↑</span> Back to Top</a>'
   ) +
   "</section>" +
-  '<a id=k-logo target=_blank href="https://github.com/kireji-app/demo#readme"><pre>' + (
+  '<a id=k-logo title="Visit Site Repo" target=_blank href="https://github.com/kireji-app/demo#readme"><pre>' + (
    " \n" +
    "𝑘\n" +
    " \n" +
@@ -27,11 +29,10 @@ return ejaugust[".."].scroller.wrap(
    "          ▙▌  \n"
   ) +
   "</pre></a>" +
-  `<img src="${_.app.kireji.www.placeholderImage("part.png")}"/>` +
   "<section id=social>" + (
-   `<a target=_blank href=https://github.com/EJAugust>${ejaugust["github.svg"]}</a>` +
-   `<a target=_blank href=https://linkedin.com/in/kireji>${ejaugust["linkedin.svg"]}</a>` +
-   "<a target=_blank href=https://github.com/sponsors/EJAugust>♡</a>"
+   `<a target=_blank title="My GitHub Profile" href=https://github.com/EJAugust>${ejaugust["github.svg"]}</a>` +
+   `<a target=_blank title="Me on LinkedIn" href=https://linkedin.com/in/kireji>${ejaugust["linkedin.svg"]}</a>` +
+   `<a target=_blank title="♡ Sponsor Me" href=https://github.com/sponsors/EJAugust>♡</a>`
   ) +
   "</section>"
  ) +

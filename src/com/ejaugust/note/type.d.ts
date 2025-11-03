@@ -9,6 +9,8 @@ declare interface IEJAugustNote extends IPart {
  readonly editTimestamp?: string
  /** An optional tagline appearing as a subheading below the note's title. */
  readonly subtitle?: string
+ /** An optional pathname segment used to generate a canonical link to the note. */
+ readonly pathname?: string
  /** The content of the note. */
  readonly "article.html": string
  /** The full date and reading time description line for the note. */

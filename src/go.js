@@ -1,0 +1,1 @@
+console.log("get canonical link to this", EVENT)

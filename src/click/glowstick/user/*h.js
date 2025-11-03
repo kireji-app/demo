@@ -1,1 +1,1 @@
-return 1n // + 1n = 1n
+return 1n

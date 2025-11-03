@@ -1,16 +1,36 @@
 <p>Here, we see two ways of checking for the existence of a certain property on an object: one which traverses the prototype chain and one which doesn't.</p>
-<pre>class Cat {
+<pre>const cat = {
  get legsCount() {
   return 4
  }
 }</pre>
-<pre>class TabbyCat extends Cat {
- // No own "legsCount" property.
-}
- 
-const cat = new Cat()</pre>
+<pre>const tabbyCat = Object.create(cat)</pre>
 <pre>console.log("legsCount" in cat)
 // true
 
- console.log(Object.hasOwn(cat, "legsCount"))
+console.log("legsCount" in tabbyCat)
+// true
+
+console.log(Object.hasOwn(cat, "legsCount"))
+// true
+
+console.log(Object.hasOwn(tabbyCat, "legsCount"))
+// false</pre>
+<p>Be careful. Class prototypes have their own properties but class instances do not own those properties.</p>
+<pre>class CatClass {
+ get legsCount() {
+  return 4
+ }
+}</pre>
+<pre>const catInstance = new CatClass()</pre>
+<pre>console.log("legsCount" in CatClass.prototype)
+// true
+
+console.log("legsCount" in catInstance)
+// true
+
+console.log(Object.hasOwn(CatClass.prototype, "legsCount"))
+// true
+
+console.log(Object.hasOwn(catInstance, "legsCount"))
 // false</pre>
