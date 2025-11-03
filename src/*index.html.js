@@ -1,16 +1,18 @@
 const placeholderIcon = _.application.placeholderImage("part.png")
 
 const meta =
- `<meta name="robots" content="noindex" />` +
+ // `<meta name="robots" content="noindex" />` +
  `<meta name="format-detection" content="telephone=no, email=no, address=no, date=no">` +
- `<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>` /*+
+ `<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>` +
+ `<meta name="description" content="${sanitizeAttr(_.application.descriptionMeta)}">` /* +
  `<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">` +
  `<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">`*/
 
 const links =
  `<link rel="manifest"${worker["link-manifest.txt"]}/>` +
  `<link class=favicon rel=icon href="${placeholderIcon}"/>` +
- `<link class=favicon rel="apple-touch-icon" href="${placeholderIcon}"/>`
+ `<link class=favicon rel="apple-touch-icon" href="${placeholderIcon}"/>` +
+ `<link rel="canonical" href="https://${_.application.host}${_.application.canonicalPathname ?? "/"}" />`
 
 const styles =
  `<style id="user-css">${_["inline.css"]}</style>` +
@@ -20,7 +22,7 @@ const styles =
  `<style id="img-css">${environment === "server" ? "" : _["images.css"]}</style>`
 
 const title =
- `<title>${_.application.title ?? "Untitled App"}</title>`
+ `<title>${sanitizeAttr(_.application.title ?? "Untitled App")}</title>`
 
 const head =
  `<head>${title}${meta}${links}${styles}</head>`

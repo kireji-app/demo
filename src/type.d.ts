@@ -24,7 +24,7 @@ declare interface IDNSRoot extends IMix {
  /** The operating system's currently assigned root application.
   * 
   * This selection is encoded by the host of the current route. */
- readonly application: IPart
+ readonly application: IApplication
  /** A host-keyed object with all of the applications that are available from the web at their host thanks to DNS records. */
  readonly applications: Record<string, IApplication>
  /** A host-keyed object with all of the applications that are available and which are not using the placeholder error 501 prototype. */

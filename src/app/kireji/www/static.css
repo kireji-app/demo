@@ -18,27 +18,25 @@ body.vintage wallpaper- {
 }
 
 part-outliner {
- position: fixed;
+ position: absolute;
  top: var(--header-height);
  width: var(--outliner-width);
- bottom: var(--task-bar-height);
+ bottom: 0;
  left: 0;
- overflow: hidden;
  background-color: var(--bg-mode-est);
 }
 
 part-editor {
- position: fixed;
+ position: absolute;
  top: var(--header-height);
  left: var(--outliner-width);
  right: 0;
- bottom: var(--task-bar-height);
- overflow: hidden;
+ bottom: 0;
 }
 
 #outliner-header,
 #editor-header {
- position: fixed;
+ position: absolute;
  z-index: 10;
  top: 0;
  margin: 0;
@@ -159,26 +157,23 @@ body.dark part-outliner {
 
 body.vintage :is(part-editor, part-outliner) {
  top: calc(4px + var(--header-height));
- bottom: calc(4px + var(--task-bar-height));
+ bottom: 4px;
 }
 
 body.vintage :is(part-editor, part-outliner)::after {
  content: "";
- position: fixed;
+ position: absolute;
  box-shadow: var(--deep-inset);
- top: calc(2px);
- bottom: calc(2px + var(--task-bar-height));
+ top: calc(-2px - var(--header-height));
+ bottom: -2px;
+ left: -2px;
+ right: -2px;
  pointer-events: none;
 }
 
 body.vintage part-editor {
  left: calc(2px + var(--outliner-width) + (var(--handle-thickness) / 2));
  right: 2px;
-}
-
-body.vintage part-editor::after {
- left: calc(var(--outliner-width) + (var(--handle-thickness) / 2));
- right: 0;
 }
 
 body.vintage #editor-header {
@@ -196,11 +191,6 @@ body.vintage :is(#outliner-header, #editor-header) {
  box-shadow: var(--deep-outset);
  background-color: var(--bg);
  top: 4px;
-}
-
-body.vintage part-outliner::after {
- left: 0;
- width: calc(var(--outliner-width) - (var(--handle-thickness) / 2));
 }
 
 wallpaper- summary>.explore-toggle,

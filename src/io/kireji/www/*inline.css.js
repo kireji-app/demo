@@ -1,0 +1,1 @@
+return kirejiIo["static.css"] + kirejiIo[".."].scroller["inline.css"]

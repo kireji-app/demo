@@ -12,4 +12,10 @@ declare interface IApplication extends IPart {
  readonly "inline.css"
  /** The html which becomes the desktop wallpaper for the application. */
  readonly "inline.html"
+ /** The canonical link to use for indexing pages in search results for a given page. */
+ readonly canonicalPathname?: string
+ /** A short optional description of the current application state which may appear in search results in relation to the application's current `canonicalLink` property. */
+ readonly descriptionMeta?: string
+ /** An optional menu title for showing apps in the taskbar menu. If undefined, the application's part title will be used instead. */
+ readonly titleMenu?: string
 }

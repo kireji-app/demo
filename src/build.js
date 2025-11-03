@@ -490,6 +490,10 @@ function ƒ(_) {
    allParts.push(part)
    closeLog(2)
    return part
+  },
+  sanitizeAttr = str => {
+   if (typeof str !== 'string') return ''
+   return str.replaceAll(/&/g, '&amp;').replaceAll(/"/g, '&quot;').replaceAll(/'/g, '&#39;').replaceAll(/</g, '&lt;').replaceAll(/>/g, '&gt;')
   }
 
  openLog(1, `\n     ▌ ▘     ▘▘   ${_.branch}\n 𝒌 = ▙▘▌▛▘█▌ ▌▌   ${_.version}\n     ▛▖▌▌ ▙▖ ▌▌   \n            ▙▌    ${environment}\n\nBooting O/S`)
@@ -573,7 +577,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
+ change: "patch",
  verbosity: 100,
  mapping: false,
  defaultApplication: "www.glowstick.click",

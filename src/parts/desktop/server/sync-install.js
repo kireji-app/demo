@@ -125,16 +125,28 @@ if (require.main === module) {
      }
     }
 
-    if (pathname === '/') {
-     status = 302
-     head = { 'Location': `/${_.version}/${_.landingHash}/`, ...securityHeader }
-     break respond
-    } else {
-     // TODO: Handle more canonical pathnames
+    const serverVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
+    if (!serverVersion) {
+     // Always handle canonical paths using the current server version.
+     if (pathname === '/') {
+      status = 302
+      head = { 'Location': `/${_.version}/${_.landingHash}/`, ...securityHeader }
+      break respond
+     } else {
+      const isValidCanonicalLink = _.go(`https://${host}${pathname}`)
+      if (isValidCanonicalLink) {
+       status = 302
+       head = { 'Location': `/${_.version}/${encodeSegment(_.routeID)}/`, ...securityHeader }
+       break respond
+      }
+      // TODO: Handle more canonical pathnames
+      /*
+       Canonical path names represent idempotent operations applied to the current state (which is always the landing hash on the server side).
+      */
+     }
+     throw "Unsupported pathname: " + pathname
     }
 
-    const serverVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
-    if (!serverVersion) throw "Unsupported pathname: " + pathname
     /** @type {IVersionedServer} */
     const versionedServer = require(`../.versions/${serverVersion}.js`)
 

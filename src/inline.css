@@ -52,7 +52,8 @@ body {
  --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
  --menu-tween: 0;
  --h: 100vh;
- --wallpaper-height: calc(var(--h) - var(--task-bar-height));
+ --warning-height: 28px;
+ --wallpaper-height: calc(var(--h) - var(--task-bar-height) - var(--warning-height));
  overscroll-behavior: none !important;
  margin: 0;
  height: var(--h);
@@ -67,7 +68,7 @@ wallpaper- {
  --gap: calc(2.5 * var(--spacing));
  --radius: calc(var(--spacing) / 2.5);
  position: fixed;
- top: 0;
+ top: var(--warning-height);
  height: var(--wallpaper-height);
  left: 0;
  right: 0;
@@ -279,4 +280,55 @@ a[x-apple-data-detectors] {
  pointer-events: none !important;
  color: inherit !important;
  text-decoration: none !important;
+}
+
+img[src^="data:image/svg+xml;inert;"] {
+ overflow: hidden;
+ animation: loading-gradient 1.7s infinite linear;
+ background: linear-gradient(to right, var(--bg-dark) 0%, var(--bg-light) 50%, var(--bg-dark) 100%), var(--bg-dark);
+ background-size: 100% 100%;
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+}
+
+@keyframes loading-gradient {
+ 0% {
+  background-position: -100vw 0;
+ }
+
+ 100% {
+  background-position: 100vw 0;
+ }
+}
+
+warning- {
+ height: var(--warning-height);
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ background-color: #f0bf64;
+ font-weight: 500;
+ font-size: 11px;
+ line-height: 14px;
+ padding: 7px;
+ text-align: center;
+}
+
+body.dark warning- {
+ background-color: #644c08;
+}
+
+@media (width < 400px) {
+
+ html,
+ body {
+  --warning-height: 49px;
+ }
+}
+
+#fullscreen-button,
+#share-button,
+stats- {
+ display: none !important;
 }

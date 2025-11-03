@@ -1,1 +1,0 @@
-return `https://www.ejaugust.com/${note.pathname ?? note.key}`

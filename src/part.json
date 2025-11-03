@@ -9,6 +9,7 @@
  ],
  "validate": [],
  "go": [
-  "ANCHOR"
+  "HREF",
+  "EVENT"
  ]
 }

@@ -4,9 +4,9 @@ return `
  <ul id=application-control>${Object.entries(_.liveApplications).map(([host, application]) => {
  return `
   <li class=task-link${application === _.application ? ` data-here` : ""}>
-   <a href="https://${host}" onclick="_.setApplication(event, this)">
+   <a href=https://${host} onclick=_.setApplication(event,this)>
     <img src="${application.placeholderImage("part.png")}" class=part-icon />
-    <span class=label>${application.title}</span>
+    <span class=label>${application.titleMenu ?? application.title}</span>
    </a>
   </li>`
 }).join("")}</ul>

@@ -1,0 +1,1 @@
+return `/notes/${note.pathname ?? note.key}`
