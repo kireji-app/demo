@@ -152,7 +152,7 @@ if (require.main === module) {
     }
 
     /** @type {IVersionedServer} */
-    const versionedServer = require(`../.versions/${serverVersion}.js`)
+    const versionedServer = serverVersion === _.version ? module.exports : require(`../.versions/${serverVersion}.js`)
 
     const alternateModelVersion = searchParams.get("from")
     if (alternateModelVersion) {
