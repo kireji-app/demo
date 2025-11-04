@@ -196,7 +196,7 @@ world- {
 
 region-:not([selected]) {
  --darken: 0;
- filter: contrast(0.8) saturate(0.8) brightness(calc(1 - var(--darken)));
+ /* filter: contrast(0.8) saturate(0.8) brightness(calc(1 - var(--darken))); */
 }
 
 body.dark region-:not([selected]) {
