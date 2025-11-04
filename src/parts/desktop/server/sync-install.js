@@ -133,10 +133,14 @@ if (require.main === module) {
       head = { 'Location': `/${_.version}/${_.landingHash}/`, ...securityHeader }
       break respond
      } else {
+      const initialRoute = encodeRoute(_.routeID)
+      log(1, "Verify Canonical Base Route: " + initialRoute)
       const isValidCanonicalLink = _.go(`https://${host}${pathname}`)
       if (isValidCanonicalLink) {
+       const finalDestination = encodeRoute(_.routeID)
+       log(1, "Resulting Destination: " + finalDestination)
        status = 302
-       head = { 'Location': `/${_.version}/${encodeSegment(_.routeID)}/`, ...securityHeader }
+       head = { 'Location': finalDestination, ...securityHeader }
        break respond
       }
       // TODO: Handle more canonical pathnames
