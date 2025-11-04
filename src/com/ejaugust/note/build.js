@@ -5,7 +5,7 @@ const noteDataLength = (note["*inline.html.js"] ?? note["inline.html"] ?? "").le
 const estimatedWordCharacters = noteDataLength * markupReductionFactor
 const averageCharactersPerMinute = averageWordLength * averageWordsPerMinute
 
-Object.defineProperties(note, {
+note.define({
  unixTimestamp: { value: note.domains[0] },
  readingLength: { value: estimatedWordCharacters / averageCharactersPerMinute },
 })

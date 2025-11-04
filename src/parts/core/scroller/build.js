@@ -1,4 +1,4 @@
-Object.defineProperties(scroller, {
+scroller.define({
  cardinality: { value: 100_00n },
 
  content: { value: null, writable: true },

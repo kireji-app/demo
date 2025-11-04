@@ -3,18 +3,18 @@ if (!facet.environments)
 
 const environments = facet.environments.split("\n")
 
-Object.defineProperties(facet, {
- isAsync: { value: "installAsync" in facet, configurable: true, writable: true }
+facet.define({
+ isAsync: { value: "installAsync" in facet }
 })
 
 if (environments.includes(environment)) {
- Object.defineProperties(facet, {
-  supported: { value: facet.checkSupport(), configurable: true, writable: true }
+ facet.define({
+  supported: { value: facet.checkSupport() }
  })
  if (!facet.supported)
-  Object.defineProperties(facet, {
-   error: { value: "support check failed", configurable: true, writable: true }
+  facet.define({
+   error: { value: "support check failed" }
   })
-} else Object.defineProperties(facet, {
- error: { value: "wrong environment", configurable: true, writable: true }
+} else facet.define({
+ error: { value: "wrong environment" }
 })

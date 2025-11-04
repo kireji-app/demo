@@ -1,14 +1,14 @@
-Object.defineProperties(part, {
- enabled: { value: undefined, configurable: true, writable: true },
- disabled: { value: undefined, configurable: true, writable: true },
- dirty: { value: undefined, configurable: true, writable: true },
- wasEnabled: { value: undefined, configurable: true, writable: true },
- justDisabled: { value: undefined, configurable: true, writable: true },
- justEnabled: { value: undefined, configurable: true, writable: true },
- routeID: { value: -1n, configurable: true, writable: true },
- previousRouteID: { value: -1n, configurable: true, writable: true },
- deltaRouteID: { value: 0n, configurable: true, writable: true },
- cardinality: { value: 1n, configurable: true, writable: true },
+part.define({
+ enabled: { value: undefined, writable: true },
+ disabled: { value: undefined, writable: true },
+ dirty: { value: undefined, writable: true },
+ wasEnabled: { value: undefined, writable: true },
+ justDisabled: { value: undefined, writable: true },
+ justEnabled: { value: undefined, writable: true },
+ routeID: { value: -1n, writable: true },
+ previousRouteID: { value: -1n, writable: true },
+ deltaRouteID: { value: 0n, writable: true },
+ cardinality: { value: 1n, configurable: true },
  callbacks: {
   value: {
    add: new Set(),

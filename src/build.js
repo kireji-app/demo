@@ -312,7 +312,7 @@ function ƒ(_) {
    const pathToRepo = new Array(domains.length).fill("..").join("/")
    const pathFromRepo = [...domains].reverse().join("/")
    Object.defineProperties(part, {
-    manifest: { value: JSON.parse(part["part.json"] ?? "{}"), configurable: true, writable: true },
+    manifest: { value: JSON.parse(part["part.json"] ?? "{}") },
     host: { value: host },
     subdomains: { value: subdomains },
     subpartKeys: { value: subpartKeys },
@@ -320,12 +320,14 @@ function ƒ(_) {
     domains: { value: domains },
    })
    const typename = part.manifest.extends ?? (host !== "part.core.parts" ? "part.core.parts" : null)
+   if (host === "part.core.parts")
+    Object.defineProperty(part, "define", { value: descriptor => Object.defineProperties(part, descriptor) })
    const prototype = typename ? distributeHydration(typename ?? "part.core.parts") : null
    const isAbstract = part.manifest.abstract
    if (prototype) {
     Object.setPrototypeOf(part.manifest, prototype.manifest)
     Object.setPrototypeOf(part, prototype)
-    Object.defineProperty(part, "prototype", { value: prototype })
+    part.define({ prototype: { value: prototype } })
    }
    const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
    const buildSource = sourceFile.addSource(pathToRepo + "/build.js", ƒ.toString())
@@ -440,8 +442,8 @@ function ƒ(_) {
      sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
     }
    }
-   Object.defineProperties(part, {
-    Property: { value: Property, configurable: true, writable: true },
+   part.define({
+    Property: { value: Property },
     isAbstract: { value: isAbstract }
    })
    for (const fn of filenames) {
@@ -465,7 +467,7 @@ function ƒ(_) {
    const propertyDescriptorScript = sourceFile.packAndMap()
    try {
     const propertyDescriptor = eval(propertyDescriptorScript)
-    Object.defineProperties(part, propertyDescriptor)
+    part.define(propertyDescriptor)
    } catch (e) {
     throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
    }
@@ -542,7 +544,8 @@ function ƒ(_) {
  // These are scope variables for evaluated method bodies.
  const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era, stats, update } = desktop
  if (environment === "client") var element, svg
- Object.defineProperties(_, {
+
+ _.define({
   frameRequest: { value: null, writable: true },
   application: { value: null, writable: true },
   applications: { value: {} },
@@ -560,7 +563,8 @@ function ƒ(_) {
  closeLog(3)
  openLog(3, "Computing Landing Hash")
  const landingModel = { "app": { "kireji": { "www": { "editor": { "selected": "f" }, "outliner": { "folders": "g__0M", "width": { "open": "_" } } } } }, "click": { "glowstick": { "user": "4", "world": { "open-office": { "x-axis": "a", "y-axis": "9" } } } }, "parts": { "desktop": { "color": "light" } } }
- Object.defineProperties(_, {
+
+ _.define({
   built: { value: true },
   landingModel: {
    value: landingModel
@@ -569,6 +573,7 @@ function ƒ(_) {
    value: encodeSegment(_.modelToRouteID(landingModel))
   }
  })
+
  log(3, "Computed output: " + _.landingHash)
  closeLog(3)
  if (_.local) _.validate()

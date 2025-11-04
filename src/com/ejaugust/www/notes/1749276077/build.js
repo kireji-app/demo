@@ -1,4 +1,4 @@
-Object.defineProperties(note, {
+note.define({
  listener: {
   value() {
    if (client.hydrated) {

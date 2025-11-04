@@ -13,7 +13,7 @@ for (let i = 0; i < allParts.length; i++) {
  folderParts.push(instance)
 }
 
-Object.defineProperties(folders, {
+folders.define({
  cardinality: { value: 2n ** BigInt(folderParts.length) },
  folderParts: { value: folderParts },
  folderIndex: { value: folderIndex }

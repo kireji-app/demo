@@ -55,8 +55,6 @@ declare const sourcePositionMarks: object
 declare const sourcePositionMarkPattern: RegExp
 /** The host used to find all of the source code for the part whose code is currently being evaluated. */
 declare const host: string
-/** Whether or not the current part is the core part (`part.core.part`), which has no prototype. */
-declare const isCore: boolean
 /** The compiled string which should evaluate to an object. */
 declare const script: string
 /** An object that serializes method signatures and meta data during part object hydration.

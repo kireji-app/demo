@@ -1,6 +1,6 @@
 await agent.promise
 
-Object.defineProperties(hotKeys, {
+hotKeys.define({
  table: { value: JSON.parse(hotKeys["table.json"]) },
  pressed: { value: new Set(), writable: true },
  contextPrefix: { value: agent.isMac ? 'Meta' : 'Control' }

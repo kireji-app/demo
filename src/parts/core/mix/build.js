@@ -7,7 +7,7 @@ for (const subpart of mix) {
  product *= subpart.cardinality
 }
 
-Object.defineProperties(mix, {
+mix.define({
  placeValues: { value: placeValues },
  cardinality: { value: product }
 })

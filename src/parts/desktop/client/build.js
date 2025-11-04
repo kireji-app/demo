@@ -1,3 +1,3 @@
-Object.defineProperties(facet, {
+facet.define({
  hydrated: { value: false, writable: true }
 })

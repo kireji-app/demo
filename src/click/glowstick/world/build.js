@@ -1,4 +1,4 @@
-Object.defineProperties(world, {
+world.define({
  gridColor: { value: "var(--fg-mode-er)" },
  element: { value: null, writable: true }
 })

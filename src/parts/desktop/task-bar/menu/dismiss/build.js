@@ -1,3 +1,3 @@
-Object.defineProperties(part, {
- cardinality: { value: 2n, configurable: true, writable: true }
+part.define({
+ cardinality: { value: 2n }
 })

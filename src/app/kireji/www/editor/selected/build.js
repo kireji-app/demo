@@ -1,4 +1,4 @@
-Object.defineProperties(selected, {
+selected.define({
  cardinality: { value: BigInt(allParts.length) },
  partListener: { value: () => selected.replaceContent() },
  previousPart: { value: null, writable: true }

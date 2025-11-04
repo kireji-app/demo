@@ -1,4 +1,4 @@
-Object.defineProperties(glowstick, {
+glowstick.define({
  walkMark: { value: null, writable: true },
  pointerID: { value: null, writable: true },
  tilesCount: { value: null, writable: true },

@@ -1,3 +1,3 @@
-Object.defineProperties(part, {
+part.define({
  version: { value: null, writable: true }
 })

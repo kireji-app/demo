@@ -55,7 +55,7 @@ if (environment === "worker") {
 
  if (!worker.registration) {
   const registration = await nav.serviceWorker.getRegistration()
-  Object.defineProperties(worker, {
+  worker.define({
    startupRegistration: { value: registration },
    registration: { value: registration },
   })
@@ -63,7 +63,7 @@ if (environment === "worker") {
   if (!worker.registration.active)
    throw 'Unexpected lack of existing service worker registration while installing worker facet in client.'
 
-  Object.defineProperties(worker, {
+  worker.define({
    controller: { value: nav.serviceWorker.controller }
   })
 

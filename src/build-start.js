@@ -17,6 +17,6 @@ for (const subpart of desktop)
   subpart.install()
 closeLog(1)
 
-Object.defineProperties(_, {
+_.define({
  "..": { value: null }
 })

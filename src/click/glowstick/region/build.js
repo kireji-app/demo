@@ -1,4 +1,4 @@
-Object.defineProperties(region, {
+region.define({
  element: { value: null, writable: true },
  neighbors: { value: [] }
 })

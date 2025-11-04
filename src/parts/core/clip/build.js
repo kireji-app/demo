@@ -1,4 +1,4 @@
-Object.defineProperties(clip, {
+clip.define({
  frameRate: { value: 60, writable: true },
  frameTime: { value: 1000 / 60, writable: true },
  endOfPlaybackBehavior: { value: "autoplay", writable: true },
