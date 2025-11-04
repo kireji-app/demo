@@ -5,6 +5,11 @@ globalThis.𝓌 ??= {}
 
 𝓌.startupRegistration = 𝓌.registration = await nav.serviceWorker.getRegistration()
 
+if (!𝓌.registration) {
+ const oldRegistrations = await nav.serviceWorker.getRegistrations()
+ await Promise.all(oldRegistrations.map(registration => registration.unregister()))
+}
+
 𝓌.registration ??= await nav.serviceWorker.register(`/${VERSION}/kireji.js`, { updateViaCache: "all", scope: `/${VERSION}/` })
 
 if (!𝓌.registration.active) {

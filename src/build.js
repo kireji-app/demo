@@ -577,7 +577,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
+ change: "patch",
  verbosity: 100,
  mapping: false,
  defaultApplication: "www.glowstick.click",

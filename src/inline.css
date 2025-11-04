@@ -328,7 +328,6 @@ body.dark warning- {
 }
 
 #fullscreen-button,
-#share-button,
-stats- {
+#share-button {
  display: none !important;
 }
