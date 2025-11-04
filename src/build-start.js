@@ -17,6 +17,4 @@ for (const subpart of desktop)
   subpart.install()
 closeLog(1)
 
-_.define({
- "..": { value: null }
-})
+_.define({ "..": { value: null } })

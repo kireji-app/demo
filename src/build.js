@@ -321,7 +321,7 @@ function ƒ(_) {
    })
    const typename = part.manifest.extends ?? (host !== "part.core.parts" ? "part.core.parts" : null)
    if (host === "part.core.parts")
-    Object.defineProperty(part, "define", { value: descriptor => Object.defineProperties(part, descriptor) })
+    Object.defineProperty(part, "define", { value(descriptor) { return Object.defineProperties(this, descriptor) } })
    const prototype = typename ? distributeHydration(typename ?? "part.core.parts") : null
    const isAbstract = part.manifest.abstract
    if (prototype) {
@@ -544,14 +544,12 @@ function ƒ(_) {
  // These are scope variables for evaluated method bodies.
  const desktop = _.parts.desktop, { server, worker, share, fullscreen, ["address-bar"]: addressBar, agent, gpu, ["hot-keys"]: hotKeys, client, color, era, stats, update } = desktop
  if (environment === "client") var element, svg
-
- _.define({
+ Object.defineProperties(_, {
   frameRequest: { value: null, writable: true },
   application: { value: null, writable: true },
   applications: { value: {} },
   liveApplications: { value: {} },
  })
-
  openLog(3, "Hydrating Domains")
  const instances = []
  const allParts = []
@@ -563,17 +561,11 @@ function ƒ(_) {
  closeLog(3)
  openLog(3, "Computing Landing Hash")
  const landingModel = { "app": { "kireji": { "www": { "editor": { "selected": "f" }, "outliner": { "folders": "g__0M", "width": { "open": "_" } } } } }, "click": { "glowstick": { "user": "4", "world": { "open-office": { "x-axis": "a", "y-axis": "9" } } } }, "parts": { "desktop": { "color": "light" } } }
-
  _.define({
   built: { value: true },
-  landingModel: {
-   value: landingModel
-  },
-  landingHash: {
-   value: encodeSegment(_.modelToRouteID(landingModel))
-  }
+  landingModel: { value: landingModel },
+  landingHash: { value: encodeSegment(_.modelToRouteID(landingModel)) }
  })
-
  log(3, "Computed output: " + _.landingHash)
  closeLog(3)
  if (_.local) _.validate()
