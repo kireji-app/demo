@@ -5,6 +5,9 @@ if (environment === "server" && require.main === module) {
  openLog(1, "Routing Test: " + testURL)
  openLog(1, "Setting route.")
  _.setRoute(testURL)
+ openLog(3, "Resulting Model")
+ log(3, serialize(_.model))
+ closeLog(3)
  closeLog(1)
  openLog(1, "Reading index.html.")
  const result = _["index.html"]

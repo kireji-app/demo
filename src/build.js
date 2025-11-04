@@ -561,12 +561,21 @@ function ƒ(_) {
  closeLog(3)
  openLog(3, "Computing Landing Hash")
  const landingModel = { "app": { "kireji": { "www": { "editor": { "selected": "f" }, "outliner": { "folders": "g__0M", "width": { "open": "_" } } } } }, "click": { "glowstick": { "user": "4", "world": { "open-office": { "x-axis": "a", "y-axis": "9" } } } }, "parts": { "desktop": { "color": "light" } } }
+ openLog(3, "Target Landing Model")
+ log(3, serialize(landingModel))
+ closeLog(3)
+ openLog(3, "Landing Base Model")
+ log(3, serialize(_.model))
+ closeLog(3)
+ const landingRoute = _.modelToRouteID(landingModel)
  _.define({
   built: { value: true },
   landingModel: { value: landingModel },
-  landingHash: { value: encodeSegment(_.modelToRouteID(landingModel)) }
+  landingRoute: { value: landingRoute },
+  landingHash: { value: encodeSegment(landingRoute) }
  })
- log(3, "Computed output: " + _.landingHash)
+ log(3, "Computed landing route: " + _.landingRoute)
+ log(3, "Computed landing hash: " + _.landingHash)
  closeLog(3)
  if (_.local) _.validate()
  log(1, "Boot Completed (end of synchronous script execution).")

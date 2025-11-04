@@ -263,7 +263,7 @@ declare class MethodConstant {
 }
 /** The incoming request url string.
  * 
- * Available only in user.setRoute(). */
+ * Available only in _.setRoute(). */
 declare const REQUEST_URL: string
 /** Gets a part instance from the root, given its array of domain parts. */
 declare function getPartFromDomains(domains): IPart
