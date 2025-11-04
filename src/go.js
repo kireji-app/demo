@@ -1,5 +1,6 @@
 if (environment === "client") _.noop(EVENT)
 const { host, pathname, hash } = new URL(HREF)
+_.setRoute(`https://${host}/${_.version}/${_.landingHash}`)
 switch (host) {
  case "www.ejaugust.com":
   const parts = pathname.split("/").slice(1)
