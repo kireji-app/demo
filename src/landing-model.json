@@ -1,0 +1,33 @@
+{
+ "app": {
+  "kireji": {
+   "www": {
+    "editor": {
+     "selected": "f"
+    },
+    "outliner": {
+     "folders": "g__0M",
+     "width": {
+      "open": "_"
+     }
+    }
+   }
+  }
+ },
+ "click": {
+  "glowstick": {
+   "user": "4",
+   "world": {
+    "open-office": {
+     "x-axis": "a",
+     "y-axis": "9"
+    }
+   }
+  }
+ },
+ "parts": {
+  "desktop": {
+   "color": "light"
+  }
+ }
+}

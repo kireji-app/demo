@@ -12,7 +12,7 @@ return `
 }).join("")}</ul>
   <hr>
   <section id="settings">
-   ${desktop.update["inline.html"]}
+   ${update["inline.html"]}
    ${color["inline.html"]}
    ${era["inline.html"]}
   </section>

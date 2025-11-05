@@ -1,0 +1,9 @@
+{
+ "abstract": true,
+ "top-scroll-to": [],
+ "onscroll": [],
+ "onresize": [],
+ "wrap": [
+  "INNER_HTML"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+ "extends": "facet.abstract.parts",
+ "version-is-newer": [
+  "INCOMING_VERSION"
+ ],
+ "go": [
+  "EVENT"
+ ]
+}

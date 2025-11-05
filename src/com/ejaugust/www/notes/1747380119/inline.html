@@ -3,15 +3,15 @@
 <p>The following is an example JSON file which has some inline code meant to equip the parsed result with runtime functionality.
 </p>
 <pre id="i">{
- "extends": "mix.core.parts",
+ "extends": "mix.abstract.parts",
  "myFavoriteNumber": 7,
  "com": {
-  "extends": "mix.core.parts"
+  "extends": "mix.abstract.parts"
  },
  "parts": {
-  "extends": "mix.core.parts",
-  "core": {
-   "extends": "mix.core.parts",
+  "extends": "mix.abstract.parts",
+  "abstract": {
+   "extends": "mix.abstract.parts",
    "one": {
     "becomeAController.js":
      "dns.myFavoriteNumber = 9"
@@ -29,28 +29,28 @@
 <p>The following is the original JSON parsed and hydrated using standard assignment syntax like <code>object.property = value</code> and <code>Object.assign(target, source)</code> to expand the parsed object into its runtime form. Then, the hydrated object was stringified.
 </p>
 <pre id="o1">{
- "extends": "mix.core.parts",
+ "extends": "mix.abstract.parts",
  "myFavoriteNumber": 9,
  "com": {
-  "extends": "mix.core.parts",
+  "extends": "mix.abstract.parts",
   "host": "com",
   "hydrated": true
  },
  "parts": {
-  "extends": "mix.core.parts",
-  "core": {
-   "extends": "mix.core.parts",
+  "extends": "mix.abstract.parts",
+  "abstract": {
+   "extends": "mix.abstract.parts",
    "one": {
     "becomeAController.js": "dns.myFavoriteNumber = 9",
-    "host": "one.core.parts",
+    "host": "one.abstract.parts",
     "hydrated": true
    },
    "mix": {
     "becomeAController.js": "console.log(\"in extension\")\nObject.getPrototypeOf(Object.getPrototypeOf(this)).becomeAController()",
-    "host": "mix.core.parts",
+    "host": "mix.abstract.parts",
     "hydrated": true
    },
-   "host": "core.parts",
+   "host": "abstract.parts",
    "hydrated": true
   },
   "host": "parts",
@@ -67,15 +67,15 @@
 <p>For the below snippet, we first hydrated the original JSON using the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties"><code>Object.defineProperty</code></a> method. This allows us to control the visibility of the properties in a way that affects <code>JSON.stringify</code>. Compared to the previous attempt, we're getting the same controller behavior at runtime but when we call <code>JSON.stringify(...)</code> on it, we don't see any of the runtime values.
 </p>
 <pre id="o2">{
- "extends": "mix.core.parts",
+ "extends": "mix.abstract.parts",
  "myFavoriteNumber": 9,
  "com": {
-  "extends": "mix.core.parts"
+  "extends": "mix.abstract.parts"
  },
  "parts": {
-  "extends": "mix.core.parts",
-  "core": {
-   "extends": "mix.core.parts",
+  "extends": "mix.abstract.parts",
+  "abstract": {
+   "extends": "mix.abstract.parts",
    "one": {
     "becomeAController.js": "dns.myFavoriteNumber = 9"
    },
@@ -123,15 +123,15 @@ for (const [key, value] of nonSerializableProperties) {
 <p>Observe the results of using this method.
 </p>
 <pre id="o3">{
- "extends": "mix.core.parts",
+ "extends": "mix.abstract.parts",
  "myFavoriteNumber": 9,
  "com": {
-  "extends": "mix.core.parts"
+  "extends": "mix.abstract.parts"
  },
  "parts": {
-  "extends": "mix.core.parts",
-  "core": {
-   "extends": "mix.core.parts",
+  "extends": "mix.abstract.parts",
+  "abstract": {
+   "extends": "mix.abstract.parts",
    "one": {
     "becomeAController.js": "dns.myFavoriteNumber = 9"
    },

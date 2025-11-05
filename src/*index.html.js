@@ -29,16 +29,16 @@ const head =
 
 const bodyClassList = [era.arm.key, color.isLight ? "light" : "dark"]
 
-if (desktop.taskBar.menu.arm?.key === "open")
+if (taskBar.menu.arm?.key === "open")
  bodyClassList.push("menu-fully-open")
 
-if (desktop.taskBar.menu.arm?.key !== "closed")
+if (taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
 if (environment === "server")
  bodyClassList.push("installing")
 
 const body =
- `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${desktop.taskBar["inline.html"]}${worker["inline.html"]}</body>`
+ `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${taskBar["inline.html"]}${worker["inline.html"]}</body>`
 
 return `<!DOCTYPE html><html lang=en>${head}${body}</html>`

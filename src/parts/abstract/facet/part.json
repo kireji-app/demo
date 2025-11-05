@@ -1,0 +1,11 @@
+{
+ "abstract": true,
+ "sync-install": [],
+ "support-check": [],
+ "install": [
+  "GATE"
+ ],
+ "async-install": [
+  "PROMISE_ARRAY"
+ ]
+}

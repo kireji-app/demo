@@ -1,1 +1,0 @@
-return `<button id=share-button onclick="_.parts.desktop.share.go(event)">➦</button>`

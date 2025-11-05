@@ -1,1 +1,3 @@
-Object.defineProperty(menu, "element", { value: null, writable: true })
+menu.define({
+ element: { value: null, writable: true }
+})

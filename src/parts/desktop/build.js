@@ -1,3 +1,3 @@
-Object.defineProperty(desktop, "wallpaper", {
- value: environment === "client" ? document.querySelector("wallpaper-") : null
+desktop.define({
+ wallpaper: { value: null, writable: true }
 })

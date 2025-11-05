@@ -1,7 +1,8 @@
 declare interface IParts extends ITopLevelDomain {
+ readonly abstract: IAbstract
  readonly core: ICore
- readonly user: IUser
  readonly desktop: IDesktop
+ readonly user: IUser
 }
 
 declare interface IPartsApexDomain extends IApexDomain {

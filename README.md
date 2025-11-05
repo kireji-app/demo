@@ -37,8 +37,9 @@ These applications are in *alpha* and still undergoing research and development.
 ### Coming Soon
 These applications coming soon!
 <h3><a href="https://www.kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>kireji.io</sup></a></h3>
-<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts</sup></a></h3>
-<h3><a href="https://www.user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
+<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts</sup></a></h3>
+<h3><a href="https://www.abstract.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>abstract.parts</sup></a></h3>
+<h3><a href="https://www.user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
 
 ### Tech Stack
 This platform is built on a minimal dependency stack, powered by the **Kireji Web Framework** and uses **Vanilla JavaScript** to ensure a fully self-contained, auditable runtime environment.

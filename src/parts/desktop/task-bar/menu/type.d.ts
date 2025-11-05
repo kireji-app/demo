@@ -19,7 +19,7 @@ declare interface IMenu extends IMatch {
  readonly opened: IMenuClip
  /** The movie clip that tweens the menu from the opened position to the closed position. */
  readonly dismiss: IMenuClip
- /** When enabled, the fullscreen element that contains the menu. */
+ /** When enabled, the screen-filling element that contains the menu. */
  readonly element: HTMLElement
  /** The part dedicated to the currently selected menu clip. */
  readonly arm: IMenuClip

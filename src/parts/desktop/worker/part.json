@@ -1,7 +1,0 @@
-{
- "extends": "facet.core.parts",
- "async-register": [],
- "async-bootstrap": [
-  "VERSION"
- ]
-}

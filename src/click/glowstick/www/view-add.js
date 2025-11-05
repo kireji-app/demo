@@ -1,12 +1,12 @@
 const
- element = desktop.wallpaper,
+ element = wallpaper,
  start = e => {
   if (e.pointerType === 'touch') {
    e.preventDefault()
    element.addEventListener('contextmenu', nolongtap)
    if (glowstick.pointerID !== null) return
    glowstick.thumbstickStart = { x: e.clientX, y: e.clientY }
-   glowstick.thumbstickElement = desktop.wallpaper.appendChild(document.createElement("thumbstick-"))
+   glowstick.thumbstickElement = wallpaper.appendChild(document.createElement("thumbstick-"))
    glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
    glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
    // if (production) glowstick.thumbstickElement.style.display = "none"

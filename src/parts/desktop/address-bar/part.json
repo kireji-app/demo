@@ -1,6 +1,0 @@
-{
- "singleton": true,
- "extends": "facet.core.parts",
- "notify": [],
- "push": []
-}

@@ -1,1 +1,1 @@
-desktop.wallpaper.setAttribute("data-has-outliner", "")
+wallpaper.setAttribute("data-has-outliner", "")

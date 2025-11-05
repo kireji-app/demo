@@ -11,3 +11,5 @@ for (const faviconLink of faviconLinks)
  faviconLink.setAttribute("href", `data:image/png;base64,${_.application["part.png"]}`)
 
 document.getElementById("img-css").innerHTML ||= _["images.css"]
+
+desktop.wallpaper = document.querySelector("wallpaper-")

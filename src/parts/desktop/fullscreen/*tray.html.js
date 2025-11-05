@@ -1,1 +1,0 @@
-return `<button id=fullscreen-button onclick="_.parts.desktop.fullscreen.go()">⛶</button>`

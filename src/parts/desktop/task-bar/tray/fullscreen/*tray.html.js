@@ -1,0 +1,1 @@
+return `<button id=fullscreen-button onclick="_.parts.desktop.taskBar.tray.fullscreen.go()">⛶</button>`

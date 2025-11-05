@@ -6,7 +6,7 @@ if (!(host in _.applications))
  throw `Unsupported application '${host}'.`
 
 const pathname = url.pathname
-const newRouteID = decodeRoute(pathname)
+const newRouteID = decodePathname(pathname)
 
 if (_.application?.key !== host)
  _.application = getPartFromDomains(host.split("."))

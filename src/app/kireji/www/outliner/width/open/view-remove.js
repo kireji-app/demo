@@ -1,1 +1,1 @@
-desktop.wallpaper.removeAttribute("data-has-outliner")
+wallpaper.removeAttribute("data-has-outliner")

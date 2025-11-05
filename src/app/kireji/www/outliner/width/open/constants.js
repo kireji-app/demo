@@ -1,0 +1,1 @@
+const wallpaper = _.parts.desktop.wallpaper

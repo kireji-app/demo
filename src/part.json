@@ -1,5 +1,5 @@
 {
- "extends": "mix.core.parts",
+ "extends": "mix.abstract.parts",
  "route-set": [
   "REQUEST_URL"
  ],
@@ -9,7 +9,12 @@
  ],
  "validate": [],
  "go": [
-  "HREF",
+  "ANCHOR",
   "EVENT"
+ ],
+ "pathname-translate-canonical": [
+  "HOST",
+  "PATHNAME",
+  "HASH"
  ]
 }

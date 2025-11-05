@@ -19,6 +19,8 @@ declare interface IDNSRoot extends IMix {
  readonly gitSHA: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string
+ /** The automatically generated HTTP identifier for this build. */
+ readonly ETag: string
  /** Sets the configuration space to match the given request url string. */
  setRoute(REQUEST_URL: string): void
  /** The operating system's currently assigned root application.
@@ -31,10 +33,18 @@ declare interface IDNSRoot extends IMix {
  readonly liveApplications: Record<string, IApplication>
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
+ /** The model of the desired landing page, used during the initial boot process to compute `_.landingHash` and `_.landingRouteID`. */
+ readonly landingModel: string
+ /** The routeID of the desired landing page, as computed from data parameters during the initial boot process. */
+ readonly landingRouteID: bigint
  /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
  readonly defaultApplication: string
  /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
  readonly frameRequest: number | null
+ /** Translates an SEO-friendly canonical route into a versioned, stateful route, using the current system state as the base state. */
+ readonly translateCanonicalRoute(CANONICAL_ROUTE: string): string
+ /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
+ readonly go(ANCHOR: string, EVENT: event): void
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
@@ -130,13 +140,12 @@ declare const production: boolean
 declare const SCRIPT_HOST: string
 /** A unicode-safe replacement for btoa. */
 declare function btoaUnicode(BODY: string): string
-/** Creates a main-thread-blocking loop for the given length of time. */
-declare function hang(timeInMilliseconds: number): void
 declare function warn(...DATA: any[]): void
 declare function debug(...DATA: any[]): void
-declare function log(VERBOSITY: number, ...DATA: any[]): void
-declare function openLog(VERBOSITY: number, ...DATA: any[]): void
-declare function closeLog(VERBOSITY: number, ...DATA: any[]): void
+/** Opens a collapsed log group with the given label at the given verbosity,
+ * calls the given callback (passing a log function with the same verbosity as an argument),
+ * closes the log group, then returns the result of the callback. */
+declare function logScope(VERBOSITY: number, LABEL: string, CALLBACK: function): any
 /** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
 declare function serialize(data: any): void
 /** Represents metadata and processing logic for a single property
@@ -267,12 +276,12 @@ declare class MethodConstant {
 declare const REQUEST_URL: string
 /** Gets a part instance from the root, given its array of domain parts. */
 declare function getPartFromDomains(domains): IPart
-/** Trades a string pathname for the bigint routeID. */
-declare function decodeRoute(pathname: string): bigint
+/** Trades a versioned string pathname for the bigint routeID. */
+declare function decodePathname(pathname: string): bigint
 /** Trades a string segment for the bigint routeID. */
 declare function decodeSegment(pathname: string): bigint
-/** Trades a bigint routeID for a string pathname. */
-declare function encodeRoute(routeID: bigint): string
+/** Trades a bigint routeID for a versioned string pathname. */
+declare function encodePathname(routeID: bigint): string
 /** Trades a bigint routeID for a string segment. */
 declare function encodeSegment(routeID: bigint): string
 /** Returns a string representing the given bigint in scientific notation (a coefficient times 10 to some power). When html is true, the power will be wrapped in a superscript tag. Otherwise, it will use unicode superscript characters. */

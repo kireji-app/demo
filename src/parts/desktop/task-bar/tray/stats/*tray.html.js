@@ -1,0 +1,1 @@
+return `<stats->${stats.fps}</stats->`

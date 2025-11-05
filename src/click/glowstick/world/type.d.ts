@@ -27,8 +27,8 @@ declare const world: IGlowstickWorld
 // Each room can have interactive elements related to their function. For abstract parts with stateful regions,
 //  they could in theory exist as blueprints in one of the regions of the parent part.
 
-// Example: the scroller abstract is in the core room.
-// The core contains the following abstracts (blueprints?):
+// Example: the scroller abstract is in the abstract.parts room.
+// The abstract.parts part contains the following abstracts (blueprints?):
 // - apex
 // - clip
 // - error-501
@@ -42,7 +42,7 @@ declare const world: IGlowstickWorld
 // X slot (unused)
 // - tld
 
-// the only concrete part is the www for the core.
+// the only concrete part is the www for the application.
 
 // there can also be a www abstract
 

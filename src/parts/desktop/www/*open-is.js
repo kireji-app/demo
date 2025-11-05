@@ -1,1 +1,1 @@
-return _.application === part
+return _.application === desktopApp

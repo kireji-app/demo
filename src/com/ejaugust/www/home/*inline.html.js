@@ -11,7 +11,7 @@ return (
  "<section>" + (
   "<div id=note-links>" + (
    [...notes].reverse().map(note =>
-    `<a href=https://www.ejaugust.com/notes/${note.pathname ?? note.key} onclick=_.go(this.href,event)>` + (
+    `<a href=https://www.ejaugust.com/notes/${note.pathname ?? note.key} onclick=_.go(this,event)>` + (
      `<h4 class=topic>${note.topic ?? "No Topic"}</h4>` +
      "<h3>" + (
       note.title

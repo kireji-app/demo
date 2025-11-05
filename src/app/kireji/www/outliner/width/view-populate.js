@@ -1,1 +1,1 @@
-desktop.wallpaper.setAttribute("style", width.style)
+wallpaper.setAttribute("style", width.style)

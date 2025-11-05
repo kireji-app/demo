@@ -1,0 +1,7 @@
+{
+ "singleton": true,
+ "extends": "facet.abstract.parts",
+ "notify": [],
+ "push": [],
+ "route-use": []
+}
