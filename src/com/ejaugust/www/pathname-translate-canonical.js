@@ -16,10 +16,13 @@ const app = model.com.ejaugust.www
 if (PATHNAME === "/") {
 
  // TODO: Improve hash behavior.
- if (HASH !== "#top" && ("notes" in app))
-  delete app.notes
+ if (HASH !== "#top") {
+  if ("notes" in app)
+   delete app.notes
 
- app.home = ""
+  app.home = ""
+ }
+
 } else {
 
  const parts = PATHNAME.split("/").slice(1)

@@ -605,7 +605,7 @@ function ƒ(_) {
       const { www } = apex
 
       if (!www) {
-       warn(`404 - Not Found.`)
+       log(`404 - Not Found.`)
        return
       }
 
@@ -660,7 +660,7 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "major",
+ change: "patch",
  verbosity: 100,
  mapping: false,
  defaultApplication: "www.glowstick.click",
