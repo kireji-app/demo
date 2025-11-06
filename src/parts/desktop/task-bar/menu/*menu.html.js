@@ -2,7 +2,7 @@ return `
 <task-menu style="${menu.arm.styleAttr}" onclick="_.parts.desktop.taskBar.menu.go()">
  <sidebar- onclick="_.noop(event)">
  <ul id=application-control>${Object.entries(_.liveApplications).map(([host, application]) => {
- debug(application.host, _.application?.host)
+ debug(application.host, _.application?.host, application === _.application)
  return `
   <li class=task-link${application === _.application ? ` data-here` : ""}>
    <a href=https://${host} onclick=_.setApplication(event,this)>
