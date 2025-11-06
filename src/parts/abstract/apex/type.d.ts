@@ -2,6 +2,8 @@
 declare interface IApexDomain extends IMix {
  /** The apex domain's application - used to set the wallpaper and override the css of the desktop when accessing the O/S via the apex domain's host. */
  readonly www: IApplication
+ /** The top-level-domain that contains this apex domains. */
+ readonly "..": ITopLevelDomain
  /** This optional method converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current system state as the base state. */
  translateCanonicalPathname?(PATHNAME: string, HASH?: string): string
 }
@@ -14,6 +16,8 @@ declare interface IApplication extends IPart {
  readonly "inline.css"
  /** The html which becomes the desktop wallpaper for the application. */
  readonly "inline.html"
+ /** The apex domain that hosts this application. */
+ readonly "..": IApexDomain
  /** The canonical link to use for indexing pages in search results for a given page. */
  readonly canonicalPathname?: string
  /** A short optional description of the current application state which may appear in search results in relation to the application's current `canonicalLink` property. */
