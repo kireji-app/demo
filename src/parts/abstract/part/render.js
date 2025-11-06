@@ -38,7 +38,14 @@
    body = new Blob([I], { type: filetype })
   }
 
-  return new Response(body, { headers: { "content-type": filetype, expires: "Sun, 20 Jul 1969 20:17:00 UTC" } })
+  return new Response(body, {
+   headers: {
+    "content-type": filetype,
+    "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
+    'ETag': _.ETag,
+    'Cache-Control': 'max-age=600',
+   }
+  })
  }
 
  throw part.host + ' Render Error: invalid format ' + serialize(OPTIONS)
