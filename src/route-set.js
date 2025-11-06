@@ -8,14 +8,8 @@ if (!(host in _.applications))
 const pathname = url.pathname
 const newRouteID = decodePathname(pathname)
 
-logScope(0, "setting route from " + _.ETag, log => {
- log("starting state", _.application?.[".."][".."][".."].ETag)
-
- if (_.application?.key !== host)
-  _.application = getPartFromDomains(host.split("."))
-
- log("ending state", _.application[".."][".."][".."].ETag)
-})
+if (_.application?.key !== host)
+ _.application = getPartFromDomains(host.split("."))
 
 if (_.routeID !== newRouteID)
  _.setRouteID(newRouteID)
