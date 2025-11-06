@@ -1,5 +1,4 @@
 declare interface IDNSRoot extends IMix {
- readonly "kireji.js": string
  readonly "index.html": string
  readonly "images.css": string
  readonly "static.css": string
@@ -19,6 +18,8 @@ declare interface IDNSRoot extends IMix {
  readonly gitSHA: string
  /** The automatically generated semantic version number of the current build. */
  readonly version: string
+ /** A string used to name the service worker file when it is fetched by the client (which contains a serialized copy of the repository of the project). */
+ readonly codename: string
  /** The automatically generated HTTP identifier for this build. */
  readonly ETag: string
  /** Sets the configuration space to match the given request url string. */
@@ -45,10 +46,15 @@ declare interface IDNSRoot extends IMix {
  readonly translateCanonicalRoute(CANONICAL_ROUTE: string): string
  /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
  readonly go(ANCHOR: string, EVENT: event): void
+ /** Returns a packed version of the entire repo, optionally including early-preview images that are designed for faster loading during SSR (but don't need to be packed into the service worker). */
+ readonly pack(INCLUDE_EARLY_ASSETS: boolean): string
+ /** Returns a css that inlines `early-*` compressed images for enhancing the first page appearance when using server-side rendering.
+  * It scans the given body HTML for usages of the early images to optimize inclusion. */
+ readonly getImagesEarly(BODY_HTML: string): string
 }
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
- * The serialized version should not include any values that are added *before* recursively hydrating the part tree. */
+ * The serialized version should not include any values that are added during or after recursively hydrating the part tree. */
 declare const _: IDNSRoot
 /** A function which simplifies the process of deploying to three environments
  * (server, worker, client) by giving them all the same

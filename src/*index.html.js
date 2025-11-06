@@ -14,20 +14,10 @@ const links =
  `<link class=favicon rel="apple-touch-icon" href="${placeholderIcon}"/>` +
  `<link rel="canonical" href="https://${_.application.host}${_.application.canonicalPathname ?? "/"}" />`
 
-const styles =
- `<style id="user-css">${_["inline.css"]}</style>` +
- `<style id="era-css">${era["inline.css"]}</style>` +
- `<style id="color-css">${color["inline.css"]}</style>` +
- `<style id="application-css">${_.application["inline.css"]}</style>` +
- `<style id="img-css">${environment === "server" ? "" : _["images.css"]}</style>`
-
 const title =
  `<title>${sanitizeAttr(_.application.title ?? "Untitled App")}</title>`
 
-const head =
- `<head>${title}${meta}${links}${styles}</head>`
-
-const bodyClassList = [era.arm.key, color.isLight ? "light" : "dark"]
+const bodyClassList = ['unhydrated', era.arm.key, color.isLight ? "light" : "dark"]
 
 if (taskBar.menu.arm?.key === "open")
  bodyClassList.push("menu-fully-open")
@@ -39,6 +29,18 @@ if (environment === "server")
  bodyClassList.push("installing")
 
 const body =
- `<body inert class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${taskBar["inline.html"]}${worker["inline.html"]}</body>`
+ `<body class="${bodyClassList.join(" ")}">${desktop["inline.html"]}<!-- windows -->${taskBar["inline.html"]}${worker["inline.html"]}</body>`
+
+const nonImageStyles = `<style id="user-css">${_["inline.css"]}</style>` +
+ `<style id="era-css">${era["inline.css"]}</style>` +
+ `<style id="color-css">${color["inline.css"]}</style>` +
+ `<style id="application-css">${_.application["inline.css"]}</style>`
+
+const styles = nonImageStyles +
+ `<style id="img-css">${environment === "server" ? "" : _["images.css"]}</style>` +
+ (environment === "server" ? `<style id="early-img-css">${_.getImagesEarly(body, nonImageStyles)}</style>` : "")
+
+const head =
+ `<head>${title}${meta}${links}${styles}</head>`
 
 return `<!DOCTYPE html><html lang=en>${head}${body}</html>`

@@ -198,7 +198,8 @@ function ƒ(_) {
     _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
     _.version = (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().match(/^\s*(\d+\.\d+\.\d+)/)[1].split("."), _.change),
     _.modified = _.$('git show -s --format=%ci HEAD').toString().trim(),
-    _.ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`
+    _.ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`,
+    _.codename ??= "kireji"
    ),
    "server"
   ),
@@ -364,8 +365,9 @@ function ƒ(_) {
    const
     instances = [],
     allParts = [],
-    imgSources = [],
-    preHydrationArchive = serialize(_),
+    imageSources = [],
+    earlyImageSources = []
+   preHydrationArchive = serialize(_),
     getPartFromDomains = domains => domains.reduceRight((currentFolder, name, index) => {
      if (!currentFolder[name])
       throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
@@ -533,10 +535,16 @@ function ƒ(_) {
        } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-"))) {
         Property.ids.add(fn.slice(0, -3))
 
-        if (fn.startsWith("*") && (fn.endsWith(".png.js") || fn.endsWith(".gif.js")))
-         imgSources.push([part, fn.slice(1, -3)])
-       } else if (fn.endsWith(".png") || fn.endsWith(".gif"))
-        imgSources.push([part, fn])
+        if (fn.startsWith("*") && (fn.endsWith(".png.js") || fn.endsWith(".gif.js"))) {
+         if (fn.startsWith("*early-"))
+          earlyImageSources.push([part, fn.slide(7, -3)])
+         imageSources.push([part, fn.slice(1, -3)])
+        }
+       } else if (fn.endsWith(".png") || fn.endsWith(".gif")) {
+        if (fn.startsWith("early-"))
+         earlyImageSources.push([part, fn.slice(6)])
+        imageSources.push([part, fn])
+       }
       }
       for (const methodID in part.manifest)
        if (!["extends", "abstract", "singleton"].includes(methodID))
@@ -660,9 +668,9 @@ function ƒ(_) {
 }
 
 ƒ({
- change: "patch",
  verbosity: 100,
  mapping: false,
+ change: "major",
+ hangHydration: 0,
  defaultApplication: "www.glowstick.click",
- hangHydration: 0
 })

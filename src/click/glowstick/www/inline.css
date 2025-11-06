@@ -139,58 +139,48 @@ user- {
  background-repeat: no-repeat;
 }
 
-/*
-user-::after {
- content: "";
- position: absolute;
- background-image: radial-gradient(ellipse calc(2 * var(--px)) calc(var(--px) * 2), var(--accent-un-mode) 100%, transparent 0);
- width: 100%;
- height: 100%;
- background-size: var(--tx) var(--ty);
- background-repeat: no-repeat;
- background-position: center bottom calc(var(--ty) / 2);
-}
-*/
-
 user-.front {
- background-image: var(--user-glowstick-click--front-idle-png);
+ background-image: var(--user-glowstick-click--front_idle-png);
 }
 
 user-.left {
- background-image: var(--user-glowstick-click--left-idle-png);
+ background-image: var(--user-glowstick-click--left_idle-png);
 }
 
 user-.right {
- background-image: var(--user-glowstick-click--right-idle-png);
+ background-image: var(--user-glowstick-click--right_idle-png);
 }
 
 user-.back {
- background-image: var(--user-glowstick-click--back-idle-png);
+ background-image: var(--user-glowstick-click--back_idle-png);
 }
 
 user-.front.walking {
- background-image: var(--user-glowstick-click--front-walk-gif);
+ background-image: var(--user-glowstick-click--front_walk-gif);
 }
 
 user-.left.walking {
- background-image: var(--user-glowstick-click--left-walk-gif);
+ background-image: var(--user-glowstick-click--left_walk-gif);
 }
 
 user-.right.walking {
- background-image: var(--user-glowstick-click--right-walk-gif);
+ background-image: var(--user-glowstick-click--right_walk-gif);
 }
 
 user-.back.walking {
- background-image: var(--user-glowstick-click--back-walk-gif);
+ background-image: var(--user-glowstick-click--back_walk-gif);
 }
 
 world- {
  position: absolute;
- left: calc(50% - var(---x) * var(--tx));
- top: calc(50% - var(---y) * var(--ty));
+ left: 50%;
+ top: 50%;
+ will-change: transform;
+ transition: transform 0.09s linear;
+ transform: translate(calc(var(---x) * var(--tx)), calc(var(---y) * var(--ty)));
+ /* TODO: Don't hard code the width and height of the whole world. */
  width: calc(101 * var(--tx));
  height: calc(32 * var(--ty));
- transition: top 0.09s linear, left 0.09s linear;
  box-shadow: inset 0 0 calc(3 * var(--tx)) calc(3 * var(--tx)) var(--bg);
 }
 

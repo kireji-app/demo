@@ -30,7 +30,7 @@ const
    const defaultRoute = `https://${host}/${_.version}/${_.landingHash}/`
 
    respond: {
-    if (pathname === `/${_.version}/kireji.js`) {
+    if (pathname === `/${_.version}/${_.codename}.js`) {
 
      if (ifNoneMatch === _.ETag) {
       status = 304
@@ -42,7 +42,7 @@ const
      _.setRoute(defaultRoute)
      status = 200
      head = serviceHeader
-     body = _["kireji.js"]
+     body = _.pack(false)
      logMessage = "Serving Artifact"
      break respond
 
@@ -102,7 +102,7 @@ logScope(0, `\nCreating Deployment Artifact`, log => {
  if (!fs.existsSync(archiveFolder))
   fs.mkdirSync(archiveFolder)
 
- fs.writeFileSync(artifactPath, _["kireji.js"])
+ fs.writeFileSync(artifactPath, _.pack(true))
 
  log("Success.")
 })

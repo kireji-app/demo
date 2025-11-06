@@ -6,7 +6,7 @@ globalThis.onfetch = event => {
   if (alternateModelVersion || pathname === '/-v')
    return
 
-  const isFileRequest = [`/${_.version}/kireji.js`, `/${_.version}/manifest.json`].includes(pathname)
+  const isFileRequest = [`/${_.version}/${_.codename}.js`, `/${_.version}/manifest.json`].includes(pathname)
   const filename = isFileRequest ? pathname.split("/")[2] : "index.html"
   const fallbackRoute = `https://${host}/${_.version}/${_.landingHash}/`
 

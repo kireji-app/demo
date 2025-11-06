@@ -30,7 +30,7 @@ logScope(0, "Finalizing Hydration", log => {
  document.body.classList.remove("installing")
 
  log("Activating Body.")
- document.body.removeAttribute("inert")
+ document.body.classList.remove("unhydrated")
 
  log("Client hydration complete.")
  client.hydrated = true

@@ -10,7 +10,7 @@ if (!𝓌.registration) {
  await Promise.all(oldRegistrations.map(registration => registration.unregister()))
 }
 
-𝓌.registration ??= await nav.serviceWorker.register(`/${VERSION}/kireji.js`, { updateViaCache: "all", scope: `/${VERSION}/` })
+𝓌.registration ??= await nav.serviceWorker.register(`/${VERSION}/${CODENAME}.js`, { updateViaCache: "all", scope: `/${VERSION}/` })
 
 if (!𝓌.registration.active) {
  await new Promise(resolve => {
@@ -31,6 +31,6 @@ if (!𝓌.registration.active) {
 
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
-newScript.setAttribute("src", `/${VERSION}/kireji.js`)
+newScript.setAttribute("src", `/${VERSION}/${CODENAME}.js`)
 newScript.setAttribute("defer", "")
 oldScript.replaceWith(newScript)

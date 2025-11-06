@@ -1,1 +1,1 @@
-return `<script defer${environment === "worker" ? ` src="/${_.version}/kireji.js">` : `>({${worker.bootstrapAsync}}.value("${_.version}"))`}</script>`
+return `<script defer${environment === "worker" ? ` src="/${_.version}/${_.codename}.js">` : `>({${worker.bootstrapAsync}}.value("${_.version}", "${_.codename}"))`}</script>`

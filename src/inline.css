@@ -11,6 +11,7 @@
  outline: none;
 }
 
+/*
 html::after {
  content: "Installing App...";
  pointer-events: none;
@@ -27,16 +28,17 @@ html::after {
  text-align: center;
  font-family: var(--system-ui);
 }
-
-html:has(body[inert], body.installing) {
+*/
+html:has(body.unhydrated, body.installing) {
  cursor: wait;
- pointer-events: none;
+ /* pointer-events: none; */
 }
 
+/*
 html:has(body.installing)::after {
  opacity: 100%;
 }
-
+*/
 #application-control {
  display: block;
  margin: 0;
@@ -148,7 +150,7 @@ scroll-bar>thumb- {
  height: calc(var(--track-height) / var(--ratio));
 }
 
-body:not([inert]) scroller- {
+body:not(.unhydrated) scroller- {
  overflow-y: auto;
  height: 100%;
 }
