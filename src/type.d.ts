@@ -151,7 +151,7 @@ declare function debug(...DATA: any[]): void
 /** Opens a collapsed log group with the given label at the given verbosity,
  * calls the given callback (passing a log function with the same verbosity as an argument),
  * closes the log group, then returns the result of the callback. */
-declare function logScope(VERBOSITY: number, LABEL: string, CALLBACK: function): any
+declare function logScope(VERBOSITY: number, LABEL: string, CALLBACK: (log: (...data) => void) => T): T
 /** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
 declare function serialize(data: any): void
 /** Represents metadata and processing logic for a single property

@@ -366,8 +366,8 @@ function ƒ(_) {
     instances = [],
     allParts = [],
     imageSources = [],
-    earlyImageSources = []
-   preHydrationArchive = serialize(_),
+    earlyImageSources = [],
+    preHydrationArchive = serialize(_),
     getPartFromDomains = domains => domains.reduceRight((currentFolder, name, index) => {
      if (!currentFolder[name])
       throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
