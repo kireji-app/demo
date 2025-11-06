@@ -155,6 +155,10 @@ body:not(.unhydrated) scroller- {
  height: 100%;
 }
 
+body.unhydrated :is(a, button) {
+ pointer-events: none;
+}
+
 scroll-content {
  display: block;
  height: fit-content;
