@@ -32,6 +32,8 @@ const
    respond: {
     if (pathname === `/${_.version}/${_.codename}.js`) {
 
+     debug({ ifNoneMatch, ETag: _.ETag })
+
      if (ifNoneMatch === _.ETag) {
       status = 304
       head = { ETag: _.ETag, ...securityHeader }
