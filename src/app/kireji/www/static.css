@@ -147,7 +147,7 @@ wallpaper- summary>svg:hover {
  stroke: var(--accent);
 }
 
-wallpaper- summary:not([data-selected])>svg:hover {
+wallpaper- summary[data-selected]>svg:hover {
  stroke: var(--bg-mode-er);
 }
 
