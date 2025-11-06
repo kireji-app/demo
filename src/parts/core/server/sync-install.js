@@ -34,7 +34,7 @@ const
 
      debug({ ifNoneMatch, ETag: _.ETag })
 
-     if (ifNoneMatch === _.ETag) {
+     if (ifNoneMatch === _.ETag || ifNoneMatch === "W/" + _.ETag) {
       status = 304
       head = { ETag: _.ETag, ...securityHeader }
       logMessage = "Confirming Artifact"
