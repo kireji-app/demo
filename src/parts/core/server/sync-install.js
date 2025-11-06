@@ -24,7 +24,7 @@ const
   ...securityHeader
  },
  currentExports = {
-  proxy(host, pathname, ifNoneMatch, prefersDarkMode) {
+  proxy(host, pathname, ifNoneMatch, prefersDarkMode, ifModifiedSince) {
 
    let status, head, body, logMessage
    const defaultRoute = `https://${host}/${_.version}/${_.landingHash}/`
@@ -32,7 +32,7 @@ const
    respond: {
     if (pathname === `/${_.version}/${_.codename}.js`) {
 
-     debug({ ifNoneMatch, ETag: _.ETag })
+     debug({ ifNoneMatch, ETag: _.ETag, ifModifiedSince })
 
      if (ifNoneMatch === _.ETag || ifNoneMatch === "W/" + _.ETag) {
       status = 304
@@ -184,7 +184,8 @@ const httpServer = require('http').createServer((request, response) => logServer
      host,
      pathname,
      request.headers['if-none-match'],
-     request.headers["sec-ch-prefers-color-scheme"] === 'dark'
+     request.headers["sec-ch-prefers-color-scheme"] === 'dark',
+     request.headers['if-modified-since'],
     ))
    }
   } catch (e) {
