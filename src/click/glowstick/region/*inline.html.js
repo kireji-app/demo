@@ -1,2 +1,1 @@
-const { x, y, w, h, key, gridColor } = region
-return `<region- data-key="${key}" ${region === world.arm || world.arm.neighbors.includes(region) ? "selected " : ""}style="---x:${x};---y:${y};---w:${w};---h:${h};--grid-color:${gridColor ?? "var(--fg-mode)"}"></region->`
+return `<region- ${region.attributes}></region->`

@@ -4,7 +4,7 @@ if (clip.pendingFrame)
 delete clip.pendingFrame
 
 if (clip.playing) {
- clip.elapsedTime = now - clip.playbackStartTime
+ clip.elapsedTime = _.now - clip.playbackStartTime
  const newElapsedFrames = Math.round(clip.elapsedTime / clip.frameTime)
  let nextFrameCallback
 

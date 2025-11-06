@@ -21,6 +21,8 @@ declare interface IGlowstickRegion extends IMix {
  readonly element: HTMLElement
  /** The list of regions which are overlapping this region. */
  readonly neighbors: IGlowstickRegion[]
+ /** The space-separated list of HTML element attributes for this region. */
+ readonly attributes: string
  /** Tests whether or not the given region or user overlaps with this region. */
  readonly overlaps(REGION: IGlowstickRegion | IGlowstickUser): boolean
 }

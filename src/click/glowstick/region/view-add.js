@@ -1,2 +1,2 @@
-region.element.setAttribute("selected", "")
-region.neighbors.map(neighbor => neighbor.element.setAttribute("selected", ""))
+region.element.setAttribute("data-occupancy", "primary")
+region.neighbors.map(neighbor => neighbor.element.setAttribute("data-occupancy", "secondary"))

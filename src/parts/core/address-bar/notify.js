@@ -9,7 +9,7 @@ addressBar.timer = setTimeout(() => {
   addressBar.routeIDCache = _.routeID
   const pathname = encodePathname(_.routeID)
   history.replaceState(null, null, pathname)
-  addressBar.throttleStartTime = performance.now()
+  addressBar.throttleStartTime = _.now
   addressBar.timer = undefined
  }
-}, addressBar.throttleDuration + addressBar.throttleStartTime - now)
+}, addressBar.throttleDuration + addressBar.throttleStartTime - _.now)

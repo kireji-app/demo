@@ -7,9 +7,9 @@ declare interface IClip extends IPart {
  readonly endOfPlaybackBehavior: "autoplay" | "autoplayInto" | "loop"
  /** If the clip is playing, `clip.routeID` when initiatePlayback was last called. */
  readonly playbackStartFrame?: bigint
- /** If the clip is playing, the value of `now` when `clip.initiatePlayback()` was called. */
+ /** If the clip is playing, the value of `_.now` when `clip.initiatePlayback()` was called. */
  readonly playbackStartTime?: DOMHighResTimeStamp
- /** If the clip is playing, the difference between `now` and `clip.playbackStartTime`. */
+ /** If the clip is playing, the difference between `_.now` and `clip.playbackStartTime`. */
  readonly elapsedTime?: number
  /** If playing, the difference between `clip.routeID` and `clip.playbackStartFrame` */
  readonly elapsedFrames?: number

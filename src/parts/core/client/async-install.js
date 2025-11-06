@@ -8,10 +8,10 @@ logScope(0, "Finalizing Hydration", log => {
  // To preview FOUC
  if (_.hangHydration > 0 && !production)
   logScope(0, `Intentionally hanging the main thread for ${_.hangHydration} milliseconds.`, log => {
-   const start = performance.now()
+   const start = _.now
    let iteration = -1, elapsedMilliseconds, remainingMilliseconds
    do {
-    elapsedMilliseconds = Math.trunc(performance.now() - start)
+    elapsedMilliseconds = Math.trunc(_.now - start)
     const newRemainingMilliseconds = _.hangHydration - elapsedMilliseconds
     Math.sin(iteration++)
     if (Math.trunc(newRemainingMilliseconds / 100) !== Math.trunc(remainingMilliseconds / 100))

@@ -107,19 +107,31 @@ region- {
   background-image: radial-gradient(ellipse var(--px) var(--px), var(--grid-color) 100%, transparent 0);
   background-position: calc(var(--tx) / 2) calc(var(--ty) / 2);
  */
- background-color: var(--grid-color);
  background-image:
   linear-gradient(0,
    transparent var(--px),
-   var(--bg) var(--px),
-   var(--bg) calc(var(--ty) - var(--px)),
+   var(--base-color) var(--px),
+   var(--base-color) calc(var(--ty) - var(--px)),
    transparent calc(var(--ty) - var(--px))),
   linear-gradient(90deg,
    transparent var(--px),
-   var(--bg) var(--px),
-   var(--bg) calc(var(--tx) - var(--px)),
+   var(--base-color) var(--px),
+   var(--base-color) calc(var(--tx) - var(--px)),
    transparent calc(var(--tx) - var(--px)));
+ --base-color: var(--bg-un-mode);
+ background-color: var(--bg-un-mode-est);
 }
+
+region-[data-occupancy="secondary"] {
+ --base-color: var(--bg);
+ background-color: var(--bg-un-mode-er);
+}
+
+region-[data-occupancy="tertiary"] {
+ --base-color: var(--bg-mode);
+ background-color: var(--bg-un-mode);
+}
+
 
 region-.threshold,
 region-[data-key="bridge"] {

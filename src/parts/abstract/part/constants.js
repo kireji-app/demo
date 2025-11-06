@@ -1,6 +1,5 @@
 const part = this
 const property = Property[PROPERTY_ID]
-const now = performance.now()
 const isLeaf = this.host === host
 const basePropertyOwner = (() => { let o = this.prototype; while (o && !Object.hasOwn(o, property.key)) o = o.prototype; return o })()
 const basePropertyDescriptor = basePropertyOwner ? Object.getOwnPropertyDescriptor(basePropertyOwner, property.key) : null

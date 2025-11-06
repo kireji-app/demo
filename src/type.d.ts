@@ -22,6 +22,8 @@ declare interface IDNSRoot extends IMix {
  readonly codename: string
  /** The automatically generated HTTP identifier for this build. */
  readonly ETag: string
+ /** The current unix timestamp, acquired using the high-precision performance.now() + performance.timeOrigin. */
+ readonly now: DOMHighResTimeStamp
  /** Sets the configuration space to match the given request url string. */
  setRoute(REQUEST_URL: string): void
  /** The operating system's currently assigned root application.

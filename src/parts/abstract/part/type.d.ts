@@ -172,8 +172,6 @@ declare interface IPart extends IPartOf<IPart> { }
  * 
  * Alias for `this` to disambiguate it from globalThis in IDEs.*/
 declare const part: IPart
-/** The value of `performance.now()` around the time this method was called. */
-declare const now: DOMHighResTimeStamp
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part[".."].exampleProperty`.  */
 declare const inherit: IPart
 /** The Property object describing this property. */
