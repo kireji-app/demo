@@ -97,25 +97,6 @@ declare interface IPartOf<T> extends Iterable<T> {
   * 
   * The default unicode character is the Mathematical Small Cursive form of the first letter of the part's domain name. */
  readonly unicode: string
- /** Generate a dynamic or static file from the part's directory.
-  * 
-  * Filenames are treated like their file extension. For binary file types (like .png)
-   * the "value" format will return a base64 encoded string and the "response" and "datauri"
-   * formats will return a file or file literal with the corresponding content-type.*/
- render(REQUEST: string | {
-  /** The name of the file to render */
-  request: string,
-  /** How to package the rendered value. All values are converted to string before becoming a datauri or response.
-   * 
-   * The default is "value".
-  */
-  format?: "value" | "datauri" | "response",
-  /** A fallback value. This fallback value will be returned exactly as
-   * is if there was no render endpoint with the given filename. If the
-   * render function returns a nullish value, the nullish value will be returned
-   * instead of this value.  */
-  fallback?: string | Response
- }): any | string | Response
  /** Converts the given model to a routeID without modifying the state of the part. */
  modelToRouteID(MODEL: any): bigint
  /** A getter that generates a model object from the state of the part and its subparts. */
@@ -193,8 +174,6 @@ declare interface IPart extends IPartOf<IPart> { }
 declare const part: IPart
 /** The value of `performance.now()` around the time this method was called. */
 declare const now: DOMHighResTimeStamp
-/** Alias for `part.render`. */
-declare function render(): any
 /** A proxy object that allows `inherit.exampleProperty` to replace `part.exampleProperty = part[".."].exampleProperty`.  */
 declare const inherit: IPart
 /** The Property object describing this property. */

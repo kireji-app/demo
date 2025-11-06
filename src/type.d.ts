@@ -94,8 +94,6 @@ declare const filenames: string[]
 declare interface ISourceDirectory<T> {
 }
 declare interface IPropertyTable<T> {
- readonly ["render"]: T
-
  readonly ["route-set"]: T
  readonly ["routeID-set"]: T
  readonly ["routeID-collect"]: T

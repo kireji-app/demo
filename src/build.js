@@ -1,5 +1,4 @@
 function ƒ(_) {
-
  globalThis._ = _
 
  class SourceMappedFile {
@@ -125,66 +124,6 @@ function ƒ(_) {
     null,
     1,
    )
-  }
- }
-
- class FileHeader {
-  static useUTF8 = true
-  static textBasedPrefixes = [
-   'text/',
-   'application/json',
-   'application/xml',
-   'application/javascript',
-   'image/svg+xml'
-  ]
-  static mimeTypes = {
-   'png': 'image/png',
-   'gif': 'image/gif',
-   'svg': 'image/svg+xml',
-   'jpg': 'image/jpeg',
-   'jpeg': 'image/jpeg',
-   'webp': 'image/webp',
-   'ico': 'image/x-icon',
-   'html': 'text/html',
-   'htm': 'text/html',
-   'css': 'text/css',
-   'js': 'text/javascript',
-   'mjs': 'text/javascript',
-   'json': 'application/json',
-   'xml': 'application/xml',
-   'txt': 'text/plain',
-   'uri': 'text/uri-list',
-   'woff': 'font/woff',
-   'woff2': 'font/woff2',
-   'ttf': 'font/ttf',
-   'otf': 'font/otf',
-  }
-  #filename
-  #extension
-  #filetype
-  #binary
-  get extension() { return this.#extension }
-  get filetype() { return this.#filetype }
-  get binary() { return this.#binary }
-  constructor(filename) {
-   const lastDotIndex = filename.lastIndexOf('.')
-   this.#filename = filename
-   this.#extension = lastDotIndex === -1 || lastDotIndex === filename.length - 1 ? '' : filename.slice(lastDotIndex)
-   this.#filetype = FileHeader.mimeTypes[this.#extension.slice(1).toLowerCase()] || "text/plain"
-   this.#binary = !FileHeader.textBasedPrefixes.some(prefix => this.#filetype.startsWith(prefix))
-   if (!this.#binary && FileHeader.useUTF8 && !this.#filetype.includes('charset'))
-    this.#filetype += ';charset=UTF-8'
-  }
-  toString() {
-   return this.#filename
-  }
-  toJSON() {
-   return {
-    filename: this.#filename,
-    extension: this.extension,
-    filetype: this.filetype,
-    binary: this.binary
-   }
   }
  }
 

@@ -1,35 +1,37 @@
 globalThis.onfetch = event => {
  try {
-  const { host, pathname, searchParams, hash } = new URL(event.request.url)
+  const { host, pathname, searchParams } = new URL(event.request.url)
+
   const alternateModelVersion = searchParams.get("from")
 
   if (alternateModelVersion || pathname === '/-v')
-   return
+   return // Let the server field the request.
 
-  const isFileRequest = [`/${_.version}/${_.codename}.js`, `/${_.version}/manifest.json`].includes(pathname)
-  const filename = isFileRequest ? pathname.split("/")[2] : "index.html"
-  const fallbackRoute = `https://${host}/${_.version}/${_.landingHash}/`
+  const [, version, filename] = pathname.split("/")
 
-  if (isFileRequest)
-   _.setRoute(fallbackRoute)
-  else try {
-   if (!/^\/\d+\.\d+.\d+\/(?:[\w-]*\/)?$/.test(pathname))
-    throw `Pathname '${pathname}' is not valid.`
-   _.setRoute(`https://${host}${pathname}`)
-  } catch (e) {
-   error(e)
-   _.setRoute(fallbackRoute)
+  if (version !== _.version)
+   throw "Unsupported Service Worker Request"
+
+  const supportedFiles = {
+   [`${_.codename}.js`]: "text/javascript",
+   "manifest.json": "application/json"
   }
+
+  const isSupportedFile = filename in supportedFiles
+
+  _.setRoute(isSupportedFile ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
 
   color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
 
-  event.respondWith(_.render({
-   request: filename,
-   format: "response"
+  event.respondWith(new Response(_[isSupportedFile ? filename : "index.html"], {
+   status: _.application.prototype.host === "error-501.abstract.parts" ? 501 : 200,
+   headers: {
+    "content-type": (isSupportedFile ? supportedFiles[filename] : "text/html") + ';charset=UTF-8',
+    "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
+   }
   }))
 
  } catch (e) {
-  error(e)
   event.respondWith(Promise.reject(e))
  }
 }

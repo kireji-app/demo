@@ -4,7 +4,7 @@ const meta =
  // `<meta name="robots" content="noindex" />` +
  `<meta name="format-detection" content="telephone=no, email=no, address=no, date=no">` +
  `<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>` +
- `<meta name="description" content="${sanitizeAttr(_.application.descriptionMeta)}">` /* +
+ `<meta name="description" content="${sanitizeAttr(_.application.descriptionMeta ?? "This app is coming soon.")}">` /* +
  `<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">` +
  `<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">`*/
 

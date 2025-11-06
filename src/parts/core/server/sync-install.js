@@ -51,16 +51,9 @@ const
     }
 
     color.device.light = !prefersDarkMode
-    status = 200
     head = indexHeader
-    try {
-     _.setRoute(`https://${host}${pathname}`)
-     logMessage = "Rendering Snapshot"
-    } catch (e) {
-     error(e)
-     logMessage = "Rendering Fallback"
-     _.setRoute(defaultRoute)
-    }
+    _.setRoute(`https://${host}${pathname}`)
+    status = host in _.liveApplications ? 200 : 501
     body = _['index.html']
     break respond
    }
@@ -180,6 +173,7 @@ const httpServer = require('http').createServer((request, response) => logServer
      break respond
     }
 
+    ;
     ({ status, head, body, logMessage = "Old Proxy" } = destinationExports.proxy(
      host,
      pathname,
@@ -189,9 +183,9 @@ const httpServer = require('http').createServer((request, response) => logServer
     ))
    }
   } catch (e) {
-   if (e.startsWith("Unsupported Canonical Route"))
+   if (("" + e).startsWith("Unsupported Canonical Route"))
     logMessage = "Unsupported Route"
-   else if (e.startsWith("Unsupported `from` "))
+   else if (("" + e).startsWith("Unsupported `from` "))
     logMessage = "Unsupported Version"
    else {
     error(e)
@@ -200,15 +194,17 @@ const httpServer = require('http').createServer((request, response) => logServer
    status = 444
    head = securityHeader
   } finally {
-   response.writeHead(status, head)
-   response.end(body)
 
    log(logMessage, status, {
     200: `✓`,
     get 302() { return `↪ ${head.Location}` },
     304: "♻",
-    444: "✕"
+    444: "✕",
+    501: `#`,
    }[status])
+
+   response.writeHead(status, head)
+   response.end(body)
   }
  }
 ))

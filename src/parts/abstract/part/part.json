@@ -31,9 +31,6 @@
  "includes": [
   "SUBPART"
  ],
- "render": [
-  "OPTIONS"
- ],
  "count": [
   "COUNT",
   "SUBPART",

@@ -21,7 +21,7 @@ const recordTable = part.filenames.map((filename, index) => {
  // totalSize += part.domains.length
 
  return "<div>" + filename + "</div>" +
-  `<div>${(new FileHeader(filename).binary ? atob(part[filename]).length : part[filename].length).toLocaleString()}</div>` +
+  `<div>${(["png", "gif"].includes(filename.split(".").at(-1)) ? atob(part[filename]).length : part[filename].length).toLocaleString()}</div>` +
   `<div>${recordSize.toLocaleString()}</div>`
 }).join("")
 
