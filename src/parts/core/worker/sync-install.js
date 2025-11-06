@@ -24,7 +24,7 @@ globalThis.onfetch = event => {
   color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
 
   event.respondWith(new Response(_[isSupportedFile ? filename : "index.html"], {
-   status: _.application.prototype.host === "error-501.abstract.parts" ? 501 : 200,
+   status: !isSupportedFile && _.application.prototype.host === "error-501.abstract.parts" ? 501 : 200,
    headers: {
     "content-type": (isSupportedFile ? supportedFiles[filename] : "text/html") + ';charset=UTF-8',
     "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
