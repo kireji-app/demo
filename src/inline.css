@@ -56,7 +56,7 @@ body {
  --h: 100vh;
  --warning-height: 28px;
  --wallpaper-height: calc(var(--h) - var(--task-bar-height) - var(--warning-height));
- overscroll-behavior: none !important;
+ overscroll-behavior: none;
  margin: 0;
  height: var(--h);
  font-synthesis: weight style;
@@ -125,6 +125,7 @@ scroller- {
  transform: translateY(0);
  overflow: hidden;
  scrollbar-width: none;
+ overscroll-behavior: none;
 }
 
 scroller-::-webkit-scrollbar {
