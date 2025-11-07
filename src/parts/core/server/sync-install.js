@@ -120,6 +120,13 @@ const httpServer = require('http').createServer((request, response) => logServer
      break respond
     }
 
+    if (pathname === "/robots.txt") {
+     status = 404
+     head = indexHeader
+     body = "<b>404 - Not Found</b>"
+     logMessage = "404 - robots.txt"
+    }
+
     const devSuffix = "localhost:3000"
     const isLocalRequest = host.endsWith(devSuffix)
     if (isLocalRequest) {
@@ -177,15 +184,23 @@ const httpServer = require('http').createServer((request, response) => logServer
     ))
    }
   } catch (e) {
-   if (("" + e).startsWith("Unsupported Canonical Route"))
-    logMessage = "Unsupported Route"
-   else if (("" + e).startsWith("Unsupported `from` "))
-    logMessage = "Unsupported Version"
-   else {
+   if (("" + e).startsWith("Unsupported Canonical Route")) {
+    logMessage = "404 - Bad Route"
+    status = 404
+    head = indexHeader
+    body = "<b>404 - Not Found</b>"
+   } else if (("" + e).startsWith("Unsupported `from` ")) {
+    logMessage = "400 - Bad Version"
+    status = 400
+    head = indexHeader
+    body = "<b>400 - Bad Request</b>"
+   } else {
     error(e)
     logMessage = "Unknown Error"
+    status = 500
+    head = indexHeader
+    body = "<b>500 - Server Error</b>"
    }
-   status = 444
    head = securityHeader
   } finally {
 
@@ -193,7 +208,10 @@ const httpServer = require('http').createServer((request, response) => logServer
     200: `✓`,
     get 302() { return `↪ ${head.Location}` },
     304: "♻",
-    444: "✕",
+    400: "✕",
+    404: "✕",
+    // 444: "✕",
+    500: "!",
     501: `#`,
    }[status])
 

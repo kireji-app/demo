@@ -1,1 +1,1 @@
-return `<task-bar tabIndex=2>${taskBar.menu["inline.html"]}<!-- tasks --><flex-spacer></flex-spacer>${taskBar.tray["inline.html"]}</task-bar>`
+return `<task-bar tabIndex=0>${taskBar.menu["inline.html"]}<!-- tasks --><flex-spacer></flex-spacer>${taskBar.tray["inline.html"]}</task-bar>`

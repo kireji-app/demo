@@ -11,7 +11,7 @@ for (const application of Object.values(_.applications)) {
   }
   truncatedName += " " + word
  }
- result += `<desktop-icon tabIndex=2><img class=icon src="${application.placeholderImage("part.png")}"/><span class=label>${truncatedName}</span></desktop-icon>`
+ result += `<desktop-icon tabIndex=0><img class=icon src="${application.placeholderImage("part.png")}"/><span class=label>${truncatedName}</span></desktop-icon>`
 }
 
 return result
