@@ -53,18 +53,14 @@ const
     _.setRoute(`https://${host}${pathname}`)
     status = host in _.liveApplications ? 200 : 501
     body = _['index.html']
+    logMessage = "Serving Snapshot"
     break respond
    }
 
    return { status, head, body, logMessage }
   },
   decode(segment) {
-   try {
-    _.setRouteID(decodeSegment(segment))
-   } catch (e) {
-    error(e)
-    _.setRouteID(decodeSegment(_.landingHash))
-   }
+   _.setRouteID(decodeSegment(segment))
    return _.model
   },
   encode(model) {
@@ -172,7 +168,7 @@ const httpServer = require('http').createServer((request, response) => logServer
     }
 
     ;
-    ({ status, head, body, logMessage = "Old Proxy" } = destinationExports.proxy(
+    ({ status, head, body, logMessage } = destinationExports.proxy(
      host,
      pathname,
      request.headers['if-none-match'],
