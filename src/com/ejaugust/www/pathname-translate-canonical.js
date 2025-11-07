@@ -30,8 +30,10 @@ if (PATHNAME === "/") {
  if (parts[0] !== "notes" || !parts[1] || parts.length !== 2)
   throw "Unsupported Canonical Route"
 
+ // TODO: Generate this list dynamically.
  const note = isNaN(parts[1]) ? {
-  "unix-timestamp": "1762140334"
+  "unix-timestamp": "1762140334",
+  "hashing-the-universe": "1762062190"
  }[parts[1]] : parts[1]
 
  if (!(note in notes))
