@@ -9,7 +9,7 @@ const pathname = url.pathname
 const newRouteID = decodePathname(pathname)
 
 if (_.application?.key !== host)
- _.application = getPartFromDomains(host.split("."))
+ _.application = _.applications[host]
 
 if (_.routeID !== newRouteID)
  _.setRouteID(newRouteID)

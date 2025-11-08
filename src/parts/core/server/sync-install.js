@@ -10,7 +10,13 @@ const
  serviceHeader = {
   ETag: _.ETag,
   'Content-Type': 'application/javascript;charset=UTF-8',
-  'Cache-Control': 'public, max-age=0, immutable',
+  'Cache-Control': 'public, max-age=31536000, immutable',
+  ...securityHeader
+ },
+ sitemapHeader = {
+  ETag: _.ETag,
+  'Content-Type': 'application/xml',
+  'Cache-Control': 'public, max-age=86400, immutable',
   ...securityHeader
  },
  indexHeader = {
@@ -125,6 +131,7 @@ const httpServer = require('http').createServer((request, response) => logServer
      head = indexHeader
      body = "<b>404 - Not Found</b>"
      logMessage = "404 - robots.txt"
+     break respond
     }
 
     const devSuffix = "localhost:3000"
@@ -143,6 +150,16 @@ const httpServer = require('http').createServer((request, response) => logServer
       logMessage = "Setting Application"
       break respond
      }
+    }
+
+    if (pathname === "/sitemap.xml") {
+     if (_.application?.key !== host)
+      _.application = _.applications[host]
+     status = 200
+     head = sitemapHeader
+     body = _["sitemap.xml"]
+     logMessage = "Serving Sitemap"
+     break respond
     }
 
     const destinationVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]

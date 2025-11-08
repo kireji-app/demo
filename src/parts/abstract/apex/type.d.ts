@@ -16,6 +16,8 @@ declare interface IApplication extends IPart {
  readonly "inline.css"
  /** The html which becomes the desktop wallpaper for the application. */
  readonly "inline.html"
+ /** For SEO, an xml file detailing this application's available canonical links, which will be fetched by search engines. */
+ readonly "sitemap.xml"
  /** The apex domain that hosts this application. */
  readonly "..": IApexDomain
  /** The canonical link to use for indexing pages in search results for a given page. */

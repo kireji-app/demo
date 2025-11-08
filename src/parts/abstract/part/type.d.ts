@@ -1,15 +1,17 @@
 declare interface IPartOf<T> extends Iterable<T> {
  [Symbol.iterator](): IterableIterator<T>
- /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
- filter(FILTER_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
- /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
- includes(SUBPART: T): boolean
  /** If defined, the per-frame update method for this part. Useful for implementing game features. */
  loop?(TIME: DOMHighResTimeStamp): void
  /** Calls loop on this part and then propagates the call leafward to all subparts. */
  distributeLoop(): void
+ /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
+ filter(FILTER_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
+ /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
+ includes(SUBPART: T): boolean
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
  map(MAP_FUNCTION: (subpart: T, index: number, part: T) => T): T[]
+ /** Perofrms MAP_FUNCTION on every subpart of the part. */
+ forEach(MAP_FUNCTION: (subpart: T, index: number, part: T) => void): void
  /** Adds a listener that calls the given callback when the given event occurs. */
  addEventListener(EVENT_TYPE: string, CALLBACK): void
  /** Removes the listener that calls the given callback when the given event occurs. */

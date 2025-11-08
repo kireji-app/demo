@@ -3,6 +3,8 @@ declare interface IDNSRoot extends IMix {
  readonly "images.css": string
  readonly "static.css": string
  readonly "inline.css": string
+ /** The sitemap for the currently active application. */
+ readonly "sitemap.xml": string
  readonly app: IApp
  readonly click: IClick
  readonly com: ICom
