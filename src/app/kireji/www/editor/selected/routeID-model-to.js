@@ -1,0 +1,1 @@
+return BigInt(allParts.indexOf(partsByHost[MODEL]))

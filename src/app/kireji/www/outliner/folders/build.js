@@ -1,4 +1,3 @@
-const folderIndex = new Map()
 const folderParts = []
 
 for (let i = 0; i < allParts.length; i++) {
@@ -7,14 +6,10 @@ for (let i = 0; i < allParts.length; i++) {
  if (!instance.subdomains.length)
   continue
 
- folderIndex.set(instance.host, i)
- folderIndex.set(i, instance.host)
-
  folderParts.push(instance)
 }
 
 folders.define({
  cardinality: { value: 2n ** BigInt(folderParts.length) },
- folderParts: { value: folderParts },
- folderIndex: { value: folderIndex }
+ folderParts: { value: folderParts }
 })

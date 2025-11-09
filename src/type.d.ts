@@ -34,7 +34,7 @@ declare interface IDNSRoot extends IMix {
  readonly application: IApplication
  /** A host-keyed object with all of the applications that are available from the web at their host thanks to DNS records. */
  readonly applications: Record<string, IApplication>
- /** A host-keyed object with all of the applications that are available and which are not using the placeholder error 501 prototype. */
+ /** A host-keyed object with all of the applications that are available which are not using the `error.abstract.parts` prototype. */
  readonly liveApplications: Record<string, IApplication>
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
@@ -46,7 +46,7 @@ declare interface IDNSRoot extends IMix {
  readonly defaultApplication: string
  /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
  readonly frameRequest: number | null
- /** Translates an SEO-friendly canonical route into a versioned, stateful route, using the current system state as the base state. */
+ /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current system state as the base state. */
  readonly translateCanonicalRoute(CANONICAL_ROUTE: string): string
  /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
  readonly go(ANCHOR: string, EVENT: event): void
@@ -282,8 +282,8 @@ declare class MethodConstant {
  * 
  * Available only in _.setRoute(). */
 declare const REQUEST_URL: string
-/** Gets a part instance from the root, given its array of domain parts. */
-declare function getPartFromDomains(domains): IPart
+/** A host-keyed map of all parts in the system. */
+declare const partsByHost: Record<string, IPart>
 /** Trades a versioned string pathname for the bigint routeID. */
 declare function decodePathname(pathname: string): bigint
 /** Trades a string segment for the bigint routeID. */

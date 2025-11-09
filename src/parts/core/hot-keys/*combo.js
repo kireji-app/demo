@@ -1,12 +1,14 @@
 const terminalKeys = new Set()
 
-let context, shift
+let context, shift, alt
 
 for (const code of hotKeys.pressed)
  if (code.startsWith(hotKeys.contextPrefix))
   context = true
  else if (code.startsWith("Shift"))
   shift = true
+ else if (code.startsWith("Alt"))
+  alt = true
  else if (code.startsWith("Key"))
   terminalKeys.add(code.slice(3).toLowerCase())
  else if (code.startsWith("Digit"))
@@ -18,6 +20,7 @@ for (const code of hotKeys.pressed)
 const combo = [...terminalKeys].sort()
 
 if (shift) combo.unshift("shift")
+if (alt) combo.unshift("alt")
 if (context) combo.unshift("context")
 
 return combo.join("+")

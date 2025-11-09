@@ -14,6 +14,6 @@ return color.rgbToHex(...color.rgbFromHex(A).map((n, i) => {
    return k - (((k - n) * (k - m)) / k)
 
   default:
-   throw new RangeError("unsupported blend mode " + MODE)
+   throw new RangeError("Unsupported Blend Mode: " + MODE)
  }
 }))

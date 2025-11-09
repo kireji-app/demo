@@ -31,7 +31,7 @@ declare const world: IGlowstickWorld
 // The abstract.parts part contains the following abstracts (blueprints?):
 // - apex
 // - clip
-// - error-501
+// - error
 // - facet
 // - match
 // - mix

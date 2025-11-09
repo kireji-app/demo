@@ -10,7 +10,7 @@ globalThis.onfetch = event => {
   const [, version, filename] = pathname.split("/")
 
   if (version !== _.version)
-   throw "Unsupported Service Worker Request"
+   throw "Unsupported Cross-Version Service Worker Request"
 
   const supportedFiles = {
    [`${_.codename}.js`]: "text/javascript",
@@ -24,7 +24,7 @@ globalThis.onfetch = event => {
   color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
 
   event.respondWith(new Response(_[isSupportedFile ? filename : "index.html"], {
-   status: !isSupportedFile && _.application.prototype.host === "error-501.abstract.parts" ? 501 : 200,
+   status: !isSupportedFile && _.application.prototype.host === "error.abstract.parts" ? _.application.status : 200,
    headers: {
     "content-type": (isSupportedFile ? supportedFiles[filename] : "text/html") + ';charset=UTF-8',
     "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
@@ -49,6 +49,6 @@ globalThis.onmessage = ({ data: { code, payload }, source }) => {
    break
 
   default:
-   error('Unsupported worker message code ' + code)
+   error('Unsupported Worker Message: ' + code)
  }
 }

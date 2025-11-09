@@ -3,10 +3,14 @@
   "kireji": {
    "www": {
     "editor": {
-     "selected": "f"
+     "selected": "www.kireji.app"
     },
     "outliner": {
-     "folders": "gg__0M",
+     "folders": [
+      "",
+      "app",
+      "kireji.app"
+     ],
      "width": {
       "open": "_"
      }

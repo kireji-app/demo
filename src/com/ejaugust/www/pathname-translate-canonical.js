@@ -28,7 +28,7 @@ if (PATHNAME === "/") {
  const parts = PATHNAME.split("/").slice(1)
 
  if (parts[0] !== "notes" || !parts[1] || parts.length !== 2)
-  throw "Unsupported Canonical Route"
+  throw "Unknown Canonical Path: " + PATHNAME
 
  // TODO: Generate this list dynamically.
  const note = isNaN(parts[1]) ? {
@@ -37,7 +37,7 @@ if (PATHNAME === "/") {
  }[parts[1]] : parts[1]
 
  if (!(note in notes))
-  throw `Could not locate note "${note}" on "${host}".`
+  throw "Unknown Canonical Path: " + PATHNAME
 
  app.notes = note
 }

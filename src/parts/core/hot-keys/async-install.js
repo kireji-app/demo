@@ -64,7 +64,7 @@ globalThis.addEventListener("keydown", e => {
 
   hotKeys.pressed.add(e.code)
 
-  const combo = hotKeys.getComboString()
+  const combo = hotKeys.combo
   const methodName = JSON.parse(_.application["hot-keys.json"] ?? "{}")[combo] ?? hotKeys.table[combo]
   const method = methodName && (_.application[methodName] ?? hotKeys[methodName])
 

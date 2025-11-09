@@ -235,7 +235,10 @@ function ƒ(_) {
 
    for (const character of [...segment]) {
     const characterValue = pathRadix.indexOf(character)
-    if (characterValue === -1 || characterValue >= 64) throw character
+
+    if (characterValue === -1 || characterValue >= 64)
+     throw `Bad Hash Character: ${character}`
+
     charmRoundedBinaryString += characterValue.toString(2).padStart(6, 0)
     charmLengthOffsetBinaryString += "000001"
    }
@@ -243,7 +246,19 @@ function ƒ(_) {
    return BigInt(charmRoundedBinaryString) + BigInt(charmLengthOffsetBinaryString)
   },
   encodePathname = routeID => `/${_.version}/${encodeSegment(routeID)}/`,
-  decodePathname = pathname => decodeSegment(pathname.slice(1, -1).split("/")[1])
+  decodePathname = pathname => {
+   if (!pathname.endsWith("/"))
+    throw `Pathname missing trailing slash: ${pathname}`
+
+   const parts = pathname.split("/")
+
+   if (parts.length > 4)
+    throw `Pathname has too many segments`
+   else if (parts.length < 4)
+    throw `Pathname has too few segments`
+
+   return decodeSegment(parts[2])
+  }
 
  logScope(1, `\n${welcomeMessage}`, log => {
   log(`
@@ -306,12 +321,8 @@ function ƒ(_) {
     allParts = [],
     imageSources = [],
     earlyImageSources = [],
+    partsByHost = {},
     preHydrationArchive = serialize(_),
-    getPartFromDomains = domains => domains.reduceRight((currentFolder, name, index) => {
-     if (!currentFolder[name])
-      throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
-     return currentFolder[name]
-    }, _),
     hydrateRecursive = (part, domains = []) => {
 
      let host
@@ -319,7 +330,11 @@ function ƒ(_) {
      if (typeof part === "string") {
       host = part
       domains = host.split(".")
-      part = getPartFromDomains(domains)
+      part = domains.reduceRight((currentFolder, name, index) => {
+       if (!currentFolder[name])
+        throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
+       return currentFolder[name]
+      }, _)
      } else {
       host = domains.join(".")
      }
@@ -328,6 +343,7 @@ function ƒ(_) {
       return part
 
      logScope(2, `"${host}"`, () => {
+      partsByHost[host] = part
       const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
       const subpartKeys = [...subdomains]
       const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
@@ -558,8 +574,8 @@ function ƒ(_) {
 
       _.applications[www.host] = www
 
-      if (www.prototype.host === "error-501.abstract.parts") {
-       log("501 - Not Implemented.")
+      if (www.prototype.host === "error.abstract.parts") {
+       log("Error " + www.status + " - Not added to menu.")
        return
       }
 

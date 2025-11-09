@@ -1,9 +1,9 @@
-return `#error>.thin {
+return `#error-message>.thin {
  font-weight: 200;
 }
 
-#error {
- font-size: ${Math.trunc(200 / ((part.title?.length ?? 9) + 18))}vw;
+#error-message {
+ font-size: ${Math.trunc(200 / (MESSAGE.replaceAll(/(<([^>]+)>)/g, "").length + 3))}vw;
  height: 100%;
  align-items: center;
  justify-content: center;
@@ -12,7 +12,7 @@ return `#error>.thin {
  line-height: 1em;
 }
 
-wallpaper->h1 {
+#error-status {
  font-size: 35vw;
  text-align: center;
  color: var(--bg-un-mode);

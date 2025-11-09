@@ -1,7 +1,6 @@
 {
  "singleton": true,
  "extends": "facet.abstract.parts",
- "string-get-combo": [],
  "undo": [],
  "redo": []
 }

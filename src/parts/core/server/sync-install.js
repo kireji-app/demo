@@ -10,7 +10,7 @@ const
  serviceHeader = {
   ETag: _.ETag,
   'Content-Type': 'application/javascript;charset=UTF-8',
-  'Cache-Control': 'public, max-age=31536000, immutable',
+  'Cache-Control': `public, max-age=${production ? 31536000 : 0}, immutable`,
   ...securityHeader
  },
  sitemapHeader = {
@@ -54,10 +54,17 @@ const
 
     }
 
+    if (pathname === `/${_.version}` || pathname === `/${_.version}/`) {
+     status = 301
+     head = { 'Location': `/${_.version}/${_.landingHash}/`, ...securityHeader }
+     logMessage = "Normalizing URL"
+     break respond
+    }
+
     color.device.light = !prefersDarkMode
     head = indexHeader
     _.setRoute(`https://${host}${pathname}`)
-    status = host in _.liveApplications ? 200 : 501
+    status = host in _.liveApplications ? 200 : _.applications[host].status
     body = _['index.html']
     logMessage = "Serving Snapshot"
     break respond
@@ -114,6 +121,10 @@ const httpServer = require('http').createServer((request, response) => logServer
   let status, head = {}, body, logMessage
   let host = request.headers.host
   const { href, pathname, searchParams } = new URL(`https://${host}${request.url}`)
+  const devSuffix = "localhost:3000"
+  const isLocalRequest = host.endsWith(devSuffix)
+  if (isLocalRequest)
+   host = host.slice(0, -1 - devSuffix.length)
 
   try {
    respond: {
@@ -126,30 +137,20 @@ const httpServer = require('http').createServer((request, response) => logServer
      break respond
     }
 
-    if (pathname === "/robots.txt") {
-     status = 404
-     head = indexHeader
-     body = "<b>404 - Not Found</b>"
-     logMessage = "404 - robots.txt"
+    if (pathname === "/robots.txt")
+     throw `No Robots`
+
+    if (isLocalRequest && !(host in _.applications)) {
+     /* 302 forward invalid application requests.
+        This is handled by NGINX on the real server. */
+     if (host && !host.startsWith("www.")) host = "www." + host
+     if (!(host in _.applications))
+      host = _.defaultApplication ?? Object.getOwnPropertyNames(_.applications)[0]
+
+     status = 302
+     head = { 'Location': `http://${host}.${devSuffix}${pathname}`, ...securityHeader }
+     logMessage = "Setting Application"
      break respond
-    }
-
-    const devSuffix = "localhost:3000"
-    const isLocalRequest = host.endsWith(devSuffix)
-    if (isLocalRequest) {
-     host = host.slice(0, -1 - devSuffix.length)
-     if (!(host in _.applications)) {
-      /* 302 forward invalid application requests.
-         This is handled by NGINX on the real server. */
-      if (host && !host.startsWith("www.")) host = "www." + host
-      if (!(host in _.applications))
-       host = _.defaultApplication ?? Object.getOwnPropertyNames(_.applications)[0]
-
-      status = 302
-      head = { 'Location': `http://${host}.${devSuffix}${pathname}`, ...securityHeader }
-      logMessage = "Setting Application"
-      break respond
-     }
     }
 
     if (pathname === "/sitemap.xml") {
@@ -162,7 +163,7 @@ const httpServer = require('http').createServer((request, response) => logServer
      break respond
     }
 
-    const destinationVersion = pathname.match(/^\/(\d+\.\d+\.\d+)(?:\/.*)?$/)?.[1]
+    const destinationVersion = pathname.match(/^\/(\d+\.\d+\.\d+)/)?.[1]
 
     if (!destinationVersion) {
      status = 302
@@ -174,14 +175,24 @@ const httpServer = require('http').createServer((request, response) => logServer
     }
 
     /** @type {IVersionedExports} */
-    const destinationExports = destinationVersion === _.version ? currentExports : require(`../.versions/${destinationVersion}.js`)
+    let destinationExports
+    try {
+     destinationExports = destinationVersion === _.version ? currentExports : require(`../.versions/${destinationVersion}.js`)
+    } catch (e) {
+     throw `Bad Version: ${destinationVersion}`
+    }
 
     const sourceVersion = searchParams.get("from")
     if (sourceVersion) {
      if (!/^\d+\.\d+\.\d+$/.test(sourceVersion))
       throw "Unsupported `from` parameter: " + sourceVersion
      /** @type {IVersionedExports} */
-     const sourceExports = require(`../.versions/${sourceVersion}.js`)
+     let sourceExports
+     try {
+      sourceExports = require(`../.versions/${sourceVersion}.js`)
+     } catch (e) {
+      throw `Bad Version: ${sourceVersion}`
+     }
      const sourceHash = pathname.split("/")[2]
      const model = sourceExports.decode(sourceHash)
      const destinationHash = destinationExports.encode(model)
@@ -201,37 +212,58 @@ const httpServer = require('http').createServer((request, response) => logServer
     ))
    }
   } catch (e) {
-   if (("" + e).startsWith("Unsupported Canonical Route")) {
-    logMessage = "404 - Bad Route"
+   if (("" + e).startsWith("No Robots")) {
+    const version = e.split(": ").pop()
+    logMessage = "No robots.txt"
     status = 404
-    head = indexHeader
-    body = "<b>404 - Not Found</b>"
-   } else if (("" + e).startsWith("Unsupported `from` ")) {
-    logMessage = "400 - Bad Version"
+    body = `<span class=thin>This server</span><span>allows search engine crawlers.</span>`
+   } else if (("" + e).startsWith("Bad Version: ")) {
+    const version = e.split(": ").pop()
+    logMessage = "Unknown Version"
     status = 400
-    head = indexHeader
-    body = "<b>400 - Bad Request</b>"
+    body = `<span>Version</span><span class=thin>${version}</span><span>was removed or never existed.</span>`
+   } else if (("" + e).startsWith("Bad Canonical Path: ") || ("" + e).startsWith("Unsupported `from` ")) {
+    logMessage = "Bad Path"
+    status = 400
+    body = "<span class=thin>Your request</span><span>was not valid.</span>"
+   } else if (("" + e).startsWith("Bad Hash Character: ")) {
+    const character = e.split(": ").pop()
+    logMessage = "Bad Hash"
+    status = 400
+    body = `<span>Path contained unsupported character "${character}".</span>`
+   } else if (("" + e).startsWith("Unknown Canonical Path: ")) {
+    const path = e.split(": ").pop()
+    logMessage = "Path Not Found"
+    status = 404
+    body = `<span>📄</span><span class=thin>${path.length > 18 ? "The requested path" : `"${path}"`}</span><span>was removed or never existed.</span>`
    } else {
     error(e)
-    logMessage = "Unknown Error"
+    logMessage = "Server Error"
     status = 500
-    head = indexHeader
-    body = "<b>500 - Server Error</b>"
+    body = "<span>An unknown server error occured.</span>"
    }
-   head = securityHeader
+   const themeBGColor = (_.applications[host] ?? _.applications["www.desktop.parts"])[`theme-light-bg`];
+   body = `<style>html {
+  background-color: var(--bg);
+  --wallpaper-height: 100vh;
+  --bg: ${themeBGColor};
+  --bg-un-mode: #${color.blendHex(themeBGColor, "cfcfcf", "multiply")};
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+ }${_.parts.abstract.error.getErrorCSS(body)}
+</style>
+${_.parts.abstract.error.getErrorHTML(status, body)}`
+   head = indexHeader
   } finally {
-
    log(logMessage, status, {
     200: `✓`,
     get 302() { return `↪ ${head.Location}` },
     304: "♻",
     400: "✕",
-    404: "✕",
+    404: "?",
     // 444: "✕",
     500: "!",
     501: `#`,
    }[status])
-
    response.writeHead(status, head)
    response.end(body)
   }

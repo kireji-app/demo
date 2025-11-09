@@ -3,7 +3,7 @@ const devSuffix = "localhost:3000"
 const host = url.host.endsWith(devSuffix) ? url.host.slice(0, -1 - devSuffix.length) : url.host
 
 if (!(host in _.applications))
- throw `Unsupported application '${host}'.`
+ throw `Unsupported Application: ${host}`
 
 const pathname = url.pathname
 const newRouteID = decodePathname(pathname)

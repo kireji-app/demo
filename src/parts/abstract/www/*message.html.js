@@ -1,0 +1,1 @@
+return `📦<span class=thin>${part.title}</span><span>is coming soon.</span>`
