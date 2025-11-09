@@ -21,7 +21,7 @@ globalThis.onfetch = event => {
 
   _.setRoute((isSupportedFile || !filename) ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
 
-  color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
+  // color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
 
   event.respondWith(new Response(_[isSupportedFile ? filename : "index.html"], {
    status: !isSupportedFile && _.application.prototype.host === "error.abstract.parts" ? _.application.status : 200,

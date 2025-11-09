@@ -1,5 +1,4 @@
 declare interface IColor extends IMatch {
- readonly device: IDeviceColorMode
  readonly light: IPart
  readonly dark: IPart
  /** Blends two color hex codes (A and B) using the given MODE.

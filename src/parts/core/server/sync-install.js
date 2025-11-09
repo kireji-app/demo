@@ -61,7 +61,7 @@ const
      break respond
     }
 
-    color.device.light = !prefersDarkMode
+    // color.device.light = !prefersDarkMode
     head = indexHeader
     _.setRoute(`https://${host}${pathname}`)
     status = host in _.liveApplications ? 200 : _.applications[host].status

@@ -1,6 +1,4 @@
 const visibleControl = document.querySelector("#color-control")
 
-if (visibleControl) {
+if (visibleControl)
  visibleControl.setAttribute("data-state", part.stateData)
- document.querySelector("#color-control .label2").innerHTML = part.title
-}
