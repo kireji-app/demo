@@ -8,5 +8,7 @@ if (host !== _.application.host)
 const translatedPathname = _.translateCanonicalPathname(_.application.host, pathname, hash)
 const translatedRouteID = decodePathname(translatedPathname)
 
-if (_.routeID !== translatedRouteID)
+if (_.routeID !== translatedRouteID) {
+ history.pushState(null, null, location.href)
  _.setRouteID(translatedRouteID)
+}
