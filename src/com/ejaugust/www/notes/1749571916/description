@@ -1,1 +1,0 @@
-Just a quick demo showing that non-configurable properties can't be deleted and yet no error is thrown if you try.

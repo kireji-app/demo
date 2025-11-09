@@ -1,1 +1,0 @@
-This is a quick demo showing that classes don't produce a meaningful result when passed into JSON.stringify() but class instances do.

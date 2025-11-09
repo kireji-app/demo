@@ -1,1 +1,0 @@
-This is a simple demonstration of the way that an object will inherit its prototype value until something causes it to shadow that value.
