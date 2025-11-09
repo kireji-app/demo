@@ -4,6 +4,6 @@ declare interface ICom extends ITopLevelDomain {
  readonly ejaugust: IEJAugust
 }
 
-declare interface IComApexDomain extends IApexDomain {
+declare interface IComApplication extends IApplication {
  readonly "..": ICom
 }

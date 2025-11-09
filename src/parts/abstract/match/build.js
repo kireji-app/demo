@@ -2,7 +2,9 @@ const offsets = new Map()
 
 let sum = 0n
 
-for (const subpart of match) {
+if (match.length === 0)
+ sum = 1n
+else for (const subpart of match) {
  offsets.set(subpart, sum)
  sum += subpart.cardinality
 }

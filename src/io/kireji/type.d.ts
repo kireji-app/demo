@@ -1,3 +1,2 @@
-declare interface IKirejiIo extends IApexDomain {
- readonly www: IKirejiIoApplication
+declare interface IKirejiIo extends IIoApplication {
 }

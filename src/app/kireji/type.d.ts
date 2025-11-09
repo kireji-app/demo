@@ -1,3 +1,5 @@
-declare interface IKirejiApp extends IAppApexDomain {
- readonly www: IKirejiAppApplication
+declare interface IKirejiApp extends IAppApplication {
+ readonly outliner: IKirejiAppOutliner
+ readonly editor: IKirejiAppEditor
 }
+declare const kirejiApp: IKirejiApp

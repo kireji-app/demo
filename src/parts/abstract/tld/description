@@ -1,1 +1,1 @@
-A top-level domain (TLD) is any of the top-most subdomain spaces of the domain name system. All of the subparts of a TLD are apex domains. The DNS root is the parent of every TLD.
+A top-level domain (TLD) is any of the top-most subdomain spaces of the domain name system. All of the subparts of a TLD are apex domains (each of which represents an application). The DNS root is the parent of every TLD.

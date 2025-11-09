@@ -1,5 +1,5 @@
-declare interface IAbstract extends IPartsApexDomain {
- readonly apex: IApexDomain
+declare interface IAbstract extends IPartsApplication {
+ readonly application: IApplication
  readonly clip: IClip
  readonly error: IErrorApplication
  readonly facet: IFacet
@@ -9,3 +9,5 @@ declare interface IAbstract extends IPartsApexDomain {
  readonly scroller: IScroller
  readonly tld: ITopLevelDomain
 }
+
+declare const abstract: IAbstract

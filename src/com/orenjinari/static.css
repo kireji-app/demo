@@ -1,0 +1,134 @@
+html,
+body {
+ background-color: var(--bg);
+}
+
+wallpaper->scroller->scroll-content:before,
+wallpaper->scroller->scroll-content::after {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ content: "";
+ left: 0;
+ top: 0;
+}
+
+wallpaper- {
+ --signature: var(--orenjinari-com--signature-png);
+ --ground: var(--orenjinari-com--ground-png);
+}
+
+/*
+ wallpaper- .zone {
+   box-shadow: inset 0 0 0 8vw #0003;
+ }
+*/
+
+wallpaper->scroller->scroll-content {
+ padding-top: calc(var(--wallpaper-height) + var(--section-gap));
+ --sections: 5;
+ --section-gap: 128px;
+ background:
+  var(--signature) 36.5vw 8vw/27vw 7.78vw no-repeat,
+  radial-gradient(ellipse 17.597vw 20.968vw at 7.735vw 5.433vw, white 99.5%, transparent 100%),
+  radial-gradient(ellipse 12.477vw 20.968vw at 28.291vw 2.626vw, white 99.5%, transparent 100%),
+  radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
+  radial-gradient(ellipse 20.255vw 20.968vw at 80.029vw 6.956vw, white 99.5%, transparent 100%),
+  radial-gradient(ellipse 14.194vw 20.968vw at 94.327vw 5.053vw, white 99.5%, transparent 100%);
+ /*background-attachment: local;*/
+ display: block;
+ position: relative;
+}
+
+wallpaper->scroller->scroll-content::after {
+ background:
+  var(--ground) 12.5vw calc(.8 * var(--wallpaper-height))/75vw 3.75vw no-repeat;
+ /*background-attachment: local;*/
+ z-index: -1;
+}
+
+body.dark wallpaper->scroller->scroll-content::after {
+ filter: invert(100%);
+ -webkit-filter: invert(100%);
+}
+
+body.modern task-bar {
+ background: transparent;
+ box-shadow: none;
+}
+
+wallpaper- .bunny {
+ position: absolute;
+ cursor: pointer;
+}
+
+wallpaper- #connect-btn {
+ left: calc(75vw - 3.7vw);
+ top: calc(calc(.8 * var(--wallpaper-height)) - 7.6vw);
+ width: 7.4vw;
+}
+
+wallpaper- #others-btn {
+ left: calc(57.5vw - 4vw);
+ top: calc(calc(.8 * var(--wallpaper-height)) - 9.3vw);
+ width: 8vw;
+}
+
+wallpaper- #portfolio-btn {
+ left: calc(42.5vw - 5vw);
+ top: calc(calc(.8 * var(--wallpaper-height)) - 10.5vw);
+ width: 10vw;
+}
+
+wallpaper- #about-btn {
+ left: calc(25vw - 4vw);
+ top: calc(.8 * var(--wallpaper-height) - 8vw);
+ width: 8vw;
+}
+
+wallpaper- .zone {
+ width: 100vw;
+ height: var(--wallpaper-height);
+ position: relative;
+ margin-top: var(--section-gap);
+}
+
+wallpaper- .zone img {
+ width: 64px;
+}
+
+wallpaper- .zone h1 {
+ text-align: center;
+ line-height: var(--wallpaper-height);
+ height: 100%;
+ position: absolute;
+ width: 100%;
+ left: 0;
+ top: 0;
+ margin: 0;
+ padding: 0;
+ font-size: 25vw;
+ color: var(--fg-mode-est);
+ opacity: 25%;
+}
+
+wallpaper- .zone .thin {
+ font-weight: 200;
+}
+
+wallpaper- .float {
+ font-size: 32px;
+ height: 100%;
+ align-items: center;
+ justify-content: center;
+ display: flex;
+ gap: 0.5ch;
+ line-height: 1em;
+ z-index: 50;
+}
+
+@media (width < 500px) {
+ wallpaper- .float {
+  font-size: max(min(5vw, calc(.05 * var(--wallpaper-height))), 16px);
+ }
+}

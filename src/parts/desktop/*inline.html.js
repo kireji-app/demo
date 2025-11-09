@@ -1,3 +1,17 @@
-const { attributes, style, "inline.html": inlineHTML } = _.application
+let result = ""
 
-return `<warning->🚧 App in Alpha. Features subject to change/break without notice.</warning-><wallpaper- tabIndex=0${attributes ? ` ${attributes}` : ""}${style ? ` style="${style}"` : ""}>${inlineHTML}</wallpaper->`
+for (const application of Object.values(_.applications)) {
+ if (application === desktop) continue
+ let truncatedName = ""
+ const iconName = application.titleMenu ?? application.title ?? application.key
+ for (const word of iconName.split(" ")) {
+  if (truncatedName.length + word.length + 1 > 20) {
+   truncatedName += "..."
+   break
+  }
+  truncatedName += " " + word
+ }
+ result += `<desktop-icon tabIndex=0><img class=icon src="${application.placeholderImage("part.png")}"/><span class=label>${truncatedName}</span></desktop-icon>`
+}
+
+return result

@@ -16,5 +16,5 @@ logScope(5, `Building ${part.host}.`, log => {
  }
 
  if (typeof part.cardinality !== "bigint" || part.cardinality <= 0)
-  throw new Error(`Recursive part tree hydration ended with invalid cardinality: ${part.cardinality}.`)
+  throw new Error(`Recursive part tree hydration ended with invalid cardinality: ${part.cardinality} (${part.host}).`)
 })

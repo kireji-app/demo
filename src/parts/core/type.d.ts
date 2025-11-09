@@ -1,8 +1,5 @@
-/** The core operating system GUI. */
-declare interface ICore extends IPartsApexDomain {
- readonly www: ICoreApplication
-
- // Facets.
+/** The core components that power all applications in the **Kireji Web Framework**. */
+declare interface ICore extends IPartsApplication {
  readonly addressBar: IAddressBar
  readonly agent: IAgent
  readonly client: IClient
@@ -12,3 +9,5 @@ declare interface ICore extends IPartsApexDomain {
  readonly update: IUpdateManager
  readonly worker: IWorker
 }
+
+declare const core: ICore

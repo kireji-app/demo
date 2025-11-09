@@ -1,12 +1,10 @@
-declare interface IEJAugustApplicationSection extends IPart {
- /** The css overrides for ejaugust's arm. */
+declare interface IEJAugustSection<T> extends IMatchOf<T> {
+ /** The css overrides for the section. */
  readonly "inline.css": string
- /** The html article content of ejaugust's current arm. */
+ /** The html article content of the section. */
  readonly "inline.html": string
- /** A string that impacts the way pages in the given section appear as canonical links. */
+ /** A string that impacts the way pages in the section appear as canonical links. */
  readonly canonicalPathname: string
- /** A passthrough description that becomes the application's overall description in search results when the given section is active. */
+ /** A passthrough description that becomes the application's overall description in search results when the section is active. */
  readonly descriptionMeta: string
 }
-
-declare const section: IEJAugustApplicationSection

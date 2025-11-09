@@ -1,0 +1,368 @@
+wallpaper- {
+ --spacing: 12px;
+ --max-width: 696px;
+ --radius: calc(var(--spacing) / 2);
+ --surface: var(--bg-light-est);
+ --edge-color: #ffffff1f;
+ --graphic-opacity: 50%;
+ background-color: var(--bg-dark);
+ font-size: calc(1.3 * var(--spacing));
+ line-height: calc(2 * var(--spacing));
+}
+
+#notebook-section :not(pre) {
+ margin: 0;
+}
+
+wallpaper- ::after,
+wallpaper- :before {
+ pointer-events: none;
+}
+
+body.dark wallpaper->scroller->scroll-content {
+ --surface: var(--bg);
+ --edge-color: #ffffff04;
+ --graphic-opacity: 30%;
+}
+
+body.vintage wallpaper- {
+ --spacing: 10px;
+ --max-width: 640px;
+}
+
+wallpaper- header {
+ position: relative;
+ margin-left: -2px;
+ margin-right: -0.5px;
+ z-index: 1;
+ --padding: 0;
+ --title-size: calc((4 - var(--padding)) * var(--spacing));
+ padding: calc((var(--padding) + 1) * var(--spacing) / 2) var(--spacing);
+}
+
+wallpaper- header :is(a, a:visited) {
+ text-decoration: none;
+}
+
+wallpaper- :is(header, header:before) {
+ border-radius: calc(var(--radius) * 0.5) calc(var(--radius) * 0.2) 0 var(--radius);
+}
+
+wallpaper- header:before {
+ background:
+  var(--ejaugust-com--spine-png),
+  var(--accent-mode-est);
+ background-size: 100% 100%;
+ box-shadow:
+  1px 2px 7px -1px #0003,
+  0px 0.5px 2px -1px #0001,
+  inset -6px -7px 3px -6px #0001,
+  inset 5px 8px 3px -4px #fff2;
+}
+
+body.dark wallpaper- header:before {
+ filter: hue-rotate(18deg) saturate(1.3) brightness(0.5) contrast(1.5);
+}
+
+wallpaper->scroller- {
+ --outer-pad: calc((100vw - var(--rounded-width)) / 2);
+ --rounded-width: calc(min(calc(round(down, 100vw, var(--spacing)) - (2 * var(--spacing))), var(--max-width)) - 4px);
+ padding: var(--padding) var(--outer-pad);
+}
+
+body.vintage wallpaper->scroller- {
+ --outer-pad: calc((100vw - var(--scrollbar-width) - var(--rounded-width)) / 2);
+ --rounded-width: calc(min(calc(round(down, 100vw - var(--scrollbar-width), var(--spacing)) - (2 * var(--spacing))), var(--max-width)) - 4px);
+}
+
+wallpaper->scroller->scroll-content {
+ box-shadow:
+  10px 8px 12px -6px #0004,
+  0 0 13px -3px #0002,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ border-radius: var(--radius);
+ background-color: var(--surface);
+ z-index: 1;
+}
+
+li~li {
+ padding-top: var(--spacing);
+}
+
+#notebook-section {
+ padding: calc((2 * var(--spacing)) - 2px);
+ display: flex;
+ /* gap: 0; */
+ flex-flow: column;
+ position: relative;
+ padding-bottom: calc(6 * var(--spacing) - 2px);
+ overflow: hidden;
+ z-index: 0;
+}
+
+wallpaper- header:before,
+#notebook-section:before,
+#notebook-section::after,
+#notebook-section pre:before,
+#notebook-section pre::after {
+ content: "";
+ position: absolute;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ top: 0;
+ z-index: -1;
+}
+
+#note-links>a:before,
+#notebook-section:before,
+#notebook-section pre::after {
+ pointer-events: none;
+ background: var(--ejaugust-com--grid-png);
+ background-size: var(--spacing);
+ background-position: left -2px top -2px;
+ opacity: var(--graphic-opacity);
+ z-index: -2;
+}
+
+#notebook-section pre {
+ font-size: 0.875em;
+}
+
+#notebook-section::after {
+ background-image: var(--ejaugust-com--chart_b-png);
+ --scaled-pixel: calc(var(--spacing) / (615 / 31));
+ background-size: calc(var(--scaled-pixel) * 640) calc(var(--scaled-pixel) * 120);
+ background-position: bottom calc(var(--scaled-pixel) * 4) right calc(var(--scaled-pixel) * 5);
+ background-repeat: no-repeat;
+ z-index: -1;
+}
+
+body.vintage #notebook-section::after {
+ background-position: bottom calc(var(--scaled-pixel) * 3) right calc(var(--scaled-pixel) * 3);
+}
+
+body.dark #notebook-section::after {
+ filter: hue-rotate(-130deg) saturate(2);
+}
+
+body.dark #notebook-section:before,
+body.dark #note-links>a:before {
+ filter: invert();
+}
+
+#notebook-section,
+#notebook-section * {
+ -webkit-user-select: text;
+ -ms-user-select: text;
+ user-select: text;
+}
+
+#notebook-section>* {
+ padding: calc(var(--spacing) / 2);
+}
+
+wallpaper- :is(p, h1, h2, h3, h4, h5, h6) {
+ color: var(--fg-mode);
+}
+
+wallpaper- :is(b, i, em, figcaption) {
+ color: var(--fg-un-mode);
+}
+
+wallpaper- figcaption {
+ font-style: italic;
+ font-weight: 200;
+ text-align: center;
+}
+
+wallpaper- b {
+ font-weight: 500;
+}
+
+wallpaper- :is(h1, h2, h3, h4, h5, h6) {
+ font-weight: 600;
+ color: var(--fg-un-mode-er);
+}
+
+wallpaper- :is(h1, h2) {
+ font-weight: 300;
+ font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif Pro', serif
+}
+
+wallpaper- h1:not(#notebook-title>h1) {
+ font-size: calc(3 * var(--spacing));
+ line-height: calc(3 * var(--spacing));
+ font-weight: 400;
+ color: var(--fg-un-mode-est);
+}
+
+#notebook-title {
+ border: none;
+}
+
+#notebook-title>h1 {
+ line-height: var(--title-size);
+ font-weight: 800;
+ margin: 0;
+}
+
+#notebook-title>h1>img {
+ height: var(--title-size);
+ vertical-align: top;
+}
+
+body.dark #notebook-title:not(:hover)>h1>img {
+ filter: invert(1);
+}
+
+#notebook-title:hover>h1>img {
+ filter: invert(1) sepia(1) brightness(0.4) saturate(10) hue-rotate(140deg) blur(0.3px);
+}
+
+details {
+ padding: var(--spacing);
+ border-radius: var(--radius);
+}
+
+summary {
+ display: block;
+ cursor: pointer;
+}
+
+wallpaper- footer {
+ background-color: var(--fg);
+ border-radius: 0 0 var(--radius) var(--radius);
+ margin: 0;
+ padding: var(--spacing);
+ display: flex;
+ justify-content: space-between;
+}
+
+wallpaper- footer>img {
+ display: none;
+}
+
+wallpaper- footer a[target="_blank"]::after {
+ content: unset;
+ display: none;
+}
+
+#social {
+ display: flex;
+}
+
+#k-logo>pre {
+ margin: 0;
+}
+
+#k-logo {
+ display: flex;
+ font-family: var(--system-ui-mono);
+ font-size: var(--spacing);
+ line-height: var(--spacing);
+}
+
+@media (width < 256px) {
+ #k-logo {
+  display: none;
+ }
+}
+
+#social>a {
+ margin: calc(var(--spacing) / 2);
+ display: block;
+ font-size: calc(3 * var(--spacing));
+ line-height: calc(3 * var(--spacing));
+}
+
+#social>:is(a, a>svg) {
+ width: calc(3 * var(--spacing));
+ height: calc(3 * var(--spacing));
+}
+
+:is(#k-logo, #social>:is(a, a>svg), #quick-links>a) {
+ fill: var(--bg);
+ color: var(--bg);
+ text-decoration: none;
+ border: none;
+}
+
+:is(#k-logo, #social>:is(a, a>svg), #quick-links>a):hover {
+ fill: var(--accent-un);
+ color: var(--accent-un);
+}
+
+body.dark wallpaper- footer {
+ background-color: var(--fg-mode);
+}
+
+#quick-links {
+ display: flex;
+ flex-flow: column;
+ justify-content: space-around;
+}
+
+.unicode-icon {
+ display: inline-block;
+ width: calc(1.3 * var(--spacing));
+ text-align: center;
+ font-weight: 900;
+}
+
+@media (width < 500px) {
+ #social>:is(a, a>svg) {
+  width: calc(2 * var(--spacing));
+  height: calc(2 * var(--spacing));
+ }
+
+ #social>a {
+  margin: calc(var(--spacing) / 2);
+  display: block;
+  font-size: calc(2 * var(--spacing));
+  line-height: calc(2 * var(--spacing));
+ }
+
+ #k-logo {
+  font-size: calc(var(--spacing) / 1.5);
+  line-height: calc(var(--spacing) / 1.5);
+ }
+
+ #quick-links {
+  font-size: 75%;
+  line-height: calc(1.5 * var(--spacing));
+ }
+}
+
+@media (width < 390px) {
+ #social>:is(a, a>svg) {
+  width: calc(1.5 * var(--spacing));
+  height: calc(1.5 * var(--spacing));
+ }
+
+ #social>a {
+  font-size: calc(1.5 * var(--spacing));
+  line-height: calc(1.5 * var(--spacing));
+ }
+
+ #k-logo {
+  display: none;
+ }
+}
+
+@media (width < 325px) {
+ wallpaper- header {
+  --padding: 1;
+ }
+}
+
+@media (width < 275px) {
+ #quick-links {
+  display: none;
+ }
+
+ wallpaper- header {
+  --padding: 2;
+ }
+
+}

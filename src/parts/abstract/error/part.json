@@ -1,5 +1,6 @@
 {
  "abstract": true,
+ "extends": "application.abstract.parts",
  "CSS-get-error": [
   "MESSAGE"
  ],

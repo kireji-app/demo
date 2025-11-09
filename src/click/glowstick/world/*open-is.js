@@ -1,1 +1,0 @@
-return _.application === _.click.glowstick.www

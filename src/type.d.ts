@@ -43,7 +43,7 @@ declare interface IDNSRoot extends IMix {
  /** The routeID of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingRouteID: bigint
  /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
- readonly defaultApplication: string
+ readonly defaultApplicationHost: string
  /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
  readonly frameRequest: number | null
  /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current system state as the base state. */

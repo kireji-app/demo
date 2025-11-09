@@ -14,32 +14,32 @@ The Kireji Project poses a question: **What if we could treat every web page as 
 ## Demo Applications
 These applications are in *alpha* and still undergoing research and development.
 
-<h3><a href="https://www.ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>EJ's Notebook</sup></a></h3>
+<h3><a href="https://ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>EJ's Notebook</sup></a></h3>
 
 - Essays and notes about the concepts that drive the project.
 
-<h3><a href="https://www.kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Demo Outliner</sup></a></h3>
+<h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Demo Outliner</sup></a></h3>
 
 - Explore the demo app ecosystem and its component parts using a visual outliner and detail viewer.
 
-<h3><a href="https://www.orenjinari.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/orenjinari/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>orenjinari</sup></a></h3>
+<h3><a href="https://orenjinari.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/orenjinari/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>orenjinari</sup></a></h3>
 
 - The portfolio of the project's resident artist, showcasing the unique aesthetic she brings to the project.
 
-<h3><a href="https://www.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Glowstick</sup></a></h3>
+<h3><a href="https://glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Glowstick</sup></a></h3>
 
 - Explore the app ecosystem through the lens of an open-world pixel art game.
 
-<h3><a href="https://www.desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts</sup></a></h3>
+<h3><a href="https://desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts</sup></a></h3>
 
 - Experience the app ecosystem as though it was a familiar operating system environment.
 
 ### Coming Soon
 These applications coming soon!
-<h3><a href="https://www.kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/www/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>kireji.io</sup></a></h3>
-<h3><a href="https://www.core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts</sup></a></h3>
-<h3><a href="https://www.abstract.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>abstract.parts</sup></a></h3>
-<h3><a href="https://www.user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
+<h3><a href="https://kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/core/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>kireji.io</sup></a></h3>
+<h3><a href="https://core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts</sup></a></h3>
+<h3><a href="https://abstract.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>abstract.parts</sup></a></h3>
+<h3><a href="https://user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
 
 ### Tech Stack
 This platform is built on a minimal dependency stack, powered by the **Kireji Web Framework** and uses **Vanilla JavaScript** to ensure a fully self-contained, auditable runtime environment.
@@ -61,6 +61,6 @@ The Kireji Project is in **early research and development**.
 [![Project Status: Alpha](https://img.shields.io/badge/status-alpha-212121?style=for-the-badge&labelColor=181717&logo=github&logoColor=white)](https://www.repostatus.org/#alpha)
 <br>[![Commits](https://img.shields.io/github/commit-activity/t/kireji-app/demo?style=for-the-badge&labelColor=181717&color=212121&logo=github&logoColor=white)](https://github.com/kireji-app/demo/commits/)
 <br>[![GitHub Last Commit](https://img.shields.io/github/last-commit/kireji-app/demo?style=for-the-badge&labelColor=181717&color=212121&logo=github&logoColor=white)](https://github.com/kireji-app/demo)
-<br>[![Copyright © 2013-2025 <a href="https://www.ejaugust.com">Eric Augustinowicz</a> and <a href="https://www.orenjinari.com">Kristina Soriano</a>](https://img.shields.io/badge/2013%20--%202025-Eric_Augustinowicz%20&%20Kristina_Soriano-212121?labelColor=007ec6&style=for-the-badge&logoColor=white&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTk3cHgiIGhlaWdodD0iMTk3cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIj4KIDxkZWZzPgogIDxtYXNrIGlkPSJtYXNrIj4KICAgPGNpcmNsZSBjeD0iOTgiIGN5PSI5OCIgcj0iOTgiIGZpbGw9IndoaXRlIiAvPgogICA8Y2lyY2xlIGN4PSI5OCIgY3k9Ijk4IiByPSI3OCIgZmlsbD0iYmxhY2siIC8+CiAgIDxjaXJjbGUgY3g9Ijk4IiBjeT0iOTgiIHI9IjU1IiBmaWxsPSJ3aGl0ZSIgLz4KICAgPGNpcmNsZSBjeD0iOTgiIGN5PSI5OCIgcj0iMzAiIGZpbGw9ImJsYWNrIiAvPgogICA8cmVjdCB4PSIxMTUiIHk9Ijg1IiB3aWR0aD0iNDUiIGhlaWdodD0iMjUiIGZpbGw9ImJsYWNrIiAvPgogIDwvbWFzaz4KIDwvZGVmcz4KIDxwYXRoIGQ9Ik0gOTgsMCBBIDk4LDk4IDAgMSAxIDk4LDE5NiBBIDk4LDk4IDAgMSAxIDk4LDAgWiIgZmlsbD0id2hpdGUiIG1hc2s9InVybCgjbWFzaykiIC8+Cjwvc3ZnPg==)](http://www.ejaugust.com/)
+<br>[![Copyright © 2013-2025 <a href="https://ejaugust.com">Eric Augustinowicz</a> and <a href="https://orenjinari.com">Kristina Soriano</a>](https://img.shields.io/badge/2013%20--%202025-Eric_Augustinowicz%20&%20Kristina_Soriano-212121?labelColor=007ec6&style=for-the-badge&logoColor=white&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTk3cHgiIGhlaWdodD0iMTk3cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIj4KIDxkZWZzPgogIDxtYXNrIGlkPSJtYXNrIj4KICAgPGNpcmNsZSBjeD0iOTgiIGN5PSI5OCIgcj0iOTgiIGZpbGw9IndoaXRlIiAvPgogICA8Y2lyY2xlIGN4PSI5OCIgY3k9Ijk4IiByPSI3OCIgZmlsbD0iYmxhY2siIC8+CiAgIDxjaXJjbGUgY3g9Ijk4IiBjeT0iOTgiIHI9IjU1IiBmaWxsPSJ3aGl0ZSIgLz4KICAgPGNpcmNsZSBjeD0iOTgiIGN5PSI5OCIgcj0iMzAiIGZpbGw9ImJsYWNrIiAvPgogICA8cmVjdCB4PSIxMTUiIHk9Ijg1IiB3aWR0aD0iNDUiIGhlaWdodD0iMjUiIGZpbGw9ImJsYWNrIiAvPgogIDwvbWFzaz4KIDwvZGVmcz4KIDxwYXRoIGQ9Ik0gOTgsMCBBIDk4LDk4IDAgMSAxIDk4LDE5NiBBIDk4LDk4IDAgMSAxIDk4LDAgWiIgZmlsbD0id2hpdGUiIG1hc2s9InVybCgjbWFzaykiIC8+Cjwvc3ZnPg==)](http://ejaugust.com/)
 <br>[![Released under CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC_BY--NC--ND_4.0-212121?labelColor=ED592F&style=for-the-badge&logo=creativecommons&logoColor=white)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 <br>[![Sponsor this Project](https://img.shields.io/badge/Sponsor-212121?labelColor=red&style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OTciIGhlaWdodD0iNDcwIj48cGF0aCBkPSJNMTQwIDIwQzczIDIwIDIwIDc0IDIwIDE0MGMwIDEzNSAxMzYgMTcwIDIyOCAzMDMgODgtMTMyIDIyOS0xNzMgMjI5LTMwMyAwLTY2LTU0LTEyMC0xMjAtMTIwLTQ4IDAtOTAgMjgtMTA5IDY5LTE5LTQxLTYwLTY5LTEwOC02OXoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNDAiIGZpbGw9Im5vbmUiLz48L3N2Zz4=&logoColor=white)](https://github.com/sponsors/EJAugust)

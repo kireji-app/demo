@@ -1,0 +1,10 @@
+{
+ "extends": "section.ejaugust.com",
+ "date-nice": [
+  "UNIX_TIMESTAMP"
+ ],
+ "go": [
+  "EVENT",
+  "TIMESTAMP"
+ ]
+}

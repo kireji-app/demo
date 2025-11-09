@@ -42,14 +42,12 @@ declare const world: IGlowstickWorld
 // X slot (unused)
 // - tld
 
-// the only concrete part is the www for the application.
-
-// there can also be a www abstract
+// the part has no concrete subparts
 
 // now, the room you are in is a simple selection part whose cardinality
 //  is the sum of each part's region count
 
-// each room could in theory have a name. i.e. core.parts/bathroom, www.core.parts/office-1, etc.
+// each room could in theory have a name. i.e. core.parts/bathroom, core.parts/office-1, etc.
 // this allows the "regions"/"rooms"/"world" property to be a string-keyed object
 // this string-keyed object can have other properties too
 // it might be worth creating a separate world.json or glowstick.json or similar.

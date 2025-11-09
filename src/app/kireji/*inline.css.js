@@ -1,0 +1,1 @@
+return kirejiApp["static.css"] + outliner["inline.css"] + editor["inline.css"]

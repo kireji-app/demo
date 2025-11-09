@@ -1,8 +1,7 @@
-declare interface IDesktop extends IPartsApexDomain {
+declare interface IDesktop extends IPartsApplication {
  readonly color: IColor
  readonly era: IEra
  readonly taskBar: ITaskBar
- readonly www: IDesktopApplication
 
  // Views.
  readonly wallpaper: HTMLElement

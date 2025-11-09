@@ -32,6 +32,9 @@ logScope(0, "Finalizing Hydration", log => {
  log("Activating Body.")
  document.body.classList.remove("unhydrated")
 
+ // Make system available to HTML event handlers.
+ globalThis._ = _
+
  log("Client hydration complete.")
  client.hydrated = true
 

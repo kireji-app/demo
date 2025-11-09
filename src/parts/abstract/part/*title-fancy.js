@@ -1,8 +1,5 @@
 const domains = [...part.domains]
 
-if (domains[0] === "www")
- domains.shift()
-
 const tld = domains.pop()
 const chars = []
 

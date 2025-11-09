@@ -1,0 +1,64 @@
+<p>In the Kireji Web Framework, a canonical URL is a short, human-readable URL that defines an override for the state of the platform compared to the default landing hash (or the current state the client is in).</p>
+<p>This allows Kireji's atypical routing system to feature the same behavior as a typical website: the ability to have simple, unversioned links like:</p>
+<pre>https://example.com/my-favorite-page</pre>
+<p>Because these URLs lack query parameters, they lack composition (multiple URLs can't be combined deterministically into a merged form). This means that they aren't as comprehensive as Kireji's own hash routing system. It also means that only one override to the state can be defined per canonical URL. This simplifies and constrains the translation behavior in Kireji.</p>
+<h2>URL Structure</h2>
+<p>Canonical URLs are composed of just two parts: a host</p>
+<pre>example.com</pre>
+<p>and a pathname</p>
+<pre>/my-favorite-page</pre>
+<p>Kireji URLs, on the other hand, are composed of three parts: a host, a platform version number, and a state hash. The challenge for canonical URLs is to design a translation service that turns canonical URLs into Kireji URLs.</p>
+<p>Luckily, the host is easy for the server to handle: its the same for both URLs and is the host being used to access the server. Adding the version number is also trivial: all canonical links point to the latest LTS version of the platform which happens to be the version of the server handling the translation.</p>
+<p>So, the main task for translation service is really just converting a human-readable pathname into a stateful hash.</p>
+<p>In Kireji, hashes are cross-origin and mean the same thing across all host names. For example:</p>
+<pre>https://<b>aaaa</b>.example.com/1.0.0/24rtgetb</pre>
+<p>is the same data as</p>
+<pre>https://<b>bbbb</b>.example.com/1.0.0/24rtgetb</pre>
+<p>just viewed from a different app. In contrast, canonical paths mean something different for each origin.</p>
+<pre>https://<b>store</b>.example.com/<b>red-shirt</b></pre>
+<p>is not the same thing as</p>
+<pre>https://<b>star-trek-characters</b>.example.com/<b>red-shirt</b></pre>
+<p>That needs to be taken into consideration for the translation logic.</p>
+<h2>URL-as-a-File Metaphor</h2>
+<p>A data model in the Kireji routing system can be thought of as a file type spec. Pathnames have a small header indicating the version number of the file type and a body containing some structured data according to that spec. Each URL is just a small file.</p>
+<p>Under this metaphor, canonical URLs are the equivelant of having the GIF spec include a handful of predefined GIFs which could be accessed by simply writing their canonical name as plain text and giving the file a <b>.gif</b> extension. Any GIF reader would have to store a copy of these GIFs for this case.</p>
+<p>This would be unusual behavior for a file spec but its expected behavior for web URLs.</p>
+<h2>Use Cases for Canonical URLs</h2>
+<p>Critically, canonical links have two use cases in Kireji:</p>
+<ol>
+ <li>External Linking
+  <ul>
+   <li>This is their main purpose: providing familiar, marketing-friendly links like ad-click links and search engine results.</li>
+   <li>These need to be unversioned and human-readable. This makes them easy to type, understand and share.</li>
+   <li>The server needs to be able to translate these into versioned Kireji URLs so we know exactly what file they represent.</li>
+  </ul>
+ </li>
+ <li>Internal Linking
+  <ul>
+   <li>Any anchor links <i>inside</i> Kireji web apps (including any sitemap) will get indexed by search engines and become exteral links, so we don't want to see this anywhere in the web app's source code:
+    <pre>&lt;a href="https://example.com/1.0.0/4gw5-g5wnzzw35h4g"&gt;Click here&lt;/a&gt;</pre>
+   </li>
+   <li>Anyways, rendering versioned anchor links inside app HTML would be annoying and not straightforward - link elements would need to be tracked and their <code>href</code> attributes updated every time the platform state changed. This would cause an explosion of URLs that would confuse search engine spiders.</li>
+   <li>
+    Hovering over links helps desktop users gain additional context about where the link will go. This doesn't look like anything to the user:
+    <pre>https://example.com/1.0.0/4gw5-g5wnzzw35h4g</pre>
+    Whereas this is clear:
+    <pre>https://example.com/contact-us</pre>
+   </li>
+   <li>As is common in web apps, anchor tags require <code>onclick</code> handlers to interrupt internal link clicks in order to update <i>parts</i> of the page without navigating away. In Kireji, this is even more important to retain file data encoded in the URL hash.</li>
+  </ul>
+ </li>
+</ol>
+<p>Given the usefulness and requirements of canonical URLs both internally and externally, the canonical link translator has the opportunity to kill two birds with one stone:</p>
+<ol>
+ <li>It can enhance search engine optimization and the first arrival experience.</li>
+ <li>It creates a URL language that tells the client exactly what aspect of the current file a given anchor link is meant to change (making canonical URLs behave more like <i>tools</i> than <i>destinations</i>) without having to encode that behavior separately in the onclick handler.</li>
+</ol>
+<p>Different versions of the platform will still function correctly even if they support different canonical URLs but there are two complications introduced by versioning:</p>
+<ol>
+ <li>A canonical URL that was hard-coded into an old version may not be supported several versions later. Older versions of the platform should thus avoid being indexed by search engines.</li>
+ <li>The fact that an unsupprted canonical URL still works on an old versioned page may confuse some users. This could happen if, for example, the user notes a URL while hovering over a link and sees that it works when clicked but not when shared. This is a rare edge case however, and its a risk that we can accept right now.</p>
+</ol>
+<h2>Final Translation Methodology</h2>
+<p>After breaking down these use cases, the optimal implementation is one where canonical URLs represent a <b>delta or tool</b> which describes a change-of-state to the base state. When linking internally, that base state is the current versioned URL hash. When coming into the platform from an external link, that base state is the <b>default landing hash</b>.</p>
+<p>These delta operations must account for the need to both <b>set</b> and <b>unset</b> state parameters. For example, the empty pathname (e.g. <code>https://example.com/</code>) most likely represents a home page, which is probably the default landing state and so the delta shouldn't need to do anything. In contrast, linking to <code>https://example.com/</code> from <code>https://example.com/1.0.0/gr224-245g-435</code> may require hiding an article and then redrawing the home page. So, canonical URLs represent functional but <i>idempotent</i> tools.</p>

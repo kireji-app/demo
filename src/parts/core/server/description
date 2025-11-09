@@ -2,4 +2,4 @@ This server-only facet uses node-specific functionality to create an HTTP server
 
 When it is deployed as the main node module (and not imported by another module) it gathers information about other version deployments and can serve them by importing them as modules.
 
-It provides http-to-https redirects, ensures that the "www." subdomain is always present, redirects from canonical URLs, provides version information for the update manager, and redirects certain canonical paths (like "/") to the appropriate versioned and stateful counterpart.
+It provides http-to-https redirects, ensures that the "www." subdomain is removed, redirects from canonical URLs, provides version information for the update manager, and redirects certain canonical paths (like "/") to the appropriate versioned and stateful counterpart.

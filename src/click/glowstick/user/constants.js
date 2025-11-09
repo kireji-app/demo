@@ -1,3 +1,3 @@
 const user = this
-const region = this[".."].world.arm
-const glowstick = this[".."].www
+const glowstick = this[".."]
+const region = glowstick.world.arm

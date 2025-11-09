@@ -1,19 +1,16 @@
 {
  "app": {
   "kireji": {
-   "www": {
-    "editor": {
-     "selected": "www.kireji.app"
-    },
-    "outliner": {
-     "folders": [
-      "",
-      "app",
-      "kireji.app"
-     ],
-     "width": {
-      "open": "_"
-     }
+   "editor": {
+    "selected": "kireji.app"
+   },
+   "outliner": {
+    "folders": [
+     "",
+     "app"
+    ],
+    "width": {
+     "open": "_"
     }
    }
   }

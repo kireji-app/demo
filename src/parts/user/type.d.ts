@@ -1,3 +1,2 @@
-declare interface IUser extends IPartsApexDomain {
- readonly www: IUserApplication
+declare interface IUser extends IPartsApplication {
 }

@@ -1,3 +1,7 @@
 {
- "extends": "apex.abstract.parts"
+ "extends": "application.abstract.parts",
+ "pathname-translate-canonical": [
+  "PATHNAME",
+  "HASH"
+ ]
 }

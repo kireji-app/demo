@@ -1,3 +1,6 @@
 {
- "extends": "apex.abstract.parts"
+ "extends": "application.abstract.parts",
+ "go": [
+  "ZONE_ID"
+ ]
 }

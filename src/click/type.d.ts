@@ -1,6 +1,7 @@
 declare interface IClick extends ITopLevelDomain {
  readonly glowstick: IGlowstick
 }
-declare interface IClickApexDomain extends IApexDomain {
+
+declare interface IClickApplication extends IApplication {
  readonly "..": IClick
 }

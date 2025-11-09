@@ -1,7 +1,0 @@
-{
- "extends": "match.abstract.parts",
- "pathname-translate-canonical": [
-  "PATHNAME",
-  "HASH"
- ]
-}

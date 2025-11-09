@@ -1,7 +1,7 @@
 if (environment === "server" && require.main === module) {
  logScope(1, "Routing Test", log => {
   // logScope(3, "Uninitialized Model", log => log(serialize(_.model)))
-  const testURL = `https://${_.defaultApplication}/${_.version}/${_.landingHash}/`
+  const testURL = `https://${_.defaultApplicationHost}/${_.version}/${_.landingHash}/`
   log("Test URL: " + testURL)
   logScope(1, "Setting route.", () => _.setRoute(testURL))
 

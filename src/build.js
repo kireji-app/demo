@@ -1,5 +1,4 @@
 function ƒ(_) {
- globalThis._ = _
 
  class SourceMappedFile {
   static radix = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
@@ -250,14 +249,14 @@ function ƒ(_) {
    if (!pathname.endsWith("/"))
     throw `Pathname missing trailing slash: ${pathname}`
 
-   const parts = pathname.split("/")
+   const segments = pathname.split("/")
 
-   if (parts.length > 4)
+   if (segments.length > 4)
     throw `Pathname has too many segments`
-   else if (parts.length < 4)
+   else if (segments.length < 4)
     throw `Pathname has too few segments`
 
-   return decodeSegment(parts[2])
+   return decodeSegment(segments[2])
   }
 
  logScope(1, `\n${welcomeMessage}`, log => {
@@ -551,38 +550,35 @@ function ƒ(_) {
    logScope(1, "\nLogging Part Entropy", () => {
     logEntropy(1, ...instances)
    })
-  })
-  logScope(1, "\nRegistering Applications", () => {
 
-   _.define({
-    application: { value: null, writable: true },
-    applications: { value: {} },
-    liveApplications: { value: {} },
-   })
+   logScope(1, "\nRegistering Applications", () => {
 
-   for (const tld of _) {
-    for (const apex of tld)
+    _.define({
+     application: { value: null, writable: true },
+     applications: { value: {} },
+     liveApplications: { value: {} },
+    })
 
-     logScope(1, `www.${apex.host}`, log => {
+    for (const part of instances) {
+     logScope(1, `${part.host}`, log => {
 
-      const { www } = apex
+      if (_.parts.abstract.application.isPrototypeOf(part)) {
 
-      if (!www) {
-       log(`404 - Not Found.`)
-       return
+       _.applications[part.host] = part
+
+       if (_.parts.abstract.error.isPrototypeOf(part)) {
+        log("Error " + part.status + " - Not added to menu.")
+        return
+       }
+
+       log("200 - Added to menu.")
+       _.liveApplications[part.host] = part
       }
-
-      _.applications[www.host] = www
-
-      if (www.prototype.host === "error.abstract.parts") {
-       log("Error " + www.status + " - Not added to menu.")
-       return
-      }
-
-      _.liveApplications[www.host] = www
-      log("200 - Added to menu.")
      })
-   }
+    }
+
+    _.defaultApplicationHost ??= Object.keys(_.liveApplications)[0]
+   })
   })
   logScope(1, "\nInstalling Facets", () => {
    const gate = Promise.withResolvers()
@@ -625,7 +621,7 @@ function ƒ(_) {
 ƒ({
  verbosity: 100,
  mapping: false,
- change: "patch",
+ change: "major",
  hangHydration: 0,
- defaultApplication: "www.glowstick.click",
+ defaultApplicationHost: "kireji.app",
 })

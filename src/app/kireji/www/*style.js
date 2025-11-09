@@ -1,1 +1,0 @@
-return kirejiApp.outliner.width.style

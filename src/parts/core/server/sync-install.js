@@ -141,11 +141,13 @@ const httpServer = require('http').createServer((request, response) => logServer
      throw `No Robots`
 
     if (isLocalRequest && !(host in _.applications)) {
-     /* 302 forward invalid application requests.
+     /* 301 forward invalid application requests.
         This is handled by NGINX on the real server. */
-     if (host && !host.startsWith("www.")) host = "www." + host
+     if (host && host.startsWith("www."))
+      host = host.slice(4)
+
      if (!(host in _.applications))
-      host = _.defaultApplication ?? Object.getOwnPropertyNames(_.applications)[0]
+      host = _.defaultApplicationHost ?? Object.getOwnPropertyNames(_.applications)[0]
 
      status = 302
      head = { 'Location': `http://${host}.${devSuffix}${pathname}`, ...securityHeader }
@@ -242,7 +244,7 @@ const httpServer = require('http').createServer((request, response) => logServer
     status = 500
     body = "<span>An unknown server error occured.</span>"
    }
-   const themeBGColor = (_.applications[host] ?? _.applications["www.desktop.parts"])[`theme-light-bg`];
+   const themeBGColor = (_.applications[host] ?? _.applications[_.defaultApplicationHost])[`theme-light-bg`];
    body = `<style>html {
   background-color: var(--bg);
   --wallpaper-height: 100vh;

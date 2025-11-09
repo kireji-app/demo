@@ -1,1 +1,0 @@
-return _.app.kireji.www.outliner.scroller["inline.css"]

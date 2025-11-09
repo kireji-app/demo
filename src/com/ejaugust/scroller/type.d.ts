@@ -1,1 +1,3 @@
-declare interface IEJAugustScroller extends IScroller { }
+declare interface IEJAugustScroller extends IScroller {
+ readonly "..": IEJAugust
+}

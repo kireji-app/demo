@@ -5,6 +5,6 @@ declare interface IParts extends ITopLevelDomain {
  readonly user: IUser
 }
 
-declare interface IPartsApexDomain extends IApexDomain {
+declare interface IPartsApplication extends IApplication {
  readonly "..": IParts
 }

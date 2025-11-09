@@ -1,5 +1,3 @@
-globalThis._ = null
-
 const registration = await nav.serviceWorker.register(`/${VERSION}/${CODENAME}.js`, {
  updateViaCache: "all",
  scope: `/${VERSION}/`

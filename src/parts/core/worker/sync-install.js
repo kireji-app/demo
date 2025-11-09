@@ -19,7 +19,7 @@ globalThis.onfetch = event => {
 
   const isSupportedFile = filename in supportedFiles
 
-  _.setRoute(isSupportedFile ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
+  _.setRoute((isSupportedFile || !filename) ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
 
   color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
 
