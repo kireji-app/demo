@@ -621,7 +621,7 @@ function ƒ(_) {
 ƒ({
  verbosity: 100,
  mapping: false,
- change: "major",
+ change: "patch",
  hangHydration: 0,
  defaultApplicationHost: "kireji.app",
 })
