@@ -1,5 +1,5 @@
 {
- "extends": "mix.abstract.parts",
+ "extends": "mix",
  "route-set": [
   "REQUEST_URL"
  ],

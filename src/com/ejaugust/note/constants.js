@@ -1,3 +1,6 @@
 const note = this
-const ejaugust = this[".."][".."][".."]
 const client = _.parts.core.client
+const notes = this[".."]
+const sections = notes[".."]
+const ejaugust = sections[".."]
+const home = sections.home

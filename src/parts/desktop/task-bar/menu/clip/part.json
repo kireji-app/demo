@@ -1,4 +1,4 @@
 {
  "abstract": true,
- "extends": "clip.abstract.parts"
+ "extends": "clip"
 }

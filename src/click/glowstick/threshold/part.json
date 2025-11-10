@@ -1,4 +1,4 @@
 {
  "abstract": true,
- "extends": "region.glowstick.click"
+ "extends": "region.."
 }

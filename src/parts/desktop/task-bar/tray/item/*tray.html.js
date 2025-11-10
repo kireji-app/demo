@@ -1,0 +1,1 @@
+return `<button title="${trayItem.tooltip}" id=${trayItem.key}-tray-item onclick="${trayItem.runtimeReference}.go(event)">${trayItem["button.html"]}</button>`

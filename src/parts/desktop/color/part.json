@@ -1,6 +1,6 @@
 {
  "singleton": true,
- "extends": "match.abstract.parts",
+ "extends": "match",
  "hex-rgb-from": [
   "HEX"
  ],

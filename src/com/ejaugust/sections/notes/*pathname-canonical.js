@@ -1,1 +1,1 @@
-return `/notes/${note.pathname ?? note.key}`
+return note.canonicalPathname

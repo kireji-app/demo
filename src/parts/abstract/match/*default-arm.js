@@ -1,1 +1,0 @@
-throw new Error("Match has no default arm assigned.")

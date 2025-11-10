@@ -1,5 +1,5 @@
 {
- "extends": "application.abstract.parts",
+ "extends": "application",
  "pathname-translate-canonical": [
   "PATHNAME",
   "HASH"

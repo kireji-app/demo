@@ -1,1 +1,0 @@
-const fullscreen = this

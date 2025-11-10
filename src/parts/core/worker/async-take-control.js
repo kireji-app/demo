@@ -7,7 +7,6 @@ await logScope(1, 'Ensuring ServiceWorker Controller', async log => {
   const registration = await nav.serviceWorker.getRegistration()
 
   worker.define({
-   startupRegistration: { value: registration },
    registration: { value: registration },
   })
 

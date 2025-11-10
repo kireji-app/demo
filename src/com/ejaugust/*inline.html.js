@@ -1,6 +1,6 @@
 return scroller.wrap(
  "<header>" + (
-  `<a id=notebook-title title="⌂ Home" href=https://ejaugust.com/ onclick=self._?.go(this,event)>` + (
+  `<a id=notebook-title title="⌂ Home" href=${home.canonicalURL} onclick=self._?.go(this,event)>` + (
    `<h1>` + (
     `<img src="${ejaugust.placeholderImage("title.png")}" alt="${ejaugust.title}"></h1>`
    ) + `</h1>`
@@ -12,8 +12,8 @@ return scroller.wrap(
  ) +
  "<footer>" + (
   "<section id=quick-links>" + (
-   "<a id=footer-home href=https://ejaugust.com/ onclick=self._?.go(this,event)><span class=unicode-icon>⌂</span> Home</a>" +
-   '<a href=https://ejaugust.com/#top onclick=self._?.go(this,event)><span class=unicode-icon>↑</span> Back to Top</a>'
+   `<a id=footer-home href=${home.canonicalURL} onclick=self._?.go(this,event)><span class=unicode-icon>⌂</span> Home</a>` +
+   `<a id=footer-top href=${ejaugust.canonicalURL} onclick=self._?.go(this,event)><span class=unicode-icon>↑</span> Back to Top</a>`
   ) +
   "</section>" +
   '<a id=k-logo title="Visit Site Repo" target=_blank href="https://github.com/kireji-app/demo#readme"><pre>' + (

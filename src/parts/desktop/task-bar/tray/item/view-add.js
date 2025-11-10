@@ -1,0 +1,1 @@
+trayItem.element = document.getElementById(`${trayItem.key}-tray-item`)

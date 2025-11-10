@@ -9,7 +9,7 @@ const meta =
  `<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">`*/
 
 const links =
- `<link rel="manifest"${worker["link-manifest.txt"]}/>` +
+ `<link rel="manifest"${worker.manifestLink}/>` +
  `<link class=favicon rel=icon href="${placeholderIcon}"/>` +
  `<link class=favicon rel="apple-touch-icon" href="${placeholderIcon}"/>` +
  `<link rel="canonical" href="https://${application.host}${application.canonicalPathname ?? "/"}" />`

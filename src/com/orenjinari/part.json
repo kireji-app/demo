@@ -1,5 +1,5 @@
 {
- "extends": "application.abstract.parts",
+ "extends": "application",
  "go": [
   "ZONE_ID"
  ]

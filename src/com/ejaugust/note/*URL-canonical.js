@@ -1,0 +1,1 @@
+return `https://${ejaugust.host}${note.canonicalPathname}`

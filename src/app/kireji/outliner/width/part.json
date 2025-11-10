@@ -1,5 +1,5 @@
 {
- "extends": "match.abstract.parts",
+ "extends": "match",
  "toggle": [
   "EVENT"
  ]

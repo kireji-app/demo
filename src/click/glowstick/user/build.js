@@ -3,6 +3,6 @@ const ftPerTile = 1
 
 user.define({
  cardinality: { value: 8n },
- tilesPerSecond: { value: ftPerSec / ftPerTile },
- element: { value: null, writable: true }
+ element: { value: null, writable: true },
+ tilesPerSecond: { value: ftPerSec / ftPerTile }
 })

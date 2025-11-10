@@ -1,3 +1,3 @@
 {
- "extends": "tld.abstract.parts"
+ "extends": "tld"
 }

@@ -1,5 +1,5 @@
 {
- "extends": "mix.abstract.parts",
+ "extends": "mix",
  "itemHTML-recursive": [
   "SUBJECT",
   "DEPTH",

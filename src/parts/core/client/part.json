@@ -1,6 +1,6 @@
 {
  "singleton": true,
- "extends": "facet.abstract.parts",
+ "extends": "facet",
  "performance-simulate-slow": [
   "DELAY_IN_MS = 0"
  ]

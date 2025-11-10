@@ -1,0 +1,1 @@
+return `self._?.${part.domains.reverse()}`

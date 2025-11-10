@@ -10,6 +10,6 @@ addressBar.timer = setTimeout(() => {
   const pathname = encodePathname(_.routeID)
   history.replaceState(null, null, pathname)
   addressBar.throttleStartTime = _.now
-  addressBar.timer = undefined
+  addressBar.timer = null
  }
 }, addressBar.throttleDuration + addressBar.throttleStartTime - _.now)

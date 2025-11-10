@@ -1,5 +1,5 @@
 {
- "extends": "facet.abstract.parts",
+ "extends": "facet",
  "version-is-newer": [
   "INCOMING_VERSION"
  ],

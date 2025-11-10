@@ -1,1 +1,0 @@
-return String.fromCodePoint((part.host[0].codePointAt(0) - 'a'.codePointAt(0)) + '𝑎'.codePointAt(0))

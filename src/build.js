@@ -356,10 +356,15 @@ function ƒ(_) {
        filenames: { value: filenames },
        domains: { value: domains },
       })
-      const typename = part.manifest.extends ?? (host !== "part.abstract.parts" ? "part.abstract.parts" : null)
-      if (host === "part.abstract.parts")
+      let prototype = null
+      if (host === "part.abstract.parts") {
        Object.defineProperty(part, "define", { value(descriptor) { return Object.defineProperties(this, descriptor) } })
-      const prototype = typename ? hydrateRecursive(typename ?? "part.abstract.parts") : null
+      } else {
+       const extendsString = part.manifest.extends ?? "part"
+       const relativeStepsBack = extendsString.match(/\.*$/)[0].length
+       const typename = relativeStepsBack ? `${extendsString.slice(0, -relativeStepsBack)}.${domains.slice(relativeStepsBack - 1).join(".")}` : extendsString.includes(".") ? extendsString : `${extendsString}.abstract.parts`
+       prototype = hydrateRecursive(typename)
+      }
       const isAbstract = part.manifest.abstract
       if (prototype) {
        Object.setPrototypeOf(part.manifest, prototype.manifest)
@@ -503,7 +508,7 @@ function ƒ(_) {
       for (const methodID in part.manifest)
        if (!["extends", "abstract", "singleton"].includes(methodID))
         Property.ids.add(methodID)
-      sourceFile.part = part
+
       sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)
       for (const id of Property.ids) new Property(id)
       sourceFile.addLine("@descriptor-map-close@})", buildSource)
@@ -621,7 +626,7 @@ function ƒ(_) {
 ƒ({
  verbosity: 100,
  mapping: false,
- change: "patch",
+ change: "major",
  hangHydration: 0,
  defaultApplicationHost: "kireji.app",
 })

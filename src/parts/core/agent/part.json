@@ -1,4 +1,4 @@
 {
  "singleton": true,
- "extends": "facet.abstract.parts"
+ "extends": "facet"
 }

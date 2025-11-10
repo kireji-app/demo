@@ -1,6 +1,6 @@
 {
  "abstract": true,
- "extends": "mix.abstract.parts",
+ "extends": "mix",
  "overlaps": [
   "REGION"
  ]

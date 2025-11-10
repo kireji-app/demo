@@ -1,1 +1,0 @@
-return `<button id=share-button onclick="self._?.parts.desktop.taskBar.tray.share.go(event)">➦</button>`

@@ -1,1 +1,0 @@
-const share = this
