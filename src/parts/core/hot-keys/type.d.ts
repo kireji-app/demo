@@ -12,7 +12,7 @@ declare interface IHotKeys
  readonly undo(): void
 
  // Runtime Properties.
- /** The platform-specific key code prefix equal to "Meta" on macOS and "Control" on all other platforms. */
+ /** The OS-specific key code prefix equal to "Meta" on macOS and "Control" on all other operating systems. */
  readonly contextPrefix: "Meta" | "Control"
  /** The set of keys which the user is currently pressing. */
  readonly pressed: Set<string>

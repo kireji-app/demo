@@ -1,5 +1,5 @@
 declare type ITopLevelDomain<TApplication> =
- IMix<IDNSRoot, TApplication>
+ IMix<IEcosystem, TApplication>
 
 declare type ITopLevelDomainAny =
  ITopLevelDomain<IApplicationAny>

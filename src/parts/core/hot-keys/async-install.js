@@ -39,7 +39,7 @@ globalThis.addEventListener("keyup", e => {
 globalThis.addEventListener("keydown", e => {
  if (!e.repeat) {
   /* This handles the edge case when the user is holding modifier keys that
-   * they pressed while not focused on this instance of the platform. */
+   * they pressed while not focused on this instance of the ecosystem. */
   if (!isInPostContext() && !e.code.startsWith(hotKeys.contextPrefix) && (agent.isMac ? e.metaKey : e.ctrlKey))
    hotKeys.pressed.add(hotKeys.contextPrefix + "Left")
 

@@ -331,7 +331,7 @@ function ƒ(_) {
       domains = host.split(".")
       part = domains.reduceRight((currentFolder, name, index) => {
        if (!currentFolder[name])
-        throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the DNS root"} (trying to create ${domains.join(".")}).`)
+        throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the ecosystem root"} (trying to create ${domains.join(".")}).`)
        return currentFolder[name]
       }, _)
      } else {
@@ -626,7 +626,7 @@ function ƒ(_) {
 ƒ({
  verbosity: 100,
  mapping: false,
- change: "major",
+ change: "patch",
  hangHydration: 0,
  defaultApplicationHost: "kireji.app",
 })

@@ -1,4 +1,4 @@
-declare interface IDNSRoot
+declare interface IEcosystem
  extends IMix<null, ITopLevelDomainAny> {
 
  // Subparts.
@@ -29,15 +29,15 @@ declare interface IDNSRoot
  readonly "defaultApplicationHost": string
  /** A stylesheet containing CSS variables with `url()` values that correspond to images. Used to seemlessly hand-off image rendering from the server-rendered page to the client-rendered page without modifying the DOM. */
  readonly "images.css": string
- /** The HTML representing a snapshot of the operating system's UI given the current state. */
+ /** The HTML representing a snapshot of the ecosystem's UI given the current state. */
  readonly "index.html": string
- /** The static, global css that should apply across every application and page in the platform. */
+ /** The static, global css that should apply across every application and page in the ecosystem. */
  readonly "inline.css": string
  /** The packed script representing the entire repository, ready to be deployed to the client and service worker. */
  readonly "kireji.js": string
  /** The current application's PWA manifest. */
  readonly "manifest.json": string
- /** A JSON object serializing the desired landing model of the platform. */
+ /** A JSON object serializing the desired landing model of the ecosystem. */
  readonly "landing-model.json": string
  /** Sets the current application, but does not propagate any view functions since the application currently cannot be changed at runtime on the client without navigating to a different host. */
  readonly setApplication(EVENT: Event, LINK: string): void
@@ -47,7 +47,7 @@ declare interface IDNSRoot
  readonly go(ANCHOR: string, EVENT: event): void
  /** Returns a packed version of the entire repo, optionally including early-preview images that are designed for faster loading during SSR (but don't need to be packed into the service worker). */
  readonly pack(INCLUDE_EARLY_ASSETS: boolean): string
- /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current system state as the base state. */
+ /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname(CANONICAL_ROUTE: string): string
  /** Sets the configuration space to match the given request url string. */
  readonly setRoute(REQUEST_URL: string): void
@@ -55,7 +55,7 @@ declare interface IDNSRoot
  readonly validate(): void
 
  // Runtime Properties.
- /** The operating system's currently assigned root application, encoded by the host of the current URL. */
+ /** The ecosystem's currently assigned application, encoded by the host of the current URL. */
  readonly application: IApplicationAny
  /** A host-keyed object with all of the applications that are available from the web at their host thanks to DNS records. */
  readonly applications: Record<string, IApplicationAny>
@@ -74,10 +74,10 @@ declare interface IDNSRoot
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
  * The serialized version should not include any values that are added during or after recursively hydrating the part tree. */
-declare const _: IDNSRoot
+declare const _: IEcosystem
 /** A function which simplifies the process of deploying to three environments (server, worker, client) by giving them all the same routing functions, virtual DOM and synchronous fetch method which can produce both static assets and dynamically generated files.
  * 
- * It creates a function scope in which all other .js files execute. It then boots the operating system. */
+ * It creates a function scope in which all other .js files execute. It then boots the ecosystem. */
 declare function ƒ(_): void
 /** The source code of the boot function, as an array of strings representing each line. */
 declare const sourceLines: string[]
@@ -261,7 +261,7 @@ declare class MethodConstant {
  * 
  * Available only in _.setRoute(). */
 declare const REQUEST_URL: string
-/** A host-keyed map of all parts in the system. */
+/** A host-keyed map of all parts in the ecosystem. */
 declare const partsByHost: Record<string, IPartAny>
 /** Trades a versioned string pathname for the bigint routeID. */
 declare function decodePathname(pathname: string): bigint

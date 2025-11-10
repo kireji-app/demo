@@ -25,7 +25,7 @@ declare interface IApplication<TOwner, TFactor>
  readonly "sitemap.xml"
  /** A JSON-serialized map of hot-key combos that the application should listen to and the methods each combo should call. */
  readonly "hot-keys.json"
- /** This optional method converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current system state as the base state. */
+ /** This optional method converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname?(PATHNAME: string, HASH?: string): string
 }
 

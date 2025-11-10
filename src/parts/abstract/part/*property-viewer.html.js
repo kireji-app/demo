@@ -26,7 +26,7 @@ const recordTable = part.filenames.map((filename, index) => {
 }).join("")
 
 return (
- `<section><h1><img src="${part.placeholderImage("part.png")}"/>${part === _ ? "DNS Root" : part.key}</h1><p><span class=marks>Part "</span>${part.domains.join("<span class=marks>.</span>")}<span class=marks>" ${part.host === "part.abstract.parts" ? "is the type root and has no prototype.</span>" : `extends </span><a href="#" onclick="${_.app.kireji.propertyViewer.selected.runtimeReference}.go(event, ${allParts.indexOf(part.prototype)})"><span class=marks>"</span>` + part.prototype.domains.join("<span class=marks>.</span>") + '<span class=marks>"</span></a>'}<h2>${part.title ?? `Untitled Part`}</h2><p id=description>${part.description ?? "<span class=marks>This part has no description.</span>"}</p></section>` +
+ `<section><h1><img src="${part.placeholderImage("part.png")}"/>${part === _ ? "ecosystem root" : part.key}</h1><p><span class=marks>Part "</span>${part.domains.join("<span class=marks>.</span>")}<span class=marks>" ${part.host === "part.abstract.parts" ? "is the type root and has no prototype.</span>" : `extends </span><a href="#" onclick="${_.app.kireji.propertyViewer.selected.runtimeReference}.go(event, ${allParts.indexOf(part.prototype)})"><span class=marks>"</span>` + part.prototype.domains.join("<span class=marks>.</span>") + '<span class=marks>"</span></a>'}<h2>${part.title ?? `Untitled Part`}</h2><p id=description>${part.description ?? "<span class=marks>This part has no description.</span>"}</p></section>` +
  "<section>" + (
   `<h2><a href="https://en.wikipedia.org/wiki/Perfect_hash_function#Minimal_perfect_hash_function" target="_blank">MPHF</a> Properties</h2>` +
   (instances.includes(part) ? ("<part-data>" + (
