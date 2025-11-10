@@ -42,7 +42,7 @@ These applications coming soon!
 <h3><a href="https://user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
 
 ### Tech Stack
-The ecoystem is built on a minimal dependency stack. It is powered by the **Kireji Web Framework** and uses **Vanilla JavaScript** with no third-party dependencies to ensure a fully self-contained, auditable runtime environment.
+The ecosystem is built on a minimal dependency stack. It is powered by the **Kireji Web Framework** and uses **Vanilla JavaScript** with no third-party dependencies to ensure a fully self-contained, auditable runtime environment.
 
 [![Debian](https://img.shields.io/badge/Debian-Operating_System-212121?&labelColor=A81D33&style=for-the-badge&logo=Debian&logoColor=white)](https://www.debian.org/)
 <br>[![nginx](https://img.shields.io/badge/nginx-Reverse_Proxy-212121.svg?labelColor=009639&style=for-the-badge&logo=nginx&logoColor=white)](https://nginx.org/)

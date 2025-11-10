@@ -21,7 +21,7 @@
 <p>That needs to be taken into consideration for the translation logic.</p>
 <h2>URL-as-a-File Metaphor</h2>
 <p>A data model in the Kireji routing system can be thought of as a file type spec. Pathnames have a small header indicating the version number of the file type and a body containing some structured data according to that spec. Each URL is just a small file.</p>
-<p>Under this metaphor, canonical URLs are the equivelant of having the GIF spec include a handful of predefined GIFs which could be accessed by simply writing their canonical name as plain text and giving the file a <b>.gif</b> extension. Any GIF reader would have to store a copy of these GIFs for this case.</p>
+<p>Under this metaphor, canonical URLs are the equivalent of having the GIF spec include a handful of predefined GIFs which could be accessed by simply writing their canonical name as plain text and giving the file a <b>.gif</b> extension. Any GIF reader would have to store a copy of these GIFs for this case.</p>
 <p>This would be unusual behavior for a file spec but its expected behavior for web URLs.</p>
 <h2>Use Cases for Canonical URLs</h2>
 <p>Critically, canonical links have two use cases in Kireji:</p>
@@ -35,7 +35,7 @@
  </li>
  <li>Internal Linking
   <ul>
-   <li>Any anchor links <i>inside</i> Kireji web apps (including any sitemap) will get indexed by search engines and become exteral links, so we don't want to see this anywhere in the web app's source code:
+   <li>Any anchor links <i>inside</i> Kireji web apps (including any sitemap) will get indexed by search engines and become external links, so we don't want to see this anywhere in the web app's source code:
     <pre>&lt;a href="https://example.com/1.0.0/4gw5-g5wnzzw35h4g"&gt;Click here&lt;/a&gt;</pre>
    </li>
    <li>Anyways, rendering versioned anchor links inside app HTML would be annoying and not straightforward - link elements would need to be tracked and their <code>href</code> attributes updated every time the ecosystem state changed. This would cause an explosion of URLs that would confuse search engine spiders.</li>
@@ -56,8 +56,8 @@
 </ol>
 <p>Different versions of the ecosystem will still function correctly even if they support different canonical URLs but there are two complications introduced by versioning:</p>
 <ol>
- <li>A canonical URL that was hard-coded into an old version may not be supported several versions later. Older versions of the ecoystem should thus avoid being indexed by search engines.</li>
- <li>The fact that an unsupprted canonical URL still works on an old versioned page may confuse some users. This could happen if, for example, the user notes a URL while hovering over a link and sees that it works when clicked but not when shared. This is a rare edge case however, and its a risk that we can accept right now.</p>
+ <li>A canonical URL that was hard-coded into an old version may not be supported several versions later. Older versions of the ecosystem should thus avoid being indexed by search engines.</li>
+ <li>The fact that an unsupported canonical URL still works on an old versioned page may confuse some users. This could happen if, for example, the user notes a URL while hovering over a link and sees that it works when clicked but not when shared. This is a rare edge case however, and its a risk that we can accept right now.</p>
 </ol>
 <h2>Final Translation Methodology</h2>
 <p>After breaking down these use cases, the optimal implementation is one where canonical URLs represent a <b>delta or tool</b> which describes a change-of-state to the base state. When linking internally, that base state is the current versioned URL hash. When coming into the ecosystem from an external link, that base state is the <b>default landing hash</b>.</p>

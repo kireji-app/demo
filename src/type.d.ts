@@ -27,7 +27,7 @@ declare interface IEcosystem
  readonly "now": DOMHighResTimeStamp
  /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
  readonly "defaultApplicationHost": string
- /** A stylesheet containing CSS variables with `url()` values that correspond to images. Used to seemlessly hand-off image rendering from the server-rendered page to the client-rendered page without modifying the DOM. */
+ /** A stylesheet containing CSS variables with `url()` values that correspond to images. Used to seamlessly hand-off image rendering from the server-rendered page to the client-rendered page without modifying the DOM. */
  readonly "images.css": string
  /** The HTML representing a snapshot of the ecosystem's UI given the current state. */
  readonly "index.html": string

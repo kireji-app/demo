@@ -2,7 +2,7 @@ declare interface IHotKeys
  extends IFacet<ICore> {
 
  // Serialized Properties.
- /** A canonical shortcut key string which can identifiy a specific keyboard shortcut and will used to trigger a hotkey method, if a matching method exists. */
+ /** A canonical shortcut key string which can identify a specific keyboard shortcut and will used to trigger a hotkey method, if a matching method exists. */
  readonly "combo": string
  /** The raw JSON that is turned into `hotKeys.table` at runtime. */
  readonly "table.json": string
