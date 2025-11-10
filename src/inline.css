@@ -334,7 +334,13 @@ body.dark warning- {
  }
 }
 
-#fullscreen-button,
-#share-button {
+
+#fullscreen-tray-item,
+#share-tray-item {
  display: none !important;
+}
+
+#stats-tray-item,
+#clock-tray-item {
+ font-size: revert;
 }

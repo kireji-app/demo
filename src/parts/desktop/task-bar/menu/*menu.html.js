@@ -1,5 +1,5 @@
 return `
-<task-menu style="${menu.arm.styleAttr}" onclick="self._?.parts.desktop.taskBar.menu.go()">
+<task-menu style="${menu.arm.styleAttr}" onclick="${menu.runtimeReference}.go()">
  <sidebar- onclick="self._?.noop(event)">
  <ul id=application-control>${Object.entries(_.liveApplications).map(([host, application]) => {
  return `

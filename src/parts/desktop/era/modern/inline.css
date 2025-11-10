@@ -56,9 +56,9 @@ task-menu {
 button,
 menu-button {
  height: var(--icon-size);
- font-size: calc(var(--icon-size) * 1.2);
  line-height: var(--icon-size);
  cursor: pointer;
+ font-size: calc(var(--icon-size) * 1.2);
 }
 
 menu-button>img {
@@ -199,18 +199,18 @@ tray- {
  width: auto;
 }
 
-clock- {
+#clock-tray-item {
  overflow: hidden;
 }
 
-clock-,
-stats- {
+#clock-tray-item,
+#stats-tray-item {
  vertical-align: top;
  display: inline-block;
  line-height: var(--icon-size);
 }
 
-stats- {
+#stats-tray-item {
  background-color: var(--fg);
  color: var(--bg);
  border-radius: 50%;
@@ -221,7 +221,7 @@ stats- {
  width: var(--icon-size);
 }
 
-stats-::before {
+#stats-tray-item::before {
  color: var(--fg);
  content: "FPS";
  position: absolute;

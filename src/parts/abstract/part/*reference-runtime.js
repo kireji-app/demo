@@ -1,1 +1,1 @@
-return `self._?.${part.domains.reverse()}`
+return part[".."].runtimeReference + (part.key.includes("-") ? `['${part.key}']` : "." + part.key)

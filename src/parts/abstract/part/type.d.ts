@@ -11,8 +11,6 @@ declare interface IPart<TOwner, TSubpart>
  readonly "constants.js": string
  /** An optional short description of the part. */
  readonly "description"?: string
- /** A bit of HTML used to generate the editor panel for this part in the kireji.app editor pane. */
- readonly "editor.html": string
  /** An decorative title that uses unicode bold and mathematical characters to render the part's host name. */
  readonly "fancyTitle"?: string
  /** The part's index in it's parent domain. */
@@ -31,6 +29,8 @@ declare interface IPart<TOwner, TSubpart>
  readonly "part.json": string
  /** A png icon that can represent the part and - for application parts - used as the application's icon and browser favicon. */
  readonly "part.png": string
+ /** A bit of HTML used to generate the property viewer panel for this part in the kireji.app property viewer pane. */
+ readonly "property-viewer.html": string
  /** A JavaScript snippet representing global access to the part, available from HTML event handler attributes after hydration. */
  readonly "runtimeReference": string
  /** An optional display name for the part. */

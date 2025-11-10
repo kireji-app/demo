@@ -1,4 +1,4 @@
-return `<span id=update-control onclick="self._?.parts.core.update.go(event)">
+return `<span id=update-control onclick="${update.runtimeReference}.go(event)">
  <span class="label">Check for updates</span>
 </span><hr><span id=version tabIndex=0>
  <span class="label">Version:</span>

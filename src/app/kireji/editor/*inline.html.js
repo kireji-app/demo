@@ -1,1 +1,0 @@
-return editor.scroller.wrap(selected["inline.html"])

@@ -26,7 +26,7 @@ part-outliner {
  background-color: var(--bg-mode-est);
 }
 
-part-editor {
+property-viewer {
  position: absolute;
  top: var(--header-height);
  left: var(--outliner-width);
@@ -35,7 +35,7 @@ part-editor {
 }
 
 #outliner-header,
-#editor-header {
+#property-viewer-header {
  position: absolute;
  z-index: 10;
  top: 0;
@@ -56,7 +56,7 @@ part-editor {
  width: var(--outliner-width);
 }
 
-#editor-header {
+#property-viewer-header {
  right: 0;
  left: var(--outliner-width);
 }
@@ -89,7 +89,7 @@ body.dragging width-handle {
  cursor: ew-resize;
 }
 
-#editor-header>svg {
+#property-viewer-header>svg {
  height: var(--line-height);
  width: var(--line-height);
  stroke: var(--fg-mode-er);
@@ -100,7 +100,7 @@ body.dragging width-handle {
  outline: none;
 }
 
-#editor-header>svg:hover {
+#property-viewer-header>svg:hover {
  stroke: var(--fg-mode);
  background-color: var(--bg-fade-2);
 }
@@ -160,12 +160,12 @@ body.dark part-outliner {
  background-color: black;
 }
 
-body.vintage :is(part-editor, part-outliner) {
+body.vintage :is(property-viewer, part-outliner) {
  top: calc(4px + var(--header-height));
  bottom: 4px;
 }
 
-body.vintage :is(part-editor, part-outliner)::after {
+body.vintage :is(property-viewer, part-outliner)::after {
  content: "";
  position: absolute;
  box-shadow: var(--deep-inset);
@@ -176,12 +176,12 @@ body.vintage :is(part-editor, part-outliner)::after {
  pointer-events: none;
 }
 
-body.vintage part-editor {
+body.vintage property-viewer {
  left: calc(2px + var(--outliner-width) + (var(--handle-thickness) / 2));
  right: 2px;
 }
 
-body.vintage #editor-header {
+body.vintage #property-viewer-header {
  left: calc(2px + var(--outliner-width) + (var(--handle-thickness) / 2));
  right: 2px;
 }
@@ -192,7 +192,7 @@ body.vintage #outliner-header {
  left: 2px;
 }
 
-body.vintage :is(#outliner-header, #editor-header) {
+body.vintage :is(#outliner-header, #property-viewer-header) {
  box-shadow: var(--deep-outset);
  background-color: var(--bg);
  top: 4px;

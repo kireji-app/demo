@@ -1,1 +1,1 @@
-return `<menu-button tabIndex=0 class="btn" onclick="self._?.parts.desktop.taskBar.menu.go()"><img class="part-icon" src="${_.application.placeholderImage("part.png")}"/></menu-button>`
+return `<menu-button tabIndex=0 class="btn" onclick="${menu.runtimeReference}.go()"><img class="part-icon" src="${_.application.placeholderImage("part.png")}"/></menu-button>`

@@ -1,14 +1,14 @@
-declare interface IKirejiAppEditorSelection
- extends IPart<IKirejiAppEditor, null> {
+declare interface IKirejiAppPropertyViewerSelection
+ extends IPart<IKirejiAppPropertyViewer, null> {
 
  // Serialized Properties.
- /** The markup for the contents of the inner scroll container of the part editor, which depends on which part is selected. */
+ /** The markup for the contents of the inner scroll container of the property viewer, which depends on which part is selected. */
  readonly "inline.html": string
  /** The currently selected part, as determined by using this part's route ID as an index into the allParts array. */
  readonly "part": IPartAny
  /** A method which selects the part at the given index of the allParts array, including setting this part's route to the given PART_INDEX. */
  readonly go(EVENT: Event, PART_INDEX: bigint): void
- /** A method which populates the editor panel's scroll-content element with freshly generated HTML. */
+ /** A method which populates the property viewer panel's scroll-content element with freshly generated HTML. */
  readonly replaceContent(): void
 
  // Runtime Properties.

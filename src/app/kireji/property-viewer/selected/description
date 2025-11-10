@@ -1,0 +1,1 @@
+This part manages the selection of a single item from an array. It is a simpler form of a match because it does not have any subparts. Its route ID is a number representing which item in the array is currently selected.

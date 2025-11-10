@@ -1,0 +1,1 @@
+return propertyViewer.scroller.wrap(selected["inline.html"])

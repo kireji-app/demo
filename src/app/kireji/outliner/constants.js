@@ -1,4 +1,6 @@
 const outliner = this
 const width = this.width
 const kirejiApp = this[".."]
-const selected = kirejiApp.editor.selected.part
+const propertyViewer = kirejiApp.propertyViewer
+const selected = propertyViewer.selected
+const selectedPart = selected.part

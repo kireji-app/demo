@@ -9,5 +9,5 @@ if (selected.routeID === routeID)
  return
 
 history.pushState(null, null, location.href)
-editor.scroller.setRouteID(0n)
+propertyViewer.scroller.setRouteID(0n)
 selected.setRouteID(routeID)

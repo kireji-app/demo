@@ -1,0 +1,1 @@
+return propertyViewer.scroller["inline.css"] + propertyViewer["static.css"]

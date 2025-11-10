@@ -1,4 +1,4 @@
 const kirejiApp = this
 const outliner = this.outliner
-const editor = this.editor
+const propertyViewer = this.propertyViewer
 const width = this.outliner.width

@@ -1,1 +1,0 @@
-return selectedPart["editor.html"]

@@ -278,18 +278,18 @@ tray- {
  width: auto;
 }
 
-clock- {
+#clock-tray-item {
  overflow: hidden;
 }
 
-clock-,
-stats- {
+#clock-tray-item,
+#stats-tray-item {
  vertical-align: middle;
  display: inline-block;
  line-height: 16px;
 }
 
-stats- {
+#stats-tray-item {
  background-color: var(--fg);
  color: var(--bg);
  margin-right: calc(2 * var(--icon-size) / 3);
@@ -298,7 +298,7 @@ stats- {
  width: calc(2 * var(--icon-size) / 3);
 }
 
-stats-::after {
+#stats-tray-item::after {
  background-color: var(--fg);
  content: "FPS";
  position: absolute;
