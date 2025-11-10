@@ -1,69 +1,81 @@
-declare interface IDNSRoot extends IMix {
- readonly "index.html": string
- readonly "images.css": string
- readonly "static.css": string
- readonly "inline.css": string
- /** The sitemap for the currently active application. */
- readonly "sitemap.xml": string
+declare interface IDNSRoot
+ extends IMix<null, ITopLevelDomainAny> {
+
+ // Subparts.
  readonly app: IApp
  readonly click: IClick
  readonly com: ICom
  readonly io: IIo
  readonly parts: IParts
+
+ // Serialized Properties.
  /** One of three strings representing the severity of the API change. Used to automatically compute the correct semantic version at build time. */
- readonly change: "major" | "minor" | "patch"
+ readonly "change": "major" | "minor" | "patch"
  /** A number used to control the detail in logs. Only messages with a priority less than or equal to this number will be logged. */
- readonly verbosity: number
+ readonly "verbosity": number
  /** The git branch for this build version. */
- readonly branch: string
+ readonly "branch": string
  /** The hash of the most recent git commit at build time. */
- readonly gitSHA: string
+ readonly "gitSHA": string
  /** The automatically generated semantic version number of the current build. */
- readonly version: string
+ readonly "version": string
  /** A string used to name the service worker file when it is fetched by the client (which contains a serialized copy of the repository of the project). */
- readonly codename: string
+ readonly "codename": string
  /** The automatically generated HTTP identifier for this build. */
- readonly ETag: string
+ readonly "ETag": string
  /** The current unix timestamp, acquired using the high-precision performance.now() + performance.timeOrigin. */
- readonly now: DOMHighResTimeStamp
+ readonly "now": DOMHighResTimeStamp
+ /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
+ readonly "defaultApplicationHost": string
+ /** A stylesheet containing CSS variables with `url()` values that correspond to images. Used to seemlessly hand-off image rendering from the server-rendered page to the client-rendered page without modifying the DOM. */
+ readonly "images.css": string
+ /** The HTML representing a snapshot of the operating system's UI given the current state. */
+ readonly "index.html": string
+ /** The static, global css that should apply across every application and page in the platform. */
+ readonly "inline.css": string
+ /** The packed script representing the entire repository, ready to be deployed to the client and service worker. */
+ readonly "kireji.js": string
+ /** The current application's PWA manifest. */
+ readonly "manifest.json": string
+ /** A JSON object serializing the desired landing model of the platform. */
+ readonly "landing-model.json": string
+ /** Sets the current application, but does not propagate any view functions since the application currently cannot be changed at runtime on the client without navigating to a different host. */
+ readonly setApplication(EVENT: Event, LINK: string): void
+ /** Returns a css that inlines `early-*` compressed images for enhancing the first page appearance when using server-side rendering. It scans the given body HTML for usages of the early images to optimize inclusion. */
+ readonly getImagesEarly(BODY_HTML: string): string
+ /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
+ readonly go(ANCHOR: string, EVENT: event): void
+ /** Returns a packed version of the entire repo, optionally including early-preview images that are designed for faster loading during SSR (but don't need to be packed into the service worker). */
+ readonly pack(INCLUDE_EARLY_ASSETS: boolean): string
+ /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current system state as the base state. */
+ readonly translateCanonicalPathname(CANONICAL_ROUTE: string): string
  /** Sets the configuration space to match the given request url string. */
- setRoute(REQUEST_URL: string): void
- /** The operating system's currently assigned root application.
-  * 
-  * This selection is encoded by the host of the current route. */
- readonly application: IApplication
+ readonly setRoute(REQUEST_URL: string): void
+ /** Performs automated build-time unit tests to validate the state of the build. */
+ readonly validate(): void
+
+ // Runtime Properties.
+ /** The operating system's currently assigned root application, encoded by the host of the current URL. */
+ readonly application: IApplicationAny
  /** A host-keyed object with all of the applications that are available from the web at their host thanks to DNS records. */
- readonly applications: Record<string, IApplication>
+ readonly applications: Record<string, IApplicationAny>
  /** A host-keyed object with all of the applications that are available which are not using the `error.abstract.parts` prototype. */
- readonly liveApplications: Record<string, IApplication>
+ readonly liveApplications: Record<string, IApplicationAny>
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
  /** The model of the desired landing page, used during the initial boot process to compute `_.landingHash` and `_.landingRouteID`. */
  readonly landingModel: string
  /** The routeID of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingRouteID: bigint
- /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
- readonly defaultApplicationHost: string
  /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
  readonly frameRequest: number | null
- /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current system state as the base state. */
- readonly translateCanonicalRoute(CANONICAL_ROUTE: string): string
- /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
- readonly go(ANCHOR: string, EVENT: event): void
- /** Returns a packed version of the entire repo, optionally including early-preview images that are designed for faster loading during SSR (but don't need to be packed into the service worker). */
- readonly pack(INCLUDE_EARLY_ASSETS: boolean): string
- /** Returns a css that inlines `early-*` compressed images for enhancing the first page appearance when using server-side rendering.
-  * It scans the given body HTML for usages of the early images to optimize inclusion. */
- readonly getImagesEarly(BODY_HTML: string): string
 }
+
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
  * 
  * The serialized version should not include any values that are added during or after recursively hydrating the part tree. */
 declare const _: IDNSRoot
-/** A function which simplifies the process of deploying to three environments
- * (server, worker, client) by giving them all the same
- * routing functions, virtual DOM and synchronous fetch method which can
- * produce both static assets and dynamically generated files.
+/** A function which simplifies the process of deploying to three environments (server, worker, client) by giving them all the same routing functions, virtual DOM and synchronous fetch method which can produce both static assets and dynamically generated files.
  * 
  * It creates a function scope in which all other .js files execute. It then boots the operating system. */
 declare function ƒ(_): void
@@ -77,9 +89,7 @@ declare const sourcePositionMarkPattern: RegExp
 declare const host: string
 /** The compiled string which should evaluate to an object. */
 declare const script: string
-/** An object that serializes method signatures and meta data during part object hydration.
- * The object is parsed from the file `part.json` (or `{}` if no file is found).
- * Its prototype is the prototype part's own partManifest or null, if it's the Core. */
+/** An object that serializes method signatures and meta data during part object hydration. The object is parsed from the file `part.json` (or `{}` if no file is found). Its prototype is the prototype part's own partManifest or null, if it's the Core. */
 declare const partManifest: IPartData
 /** The inverse of pathToRoot. The path "back up" to the repository root from the directory containing the source code the part used. */
 declare const pathToRepo: string
@@ -95,8 +105,7 @@ declare const pathFromRepo: string
 declare const subdomains: string[]
 /** The list of static assets for the part whose source code is currently being evaluated. */
 declare const filenames: string[]
-declare interface ISourceDirectory<T> {
-}
+declare interface ISourceDirectory<T> { }
 declare interface IPropertyTable<T> {
  readonly ["route-set"]: T
  readonly ["routeID-set"]: T
@@ -121,7 +130,6 @@ class SourceMappedFile {
  readonly mappings: []
  readonly sources: string[]
  readonly scripts: [string | null]
- readonly part: IPart
  addLine(string: string, srcIndex: number, ogLn: number, ogCol: number, indent: string, mapTokens: boolean): void
  addLines(strings: string[], srcIndex: number, ogLn: number, ogCol: number, indent: string, mapTokens: boolean): void
  addSource(source: string, script: string | null = null): number
@@ -144,22 +152,15 @@ class SourceMappedFile {
 declare const environment: "server" | "worker" | "client"
 /** True if the framework was built on the cloud from the main branch. */
 declare const production: boolean
-/** The host of the currently evaluating script. */
-declare const SCRIPT_HOST: string
 /** A unicode-safe replacement for btoa. */
 declare function btoaUnicode(BODY: string): string
 declare function warn(...DATA: any[]): void
 declare function debug(...DATA: any[]): void
-/** Opens a collapsed log group with the given label at the given verbosity,
- * calls the given callback (passing a log function with the same verbosity as an argument),
- * closes the log group, then returns the result of the callback. */
+/** Opens a collapsed log group with the given label at the given verbosity, calls the given callback (passing a log function with the same verbosity as an argument), closes the log group, then returns the result of the callback. */
 declare function logScope(VERBOSITY: number, LABEL: string, CALLBACK: (log: (...data) => void) => T): T
 /** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
 declare function serialize(data: any): void
-/** Represents metadata and processing logic for a single property
- * of the part. If the property is a method or getter/setter, it
- * parses the method's ID and generates its signature, dynamic constants and body.
- * If the property is a static file, a simple getter method is created automatically.
+/** Represents metadata and processing logic for a single property of the part. If the property is a method or getter/setter, it parses the method's ID and generates its signature, dynamic constants and body. If the property is a static file, a simple getter method is created automatically.
  * 
  * This is a nested type. There is a dedicated instance of this type for each part. */
 declare class Property {
@@ -171,28 +172,19 @@ declare class Property {
  static collectConstants(targetPart, targetProperty): void
  /** The original kebab-case identifier string for this property. */
  readonly id: string;
- /** The expected file name for storing the method's source code.
-  * Typically `${PROPERTY_ID}.js`. */
+ /** The expected file name for storing the method's source code. Typically `${PROPERTY_ID}.js`. */
  readonly filename: string;
- /** Flag indicating if this property is an automatic getter generated by the framework.
-  * Determined by checking if `id` starts with "auto-". */
+ /** Flag indicating if this property is an automatic getter generated by the framework. Determined by checking if `id` starts with "auto-". */
  readonly isAuto: boolean;
- /** The raw source code for the body of the method.
-  * For 'auto' methods, it's a generated template string.
-  * Otherwise, it's read from the corresponding file (`filename`).
-  * Undefined if reading fails. */
- content: string | undefined;
- /** Flag indicating if this method is related to view logic.
-  * Determined by checking if `ids` starts with "view-". */
+ /** The raw source code for the body of the method. For 'auto' methods, it's a generated template string. Otherwise, it's read from the corresponding file (`filename`). Undefined if reading fails. */
+ readonly content: string | undefined;
+ /** Flag indicating if this method is related to view logic. Determined by checking if `ids` starts with "view-". */
  readonly isView: boolean;
- /** Flag indicating if this method is asynchronous.
-  * Determined by checking if `id` starts with "async-". */
+ /** Flag indicating if this method is asynchronous. Determined by checking if `id` starts with "async-". */
  readonly isAsync: boolean;
- /** Flag indicating if this method represents a well-known Symbol (e.g., Symbol.iterator).
-  * Determined by checking if `id` starts with "symbol-". */
+ /** Flag indicating if this method represents a well-known Symbol (e.g., Symbol.iterator). Determined by checking if `id` starts with "symbol-". */
  readonly isSymbol: boolean;
- /** Flag indicating if this property is a getter or setter.
-  * Determined by checking if `id` starts with "get-" or "set-". */
+ /** Flag indicating if this property is a getter or setter. Determined by checking if `id` starts with "get-" or "set-". */
  readonly isGetOrSet: boolean;
  /** A processed, potentially more human-readable or code-friendly name for the method.
   * - For Symbols: `[Symbol.symbolName]`
@@ -201,54 +193,45 @@ declare class Property {
   * - For kebab-case method IDs: Transformed into camelCase (e.g., "view-update" -> "updateView").
   * - Otherwise: The original `id`. */
  readonly niceName: string;
- /** Represents and manages constant declarations (`const ... = ...`) found or used
-  * within the method's body, handling dependencies between them. */
+ /** Represents and manages constant declarations (`const ... = ...`) found or used within the method's body, handling dependencies between them. */
  static readonly Constant: typeof MethodConstant;
  /** The index of the source object associated with this method's content. */
  readonly source: number;
- /** An array containing the lines of the method's source code (`content`).
-  * Empty if `content` is undefined. */
+ /** An array containing the lines of the method's source code (`content`). Empty if `content` is undefined. */
  readonly lines: string[];
  /** The Array.isArray() static method determines whether the passed value is an Array. */
  readonly toArray(value): boolean
- /** Flag indicating if the `niceName` can be used directly as a property name
-  * in code (i.e., it's a valid identifier or a Symbol representation). */
+ /** Flag indicating if the `niceName` can be used directly as a property name in code (i.e., it's a valid identifier or a Symbol representation). */
  readonly hasValidPropertyName: boolean;
- /** The string representation used to reference the method/property in code.
-  * Uses `niceName` directly if valid, otherwise wraps it in brackets/quotes (`["niceName"]`).
+ /** The string representation used to reference the method/property in code. Uses `niceName` directly if valid, otherwise wraps it in brackets/quotes (`["niceName"]`).
+  * 
   * Example: `myMethod`, `[Symbol.iterator]`, `["property-with-hyphens"]`. */
  readonly propertyReference: string;
- /** The string representation used to access the property in source code.
-  * Uses dot notation (`.niceName`) if possible, otherwise bracket notation (`["niceName"]`).
+ /** The string representation used to access the property in source code. Uses dot notation (`.niceName`) if possible, otherwise bracket notation (`["niceName"]`).
+  * 
   * Example: `.myMethod`, `[Symbol.iterator]`, `["property-with-hyphens"]`. */
  readonly propertyAccessor: string;
- /** The string representing the method's arguments list, including parentheses.
-  * Derived from part configuration (`partManifest[PROPERTY_ID]`).
+ /** The string representing the method's arguments list, including parentheses. Derived from part configuration (`partManifest[PROPERTY_ID]`).
+  * 
   * Example: `(arg1, arg2)`. Defaults to `()` if no arguments defined. */
  readonly argumentString: string;
- /** String containing modifiers for the method signature (e.g., "async ", "get ", "set ").
-  * Determined based on `isAsync`, `isGetOrSet`, `isAuto` flags. */
+ /** String containing modifiers for the method signature (e.g., "async ", "get ", "set "). Determined based on `isAsync`, `isGetOrSet`, `isAuto` flags. */
  readonly modifiers: string;
- /** The complete method signature string as it would appear in class syntax.
-  * Combines `modifiers`, `propertyReference`, and `argumentString`.
+ /** The complete method signature string as it would appear in class syntax. Combines `modifiers`, `propertyReference`, and `argumentString`.
+  * 
   * Example: `async myMethod(arg1)`, `get propertyName()`, `[Symbol.iterator]()`. */
  readonly signature: string;
- /** Constructs a Property instance, parsing the PROPERTY_ID and processing
-  * associated metadata and source code content.
+ /** Constructs a Property instance, parsing the PROPERTY_ID and processing associated metadata and source code content.
   * @param PROPERTY_ID The unique identifier string for the method. */
  constructor(PROPERTY_ID: string);
 }
-/** Inner class representing a single constant declaration within a method's scope.
- * Manages its source, dependencies, and ensures it's declared when used. */
+/** Inner class representing a single constant declaration within a method's scope. Manages its source, dependencies, and ensures it's declared when used. */
 declare class MethodConstant {
- /** Registry of all MethodConstant instances created for the parent Property, keyed by identifier.
-  * Includes the special 'PROPERTY_ID' constant. */
+ /** Registry of all MethodConstant instances created for the parent Property, keyed by identifier. Includes the special 'PROPERTY_ID' constant. */
  static all: Record<string, MethodConstant | { identifier: string; usageRegExp: RegExp; ensureDeclarationAndDependencies(): void }>
- /** Registry of MethodConstant instances that have not yet been marked as used within the method body.
-  * Keyed by identifier. Includes the special 'PROPERTY_ID' constant initially. */
+ /** Registry of MethodConstant instances that have not yet been marked as used within the method body. Keyed by identifier. Includes the special 'PROPERTY_ID' constant initially. */
  static unused: Record<string, MethodConstant | { identifier: string; usageRegExp: RegExp; ensureDeclarationAndDependencies(): void }>
- /** Flag indicating whether this specific constant has been used and its declaration
-  * added to the output source file. */
+ /** Flag indicating whether this specific constant has been used and its declaration added to the output source file. */
  used: boolean
  /** An array of other MethodConstant instances that this constant depends on. */
  readonly requirements: MethodConstant[]
@@ -264,18 +247,14 @@ declare class MethodConstant {
  readonly equalsIndex: number;
  /** The identifier (name) of the constant. */
  readonly identifier: string;
- /** A regular expression used to detect usage of this constant's identifier within code lines.
-  * Looks for the identifier as a whole word, not preceded by a dot. */
+ /** A regular expression used to detect usage of this constant's identifier within code lines. Looks for the identifier as a whole word, not preceded by a dot. */
  readonly usageRegExp: RegExp;
- /** Manages a single inherited constant declaration, tracking its dependencies
-  * and ensuring it's added to the source output when used.
+ /** Manages a single inherited constant declaration, tracking its dependencies and ensuring it's added to the source output when used.
   * @param SOURCE_PATH The file path where the constant declaration originates.
   * @param SOURCE_LINE The full line of the constant declaration source code.
-  * @param SOURCE_LINE_NUMBER The line number in the source file.
-  */
+  * @param SOURCE_LINE_NUMBER The line number in the source file. */
  constructor(SOURCE_PATH: string, SOURCE_LINE: string, SOURCE_LINE_NUMBER: number);
- /** Idempotent function that ensures that this constant and all its recursive dependencies (`requirements`)
-  * are declared (added to the source file output). Marks the constant as used. */
+ /** Idempotent function that ensures that this constant and all its recursive dependencies (`requirements`) are declared (added to the source file output). Marks the constant as used. */
  ensureDeclarationAndDependencies(): void;
 }
 /** The incoming request url string.
@@ -283,7 +262,7 @@ declare class MethodConstant {
  * Available only in _.setRoute(). */
 declare const REQUEST_URL: string
 /** A host-keyed map of all parts in the system. */
-declare const partsByHost: Record<string, IPart>
+declare const partsByHost: Record<string, IPartAny>
 /** Trades a versioned string pathname for the bigint routeID. */
 declare function decodePathname(pathname: string): bigint
 /** Trades a string segment for the bigint routeID. */
@@ -295,6 +274,6 @@ declare function encodeSegment(routeID: bigint): string
 /** Returns a string representing the given bigint in scientific notation (a coefficient times 10 to some power). When html is true, the power will be wrapped in a superscript tag. Otherwise, it will use unicode superscript characters. */
 declare function scientific(x: bigint, html: boolean = false): string
 /** The immutable list of runtime instances for the root space, in order of when they were fully hydrated. */
-declare const instances: IPart[]
+declare const instances: IPartAny[]
 /** The immutable list of every part in the root space, in order of when they were fully hydrated. */
-declare const allParts: IPart[]
+declare const allParts: IPartAny[]

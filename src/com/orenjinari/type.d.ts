@@ -1,7 +1,14 @@
-/** Orenjinari's artist profile. */
-declare interface IOrenjinari extends IComApplication {
+declare interface IOrenjinari
+ extends IComApplication {
+
+ // Subparts.
  /** The scroller that controls the entire wallpaper. */
- readonly scroller: IOrenjinariScroller
+ readonly scroller: IScroller<IOrenjinari>
+
+ // Serialized Properties.
+ /** Scrolls to the given zone with an animation transition. */
+ readonly go(ZONE_ID: string): void
 }
 
+/** Orenjinari's artist profile. */
 declare const orenjinari: IOrenjinari

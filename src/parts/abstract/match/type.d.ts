@@ -1,12 +1,19 @@
-declare interface IMatch extends IMatchOf<IPart> {
-}
+declare interface IMatch<TOwner, TArm>
+ extends IPart<TOwner, TArm> {
 
-declare interface IMatchOf<T> extends IPartOf<T> {
- /** A map storing the arm position offsets. */
- readonly offsets?: Map<T, bigint>
+ // Runtime Properties.
  /** The subpart which is currently chosen. */
- readonly arm?: T
+ readonly arm?: TArm
+ /** A map storing the arm position offsets. */
+ readonly offsets?: Map<TArm, bigint>
 }
 
-declare const match: IMatch
-declare const CHANGED_ARMS: IPart[]
+declare type IMatchAny =
+ IMatch<IPartAny, IMatchArm>
+
+declare type IMatchArm =
+ IPart<IMatchAny, IPartAny>
+
+declare const match: IMatchAny
+
+declare const CHANGED_ARMS: IMatchArm[]

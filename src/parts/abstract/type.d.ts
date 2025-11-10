@@ -1,13 +1,16 @@
-declare interface IAbstract extends IPartsApplication {
- readonly application: IApplication
- readonly clip: IClip
- readonly error: IErrorApplication
- readonly facet: IFacet
- readonly match: IMatch
- readonly mix: IMix
- readonly part: IPart
- readonly scroller: IScroller
- readonly tld: ITopLevelDomain
-}
+declare interface IAbstract
+ extends IErrorApplication<IParts> {
 
-declare const abstract: IAbstract
+ // Subparts.
+ readonly application: IApplication<IAbstract, null>
+ readonly clip: IClip<IAbstract, null>
+ readonly error: IErrorApplication<IAbstract>
+ readonly facet: IFacet<IAbstract, null>
+ readonly match: IMatch<IAbstract, null>
+ readonly mix: IMix<IAbstract, null>
+ readonly part: IPart<IAbstract, null>
+ readonly scroller: IScroller<IAbstract, null>
+ readonly section: IApplicationSection<IAbstract, null>
+ readonly sections: IApplicationSections<IAbstract, null>
+ readonly tld: ITopLevelDomain<IAbstract, null>
+}

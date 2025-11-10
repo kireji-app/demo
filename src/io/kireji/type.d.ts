@@ -1,2 +1,2 @@
-declare interface IKirejiIo extends IIoApplication {
-}
+declare type IKirejiIo =
+ IErrorApplication<IIo>

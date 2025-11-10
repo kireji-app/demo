@@ -1,5 +1,8 @@
 /** The core components that power all applications in the **Kireji Web Framework**. */
-declare interface ICore extends IPartsApplication {
+declare interface ICore
+ extends IErrorApplication<IParts> {
+
+ // Subparts.
  readonly addressBar: IAddressBar
  readonly agent: IAgent
  readonly client: IClient

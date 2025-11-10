@@ -1,6 +1,8 @@
-/** Host of the fetch function which renders response objects from URIs. */
-declare interface IServer extends IFacet {
-}
+/** Host of a node server which renders response objects from node requests. */
+declare type IServer =
+ IFacet<ICore>
+
+/** An interface that represents an internal server API contract between modules of different versions. */
 declare interface IVersionedExports {
  /** Allows pass-through access to this version's server-side rendering features. */
  proxy(host: string, pathname: string, ifNoneMatch: string, prefersDarkMode: boolean): any
@@ -9,4 +11,5 @@ declare interface IVersionedExports {
  /** Allows conversion of a data model to a URL pathname segment using the server's hash function. */
  encode(model: any): string
 }
+
 declare const server: IServer

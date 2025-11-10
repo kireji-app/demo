@@ -1,4 +1,7 @@
-declare interface IColorMode extends IPart {
- /** The current color mode as a state string, which can be used for controlling UI components. */
- readonly stateData: string
+declare interface IColorMode
+ extends IPart<IColor, null> {
+
+ // Serialized Properties.
+ /** The data-state attribute value for the color control button when the mode is active. */
+ readonly "stateData": string
 }

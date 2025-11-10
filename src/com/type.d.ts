@@ -1,9 +1,10 @@
-/** Represents the top-level domain "com". */
-declare interface ICom extends ITopLevelDomain {
+declare interface ICom
+ extends ITopLevelDomain<IComApplication> {
+
+ // Subparts.
  readonly orenjinari: IOrenjinari
  readonly ejaugust: IEJAugust
 }
 
-declare interface IComApplication extends IApplication {
- readonly "..": ICom
-}
+declare type IComApplication =
+ IApplication<ICom, IPart<IComApplication, IPartAny>>

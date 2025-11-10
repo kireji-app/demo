@@ -1,4 +1,4 @@
-declare interface IEJAugustHome extends IEJAugustSection<IPart> {
-}
+declare type IEJAugustHome
+ = IEJAugustSection<null>
 
 declare const home: IEJAugustHome

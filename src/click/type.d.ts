@@ -1,7 +1,9 @@
-declare interface IClick extends ITopLevelDomain {
+declare interface IClick
+ extends ITopLevelDomain<IClickApplication> {
+
+ // Subparts.
  readonly glowstick: IGlowstick
 }
 
-declare interface IClickApplication extends IApplication {
- readonly "..": IClick
-}
+declare type IClickApplication =
+ IApplication<IClick, IPart<IClickApplication, IPartAny>>

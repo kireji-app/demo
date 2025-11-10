@@ -1,9 +1,12 @@
-declare interface IDesktop extends IPartsApplication {
+declare interface IDesktop
+ extends IPartsApplication {
+
+ // Subparts.
  readonly color: IColor
  readonly era: IEra
  readonly taskBar: ITaskBar
 
- // Views.
+ // Runtime Properties.
  readonly wallpaper: HTMLElement
 }
 

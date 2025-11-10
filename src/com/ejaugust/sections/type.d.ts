@@ -1,8 +1,12 @@
-declare interface IEJAugustSections extends IMatch {
- readonly "..": IEJAugust
+declare interface IEJAugustSections
+ extends IApplicationSections<IEJAugust, IEJAugustSection> {
+
+ // Subparts.
  readonly home: IEJAugustHome
  readonly notes: IEJAugustNotes
- readonly arm: IEJAugustSection<IPart>
 }
 
-declare const section: IEJAugustSection<IPart>
+declare type IEJAugustSection =
+ IApplicationSection<IEJAugustSections, IPart<IEJAugustSection, IPartAny>>
+
+declare const section: IEJAugustSection

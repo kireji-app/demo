@@ -1,2 +1,2 @@
-declare interface IUser extends IPartsApplication {
-}
+declare type IUser
+ = IErrorApplication<IParts>

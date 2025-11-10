@@ -1,7 +1,9 @@
-declare interface IIo extends ITopLevelDomain {
+declare interface IIo
+ extends ITopLevelDomain<IIoApplication> {
+
+ // Subparts.
  readonly kireji: IKirejiIo
 }
 
-declare interface IIoApplication extends IApplication {
- readonly "..": IIo
-}
+declare type IIoApplication =
+ IApplication<IIo, IPart<IIoApplication, IPartAny>>
