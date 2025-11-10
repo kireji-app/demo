@@ -1,16 +1,17 @@
 declare interface IEJAugustNotes
- extends IEJAugustSection<IEJAugustNote> {
+ extends IApplicationSections<IEJAugustSections, IEJAugustNote> {
 
  // Subparts.
- readonly 1743765678: IEJAugustNote<IEJAugustNotes>
- readonly 1743772658: IEJAugustNote<IEJAugustNotes>
- readonly 1762062190: IEJAugustNote<IEJAugustNotes>
- readonly 1762063104: IEJAugustNote<IEJAugustNotes>
- readonly 1762063947: IEJAugustNote<IEJAugustNotes>
- readonly 1762098121: IEJAugustNote<IEJAugustNotes>
- readonly 1762140334: IEJAugustNote<IEJAugustNotes>
- readonly 1762150560: IEJAugustNote<IEJAugustNotes>
- readonly 1762157702: IEJAugustNote<IEJAugustNotes>
+ readonly 1743765678: IEJAugustNote
+ readonly 1743772658: IEJAugustNote
+ readonly 1762062190: IEJAugustNote
+ readonly 1762063104: IEJAugustNote
+ readonly 1762063947: IEJAugustNote
+ readonly 1762098121: IEJAugustNote
+ readonly 1762140334: IEJAugustNote
+ readonly 1762150560: IEJAugustNote
+ readonly 1762157702: IEJAugustNote
+ readonly note: IEJAugustNote
 }
 
 /** The section of ejaugust that contains all of the note entries and

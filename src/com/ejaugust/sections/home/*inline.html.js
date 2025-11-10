@@ -1,12 +1,4 @@
-
 return (
- /* "<section id=bio>" + (
-  `<img src="${ejaugust.placeholderImage("part.png")}" title=Me>` +
-  `<img src="${ejaugust.placeholderImage("hw-design.png")}" title=Design>` +
-  `<img src="${ejaugust.placeholderImage("hw-engineering.png")}" title=Engineering>` +
-  `<img src="${ejaugust.placeholderImage("hw-math.png")}" title=Math>` +
-  `<img src="${ejaugust.placeholderImage("hw-research.png")}" title=Research>`
- ) + */
  "</section>" +
  "<section>" + (
   "<div id=note-links>" + (

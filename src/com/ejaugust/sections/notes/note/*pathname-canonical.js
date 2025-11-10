@@ -1,0 +1,1 @@
+return notes.pathname + note.pathname

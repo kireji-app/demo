@@ -3,7 +3,8 @@
  * 
  * It represents a domain which has an `A` record that points to a server implementing the project's build artifact.*/
 declare interface IApplication<TOwner, TFactor>
- extends IMix<TOwner, TFactor>, IApplicationDetails {
+ extends IMix<TOwner, TFactor>,
+ IApplicationDetails {
 
  // Serialized Properties.
  /** An optional menu title for showing apps in the taskbar menu. If undefined, the application's part title will be used instead. */

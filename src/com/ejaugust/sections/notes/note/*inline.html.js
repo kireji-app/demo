@@ -3,6 +3,6 @@ return note["heading.html"] +
   note["credit.html"]
  ) +
  "</p>" +
- note["inline.html"]
+ note["note.html"]
 
 // TODO: Somehow sanitize note html.

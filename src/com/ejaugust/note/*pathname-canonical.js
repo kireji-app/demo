@@ -1,1 +1,0 @@
-return `${notes.pathname}/${note.pathname ?? note.key}`

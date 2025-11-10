@@ -1,5 +1,4 @@
 {
- "singleton": true,
  "extends": "facet",
  "undo": [],
  "redo": []

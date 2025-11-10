@@ -1,9 +1,10 @@
-declare interface IEJAugustNote<TOwner>
- extends IPart<TOwner, IPartAny>, IApplicationDetails {
+declare interface IEJAugustNote
+ extends IPart<IEJAugustNotes, IPartAny>,
+ IApplicationDetails {
 
  // Serialized Properties.
  /** The content of the note. */
- readonly "article.html": string
+ readonly "note.html": string
  /** The full date and reading time description line for the note. */
  readonly "credit.html": string
  /** The full display title and subtitle for the note. */
@@ -25,4 +26,4 @@ declare interface IEJAugustNote<TOwner>
 }
 
 /** The currently active note for ejaugust. */
-declare const note: IEJAugustNote<IEJAugustNotes | IEJAugust>
+declare const note: IEJAugustNote

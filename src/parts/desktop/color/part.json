@@ -1,5 +1,4 @@
 {
- "singleton": true,
  "extends": "match",
  "hex-rgb-from": [
   "HEX"

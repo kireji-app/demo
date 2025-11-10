@@ -1,6 +1,5 @@
 {
  "abstract": true,
- "singleton": true,
  "build": [],
  "build-start": [],
  "symbol-iterator": [],

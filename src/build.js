@@ -506,7 +506,7 @@ function ƒ(_) {
        }
       }
       for (const methodID in part.manifest)
-       if (!["extends", "abstract", "singleton"].includes(methodID))
+       if (!["extends", "abstract"].includes(methodID))
         Property.ids.add(methodID)
 
       sourceFile.addSection(`@descriptor-map-open@({\n //  ${host}${!prototype ? "" : ` instanceof ${prototype.host}`}\n`, buildSource)

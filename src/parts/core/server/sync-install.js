@@ -156,11 +156,9 @@ const httpServer = require('http').createServer((request, response) => logServer
     }
 
     if (pathname === "/sitemap.xml") {
-     if (_.application?.key !== host)
-      _.application = _.applications[host]
      status = 200
      head = sitemapHeader
-     body = _["sitemap.xml"]
+     body = _.applications[host]["sitemap.xml"]
      logMessage = "Serving Sitemap"
      break respond
     }

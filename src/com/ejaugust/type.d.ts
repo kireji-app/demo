@@ -2,7 +2,6 @@ declare interface IEJAugust
  extends IComApplication {
 
  // Subparts.
- readonly note: IEJAugustNote<IEJAugust>
  readonly scroller: IScroller<IEJAugust>
  readonly sections: IEJAugustSections
 
