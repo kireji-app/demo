@@ -20,7 +20,6 @@ const
   ...securityHeader
  },
  indexHeader = {
-  "Retry-After": "86400",
   'Content-Type': 'text/html;charset=UTF-8',
   "Document-Policy": "force-load-at-top",
   "Vary": "Sec-CH-Prefers-Color-Scheme",
@@ -47,7 +46,7 @@ const
 
      _.setRoute(defaultRoute)
      status = 200
-     head = serviceHeader
+     head = { ...serviceHeader }
      body = _.pack(false)
      logMessage = "Serving Artifact"
      break respond
@@ -62,9 +61,10 @@ const
     }
 
     // color.device.light = !prefersDarkMode
-    head = indexHeader
     _.setRoute(`https://${host}${pathname}`)
-    status = host in _.liveApplications ? 200 : _.applications[host].status
+    status = +(host in _.liveApplications ? 200 : _.applications[host].status)
+    const customHeaders = _.applications[host].customHeaders ?? {}
+    head = { ...indexHeader, ...customHeaders }
     body = _['index.html']
     logMessage = "Serving Snapshot"
     break respond
@@ -157,7 +157,7 @@ const httpServer = require('http').createServer((request, response) => logServer
 
     if (pathname === "/sitemap.xml") {
      status = 200
-     head = sitemapHeader
+     head = { ...sitemapHeader }
      body = _.applications[host]["sitemap.xml"]
      logMessage = "Serving Sitemap"
      break respond
@@ -252,8 +252,9 @@ const httpServer = require('http').createServer((request, response) => logServer
  }${_.parts.abstract.error.getErrorCSS(body)}
 </style>
 ${_.parts.abstract.error.getErrorHTML(status, body)}`
-   head = indexHeader
+   head = { ...indexHeader }
   } finally {
+
    log(logMessage, status, {
     200: `✓`,
     get 302() { return `↪ ${head.Location}` },
@@ -262,7 +263,7 @@ ${_.parts.abstract.error.getErrorHTML(status, body)}`
     404: "?",
     // 444: "✕",
     500: "!",
-    501: `#`,
+    503: `#`,
    }[status])
    response.writeHead(status, head)
    response.end(body)

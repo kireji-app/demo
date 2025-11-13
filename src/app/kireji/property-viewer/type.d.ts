@@ -6,8 +6,12 @@ declare interface IKirejiAppPropertyViewer
  readonly scroller: IScroller<IKirejiAppPropertyViewer>
 
  // Serialized Properties.
- readonly "inline.css": string
+ readonly "info-basic.html": string
+ readonly "info-files.html": string
+ readonly "info-hash.html": string
+ readonly "info-properties.html": string
  readonly "inline.html": string
+ readonly "inline.css": string
  readonly "static.css": string
 }
 

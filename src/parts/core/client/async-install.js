@@ -26,9 +26,6 @@ logScope(0, "Finalizing Hydration", log => {
  log("Setting initial state.")
  addressBar.useRoute()
 
- log("Hiding splash screen.")
- document.body.classList.remove("installing")
-
  log("Activating Body.")
  document.body.classList.remove("unhydrated")
 

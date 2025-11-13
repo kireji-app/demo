@@ -24,17 +24,14 @@
  "filter": [
   "FILTER_FUNCTION"
  ],
+ "each-for": [
+  "FILTER_FUNCTION"
+ ],
  "map": [
   "MAP_FUNCTION"
  ],
  "includes": [
   "SUBPART"
- ],
- "count": [
-  "COUNT",
-  "SUBPART",
-  "INDEX",
-  "SUBDOMAINS"
  ],
  "listener-add-event": [
   "EVENT_TYPE",

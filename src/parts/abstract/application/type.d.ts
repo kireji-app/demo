@@ -7,8 +7,10 @@ declare interface IApplication<TOwner, TFactor>
  IApplicationDetails {
 
  // Serialized Properties.
- /** An optional menu title for showing apps in the taskbar menu. If undefined, the application's part title will be used instead. */
- readonly "titleMenu"?: string
+ /** An object corresponding to any custom headers that the application would like to include in the final response for its index pages. */
+ readonly "customHeaders": Record<string, string>
+ /** A JSON-serialized map of hot-key combos that the application should listen to and the methods each combo should call. */
+ readonly "hot-keys.json"
  /** One of the six theme colors for this part. This is the accent/hover color when dark mode is enabled. */
  readonly "darkAccentTheme": string
  /** One of the six theme colors for this part. This is the background color when dark mode is enabled. */
@@ -21,10 +23,10 @@ declare interface IApplication<TOwner, TFactor>
  readonly "lightBgTheme": string
  /** One of the six theme colors for this part. This is the foreground color when the dark is disabled. */
  readonly "lightFgTheme": string
+ /** An optional menu title for showing apps in the taskbar menu. If undefined, the application's part title will be used instead. */
+ readonly "titleMenu"?: string
  /** For SEO, an xml file detailing this application's available canonical links, which will be fetched by search engines. */
  readonly "sitemap.xml"
- /** A JSON-serialized map of hot-key combos that the application should listen to and the methods each combo should call. */
- readonly "hot-keys.json"
  /** This optional method converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname?(PATHNAME: string, HASH?: string): string
 }

@@ -10,4 +10,8 @@ if (!selectedPart.isAbstract) {
  selectedPart.addEventListener("remove", selected.partListener)
 }
 
-selected.replaceContent()
+for (const word of ["basic", "hash", "properties", "images", "files"])
+ document.getElementById(`info-${word}`).innerHTML = propertyViewer[`info-${word}.html`]
+
+document.querySelector("part-outliner summary[data-selected]").removeAttribute("data-selected")
+document.querySelector(`part-outliner summary[data-index="${selected.routeID}"]`).setAttribute("data-selected", "")

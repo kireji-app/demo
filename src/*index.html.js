@@ -25,9 +25,6 @@ if (taskBar.menu.arm?.key === "open")
 if (taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
-if (environment === "server")
- bodyClassList.push("installing")
-
 const body =
  `<body class="${bodyClassList.join(" ")}">` + (
   `<warning->` + (

@@ -8,6 +8,6 @@ return (
  // ${svg("", "M -0.3 0 L 0.3 0.5 M 0.3 -0.5 L -0.3 0")}${svg("", "M 0.3 0 L -0.3 0.5 M -0.3 -0.5 L 0.3 0")}
  `<h2 id=property-viewer-header>${svg(`${outliner.width.runtimeReference}.toggle(event)`, "M 0 0.5 L 0 0.5 M 0 0 L 0 0 M 0 -0.5 L 0 -0.5")} ${propertyViewer.title}</h2>` +
  outliner["inline.html"] +
- "<property-viewer>" + propertyViewer["inline.html"] + "</property-viewer>" +
+ propertyViewer["inline.html"] +
  outliner.width["inline.html"]
 )

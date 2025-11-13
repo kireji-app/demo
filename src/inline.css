@@ -11,34 +11,11 @@
  outline: none;
 }
 
-/*
-html::after {
- content: "Installing App...";
- pointer-events: none;
- position: fixed;
- top: 0;
- bottom: 0;
- left: 0;
- right: 0;
- opacity: 0;
- background-color: var(--dark-bg);
- color: var(--dark-fg);
- transition: opacity 0.5s ease;
- line-height: var(--h);
- text-align: center;
- font-family: var(--system-ui);
-}
-*/
-html:has(body.unhydrated, body.installing) {
+html:has(body.unhydrated) {
  cursor: wait;
  /* pointer-events: none; */
 }
 
-/*
-html:has(body.installing)::after {
- opacity: 100%;
-}
-*/
 #application-control {
  display: block;
  margin: 0;

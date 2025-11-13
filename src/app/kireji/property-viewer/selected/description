@@ -1,1 +1,1 @@
-This part manages the selection of a single item from an array. It is a simpler form of a match because it does not have any subparts. Its route ID is a number representing which item in the array is currently selected.
+This part manages the selection of a single part from the outliner. It behaves like a match across each outliner item but it does not have subparts of its own corresponding to these choices. If it it did, those subparts would become selectable parts of their own, which would create an infinite recursion.

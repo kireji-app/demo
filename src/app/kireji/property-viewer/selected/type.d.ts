@@ -8,11 +8,9 @@ declare interface IKirejiAppPropertyViewerSelection
  readonly "part": IPartAny
  /** A method which selects the part at the given index of the allParts array, including setting this part's route to the given PART_INDEX. */
  readonly go(EVENT: Event, PART_INDEX: bigint): void
- /** A method which populates the property viewer panel's scroll-content element with freshly generated HTML. */
- readonly replaceContent(): void
 
  // Runtime Properties.
- /** A listener delegate which calls the selection part's own replaceContent method.
+ /** A listener delegate which updates the variable hash info when the selected part's state changes.
   * 
   * A reliable runtime reference to this method is required to correctly add and remove event listeners. */
  readonly partListener: function

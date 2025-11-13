@@ -584,16 +584,17 @@ function ƒ(_) {
 
     _.defaultApplicationHost ??= Object.keys(_.liveApplications)[0]
    })
+
+   logScope(1, "\nInstalling Facets", () => {
+    const gate = Promise.withResolvers()
+    const promiseArray = []
+    for (const subpart of _.parts.core)
+     if (subpart.prototype.host === "facet.abstract.parts") {
+      subpart.install(gate)
+      promiseArray.push(subpart.promise)
+     }
+    gate.resolve(promiseArray)
   })
-  logScope(1, "\nInstalling Facets", () => {
-   const gate = Promise.withResolvers()
-   const promiseArray = []
-   for (const subpart of _.parts.core)
-    if (subpart.prototype.host === "facet.abstract.parts") {
-     subpart.install(gate)
-     promiseArray.push(subpart.promise)
-    }
-   gate.resolve(promiseArray)
   })
   logScope(3, "\nComputing Landing Hash & Route ID", log => {
 
@@ -625,8 +626,9 @@ function ƒ(_) {
 
 ƒ({
  verbosity: 100,
+ // TODO: Fix source mapping bugs.
  mapping: false,
- change: "patch",
+ change: "major",
  hangHydration: 0,
  defaultApplicationHost: "kireji.app",
 })

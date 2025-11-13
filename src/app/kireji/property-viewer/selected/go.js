@@ -1,3 +1,5 @@
+// TODO: convert this into clickable links and create canonical URLs for each of the parts in the system, if reasonable.
+
 _.noop(EVENT)
 
 if (PART_INDEX === -1n || PART_INDEX >= allParts.length)

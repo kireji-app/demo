@@ -59,7 +59,7 @@ part-data {
  width: 100%;
 }
 
-part-data div {
+part-data>* {
  padding: calc(var(--spacing) / 2);
  border-radius: 4px;
  text-overflow: ellipsis;
@@ -69,4 +69,16 @@ part-data div {
 
 property-viewer>scroller->scroll-content h1 {
  margin: 0;
+}
+
+#info-images>div {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: flex-start;
+}
+
+#info-images>div>img {
+ border: 1px solid #ccc;
+ max-height: 180px;
+ max-width: 180px;
 }

@@ -146,10 +146,11 @@ declare interface IPart<TOwner, TSubpart>
  }
  /** The previous route of the part, changed at the last call to distributeRouteID or collectRouteID. */
  readonly previousRouteID: bigint
+ readonly Property: typeof Property
  /** The part that is this part's prototype object.
   * 
   * *Note: The part `part.abstract.parts` does not have a prototype part.* */
- readonly prototype?: IPart
+ readonly prototype?: IPartAny
  /** The current route of the part expressed as a bigint index in the virtual array of all of its routes. */
  readonly routeID: bigint
  /** Whether or not the part has a running task */
