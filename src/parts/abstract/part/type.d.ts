@@ -40,7 +40,7 @@ declare interface IPart<TOwner, TSubpart>
  /** Removes the listener that calls the given callback when the given event occurs. */
  readonly removeEventListener(EVENT_TYPE: string, CALLBACK): void
  /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
- readonly build(COUNT, SUBPART, INDEX, SUBPARTS): bigint
+ readonly build(): void
  /** Calls loop on this part and then propagates the call leafward to all subparts. */
  readonly distributeLoop(): void
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
@@ -58,10 +58,10 @@ declare interface IPart<TOwner, TSubpart>
  /** A URI-encoded svg data segment that can represent the bounding box of a part image but is small enough to be inlined in image-heavy server-rendered views. */
  readonly placeholderImage(IMAGE_NAME: string): string
  /** Collects every build function in its prototype chain and then calls them all on itself. */
- readonly startBuild(COUNT, SUBPART, INDEX, SUBPARTS): bigint
+ readonly startBuild(): void
  /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */
  readonly setRouteID(ROUTE_ID: bigint): void
- /** Recomputes and then updates the part's routeID in response to a change in the the given subparts' routeIDs.
+ /** Recomputes and then updates the part's routeID in response to a change in the the given subpart's routeID.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
  readonly collectRouteID(SUBPARTS: TSubpart[]): void
@@ -161,7 +161,7 @@ declare interface IPart<TOwner, TSubpart>
  readonly subpartKeys: string[]
  /** Whether or not the part was enabled before the most recent route change. */
  readonly wasEnabled: boolean
- /** Extends the definition of the object by allowing the addition of custom properties.
+ /** Extends the definition of the part by allowing the addition of custom properties.
   * 
   * All runtime properties are added using this method.
   * 
@@ -182,3 +182,7 @@ declare const property: Property
 declare function base(...args): any
 /** The current function, so that it can be called again from within itself. */
 declare function recurse(...args): any
+/** The current incoming route ID argument.
+ * 
+ * *Available within distributeRouteID, setRouteID and updateRouteID methods only.*  */
+declare const ROUTE_ID: bigint

@@ -534,7 +534,6 @@ function ƒ(_) {
         subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
         continue
        }
-       part.define({ [subpartIndex++]: { value: subpart } })
       }
       if (!isAbstract) instances.push(part)
       allParts.push(part)
@@ -594,7 +593,7 @@ function ƒ(_) {
       promiseArray.push(subpart.promise)
      }
     gate.resolve(promiseArray)
-  })
+   })
   })
   logScope(3, "\nComputing Landing Hash & Route ID", log => {
 

@@ -17,9 +17,9 @@ const arm = match[key]
 if (!match.subpartKeys.includes(key))
  throw new ReferenceError(`Model To RouteID Error: Match "${match.host}" does not have a concrete arm at subdomain "${key}" (available arms are "${match.subpartKeys.join('", "')}").`)
 
-const routeID = match.offsets.get(arm) + (isString ? 0n : arm.modelToRouteID(MODEL[key]))
+const resultRouteID = match.offsets.get(arm) + (isString ? 0n : arm.modelToRouteID(MODEL[key]))
 
-if (routeID >= part.cardinality)
- throw new RangeError(`Model To RouteID Error: Mix "${part.host}" does not support a route ID up to ${routeID} (max ${part.cardinality}).`)
+if (resultRouteID >= part.cardinality)
+ throw new RangeError(`Model To RouteID Error: Mix "${part.host}" does not support a route ID up to ${resultRouteID} (max ${part.cardinality}).`)
 
-return routeID
+return resultRouteID

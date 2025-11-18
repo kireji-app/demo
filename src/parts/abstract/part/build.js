@@ -1,3 +1,5 @@
+part.subpartKeys.sort((a, b) => Number(part[a].cardinality - part[b].cardinality))
+
 part.define({
  enabled: { value: undefined, writable: true },
  disabled: { value: undefined, writable: true },

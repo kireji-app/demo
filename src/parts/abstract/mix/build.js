@@ -2,9 +2,9 @@ const placeValues = new Map()
 
 let product = 1n
 
-for (const subpart of mix) {
- placeValues.set(subpart, product)
- product *= subpart.cardinality
+for (const factor of mix) {
+ placeValues.set(factor, product)
+ product *= factor.cardinality
 }
 
 mix.define({
