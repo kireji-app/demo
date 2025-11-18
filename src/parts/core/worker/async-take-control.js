@@ -17,7 +17,15 @@ await logScope(1, 'Ensuring ServiceWorker Controller', async log => {
    controller: { value: nav.serviceWorker.controller }
   })
 
-  nav.serviceWorker.oncontrollerchange = () => location.reload()
+  if (!production) {
+   /* In development builds, we reset to the landing hash every time we rebuild
+    the service worker, to avoid edge cases where the latest development has a
+    different part arrangement from the original. */
+   nav.serviceWorker.oncontrollerchange = () => {
+    location.assign(location.origin + `/${_.version}/`)
+    // location.reload()
+   }
+  }
  }
 
  worker.registration.onupdatefound = event => {
