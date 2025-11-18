@@ -1,6 +1,7 @@
 {
  "abstract": true,
  "routeID-collect": [
-  "CHANGED_FACTORS"
+  "CHANGED_FACTORS",
+  "DEPTH"
  ]
 }

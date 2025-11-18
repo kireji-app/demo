@@ -1,6 +1,7 @@
 {
  "abstract": true,
  "routeID-collect": [
-  "CHANGED_ARMS"
+  "CHANGED_ARMS",
+  "DEPTH"
  ]
 }
