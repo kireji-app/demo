@@ -6,13 +6,8 @@ sourceFile.addSection(`\nƒ(${JSON.stringify(_, (k, v) => {
  if (typeof v === "bigint")
   return v.toString() + "n"
 
- if (INCLUDE_EARLY_ASSETS)
-  return v
-
- if (k.startsWith("early-") || k.startsWith("*early-"))
-  return undefined
-
  return v
+
 }, 1)})`, sourceFile.addSource(property.filename, property.content))
 const script = sourceFile.packAndMap()
 return script
