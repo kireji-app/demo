@@ -8,7 +8,8 @@
   "DELTA = false"
  ],
  "routeID-collect": [
-  "SUBPARTS"
+  "SUBPARTS",
+  "DEPTH"
  ],
  "routeID-distribute": [
   "ROUTE_ID"

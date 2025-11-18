@@ -33,4 +33,7 @@ if (reportsAtLeastOneEnabledFactor) {
  mix.updateRouteID(-1n)
 }
 
-mix[".."]?.collectRouteID([mix])
+if (DEPTH === 1)
+ return
+
+mix[".."]?.collectRouteID([mix], DEPTH ? DEPTH-- : undefined)

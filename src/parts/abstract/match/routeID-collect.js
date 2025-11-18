@@ -42,4 +42,8 @@ if (oldArm && newArm !== oldArm && !disabledArm)
  oldArm.distributeRouteID(-1n)
 
 match.updateRouteID(match.offsets.get(newArm) + newArm.routeID)
-match[".."].collectRouteID([match])
+
+if (DEPTH === 1)
+ return
+
+match[".."].collectRouteID([match], DEPTH ? DEPTH-- : undefined)

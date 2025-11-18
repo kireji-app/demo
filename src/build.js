@@ -519,7 +519,6 @@ function ƒ(_) {
       } catch (e) {
        throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
       }
-      let subpartIndex = 0
       for (const subdomain of subdomains) {
        const subpart = part[subdomain]
        if (subdomain.includes("-")) {
