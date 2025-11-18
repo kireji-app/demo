@@ -1,9 +1,7 @@
 {
  "app": {
   "kireji": {
-   "property-viewer": {
-    "selected": "kireji.app"
-   },
+   "property-viewer": {},
    "outliner": {
     "folders": [
      "",

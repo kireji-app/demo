@@ -1,3 +1,3 @@
 const propertyViewer = this
-const selected = this.selected
-const selectedPart = this.selected.part
+const scroller = this.scroller
+const outliner = this[".."].outliner
