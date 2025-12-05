@@ -1,4 +1,4 @@
-if (client.hydrated) {
+if (hydrated) {
  document.querySelector("#notebook-section").innerHTML = note["inline.html"]
  document.querySelector("#note-title").innerHTML = note.title ?? "Untitled Note"
  document.querySelector("#note-subtitle").innerHTML = note.subtitle ?? ""

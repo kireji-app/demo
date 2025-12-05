@@ -1,4 +1,4 @@
-if (client.hydrated) {
+if (hydrated) {
  document.getElementById("notebook-section").innerHTML = home["inline.html"]
  document.title = ejaugust.title
  document.querySelector(`meta[name="description"]`).setAttribute("content", ejaugust.descriptionMeta)
