@@ -3,7 +3,7 @@ return `<p>Try opening the menu in the bottom left and visiting another app in t
 <p>The <b>Kireji Web Framework</b> is a reactive framework that unites a collection of apps into a single ecosystem and uses a <b>minimal perfect hash function (MPHF)</b> as its routing system.</p>
 <p>My notebook is part of a larger ecosystem called the <b>Kireji Demo App Ecosystem</b>. The cardinality of all of these demo apps together is about ${scientific(_.cardinality, true)}. As an integer, it looks like this:</p>
 <pre>${_.cardinality}</pre>
-<p>Here's the state you've assigned to the demo ecosystem:</p>
+<p>That's a lot of states, but don't worry. You don't have to visit them all. Here's the one you're looking at right now, in base 10:</p>
 <pre id=current-state-ecosystem>${_.routeID}</pre>
 <p>Here's how it looks as a hash in base 64:</p>
 <pre id=current-hash-ecosystem>${encodeSegment(_.routeID)}</pre>

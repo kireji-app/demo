@@ -6,6 +6,5 @@ if (part.dirty && part.justEnabled) {
  if (part.isOpen)
   part.addView()
 
- for (const callback of part.callbacks.add)
-  callback()
+ part.notify("add")
 }

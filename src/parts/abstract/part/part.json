@@ -34,13 +34,18 @@
  "includes": [
   "SUBPART"
  ],
- "listener-add-event": [
+ "attach": [
   "EVENT_TYPE",
-  "CALLBACK"
+  "RECEIVER",
+  "CALLBACK_NAME"
  ],
- "listener-remove-event": [
+ "detach": [
   "EVENT_TYPE",
-  "CALLBACK"
+  "RECEIVER",
+  "CALLBACK_NAME"
+ ],
+ "notify": [
+  "EVENT_TYPE"
  ],
  "image-placeholder": [
   "IMAGE_NAME"

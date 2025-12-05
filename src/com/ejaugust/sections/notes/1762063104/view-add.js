@@ -1,2 +1,2 @@
 base()
-_.addEventListener("populate", note.listener)
+_.com.ejaugust.attach("populate", note, "listener")

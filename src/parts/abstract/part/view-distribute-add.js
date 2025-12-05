@@ -6,8 +6,7 @@ if (part.dirty) {
   if (part.isOpen)
    part.addView()
 
-  for (const callback of part.callbacks.add)
-   callback()
+  part.notify("add")
  }
 
  for (const subpart of part)

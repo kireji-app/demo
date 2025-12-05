@@ -4,8 +4,7 @@ if (part.dirty && part.justDisabled) {
  if (part.isOpen)
   part.removeView()
 
- for (const callback of part.callbacks.remove)
-  callback()
+ part.notify("remove")
 
  part[".."]?.collectRemoveView()
 }

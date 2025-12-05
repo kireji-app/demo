@@ -9,7 +9,6 @@ if (part.dirty) {
   if (part.isOpen)
    part.removeView()
 
-  for (const callback of part.callbacks.remove)
-   callback()
+  part.notify("remove")
  }
 }

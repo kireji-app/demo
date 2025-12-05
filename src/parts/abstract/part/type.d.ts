@@ -35,17 +35,19 @@ declare interface IPart<TOwner, TSubpart>
  readonly "runtimeReference": string
  /** An optional display name for the part. */
  readonly "title"?: string
- /** Adds a listener that calls the given callback when the given event occurs. */
- readonly addEventListener(EVENT_TYPE: string, CALLBACK): void
- /** Removes the listener that calls the given callback when the given event occurs. */
- readonly removeEventListener(EVENT_TYPE: string, CALLBACK): void
+ /** Registers a listener that calls RECEIVER[CALLBACK_NAME](this) after the event of the given type occurs. */
+ readonly attach(EVENT_TYPE: string, RECEIVER: IPartAny, CALLBACK_NAME: string): void
+ /** Unregisters the listener that calls RECEIVER[CALLBACK_NAME](this) after the event of the given type occurs. */
+ readonly detach(EVENT_TYPE: string, RECEIVER: IPartAny, CALLBACK_NAME: string): void
+ /** Calls receiver[callbackName](this) for every receiver/callback pair registered to the given event type. */
+ readonly notify(EVENT_TYPE: string): void
  /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
  readonly build(): void
  /** Calls loop on this part and then propagates the call leafward to all subparts. */
  readonly distributeLoop(): void
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
  readonly filter(FILTER_FUNCTION: (subpart: TSubpart, index: number, part: TSubpart) => TSubpart): TSubpart[]
- /** Perofrms MAP_FUNCTION on every subpart of the part. */
+ /** performs MAP_FUNCTION on every subpart of the part. */
  readonly forEach(MAP_FUNCTION: (subpart: TSubpart, index: number, part: TSubpart) => void): void
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
  readonly includes(SUBPART: TSubpart): boolean
@@ -102,7 +104,7 @@ declare interface IPart<TOwner, TSubpart>
   *  *Note: There is no* `_[".."]`. */
  readonly "..": TOwner
  /** The record of all event callbacks currently attached to the part. */
- readonly callbacks: Record<string, Set<Function>>
+ readonly callbacks: Record<string, Record<string, [target: IPartAny, callbackName: string]>>
  /** The number of routes the part has, used heavily to compute routing across the user space. */
  readonly cardinality: bigint
  /** The difference between the current routeID and the previous one. */
@@ -166,7 +168,7 @@ declare interface IPart<TOwner, TSubpart>
   * All runtime properties are added using this method.
   * 
   * No property descriptor should have its "enumerable" property set to true, as this would make the property appear to be a serialized property, which can only be added by adding a new file into the part's repository folder. */
- readonly define(propertyDescriptorMap: PropertyDescriptorMap): IPart<TOwner, TSubpart>
+ readonly define(propertyDescriptorMap: PropertyDescriptorMap): this
 }
 
 declare type IPartAny =
@@ -186,3 +188,9 @@ declare function recurse(...args): any
  * 
  * *Available within distributeRouteID, setRouteID and updateRouteID methods only.*  */
 declare const ROUTE_ID: bigint
+/** The part on which an event occurred.*
+ * 
+ * **where available as an argument passed to a part listener callback.* */
+declare const SENDER: IPartAny
+/** If on the client, returns whether or not the server-rendered view has been taken over by the client-side MVC framework. */
+declare const hydrated: boolean | null

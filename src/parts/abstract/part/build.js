@@ -13,9 +13,9 @@ part.define({
  cardinality: { value: 1n, configurable: true },
  callbacks: {
   value: {
-   add: new Set(),
-   populate: new Set(),
-   remove: new Set(),
+   add: {},
+   populate: {},
+   remove: {},
   }
  }
 })

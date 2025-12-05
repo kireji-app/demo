@@ -1,1 +1,1 @@
-_.removeEventListener("populate", note.listener)
+_.detach("populate", note, "listener")

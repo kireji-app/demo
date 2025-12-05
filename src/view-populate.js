@@ -1,1 +1,1 @@
-addressBar.notify()
+addressBar.update()

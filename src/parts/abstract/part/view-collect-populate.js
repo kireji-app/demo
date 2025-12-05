@@ -8,7 +8,6 @@ if (part.dirty) {
   if (part.isOpen)
    part.populateView()
 
-  for (const callback of part.callbacks.populate)
-   callback()
+  part.notify("populate")
  }
 }

@@ -1,2 +1,2 @@
 base()
-_.addEventListener("populate", note.listener)
+_.attach("populate", note, "listener")

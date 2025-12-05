@@ -1,6 +1,6 @@
 {
  "extends": "facet",
- "notify": [],
+ "update": [],
  "push": [],
  "route-use": []
 }

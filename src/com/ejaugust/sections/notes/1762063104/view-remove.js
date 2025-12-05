@@ -1,1 +1,1 @@
-_.removeEventListener("populate", note.listener)
+_.com.ejaugust.detach("populate", note, "listener")
