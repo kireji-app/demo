@@ -624,7 +624,7 @@ function ƒ(_) {
  verbosity: 100,
  // TODO: Fix source mapping bugs.
  mapping: false,
- change: "major",
+ change: "patch",
  hangHydration: 0,
  defaultApplicationHost: "kireji.app",
 })
