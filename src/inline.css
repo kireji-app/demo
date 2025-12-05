@@ -2,9 +2,9 @@
 *::before,
 *::after {
  box-sizing: border-box;
- -webkit-user-select: none;
- -ms-user-select: none;
- user-select: none;
+ -webkit-user-select: inherit;
+ -ms-user-select: inherit;
+ user-select: inherit;
 }
 
 [tabIndex] {
@@ -40,6 +40,9 @@ body {
  color: var(--fg);
  background: var(--bg);
  image-rendering: pixelated;
+ user-select: none;
+ -webkit-user-select: none;
+ -ms-user-select: none;
 }
 
 wallpaper- {
@@ -168,6 +171,8 @@ menu-button {
  margin: 0;
  border: none;
  color: inherit;
+ font-family: inherit;
+ line-height: inherit;
 }
 
 task-bar>menu-button {
@@ -216,10 +221,6 @@ sidebar- {
  flex: 1 1;
 }
 
-/*.marks {
- color: var(--accent);
-}*/
-
 .part-icon {
  height: var(--icon-size);
  width: var(--icon-size);
@@ -241,17 +242,8 @@ task-bar {
  display: flex;
 }
 
-task-bar>.btn {
+task-bar>button {
  width: var(--icon-size);
-}
-
-task-bar>.btn:hover {
- color: var(--accent);
-}
-
-button:hover,
-menu-button:hover {
- color: var(--accent);
 }
 
 flex-spacer {

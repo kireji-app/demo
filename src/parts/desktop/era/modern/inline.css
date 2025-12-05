@@ -5,7 +5,8 @@ body {
  --icon-size: 29px;
  --spacing: 14px;
  --task-bar-height: calc(var(--icon-size) + 2 * var(--spacing));
- font: 13px var(--system-ui);
+ --default-font-size: 13px;
+ font: var(--default-font-size) var(--system-ui);
 }
 
 #color-control,
@@ -59,6 +60,11 @@ menu-button {
  line-height: var(--icon-size);
  cursor: pointer;
  font-size: calc(var(--icon-size) * 1.2);
+}
+
+button:hover,
+menu-button:hover {
+ color: var(--accent);
 }
 
 menu-button>img {

@@ -95,7 +95,8 @@ scroll-bar>thumb- {
 }
 
 #settings>*:focus>.label::after {
- border: 1px dotted var(--bg-un-mode-est);
+ border: 1px dotted white;
+ mix-blend-mode: difference;
  content: "";
  position: absolute;
  left: 0;
@@ -141,7 +142,7 @@ scroll-bar>thumb- {
 }
 
 .task {
- font: 11px var(--system-ui);
+ font: var(--default-font-size) var(--system-ui);
  position: relative;
  height: 100%;
  margin: 0;
@@ -162,15 +163,33 @@ body {
  --icon-size: var(--task-bar-height);
  --deep-inset:
   inset -1px -1px var(--bg-light-er),
-  inset 1px 1px var(--bg-dark-er),
-  inset -2px -2px var(--bg-light),
-  inset 2px 2px var(--bg-dark);
+  inset 1px 1px var(--bg-dark),
+  inset -2px -2px var(--bg-light-est),
+  inset 2px 2px black;
+ --outset:
+  inset -1px -1px black,
+  inset 1px 1px var(--bg-light-est),
+  inset -2px -2px var(--bg-dark);
  --deep-outset:
-  inset -1px -1px var(--bg-dark-er),
+  inset -1px -1px black,
   inset 1px 1px var(--bg-light-er),
   inset -2px -2px var(--bg-dark),
-  inset 2px 2px var(--bg-light);
- font: 11px / 16px var(--system-ui);
+  inset 2px 2px var(--bg-light-est);
+ --default-font-size: 11px;
+ font: var(--default-font-size) var(--system-ui);
+}
+
+body.dark {
+ --deep-inset:
+  inset -1px -1px var(--bg-light),
+  inset 1px 1px var(--bg-dark),
+  inset -2px -2px var(--bg-light-er),
+  inset 2px 2px black;
+ --deep-outset:
+  inset -1px -1px black,
+  inset 1px 1px var(--bg-light),
+  inset -2px -2px var(--bg-dark),
+  inset 2px 2px var(--bg-light-er);
 }
 
 sidebar- {
@@ -182,7 +201,7 @@ sidebar- {
  padding: 3px 3px 3px 24px;
  background: var(--bg);
  text-align: left;
- box-shadow: inset -1px -1px var(--bg-dark-er), inset 1px 1px var(--bg-light), inset -2px -2px var(--bg-dark), inset 2px 2px var(--bg-light-er)
+ box-shadow: var(--deep-outset);
 }
 
 sidebar-::after {
@@ -207,7 +226,7 @@ sidebar-::after {
  width: 21px
 }
 
-sidebar- hr {
+hr {
  height: 2px;
  border-top: 1px solid var(--bg-dark);
  border-bottom: 1px solid var(--bg-light-er);
@@ -226,7 +245,8 @@ sidebar- [disabled] {
 }
 
 .task:focus::after {
- border: 1px dotted var(--bg-un-mode-est);
+ border: 1px dotted white;
+ mix-blend-mode: difference;
  content: "";
  position: absolute;
  margin: 3px;
@@ -238,7 +258,7 @@ sidebar- [disabled] {
 }
 
 .task.open {
- font: bold 11px var(--system-ui);
+ font: bold var(--default-font-size) var(--system-ui);
  padding: 4px 2px 2px;
  box-shadow: inset -1px -1px var(--bg-light-er), inset 1px 1px var(--bg-dark-er), inset -2px -2px var(--bg-light), inset 2px 2px var(--bg-dark);
 }
@@ -324,7 +344,7 @@ task-bar>menu-button {
  flex-flow: row nowrap;
  gap: 3px;
  border: none;
- font: bold 11px / 16px var(--system-ui);
+ font: bold var(--default-font-size) / 16px var(--system-ui);
  padding: 3px 4px 2px;
  text-align: left;
  background: var(--bg);
@@ -348,7 +368,8 @@ desktop-icon .label {
 
 menu-button:focus::before,
 desktop-icon:focus .label::before {
- border: 1px dotted var(--bg-un-mode-est);
+ border: 1px dotted white;
+ mix-blend-mode: difference;
  content: "";
  position: absolute;
  margin: 3px;

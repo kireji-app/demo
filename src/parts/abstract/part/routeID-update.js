@@ -5,7 +5,7 @@ if (typeof ROUTE_ID !== "bigint" || ROUTE_ID < -1n)
  throw new Error(`Route ID is invalid. ` + part.host)
 
 if (ROUTE_ID >= part.cardinality)
- throw new Error(`Route ID (${ROUTE_ID}) out of range (${part.cardinality}). ` + part.host)
+ throw new Error(`Route ID (${ROUTE_ID}) out of range (max = ${part.cardinality - 1n}). ` + part.host)
 
 part.previousRouteID = part.routeID
 part.routeID = ROUTE_ID
