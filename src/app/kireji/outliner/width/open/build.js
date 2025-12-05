@@ -1,3 +1,3 @@
 part.define({
- cardinality: { value: 896n }
+ cardinality: { value: 385n } // + width.min = max width
 })

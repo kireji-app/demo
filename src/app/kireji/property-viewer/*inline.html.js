@@ -1,3 +1,3 @@
 return "<property-viewer>" + propertyViewer.scroller.wrap(
- ["basic", "hash", "properties", "images", "files"].map(word => `<section id=info-${word}>${propertyViewer[`info-${word}.html`]}</section>`).join("")
+ propertyViewer[`${tabGroup.openTabs.length ? (tabGroup.selectedTab.filename ? "file" : "summary") : "empty"}-view.html`]
 ) + "</property-viewer>"

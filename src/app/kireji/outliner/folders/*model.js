@@ -1,10 +1,6 @@
-const openFolders = []
+const model = []
 
-for (let i = 0; i < folders.folderParts.length; i++) {
- const folderPart = folders.folderParts[i]
- const toggleBit = 1n << BigInt(i)
- if ((toggleBit & folders.routeID) > 0n)
-  openFolders.push(folderPart.host)
-}
+for (const openPart of folders.openParts)
+ model.push(openPart.host)
 
-return openFolders
+return model

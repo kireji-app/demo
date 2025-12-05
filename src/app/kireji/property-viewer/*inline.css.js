@@ -1,1 +1,1 @@
-return propertyViewer.scroller["inline.css"] + propertyViewer["static.css"]
+return scroller["inline.css"] + propertyViewer["static.css"] + tabGroup["inline.css"]

@@ -1,0 +1,13 @@
+{
+ "HTML-render-tab": [
+  "TAB_PART",
+  "TAB_FILENAME",
+  "TAB_INDEX"
+ ],
+ "routeID-get-permutation": [
+  "TABS"
+ ],
+ "listener": [
+  "SENDER"
+ ]
+}

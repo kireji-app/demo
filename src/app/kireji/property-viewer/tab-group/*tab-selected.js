@@ -1,0 +1,1 @@
+return tabGroup.openTabs.length ? tabGroup.openTabs[tabGroup.activeTab] : null

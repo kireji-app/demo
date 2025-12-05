@@ -3,6 +3,7 @@ const closing = triggerContainer.hasAttribute("open")
 
 let toggleMask = 0n
 let toggleElements = new Set([ELEMENT])
+const triggerPart = outliner.folders.folderParts[FOLDER_INDEX]
 
 if (["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo)) {
  function gatherRecursively(part) {
@@ -13,6 +14,12 @@ if (["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo)) {
 
   toggleMask |= 1n << BigInt(folderIndex)
 
+  if (closing) {
+   if (folders.openParts.has(part))
+    folders.openParts.delete(part)
+  } else if (!folders.openParts.has(part))
+   folders.openParts.add(part)
+
   for (const subpart of part)
    gatherRecursively(subpart)
 
@@ -21,10 +28,14 @@ if (["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo)) {
   const svgElement = document.querySelector(`part-outliner summary[data-index="${instanceIndex}"]>svg`)
   toggleElements.add(svgElement)
  }
- const triggerPart = outliner.folders.folderParts[FOLDER_INDEX]
  gatherRecursively(triggerPart)
 } else {
  toggleMask = 1n << BigInt(FOLDER_INDEX)
+ if (closing) {
+  if (folders.openParts.has(triggerPart))
+   folders.openParts.delete(triggerPart)
+ } else if (!folders.openParts.has(triggerPart))
+  folders.openParts.add(triggerPart)
 }
 
 for (const element of toggleElements) {
@@ -34,5 +45,9 @@ for (const element of toggleElements) {
 ${closing ? `<line x1="0" y1="-0.41" x2="0" y2="0.41" stroke-width="0.2" stroke-linecap="round" />` : ``}`
 }
 
-const newRoute = closing ? ~toggleMask & outliner.folders.routeID : toggleMask | outliner.folders.routeID
-outliner.folders.setRouteID(newRoute)
+outliner.folders.updateRouteID(closing ? ~toggleMask & outliner.folders.routeID : toggleMask | outliner.folders.routeID)
+outliner.collectRouteID([outliner.folders])
+outliner.collectPopulateView()
+outliner.notify("populate")
+outliner.distributeClean()
+outliner[".."].collectClean()

@@ -1,0 +1,264 @@
+#tab-group {
+ position: absolute;
+ z-index: 10;
+ top: 0;
+ margin: 0;
+ font-weight: 300;
+ background-color: var(--bg-mode-er);
+ line-height: var(--line-height);
+ font-size: calc(var(--line-height) * 2 / 3);
+ white-space: pre;
+ text-overflow: ellipsis;
+ right: 0;
+ left: var(--outliner-width);
+ padding: 0;
+ display: flex;
+ flex-wrap: nowrap;
+ flex-direction: row;
+ overflow: hidden;
+ overflow-x: auto;
+ scrollbar-width: none;
+ overscroll-behavior: none;
+ height: var(--header-height);
+}
+
+#tab-group::-webkit-scrollbar {
+ display: none;
+}
+
+#tab-group>svg {
+ height: var(--line-height);
+ width: var(--line-height);
+ stroke: var(--fg-mode-er);
+ margin: 0;
+ fill: none;
+ border: none;
+ cursor: pointer;
+ outline: none;
+}
+
+#tab-group>svg:hover {
+ stroke: var(--fg-mode);
+ background-color: var(--bg-fade-2);
+}
+
+#tab-group:empty {
+ display: none;
+}
+
+tab- {
+ height: fit-content;
+ white-space: pre;
+ text-overflow: ellipsis;
+ overflow: hidden;
+ display: flex;
+ flex-direction: row;
+ flex-wrap: nowrap;
+ gap: calc(var(--spacing) / 3);
+ height: var(--header-height);
+ position: relative;
+ background-color: transparent;
+ color: var(--fg);
+ flex: 0 0 fit-content;
+ line-height: var(--line-height);
+}
+
+body.modern tab- button:hover {
+ color: var(--fg);
+}
+
+tab- .tab-button {
+ font-size: var(--default-font-size);
+ font-weight: 400;
+ height: unset;
+ padding-left: calc(var(--spacing) / 1.5);
+ padding-right: var(--header-height);
+ display: flex;
+ flex-direction: row;
+ flex-wrap: nowrap;
+ gap: calc(var(--spacing) / 3);
+}
+
+tab- .close-tab {
+ position: absolute;
+ text-align: center;
+ font-size: var(--default-font-size);
+}
+
+body.modern tab- .close-tab {
+ right: calc((var(--header-height) - var(--line-height)) / 2);
+ top: calc((var(--header-height) - var(--line-height)) / 2);
+ width: var(--line-height);
+ height: var(--line-height);
+}
+
+body.modern tab- .close-tab:hover {
+ background-color: var(--bg-light-er);
+}
+
+body.modern tab-[data-selected] .close-tab:hover {
+ background-color: var(--bg-light-est);
+}
+
+tab- button:focus {
+ outline: none;
+}
+
+body.modern #tab-group {
+ box-shadow:
+  inset 0 -2px 0 -1px var(--bg-un-mode),
+  inset -2px 0 0 -1px var(--bg-un-mode),
+  inset 0 2px 0 -1px var(--bg-un-mode);
+}
+
+body.modern.dark tab-:not([data-selected]):hover {
+ background-color: var(--bg-mode);
+}
+
+body.modern.dark tab-[data-selected] {
+ background-color: var(--bg-mode);
+}
+
+body.modern.light tab-:is([data-selected], :not([data-selected]):hover) {
+ background-color: var(--bg-light-est);
+}
+
+body.modern tab- {
+ box-shadow:
+  inset 0 -2px 0 -1px var(--bg-un-mode),
+  inset 0 2px 0 -1px var(--bg-un-mode),
+  inset -2px 0 0 -1px var(--bg-un-mode);
+}
+
+body.modern tab-[data-selected] {
+ box-shadow:
+  inset 0 3px 0 -1px var(--accent),
+  inset -2px 0 0 -1px var(--bg-un-mode);
+}
+
+body.modern tab- .tab-button {
+ line-height: var(--header-height);
+}
+
+body.modern tab- .tab-path {
+ font-size: calc(var(--line-height) * 1 / 2);
+ font-weight: 200;
+ display: inline-block;
+}
+
+body.modern tab- .close-tab {
+ border-radius: 50%;
+}
+
+body.vintage #tab-group {
+ left: calc(2px + var(--outliner-width));
+ right: 6px;
+ top: 4px;
+ height: calc(4px + var(--header-height));
+ background: transparent;
+ padding: 0 2px;
+}
+
+body.vintage tab- .close-tab {
+ right: 4px;
+ top: 3px;
+ width: calc(var(--header-height) - 5px);
+ height: calc(var(--header-height) - 5px);
+ line-height: calc(var(--header-height) - 5px);
+}
+
+body.vintage tab- .close-tab:hover {
+ box-shadow: var(--outset);
+}
+
+body.vintage tab-[data-selected] .close-tab {
+ right: 6px;
+ top: 5px;
+}
+
+body.vintage tab-[data-selected] {
+ height: calc(var(--header-height) + 4px);
+ border-bottom-right-radius: 3px;
+ border-bottom-left-radius: 3px;
+ margin-left: -2px;
+ margin-right: -2px;
+ z-index: 2;
+}
+
+body.vintage tab- .tab-path {
+ display: none;
+}
+
+body.vintage tab-:not([data-selected]) {
+ height: var(--header-height);
+ position: relative;
+ top: 2px;
+}
+
+body.vintage tab-[data-selected] .tab-button {
+ height: calc(var(--header-height) + 4px);
+ padding-top: 2px;
+ padding-right: calc(var(--header-height) + 10px);
+ padding-left: calc(var(--spacing) / 1.5 + 2px);
+}
+
+body.vintage tab- .tab-button {
+ padding-right: calc(var(--header-height) + 8px);
+}
+
+body.vintage tab- .tab-button {
+ border-top-left-radius: 2px;
+ border-top-right-radius: 2px;
+ background-color: var(--bg);
+ line-height: var(--header-height);
+}
+
+body.vintage tab- .tab-button {
+ box-shadow:
+  inset -2px 0 0 -1px black,
+  inset 1px 1px 0 0 var(--bg-light-est),
+  inset -3px 0 0 -1px var(--bg-dark);
+}
+
+body.vintage tab- .close-tab:active {
+ box-shadow: var(--deep-inset);
+}
+
+body.dark.vintage tab- .tab-button {
+ box-shadow:
+  inset -2px 0 0 -1px black,
+  inset 1px 1px 0 0 var(--bg-light-er),
+  inset -3px 0 0 -1px var(--bg-dark);
+}
+
+body.vintage tab- button:focus:after {
+ border-top-left-radius: 1px;
+ border-top-right-radius: 1px;
+ border: 1px dotted white;
+ mix-blend-mode: difference;
+ content: "";
+ position: absolute;
+ left: 4px;
+ right: 3px;
+ top: 4px;
+ bottom: 3px;
+ pointer-events: none;
+}
+
+body.vintage tab- .close-tab:focus:after {
+ left: 2px;
+ right: 2px;
+ top: 2px;
+ bottom: 2px;
+}
+
+body.vintage tab- .tab-button:focus:after {
+ right: calc(var(--header-height) + 4px);
+}
+
+body.vintage tab-:not([data-selected]) .tab-button:focus:after {
+ left: 2px;
+ right: calc(var(--header-height) + 2px);
+ top: 2px;
+ bottom: 1px;
+}

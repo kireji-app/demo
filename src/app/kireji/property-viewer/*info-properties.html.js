@@ -1,41 +1,54 @@
-const propertyKeys = new Set()
-const recordTable = []
-
-for (const id of selectedPart.Property.ids) {
-
- /** @type {Property} */
- const property = selectedPart.Property[id]
-
- if (!Object.hasOwn(selectedPart, property.key))
-  continue
-
- if (/\.(png|gif)(\.js)?$/.test(property.filename))
-  continue
-
- propertyKeys.add(property.filename)
- propertyKeys.add(property.key)
-
-
- const isNew = !(selectedPart.prototype && (property.key in selectedPart.prototype))
-
- recordTable.push(`<details><summary>${isNew ? "<b>" : ""}<code>${property.modifiers ?? ""}${property.niceName}${property.argumentString ?? "()"}</code>${isNew ? "</b>" : ""}</summary>` +
-  `<pre>${sanitizeAttr(property.content)}</pre></details>`)
+function getLinkHTML(part, filename, modifiers = "", niceName = `"${filename}"`, argumentString = "") {
+ return `<div><a href=# onclick="${propertyViewer.runtimeReference}.open(event,${allParts.indexOf(part)},${part.filenames.indexOf(filename)})">&nbsp;&nbsp;${filename in Object.getPrototypeOf(part) ? "<i>" : ""}${modifiers ?? ""}${niceName}${argumentString}${filename in Object.getPrototypeOf(part) ? "</i>" : ""}</a></div><div>${part === selectedPart ? (
+  // The number of whitespace characters before the filename entry in the table.
+  part.domains.length + 1 +
+  // The number of characters taken up by the filename itself, including quotes.
+  serialize(filename).length +
+  // The length of the colon and space linking the key to the value.
+  2 +
+  // The length of the record itself, including escape characters and outer quotes.
+  serialize(part[filename]).length +
+  // The comma separating this record from siblings and the following line break.
+  2).toLocaleString() + " bytes" : ""}</div>`
 }
 
-for (const filename of selectedPart.filenames) {
+const records = []
+const propertyNames = new Set()
+let owner = selectedPart
+while (owner !== Object.prototype) {
+ records.push(`<div><b>${owner === selectedPart ? "" : `from <a href=# onclick="${propertyViewer.runtimeReference}.open(event,${allParts.indexOf(owner)})">`}${owner === _ ? "ecosystem root" : owner.host}${owner === selectedPart ? "" : "</a>"}</b></div><div>${owner === selectedPart ? `<b>${serialize(owner).length.toLocaleString()} bytes</b>` : ""}</div>`)
 
- if (propertyKeys.has(filename))
-  continue
+ for (const id of owner.Property.ids) {
 
- if (/\.(png|gif)(\.js)?$/.test(filename))
-  continue
+  /** @type {Property} */
+  const property = owner.Property[id]
 
- propertyKeys.add(filename)
+  if (!Object.hasOwn(owner, property.key))
+   continue
 
- const isNew = !(selectedPart.prototype && (filename in selectedPart.prototype))
+  if (propertyNames.has(property.filename))
+   continue
 
- recordTable.push(`<details><summary>${isNew ? "<b>" : ""}<code>"${filename}"</code>${isNew ? "</b>" : ""}</summary>` +
-  `<pre>${sanitizeAttr(selectedPart[filename])}</pre></details>`)
+  propertyNames.add(property.filename)
+  propertyNames.add(property.key)
+
+  records.push(getLinkHTML(owner, property.filename, property.modifiers, property.niceName, property.argumentString ?? "()"))
+ }
+
+ for (const filename of owner.filenames) {
+
+  if (propertyNames.has(filename))
+   continue
+
+  propertyNames.add(filename)
+
+  records.push(getLinkHTML(owner, filename))
+ }
+
+ owner = Object.getPrototypeOf(owner)
 }
 
-return "<h2>Serialized Properties</h2>" + recordTable.join("")
+return (
+ "<h2>Serialized Properties</h2>" +
+ '<part-data>' + records.join("") + "</part-data>"
+)

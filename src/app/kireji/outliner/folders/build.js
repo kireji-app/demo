@@ -11,5 +11,6 @@ for (let i = 0; i < allParts.length; i++) {
 
 folders.define({
  cardinality: { value: 2n ** BigInt(folderParts.length) },
- folderParts: { value: folderParts }
+ folderParts: { value: folderParts },
+ openParts: { value: new Set() }
 })
