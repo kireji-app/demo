@@ -1,7 +1,16 @@
 {
  "app": {
   "kireji": {
-   "property-viewer": {},
+   "property-viewer": {
+    "tab-group": {
+     "activeTab": 0,
+     "openTabs": [
+      {
+       "host": "kireji.app"
+      }
+     ]
+    }
+   },
    "outliner": {
     "folders": [
      "",
@@ -26,7 +35,8 @@
  },
  "parts": {
   "desktop": {
-   "color": "light"
+   "color": "light",
+   "era": "vintage"
   }
  }
 }
