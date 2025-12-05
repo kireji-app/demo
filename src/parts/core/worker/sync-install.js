@@ -13,7 +13,7 @@ globalThis.onfetch = event => {
    throw "Unsupported Cross-Version Service Worker Request"
 
   const supportedFiles = {
-   [`${_.codename}.js`]: "text/javascript",
+   "build.js": "text/javascript",
    "manifest.json": "application/json"
   }
 
@@ -22,8 +22,8 @@ globalThis.onfetch = event => {
   _.setRoute((isSupportedFile || !filename) ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
 
   // color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
-
-  event.respondWith(new Response(_[isSupportedFile ? filename : "index.html"], {
+  const body = _[isSupportedFile ? filename : "index.html"]
+  event.respondWith(new Response(body, {
    status: !isSupportedFile && _.application.prototype.host === "error.abstract.parts" ? _.application.status : 200,
    headers: {
     "content-type": (isSupportedFile ? supportedFiles[filename] : "text/html") + ';charset=UTF-8',

@@ -1,8 +1,7 @@
 {
  "extends": "facet",
  "async-bootstrap": [
-  "VERSION",
-  "CODENAME"
+  "VERSION"
  ],
  "async-take-control": []
 }

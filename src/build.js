@@ -136,8 +136,7 @@ function ƒ(_) {
     _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
     _.version = (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().match(/^\s*(\d+\.\d+\.\d+)/)[1].split("."), _.change),
     _.modified = _.$('git show -s --format=%ci HEAD').toString().trim(),
-    _.ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`,
-    _.codename ??= "kireji"
+    _.ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`
    ),
    "server"
   ),
@@ -601,7 +600,6 @@ function ƒ(_) {
    const landingHash = encodeSegment(landingRouteID)
 
    _.define({
-    built: { value: true },
     landingHash: { value: landingHash },
     landingModel: { value: landingModel },
     landingRouteID: { value: landingRouteID },

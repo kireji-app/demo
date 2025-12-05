@@ -17,9 +17,6 @@
   "PATHNAME",
   "HASH"
  ],
- "pack": [
-  "INCLUDE_EARLY_ASSETS"
- ],
  "early-get-images": [
   "BODY_HTML",
   "HEAD_HTML"

@@ -15,12 +15,12 @@ declare interface IEcosystem
  readonly "verbosity": number
  /** The git branch for this build version. */
  readonly "branch": string
+ /** Returns a packed version of the entire repo as a stand-alone script that boots the ecosystem. */
+ readonly "build.js": string
  /** The hash of the most recent git commit at build time. */
  readonly "gitSHA": string
  /** The automatically generated semantic version number of the current build. */
  readonly "version": string
- /** A string used to name the service worker file when it is fetched by the client (which contains a serialized copy of the repository of the project). */
- readonly "codename": string
  /** The automatically generated HTTP identifier for this build. */
  readonly "ETag": string
  /** The current unix timestamp, acquired using the high-precision performance.now() + performance.timeOrigin. */
@@ -33,8 +33,6 @@ declare interface IEcosystem
  readonly "index.html": string
  /** The static, global css that should apply across every application and page in the ecosystem. */
  readonly "inline.css": string
- /** The packed script representing the entire repository, ready to be deployed to the client and service worker. */
- readonly "kireji.js": string
  /** The current application's PWA manifest. */
  readonly "manifest.json": string
  /** A JSON object serializing the desired landing model of the ecosystem. */
@@ -45,8 +43,6 @@ declare interface IEcosystem
  readonly getImagesEarly(BODY_HTML: string): string
  /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
  readonly go(ANCHOR: string, EVENT: event): void
- /** Returns a packed version of the entire repo, optionally including early-preview images that are designed for faster loading during SSR (but don't need to be packed into the service worker). */
- readonly pack(INCLUDE_EARLY_ASSETS: boolean): string
  /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname(CANONICAL_ROUTE: string): string
  /** Sets the configuration space to match the given request url string. */
@@ -279,6 +275,8 @@ declare function encodePathname(routeID: bigint): string
 declare function encodeSegment(routeID: bigint): string
 /** Returns a string representing the given bigint in scientific notation (a coefficient times 10 to some power). When html is true, the power will be wrapped in a superscript tag. Otherwise, it will use unicode superscript characters. */
 declare function scientific(x: bigint, html: boolean = false): string
+/** Makes the given text html-friendly by escaping special characters using ampersand codes. */
+declare function sanitizeAttr(input: string): string
 /** The immutable list of runtime instances for the root space, in order of when they were fully hydrated. */
 declare const instances: IPartAny[]
 /** The immutable list of every part in the root space, in order of when they were fully hydrated. */

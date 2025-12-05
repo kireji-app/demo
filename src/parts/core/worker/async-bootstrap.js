@@ -1,4 +1,4 @@
-const registration = await nav.serviceWorker.register(`/${VERSION}/${CODENAME}.js`, {
+const registration = await nav.serviceWorker.register(`/${VERSION}/build.js`, {
  updateViaCache: "all",
  scope: `/${VERSION}/`
 })
@@ -30,6 +30,6 @@ const controller = nav.serviceWorker.controller ?? await new Promise(resolve => 
 const oldScript = document.body.querySelector("script")
 const newScript = document.createElement("script")
 
-newScript.setAttribute("src", `/${VERSION}/${CODENAME}.js`)
+newScript.setAttribute("src", `/${VERSION}/build.js`)
 newScript.setAttribute("defer", "")
 oldScript.replaceWith(newScript)
