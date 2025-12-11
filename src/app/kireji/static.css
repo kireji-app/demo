@@ -1,17 +1,15 @@
 wallpaper- {
  font: inherit;
- /* --line-height: calc(var(--spacing) * 1.75);
-  --icon-size: calc(var(--line-height) * 2 / 3); */
- --line-height: 20px;
- --icon-size: 16px;
- --header-height: calc(var(--line-height) + var(--spacing) / 1.5);
 }
 
 body.modern wallpaper- {
  --line-height: 26px;
  --icon-size: 20px;
+ --header-height: calc(var(--line-height) + var(--spacing) / 1.5);
 }
 
 body.vintage wallpaper- {
+ --line-height: 20px;
+ --icon-size: 16px;
  --header-height: calc(var(--line-height) + 2px);
 }

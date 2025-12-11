@@ -39,7 +39,6 @@ body {
  font-synthesis: weight style;
  color: var(--fg);
  background: var(--bg);
- image-rendering: pixelated;
  user-select: none;
  -webkit-user-select: none;
  -ms-user-select: none;

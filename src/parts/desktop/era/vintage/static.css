@@ -177,6 +177,7 @@ body {
   inset 2px 2px var(--bg-light-est);
  --default-font-size: 11px;
  font: var(--default-font-size) var(--system-ui);
+ image-rendering: pixelated;
 }
 
 body.dark {

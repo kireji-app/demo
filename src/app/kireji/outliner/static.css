@@ -101,12 +101,7 @@ part-outliner svg {
 outliner-spacer {
  width: calc(var(--line-height) / 2);
  border-radius: 0;
- transition: border 0.3s ease;
- border-right: 1px solid var(--bg);
-}
-
-part-outliner:hover outliner-spacer {
- border-color: var(--bg-un-mode);
+ border-right: 1px solid var(--bg-un-mode);
 }
 
 outliner-spacer:has(+ img) {

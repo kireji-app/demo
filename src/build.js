@@ -330,7 +330,7 @@ function ƒ(_) {
       domains = host.split(".")
       part = domains.reduceRight((currentFolder, name, index) => {
        if (!currentFolder[name])
-        throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the ecosystem root"} (trying to create ${domains.join(".")}).`)
+        throw new ReferenceError(`There is no part called '${name}' in ${[...domains].slice(index + 1).reverse().join("/") || "the ecosystem"} (trying to create ${domains.join(".")}).`)
        return currentFolder[name]
       }, _)
      } else {

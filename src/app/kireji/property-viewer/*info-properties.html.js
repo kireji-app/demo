@@ -16,7 +16,12 @@ const records = []
 const propertyNames = new Set()
 let owner = selectedPart
 while (owner !== Object.prototype) {
- records.push(`<div><b>${owner === selectedPart ? "" : `from <a href=# onclick="${propertyViewer.runtimeReference}.open(event,${allParts.indexOf(owner)})">`}${owner === _ ? "ecosystem root" : owner.host}${owner === selectedPart ? "" : "</a>"}</b></div><div>${owner === selectedPart ? `<b>${serialize(owner).length.toLocaleString()} bytes</b>` : ""}</div>`)
+ const isSelectedPart = owner === selectedPart
+ records.push(`<div><b>${isSelectedPart ? "" : `from <a href=# onclick="${propertyViewer.runtimeReference}.open(event,${allParts.indexOf(owner)})">`}${owner === _ ? "ecosystem" : owner.host}${isSelectedPart ? "" : "</a>"}</b></div><div>${isSelectedPart ? `<b>${serialize(owner).length.toLocaleString()} bytes</b>` : ""}</div>`)
+
+ if (isSelectedPart)
+  for (const subpart of selectedPart)
+   records.push(`<div><a href=# onclick="${propertyViewer.runtimeReference}.open(event,${allParts.indexOf(subpart)})">&nbsp;&nbsp;<b>${subpart.key}</b></a></div><div><b>${serialize(subpart).length.toLocaleString()} bytes</b></div>`)
 
  for (const id of owner.Property.ids) {
 

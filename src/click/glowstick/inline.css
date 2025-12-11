@@ -13,6 +13,10 @@ wallpaper- {
  touch-action: none;
 }
 
+wallpaper- {
+ image-rendering: pixelated;
+}
+
 world-,
 region- {
  background-color: var(--bg);

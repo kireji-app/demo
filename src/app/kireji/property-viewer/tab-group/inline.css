@@ -63,8 +63,9 @@ tab- {
  line-height: var(--line-height);
 }
 
-body.modern tab- button:hover {
- color: var(--fg);
+tab- img {
+ height: var(--icon-size);
+ margin: calc((var(--header-height) - var(--icon-size)) / 2) 0;
 }
 
 tab- .tab-button {
@@ -83,6 +84,10 @@ tab- .close-tab {
  position: absolute;
  text-align: center;
  font-size: var(--default-font-size);
+}
+
+body.modern tab- button:hover {
+ color: var(--fg);
 }
 
 body.modern tab- .close-tab {

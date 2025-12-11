@@ -12,9 +12,9 @@ return (
    `<hr>` +
    "<part-data>" + (
     "<div>Information</div>" +
-    `<div>${(selectedPart.cardinality - 1n).toString(2).length} <span class=marks>bits</span></div>` +
+    `<div>${(selectedPart.cardinality - 1n).toString(2).length} bits</div>` +
     "<div></div>" +
-    `<div>${toCharms(selectedPart.cardinality, false)} <span class=marks>charms</span></div>`
+    `<div>${toCharms(selectedPart.cardinality, false)} charms</div>`
    ) +
    "</part-data>" +
    `<hr>` +
@@ -22,9 +22,9 @@ return (
     "<div>State</div>" +
     `<div><span id=live-route-id>${selectedPart.routeID.toLocaleString()}</span></div>` +
     "<div></div>" +
-    `<div><span class=marks>"</span><span id=live-route-hash>${encodeSegment(selectedPart.routeID)}</span><span class=marks>"</span></div>`
+    `<div><span id=live-route-hash>${encodeSegment(selectedPart.routeID)}</span></div>`
    ) +
    "</part-data>"
-  ) : "<p>Abstract parts do not contribute directly to the application state.</p>"
+  ) : "<p>Abstract parts do not have a concrete state space.</p>"
  )
 )

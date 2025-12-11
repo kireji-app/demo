@@ -25,6 +25,11 @@ wallpaper-:has(#tab-group:empty) property-viewer>scroller- {
  width: 100%;
 }
 
+#live-route-id,
+#live-route-hash {
+ font-family: var(--system-ui-mono);
+}
+
 #file-viewer {
  margin: 0;
  padding: 0;
@@ -102,6 +107,10 @@ property-viewer>scroller->scroll-content>section>h1 {
 
 #description {
  white-space: pre-wrap;
+}
+
+body.vintage #description {
+ margin: 0;
 }
 
 #part-intro>* {
