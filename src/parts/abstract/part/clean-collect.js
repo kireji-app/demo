@@ -1,2 +1,2 @@
-delete part.dirty
+part.dirty = false
 part[".."]?.collectClean()
