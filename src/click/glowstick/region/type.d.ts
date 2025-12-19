@@ -1,5 +1,6 @@
 declare interface IGlowstickRegion
- extends IMix<IGlowstickWorld, IGlowstickRegionDimension> {
+ extends IMix<IGlowstickWorld, IGlowstickRegionDimension>,
+ IWebComponent {
 
  // Subparts.
  /** A part representing the width range of the region. */
@@ -10,8 +11,6 @@ declare interface IGlowstickRegion
  // Serialized Properties.
  /** The space-separated list of HTML element attributes for this region. */
  readonly "attributes": string
- /** The raw HTML that renders this region in the world. */
- readonly "inline.html": string
  /** The current user position on the x-axis if in the region, -1n otherwise. */
  readonly "xPosition": bigint
  /** The current user position on the y-axis if in the region, -1n otherwise. */

@@ -1,1 +1,0 @@
-return `--outliner-width:${width.arm === width.open ? Number(width.open.routeID) + width.min : 4}px`

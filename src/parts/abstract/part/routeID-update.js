@@ -17,7 +17,7 @@ part.justDisabled = !part.enabled && part.wasEnabled
 part.deltaRouteID = part.routeID - part.previousRouteID
 
 // TODO: Evaluate these cases. Why do they occur?
-// if (part.deltaRouteID === 0n)
-// error(`Reassigned route ID (${part.routeID}) to part.\n ${part[".."] ? `${part[".."].key} {\n  ${part.key} : "${part.host}" // <--- this part \n }` : part.host}`)
+if (part.deltaRouteID === 0n)
+ warn(`Reassigned route ID (${part.routeID}) to part.\n ${part[".."] ? `${part[".."].key} {\n  ${part.key} : "${part.host}" // <--- this part \n }` : part.host}`)
 
 part.dirty = true

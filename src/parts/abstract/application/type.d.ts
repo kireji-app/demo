@@ -31,7 +31,8 @@ declare interface IApplication<TOwner, TFactor>
  readonly translateCanonicalPathname?(PATHNAME: string, HASH?: string): string
 }
 
-declare interface IApplicationDetails {
+declare interface IApplicationDetails
+ extends IWebComponent {
 
  // Serialized Properties.
  /** A string that impacts the way the current page of the application appears in search results. */
@@ -44,12 +45,8 @@ declare interface IApplicationDetails {
  readonly "pathname": string
  /** An optional string of attributes which will be added to the `<wallpaper->` tag of the desktop environment. */
  readonly "attributes"?: string
- /** An optional string representing the style attribute of the `<wallpaper->` tag, which can be used for making quick (quicker than replacing inline.css) changes to css variables. */
+ /** An optional string representing the style attribute of the `<wallpaper->` tag, which can be used for making quick (quicker than replacing part.css) changes to css variables. */
  readonly "style"?: string
- /** The css overrides for the current page of the application. */
- readonly "inline.css": string
- /** The html article content of the current page of the application. */
- readonly "inline.html": string
  /** For SEO, the portion of the "sitemap.xml" file listing this application or application section's available canonical links. */
  readonly "urls.xml"
 }

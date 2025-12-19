@@ -1,0 +1,1 @@
+_.app.kireji.editor.open(EVENT, PART_INDEX)

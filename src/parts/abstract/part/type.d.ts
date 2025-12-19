@@ -29,8 +29,6 @@ declare interface IPart<TOwner, TSubpart>
  readonly "part.json": string
  /** A png icon that can represent the part and - for application parts - used as the application's icon and browser favicon. */
  readonly "part.png": string
- /** A bit of HTML used to generate the property viewer panel for this part in the kireji.app property viewer pane. */
- readonly "property-viewer.html": string
  /** A JavaScript snippet representing global access to the part, available from HTML event handler attributes after hydration. */
  readonly "runtimeReference": string
  /** An optional display name for the part. */
@@ -117,6 +115,8 @@ declare interface IPart<TOwner, TSubpart>
  readonly disabled: boolean
  /** The array of subdomain names corresponding to `part.host` split along ".". */
  readonly domains: string[]
+ /** The set of parts which extend from this part. */
+ readonly inheritors: IPartAny[]
  /** Whether or not the part has a routeID greater than `-1n`. */
  readonly enabled: boolean
  /** The list of static assets for the part whose source code is currently being evaluated. */
@@ -173,6 +173,15 @@ declare interface IPart<TOwner, TSubpart>
 
 declare type IPartAny =
  IPart<IPartAny, IPartAny>
+
+declare interface IWebComponent {
+
+ // Serialized Properties.
+ /** The optional css content of the component, given the current state. */
+ readonly "part.css"?: string
+ /** The optional html content of the component, given the current state. */
+ readonly "part.html"?: string
+}
 
 /** The part instance on which the current script is being called.
  * 

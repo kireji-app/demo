@@ -354,21 +354,24 @@ function ƒ(_) {
        subpartKeys: { value: subpartKeys },
        filenames: { value: filenames },
        domains: { value: domains },
+       inheritors: { value: [] }
       })
       let prototype = null
       if (host === "part.abstract.parts") {
        Object.defineProperty(part, "define", { value(descriptor) { return Object.defineProperties(this, descriptor) } })
+       part.define({ isAbstract: { value: part.manifest.abstract } })
       } else {
        const extendsString = part.manifest.extends ?? "part"
        const relativeStepsBack = extendsString.match(/\.*$/)[0].length
        const typename = relativeStepsBack ? `${extendsString.slice(0, -relativeStepsBack)}.${domains.slice(relativeStepsBack - 1).join(".")}` : extendsString.includes(".") ? extendsString : `${extendsString}.abstract.parts`
        prototype = hydrateRecursive(typename)
-      }
-      const isAbstract = part.manifest.abstract
-      if (prototype) {
-       Object.setPrototypeOf(part.manifest, prototype.manifest)
        Object.setPrototypeOf(part, prototype)
-       part.define({ prototype: { value: prototype } })
+       part.define({
+        prototype: { value: prototype },
+        isAbstract: { value: part.manifest.abstract }
+       })
+       Object.setPrototypeOf(part.manifest, prototype.manifest)
+       prototype.inheritors.push(part)
       }
       const sourceFile = new SourceMappedFile(pathFromRepo, pathToRepo, "compiled-part.js")
       const buildSource = sourceFile.addSource(pathToRepo + "/build.js", ƒ.toString())
@@ -402,14 +405,14 @@ function ƒ(_) {
         property.isView = PROPERTY_ID.startsWith("view-")
         property.isAsync = PROPERTY_ID.startsWith("async-")
         property.isSymbol = PROPERTY_ID.startsWith("symbol-")
-        property.isGenerated = PROPERTY_ID.startsWith("*")
+        property.isGenerated = PROPERTY_ID.endsWith("*")
         property.filename = property.isAlias ? PROPERTY_ID.slice(1) : `${PROPERTY_ID}.js`
         property.content = Object.getOwnPropertyDescriptor(part, property.filename)?.value
         property.niceName = (() => {
          if (PROPERTY_ID.includes("-") || property.isGenerated) {
 
           if (property.isGenerated && (PROPERTY_ID.includes("."))) {
-           property.key = PROPERTY_ID.slice(1)
+           property.key = PROPERTY_ID.slice(0, -1)
            return `["${property.key}"]`
           }
 
@@ -420,7 +423,7 @@ function ƒ(_) {
           }
 
           // First word of kebab-case property name becomes last word of camelCase identifier.
-          const words = PROPERTY_ID.slice(+(property.isGenerated || property.isAlias)).split("-")
+          const words = PROPERTY_ID.slice(property.isAlias ? 1 : 0, property.isGenerated ? -1 : undefined).split("-")
           words.push(words.shift())
           return property.key = camelCase(words)
          }
@@ -483,20 +486,17 @@ function ƒ(_) {
         sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
        }
       }
-      part.define({
-       Property: { value: Property },
-       isAbstract: { value: isAbstract }
-      })
+      part.define({ Property: { value: Property } })
       for (const fn of filenames) {
        if (!fn.includes(".") && fn.includes("-")) {
         Property.ids.add("@" + fn)
-       } else if (fn.endsWith(".js") && (fn.startsWith("*") || fn.startsWith("set-") || fn.startsWith("view-"))) {
+       } else if (fn.endsWith("*.js") || fn.endsWith(".js") && (fn.startsWith("set-") || fn.startsWith("view-"))) {
         Property.ids.add(fn.slice(0, -3))
 
-        if (fn.startsWith("*") && (fn.endsWith(".png.js") || fn.endsWith(".gif.js"))) {
-         if (fn.startsWith("*early-"))
-          earlyImageSources.push([part, fn.slide(7, -3)])
-         imageSources.push([part, fn.slice(1, -3)])
+        if (fn.endsWith(".png*.js") || fn.endsWith(".gif*.js")) {
+         if (fn.startsWith("early-"))
+          earlyImageSources.push([part, fn.slice(6, -4)])
+         imageSources.push([part, fn.slice(0, -4)])
         }
        } else if (fn.endsWith(".png") || fn.endsWith(".gif")) {
         if (fn.startsWith("early-"))
@@ -528,12 +528,9 @@ function ƒ(_) {
        }
        hydrateRecursive(subpart, [subdomain, ...domains])
        subpart.define({ "..": { value: part } })
-       if (subpart.isAbstract) {
-        subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
-        continue
-       }
+       if (subpart.isAbstract) subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
       }
-      if (!isAbstract) instances.push(part)
+      if (!part.isAbstract) instances.push(part)
       allParts.push(part)
      })
 
@@ -624,7 +621,7 @@ function ƒ(_) {
  verbosity: 100,
  // TODO: Fix source mapping bugs.
  mapping: false,
- change: "patch",
+ change: "major",
  hangHydration: 0,
  defaultApplicationHost: "kireji.app",
 })

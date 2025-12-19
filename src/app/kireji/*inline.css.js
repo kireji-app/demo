@@ -1,1 +1,0 @@
-return kirejiApp["static.css"] + outliner["inline.css"] + propertyViewer["inline.css"]

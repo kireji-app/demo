@@ -1,1 +1,0 @@
-return world["inline.html"] + user["inline.html"]

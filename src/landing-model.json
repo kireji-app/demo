@@ -1,7 +1,7 @@
 {
  "app": {
   "kireji": {
-   "property-viewer": {
+   "editor": {
     "tab-group": {
      "activeTab": 0,
      "openTabs": [
@@ -11,14 +11,23 @@
      ]
     }
    },
-   "outliner": {
-    "folders": [
-     "",
-     "app"
-    ],
-    "width": {
-     "open": "_"
-    }
+   "sidebar": {
+    "open": true,
+    "outliner-domains": {
+     "folders": [
+      "",
+      "app"
+     ]
+    },
+    "outliner-types": {
+     "folders": [
+      "part.abstract.parts",
+      "mix.abstract.parts",
+      "application.abstract.parts"
+     ]
+    },
+    "view": "outliner-types",
+    "width": "_"
    }
   }
  },

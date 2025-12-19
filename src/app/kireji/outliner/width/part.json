@@ -1,6 +1,0 @@
-{
- "extends": "match",
- "toggle": [
-  "EVENT"
- ]
-}

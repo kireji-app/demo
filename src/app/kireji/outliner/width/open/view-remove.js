@@ -1,1 +1,0 @@
-wallpaper.removeAttribute("data-has-outliner")

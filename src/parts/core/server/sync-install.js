@@ -65,7 +65,7 @@ const
     status = +(host in _.liveApplications ? 200 : _.applications[host].status)
     const customHeaders = _.applications[host].customHeaders ?? {}
     head = { ...indexHeader, ...customHeaders }
-    body = _['index.html']
+    body = _['part.html']
     logMessage = "Serving Snapshot"
     break respond
    }

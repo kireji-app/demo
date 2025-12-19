@@ -1,0 +1,1 @@
+return `--sidebar-view-width:${sidebar.open.routeID === 0n ? 0 : Number(sidebarWidth.routeID) + sidebarWidth.min}px`

@@ -1,0 +1,1 @@
+return editor["part.html"] + sidebar["part.html"]

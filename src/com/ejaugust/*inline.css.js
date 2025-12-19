@@ -1,1 +1,0 @@
-return _.com.ejaugust.scroller["inline.css"] + ejaugust["static.css"] + "\n" + sections["inline.css"]

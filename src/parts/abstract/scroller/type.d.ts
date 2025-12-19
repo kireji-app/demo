@@ -1,6 +1,7 @@
 /** Controls a stateful vertically scrolling view with a positional cardinality of 10,000. */
 declare interface IScroller<TOwner>
- extends IPart<TOwner, null> {
+ extends IPart<TOwner, null>,
+ IWebComponent {
 
  // Serialized Properties.
  /** A number between 0 and 1 obtained by dividing the scroller's current route ID by it's highest possible route ID (one less than its cardinality). */
@@ -8,7 +9,7 @@ declare interface IScroller<TOwner>
  /** The stylesheet which tells the scroller's container to move to the right scroller position before hydration.
   * 
   * After hydration, the scroller's position is set by script and the given CSS becomes inert. */
- readonly "inline.css": string
+ readonly "part.css": string
  /** The CSS selector query that uniquely idenfies the scroller's container in the page. */
  readonly "query": string
  /** The listener which is called by the ResizerObserver to track scrolling. */

@@ -1,0 +1,1 @@
+return sidebar["static.css"] + sidebar.width["part.css"]

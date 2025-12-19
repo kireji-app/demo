@@ -1,0 +1,26 @@
+{
+ "abstract": true,
+ "extends": "mix",
+ "itemHTML-recursive": [
+  "SUBJECT",
+  "DEPTH",
+  "IS_LAST_OF_TYPE"
+ ],
+ "toggle": [
+  "ELEMENT",
+  "FOLDER_INDEX"
+ ],
+ "children-get": [
+  "SUBJECT"
+ ],
+ "selected-is": [
+  "SUBJECT"
+ ],
+ "open": [
+  "EVENT",
+  "PART_INDEX"
+ ],
+ "label-get": [
+  "SUBJECT"
+ ]
+}

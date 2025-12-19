@@ -1,9 +1,8 @@
 declare interface IUpdateManager
- extends IFacet<ICore> {
+ extends IFacet<ICore>,
+ IWebComponent {
 
  // Serialized Properties.
- /** The HTML which renders the update button in the desktop application menu. */
- readonly "inline.html": string
  /** Reacts to clicking the update button.
   * 
   * If an update is available, gracefully fades the screen, locally stores the current application data model (using the nonce as a key) and then navigates to the new scope.

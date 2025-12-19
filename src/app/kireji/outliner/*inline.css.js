@@ -1,1 +1,0 @@
-return outliner.scroller["inline.css"] + outliner["static.css"] + width["inline.css"]

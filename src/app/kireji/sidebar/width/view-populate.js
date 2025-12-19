@@ -1,0 +1,1 @@
+wallpaper.setAttribute("style", sidebarWidth.style)

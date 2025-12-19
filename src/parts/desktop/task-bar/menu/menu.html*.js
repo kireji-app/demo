@@ -1,0 +1,20 @@
+return `
+<task-menu style="${menu.arm.styleAttr}" onclick="${menu.runtimeReference}.go()">
+ <task-sidebar onclick="self._?.noop(event)">
+ <ul id=application-control>${Object.entries(_.liveApplications).map(([host, application]) => {
+ return `
+  <li class=task-link${application === _.application ? ` data-here` : ""}>
+   <a href=https://${host} onclick=self._?.setApplication(event,this)>
+    <img src="${application.placeholderImage("part.png")}" class=part-icon />
+    <span class=label>${application.titleMenu ?? application.title}</span>
+   </a>
+  </li>`
+}).join("")}</ul>
+  <hr>
+  <section id="settings">
+   ${update["part.html"]}
+   ${color["part.html"]}
+   ${era["part.html"]}
+  </section>
+ </task-sidebar>
+</task-menu>`

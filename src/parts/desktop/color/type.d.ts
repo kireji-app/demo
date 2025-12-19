@@ -1,5 +1,6 @@
 declare interface IColor
- extends IMatch<IDesktop, IColorMode> {
+ extends IMatch<IDesktop, IColorMode>,
+ IWebComponent {
 
  // Subparts.
  readonly light: IColorMode
@@ -52,10 +53,6 @@ declare interface IColor
  readonly "unModeBg": string
  readonly "unModeErBg": string
  readonly "unModeEstBg": string
- /** The stylesheet which determines which colors to use and is replaced whenever the color mode changes. */
- readonly "inline.css": string
- /** The HTML which renders the menu control switch for the color mode. */
- readonly "inline.html": string
  /** Returns true of the framework environment is in light mode. */
  readonly "isLight": boolean
  /** Blends two color hex codes (A and B) using the given MODE.

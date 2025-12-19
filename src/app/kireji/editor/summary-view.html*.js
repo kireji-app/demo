@@ -1,0 +1,1 @@
+return ["about", "hash", "properties"].map(word => `<section id=info-${word}>${editor[`info-${word}.html`]}</section>`).join("")

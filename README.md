@@ -18,9 +18,9 @@ These applications are in *alpha* and still undergoing research and development.
 
 - Essays and notes about the concepts that drive the project.
 
-<h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Demo Outliner</sup></a></h3>
+<h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Part Viewer</sup></a></h3>
 
-- Explore the demo app ecosystem and its component parts using a visual outliner and detail viewer.
+- Explore the demo app ecosystem and its component parts using an IDE-style application.
 
 <h3><a href="https://orenjinari.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/orenjinari/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>orenjinari</sup></a></h3>
 

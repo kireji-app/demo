@@ -1,13 +1,12 @@
 declare interface IGlowstickUser
- extends IPart<IGlowstick, null> {
+ extends IPart<IGlowstick, null>,
+ IWebComponent {
 
  // Serialized Properties.
  /** A unicode arrow character pointing in the same direction as the user. */
  readonly "arrow": string
  /** A string (either left, right, front or back) representing which direction the user is currently facing. */
  readonly "direction": string
- /** The HTML that renders the user in the world. */
- readonly "inline.html": string
  /** The "extra" width of the character beyond the 1x1 point representing his position on the map. */
  readonly "w": bigint
  /** The "extra" width of the character beyond the 1x1 point representing his position on the map. */

@@ -1,1 +1,0 @@
-wallpaper.setAttribute("style", width.style)

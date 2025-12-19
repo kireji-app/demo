@@ -1,5 +1,6 @@
 declare interface IEcosystem
- extends IMix<null, ITopLevelDomainAny> {
+ extends IMix<null, ITopLevelDomainAny>,
+ IWebComponent {
 
  // Subparts.
  readonly app: IApp
@@ -29,10 +30,6 @@ declare interface IEcosystem
  readonly "defaultApplicationHost": string
  /** A stylesheet containing CSS variables with `url()` values that correspond to images. Used to seamlessly hand-off image rendering from the server-rendered page to the client-rendered page without modifying the DOM. */
  readonly "images.css": string
- /** The HTML representing a snapshot of the ecosystem's UI given the current state. */
- readonly "index.html": string
- /** The static, global css that should apply across every application and page in the ecosystem. */
- readonly "inline.css": string
  /** The current application's PWA manifest. */
  readonly "manifest.json": string
  /** A JSON object serializing the desired landing model of the ecosystem. */

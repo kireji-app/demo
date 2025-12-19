@@ -1,1 +1,0 @@
-return ["about", "hash", "properties"].map(word => `<section id=info-${word}>${propertyViewer[`info-${word}.html`]}</section>`).join("")

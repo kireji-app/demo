@@ -1,5 +1,6 @@
 declare interface IMenu
- extends IMatch<IMenu, IMenuClip> {
+ extends IMatch<IMenu, IMenuClip>,
+ IWebComponent {
 
  // Subparts.
  /** The abstract part used for all the menu's clips which automatically plays the clips when the menu match arm is set. */
@@ -16,8 +17,6 @@ declare interface IMenu
  // Serialized Properties.
  /** The HTML that renders the menu button on the taskbar. */
  readonly "button.html": string
- /** The HTML that always renders the menu button HTML but conditionally renders the menu HTML only if the menu is open. */
- readonly "inline.html": string
  /** The HTML that renders the desktop application menu, including some application links and a few settings. */
  readonly "menu.html": string
  /** An event handler that advances the menu from its current clip into its next one. */

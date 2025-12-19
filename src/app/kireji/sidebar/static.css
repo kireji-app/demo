@@ -1,0 +1,196 @@
+#sidebar-view-header {
+ position: absolute;
+ z-index: 10;
+ top: 0;
+ margin: 0;
+ padding: calc(var(--spacing) / 3);
+ font-weight: 300;
+ background-color: var(--bg-mode-er);
+ line-height: var(--line-height);
+ font-size: calc(var(--line-height) * 2 / 3);
+ white-space: pre;
+ text-overflow: ellipsis;
+ overflow: hidden;
+ left: var(--toolbar-width);
+ width: var(--sidebar-view-width);
+}
+
+sidebar-view {
+ position: absolute;
+ top: var(--header-height);
+ width: var(--sidebar-view-width);
+ bottom: 0;
+ left: var(--toolbar-width);
+ background-color: var(--bg-mode-est);
+ box-shadow:
+  inset 0 2px 0 -1px var(--bg-un-mode),
+  inset -2px 0 0 -1px var(--bg-un-mode);
+}
+
+toolbar- {
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: var(--toolbar-width);
+ bottom: 0;
+ display: flex;
+ flex-flow: column;
+}
+
+sidebar-view>scroller->scroll-content>details {
+ overflow: hidden;
+ width: fit-content;
+ width: 100%;
+ padding: 0;
+}
+
+sidebar-view details {
+ margin: 0;
+ padding: 0;
+}
+
+sidebar-view summary {
+ display: block;
+ height: var(--line-height);
+ line-height: var(--line-height);
+ color: var(--fg-mode);
+ padding: 0;
+ white-space: pre;
+ cursor: pointer;
+ position: relative;
+ text-overflow: ellipsis;
+ overflow: hidden;
+ outline: none;
+}
+
+sidebar-view summary[data-selected] {
+ background-color: var(--accent);
+ color: var(--bg-mode-est);
+ font-weight: 500;
+}
+
+sidebar-view summary:hover:not(:has(svg:hover)):not([data-selected]) {
+ background-color: var(--bg-mode-est);
+ color: var(--fg-un-mode-est);
+}
+
+sidebar-view summary>svg:hover {
+ stroke: var(--accent);
+}
+
+sidebar-view summary[data-selected]>svg:hover {
+ stroke: var(--bg-mode-er);
+}
+
+sidebar-view summary>.explore-toggle,
+sidebar-view summary>img,
+sidebar-view svg,
+outliner-spacer {
+ stroke: var(--fg);
+ vertical-align: top;
+ display: inline-block;
+ height: var(--line-height);
+ width: var(--line-height);
+ border-radius: calc(var(--icon-size) * 0.4 / 3);
+ margin: 0;
+ position: relative;
+}
+
+sidebar-view summary>.explore-toggle,
+sidebar-view summary>img,
+sidebar-view svg {
+ height: var(--icon-size);
+ width: var(--icon-size);
+ margin: calc((var(--line-height) - var(--icon-size)) / 2);
+}
+
+outliner-spacer {
+ width: calc(var(--line-height) / 2);
+ border-radius: 0;
+ border-right: 1px solid var(--bg-un-mode);
+}
+
+outliner-spacer:has(+ img) {
+ margin-right: calc(var(--line-height) / 2);
+}
+
+sidebar-view summary .label {
+ padding-left: calc((var(--line-height) - var(--icon-size)) / 2);
+ padding-right: calc(var(--line-height) - var(--icon-size));
+ font-weight: 300;
+}
+
+sidebar-view summary .label.abstract {
+ font-style: italic;
+ font-weight: 100;
+}
+
+body.modern sidebar-view summary {
+ box-shadow:
+  inset 2px 0 0 -1px var(--bg-un-mode),
+  inset -2px 0 0 -1px var(--bg-un-mode);
+}
+
+body.modern sidebar-view {
+ box-shadow:
+  inset -2px 0 0 -1px var(--bg-un-mode),
+  inset 2px 0 0 -1px var(--bg-un-mode),
+  inset 0 -2px 0 -1px var(--bg-un-mode);
+}
+
+body.modern #sidebar-view-header {
+ box-shadow:
+  inset -2px 0 0 -1px var(--bg-un-mode),
+  inset 2px 0 0 -1px var(--bg-un-mode),
+  inset 0 2px 0 -1px var(--bg-un-mode);
+}
+
+body.modern.light sidebar-view {
+ background-color: var(--bg-light-er);
+}
+
+body.modern.dark sidebar-view {
+ background-color: var(--bg-mode-er);
+}
+
+body.vintage #sidebar-view-header {
+ font-size: var(--default-font-size);
+ padding: 0 4px;
+ line-height: var(--header-height);
+}
+
+body.vintage.light sidebar-view {
+ background-color: white;
+}
+
+body.vintage.dark sidebar-view {
+ background-color: black;
+}
+
+body.vintage sidebar-view {
+ top: calc(6px + var(--header-height));
+ bottom: 8px;
+}
+
+body.vintage sidebar-view::after {
+ content: "";
+ position: absolute;
+ box-shadow: var(--deep-inset);
+ top: calc(-2px - var(--header-height));
+ bottom: -2px;
+ left: -2px;
+ right: -2px;
+ pointer-events: none;
+}
+
+body.vintage sidebar-view,
+body.vintage #sidebar-view-header {
+ width: calc(var(--sidebar-view-width) - (var(--handle-thickness) / 2) - 8px);
+ left: calc(6px + var(--toolbar-width));
+}
+
+body.vintage #sidebar-view-header {
+ box-shadow: var(--deep-outset);
+ background-color: var(--bg);
+ top: 6px;
+}

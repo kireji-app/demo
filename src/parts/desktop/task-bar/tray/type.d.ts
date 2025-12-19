@@ -1,5 +1,6 @@
 declare interface ITray
- extends IMix<IMenu, ITrayItem> {
+ extends IMix<IMenu, ITrayItem>,
+ IWebComponent {
 
  // Subparts.
  /** A part representing the fullscreen button. */
@@ -10,10 +11,6 @@ declare interface ITray
  readonly stats: IStats
  /** A part representing the clock. */
  readonly clock: IClock
-
- // Serialized Properties.
- /** The HTML markup that displays the taskbar tray. */
- readonly "inline.html": string
 }
 
 /** The taskbar's tray, displayed in the bottom-right corner of the screen. */

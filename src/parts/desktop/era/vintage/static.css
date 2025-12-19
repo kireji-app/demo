@@ -197,7 +197,7 @@ body.dark {
   inset -2px -2px var(--bg-dark);
 }
 
-sidebar- {
+task-sidebar {
  height: calc(var(--menu-tween) * var(--sidebar-height));
  min-width: 164px;
  left: 2px;
@@ -209,7 +209,7 @@ sidebar- {
  box-shadow: var(--deep-outset);
 }
 
-sidebar-::after {
+task-sidebar::after {
  pointer-events: none;
  /* font-smooth: never;
  -webkit-font-smoothing: none; */
@@ -238,7 +238,7 @@ hr {
  margin: 4px 0;
 }
 
-sidebar- [disabled] {
+task-sidebar [disabled] {
  pointer-events: none;
  color: var(--bg-dark);
  text-shadow: 1px 1px var(--bg-light-er);

@@ -1,1 +1,0 @@
-return orenjinari["static.css"] + orenjinari.scroller["inline.css"]

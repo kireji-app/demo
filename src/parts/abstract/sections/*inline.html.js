@@ -1,1 +1,0 @@
-return section["inline.html"]

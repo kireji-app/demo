@@ -1,5 +1,6 @@
 declare interface IGlowstickWorld
- extends IMatch<IGlowstick, IGlowstickRegion> {
+ extends IMatch<IGlowstick, IGlowstickRegion>,
+ IWebComponent {
 
  // Subparts.
  readonly bathroom: IGlowstickRegion
@@ -10,10 +11,6 @@ declare interface IGlowstickWorld
  readonly officeA: IGlowstickRegion
  readonly officeADoor: IGlowstickThreshold
  readonly openOffice: IGlowstickRegion
-
- // Serialized Properties.
- /** The HTML representing the glowstick world, including all contained regions and the world overall background. */
- readonly "inline.html": string
 
  // Runtime Properties.
  /** The color of the grid when previewing the world, if one is defined. */

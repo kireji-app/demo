@@ -1,1 +1,0 @@
-return outliner.width.style

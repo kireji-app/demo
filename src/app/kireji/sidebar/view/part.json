@@ -1,0 +1,6 @@
+{
+ "extends": "match",
+ "open": [
+  "VIEW_INDEX"
+ ]
+}

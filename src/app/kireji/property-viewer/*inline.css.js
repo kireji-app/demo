@@ -1,1 +1,0 @@
-return scroller["inline.css"] + propertyViewer["static.css"] + tabGroup["inline.css"]

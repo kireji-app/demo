@@ -13,7 +13,7 @@ for (const [, host, filename] of HEAD_HTML.matchAll(/var\(--(.+?)--(.+?)\)/g))
  (earlies[host.replaceAll("-", ".").replaceAll("_", "-")] ??= new Set()).add(filename.replace("-", ".").replaceAll("_", "-"))
 
 /* Early service images are valid for .png, .gif and .jpeg files only - additional extensions
-   (like .jpg) will cause problems with the quick and dirty miime type determination here. */
+   (like .jpg) will cause problems with the quick and dirty mime type determination here. */
 
 return (
  earlyImageSources.map(([owner, filename]) => {

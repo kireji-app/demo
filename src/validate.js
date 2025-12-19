@@ -20,7 +20,7 @@ if (environment === "server" && require.main === module) {
   else log("RESULT: Exact Match")
  })
  logScope(1, "\nIndex Fetching Test", log => {
-  const result = _["index.html"]
+  const result = _["part.html"]
 
   if (!result || typeof result !== "string")
    throw "Index fetching failed."

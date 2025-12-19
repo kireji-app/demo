@@ -1,0 +1,1 @@
+return { inheritors: [_.parts.abstract.part] }
