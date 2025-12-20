@@ -7,6 +7,8 @@ declare interface IApplication<TOwner, TFactor>
  IApplicationDetails {
 
  // Serialized Properties.
+ /** An optional array of classes which the application wants to have applied to the body. */
+ readonly "classes": string[]
  /** An object corresponding to any custom headers that the application would like to include in the final response for its index pages. */
  readonly "customHeaders": Record<string, string>
  /** A JSON-serialized map of hot-key combos that the application should listen to and the methods each combo should call. */

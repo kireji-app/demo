@@ -1,0 +1,1 @@
+return sidebar[sidebar.view.arm.key]["part.html"]

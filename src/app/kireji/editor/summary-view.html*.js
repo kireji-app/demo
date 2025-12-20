@@ -1,1 +1,1 @@
-return ["about", "hash", "properties"].map(word => `<section id=info-${word}>${editor[`info-${word}.html`]}</section>`).join("")
+return ["about", "state-space", "state", "properties"].map(word => `<section id=info-${word}>${editor[`info-${word}.html`]}</section>`).join("")

@@ -9,7 +9,7 @@ for (const element of [track, track.up, track.down, track.thumb]) {
  element.onpointerdown = null
 }
 
-scroller.scrollBar = null
 delete scroller.scrollBar.up
 delete scroller.scrollBar.down
 delete scroller.scrollBar.thumb
+scroller.scrollBar = null

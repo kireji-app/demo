@@ -9,7 +9,7 @@ declare interface IKirejiAppTabGroup
  readonly "selectedPart": IPartAny
  /** Returns the specific permutation ID of the given array of tab models without changing the state of the tab group. */
  readonly getPermutationRouteID(TABS: IKirejiAppTabGroupTab[]): bigint
- /** Updates the state hash and integer for the currently active part part, if it is a summary view. */
+ /** Updates the state fields for the currently active part part, if it is a summary view. */
  readonly listener(SENDER: IPartAny): void
 
  // Runtime Properties.

@@ -23,7 +23,7 @@ declare interface IPart<TOwner, TSubpart>
  readonly "key": string
  /** The number of subparts the part has. */
  readonly "length": number
- /** A getter that generates a model object from the state of the part and its subparts. */
+ /** A getter that generates a JSON-compatable model value from the state of the part and its subparts. */
  readonly "model": any
  /** The raw JSON string used to construct the object at `part.manifest`. */
  readonly "part.json": string
@@ -157,10 +157,10 @@ declare interface IPart<TOwner, TSubpart>
  readonly routeID: bigint
  /** Whether or not the part has a running task */
  readonly running: boolean
+ /** The array of child parts which are not abstract. */
+ readonly subparts: TSubpart[]
  /** The list of subdomains for the part whose source code is currently being evaluated. */
  readonly subdomains: string[]
- /** The array of subdomains which correspond to concrete (non-abstract) subparts. */
- readonly subpartKeys: string[]
  /** Whether or not the part was enabled before the most recent route change. */
  readonly wasEnabled: boolean
  /** Extends the definition of the part by allowing the addition of custom properties.

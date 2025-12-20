@@ -25,6 +25,9 @@ if (taskBar.menu.arm?.key === "open")
 if (taskBar.menu.arm?.key !== "closed")
  bodyClassList.push("menu-pressed")
 
+if (application.classes)
+ bodyClassList.push(...application.classes)
+
 const body =
  `<body class="${bodyClassList.join(" ")}">` + (
   `<warning->` + (

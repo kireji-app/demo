@@ -1,1 +1,0 @@
-return part.domains[0]

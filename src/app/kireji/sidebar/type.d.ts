@@ -3,7 +3,7 @@ declare interface IKirejiAppSidebar
  IWebComponent {
 
  // Subparts.
- readonly open: IPart<IKirejiAppSidebar, null>
+ readonly open: IKirejiAppSidebarOpen
  readonly outlinerDomains: IPartOutliner<IKirejiAppSidebar>
  readonly outlinerTypes: IPartOutliner<IKirejiAppSidebar>
  readonly width: IKirejiAppSidebarWidth
@@ -11,6 +11,12 @@ declare interface IKirejiAppSidebar
 
  // Serialized Properties.
  readonly "static.css": string
+ readonly "header.html": string
+ readonly "view.html": string
+
+ // Runtime Properties.
+ readonly headerElement: HTMLHeadingElement
+ readonly viewElement: HTMLElement
 }
 
 declare type IKirejiAppSidebarPart =

@@ -1,7 +1,11 @@
 wallpaper- {
  font: inherit;
  --toolbar-width: var(--task-bar-height);
- --sidebar-width: calc(var(--toolbar-width) + var(--sidebar-view-width))
+ --sidebar-width: var(--toolbar-width);
+}
+
+body.sidebar-open wallpaper- {
+ --sidebar-width: calc(var(--toolbar-width) + var(--sidebar-view-width));
 }
 
 body.modern wallpaper- {

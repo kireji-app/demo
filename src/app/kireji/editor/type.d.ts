@@ -8,7 +8,8 @@ declare interface IKirejiAppEditor
 
  // Serialized Properties.
  readonly "info-about.html": string
- readonly "info-hash.html": string
+ readonly "info-state-space.html": string
+ readonly "info-state.html": string
  readonly "info-properties.html": string
  readonly "static.css": string
  readonly "summary-view.html": string

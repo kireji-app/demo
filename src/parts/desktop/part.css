@@ -5,8 +5,6 @@ wallpaper- {
  align-content: baseline;
  gap: 8px;
  padding: 0;
- color: white;
- background: #377f7f;
 }
 
 desktop-icon {
@@ -31,4 +29,9 @@ desktop-icon>.label {
  padding: 3px;
  text-align: center;
  border-radius: 4px;
+}
+
+body.vintage wallpaper- {
+ background: #377f7f;
+ color: white;
 }

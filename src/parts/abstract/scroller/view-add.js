@@ -1,5 +1,6 @@
 scroller.container = document.querySelector(scroller.query + ">scroller-")
 scroller.content = document.querySelector(scroller.query + ">scroller->scroll-content")
+scroller.container.scrollTop = scroller.fraction * scroller.container.scrollHeight
 scroller.container.addEventListener("scroll", scroller.listener, { passive: true })
 scroller.observer = new ResizeObserver(() => scroller.onresize())
 scroller.observer.observe(scroller.content)
@@ -30,9 +31,11 @@ const
  },
  drag = e => {
   if (e.pointerId !== pointerID) return
-  const newRouteID = markedRouteID + BigInt(Math.trunc((e.clientY - markY) / (track.clientHeight - (era.arm === era.vintage ? 2 * track.clientWidth : 0)) * Number(scrollerLimit)))
+  const positionalRouteID = markedRouteID + BigInt(Math.trunc((e.clientY - markY) / (track.clientHeight - (era.arm === era.vintage ? 2 * track.clientWidth : 0)) * Number(scrollerLimit)))
   const rangeLimit = BigInt(Math.trunc(Number(scrollerLimit) * (1 - scroller.container.clientHeight / scroller.container.scrollHeight)))
-  scroller.setRouteID(newRouteID < 0n ? 0n : (newRouteID > rangeLimit) ? rangeLimit : newRouteID)
+  const newRouteID = positionalRouteID < 0n ? 0n : (positionalRouteID > rangeLimit) ? rangeLimit : positionalRouteID
+  if (newRouteID !== scroller.routeID)
+   scroller.setRouteID(newRouteID)
  },
  jump = pointerY => {
   const amount = activeElement === track ? scroller.container.clientHeight : parseFloat(getComputedStyle(scroller.container).lineHeight)
@@ -66,6 +69,8 @@ const
   markY = null
  }
 
+scroller.startDrag = start
+
 let timeoutID = null
 let pointerID = null
 let activeElement = null
@@ -74,7 +79,7 @@ let markedRouteID = null
 
 for (const element of [up, down, thumb, track]) {
  element.onclick = e => _.noop(e)
- element.onpointerdown = start
+ element.onpointerdown = scroller.startDrag
 }
 
 track.up = up

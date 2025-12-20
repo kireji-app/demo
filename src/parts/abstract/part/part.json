@@ -34,6 +34,9 @@
  "includes": [
   "SUBPART"
  ],
+ "indexOf": [
+  "...ARGS"
+ ],
  "attach": [
   "EVENT_TYPE",
   "RECEIVER",

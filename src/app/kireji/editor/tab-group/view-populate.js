@@ -25,7 +25,7 @@ if (hydrated) {
   if (hasNoTabs) {
    document.querySelector(`editor- scroll-content`).innerHTML = editor["empty-view.html"]
   } else if (!tabGroup.viewedTab.filename) {
-   for (const word of ["about", "hash", "properties"])
+   for (const word of ["about", "state-space", "state", "properties"])
     document.getElementById(`info-${word}`).innerHTML = editor[`info-${word}.html`]
   } else {
    document.querySelector(`editor- scroll-content`).innerHTML = editor["file-view.html"]

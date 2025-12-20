@@ -22,9 +22,6 @@ sidebar-view {
  bottom: 0;
  left: var(--toolbar-width);
  background-color: var(--bg-mode-est);
- box-shadow:
-  inset 0 2px 0 -1px var(--bg-un-mode),
-  inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
 toolbar- {
@@ -35,6 +32,16 @@ toolbar- {
  bottom: 0;
  display: flex;
  flex-flow: column;
+}
+
+toolbar->button {
+ width: var(--toolbar-width);
+ height: var(--toolbar-width);
+ display: block;
+ padding: calc((var(--toolbar-width) - var(--icon-size)) / 2);
+ text-align: center;
+ font-size: var(--icon-size);
+ line-height: var(--icon-size);
 }
 
 sidebar-view>scroller->scroll-content>details {
@@ -127,18 +134,21 @@ sidebar-view summary .label.abstract {
 
 body.modern sidebar-view summary {
  box-shadow:
-  inset 2px 0 0 -1px var(--bg-un-mode),
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
 body.modern sidebar-view {
  box-shadow:
-  inset -2px 0 0 -1px var(--bg-un-mode),
-  inset 2px 0 0 -1px var(--bg-un-mode),
-  inset 0 -2px 0 -1px var(--bg-un-mode);
+  inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
 body.modern #sidebar-view-header {
+ box-shadow:
+  inset -2px 0 0 -1px var(--bg-un-mode),
+  inset 0 2px 0 -1px var(--bg-un-mode);
+}
+
+body.modern toolbar- {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode),
   inset 2px 0 0 -1px var(--bg-un-mode),
@@ -193,4 +203,20 @@ body.vintage #sidebar-view-header {
  box-shadow: var(--deep-outset);
  background-color: var(--bg);
  top: 6px;
+}
+
+body.vintage toolbar- {
+ padding: calc((var(--toolbar-width) - var(--icon-size)) / 4);
+ gap: calc((var(--toolbar-width) - var(--icon-size)) / 4);
+}
+
+body.vintage toolbar->button {
+ padding: calc((var(--toolbar-width) - var(--icon-size)) / 4);
+ width: calc(var(--icon-size) + (var(--toolbar-width) - var(--icon-size)) / 2);
+ height: calc(var(--icon-size) + (var(--toolbar-width) - var(--icon-size)) / 2);
+ box-shadow: var(--deep-outset);
+}
+
+body.vintage toolbar->button:active {
+ box-shadow: var(--deep-inset);
 }

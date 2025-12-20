@@ -20,6 +20,10 @@ declare interface IScroller<TOwner>
  readonly scrollToTop(): void
  /** Used to wrap the given HTML string with the scroller's provided container and custom scrollbar HTML. */
  readonly wrap(INNER_HTML: string): string
+ /** Disables the scroller's resize and scroll listeners so that the container can be manipulated without triggering route changes. */
+ readonly pause(): void
+ /** Resumes listening to resize and scroll listeners if the scroller is paused. If the scroller was never initialized, calls addView. */
+ readonly resume(): void
 
  // Runtime Properties.
  /** The element that will recieve the scroll listening and view updates. */
@@ -36,6 +40,8 @@ declare interface IScroller<TOwner>
  readonly skipRouteIDUpdate: boolean
  /** The outer event listener which can be added and removed and calls the inner event listener `scroller.onscroll`. */
  readonly listener(e: Event): void
+ /** The primary event listener for dragging the thumb of the scrollbar. */
+ readonly startDrag(e: Event): void
 }
 
 declare const scroller: IScroller<IPartAny>

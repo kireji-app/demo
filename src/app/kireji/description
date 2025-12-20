@@ -1,4 +1,4 @@
-This application allows you to view all of the parts that define the Kireji Web Framework and the Demo App Ecosystem. It includes an sidebar pane and a property viewer pane.
+This application allows you to view all of the parts that define the Kireji Web Framework and the Demo App Ecosystem. It includes a sidebar pane and a property viewer pane.
 
 By clicking on a part in the sidebar, you can view the properties of that part and its contribution - if any - to the minimal perfect hash function that provides the ecosystem's optimal state compression.
 

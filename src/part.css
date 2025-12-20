@@ -99,6 +99,10 @@ a[target="_blank"]::after {
  text-decoration: none;
 }
 
+pre {
+ font-family: var(--system-ui-mono);
+}
+
 scroller- {
  display: flow-root;
  transform: translateY(0);

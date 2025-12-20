@@ -1,1 +1,1 @@
-return part === _ ? -1 : [...part[".."]].indexOf(part) ?? 0
+return part[".."]?.indexOf(part) ?? -1

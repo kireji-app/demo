@@ -3,13 +3,15 @@
 <pre>https://example.com/my-favorite-page</pre>
 <p>Because these URLs lack query parameters, they lack composition (multiple URLs can't be combined deterministically into a merged form). This means that they aren't as comprehensive as Kireji's own hash routing system. It also means that only one override to the state can be defined per canonical URL. This simplifies and constrains the translation behavior in Kireji.</p>
 <h2>URL Structure</h2>
-<p>Canonical URLs are composed of just two parts: a host</p>
-<pre>example.com</pre>
+<p>Canonical URLs are composed of just two parts: an origin</p>
+<pre>https://example.com</pre>
 <p>and a pathname</p>
 <pre>/my-favorite-page</pre>
-<p>Kireji URLs, on the other hand, are composed of three parts: a host, a ecosystem version number, and a state hash. The challenge for canonical URLs is to design a translation service that turns canonical URLs into Kireji URLs.</p>
-<p>Luckily, the host is easy for the server to handle: its the same for both URLs and is the host being used to access the server. Adding the version number is also trivial: all canonical links point to the latest LTS version of the ecosystem which happens to be the version of the server handling the translation.</p>
-<p>So, the main task for translation service is really just converting a human-readable pathname into a stateful hash.</p>
+<p>Kireji URLs, on the other hand, are composed of three parts: an origin, an ecosystem version number, and a state hash.</p>
+<pre>https://example.com/1.2.3/aurg3248gh23rg-234rfwrv_asdf</pre>
+<p>The challenge for canonical URLs is to design a translation service that turns canonical URLs into Kireji URLs.</p>
+<p>Luckily, the origin is easy for the server to handle: its the same for both URLs and features the domain name being used to access the server. Adding the version number is also trivial: all canonical links point to the latest LTS version of the ecosystem which happens to be the current version of the server.</p>
+<p>So, the main task for the translation service is really just converting a human-readable pathname into a stateful hash.</p>
 <p>In Kireji, hashes are cross-origin and mean the same thing across all host names. For example:</p>
 <pre>https://<b>aaaa</b>.example.com/1.0.0/24rtgetb</pre>
 <p>is the same data as</p>
@@ -20,9 +22,10 @@
 <pre>https://<b>star-trek-characters</b>.example.com/<b>red-shirt</b></pre>
 <p>That needs to be taken into consideration for the translation logic.</p>
 <h2>URL-as-a-File Metaphor</h2>
-<p>A data model in the Kireji routing system can be thought of as a file type spec. Pathnames have a small header indicating the version number of the file type and a body containing some structured data according to that spec. Each URL is just a small file.</p>
-<p>Under this metaphor, canonical URLs are the equivalent of having the GIF spec include a handful of predefined GIFs which could be accessed by simply writing their canonical name as plain text and giving the file a <b>.gif</b> extension. Any GIF reader would have to store a copy of these GIFs for this case.</p>
-<p>This would be unusual behavior for a file spec but its expected behavior for web URLs.</p>
+<p>The routing model for a Kireji ecosystem can be thought of as a file type spec, such that Kireji URLs can be thought of as highly compressed, lossless save files. These files have a simple structure: a small header provides the origin (indicating the application that is currently full-screened) and version number of the file spec. This is then followed by the file body: a block of data which achieves the information-theoretic lower bound for data compression according to the file spec.</p>
+<p>This is analogous to how common file types such as GIF feature a small header with meta data followed by blocks of data representing the file.</p>
+<p>Under this metaphor, canonical URLs are a bit strange - the equivalent of having a GIF spec that includes a handful of predefined GIFs which can be accessed by simply writing their name as plain text and giving the file a <b>.gif</b> extension. All GIF readers would then have to store a table containing all these premade GIFs according to their name.</p>
+<p>This would be unusual behavior for a file type like GIF, but its expected behavior when fetching web URLs.</p>
 <h2>Use Cases for Canonical URLs</h2>
 <p>Critically, canonical links have two use cases in Kireji:</p>
 <ol>
@@ -38,7 +41,7 @@
    <li>Any anchor links <i>inside</i> Kireji web apps (including any sitemap) will get indexed by search engines and become external links, so we don't want to see this anywhere in the web app's source code:
     <pre>&lt;a href="https://example.com/1.0.0/4gw5-g5wnzzw35h4g"&gt;Click here&lt;/a&gt;</pre>
    </li>
-   <li>Anyways, rendering versioned anchor links inside app HTML would be annoying and not straightforward - link elements would need to be tracked and their <code>href</code> attributes updated every time the ecosystem state changed. This would cause an explosion of URLs that would confuse search engine spiders.</li>
+   <li>Besides, rendering versioned anchor links inside app HTML would be annoying and not straightforward - link elements would need to be tracked and their <code>href</code> attributes updated every time the ecosystem state changed. This would cause an explosion of URLs that would confuse search engine spiders.</li>
    <li>
     Hovering over links helps desktop users gain additional context about where the link will go. This doesn't look like anything to the user:
     <pre>https://example.com/1.0.0/4gw5-g5wnzzw35h4g</pre>

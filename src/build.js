@@ -188,6 +188,7 @@ function ƒ(_) {
 
  // String and Stringification Utilities
  const
+  toBits = (x, unit = true) => (x = BigInt(x) - 1n, x ? x.toString(2).length : 0) + (unit ? " bit" + (x !== 1 ? "s" : "") : 0),
   toCharms = (x, unit = true) => encodeSegment(BigInt(x) - 1n).length + (unit ? " charm" + (x !== 1 ? "s" : "") : 0),
   camelCase = (words, delimiter = "-") => (typeof words === "string" ? words.split(delimiter) : words).map((word, i) => (i ? word[0].toUpperCase() + word.slice(1) : word)).join(""),
   serialize = value => JSON.stringify(value, (k, v) => (typeof v === "bigint" ? v.toString() + "n" : v), 1),
@@ -343,18 +344,17 @@ function ƒ(_) {
      logScope(2, `"${host}"`, () => {
       partsByHost[host] = part
       const subdomains = Object.keys(part).filter(n => typeof part[n] === "object")
-      const subpartKeys = [...subdomains]
-      const filenames = Object.keys(part).filter(n => typeof part[n] === "string")
       const pathToRepo = new Array(domains.length).fill("..").join("/")
       const pathFromRepo = [...domains].reverse().join("/")
       Object.defineProperties(part, {
-       manifest: { value: JSON.parse(part["part.json"] ?? "{}") },
+       key: { value: domains[0] },
        host: { value: host },
-       subdomains: { value: subdomains },
-       subpartKeys: { value: subpartKeys },
-       filenames: { value: filenames },
        domains: { value: domains },
-       inheritors: { value: [] }
+       manifest: { value: JSON.parse(part["part.json"] ?? "{}") },
+       subparts: { value: [] },
+       filenames: { value: Object.keys(part).filter(n => typeof part[n] === "string") },
+       inheritors: { value: [] },
+       subdomains: { value: subdomains },
       })
       let prototype = null
       if (host === "part.abstract.parts") {
@@ -388,7 +388,7 @@ function ƒ(_) {
         }
         prototype?.Property.collectConstants(targetPart, targetProperty)
 
-        if (!filenames.includes("constants.js")) return
+        if (!part.filenames.includes("constants.js")) return
         const pathPrefix = targetPart.pathToRepo + "/" + pathFromRepo + "/"
         const path = pathPrefix + "constants.js"
         const body = part["constants.js"]
@@ -487,7 +487,7 @@ function ƒ(_) {
        }
       }
       part.define({ Property: { value: Property } })
-      for (const fn of filenames) {
+      for (const fn of part.filenames) {
        if (!fn.includes(".") && fn.includes("-")) {
         Property.ids.add("@" + fn)
        } else if (fn.endsWith("*.js") || fn.endsWith(".js") && (fn.startsWith("set-") || fn.startsWith("view-"))) {
@@ -519,25 +519,47 @@ function ƒ(_) {
        throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
       }
       for (const subdomain of subdomains) {
-       const subpart = part[subdomain]
+
+       const childPart = part[subdomain]
+
        if (subdomain.includes("-")) {
         const identifier = camelCase(subdomain)
+
         if (identifier in part)
          throw `Computed camelCase name ${identifier} for ${subdomain}.${host} conflicts with existing property ${identifier} on ${host}.`
-        part.define({ [identifier]: { value: subpart } })
+
+        part.define({ [identifier]: { value: childPart } })
        }
-       hydrateRecursive(subpart, [subdomain, ...domains])
-       subpart.define({ "..": { value: part } })
-       if (subpart.isAbstract) subpartKeys.splice(subpartKeys.indexOf(subpart.key), 1)
+
+       hydrateRecursive(childPart, [subdomain, ...domains])
+
+       childPart.define({ "..": { value: part } })
+
+       if (!childPart.isAbstract)
+        part.subparts.push(childPart)
       }
       if (!part.isAbstract) instances.push(part)
       allParts.push(part)
      })
 
      return part
+    },
+    countAndSortInheritorsRecursive = part => {
+     if (part.totalInheritors !== undefined)
+      return part.totalInheritors
+     let totalInheritors = 0
+     for (const inheritor of part.inheritors)
+      totalInheritors += 1 + countAndSortInheritorsRecursive(inheritor)
+     part.define({ totalInheritors: { value: totalInheritors } })
+
+     if (part.inheritors.length > 1)
+      part.inheritors.sort((a, b) => (b.totalInheritors - a.totalInheritors) || (a.host > b.host ? 1 : -1))
+
+     return totalInheritors
     }
 
    hydrateRecursive(_)
+   countAndSortInheritorsRecursive(_.parts.abstract.part)
 
    _.define({ "..": { value: null } })
 
