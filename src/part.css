@@ -54,6 +54,8 @@ wallpaper- {
  left: 0;
  right: 0;
  overflow: hidden;
+ overflow: clip;
+ touch-action: manipulation;
  --scrollbar-width: 20px;
 }
 

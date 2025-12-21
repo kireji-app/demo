@@ -2,6 +2,7 @@ wallpaper- {
  font: inherit;
  --toolbar-width: var(--task-bar-height);
  --sidebar-width: var(--toolbar-width);
+ overscroll-behavior: none;
 }
 
 body.sidebar-open wallpaper- {

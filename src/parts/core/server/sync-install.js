@@ -137,8 +137,8 @@ const httpServer = require('http').createServer((request, response) => logServer
      break respond
     }
 
-    if (pathname === "/robots.txt")
-     throw `No Robots`
+    if (["/robots.txt", "/ads.txt", "/sitemap.txt"].includes(pathname))
+     throw `Config 404`
 
     if (isLocalRequest && !(host in _.applications)) {
      /* 301 forward invalid application requests.
@@ -212,15 +212,15 @@ const httpServer = require('http').createServer((request, response) => logServer
     ))
    }
   } catch (e) {
-   if (("" + e).startsWith("No Robots")) {
+   if (("" + e).startsWith("Config 404")) {
     const version = e.split(": ").pop()
-    logMessage = "No robots.txt"
+    logMessage = "Config 404"
     status = 404
     body = `<span class=thin>This server</span><span>allows search engine crawlers.</span>`
    } else if (("" + e).startsWith("Bad Version: ")) {
     const version = e.split(": ").pop()
     logMessage = "Unknown Version"
-    status = 400
+    status = 404
     body = `<span>Version</span><span class=thin>${version}</span><span>was removed or never existed.</span>`
    } else if (("" + e).startsWith("Bad Canonical Path: ") || ("" + e).startsWith("Unsupported `from` ")) {
     logMessage = "Bad Path"
