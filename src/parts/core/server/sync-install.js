@@ -140,6 +140,9 @@ const httpServer = require('http').createServer((request, response) => logServer
     if (["/robots.txt", "/ads.txt", "/sitemap.txt"].includes(pathname))
      throw `Config 404`
 
+    if (["/favicon.ico"].includes(pathname))
+     throw `Favicon`
+
     if (isLocalRequest && !(host in _.applications)) {
      /* 301 forward invalid application requests.
         This is handled by NGINX on the real server. */
@@ -212,7 +215,12 @@ const httpServer = require('http').createServer((request, response) => logServer
     ))
    }
   } catch (e) {
-   if (("" + e).startsWith("Config 404")) {
+   if (("" + e).startsWith("Favicon")) {
+    const version = e.split(": ").pop()
+    logMessage = "Favicon"
+    status = 404
+    body = `<span class=thin>🖼️ favicon.ico</span><span>| We haven't had that spirit here since 1999.</span>`
+   } else if (("" + e).startsWith("Config 404")) {
     const version = e.split(": ").pop()
     logMessage = "Config 404"
     status = 404
