@@ -130,7 +130,7 @@ function ƒ(_) {
  const
   environment = globalThis.constructor === globalThis.Window ? "client" : globalThis.constructor === globalThis.ServiceWorkerGlobalScope ? "worker" : (
    Object.defineProperty(_, "$", { value: (f => x => f(x).toString().trim())(require("child_process").execSync) }),
-   _.local = process.env.LOCAL,
+   _.local = process.env.LOCAL ? true : false,
    require.main === module && (
     _.branch = _.$("git rev-parse --abbrev-ref HEAD").toString().trim(),
     _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
