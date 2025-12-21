@@ -1,1 +1,1 @@
-return [...this].length
+return part.subparts.length

@@ -273,17 +273,7 @@ const httpServer = require('http').createServer((request, response) => logServer
 ${_.parts.abstract.error.getErrorHTML(status, body)}`
    head = { ...indexHeader }
   } finally {
-
-   log(logMessage, status, {
-    200: `✓`,
-    get 302() { return `↪ ${head.Location}` },
-    304: "♻",
-    400: "✕",
-    404: "?",
-    // 444: "✕",
-    500: "!",
-    503: `#`,
-   }[status])
+   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 500: "!", 503: `#`, }[status])
    response.writeHead(status, head)
    response.end(body)
   }
