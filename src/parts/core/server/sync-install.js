@@ -138,7 +138,10 @@ const httpServer = require('http').createServer((request, response) => logServer
     }
 
     if (["/robots.txt", "/ads.txt", "/sitemap.txt"].includes(pathname))
-     throw `Config 404`
+     throw `Config 404:${pathname.slice(1)}`
+
+    if (pathname.startsWith("/.well-known/"))
+     throw `Config 404:.well-known`
 
     if (["/favicon.ico"].includes(pathname))
      throw `Favicon`
@@ -163,6 +166,14 @@ const httpServer = require('http').createServer((request, response) => logServer
      head = { ...sitemapHeader }
      body = _.applications[host]["sitemap.xml"]
      logMessage = "Serving Sitemap"
+     break respond
+    }
+
+    if (pathname === "/humans.txt") {
+     status = 200
+     head = { 'Content-Type': 'text/plain', ...securityHeader }
+     body = server["humans.txt"]
+     logMessage = "Serving Credits!"
      break respond
     }
 
@@ -219,12 +230,12 @@ const httpServer = require('http').createServer((request, response) => logServer
     const version = e.split(": ").pop()
     logMessage = "Favicon"
     status = 404
-    body = `<span class=thin>🖼️ favicon.ico</span><span>| We haven't had that spirit here since 1999.</span>`
+    body = `<span class=thin>📜 favicon.ico -</span><span>We haven't had that spirit here since 1999.</span>`
    } else if (("" + e).startsWith("Config 404")) {
     const version = e.split(": ").pop()
     logMessage = "Config 404"
     status = 404
-    body = `<span class=thin>This server</span><span>allows search engine crawlers.</span>`
+    body = `<span>We don't have</span><span class=thin>${("" + e).split(":").pop()}</span><span>... but we have <a href="/sitemap.xml">sitemap.xml</a> and <a href="/humans.txt">humans.txt</a>.</span>`
    } else if (("" + e).startsWith("Bad Version: ")) {
     const version = e.split(": ").pop()
     logMessage = "Unknown Version"
