@@ -177,16 +177,3 @@ body.vintage #sidebar-view-header {
  background-color: var(--bg);
  top: 6px;
 }
-
-body.vintage tab- button:focus:after {
- border: 1px dotted white;
- mix-blend-mode: difference;
- content: "";
- position: absolute;
- margin: 3px;
- left: 0;
- right: 0;
- top: 0;
- bottom: 0;
- pointer-events: none;
-}

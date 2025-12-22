@@ -5,17 +5,15 @@ return (
   "<div>" + (
    "<h3>" + (
     selectedPart.title ?? selectedPart.key
-   ) + "</h3>" +
-   'Extends ' + (
+   ) + "</h3>" + (
     selectedPart.host === "part.abstract.parts" ?
-     "<code>Object.prototype</code>." :
-     `<a href="#" onclick="${editor.runtimeReference}.open(event,${allParts.indexOf(selectedPart.prototype)})">` + (
+     "<span disabled>This part has no prototype.</span>" :
+     `Extends <a href="#" onclick="${editor.runtimeReference}.open(event,${allParts.indexOf(selectedPart.prototype)})">` + (
       selectedPart.prototype.title ?? selectedPart.prototype.key
-     ) +
-     '</a>'
+     ) + '</a>'
    )
   ) + "</div>"
  ) + "</div>" +
  "<hr>" +
- `<p id=description>${selectedPart.description ?? "This part has no description."}</p>`
+ `<p id=description${selectedPart.description ? "" : " disabled"}>${selectedPart.description ?? "This part has no description."}</p>`
 )

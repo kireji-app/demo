@@ -54,6 +54,16 @@ body.modern editor- {
  }
 }
 
+@container modern-editor- (width > 350px) {
+ #info-state-space :is(p, h3) {
+  display: inline-block;
+ }
+
+ #info-state-space:not([disabled]) p {
+  float: right;
+ }
+}
+
 #file-viewer {
  font-family: var(--system-ui-mono);
  display: flex;
@@ -100,12 +110,16 @@ editor->scroller->scroll-content>section>h1 {
  overflow: hidden;
 }
 
-#description {
- white-space: pre-wrap;
+editor- {
+ position: absolute;
+ top: var(--header-height);
+ left: var(--sidebar-width);
+ right: 0;
+ bottom: 0;
 }
 
-body.vintage #description {
- margin: 0;
+#description {
+ white-space: pre-wrap;
 }
 
 #part-intro>* {
@@ -198,24 +212,24 @@ body.modern :is(#info-about, #info-state-space, #info-state, #info-properties)>h
  box-shadow: inset 0 0 0 1px var(--bg-un-mode);
 }
 
+body.modern :is(#info-about, #info-state-space, #info-state, #info-properties)[disabled] {
+ color: var(--fg-mode);
+}
+
+body.modern :is(#info-about, #info-state-space, #info-state, #info-properties)[disabled]>h2 {
+ background-color: var(--bg-light);
+}
+
 body.modern editor- {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode);
-}
-
-editor- {
- position: absolute;
- top: var(--header-height);
- left: var(--sidebar-width);
- right: 0;
- bottom: 0;
 }
 
 body.vintage editor-:not(:has(#file-viewer)) {
  background-color: var(--bg);
 }
 
-body.vintage editor-:has(#file-viewer):before {
+body.vintage editor-:before {
  box-shadow: var(--deep-inset);
  position: absolute;
  content: "";
@@ -234,7 +248,7 @@ body.vintage.light editor- {
 }
 
 body.vintage.dark editor- {
- background-color: black;
+ background-color: var(--bg);
 }
 
 body.vintage part-data {
@@ -245,6 +259,10 @@ body.vintage part-data>:not(hr) {
  padding: 0;
  height: var(--line-height);
  line-height: var(--line-height);
+}
+
+body.vintage #description {
+ margin: 0;
 }
 
 body.vintage :is(#info-about, #info-state-space, #info-state, #info-properties) {
@@ -291,4 +309,31 @@ body.vintage wallpaper-:has(#tab-group:empty) editor- {
  right: 6px;
  top: 6px;
  bottom: 6px;
+}
+
+body.vintage h3 {
+ font-size: inherit;
+ font-weight: inherit;
+}
+
+body.vintage :not(#part-intro>div)>h3::after {
+ content: ":";
+}
+
+body.vintage :not(#info-about):not([disabled])> :is(pre, p) {
+ box-shadow: var(--deep-inset);
+ padding: 5px 4px 9px 4px;
+ background: white;
+ margin: 4px 0;
+ white-space: pre;
+ word-wrap: none;
+ overflow: hidden;
+}
+
+body.vintage :not(#info-about):not([disabled])> :is(pre, p):focus {
+ user-select: text;
+}
+
+body.dark.vintage :not(#info-about):not([disabled])> :is(pre, p) {
+ background: transparent;
 }

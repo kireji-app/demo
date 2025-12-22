@@ -25,8 +25,16 @@ if (hydrated) {
   if (hasNoTabs) {
    document.querySelector(`editor- scroll-content`).innerHTML = editor["empty-view.html"]
   } else if (!tabGroup.viewedTab.filename) {
-   for (const word of ["about", "state-space", "state", "properties"])
-    document.getElementById(`info-${word}`).innerHTML = editor[`info-${word}.html`]
+   for (const word of ["about", "state-space", "state", "properties"]) {
+    const element = document.getElementById(`info-${word}`)
+    element.innerHTML = editor[`info-${word}.html`]
+    if (word.startsWith("state")) {
+     if (selectedPart.isAbstract)
+      element.setAttribute("disabled", "")
+     else
+      element.removeAttribute("disabled")
+    }
+   }
   } else {
    document.querySelector(`editor- scroll-content`).innerHTML = editor["file-view.html"]
   }

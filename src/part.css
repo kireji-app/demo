@@ -150,10 +150,6 @@ scroll-content {
  height: fit-content;
 }
 
-scroll-bar[disabled] {
- pointer-events: none;
-}
-
 scroll-bar[disabled]>thumb- {
  display: none;
 }
