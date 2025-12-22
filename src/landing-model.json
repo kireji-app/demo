@@ -26,9 +26,9 @@
       "application.abstract.parts"
      ]
     },
-    "view": "outliner-domains",
     "width": "_"
-   }
+   },
+   "tool-bar": "outliner-domains"
   }
  },
  "click": {

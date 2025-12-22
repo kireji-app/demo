@@ -6,7 +6,6 @@ let toggleElements = new Set([ELEMENT])
 const triggerPart = folders.folderParts[FOLDER_INDEX]
 
 if (["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo)) {
- debug('big toggle')
  function gatherRecursively(part) {
   const folderIndex = folders.folderParts.indexOf(part)
 
@@ -21,12 +20,11 @@ if (["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo)) {
   } else if (!folders.openParts.has(part))
    folders.openParts.add(part)
 
-  for (const subpart of part)
-   gatherRecursively(subpart)
+  partOutliner.getChildren(part).map(childPart => gatherRecursively(childPart))
 
   const instanceIndex = allParts.indexOf(part)
 
-  const svgElement = document.querySelector(`${partOutliner.tag} summary[data-index="${instanceIndex}"]>svg`)
+  const svgElement = document.querySelector(`#${partOutliner.id} summary[data-index="${instanceIndex}"]>svg`)
   toggleElements.add(svgElement)
  }
  gatherRecursively(triggerPart)

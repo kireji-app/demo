@@ -47,9 +47,9 @@ if (hydrated) {
    document.querySelector(`editor- scroll-content`).innerHTML = editor["summary-view.html"]
   }
  }
- document.querySelector("sidebar-view summary[data-selected]")?.removeAttribute("data-selected")
+ document.querySelector("#sidebar-view summary[data-selected]")?.removeAttribute("data-selected")
  if (!hasNoTabs)
-  document.querySelector(`sidebar-view summary[data-index="${allParts.indexOf(tabGroup.viewedTab.part)}"]`)?.setAttribute("data-selected", "")
+  document.querySelector(`#sidebar-view summary[data-index="${allParts.indexOf(tabGroup.viewedTab.part)}"]`)?.setAttribute("data-selected", "")
 } else _.parts.core.client.promise.then(() => {
  if (tabGroup.selectedTab && !tabGroup.selectedTab.filename && !tabGroup.selectedTab.part.isAbstract)
   addListeners()

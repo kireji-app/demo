@@ -1,1 +1,1 @@
-return scroller[".."].tag
+return "#" + scroller[".."].id

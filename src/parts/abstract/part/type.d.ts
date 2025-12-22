@@ -63,8 +63,10 @@ declare interface IPart<TOwner, TSubpart>
  readonly setRouteID(ROUTE_ID: bigint): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subpart's routeID.
   * 
-  * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.*/
- readonly collectRouteID(SUBPARTS: TSubpart[]): void
+  * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.
+  * 
+  * If DEPTH is a number greater than 0, the signal only propagates that many times (including the part itself). */
+ readonly collectRouteID(SUBPARTS: TSubpart[], DEPTH: number): void
  /** Updates the part's routeID to ROUTE_ID and then recomputes all subpart routeIDs to match.
   * 
   * For any active subparts, it calls distributeRoute on them, passing the signal leafward.

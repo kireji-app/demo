@@ -152,11 +152,10 @@ task-sidebar>* {
 .task-link[data-here]>a::before {
  content: "";
  position: absolute;
- width: 1ch;
  left: calc(var(--spacing) * -1);
  top: 0;
  bottom: 0;
- width: 8px;
+ width: 4px;
  background: var(--accent);
 }
 

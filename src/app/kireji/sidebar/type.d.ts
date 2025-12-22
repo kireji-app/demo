@@ -7,12 +7,13 @@ declare interface IKirejiAppSidebar
  readonly outlinerDomains: IPartOutliner<IKirejiAppSidebar>
  readonly outlinerTypes: IPartOutliner<IKirejiAppSidebar>
  readonly width: IKirejiAppSidebarWidth
- readonly view: IKirejiAppSidebarView
 
  // Serialized Properties.
  readonly "static.css": string
  readonly "header.html": string
  readonly "view.html": string
+ /** The part outliner currently assigned to the sidebar (resolves to a view even when the sidebar is hidden). */
+ readonly "view": IPartOutliner<IKirejiAppSidebar>
 
  // Runtime Properties.
  readonly headerElement: HTMLHeadingElement

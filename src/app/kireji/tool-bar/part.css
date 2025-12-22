@@ -1,0 +1,58 @@
+tool-bar {
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: var(--tool-bar-width);
+ bottom: 0;
+ display: flex;
+ flex-flow: column;
+}
+
+tool-bar>button {
+ width: var(--tool-bar-width);
+ height: var(--tool-bar-width);
+ display: block;
+ padding: calc((var(--tool-bar-width) - var(--icon-size)) / 2);
+ text-align: center;
+ font-size: var(--icon-size);
+ line-height: var(--icon-size);
+ position: relative;
+}
+
+body.modern tool-bar {
+ box-shadow:
+  inset -2px 0 0 -1px var(--bg-un-mode),
+  inset 2px 0 0 -1px var(--bg-un-mode),
+  inset 0 2px 0 -1px var(--bg-un-mode);
+}
+
+body.modern.sidebar-open tool-bar>button[data-selected] {
+ box-shadow: inset 3px 0 0 -1px var(--accent);
+}
+
+body.vintage tool-bar>button {
+ box-shadow: var(--deep-outset);
+}
+
+body.vintage tool-bar>button:active,
+body.vintage.sidebar-open tool-bar>button[data-selected] {
+ box-shadow: var(--deep-inset);
+ background: var(--pressed-checker), var(--bg-un-mode);
+}
+
+body.vintage tool-bar>button {
+ background-color: var(--bg);
+}
+
+body.vintage tool-bar>button:focus:after {
+ border: 1px dotted white;
+ mix-blend-mode: difference;
+ content: "";
+ position: absolute;
+ margin: 3px;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
+}

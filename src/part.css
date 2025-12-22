@@ -180,6 +180,10 @@ menu-button {
  line-height: inherit;
 }
 
+button:focus {
+ outline: none;
+}
+
 task-bar>menu-button {
  position: absolute;
  left: var(--spacing);

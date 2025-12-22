@@ -1,1 +1,1 @@
-return `<h2 id=sidebar-view-header>${sidebar[sidebar.view.arm.key].title}</h2>`
+return `<h2 id=sidebar-view-header>${sidebar.view.title}</h2>`

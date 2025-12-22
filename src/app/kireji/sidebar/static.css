@@ -11,52 +11,32 @@
  white-space: pre;
  text-overflow: ellipsis;
  overflow: hidden;
- left: var(--toolbar-width);
+ left: var(--tool-bar-width);
  width: var(--sidebar-view-width);
 }
 
-sidebar-view {
+#sidebar-view {
  position: absolute;
  top: var(--header-height);
  width: var(--sidebar-view-width);
  bottom: 0;
- left: var(--toolbar-width);
+ left: var(--tool-bar-width);
  background-color: var(--bg-mode-est);
 }
 
-toolbar- {
- position: absolute;
- top: 0;
- left: 0;
- width: var(--toolbar-width);
- bottom: 0;
- display: flex;
- flex-flow: column;
-}
-
-toolbar->button {
- width: var(--toolbar-width);
- height: var(--toolbar-width);
- display: block;
- padding: calc((var(--toolbar-width) - var(--icon-size)) / 2);
- text-align: center;
- font-size: var(--icon-size);
- line-height: var(--icon-size);
-}
-
-sidebar-view>scroller->scroll-content>details {
+#sidebar-view>scroller->scroll-content>details {
  overflow: hidden;
  width: fit-content;
  width: 100%;
  padding: 0;
 }
 
-sidebar-view details {
+#sidebar-view details {
  margin: 0;
  padding: 0;
 }
 
-sidebar-view summary {
+#sidebar-view summary {
  display: block;
  height: var(--line-height);
  line-height: var(--line-height);
@@ -70,28 +50,28 @@ sidebar-view summary {
  outline: none;
 }
 
-sidebar-view summary[data-selected] {
+#sidebar-view summary[data-selected] {
  background-color: var(--accent);
  color: var(--bg-mode-est);
  font-weight: 500;
 }
 
-sidebar-view summary:hover:not(:has(svg:hover)):not([data-selected]) {
+#sidebar-view summary:hover:not(:has(svg:hover)):not([data-selected]) {
  background-color: var(--bg-mode-est);
  color: var(--fg-un-mode-est);
 }
 
-sidebar-view summary>svg:hover {
+#sidebar-view summary>svg:hover {
  stroke: var(--accent);
 }
 
-sidebar-view summary[data-selected]>svg:hover {
+#sidebar-view summary[data-selected]>svg:hover {
  stroke: var(--bg-mode-er);
 }
 
-sidebar-view summary>.explore-toggle,
-sidebar-view summary>img,
-sidebar-view svg,
+#sidebar-view summary>.explore-toggle,
+#sidebar-view summary>img,
+#sidebar-view svg,
 outliner-spacer {
  stroke: var(--fg);
  vertical-align: top;
@@ -103,9 +83,9 @@ outliner-spacer {
  position: relative;
 }
 
-sidebar-view summary>.explore-toggle,
-sidebar-view summary>img,
-sidebar-view svg {
+#sidebar-view summary>.explore-toggle,
+#sidebar-view summary>img,
+#sidebar-view svg {
  height: var(--icon-size);
  width: var(--icon-size);
  margin: calc((var(--line-height) - var(--icon-size)) / 2);
@@ -121,23 +101,23 @@ outliner-spacer:has(+ img) {
  margin-right: calc(var(--line-height) / 2);
 }
 
-sidebar-view summary .label {
+#sidebar-view summary .label {
  padding-left: calc((var(--line-height) - var(--icon-size)) / 2);
  padding-right: calc(var(--line-height) - var(--icon-size));
  font-weight: 300;
 }
 
-sidebar-view summary .label.abstract {
+#sidebar-view summary .label.abstract {
  font-style: italic;
  font-weight: 100;
 }
 
-body.modern sidebar-view summary {
+body.modern #sidebar-view summary {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
-body.modern sidebar-view {
+body.modern #sidebar-view {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
@@ -148,18 +128,11 @@ body.modern #sidebar-view-header {
   inset 0 2px 0 -1px var(--bg-un-mode);
 }
 
-body.modern toolbar- {
- box-shadow:
-  inset -2px 0 0 -1px var(--bg-un-mode),
-  inset 2px 0 0 -1px var(--bg-un-mode),
-  inset 0 2px 0 -1px var(--bg-un-mode);
-}
-
-body.modern.light sidebar-view {
+body.modern.light #sidebar-view {
  background-color: var(--bg-light-er);
 }
 
-body.modern.dark sidebar-view {
+body.modern.dark #sidebar-view {
  background-color: var(--bg-mode-er);
 }
 
@@ -169,20 +142,20 @@ body.vintage #sidebar-view-header {
  line-height: var(--header-height);
 }
 
-body.vintage.light sidebar-view {
+body.vintage.light #sidebar-view {
  background-color: white;
 }
 
-body.vintage.dark sidebar-view {
+body.vintage.dark #sidebar-view {
  background-color: black;
 }
 
-body.vintage sidebar-view {
+body.vintage #sidebar-view {
  top: calc(6px + var(--header-height));
  bottom: 8px;
 }
 
-body.vintage sidebar-view::after {
+body.vintage #sidebar-view::after {
  content: "";
  position: absolute;
  box-shadow: var(--deep-inset);
@@ -193,10 +166,10 @@ body.vintage sidebar-view::after {
  pointer-events: none;
 }
 
-body.vintage sidebar-view,
+body.vintage #sidebar-view,
 body.vintage #sidebar-view-header {
  width: calc(var(--sidebar-view-width) - (var(--handle-thickness) / 2) - 8px);
- left: calc(6px + var(--toolbar-width));
+ left: calc(6px + var(--tool-bar-width));
 }
 
 body.vintage #sidebar-view-header {
@@ -205,18 +178,15 @@ body.vintage #sidebar-view-header {
  top: 6px;
 }
 
-body.vintage toolbar- {
- padding: calc((var(--toolbar-width) - var(--icon-size)) / 4);
- gap: calc((var(--toolbar-width) - var(--icon-size)) / 4);
-}
-
-body.vintage toolbar->button {
- padding: calc((var(--toolbar-width) - var(--icon-size)) / 4);
- width: calc(var(--icon-size) + (var(--toolbar-width) - var(--icon-size)) / 2);
- height: calc(var(--icon-size) + (var(--toolbar-width) - var(--icon-size)) / 2);
- box-shadow: var(--deep-outset);
-}
-
-body.vintage toolbar->button:active {
- box-shadow: var(--deep-inset);
+body.vintage tab- button:focus:after {
+ border: 1px dotted white;
+ mix-blend-mode: difference;
+ content: "";
+ position: absolute;
+ margin: 3px;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ pointer-events: none;
 }

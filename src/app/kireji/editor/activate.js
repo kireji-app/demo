@@ -14,32 +14,25 @@ if (tabCount > 0) {
 
  tabGroup.activeTab = tabIndex
 
- warn('expand sidebar outliner folders (if necessary) now')
- // 
- // /** @type {IKirejiAppSubpartsView | IKirejiAppSubtypesView} */
- // const sidebarView = sidebar[sidebar.view.arm.key]
- // 
- // let parentFolder = tabGroup.openTabs[tabIndex].part[".."]
- // let toggleMask = 0n
- // 
- // while (parentFolder) {
- //  const folderIndex = sidebarView.folders.folderParts.indexOf(parentFolder)
- //  const toggleBit = 1n << BigInt(folderIndex)
- //  if (!(sidebarView.folders.routeID & toggleBit))
- //   toggleMask |= toggleBit
- //  parentFolder = parentFolder[".."]
- // }
- // // TAB_ELEMENT.scrollIntoView({
- // //  behavior: 'smooth',
- // //  inline: 'center',
- // // })
- // 
- // const finalRouteID = toggleMask | sidebar.folders.routeID
- // if (sidebar.folders.routeID !== finalRouteID) {
- //  sidebar.folders.distributeRouteID(finalRouteID)
- //  sidebar.collectRouteID([sidebar.folders], 1)
- //  changedAppSubparts.unshift(sidebar)
- // }
+ let parentFolder = sidebar.view.getParent(tabGroup.openTabs[tabIndex].part)
+ let toggleMask = 0n
+
+ while (parentFolder) {
+  const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
+  const toggleBit = 1n << BigInt(folderIndex)
+  if (!(sidebar.view.folders.routeID & toggleBit))
+   toggleMask |= toggleBit
+  parentFolder = sidebar.view.getParent(parentFolder)
+ }
+
+ const finalRouteID = toggleMask | sidebar.view.folders.routeID
+
+ if (sidebar.view.folders.routeID !== finalRouteID) {
+  sidebar.view.folders.distributeRouteID(finalRouteID)
+  sidebar.view.collectRouteID([sidebar.view.folders], 2)
+  changedAppSubparts.unshift(sidebar)
+ }
+
 } else {
  tabGroup.activeTab = null
 }

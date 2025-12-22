@@ -37,7 +37,7 @@ logScope(0, "Finalizing Hydration", log => {
 
  log("Starting Engine Loop")
  _.define({
-  noop: { value(event) { event.preventDefault(); event.stopPropagation() } },
+  noop: { value(event) { event?.preventDefault(); event?.stopPropagation() } },
   frameRequest: { value: requestAnimationFrame(() => _.distributeLoop()), writable: true },
  })
 })

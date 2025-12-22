@@ -13,6 +13,9 @@
  "children-get": [
   "SUBJECT"
  ],
+ "parent-get": [
+  "SUBJECT"
+ ],
  "selected-is": [
   "SUBJECT"
  ],

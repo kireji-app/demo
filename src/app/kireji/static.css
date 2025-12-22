@@ -1,12 +1,12 @@
 wallpaper- {
  font: inherit;
- --toolbar-width: var(--task-bar-height);
- --sidebar-width: var(--toolbar-width);
+ --tool-bar-width: calc(var(--icon-size) + (1.75 * var(--spacing)));
+ --sidebar-width: var(--tool-bar-width);
  overscroll-behavior: none;
 }
 
 body.sidebar-open wallpaper- {
- --sidebar-width: calc(var(--toolbar-width) + var(--sidebar-view-width));
+ --sidebar-width: calc(var(--tool-bar-width) + var(--sidebar-view-width));
 }
 
 body.modern wallpaper- {

@@ -1,3 +1,3 @@
-return sidebar.view["part.html"] +
+return toolBar["part.html"] +
  (sidebar.open.routeID === 0n ? "" : sidebar["header.html"] + sidebar["view.html"]) +
  sidebar.width["part.html"]

@@ -1,7 +1,7 @@
 sidebarWidth.element = document.querySelector("width-handle")
 
 const
- toolbarElement = document.querySelector("toolbar-"),
+ toolBarElement = document.querySelector("tool-bar"),
  start = e => {
   e.preventDefault()
   if (pointerID !== null) return
@@ -15,13 +15,13 @@ const
  drag = e => {
   if (e.pointerId !== pointerID) return
   e.preventDefault()
-  if (e.clientX < (sidebarWidth.min / 2 + toolbarElement.clientWidth)) {
+  if (e.clientX < (sidebarWidth.min / 2 + toolBarElement.clientWidth)) {
    if (sidebar.open.routeID === 1n) {
     sidebar.open.setRouteID(0n)
     sidebarWidth.setRouteID(sidebarWidthRouteIDCache)
    }
   } else {
-   const targetWidth = Math.min(Number(sidebarWidth.cardinality) - 1, Math.max(0, Math.trunc(e.clientX) - sidebarWidth.min - toolbarElement.clientWidth))
+   const targetWidth = Math.min(Number(sidebarWidth.cardinality) - 1, Math.max(0, Math.trunc(e.clientX) - sidebarWidth.min - toolBarElement.clientWidth))
    const targetRouteID = BigInt(targetWidth)
    if (sidebar.open.routeID === 0n) {
     sidebar.open.setRouteID(1n)

@@ -4,8 +4,8 @@ sidebar.headerElement = document.querySelector("#sidebar-view-header") ?? (() =>
  return offscreen.querySelector("#sidebar-view-header")
 })()
 
-sidebar.viewElement = document.querySelector("sidebar-view") ?? (() => {
+sidebar.viewElement = document.querySelector("#sidebar-view") ?? (() => {
  const offscreen = document.createElement("div")
  offscreen.innerHTML = sidebar["view.html"]
- return offscreen.querySelector("sidebar-view")
+ return offscreen.querySelector("#sidebar-view")
 })()
