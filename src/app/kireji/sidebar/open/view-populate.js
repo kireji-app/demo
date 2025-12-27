@@ -3,13 +3,10 @@ if (hydrated) {
  const scroller = sidebar.view.scroller
 
  if (part.routeID === 0n) {
-  scroller.pause()
-  sidebar.headerElement.remove()
-  sidebar.viewElement.remove()
-  document.body.classList.remove("sidebar-open")
+  scroller.removeView()
+  sidebar.element.remove()
  } else {
-  document.body.classList.add("sidebar-open")
-  document.querySelector("tool-bar").after(sidebar.headerElement, sidebar.viewElement)
-  scroller.resume()
+  document.querySelector("tool-bar").after(sidebar.element)
+  scroller.addView()
  }
 }

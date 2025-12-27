@@ -121,7 +121,7 @@ declare interface IPart<TOwner, TSubpart>
  readonly inheritors: IPartAny[]
  /** Whether or not the part has a routeID greater than `-1n`. */
  readonly enabled: boolean
- /** The list of static assets for the part whose source code is currently being evaluated. */
+ /** The list of static asset names for the part. */
  readonly filenames: string[]
  /** The domain name used to identify the part. */
  readonly host: string

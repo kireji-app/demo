@@ -16,8 +16,7 @@ declare interface IKirejiAppSidebar
  readonly "view": IPartOutliner<IKirejiAppSidebar>
 
  // Runtime Properties.
- readonly headerElement: HTMLHeadingElement
- readonly viewElement: HTMLElement
+ readonly element: HTMLElement
 }
 
 declare type IKirejiAppSidebarPart =

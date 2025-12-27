@@ -1,2 +1,2 @@
 const tabCount = MODEL.openTabs.length
-return tabGroup.getPermutationRouteID(MODEL.openTabs) + BigInt(MODEL.activeTab) * tabGroup.permutationSizes[tabCount] + tabGroup.tabOffsets[tabCount]
+return tabGroup.getPermutationRouteID(MODEL.openTabs.map(({ host, filename }) => ({ part: partsByHost[host], filename }))) + BigInt(MODEL.activeTab) * tabGroup.permutationSizes[tabCount] + tabGroup.tabOffsets[tabCount]

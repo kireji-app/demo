@@ -1,1 +1,1 @@
-return sidebar.view["part.html"]
+return sidebar["header.html"] + sidebar.view["part.html"]

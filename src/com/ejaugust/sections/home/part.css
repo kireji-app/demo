@@ -58,7 +58,7 @@ wallpaper- .topic {
   inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
 }
 
-#note-links>a:before {
+#note-links>a::before {
  content: "";
  position: absolute;
  left: 0;

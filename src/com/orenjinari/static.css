@@ -3,7 +3,7 @@ body {
  background-color: var(--bg);
 }
 
-wallpaper->scroller->scroll-content:before,
+wallpaper->scroller->scroll-content::before,
 wallpaper->scroller->scroll-content::after {
  position: absolute;
  width: 100%;

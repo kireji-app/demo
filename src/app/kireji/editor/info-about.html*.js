@@ -8,7 +8,7 @@ return (
    ) + "</h3>" + (
     selectedPart.host === "part.abstract.parts" ?
      "<span disabled>This part has no prototype.</span>" :
-     `Extends <a href="#" onclick="${editor.runtimeReference}.open(event,${allParts.indexOf(selectedPart.prototype)})">` + (
+     `Extends <a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(selectedPart.prototype)})">` + (
       selectedPart.prototype.title ?? selectedPart.prototype.key
      ) + '</a>'
    )

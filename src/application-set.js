@@ -1,5 +1,4 @@
-EVENT.preventDefault()
-EVENT.stopPropagation()
+_.noop(POINTER_EVENT)
 
 const host = LINK.getAttribute("href").slice(8)
 

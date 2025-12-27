@@ -1,6 +1,6 @@
 {
  "extends": "match",
  "go": [
-  "EVENT"
+  "POINTER_EVENT"
  ]
 }

@@ -5,7 +5,5 @@
  "onresize": [],
  "wrap": [
   "INNER_HTML"
- ],
- "pause": [],
- "resume": []
+ ]
 }

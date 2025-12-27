@@ -1,1 +1,0 @@
-return part.routeID === 0n ? "" : "sidebar-open"

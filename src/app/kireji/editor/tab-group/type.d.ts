@@ -8,11 +8,14 @@ declare interface IKirejiAppTabGroup
  /** The part corresponding to the currently selected tab, equal to `tabGroup.openTabs[tabGroup.activeTab].part` */
  readonly "selectedPart": IPartAny
  /** Returns the specific permutation ID of the given array of tab models without changing the state of the tab group. */
- readonly getPermutationRouteID(TABS: IKirejiAppTabGroupTab[]): bigint
+ readonly getPermutationRouteID(TABS: IKirejiAppTabGroupTabArray): bigint
  /** Updates the state fields for the currently active part part, if it is a summary view. */
  readonly listener(SENDER: IPartAny): void
+ /** Detaches from listeners to prevent the edge case wherein departing from the summary of a part belonging to the kireji app triggers changes to that summary page _after_ departing from it. */
+ readonly detachListeners(): void
 
  // Runtime Properties.
+ readonly pointerID?: number
  readonly tabOffsets: bigint[]
  readonly tabBitDepths: bigint[]
  readonly permutationSizes: bigint[]
@@ -20,11 +23,15 @@ declare interface IKirejiAppTabGroup
   * 
   * The most recent tab model, as determined while populating the view (not set propagating the route ID). */
  readonly viewedTab?: IKirejiAppTabGroupTab
+ /** The most recent permutation route ID, used to quickly determine if the tab arrangement has changed since the last view population. */
+ readonly viewedPermutation?: bigint
+ /** The set of viewed tab objects corresponding to the current `tabGroup.viewedPermutation`. */
+ readonly viewedOpenTabs: IKirejiAppTabGroupTabArray
  /** A subindex representing which permutation of k open tabs is selected. */
  readonly permutationRouteID: bigint
  /** A Fenwick tree that allows performant ranking and unranking of permutation indices. */
  readonly tree: TabTree
- readonly openTabs: IKirejiAppTabGroupTab[]
+ readonly openTabs: IKirejiAppTabGroupTabArray
  /** The index of the currently active tab. */
  readonly activeTab: number
  /** The array of memoized offset route IDs corresponding to the start of each part's filename plane. */
@@ -34,6 +41,8 @@ declare interface IKirejiAppTabGroup
  /** A data type which can be used to performantly rank and unrank permutation indices. */
  readonly TabTree: typeof TabTree
 }
+
+declare type IKirejiAppTabGroupTabArray = IKirejiAppTabGroupTab[]
 
 declare class TabTree {
  constructor(): TabTree
@@ -62,3 +71,4 @@ declare const TAB_PART: IPartAny
 declare const TAB_FILENAME: string
 declare const selectedTab: IKirejiAppTabGroupTab
 declare const selectedPart: IPartAny
+declare const TABS: IKirejiAppTabGroupTabArray

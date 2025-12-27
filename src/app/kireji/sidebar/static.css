@@ -1,27 +1,36 @@
+side-bar {
+ position: absolute;
+ top: 0;
+ left: var(--tool-bar-width);
+ width: var(--sidebar-view-width);
+ bottom: 0;
+}
+
 #sidebar-view-header {
  position: absolute;
  z-index: 10;
  top: 0;
+ left: 0;
+ right: 0;
  margin: 0;
  padding: calc(var(--spacing) / 3);
  font-weight: 300;
  background-color: var(--bg-mode-er);
- line-height: var(--line-height);
- font-size: calc(var(--line-height) * 2 / 3);
+ line-height: var(--tab-line-height);
+ font-size: calc(var(--tab-line-height) * 2 / 3);
  white-space: pre;
  text-overflow: ellipsis;
  overflow: hidden;
- left: var(--tool-bar-width);
- width: var(--sidebar-view-width);
 }
 
 #sidebar-view {
  position: absolute;
- top: var(--header-height);
- width: var(--sidebar-view-width);
+ top: var(--tab-group-height);
+ right: 0;
  bottom: 0;
- left: var(--tool-bar-width);
+ left: 0;
  background-color: var(--bg-mode-est);
+ overflow: clip;
 }
 
 #sidebar-view>scroller->scroll-content>details {
@@ -38,8 +47,8 @@
 
 #sidebar-view summary {
  display: block;
- height: var(--line-height);
- line-height: var(--line-height);
+ height: var(--tab-line-height);
+ line-height: var(--tab-line-height);
  color: var(--fg-mode);
  padding: 0;
  white-space: pre;
@@ -76,9 +85,9 @@ outliner-spacer {
  stroke: var(--fg);
  vertical-align: top;
  display: inline-block;
- height: var(--line-height);
- width: var(--line-height);
- border-radius: calc(var(--icon-size) * 0.4 / 3);
+ height: var(--tab-line-height);
+ width: var(--tab-line-height);
+ border-radius: calc(var(--tab-icon-size) * 0.4 / 3);
  margin: 0;
  position: relative;
 }
@@ -86,24 +95,28 @@ outliner-spacer {
 #sidebar-view summary>.explore-toggle,
 #sidebar-view summary>img,
 #sidebar-view svg {
- height: var(--icon-size);
- width: var(--icon-size);
- margin: calc((var(--line-height) - var(--icon-size)) / 2);
+ height: var(--tab-icon-size);
+ width: var(--tab-icon-size);
+ margin: calc((var(--tab-line-height) - var(--tab-icon-size)) / 2);
 }
 
 outliner-spacer {
- width: calc(var(--line-height) / 2);
+ width: calc(var(--tab-line-height) / 2);
  border-radius: 0;
  border-right: 1px solid var(--bg-un-mode);
 }
 
 outliner-spacer:has(+ img) {
- margin-right: calc(var(--line-height) / 2);
+ margin-right: calc(var(--tab-line-height) / 2);
+}
+
+details.empty>summary>outliner-spacer:last-of-type {
+ border: none;
 }
 
 #sidebar-view summary .label {
- padding-left: calc((var(--line-height) - var(--icon-size)) / 2);
- padding-right: calc(var(--line-height) - var(--icon-size));
+ padding-left: calc((var(--tab-line-height) - var(--tab-icon-size)) / 2);
+ padding-right: calc(var(--tab-line-height) - var(--tab-icon-size));
  font-weight: 300;
 }
 
@@ -112,20 +125,17 @@ outliner-spacer:has(+ img) {
  font-weight: 100;
 }
 
-body.modern #sidebar-view summary {
- box-shadow:
-  inset -2px 0 0 -1px var(--bg-un-mode);
-}
-
-body.modern #sidebar-view {
- box-shadow:
-  inset -2px 0 0 -1px var(--bg-un-mode);
-}
+/* Modern */
 
 body.modern #sidebar-view-header {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode),
   inset 0 2px 0 -1px var(--bg-un-mode);
+}
+
+body.modern #sidebar-view {
+ box-shadow:
+  inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
 body.modern.light #sidebar-view {
@@ -136,10 +146,37 @@ body.modern.dark #sidebar-view {
  background-color: var(--bg-mode-er);
 }
 
+body.modern #sidebar-view summary {
+ box-shadow:
+  inset -2px 0 0 -1px var(--bg-un-mode);
+}
+
+/* Vintage */
+
+body.vintage side-bar {
+ top: 6px;
+ width: calc(var(--sidebar-view-width) - (var(--handle-thickness) / 2) - 2px);
+ left: calc(6px + var(--tool-bar-width));
+ bottom: 6px;
+}
+
+body.vintage side-bar::after {
+ content: "";
+ position: absolute;
+ box-shadow: var(--deep-inset);
+ top: -2px;
+ bottom: -2px;
+ left: -2px;
+ right: -2px;
+ pointer-events: none;
+}
+
 body.vintage #sidebar-view-header {
  font-size: var(--default-font-size);
  padding: 0 4px;
- line-height: var(--header-height);
+ line-height: var(--tab-group-height);
+ box-shadow: var(--deep-outset);
+ background-color: var(--bg);
 }
 
 body.vintage.light #sidebar-view {
@@ -148,32 +185,4 @@ body.vintage.light #sidebar-view {
 
 body.vintage.dark #sidebar-view {
  background-color: black;
-}
-
-body.vintage #sidebar-view {
- top: calc(6px + var(--header-height));
- bottom: 8px;
-}
-
-body.vintage #sidebar-view::after {
- content: "";
- position: absolute;
- box-shadow: var(--deep-inset);
- top: calc(-2px - var(--header-height));
- bottom: -2px;
- left: -2px;
- right: -2px;
- pointer-events: none;
-}
-
-body.vintage #sidebar-view,
-body.vintage #sidebar-view-header {
- width: calc(var(--sidebar-view-width) - (var(--handle-thickness) / 2) - 8px);
- left: calc(6px + var(--tool-bar-width));
-}
-
-body.vintage #sidebar-view-header {
- box-shadow: var(--deep-outset);
- background-color: var(--bg);
- top: 6px;
 }

@@ -4,13 +4,13 @@
   "REQUEST_URL"
  ],
  "application-set": [
-  "EVENT",
+  "POINTER_EVENT",
   "LINK"
  ],
  "validate": [],
  "go": [
-  "ANCHOR",
-  "EVENT"
+  "POINTER_EVENT",
+  "ANCHOR"
  ],
  "pathname-translate-canonical": [
   "HOST",

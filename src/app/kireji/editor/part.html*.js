@@ -1,6 +1,6 @@
-return (
- "<editor->" + editor.scroller.wrap(
+return "<editor->" + (
+ "<editor-view>" + editor.scroller.wrap(
   editor[`${tabGroup.openTabs.length ? (tabGroup.selectedTab.filename ? "file" : "summary") : "empty"}-view.html`]
- ) + "</editor->" +
+ ) + "</editor-view>" +
  tabGroup["part.html"]
-)
+) + "</editor->"

@@ -1,4 +1,4 @@
-_.noop(EVENT)
+_.noop(POINTER_EVENT)
 
 const button = document.getElementById("update-control")
 const label = button.querySelector(".label")

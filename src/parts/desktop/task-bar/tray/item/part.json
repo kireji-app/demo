@@ -1,6 +1,6 @@
 {
  "abstract": true,
  "go": [
-  "EVENT"
+  "POINTER_EVENT"
  ]
 }

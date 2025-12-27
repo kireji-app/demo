@@ -1,16 +1,13 @@
 {
  "extends": "mix",
  "activate": [
-  "EVENT",
-  "TAB_ELEMENT"
- ],
- "close": [
-  "EVENT",
-  "TAB_ELEMENT"
- ],
- "open": [
-  "EVENT",
+  "POINTER_EVENT",
+  "TARGET_ELEMENT",
   "PART_INDEX",
   "FILE_INDEX"
+ ],
+ "close": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
  ]
 }

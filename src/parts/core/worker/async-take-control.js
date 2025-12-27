@@ -18,12 +18,15 @@ await logScope(1, 'Ensuring ServiceWorker Controller', async log => {
   })
 
   if (!production) {
-   /* In development builds, we reset to the landing hash every time we rebuild
-    the service worker, to avoid edge cases where the latest development has a
-    different part arrangement from the original. */
-   nav.serviceWorker.oncontrollerchange = () =>
-    location.assign(location.origin + `/${_.version}/${_.landingHash}/`)
+   nav.serviceWorker.oncontrollerchange = () => {
+    if (_.resetLocalState) {
+     /* Reset to the landing hash on service worker update (useful during
+        development that changes the part arrangement frequently. */
+     location.assign(location.origin + `/${_.version}/${_.landingHash}/`)
+    } else location.reload()
+   }
   }
+
  }
 
  worker.registration.onupdatefound = event => {

@@ -58,7 +58,7 @@
  overflow: hidden;
 }
 
-#notebook-section pre:before {
+#notebook-section pre::before {
  background: var(--paper-color);
 }
 

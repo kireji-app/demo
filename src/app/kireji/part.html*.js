@@ -1,1 +1,1 @@
-return editor["part.html"] + sidebar["part.html"]
+return toolBar["part.html"] + sidebar["part.html"] + editor["part.html"]

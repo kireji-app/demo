@@ -4,6 +4,6 @@
   "INCOMING_VERSION"
  ],
  "go": [
-  "EVENT"
+  "POINTER_EVENT"
  ]
 }

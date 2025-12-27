@@ -1,4 +1,4 @@
-_.noop(EVENT)
+_.noop(POINTER_EVENT)
 
 const { host, pathname, hash } = new URL(ANCHOR.href, `https://${_.application.host}${encodePathname(_.routeID)}`)
 

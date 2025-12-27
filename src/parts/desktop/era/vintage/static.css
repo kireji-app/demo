@@ -177,9 +177,9 @@ body {
 
 body.dark {
  --deep-inset:
-  inset -1px -1px var(--bg-light-er),
+  inset -1px -1px var(--bg-light-est),
   inset 1px 1px var(--bg-dark),
-  inset -2px -2px var(--bg-light-est),
+  inset -2px -2px var(--bg-light-er),
   inset 2px 2px black;
  --deep-outset:
   inset -1px -1px black,

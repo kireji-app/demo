@@ -1,3 +1,1 @@
-return toolBar["part.html"] +
- (sidebar.open.routeID === 0n ? "" : sidebar["header.html"] + sidebar["view.html"]) +
- sidebar.width["part.html"]
+return (sidebar.open.routeID === 0n ? "" : `<side-bar>${sidebar["view.html"]}</side-bar>`) + sidebar.width["part.html"]

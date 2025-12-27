@@ -35,11 +35,11 @@ declare interface IEcosystem
  /** A JSON object serializing the desired landing model of the ecosystem. */
  readonly "landing-model.json": string
  /** Sets the current application, but does not propagate any view functions since the application currently cannot be changed at runtime on the client without navigating to a different host. */
- readonly setApplication(EVENT: Event, LINK: string): void
+ readonly setApplication(POINTER_EVENT: PointerEvent, LINK: string): void
  /** Returns a css that inlines `early-*` compressed images for enhancing the first page appearance when using server-side rendering. It scans the given body HTML for usages of the early images to optimize inclusion. */
  readonly getImagesEarly(BODY_HTML: string): string
  /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
- readonly go(ANCHOR: string, EVENT: event): void
+ readonly go(POINTER_EVENT: PointerEvent, ANCHOR: string): void
  /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname(CANONICAL_ROUTE: string): string
  /** Sets the configuration space to match the given request url string. */
@@ -62,6 +62,8 @@ declare interface IEcosystem
  readonly landingRouteID: bigint
  /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
  readonly frameRequest: number | null
+ /** A method which prevents the default action of the given pointer event and also stops the event from propagating, keeping any reaction contained to the target element. */
+ readonly noop(POINTER_EVENT?: PointerEvent): void
 }
 
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
@@ -111,6 +113,14 @@ declare interface IPropertyTable<T> {
  readonly ["view-distribute-update"]: T
  readonly ["view-distribute-end"]: T
 }
+/** The pointer event that the current listener is reacting to.
+ * 
+ * *Available only in pointer event listeners.* */
+declare const POINTER_EVENT: PointerEvent
+/** The element that the current pointer event listener is reacting to.
+ * 
+ * *Available only in pointer event listeners.* */
+declare const TARGET_ELEMENT: HTMLElement
 
 declare interface IPartData extends IPropertyTable<string[]> {
  readonly extends: string

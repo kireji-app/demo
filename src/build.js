@@ -367,7 +367,6 @@ function ƒ(_) {
        prototype = hydrateRecursive(typename)
        Object.setPrototypeOf(part, prototype)
        part.define({
-        prototype: { value: prototype },
         isAbstract: { value: part.manifest.abstract }
        })
        Object.setPrototypeOf(part.manifest, prototype.manifest)
@@ -476,7 +475,11 @@ function ƒ(_) {
         property.niceNameIsValidIdentifier = property.isSymbol || property.isGenerated || Property.identifierPattern.test(property.niceName)
         property.propertyReference = property.niceNameIsValidIdentifier ? property.niceName : `["${property.niceName}"]`
         property.propertyAccessor = property.propertyReference.startsWith("[") ? property.propertyReference : "." + property.niceName
-        property.argumentString = "(" + (part.manifest[PROPERTY_ID]?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
+        const args = part.manifest[PROPERTY_ID];
+        const errorIndex = args?.findIndex(arg => !arg || typeof arg !== "string") ?? -1
+        if (errorIndex !== -1)
+         throw `Invalid method argument\n\t_.${[...domains].reverse().join(".")}.manifest["${PROPERTY_ID}"][${errorIndex}]\n\tAll arguments must be non-empty strings.`
+        property.argumentString = "(" + (args?.join(", ") ?? (PROPERTY_ID.startsWith("set-") ? "VALUE" : "")) + ")"
         property.modifiers = property.isAsync ? "async " : (property.isGenerated || property.isAlias ? "get " : "")
         property.signature = "\n\n " + property.propertyReference + `: {\n  ${(property.isGenerated || property.isAlias) ? property.modifiers : ((property.isAsync ? property.modifiers : "") + "value")}${property.argumentString} {`
         sourceFile.addSection(`@method-open@${property.signature}`, buildSource)
@@ -486,7 +489,10 @@ function ƒ(_) {
         sourceFile.addLine(`@method-close@ }\n },`, buildSource, null, null, " ")
        }
       }
-      part.define({ Property: { value: Property } })
+      part.define({
+       Property: { value: Property },
+       prototype: { value: Object.getPrototypeOf(part) }
+      })
       for (const fn of part.filenames) {
        if (!fn.includes(".") && fn.includes("-")) {
         Property.ids.add("@" + fn)

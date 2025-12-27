@@ -4,10 +4,15 @@
   "TAB_FILENAME",
   "TAB_INDEX"
  ],
+ "listener": [
+  "SENDER"
+ ],
  "routeID-get-permutation": [
   "TABS"
  ],
- "listener": [
-  "SENDER"
- ]
+ "factor-get-permutation": [
+  "NUMBER_OF_TABS_OPEN",
+  "CURRENT_TAB_INDEX"
+ ],
+ "listeners-detach": []
 }

@@ -2,15 +2,16 @@
  position: absolute;
  z-index: 10;
  top: 0;
+ right: 0;
+ left: 0;
+ height: var(--tab-group-height);
  margin: 0;
  font-weight: 300;
  background-color: var(--bg-mode-er);
- line-height: var(--line-height);
- font-size: calc(var(--line-height) * 2 / 3);
+ line-height: var(--tab-line-height);
+ font-size: calc(var(--tab-line-height) * 2 / 3);
  white-space: pre;
  text-overflow: ellipsis;
- right: 0;
- left: var(--sidebar-width);
  padding: 0;
  display: flex;
  flex-wrap: nowrap;
@@ -19,7 +20,6 @@
  overflow-x: auto;
  scrollbar-width: none;
  overscroll-behavior: none;
- height: var(--header-height);
 }
 
 #tab-group::-webkit-scrollbar {
@@ -27,8 +27,8 @@
 }
 
 #tab-group>svg {
- height: var(--line-height);
- width: var(--line-height);
+ height: var(--tab-line-height);
+ width: var(--tab-line-height);
  stroke: var(--fg-mode-er);
  margin: 0;
  fill: none;
@@ -46,26 +46,35 @@
  display: none;
 }
 
+tab-[data-drag-preview] {
+ position: fixed;
+ pointer-events: none;
+}
+
+tab-[data-drag-preview] .close-tab {
+ display: none;
+}
+
 tab- {
  height: fit-content;
  white-space: pre;
  text-overflow: ellipsis;
- overflow: hidden;
+ /*overflow: hidden;*/
  display: flex;
  flex-direction: row;
  flex-wrap: nowrap;
  gap: calc(var(--spacing) / 3);
- height: var(--header-height);
+ height: var(--tab-group-height);
  position: relative;
  background-color: transparent;
  color: var(--fg);
  flex: 0 0 fit-content;
- line-height: var(--line-height);
+ line-height: var(--tab-line-height);
 }
 
 tab- img {
- height: var(--icon-size);
- margin: calc((var(--header-height) - var(--icon-size)) / 2) 0;
+ height: var(--tab-icon-size);
+ margin: calc((var(--tab-group-height) - var(--tab-icon-size)) / 2) 0;
 }
 
 tab- .tab-button {
@@ -73,17 +82,36 @@ tab- .tab-button {
  font-weight: 400;
  height: unset;
  padding-left: calc(var(--spacing) / 1.5);
- padding-right: var(--header-height);
+ padding-right: var(--tab-group-height);
  display: flex;
  flex-direction: row;
  flex-wrap: nowrap;
  gap: calc(var(--spacing) / 3);
 }
 
-body wallpaper- tab- button.close-tab {
+tab- .close-tab {
  position: absolute;
  text-align: center;
  font-size: var(--default-font-size);
+}
+
+tab-[data-drop-target]::before {
+ pointer-events: none;
+ content: "";
+ position: absolute;
+ width: 2px;
+ background-color: white;
+ height: 100%;
+ top: 0;
+ z-index: 999;
+}
+
+tab-[data-drop-target="after"]::before {
+ right: -1px;
+}
+
+tab-[data-drop-target="before"]::before {
+ left: -1px;
 }
 
 body.modern tab- button:hover {
@@ -92,10 +120,10 @@ body.modern tab- button:hover {
 
 body.modern tab- .close-tab {
  border-radius: 50%;
- right: calc((var(--header-height) - var(--line-height)) / 2);
- top: calc((var(--header-height) - var(--line-height)) / 2);
- width: var(--line-height);
- height: var(--line-height);
+ right: calc((var(--tab-group-height) - var(--tab-line-height)) / 2);
+ top: calc((var(--tab-group-height) - var(--tab-line-height)) / 2);
+ width: var(--tab-line-height);
+ height: var(--tab-line-height);
 }
 
 body.modern tab- .close-tab:hover {
@@ -139,30 +167,34 @@ body.modern tab-[data-selected] {
 }
 
 body.modern tab- .tab-button {
- line-height: var(--header-height);
+ line-height: var(--tab-group-height);
 }
 
 body.modern tab- .tab-path {
- font-size: calc(var(--line-height) * 1 / 2);
+ font-size: calc(var(--tab-line-height) * 1 / 2);
  font-weight: 200;
  display: inline-block;
 }
 
+body.modern tab-[data-drag-preview] .tab-path {
+ display: none;
+}
+
 body.vintage #tab-group {
- left: calc(2px + var(--sidebar-width));
- right: 6px;
- top: 4px;
- height: calc(4px + var(--header-height));
+ height: calc(4px + var(--tab-group-height));
  background: transparent;
  padding: 0 2px;
+ top: -8px;
+ left: -6px;
+ right: -6px;
 }
 
 body.vintage tab- .close-tab {
  right: 4px;
  top: 3px;
- width: calc(var(--header-height) - 5px);
- height: calc(var(--header-height) - 5px);
- line-height: calc(var(--header-height) - 5px);
+ width: calc(var(--tab-group-height) - 5px);
+ height: calc(var(--tab-group-height) - 5px);
+ line-height: calc(var(--tab-group-height) - 5px);
 }
 
 body.vintage tab- .close-tab:hover {
@@ -179,7 +211,7 @@ body.vintage tab-[data-selected] .close-tab {
 }
 
 body.vintage tab-[data-selected] {
- height: calc(var(--header-height) + 4px);
+ height: calc(var(--tab-group-height) + 4px);
  border-bottom-right-radius: 3px;
  border-bottom-left-radius: 3px;
  margin-left: -2px;
@@ -192,24 +224,24 @@ body.vintage tab- .tab-path {
 }
 
 body.vintage tab-:not([data-selected]) {
- height: var(--header-height);
+ height: var(--tab-group-height);
  position: relative;
  top: 2px;
 }
 
 body.vintage tab-[data-selected] .tab-button {
- height: calc(var(--header-height) + 4px);
+ height: calc(var(--tab-group-height) + 4px);
  padding-top: 2px;
- padding-right: calc(var(--header-height) + 10px);
+ padding-right: calc(var(--tab-group-height) + 10px);
  padding-left: calc(var(--spacing) / 1.5 + 2px);
 }
 
 body.vintage tab- .tab-button {
- padding-right: calc(var(--header-height) + 8px);
+ padding-right: calc(var(--tab-group-height) + 8px);
  border-top-left-radius: 2px;
  border-top-right-radius: 2px;
  background-color: var(--bg);
- line-height: var(--header-height);
+ line-height: var(--tab-group-height);
  box-shadow:
   inset -2px 0 0 -1px black,
   inset 1px 1px 0 0 var(--bg-light-est),
@@ -223,7 +255,7 @@ body.dark.vintage tab- .tab-button {
   inset -3px 0 0 -1px var(--bg-dark);
 }
 
-body.vintage tab- button:focus:after {
+body.vintage tab- button:focus::after {
  border: 1px dotted white;
  mix-blend-mode: difference;
  content: "";
@@ -236,10 +268,39 @@ body.vintage tab- button:focus:after {
  bottom: var(--inset);
 }
 
-body.vintage tab- .tab-button:focus:after {
- right: calc(var(--header-height) + var(--inset));
+body.vintage tab- .tab-button:focus::after {
+ right: calc(var(--tab-group-height) + var(--inset));
 }
 
-body.vintage tab-[data-selected] .tab-button:focus:after {
+body.vintage tab-[data-selected] .tab-button:focus::after {
  --inset: 4px;
+}
+
+body.vintage tab-[data-drag-preview] .tab-button {
+ box-shadow: inset 0 0 0 1px black;
+}
+
+body.vintage tab-[data-drop-target]::before {
+ background: var(--pressed-checker), var(--bg-dark-est);
+ width: 4px;
+}
+
+body.vintage tab-[data-drop-target="after"]::before {
+ right: -2px;
+}
+
+body.vintage tab-[data-drop-target="before"]::before {
+ left: -2px;
+}
+
+body.vintage tab-[data-selected][data-drop-target="after"]::before {
+ right: 0;
+ top: 2px;
+ bottom: 2px;
+}
+
+body.vintage tab-[data-selected][data-drop-target="before"]::before {
+ left: 0;
+ top: 2px;
+ bottom: 2px;
 }

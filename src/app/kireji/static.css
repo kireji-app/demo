@@ -1,22 +1,22 @@
 wallpaper- {
  font: inherit;
- --tool-bar-width: calc(var(--icon-size) + (1.75 * var(--spacing)));
+ --tool-bar-width: calc(var(--tab-icon-size) + (1.75 * var(--spacing)));
  --sidebar-width: var(--tool-bar-width);
  overscroll-behavior: none;
 }
 
-body.sidebar-open wallpaper- {
+wallpaper-:has(side-bar) {
  --sidebar-width: calc(var(--tool-bar-width) + var(--sidebar-view-width));
 }
 
-body.modern wallpaper- {
- --line-height: 26px;
- --icon-size: 20px;
- --header-height: calc(var(--line-height) + var(--spacing) / 1.5);
+body.modern {
+ --tab-group-height: calc(var(--tab-line-height) + var(--spacing) / 1.5);
+ --tab-line-height: 26px;
+ --tab-icon-size: 20px;
 }
 
-body.vintage wallpaper- {
- --line-height: 20px;
- --icon-size: 16px;
- --header-height: calc(var(--line-height) + 2px);
+body.vintage {
+ --tab-group-height: calc(var(--tab-line-height) + 2px);
+ --tab-line-height: 20px;
+ --tab-icon-size: 16px;
 }

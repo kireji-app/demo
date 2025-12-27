@@ -12,10 +12,10 @@ tool-bar>button {
  width: var(--tool-bar-width);
  height: var(--tool-bar-width);
  display: block;
- padding: calc((var(--tool-bar-width) - var(--icon-size)) / 2);
+ padding: calc((var(--tool-bar-width) - var(--tab-icon-size)) / 2);
  text-align: center;
- font-size: var(--icon-size);
- line-height: var(--icon-size);
+ font-size: var(--tab-icon-size);
+ line-height: var(--tab-icon-size);
  position: relative;
 }
 
@@ -24,10 +24,16 @@ body.modern tool-bar {
   inset -2px 0 0 -1px var(--bg-un-mode),
   inset 2px 0 0 -1px var(--bg-un-mode),
   inset 0 2px 0 -1px var(--bg-un-mode);
+ background-color: var(--bg-mode-er);
 }
 
-body.modern.sidebar-open tool-bar>button[data-selected] {
+body.modern wallpaper-:has(side-bar) tool-bar>button[data-selected] {
  box-shadow: inset 3px 0 0 -1px var(--accent);
+}
+
+body.vintage tool-bar {
+ top: 4px;
+ bottom: 6px;
 }
 
 body.vintage tool-bar>button {
@@ -35,7 +41,7 @@ body.vintage tool-bar>button {
 }
 
 body.vintage tool-bar>button:active,
-body.vintage.sidebar-open tool-bar>button[data-selected] {
+body.vintage wallpaper-:has(side-bar) tool-bar>button[data-selected] {
  box-shadow: var(--deep-inset);
  background: var(--pressed-checker), var(--bg-un-mode);
 }
@@ -44,7 +50,7 @@ body.vintage tool-bar>button {
  background-color: var(--bg);
 }
 
-body.vintage tool-bar>button:focus:after {
+body.vintage tool-bar>button:focus::after {
  border: 1px dotted white;
  mix-blend-mode: difference;
  content: "";

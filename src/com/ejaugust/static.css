@@ -15,7 +15,7 @@ wallpaper- {
 }
 
 wallpaper- ::after,
-wallpaper- :before {
+wallpaper- ::before {
  pointer-events: none;
 }
 
@@ -44,11 +44,11 @@ wallpaper- header :is(a, a:visited) {
  text-decoration: none;
 }
 
-wallpaper- :is(header, header:before) {
+wallpaper- :is(header, header::before) {
  border-radius: calc(var(--radius) * 0.5) calc(var(--radius) * 0.2) 0 var(--radius);
 }
 
-wallpaper- header:before {
+wallpaper- header::before {
  background:
   var(--ejaugust-com--spine-png),
   var(--accent-mode-est);
@@ -60,7 +60,7 @@ wallpaper- header:before {
   inset 5px 8px 3px -4px #fff2;
 }
 
-body.dark wallpaper- header:before {
+body.dark wallpaper- header::before {
  filter: hue-rotate(18deg) saturate(1.3) brightness(0.5) contrast(1.5);
 }
 
@@ -100,10 +100,10 @@ li~li {
  z-index: 0;
 }
 
-wallpaper- header:before,
-#notebook-section:before,
+wallpaper- header::before,
+#notebook-section::before,
 #notebook-section::after,
-#notebook-section pre:before,
+#notebook-section pre::before,
 #notebook-section pre::after {
  content: "";
  position: absolute;
@@ -114,8 +114,8 @@ wallpaper- header:before,
  z-index: -1;
 }
 
-#note-links>a:before,
-#notebook-section:before,
+#note-links>a::before,
+#notebook-section::before,
 #notebook-section pre::after {
  pointer-events: none;
  background: var(--ejaugust-com--grid-png);
@@ -146,8 +146,8 @@ body.dark #notebook-section::after {
  filter: hue-rotate(-130deg) saturate(2);
 }
 
-body.dark #notebook-section:before,
-body.dark #note-links>a:before {
+body.dark #notebook-section::before,
+body.dark #note-links>a::before {
  filter: invert();
 }
 
