@@ -3,13 +3,10 @@
   "kireji": {
    "editor": {
     "tab-group": {
-     "activeTab": 1,
+     "activeTab": 0,
      "openTabs": [
       {
        "host": "kireji.app"
-      },
-      {
-       "host": "part.abstract.parts"
       }
      ]
     }
@@ -48,7 +45,7 @@
  "parts": {
   "desktop": {
    "color": "light",
-   "era": "vintage"
+   "era": "modern"
   }
  }
 }
