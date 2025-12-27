@@ -44,6 +44,19 @@ editor-view>scroller->scroll-content:has(#file-viewer) {
  padding: 0;
 }
 
+editor-:has(#tab-group:empty) editor-view>scroller->scroll-content {
+ display: flex;
+ flex-flow: column nowrap;
+ align-items: center;
+ justify-content: center;
+ height: 100%;
+ color: var(--bg-un-mode);
+}
+
+editor-:has(#tab-group:empty) editor-view>scroller->scroll-content>svg {
+ opacity: 50%;
+}
+
 wallpaper-:has(#tab-group:empty) editor-view>scroll-bar {
  display: none;
 }
@@ -51,6 +64,8 @@ wallpaper-:has(#tab-group:empty) editor-view>scroll-bar {
 wallpaper-:has(#tab-group:empty) editor-view>scroller- {
  margin-right: 0;
  width: 100%;
+ transform: unset !important;
+ height: 100%;
 }
 
 #file-viewer {
@@ -293,6 +308,18 @@ body.vintage editor-::after {
 
 body.vintage editor-view:not(:has(#file-viewer)) {
  background-color: var(--bg);
+}
+
+body.vintage editor-:has(#tab-group:empty) editor-view {
+ top: 0;
+}
+
+body.vintage editor-:has(#tab-group:empty)::before {
+ content: unset;
+}
+
+body.vintage editor-:has(#tab-group:empty)::after {
+ content: unset;
 }
 
 body.vintage #file-viewer {

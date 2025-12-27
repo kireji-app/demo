@@ -14,6 +14,7 @@ declare interface IKirejiAppEditor
  readonly "static.css": string
  readonly "summary-view.html": string
  readonly "file-view.html": string
+ readonly "background.svg": string
  /** Creates a new drag-drop-activate session for a tab. If one already exists (multi-touch), the call is ignored.
   * 
   * If TARGET_ELEMENT is a tab:
