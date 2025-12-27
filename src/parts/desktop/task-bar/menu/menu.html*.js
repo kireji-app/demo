@@ -1,6 +1,6 @@
 return `
 <task-menu style="${menu.arm.styleAttr}" onclick=self._?.noop(event) onpointerdown="${menu.runtimeReference}.go()">
- <task-sidebar onclick=self._?.noop(event)>
+ <task-sidebar onclick=self._?.noop(event) onpointerdown=self._?.noop(event)>
  <ul id=application-control>${Object.entries(_.liveApplications).map(([host, application]) => {
  return `
   <li class=task-link${application === _.application ? ` data-here` : ""}>
