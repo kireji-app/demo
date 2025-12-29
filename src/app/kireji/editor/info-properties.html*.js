@@ -1,7 +1,7 @@
 const
  propertyNames = new Set(),
  getLinkHTML = (part, filename, modifiers = "", niceName = `"${filename}"`, argumentString = "") => {
-  return `<div><a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(part)},${part.filenames.indexOf(filename)})">&nbsp;&nbsp;${filename in Object.getPrototypeOf(part) ? "<i>" : ""}${modifiers ?? ""}${niceName}${argumentString}${filename in Object.getPrototypeOf(part) ? "</i>" : ""}</a></div>${part === selectedPart ? "<div>" + (
+  return `<div>&nbsp;&nbsp;<a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(part)},${part.filenames.indexOf(filename)})">${filename in Object.getPrototypeOf(part) ? "<i>" : ""}${modifiers ?? ""}${niceName}${argumentString}${filename in Object.getPrototypeOf(part) ? "</i>" : ""}</a></div>${part === selectedPart ? "<div>" + (
    // The number of whitespace characters before the filename entry in the table.
    part.domains.length + 1 +
    // The number of characters taken up by the filename itself, including quotes.
