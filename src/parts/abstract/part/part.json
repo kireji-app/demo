@@ -26,13 +26,17 @@
   "FILTER_FUNCTION"
  ],
  "each-for": [
-  "FILTER_FUNCTION"
+  "FOR_EACH_FUNCTION"
  ],
  "map": [
   "MAP_FUNCTION"
  ],
  "includes": [
   "SUBPART"
+ ],
+ "reduce": [
+  "REDUCE_FUNCTION",
+  "INITIAL_VALUE"
  ],
  "indexOf": [
   "...ARGS"

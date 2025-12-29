@@ -1,4 +1,2 @@
-const parts = []
-
 for (const subpart of part)
- MAP_FUNCTION(subpart, subpart.index, part)
+ FOR_EACH_FUNCTION(subpart, subpart.index, part)

@@ -44,15 +44,16 @@ declare interface IPart<TOwner, TSubpart>
  /** Calls loop on this part and then propagates the call leafward to all subparts. */
  readonly distributeLoop(): void
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
- readonly filter(FILTER_FUNCTION: (subpart: TSubpart, index: number, part: TSubpart) => TSubpart): TSubpart[]
+ readonly filter(FILTER_FUNCTION: (subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => TSubpart): TSubpart[]
  /** performs MAP_FUNCTION on every subpart of the part. */
- readonly forEach(MAP_FUNCTION: (subpart: TSubpart, index: number, part: TSubpart) => void): void
+ readonly forEach(MAP_FUNCTION: (subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => void): void
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
  readonly includes(SUBPART: TSubpart): boolean
+ readonly reduce(REDUCE_FUNCTION: (result: TResult, subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => TResult, INITIAL_VALUE: TResult): TResult
  /** If defined, the per-frame update method for this part. Useful for implementing game features. */
  readonly loop?(TIME: DOMHighResTimeStamp): void
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
- readonly map(MAP_FUNCTION: (subpart: TSubpart, index: number, part: TSubpart) => TSubpart): TSubpart[]
+ readonly map(MAP_FUNCTION: (subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => TResult): TResult[]
  /** Converts the given model to a routeID without modifying the state of the part. */
  readonly modelToRouteID(MODEL: any): bigint
  /** A URI-encoded svg data segment that can represent the bounding box of a part image but is small enough to be inlined in image-heavy server-rendered views. */
