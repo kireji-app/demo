@@ -1,1 +1,1 @@
-An application is a part located at an origin which is accessible from the web via an A record. Applications are no longer located at the "www" subdomain. The server now forwards all "www" subdomains to their "naked" or "bare" apex domain. All applications extend the `mix.abstract.parts` prototype.
+An application is a part located at an origin which is accessible from the web via an A record. An application part cannot be named "www" because the server strips this subdomain automatically. All applications extend the `mix.abstract.parts` prototype.
