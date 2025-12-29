@@ -24,7 +24,8 @@ if (PATHNAME === "/") {
  // TODO: Generate this list dynamically.
  const note = isNaN(parts[1]) ? {
   "unix-timestamp": "1762140334",
-  "hashing-the-universe": "1762062190"
+  "hashing-the-universe": "1762062190",
+  "child-part-vs-subpart": "1766995600"
  }[parts[1]] : parts[1]
 
  if (!(note in notes))
