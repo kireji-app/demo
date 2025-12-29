@@ -84,6 +84,7 @@ if (hydrated) {
   } else {
    document.querySelector(`editor-view scroll-content`).innerHTML = editor["file-view.html"]
   }
+  document.querySelector(`crumbs-`).innerHTML = editor["crumbs.html"]
  } else if (currentTabLayout === "file") {
   if (hasNoTabs) {
    document.querySelector(`editor-view scroll-content`).innerHTML = editor["empty-view.html"]
@@ -92,6 +93,7 @@ if (hydrated) {
   } else {
    document.querySelector(`editor-view scroll-content`).innerHTML = editor["summary-view.html"]
   }
+  document.querySelector(`crumbs-`).innerHTML = editor["crumbs.html"]
  } else {
   if (hasNoTabs)
    throw `Unexpected update to empty tab group without adding any new tabs.`
@@ -100,6 +102,7 @@ if (hydrated) {
   } else {
    document.querySelector(`editor-view scroll-content`).innerHTML = editor["summary-view.html"]
   }
+  document.querySelector(`crumbs-`).innerHTML = editor["crumbs.html"]
  }
  document.querySelector("#sidebar-view summary[data-selected]")?.removeAttribute("data-selected")
  if (!hasNoTabs)

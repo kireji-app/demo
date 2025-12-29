@@ -7,6 +7,7 @@ declare interface IKirejiAppEditor
  readonly scroller: IScroller<IKirejiAppEditor>
 
  // Serialized Properties.
+ readonly "crumbs.html": string
  readonly "info-about.html": string
  readonly "info-state-space.html": string
  readonly "info-state.html": string

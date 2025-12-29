@@ -12,11 +12,13 @@ wallpaper-:has(side-bar) {
 body.modern {
  --tab-group-height: calc(var(--tab-line-height) + var(--spacing) / 1.5);
  --tab-line-height: 26px;
+ --crumbs-height: 26px;
  --tab-icon-size: 20px;
 }
 
 body.vintage {
  --tab-group-height: calc(var(--tab-line-height) + 2px);
  --tab-line-height: 20px;
+ --crumbs-height: 20px;
  --tab-icon-size: 16px;
 }

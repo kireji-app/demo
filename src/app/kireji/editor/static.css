@@ -10,7 +10,7 @@ editor-view {
  container-type: inline-size;
  container-name: editor-view;
  position: absolute;
- top: var(--tab-group-height);
+ top: calc(var(--tab-group-height) + var(--crumbs-height));
  left: 0;
  right: 0;
  bottom: 0;
@@ -26,6 +26,28 @@ editor-[data-drop-target] editor-view::after {
  right: 0;
  background: var(--bg-light-er);
  opacity: 0.35;
+}
+
+crumbs- {
+ position: absolute;
+ top: var(--tab-group-height);
+ left: 0;
+ right: 0;
+ height: var(--crumbs-height);
+ line-height: var(--crumbs-height);
+ display: flex;
+ padding: 0 calc(var(--spacing) / 2);
+}
+
+crumbs->span {
+ display: block;
+ transform: translateX(calc(100% / -6)) rotateZ(-45deg) scale(calc(1 / 3));
+ box-shadow: 3px 3px 0 0 var(--fg);
+ width: var(--crumbs-height);
+}
+
+crumbs->a:not(:hover) {
+ text-decoration: none;
 }
 
 body.light editor-[data-drop-target] editor-view::after {
@@ -57,7 +79,7 @@ editor-:has(#tab-group:empty) editor-view>scroller->scroll-content>svg {
  opacity: 50%;
 }
 
-wallpaper-:has(#tab-group:empty) editor-view>scroll-bar {
+wallpaper-:has(#tab-group:empty) :is(editor-view>scroll-bar, crumbs-) {
  display: none;
 }
 
@@ -74,7 +96,7 @@ wallpaper-:has(#tab-group:empty) editor-view>scroller- {
  --tab-line-height: calc(var(--default-font-size) + 4px);
  line-height: var(--tab-line-height);
  counter-reset: ln;
- padding-bottom: calc(100vh - var(--tab-group-height) - var(--task-bar-height) - var(--warning-height) - var(--tab-line-height));
+ padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--tab-line-height));
 }
 
 #file-viewer {
@@ -198,11 +220,11 @@ body.modern editor-view>scroller->scroll-content {
  gap: var(--padding);
 }
 
-body.modern.light editor-view {
+body.modern.light :is(editor-view, crumbs-) {
  background-color: var(--bg-light-est);
 }
 
-body.modern.dark editor-view {
+body.modern.dark :is(editor-view, crumbs-) {
  background-color: var(--bg-mode);
 }
 
@@ -277,7 +299,7 @@ body.vintage editor-::before {
  box-shadow: var(--deep-inset);
  position: absolute;
  content: "";
- top: calc(var(--tab-group-height) - 2px);
+ top: calc(var(--tab-group-height) - 2px + var(--crumbs-height) + 2px);
  right: -2px;
  left: -2px;
  bottom: -2px;
@@ -306,6 +328,10 @@ body.vintage editor-::after {
  }
 }
 
+body.vintage editor-view {
+ top: calc(var(--tab-group-height) + var(--crumbs-height) + 2px);
+}
+
 body.vintage editor-view:not(:has(#file-viewer)) {
  background-color: var(--bg);
 }
@@ -322,8 +348,14 @@ body.vintage editor-:has(#tab-group:empty)::after {
  content: unset;
 }
 
+body.vintage crumbs- {
+ top: calc(var(--tab-group-height) - 2px);
+ left: -2px;
+ right: -2px;
+}
+
 body.vintage #file-viewer {
- padding-bottom: calc(100vh - var(--tab-group-height) - var(--task-bar-height) - var(--warning-height) - var(--tab-line-height) - 24px);
+ padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--tab-line-height) - 24px);
 }
 
 body.vintage.light editor-view {

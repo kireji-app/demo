@@ -1,5 +1,5 @@
 return "<editor->" + (
- "<editor-view>" + editor.scroller.wrap(
+ `<crumbs->${editor["crumbs.html"]}</crumbs-><editor-view>` + editor.scroller.wrap(
   editor[`${tabGroup.openTabs.length ? (tabGroup.selectedTab.filename ? "file" : "summary") : "empty"}-view.html`]
  ) + "</editor-view>" +
  tabGroup["part.html"]
