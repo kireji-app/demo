@@ -17,7 +17,7 @@ editor-view {
  overflow: clip;
 }
 
-editor-[data-drop-target] editor-view::after {
+editor-[data-drop-target] :is(editor-view, crumbs-)::after {
  content: "";
  position: absolute;
  top: 0;
@@ -50,7 +50,7 @@ crumbs->a:not(:hover) {
  text-decoration: none;
 }
 
-body.light editor-[data-drop-target] editor-view::after {
+body.light editor-[data-drop-target] :is(editor-view, crumbs-)::after {
  background: var(--accent-light-er);
 }
 
