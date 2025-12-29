@@ -1,0 +1,1 @@
+declare type IBoolean<IOwner> = IPart<IOwner, null>
