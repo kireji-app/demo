@@ -1,4 +1,3 @@
-return !(region.x >= REGION.x + REGION.w ||
- region.x + region.w <= REGION.x ||
- region.y >= REGION.y + REGION.h ||
- region.y + region.h <= REGION.y)
+const { x, y, w, h } = region
+const { x: X, y: Y, w: W, h: H } = REGION
+return !(x >= X + W || x + w <= X || y >= Y + H || y + h <= Y)

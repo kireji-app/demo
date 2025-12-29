@@ -1,12 +1,6 @@
 declare interface IGlowstickRegion
- extends IMix<IGlowstickWorld, IGlowstickRegionDimension>,
+ extends IBox<IGlowstickWorld>,
  IWebComponent {
-
- // Subparts.
- /** A part representing the width range of the region. */
- readonly xAxis: IGlowstickRegionDimension
- /** A part representing the height range of the region. */
- readonly yAxis: IGlowstickRegionDimension
 
  // Serialized Properties.
  /** The space-separated list of HTML element attributes for this region. */
@@ -19,6 +13,8 @@ declare interface IGlowstickRegion
  readonly "w": bigint
  /** The height of the region rectangle in the glowstick world. */
  readonly "h": bigint
+ /** An array providing the static x-position, y-position, width and height of the region in the world. */
+ readonly "xywh": [bigint | number, bigint | number, bigint | number, bigint | number]
  /** Tests whether or not the given region or user overlaps with this region. */
  readonly overlaps(REGION: IGlowstickRegion | IGlowstickUser): boolean
 
@@ -34,9 +30,6 @@ declare interface IGlowstickRegion
  /** The list of regions which are overlapping this region. */
  readonly neighbors: IGlowstickRegion[]
 }
-
-declare type IGlowstickRegionDimension =
- IPart<IGlowstickRegion, null>
 
 declare const region: IGlowstickRegion
 /** The incoming region (only available in the overlaps function). */

@@ -1,1 +1,1 @@
-return region.yAxis.cardinality + user.h
+return region.placeLimits[1] + user.h

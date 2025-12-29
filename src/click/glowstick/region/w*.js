@@ -1,1 +1,1 @@
-return region.xAxis.cardinality + user.w
+return region.placeLimits[0] + user.w

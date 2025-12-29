@@ -35,10 +35,10 @@
   "glowstick": {
    "user": "4",
    "world": {
-    "open-office": {
-     "x-axis": "a",
-     "y-axis": "9"
-    }
+    "open-office": [
+     9,
+     8
+    ]
    }
   }
  },
