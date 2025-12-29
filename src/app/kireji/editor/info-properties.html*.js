@@ -22,8 +22,11 @@ const
   records.push(`<div><b>${isSelectedPart ? "" : `extends <a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(part)})">`}${part === _ ? "ecosystem" : part.host}${isSelectedPart ? "" : "</a>"}</b></div>${isSelectedPart ? `<div><b>${serialize(part).length.toLocaleString()} bytes</b></div>` : ""}`)
 
   if (isSelectedPart)
-   for (const subpart of selectedPart)
-    records.push(`<div><a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(subpart)})">&nbsp;&nbsp;<b>${subpart.key}</b></a></div><div><b>${serialize(subpart).length.toLocaleString()} bytes</b></div>`)
+   for (const key of selectedPart.subdomains) {
+    /** @type {IPartAny} */
+    const childPart = selectedPart[key]
+    records.push(`<div>&nbsp;&nbsp;<a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(childPart)})">${childPart.isAbstract ? "<i>" : ""}<b>${childPart.key}</b>${childPart.isAbstract ? "</i>" : ""}</a></div><div><b>${serialize(childPart).length.toLocaleString()} bytes</b></div>`)
+   }
 
   for (const id of part.Property.ids) {
 
