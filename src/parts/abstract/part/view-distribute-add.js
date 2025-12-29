@@ -1,6 +1,6 @@
 if (part.dirty) {
 
- // Add own view before adding child.
+ // Add own view before adding subpart views.
  if (part.justEnabled) {
 
   if (part.isOpen)

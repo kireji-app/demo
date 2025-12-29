@@ -1,6 +1,6 @@
 if (part.dirty) {
 
- // Remove child views before removing own.
+ // Remove subpart views before removing own.
  for (const subpart of part)
   subpart.distributeRemoveView()
 

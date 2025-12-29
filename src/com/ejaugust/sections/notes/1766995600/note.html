@@ -1,0 +1,20 @@
+<p>At first, <i>child part</i> and <i>subpart</i> might seem like synonyms. Throughout the source code of the Kireji Framework, there are references to both. That's not a mistake or a result of loosely-defined syntax.</p>
+<p>The difference is actually very simple: subparts are <em>concrete</em> child parts and therefore not <em>abstract</em> child parts. All subparts are child parts, but not all child parts are subparts.</p>
+<h2>Abstract vs. Concrete Parts</h2>
+<p>In the Kireji project, abstract parts are the opposite of concrete parts. Their meaning is essentially the same as abstract classes and concrete classes in object-oriented programming. That is, abstract parts are stateless blueprints for "real," stateful parts. They can be extended to create those real parts but they don't have a state by themselves.</p>
+<p>All parts exist somewhere in the hierarchy of domains so that all parts can have a unique, meaningful name while coexisting in a single name space. Thus, all parts (other than the domain name root) are a child of some other part. Yet, from a state space perspective, abstract child parts aren't true subparts of their parent because they remain invisible to their parent's state handling.</p>
+<p>This pattern allows us to define parts that describe complex handling of views and/or arithmetic so that extension parts don't need to be aware of those details and can instead focus on their own exclusive purpose. This prevents code repetition when defining parts which in turn reduces the risk of errors and the overall size and complexity of the code base. Abstract parts are invisible to this handling. They also don't participate in the system-wide event loop.</p>
+<p>For example, the part <code>mix.abstract.parts</code> is a child part of the part <code>abstract.parts</code> in that it exists within its parent namespace. Yet, it is not a <em>subpart</em> of <code>abstract.parts</code>. It provides a <i>generic</i> implementation of a cartesian product space that uses its subpart spaces as its factors. The abstract mix doesn't have any defined factors because these will vary from implementation to implementation. As a result, the abstract mix doesn't have enough information to define any actual cartesian product space on its own.</p>
+<h2>Parts act like Arrays of their Subparts</h2>
+<p>One of the core desires I had for parts and their subparts was to be able to simply say:</p>
+<pre>for (const subpart of part) {
+ // Do something with subpart
+}</pre>
+<p>This was achieved by providing each part with an iterator over its subparts. This ensures that we can intuitively loop over all of the concrete child parts that contribute to the parent part's state without accidentally performing arithmetic on an abstract part that happens to exist in the same name space.</p>
+<p>It is possible to loop over all <i>child</i> parts, but this is less common and so it requires a more verbose solution, such as:</p>
+<pre>for (const subdomain of part.domains) {
+ const childPart = part[subdomain]
+ // Do something to childPart
+}</pre>
+<h2>Conclusion</h2>
+<p>So there you have it. Subparts are concrete child parts. Feel free to browse around in the Kireji Part Viewer to get hands-on experience comparing subparts to abstract parts.</p>

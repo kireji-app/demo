@@ -1,6 +1,6 @@
 if (part.dirty) {
 
- // Populate own view before populating child.
+ // Populate own view before populating subpart views.
  if (part.enabled) {
 
   if (part.isOpen)
