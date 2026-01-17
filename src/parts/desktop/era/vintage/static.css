@@ -246,7 +246,7 @@ body.dark :is([disabled], [disabled] *) {
 }
 
 body.dark hr {
- border-top: var(--bg-dark-est);
+ border-top: 1px solid black;
  border-bottom: 1px solid var(--bg-light-er);
 }
 

@@ -23,5 +23,4 @@ declare type IKirejiAppSidebarPart =
  IPart<IKirejiAppSidebar, IPart<IKirejiAppSidebarPart, IPartAny>>
 
 declare const sidebar: IKirejiAppSidebar
-declare const width: IKirejiAppSidebarWidth
 declare const SUBJECT: IPartAny

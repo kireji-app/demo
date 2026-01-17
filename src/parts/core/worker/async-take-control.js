@@ -40,6 +40,6 @@ await logScope(1, 'Ensuring ServiceWorker Controller', async log => {
  if (!production)
   addEventListener("focus", () => {
    log("Checking for ServiceWorker updates.")
-   worker.registration.update().catch((e) => warn(e))
+   worker.registration.update().catch(registrationError => warn(registrationError))
   })
 })

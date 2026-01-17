@@ -35,11 +35,11 @@ declare interface IEcosystem
  /** A JSON object serializing the desired landing model of the ecosystem. */
  readonly "landing-model.json": string
  /** Sets the current application, but does not propagate any view functions since the application currently cannot be changed at runtime on the client without navigating to a different host. */
- readonly setApplication(POINTER_EVENT: PointerEvent, LINK: string): void
+ readonly appPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
  /** Returns a css that inlines `early-*` compressed images for enhancing the first page appearance when using server-side rendering. It scans the given body HTML for usages of the early images to optimize inclusion. */
  readonly getImagesEarly(BODY_HTML: string): string
  /** Handles standard internal anchor link clicks by calling `_.translateCanonicalRoute` on the anchor's HREF attribute and then going to the returned route. */
- readonly go(POINTER_EVENT: PointerEvent, ANCHOR: string): void
+ readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
  /** Translates an SEO-friendly canonical pathname into a versioned, stateful route, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname(CANONICAL_ROUTE: string): string
  /** Sets the configuration space to match the given request url string. */
@@ -62,8 +62,6 @@ declare interface IEcosystem
  readonly landingRouteID: bigint
  /** If in the client environment, an integer ID representing the application frame loop's current pending frame request. Null, otherwise. */
  readonly frameRequest: number | null
- /** A method which prevents the default action of the given pointer event and also stops the event from propagating, keeping any reaction contained to the target element. */
- readonly noop(POINTER_EVENT?: PointerEvent): void
 }
 
 /** The root part. When JSON stringified, it should inline all information compiled from the git repo in node by the build process.
@@ -161,6 +159,8 @@ declare function warn(...DATA: any[]): void
 declare function debug(...DATA: any[]): void
 /** Opens a collapsed log group with the given label at the given verbosity, calls the given callback (passing a log function with the same verbosity as an argument), closes the log group, then returns the result of the callback. */
 declare function logScope(VERBOSITY: number, LABEL: string, CALLBACK: (log: (...data) => void) => T): T
+/** A special wrap around logScope which logs server events with a reliable server format. */
+declare function logServerScope(col1, col2, col3, CALLBACK: (log: (...data) => void) => T): T
 /** A function which wraps JSON.stringify using a replacer which can serialize BigInt values. */
 declare function serialize(data: any): void
 /** Represents metadata and processing logic for a single property of the part. If the property is a method or getter/setter, it parses the method's ID and generates its signature, dynamic constants and body. If the property is a static file, a simple getter method is created automatically.

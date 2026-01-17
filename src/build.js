@@ -184,6 +184,9 @@ function ƒ(_) {
     "Charms  (base-64 length)": { Quantity: Math.ceil((n * 8) / 6), Radix: '2⁶', "Abbr.": 'chm', Format: 'UTF-8' },
     "Bits": { Quantity: Math.ceil(n * 8), Radix: '2¹', "Abbr.": 'b', Format: 'UTF-8' },
    }], "table")
+  },
+  logServerScope = (col1, col2, col3, callback) => {
+   return logScope(0, `\n${("" + col1).padEnd(22, " ")} ${(environment === "server" ? Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB" : "--").padEnd(8, " ")} ${("" + col2).padStart(24, " ")} ${col3}`, log => callback((col1, col2, col3) => log(`${("" + col1).padEnd(20, " ")} ${(environment === "server" ? Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB" : "--").padEnd(8, " ")} ${("" + col2).padStart(24, " ")} ${col3}`)))
   }
 
  // String and Stringification Utilities
@@ -200,6 +203,10 @@ function ƒ(_) {
  const
   pathRadix = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0",
   encodeSegment = routeID => {
+
+   if (routeID < 0n)
+    throw new RangeError("Segment encoder cannot encode a negative route ID.")
+
    let charmCount = 0n
    let charmIndex
    let reducedRouteID = routeID
@@ -521,8 +528,8 @@ function ƒ(_) {
       try {
        const propertyDescriptor = eval(propertyDescriptorScript)
        part.define(propertyDescriptor)
-      } catch (e) {
-       throw new Error(`Failed to construct property descriptor for ${host}.\n${e}\n${propertyDescriptorScript}`)
+      } catch (evalError) {
+       throw new Error(`Failed to construct property descriptor for ${host}.\n${evalError}\n${propertyDescriptorScript}`)
       }
       for (const subdomain of subdomains) {
 

@@ -18,7 +18,7 @@ declare interface IPartOutliner<TOwner>
  /** Takes in a part and recursively generates its outliner item HTML. */
  readonly recursiveItemHTML(SUBJECT: IPartAny, DEPTH: number, IS_LAST_OF_TYPE: bool): string
  /** Responds to a glick on the collapse/expand button of the given svg element, updating the button's state and this part's route ID using the given index to set the bit in the this part's route ID that represents the given outliner item. */
- readonly toggle(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, FOLDER_INDEX: number): void
+ readonly togglePoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, FOLDER_INDEX: number): void
 }
 
 declare type IPartOutlinerAny =

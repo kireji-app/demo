@@ -15,14 +15,14 @@ if (!registration.active) {
  await new Promise(resolve => {
   const incomingServiceWorker = registration.waiting ?? registration.installing
 
-  incomingServiceWorker.onstatechange = e => {
-   if (e.target.state == "activated")
-    resolve(e.target)
+  incomingServiceWorker.onstatechange = event => {
+   if (event.target.state == "activated")
+    resolve(event.target)
   }
  })
 }
 
-const controller = nav.serviceWorker.controller ?? await new Promise(resolve => {
+nav.serviceWorker.controller ?? await new Promise(resolve => {
  nav.serviceWorker.oncontrollerchange = resolve
  registration.active.postMessage({ code: "claim" })
 })

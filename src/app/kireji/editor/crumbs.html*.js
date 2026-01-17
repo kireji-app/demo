@@ -1,5 +1,5 @@
 function generateCrumb(part, filename) {
- return `<a href="/" onclick=self._?.noop(event) onpointerdown="${editor.runtimeReference}.activate(event,this,${allParts.indexOf(part)}${filename ? "," + part.filenames.indexOf(filename) : ""})">${filename ?? (part === _ ? "ecosystem" : part.key)}</a>`
+ return `<a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(part)}${filename ? "," + part.filenames.indexOf(filename) : ""})">${filename ?? (part === _ ? "ecosystem" : part.key)}</a>`
 }
 
 if (selectedPart) {

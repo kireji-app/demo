@@ -11,7 +11,10 @@ let resultRouteID = 0n
 
 box.placeValues.forEach((placeValue, i) => resultRouteID += BigInt(MODEL[i]) * box.placeValues[i])
 
-if (resultRouteID >= box.cardinality)
- throw new RangeError(`Model To RouteID Error: Box "${box.host}" does not support a route ID up to ${resultRouteID} (max ${box.cardinality}).`)
+if (resultRouteID >= part.cardinality)
+ throw new RangeError(`Model To RouteID Error: Part "${part.host}" returned a route ID that was too large (${resultRouteID}) (max ${part.cardinality}).`)
+
+if (resultRouteID < 0n)
+ throw new RangeError(`Model To RouteID Error: Part "${part.host}" returned a negative route ID.`)
 
 return resultRouteID

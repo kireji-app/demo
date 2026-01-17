@@ -1,0 +1,1 @@
+return `onpointerdown="${glowstick.runtimeReference}.point(event,this)"`

@@ -14,3 +14,9 @@ document.getElementById("img-css").innerHTML ||= _["images.css"]
 document.getElementById("early-img-css")?.remove()
 
 desktop.wallpaper = document.querySelector("wallpaper-")
+
+// Prevent normal click events to ensure the pointerdown event always takes precedence.
+document.addEventListener("click", event => {
+ event.preventDefault()
+ event.stopPropagation()
+}, { capture: true })

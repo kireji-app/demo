@@ -1,0 +1,1 @@
+return `<width-handle onpointerdown="${sidebarWidth.runtimeReference}.point(event,this)"></width-handle>`

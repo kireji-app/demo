@@ -28,6 +28,8 @@ declare interface IScroller<TOwner>
  readonly observer: ResizeObserver
  /** The element that displays the custom scroll bar control. */
  readonly scrollBar: HTMLElement
+ /** The draggable element that manually controls the scroll fraction of the scroller. */
+ readonly thumb: HTMLElement
  /** The element that tracks the scroll height of the scroller, needed for handling resize events. */
  readonly content: HTMLElement
  /** When true, the event cycle doesn't trigger assignment to the container's scroll and instead reads its position in order to set the scroller's route ID. */
@@ -35,9 +37,7 @@ declare interface IScroller<TOwner>
  /** When true, the event cycle doesn't read in the container's DOM scroll position and instead sets it based on the scroller's route ID. */
  readonly skipRouteIDUpdate: boolean
  /** The outer event listener which can be added and removed and calls the inner event listener `scroller.onscroll`. */
- readonly listener(e: Event): void
- /** The primary event listener for dragging the thumb of the scrollbar. */
- readonly startDrag(e: Event): void
+ readonly listener(scrollEvent: Event): void
 }
 
 declare const scroller: IScroller<IPartAny>

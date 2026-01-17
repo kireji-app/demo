@@ -1,1 +1,1 @@
-return ["about", "state-space", "state", "properties"].map(word => `<section id=info-${word}${word.startsWith("state") && selectedPart.isAbstract ? " disabled" : ""}>${editor[`info-${word}.html`]}</section>`).join("")
+return ["about", "state-space", "state", "properties"].map(word => `<section id=info-${word}${word.startsWith("state") && (selectedPart.isAbstract || word === "state" && selectedPart.disabled) ? " disabled" : ""}>${editor[`info-${word}.html`]}</section>`).join("")

@@ -1,6 +1,6 @@
 /** Host of a node server which renders response objects from node requests. */
-declare type IServer =
- IFacet<ICore>
+declare interface IServer
+ extends IFacet<ICore> { }
 
 /** An interface that represents an internal server API contract between modules of different versions. */
 declare interface IVersionedExports {

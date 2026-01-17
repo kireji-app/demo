@@ -15,7 +15,6 @@ declare interface IKirejiAppTabGroup
  readonly detachListeners(): void
 
  // Runtime Properties.
- readonly pointerID?: number
  readonly tabOffsets: bigint[]
  readonly tabBitDepths: bigint[]
  readonly permutationSizes: bigint[]
@@ -59,7 +58,7 @@ declare interface IKirejiAppTabGroupTab {
 declare const tabGroup: IKirejiAppTabGroup
 /** The index of the tab to render.
  * 
- * *Only available in `close`, `activate` and `renderTabHTML` methods.* */
+ * *Only available in `close`, `point` and `renderTabHTML` methods.* */
 declare const TAB_INDEX: number
 /** The host part of the given tab.
  * 

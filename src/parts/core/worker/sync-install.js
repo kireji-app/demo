@@ -1,42 +1,82 @@
-globalThis.onfetch = event => {
- try {
+const supportedFiles = {
+ "build.js": "text/javascript",
+ "manifest.json": "application/json"
+}
+
+globalThis.onfetch = event => logServerScope(
+ new Date().toLocaleString(),
+ "worker-self",
+ event.request.url,
+ log => {
+  let status, head, body, logMessage
   const { host, pathname, searchParams } = new URL(event.request.url)
 
-  const alternateModelVersion = searchParams.get("from")
+  try {
+   respond: {
 
-  if (alternateModelVersion || pathname === '/-v')
-   return // Let the server field the request.
+    if (searchParams.get("from")) {
+     status = 444
+     logMessage = "Updating Version"
+     break respond
+    }
 
-  const [, version, filename] = pathname.split("/")
+    if (pathname === '/-v') {
+     status = 444
+     logMessage = "Serving Version"
+     break respond
+    }
+    if (pathname === `/${_.version}/`) {
+     status = 301
+     head = { 'Location': `/${_.version}/${_.landingHash}/` }
+     logMessage = "Normalizing URL"
+     break respond
+    }
 
-  if (version !== _.version)
-   throw "Unsupported Cross-Version Service Worker Request"
-
-  const supportedFiles = {
-   "build.js": "text/javascript",
-   "manifest.json": "application/json"
-  }
-
-  const isSupportedFile = filename in supportedFiles
-
-  _.setRoute((isSupportedFile || !filename) ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
-
-  // color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
-  const body = _[isSupportedFile ? filename : "part.html"]
-  event.respondWith(new Response(body, {
-   status: !isSupportedFile && _.application.prototype.host === "error.abstract.parts" ? _.application.status : 200,
-   headers: {
-    "content-type": (isSupportedFile ? supportedFiles[filename] : "text/html") + ';charset=UTF-8',
-    "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
+    const [, version, filename] = pathname.split("/")
+    const isSupportedFile = filename in supportedFiles
+    _.setRoute((isSupportedFile || filename === undefined) ? `https://${host}/${_.version}/${_.landingHash}/` : `https://${host}${pathname}`)
+    // color.device.light = event.request.headers.get("sec-ch-prefers-color-scheme") !== 'dark'
+    status = !isSupportedFile && _.application.prototype.host === "error.abstract.parts" ? _.application.status : 200
+    head = {
+     "content-type": (isSupportedFile ? supportedFiles[filename] : "text/html") + ';charset=UTF-8',
+     "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
+    }
+    body = _[isSupportedFile ? filename : "part.html"]
+    logMessage = isSupportedFile ? ("Serving Artifact", "Serving File") : "Serving Snapshot"
    }
-  }))
+  } catch (respondError) {
+   try {
+    const payload = _.parts.abstract.error.getErrorResponse("" + respondError, host)
 
- } catch (e) {
-  event.respondWith(Promise.reject(e))
- }
-}
-globalThis.onactivate = e => globalThis.clients.claim()
-// globalThis.oninstall = e => globalThis.skipWaiting()
+    status = payload.status
+    head = {
+     "content-type": "text/html;charset=UTF-8",
+     "expires": "Sun, 20 Jul 1969 20:17:00 UTC",
+    }
+    body = payload.body
+    logMessage = payload.logMessage
+   } catch (metaError) {
+    error(metaError)
+    event.respondWith(Promise.reject(metaError))
+   }
+  } finally {
+   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, get 302() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 444: `↪`, 500: "!", 503: `#`, }[status])
+
+   if (status === 444) {
+    // Let the server field the request.
+    return
+   }
+
+   // Let the worker field the request.
+   event.respondWith(new Response(body, {
+    status,
+    headers: head
+   }))
+  }
+ })
+
+globalThis.onactivate = () => globalThis.clients.claim()
+// globalThis.oninstall = () => globalThis.skipWaiting()
 globalThis.onmessage = ({ data: { code, payload }, source }) => {
  switch (code) {
 

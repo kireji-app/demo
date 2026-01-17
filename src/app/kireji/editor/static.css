@@ -46,6 +46,12 @@ crumbs->span {
  width: var(--crumbs-height);
 }
 
+crumbs->a:last-of-type {
+ pointer-events: none;
+ text-decoration: none;
+ color: inherit;
+}
+
 crumbs->a:not(:hover) {
  text-decoration: none;
 }
@@ -62,7 +68,7 @@ editor-view>scroller->scroll-content {
 }
 
 editor-view>scroller->scroll-content:has(#file-viewer) {
- position: relative;
+ /*position: relative;*/
  padding: 0;
 }
 
@@ -93,10 +99,13 @@ wallpaper-:has(#tab-group:empty) editor-view>scroller- {
 #file-viewer {
  margin: 0;
  padding: 0;
- --tab-line-height: calc(var(--default-font-size) + 4px);
- line-height: var(--tab-line-height);
  counter-reset: ln;
- padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--tab-line-height));
+ padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--code-line-height));
+}
+
+editor-view>scroller-:has(#file-viewer) {
+ --code-line-height: calc(var(--default-font-size) + 4px);
+ line-height: var(--code-line-height);
 }
 
 #file-viewer {
@@ -208,6 +217,11 @@ editor-view>scroller->scroll-content :is(h1, h2, h3) {
 
 :not(#info-about):not([disabled])> :is(pre, p) {
  overflow: hidden;
+}
+
+#info-state[disabled]>:not(:is(.disabled-message, h2)),
+#info-state:not([disabled])>.disabled-message {
+ display: none;
 }
 
 body.modern editor-view {
@@ -345,7 +359,7 @@ body.vintage editor-:has(#tab-group:empty)::before {
 }
 
 body.vintage editor-:has(#tab-group:empty)::after {
- content: unset;
+ top: -6px;
 }
 
 body.vintage crumbs- {
@@ -355,7 +369,7 @@ body.vintage crumbs- {
 }
 
 body.vintage #file-viewer {
- padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--tab-line-height) - 24px);
+ padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--code-line-height) - 24px);
 }
 
 body.vintage.light editor-view {

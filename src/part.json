@@ -3,14 +3,14 @@
  "route-set": [
   "REQUEST_URL"
  ],
- "application-set": [
-  "POINTER_EVENT",
-  "LINK"
- ],
  "validate": [],
- "go": [
+ "point-app": [
   "POINTER_EVENT",
-  "ANCHOR"
+  "TARGET_ELEMENT"
+ ],
+ "point": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
  ],
  "pathname-translate-canonical": [
   "HOST",

@@ -39,7 +39,6 @@ for (let k = 1n, p = 1n; k <= subjectCount; k++) {
 tabGroup.define({
  cardinality: { value: cardinality },
  permutationRouteID: { value: null, writable: true },
- pointerID: { value: null, writable: true },
  activeTab: { value: null, writable: true },
  viewedTab: { value: null, writable: true },
  viewedPermutation: { value: null, writable: true },

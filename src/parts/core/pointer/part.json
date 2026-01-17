@@ -1,0 +1,6 @@
+{
+ "extends": "facet",
+ "handle": [
+  "POINTER_CONFIG"
+ ]
+}

@@ -28,7 +28,7 @@ if (taskBar.menu.arm?.key !== "closed")
 if (application.classes)
  bodyClassList.push(...application.classes)
 
-const body =
+const bodyHTML =
  `<body class="${bodyClassList.join(" ")}">` + (
   `<warning->` + (
    `🚧 App in Alpha. Features subject to change/break without notice.`
@@ -51,9 +51,9 @@ const nonImageStyles = `<style id="user-css">${_["part.css"]}</style>` +
 
 const styles = nonImageStyles +
  `<style id="img-css">${environment === "server" ? "" : _["images.css"]}</style>` +
- (environment === "server" ? `<style id="early-img-css">${_.getImagesEarly(body, nonImageStyles)}</style>` : "")
+ (environment === "server" ? `<style id="early-img-css">${_.getImagesEarly(bodyHTML, nonImageStyles)}</style>` : "")
 
-const head =
+const headHTML =
  `<head>${title}${meta}${links}${styles}</head>`
 
-return `<!DOCTYPE html><html lang=en>${head}${body}</html>`
+return `<!DOCTYPE html><html lang=en>${headHTML}${bodyHTML}</html>`

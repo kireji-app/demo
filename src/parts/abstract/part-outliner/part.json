@@ -6,11 +6,6 @@
   "DEPTH",
   "IS_LAST_OF_TYPE"
  ],
- "toggle": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT",
-  "FOLDER_INDEX"
- ],
  "children-get": [
   "SUBJECT"
  ],
@@ -20,7 +15,12 @@
  "selected-is": [
   "SUBJECT"
  ],
- "open": [
+ "point-toggle": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT",
+  "FOLDER_INDEX"
+ ],
+ "point": [
   "POINTER_EVENT",
   "TARGET_ELEMENT",
   "PART_INDEX"

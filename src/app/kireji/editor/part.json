@@ -1,12 +1,12 @@
 {
  "extends": "mix",
- "activate": [
+ "point": [
   "POINTER_EVENT",
   "TARGET_ELEMENT",
   "PART_INDEX",
   "FILE_INDEX"
  ],
- "close": [
+ "point-close": [
   "POINTER_EVENT",
   "TARGET_ELEMENT"
  ]

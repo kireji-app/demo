@@ -1,6 +1,7 @@
 {
  "extends": "application",
- "go": [
-  "ZONE_ID"
+ "point": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
  ]
 }

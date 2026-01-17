@@ -1,1 +1,0 @@
-_.app.kireji.editor.activate(POINTER_EVENT, TARGET_ELEMENT, PART_INDEX)

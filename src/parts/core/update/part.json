@@ -3,7 +3,8 @@
  "version-is-newer": [
   "INCOMING_VERSION"
  ],
- "go": [
-  "POINTER_EVENT"
+ "point": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
  ]
 }

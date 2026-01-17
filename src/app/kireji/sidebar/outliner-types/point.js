@@ -1,0 +1,1 @@
+_.app.kireji.editor.point(POINTER_EVENT, TARGET_ELEMENT, PART_INDEX)

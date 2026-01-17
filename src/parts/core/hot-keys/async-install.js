@@ -26,29 +26,29 @@ const
   nonModifierKey = code
  }
 
-globalThis.addEventListener("blur", e => {
+globalThis.addEventListener("blur", () => {
  hotKeys.pressed.clear()
  setNonModifierKey(null)
 })
 
-globalThis.addEventListener("keyup", e => {
- hotKeys.pressed.delete(e.code)
+globalThis.addEventListener("keyup", keyboardEvent => {
+ hotKeys.pressed.delete(keyboardEvent.code)
  setNonModifierKey(null)
 })
 
-globalThis.addEventListener("keydown", e => {
- if (!e.repeat) {
+globalThis.addEventListener("keydown", keyboardEvent => {
+ if (!keyboardEvent.repeat) {
   /* This handles the edge case when the user is holding modifier keys that
    * they pressed while not focused on this instance of the ecosystem. */
-  if (!isInPostContext() && !e.code.startsWith(hotKeys.contextPrefix) && (agent.isMac ? e.metaKey : e.ctrlKey))
+  if (!isInPostContext() && !keyboardEvent.code.startsWith(hotKeys.contextPrefix) && (agent.isMac ? keyboardEvent.metaKey : keyboardEvent.ctrlKey))
    hotKeys.pressed.add(hotKeys.contextPrefix + "Left")
 
-  if (!isInPostShift() && !e.code.startsWith("Shift") && e.shiftKey)
+  if (!isInPostShift() && !keyboardEvent.code.startsWith("Shift") && keyboardEvent.shiftKey)
    hotKeys.pressed.add("ShiftLeft")
 
   /* When the user presses a context key, drop all prior keys. The user is
    * required to press and hold a context key before they add on other keys.*/
-  if (e.code.startsWith(hotKeys.contextPrefix)) {
+  if (keyboardEvent.code.startsWith(hotKeys.contextPrefix)) {
    setNonModifierKey(null)
    hotKeys.pressed.clear()
   }
@@ -58,18 +58,18 @@ globalThis.addEventListener("keydown", e => {
    * multiple commands in rapid succession, while enforcing that every
    * keyboard shortcut can contain only one non-modifier character. */
   else if (isInPostContext()) {
-   const isModifier = e.code.startsWith("Shift") || e.code.startsWith("Option") || e.code.startsWith("Alt") || e.code.startsWith("Control") || e.code.startsWith("Meta")
-   setNonModifierKey(isModifier ? null : e.code)
+   const isModifier = keyboardEvent.code.startsWith("Shift") || keyboardEvent.code.startsWith("Option") || keyboardEvent.code.startsWith("Alt") || keyboardEvent.code.startsWith("Control") || keyboardEvent.code.startsWith("Meta")
+   setNonModifierKey(isModifier ? null : keyboardEvent.code)
   }
 
-  hotKeys.pressed.add(e.code)
+  hotKeys.pressed.add(keyboardEvent.code)
 
   const combo = hotKeys.combo
   const methodName = JSON.parse(_.application["hot-keys.json"] ?? "{}")[combo] ?? hotKeys.table[combo]
   const method = methodName && (_.application[methodName] ?? hotKeys[methodName])
 
   if (methodName) {
-   e.preventDefault()
+   keyboardEvent.preventDefault()
    if (typeof method === "function")
     method()
    // else warn(`Hot Keys Warning: method called ${methodName} is not defined on either the hot keys manager or the current application.`)

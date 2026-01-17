@@ -9,7 +9,7 @@ declare interface ITrayItem
  /** The raw HTML that goes inside the item's button. */
  readonly "button.html": string
  /** The action that the tray item performs when it is clicked. */
- readonly go(POINTER_EVENT: PointerEvent): void
+ readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
 
  // Runtime Properties.
  /** The runtime HTML element corresponding to the tray item view. */

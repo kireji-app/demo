@@ -3,3 +3,5 @@ menu.element = document.querySelector("task-menu") ?? (() => {
  offscreen.innerHTML = menu["menu.html"]
  return offscreen.querySelector("task-menu")
 })()
+
+menu.button = document.querySelector("menu-button")

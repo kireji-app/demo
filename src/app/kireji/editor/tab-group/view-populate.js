@@ -75,7 +75,7 @@ if (hydrated) {
     const element = document.getElementById(`info-${word}`)
     element.innerHTML = editor[`info-${word}.html`]
     if (word.startsWith("state")) {
-     if (selectedPart.isAbstract)
+     if (selectedPart.isAbstract || word === "state" && selectedPart.disabled)
       element.setAttribute("disabled", "")
      else
       element.removeAttribute("disabled")

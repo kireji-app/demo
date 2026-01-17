@@ -7,5 +7,9 @@
  "HTML-get-error": [
   "STATUS",
   "MESSAGE"
+ ],
+ "response-get-error": [
+  "ERROR_STRING",
+  "REQUEST_HOST"
  ]
 }

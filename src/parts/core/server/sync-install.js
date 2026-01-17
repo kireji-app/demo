@@ -88,11 +88,6 @@ if (require.main !== module) {
  return
 }
 
-const
- logServerScope = (col1, col2, col3, callback) =>
-  logScope(0, `\n${("" + col1).padEnd(22, " ")} ${(Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB").padEnd(8, " ")} ${("" + col2).padStart(24, " ")} ${col3}`, log =>
-   callback((col1, col2, col3) => log(`${("" + col1).padEnd(20, " ")} ${(Math.trunc(process.memoryUsage().rss / 1024 / 1024) + " MiB").padEnd(8, " ")} ${("" + col2).padStart(24, " ")} ${col3}`)))
-
 logScope(0, `\nCreating Deployment Artifact`, log => {
  const
   fs = require("fs"),
@@ -148,7 +143,7 @@ const httpServer = require('http').createServer((request, response) => logServer
 
     if (isLocalRequest && !(host in _.applications)) {
      /* 301 forward invalid application requests.
-        This is handled by NGINX on the real server. */
+        This is handled by NGINX when not testing locally. */
      if (host && host.startsWith("www."))
       host = host.slice(4)
 
@@ -192,7 +187,7 @@ const httpServer = require('http').createServer((request, response) => logServer
     let destinationExports
     try {
      destinationExports = destinationVersion === _.version ? currentExports : require(`../.versions/${destinationVersion}.js`)
-    } catch (e) {
+    } catch {
      throw `Bad Version: ${destinationVersion}`
     }
 
@@ -204,7 +199,7 @@ const httpServer = require('http').createServer((request, response) => logServer
      let sourceExports
      try {
       sourceExports = require(`../.versions/${sourceVersion}.js`)
-     } catch (e) {
+     } catch {
       throw `Bad Version: ${sourceVersion}`
      }
      const sourceHash = pathname.split("/")[2]
@@ -217,63 +212,35 @@ const httpServer = require('http').createServer((request, response) => logServer
     }
 
     ;
-    ({ status, head, body, logMessage } = destinationExports.proxy(
+    const payload = destinationExports.proxy(
      host,
      pathname,
      request.headers['if-none-match'],
      request.headers["sec-ch-prefers-color-scheme"] === 'dark',
      request.headers['if-modified-since'],
-    ))
+    )
+
+    status = payload.status
+    head = payload.head
+    body = payload.body
+    logMessage = payload.logMessage
    }
-  } catch (e) {
-   if (("" + e).startsWith("Favicon")) {
-    const version = e.split(": ").pop()
-    logMessage = "Favicon"
-    status = 404
-    body = `<span class=thin>📜 favicon.ico -</span><span>We haven't had that spirit here since 1999.</span>`
-   } else if (("" + e).startsWith("Config 404")) {
-    const version = e.split(": ").pop()
-    logMessage = "Config 404"
-    status = 404
-    body = `<span>We don't have</span><span class=thin>${("" + e).split(":").pop()}</span><span>... but we have <a href="/sitemap.xml">sitemap.xml</a> and <a href="/humans.txt">humans.txt</a>.</span>`
-   } else if (("" + e).startsWith("Bad Version: ")) {
-    const version = e.split(": ").pop()
-    logMessage = "Unknown Version"
-    status = 404
-    body = `<span>Version</span><span class=thin>${version}</span><span>was removed or never existed.</span>`
-   } else if (("" + e).startsWith("Bad Canonical Path: ") || ("" + e).startsWith("Unsupported `from` ")) {
-    logMessage = "Bad Path"
-    status = 400
-    body = "<span class=thin>Your request</span><span>was not valid.</span>"
-   } else if (("" + e).startsWith("Bad Hash Character: ")) {
-    const character = e.split(": ").pop()
-    logMessage = "Bad Hash"
-    status = 400
-    body = `<span>Path contained unsupported character "${character}".</span>`
-   } else if (("" + e).startsWith("Unknown Canonical Path: ")) {
-    const path = e.split(": ").pop()
-    logMessage = "Path Not Found"
-    status = 404
-    body = `<span>📄</span><span class=thin>${path.length > 18 ? "The requested path" : `"${path}"`}</span><span>was removed or never existed.</span>`
-   } else {
-    error(e)
-    logMessage = "Server Error"
+  } catch (respondError) {
+   try {
+    const payload = _.parts.abstract.error.getErrorResponse("" + respondError, host)
+    status = payload.status
+    head = { ...indexHeader }
+    body = payload.body
+    logMessage = payload.logMessage
+   } catch (metaError) {
+    error(metaError)
     status = 500
-    body = "<span>An unknown server error occured.</span>"
+    head = { ...indexHeader }
+    body = "<h1>Server Meta Error</h1><p>A server error occurred. Then, a second error was encountered while trying to generate the server error page.</p>"
+    logMessage = "Meta Error"
    }
-   const themeBGColor = (_.applications[host] ?? _.applications[_.defaultApplicationHost])[`theme-light-bg`];
-   body = `<style>html {
-  background-color: var(--bg);
-  --wallpaper-height: 100vh;
-  --bg: ${themeBGColor};
-  --bg-un-mode: #${color.blendHex(themeBGColor, "cfcfcf", "multiply")};
-  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
- }${_.parts.abstract.error.getErrorCSS(body)}
-</style>
-${_.parts.abstract.error.getErrorHTML(status, body)}`
-   head = { ...indexHeader }
   } finally {
-   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 500: "!", 503: `#`, }[status])
+   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, get 301() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 444: `↪`, 500: "!", 503: `#`, }[status])
    response.writeHead(status, head)
    response.end(body)
   }

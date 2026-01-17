@@ -26,8 +26,8 @@ declare interface IKirejiAppEditor
   * - PART_INDEX (and optional FILE_INDEX) are required to identify a tab.
   * - If the session ends over the tab group, the tab will be  moved to (or created at) the slot nearest the pointer and activated.
   * - If the session ends over TARGET_ELEMENT, the tab will be found (or created at the end of the tab group) and activated. */
- readonly activate(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, PART_INDEX?: number, FILE_INDEX?: number): void
- readonly close(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
+ readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, PART_INDEX?: number, FILE_INDEX?: number): void
+ readonly closePoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
 }
 
 declare type IKirejiAppEditorPart =

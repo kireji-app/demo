@@ -20,11 +20,13 @@ declare interface IMenu
  /** The HTML that renders the desktop application menu, including some application links and a few settings. */
  readonly "menu.html": string
  /** An event handler that advances the menu from its current clip into its next one. */
- readonly go(POINTER_EVENT: PointerEvent): void
+ readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
 
  // Runtime Properties.
  /** On the client, the screen-filling element that contains the menu. If the menu is closed at hydration time, it will be rendered in an offscreen element so that it can be quickly shown later by adding it to the DOM. */
  readonly element: HTMLElement
+ /** On the client, the button element that should open the task menu. */
+ readonly button: HTMLElement
 }
 
 /** A type that generates an animated menu.

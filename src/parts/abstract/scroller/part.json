@@ -5,5 +5,13 @@
  "onresize": [],
  "wrap": [
   "INNER_HTML"
+ ],
+ "point-button": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ],
+ "point-thumb": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
  ]
 }
