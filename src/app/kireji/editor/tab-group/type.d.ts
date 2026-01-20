@@ -3,9 +3,9 @@ declare interface IKirejiAppTabGroup
  IWebComponent {
 
  // Serialized Properties.
- /** The currently selected tab, equal to `tabGroup.openTabs[tabGroup.activeTab]` */
+ /** The currently selected tab, equal to `tabGroup.openTabs[tabGroup.activeTabIndex]` */
  readonly "selectedTab": IKirejiAppTabGroupTab
- /** The part corresponding to the currently selected tab, equal to `tabGroup.openTabs[tabGroup.activeTab].part` */
+ /** The part corresponding to the currently selected tab, equal to `tabGroup.openTabs[tabGroup.activeTabIndex].part` */
  readonly "selectedPart": IPartAny
  /** Returns the specific permutation ID of the given array of tab models without changing the state of the tab group. */
  readonly getPermutationRouteID(TABS: IKirejiAppTabGroupTabArray): bigint
@@ -29,22 +29,22 @@ declare interface IKirejiAppTabGroup
  /** A subindex representing which permutation of k open tabs is selected. */
  readonly permutationRouteID: bigint
  /** A Fenwick tree that allows performant ranking and unranking of permutation indices. */
- readonly tree: TabTree
+ readonly tree: FenwickTree
  readonly openTabs: IKirejiAppTabGroupTabArray
  /** The index of the currently active tab. */
- readonly activeTab: number
+ readonly activeTabIndex: number
  /** The array of memoized offset route IDs corresponding to the start of each part's filename plane. */
  readonly partOffsets: number[]
  /** The total number of tab subjects available - the number of _different_ filenames and part summaries that can be the focus of their own tab (regardless of the maximum number of tabs which can be open at once). */
  readonly subjectCount: bigint
  /** A data type which can be used to performantly rank and unrank permutation indices. */
- readonly TabTree: typeof TabTree
+ readonly FenwickTree: typeof FenwickTree
 }
 
 declare type IKirejiAppTabGroupTabArray = IKirejiAppTabGroupTab[]
 
-declare class TabTree {
- constructor(): TabTree
+declare class FenwickTree {
+ constructor(): FenwickTree
  update(i: bigint, val: bigint): void
  query(i: bigint): bigint
  findNthAvailable(n: bigint): bigint

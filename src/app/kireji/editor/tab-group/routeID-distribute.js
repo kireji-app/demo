@@ -12,7 +12,7 @@ const numberOfTabsOpen = (() => {
 })()
 
 // Extract the index of the active open tab.
-tabGroup.activeTab = (() => {
+tabGroup.activeTabIndex = (() => {
  // TODO: Consider using -1 here instead of null.
  if (numberOfTabsOpen === 0n)
   return null
@@ -31,7 +31,7 @@ if (numberOfTabsOpen !== tabGroup.openTabs.length || tabGroup.permutationRouteID
  tabGroup.permutationRouteID = permutationRouteID
 
  // Prepare an empty Fenwick tree for converting availability-based indices to absolute indices.
- tabGroup.tree = new tabGroup.TabTree()
+ tabGroup.tree = new tabGroup.FenwickTree()
 
  const indexOfLastOpenTab = numberOfTabsOpen - 1n
  const indexOfLastPossibleTabSubject = tabGroup.subjectCount - 1n

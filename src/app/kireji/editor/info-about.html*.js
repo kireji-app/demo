@@ -1,5 +1,5 @@
 return (
- `<h2>About Part</h2>` +
+ `<summary onpointerdown=${editor.settings.runtimeReference}.point(event,this)>About Part</summary>` +
  "<div id=part-intro>" + (
   `<img src="${selectedPart.placeholderImage("part.png")}"/>` +
   "<div>" + (

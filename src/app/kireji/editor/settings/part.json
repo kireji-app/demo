@@ -1,0 +1,7 @@
+{
+ "extends": "mix",
+ "point": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ]
+}

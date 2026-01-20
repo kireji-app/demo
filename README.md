@@ -1,7 +1,7 @@
 # Demo - *App Ecosystem*
 > **<sub>Part of the Kireji Project</sub>**<br><sup><i>omnia ex una linea</i></sup>
 
-The Demo App Ecosystem serves as the unified host for all applications demonstrating the Kireji Project. It represents a multi-origin app ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a powerful, portable save-state system.
+The Demo App Ecosystem serves as the unified host for all applications demonstrating the Kireji Project. It represents a multi-origin app ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a portable save-state system.
 ## The Kireji Project
 The Kireji Project poses a question: **What if we could treat every web page as a point in a unified, mathematically mapped space?**
 

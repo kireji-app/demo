@@ -59,7 +59,6 @@ tab- {
  height: fit-content;
  white-space: pre;
  text-overflow: ellipsis;
- /*overflow: hidden;*/
  display: flex;
  flex-direction: row;
  flex-wrap: nowrap;

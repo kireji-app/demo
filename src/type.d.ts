@@ -193,6 +193,8 @@ declare class Property {
  readonly isSymbol: boolean
  /** Flag indicating if this property is a getter or setter. Determined by checking if `id` starts with "get-" or "set-". */
  readonly isGetOrSet: boolean
+ /** Flag indicating if this property represents a generated file, as indicated by the filename ending with "*.js". */
+ readonly isGenerated: boolean
  /** A processed, potentially more human-readable or code-friendly name for the method.
   * - For Symbols: `[Symbol.symbolName]`
   * - For certain get/set with dots: `["file.extension"]`

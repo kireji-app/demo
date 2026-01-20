@@ -92,7 +92,6 @@ li~li {
 #notebook-section {
  padding: calc((2 * var(--spacing)) - 2px);
  display: flex;
- /* gap: 0; */
  flex-flow: column;
  position: relative;
  padding-bottom: calc(6 * var(--spacing) - 2px);

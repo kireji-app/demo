@@ -1,45 +1,58 @@
 const
- changeActiveTab = (newActiveTab, changesPermutation) => {
+ changeActiveTab = (newActiveTabIndex, changesPermutation) => {
   history.pushState(null, null, location.href)
   if (changesPermutation)
    tabGroup.permutationRouteID = tabGroup.getPermutationRouteID(tabGroup.openTabs)
-  tabGroup.activeTab = newActiveTab
+  tabGroup.activeTabIndex = newActiveTabIndex
   changedEditorSubparts.add(tabGroup)
   changedAppSubparts.add(editor)
-  warn('expand outliner folders here.')
-  /* FIX BUG HERE!
-  let parentFolder = sidebar.view.getParent(tabGroup.openTabs[activeTabIndexOfDraggedItem].part)
-  let toggleMask = 0n
- 
-  while (parentFolder) {
-   const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
-   const toggleBit = 1n << BigInt(folderIndex)
-   if (!(sidebar.view.folders.routeID & toggleBit))
-    toggleMask |= toggleBit
-   parentFolder = sidebar.view.getParent(parentFolder)
+
+  const activePart = tabGroup.openTabs[newActiveTabIndex].part
+  const sidebarIsOpen = sidebar.open.model
+
+  if (sidebarIsOpen) {
+   let parentFolder = sidebar.view.getParent(activePart)
+   let finalRouteID = sidebar.view.folders.routeID
+
+   while (parentFolder) {
+    const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
+    finalRouteID |= 1n << BigInt(folderIndex)
+    parentFolder = sidebar.view.getParent(parentFolder)
+   }
+
+   if (sidebar.view.folders.routeID !== finalRouteID) {
+    sidebar.view.folders.distributeRouteID(finalRouteID)
+    sidebar.view.collectRouteID([sidebar.view.folders], 1)
+    sidebar.collectRouteID([sidebar.view], 1)
+    changedAppSubparts.add(sidebar)
+   }
   }
- 
-  const finalRouteID = toggleMask | sidebar.view.folders.routeID
- 
-  if (sidebar.view.folders.routeID !== finalRouteID) {
-   sidebar.view.folders.distributeRouteID(finalRouteID)
-   sidebar.view.collectRouteID([sidebar.view.folders], 2)
-   changedAppSubparts.unshift(sidebar)
-  }
-  */
+
   tabGroup.detachListeners()
   if (scroller.routeID !== 0n) {
    scroller.updateRouteID(0n)
    changedEditorSubparts.add(scroller)
   }
   const numberOfTabsOpen = tabGroup.openTabs.length
-  tabGroup.updateRouteID(tabGroup.permutationRouteID + (numberOfTabsOpen > 0 ? BigInt(tabGroup.activeTab) : 0n) * tabGroup.permutationSizes[numberOfTabsOpen] + tabGroup.tabOffsets[numberOfTabsOpen])
+  tabGroup.updateRouteID(tabGroup.permutationRouteID + (numberOfTabsOpen > 0 ? BigInt(tabGroup.activeTabIndex) : 0n) * tabGroup.permutationSizes[numberOfTabsOpen] + tabGroup.tabOffsets[numberOfTabsOpen])
   editor.collectRouteID([...changedEditorSubparts], 1)
   kirejiApp.collectRouteID([...changedAppSubparts])
   kirejiApp[".."].collectPopulateView()
   kirejiApp.distributePopulateView()
   kirejiApp.distributeClean()
   kirejiApp.collectClean()
+
+  if (sidebarIsOpen) {
+   const { top: sidebarTop, bottom: sidebarBottom } = sidebar.view.scroller.container.getBoundingClientRect()
+   const item = sidebar.view.scroller.container.querySelector(`[data-index="${allParts.indexOf(activePart)}"]`)
+   const { top, bottom } = item.getBoundingClientRect()
+
+   if ((bottom > sidebarBottom) || (top < sidebarTop))
+    item.scrollIntoView({
+     behavior: 'instant',
+     block: 'center',
+    })
+  }
  },
  changedEditorSubparts = new Set(),
  changedAppSubparts = new Set(),
@@ -52,7 +65,7 @@ let dragPreviewElement = null
 
 pointer.handle({
  down() {
-  if (![-1, tabGroup.activeTab].includes(activeTabIndexOfDraggedItem))
+  if (![-1, tabGroup.activeTabIndex].includes(activeTabIndexOfDraggedItem))
    changeActiveTab(activeTabIndexOfDraggedItem)
  },
  drag(pointerEvent) {
@@ -125,7 +138,7 @@ pointer.handle({
    tabAlreadyExistsForFileData = existingTabIndexOfFileData !== -1,
    numberOfTabsOpen = tabGroup.openTabs.length,
    conditionallyActivateExistingTab = () => {
-    if (existingTabIndexOfFileData !== tabGroup.activeTab)
+    if (existingTabIndexOfFileData !== tabGroup.activeTabIndex)
      changeActiveTab(existingTabIndexOfFileData)
    },
    createAndActivateNewTabAt = indexOfNewlyCreatedTab => {
@@ -141,7 +154,7 @@ pointer.handle({
      return
     }
 
-    const nearestIndexToTheRight = numberOfTabsOpen === 0 ? 0 : tabGroup.activeTab + 1
+    const nearestIndexToTheRight = numberOfTabsOpen === 0 ? 0 : tabGroup.activeTabIndex + 1
     createAndActivateNewTabAt(nearestIndexToTheRight)
    },
    handleTabGroupDragAndDrop = () => {

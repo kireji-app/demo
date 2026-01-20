@@ -1,35 +1,70 @@
 pointer.handle({
  click() {
-  const tabIndex = Array.prototype.indexOf.call(document.getElementById("tab-group").children, TARGET_ELEMENT.parentElement)
+  const
+   tabIndex = Array.prototype.indexOf.call(document.getElementById("tab-group").children, TARGET_ELEMENT.parentElement),
+   changedAppSubparts = new Set([editor])
 
   if (tabIndex < 0)
    throw `can't close tab: the given element was not a tab in #tabGroup.`
 
   const
    targetTab = tabGroup.openTabs[tabIndex],
-   isClosingActiveTab = tabGroup.activeTab === tabIndex,
-   finalTabIndex = isClosingActiveTab ? (tabGroup.activeTab < 1 ? 0 : tabGroup.activeTab - 1) : (tabGroup.activeTab > tabIndex ? tabGroup.activeTab - 1 : tabGroup.activeTab)
+   isClosingActiveTab = tabGroup.activeTabIndex === tabIndex,
+   finalTabIndex = isClosingActiveTab ? (tabGroup.activeTabIndex < 1 ? 0 : tabGroup.activeTabIndex - 1) : (tabGroup.activeTabIndex > tabIndex ? tabGroup.activeTabIndex - 1 : tabGroup.activeTabIndex)
 
-  const fallbackTabElement = document.querySelector(`tab-:nth-child(${finalTabIndex + 1})`)
+  const fallbackTabElement = tabGroup.openTabs.length === 1 ? null : document.querySelector(`tab-:nth-child(${finalTabIndex + 1})`)
 
   tabGroup.detachListeners()
-  tabGroup.activeTab = null
+  tabGroup.activeTabIndex = null
   tabGroup.openTabs.splice(tabIndex, 1)
   tabGroup.permutationRouteID = tabGroup.getPermutationRouteID(tabGroup.openTabs)
 
-  if (fallbackTabElement)
-   tabGroup.activeTab = finalTabIndex
+  let activePart = null
+  const sidebarIsOpen = sidebar.open.model
 
-  warn('expand outliner folders now')
+  if (fallbackTabElement) {
+   tabGroup.activeTabIndex = finalTabIndex
+
+   if (sidebarIsOpen) {
+    activePart = tabGroup.openTabs[finalTabIndex].part
+    let parentFolder = sidebar.view.getParent(activePart)
+    let finalRouteID = sidebar.view.folders.routeID
+
+    while (parentFolder) {
+     const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
+     finalRouteID |= 1n << BigInt(folderIndex)
+     parentFolder = sidebar.view.getParent(parentFolder)
+    }
+
+    if (sidebar.view.folders.routeID !== finalRouteID) {
+     sidebar.view.folders.distributeRouteID(finalRouteID)
+     sidebar.view.collectRouteID([sidebar.view.folders], 1)
+     sidebar.collectRouteID([sidebar.view], 1)
+     changedAppSubparts.add(sidebar)
+    }
+   }
+  }
 
   const numberOfTabsOpen = tabGroup.openTabs.length
-  tabGroup.updateRouteID(tabGroup.permutationRouteID + (numberOfTabsOpen > 0 ? BigInt(tabGroup.activeTab) : 0n) * tabGroup.permutationSizes[numberOfTabsOpen] + tabGroup.tabOffsets[numberOfTabsOpen])
+  tabGroup.updateRouteID(tabGroup.permutationRouteID + (numberOfTabsOpen > 0 ? BigInt(tabGroup.activeTabIndex) : 0n) * tabGroup.permutationSizes[numberOfTabsOpen] + tabGroup.tabOffsets[numberOfTabsOpen])
   editor.collectRouteID([tabGroup], 1)
-  kirejiApp.collectRouteID([editor])
+  kirejiApp.collectRouteID([...changedAppSubparts])
   kirejiApp[".."].collectPopulateView()
   kirejiApp.distributePopulateView()
   kirejiApp.distributeClean()
   kirejiApp.collectClean()
+
+  if (fallbackTabElement && sidebarIsOpen) {
+   const { top: sidebarTop, bottom: sidebarBottom } = sidebar.view.scroller.container.getBoundingClientRect()
+   const item = sidebar.view.scroller.container.querySelector(`[data-index="${allParts.indexOf(activePart)}"]`)
+   const { top, bottom } = item.getBoundingClientRect()
+
+   if ((bottom > sidebarBottom) || (top < sidebarTop))
+    item.scrollIntoView({
+     behavior: 'instant',
+     block: 'center',
+    })
+  }
  },
  POINTER_EVENT,
  TARGET_ELEMENT,

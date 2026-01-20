@@ -6,9 +6,6 @@ for (const [, host, filename] of BODY_HTML.matchAll(/data:image\/svg\+xml;inert;
 
 "".replace()
 
-/* TODO: replace underscore in css variable with dash (and vise-versa),
-  so we can use dashes in filenames for images instead of underscores. */
-
 for (const [, host, filename] of HEAD_HTML.matchAll(/var\(--(.+?)--(.+?)\)/g))
  (earlies[host.replaceAll("-", ".").replaceAll("_", "-")] ??= new Set()).add(filename.replace("-", ".").replaceAll("_", "-"))
 

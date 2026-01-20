@@ -14,7 +14,7 @@ let cardinality = 1n
 
 for (let k = 1n, p = 1n; k <= subjectCount; k++) {
 
- // Memoize a prototype LSB array to simplify initialization of TabTree instances.
+ // Memoize a prototype LSB array to simplify initialization of Fenwick tree instances.
  LSB[k - 1n] = k & -k
 
  if (k > maxTabCount)
@@ -39,7 +39,7 @@ for (let k = 1n, p = 1n; k <= subjectCount; k++) {
 tabGroup.define({
  cardinality: { value: cardinality },
  permutationRouteID: { value: null, writable: true },
- activeTab: { value: null, writable: true },
+ activeTabIndex: { value: null, writable: true },
  viewedTab: { value: null, writable: true },
  viewedPermutation: { value: null, writable: true },
  viewedOpenTabs: { value: null, writable: true },
@@ -52,8 +52,8 @@ tabGroup.define({
  maxTabCount: { value: maxTabCount },
  previousPart: { value: null, writable: true },
  tree: { value: null, writable: true },
- TabTree: {
-  value: class TabTree {
+ FenwickTree: {
+  value: class FenwickTree {
    constructor() {
     this.tree = [...LSB]
    }

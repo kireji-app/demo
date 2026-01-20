@@ -4,6 +4,7 @@ declare interface IKirejiAppEditor
 
  // Subparts.
  readonly tabGroup: IKirejiAppTabGroup
+ readonly settings: IKirejiAppEditorSettings
  readonly scroller: IScroller<IKirejiAppEditor>
 
  // Serialized Properties.

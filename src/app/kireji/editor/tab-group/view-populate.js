@@ -53,7 +53,7 @@ if (hydrated) {
 
  tabGroup.viewedTab = selectedTab
  if (!hasNoTabs) {
-  const activeTabElement = document.querySelector(`tab-:nth-child(${tabGroup.activeTab + 1})`)
+  const activeTabElement = document.querySelector(`tab-:nth-child(${tabGroup.activeTabIndex + 1})`)
 
   if (!activeTabElement.hasAttribute("data-selected")) {
    activeTabElement.setAttribute("data-selected", "")

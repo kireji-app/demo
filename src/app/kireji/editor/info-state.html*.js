@@ -1,5 +1,5 @@
 return (
- `<h2>State</h2>` + (
+ `<summary onpointerdown=${editor.settings.runtimeReference}.point(event,this)>State</summary>` + (
   instances.includes(selectedPart) ? (
    selectedPart.disabled ? (
     "<p class=disabled-message>This part is currently disabled.</p>" +

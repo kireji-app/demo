@@ -1,4 +1,4 @@
 {
  "abstract": true,
- "toggle": []
+ "extends": "boolean"
 }

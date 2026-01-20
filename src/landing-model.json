@@ -3,7 +3,7 @@
   "kireji": {
    "editor": {
     "tab-group": {
-     "activeTab": 0,
+     "activeTabIndex": 0,
      "openTabs": [
       {
        "host": "kireji.app"

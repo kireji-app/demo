@@ -37,14 +37,7 @@
   1px 1px 2px -1px #0005,
   0 0 8px 3px #0001,
   inset 0 0 var(--spacing) var(--spacing) var(--edge-color),
-  calc(var(--spacing) / -4) 0 var(--text-color)
-  /*
-  calc(var(--spacing) * -1) 0 var(--paper-color),
-  inset calc(var(--spacing) / -2) calc(var(--spacing) / 2) 0 calc(var(--spacing) / 2 - 0.5px) var(--paper-color),
-  inset calc(var(--spacing) / -2) calc(var(--spacing) / -2) 0 calc(var(--spacing) / 2 - 0.5px) var(--paper-color),*/
- ;
- /*background: var(--grid);
- background-color: var(--paper-color);*/
+  calc(var(--spacing) / -4) 0 var(--text-color);
  color: var(--text-color);
  border-radius: var(--radius);
  white-space: pre-wrap;

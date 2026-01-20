@@ -13,7 +13,6 @@
 
 html:has(body.unhydrated) {
  cursor: wait;
- /* pointer-events: none; */
 }
 
 #application-control {

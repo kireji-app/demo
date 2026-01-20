@@ -433,6 +433,7 @@ function ƒ(_) {
           words.push(words.shift())
           return property.key = camelCase(words)
          }
+         property.key = PROPERTY_ID
          return PROPERTY_ID
         })()
         property.MethodConstant = class MethodConstant {

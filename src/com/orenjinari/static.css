@@ -18,12 +18,6 @@ wallpaper- {
  --ground: var(--orenjinari-com--ground-png);
 }
 
-/*
- wallpaper- .zone {
-   box-shadow: inset 0 0 0 8vw #0003;
- }
-*/
-
 wallpaper->scroller->scroll-content {
  padding-top: calc(var(--wallpaper-height) + var(--section-gap));
  --sections: 5;
@@ -35,7 +29,6 @@ wallpaper->scroller->scroll-content {
   radial-gradient(ellipse 18.667vw 20.968vw at 49.722vw 5.389vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 20.255vw 20.968vw at 80.029vw 6.956vw, white 99.5%, transparent 100%),
   radial-gradient(ellipse 14.194vw 20.968vw at 94.327vw 5.053vw, white 99.5%, transparent 100%);
- /*background-attachment: local;*/
  display: block;
  position: relative;
 }
@@ -43,7 +36,6 @@ wallpaper->scroller->scroll-content {
 wallpaper->scroller->scroll-content::after {
  background:
   var(--ground) 12.5vw calc(.8 * var(--wallpaper-height))/75vw 3.75vw no-repeat;
- /*background-attachment: local;*/
  z-index: -1;
 }
 
