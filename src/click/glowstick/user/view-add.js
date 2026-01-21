@@ -1,1 +1,1 @@
-user.element = document.querySelector("user-")
+user.element = Q("user-")

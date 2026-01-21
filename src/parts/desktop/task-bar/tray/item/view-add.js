@@ -1,1 +1,1 @@
-trayItem.element = document.getElementById(`${trayItem.key}-tray-item`)
+trayItem.element = Q(`#${trayItem.key}-tray-item`)

@@ -1,9 +1,11 @@
-tabGroup.viewedTab = tabGroup.selectedTab
+tabGroup.viewedActiveTab = tabGroup.activeTab
+tabGroup.viewedPreviewTab = tabGroup.previewTab
 tabGroup.viewedPermutation = tabGroup.permutationRouteID
+tabGroup.viewedPayload = tabGroup.payloadRouteID
 tabGroup.viewedOpenTabs = [...tabGroup.openTabs]
 
 _.parts.core.client.promise.then(() => {
- document.querySelector(`tab-[data-selected]`)?.scrollIntoView({
+ Q(`tab-[data-active]`)?.scrollIntoView({
   behavior: 'smooth',
   inline: 'nearest',
  })

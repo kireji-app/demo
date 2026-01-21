@@ -1,0 +1,1 @@
+return _.app.kireji.editor.tabGroup.activePart === SUBJECT

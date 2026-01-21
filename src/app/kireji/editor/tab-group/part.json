@@ -2,6 +2,7 @@
  "HTML-render-tab": [
   "TAB_PART",
   "TAB_FILENAME",
+  "TAB_PAYLOAD",
   "TAB_INDEX"
  ],
  "listener": [
@@ -10,9 +11,14 @@
  "routeID-get-permutation": [
   "TABS"
  ],
+ "routeID-get-payload": [
+  "TABS"
+ ],
+ "routeID-summarize": [],
  "factor-get-permutation": [
   "NUMBER_OF_TABS_OPEN",
   "CURRENT_TAB_INDEX"
  ],
+ "listeners-attach": [],
  "listeners-detach": []
 }

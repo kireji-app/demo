@@ -1,5 +1,5 @@
 if (hydrated) {
- const detailsElement = document.querySelector(`#info-${part.key}`)
+ const detailsElement = Q(`#info-${part.key}`)
 
  if (detailsElement) {
   if (part.model)

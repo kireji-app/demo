@@ -1,6 +1,6 @@
 pointer.handle({
  click() {
-  document.getElementById(TARGET_ELEMENT.name).scrollIntoView({
+  Q("#" + TARGET_ELEMENT.name).scrollIntoView({
    behavior: 'smooth',
    block: 'center',
   })

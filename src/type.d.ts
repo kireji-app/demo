@@ -68,6 +68,7 @@ declare interface IEcosystem
  * 
  * The serialized version should not include any values that are added during or after recursively hydrating the part tree. */
 declare const _: IEcosystem
+declare const Q: typeof document.querySelector
 /** A function which simplifies the process of deploying to three environments (server, worker, client) by giving them all the same routing functions, virtual DOM and synchronous fetch method which can produce both static assets and dynamically generated files.
  * 
  * It creates a function scope in which all other .js files execute. It then boots the ecosystem. */

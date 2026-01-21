@@ -27,7 +27,7 @@ body.modern tool-bar {
  background-color: var(--bg-mode-er);
 }
 
-body.modern wallpaper-:has(side-bar) tool-bar>button[data-selected] {
+body.modern wallpaper-:has(side-bar) tool-bar>button[data-active] {
  box-shadow: inset 3px 0 0 -1px var(--accent);
 }
 
@@ -41,7 +41,7 @@ body.vintage tool-bar>button {
 }
 
 body.vintage tool-bar>button:active,
-body.vintage wallpaper-:has(side-bar) tool-bar>button[data-selected] {
+body.vintage wallpaper-:has(side-bar) tool-bar>button[data-active] {
  box-shadow: var(--deep-inset);
  background: var(--pressed-checker), var(--bg-un-mode);
 }

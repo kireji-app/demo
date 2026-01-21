@@ -1,5 +1,5 @@
 const
- toolBarWidth = document.querySelector("tool-bar").clientWidth,
+ toolBarWidth = Q("tool-bar").clientWidth,
  sidebarWidthRouteIDCache = sidebarWidth.routeID
 
 pointer.handle({

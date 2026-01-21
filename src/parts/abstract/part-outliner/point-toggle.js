@@ -24,7 +24,7 @@ pointer.handle({
     partOutliner.getChildren(part).map(childPart => gatherRecursively(childPart))
 
     // const instanceIndex = allParts.indexOf(part)
-    // const svgElement = document.querySelector(`#${partOutliner.id} summary[data-index="${instanceIndex}"]>svg`)
+    // const svgElement = Q(`#${partOutliner.id} summary[data-index="${instanceIndex}"]>svg`)
     // toggleElements.add(svgElement)
    }
    gatherRecursively(triggerPart)

@@ -1,1 +1,1 @@
-document.getElementById("era-css").innerHTML = era["part.css"]
+Q("#era-css").innerHTML = era["part.css"]

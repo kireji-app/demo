@@ -1,7 +1,7 @@
 pointer.handle({
  click() {
 
-  const button = document.getElementById("update-control")
+  const button = Q("#update-control")
   const label = button.querySelector(".label")
 
   if (update.version) {

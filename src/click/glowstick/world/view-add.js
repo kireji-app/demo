@@ -1,4 +1,4 @@
-world.element = document.querySelector("world-")
+world.element = Q("world-")
 
 for (const region of world)
- region.element = document.querySelector(`world->[data-key="${region.key}"]`)
+ region.element = Q(`world->[data-key="${region.key}"]`)

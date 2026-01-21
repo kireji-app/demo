@@ -4,11 +4,15 @@
    "editor": {
     "tab-group": {
      "activeTabIndex": 0,
+     "previewTabIndex": 0,
      "openTabs": [
       {
        "host": "kireji.app"
       }
      ]
+    },
+    "settings": {
+     "about": true
     }
    },
    "sidebar": {

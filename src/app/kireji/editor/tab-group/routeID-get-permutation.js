@@ -10,17 +10,17 @@ for (let currentTabIndex = 0n; currentTabIndex < numberOfTabsOpen; currentTabInd
  // Use an embedded match to combine the current tab's file data into an absolute tab subject index.
  const { part, filename } = TABS[Number(currentTabIndex)]
  const index = allParts.indexOf(part)
- const trueIndexOfSelectedTabSubject = BigInt(filename ? tabGroup.partOffsets[index + 1] + part.filenames.indexOf(filename) : index)
+ const trueIndexOfActiveTabSubject = BigInt(filename ? tabGroup.partOffsets[index + 1] + part.filenames.indexOf(filename) : index)
 
  // Use the Fenwick tree to obtain the availability-based index of the tab subject in the list of remaining subjects.
- const availabilityIndexOfSelectedTabSubject = tabGroup.tree.query(trueIndexOfSelectedTabSubject - 1n)
+ const availabilityIndexOfActiveTabSubject = tabGroup.tree.query(trueIndexOfActiveTabSubject - 1n)
 
  // Consume that index of the Fenwick tree in preparation for the next iteration.
- tabGroup.tree.update(trueIndexOfSelectedTabSubject, -1n)
+ tabGroup.tree.update(trueIndexOfActiveTabSubject, -1n)
 
  // Use mix-based logic to compile this index with the rest.
  const permutationFactorOfCurrentTabIndex = tabGroup.getPermutationFactor(numberOfTabsOpen, currentTabIndex)
- permutationRouteID += availabilityIndexOfSelectedTabSubject * permutationFactorOfCurrentTabIndex
+ permutationRouteID += availabilityIndexOfActiveTabSubject * permutationFactorOfCurrentTabIndex
 }
 
 return permutationRouteID

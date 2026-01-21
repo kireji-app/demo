@@ -1,18 +1,14 @@
-function addListeners() {
- tabGroup.viewedTab.part.attach("populate", tabGroup, "listener")
- tabGroup.viewedTab.part.attach("remove", tabGroup, "listener")
-}
-
 if (hydrated) {
 
  const hasNoTabs = !tabGroup.openTabs.length
- const selectedTab = tabGroup.selectedTab
+ const activeTab = tabGroup.activeTab
+ const previewTab = tabGroup.previewTab
 
  // TODO: Create a "pseudo-part" that has all the same view methods, etc. of a normal part but is dynamically instantiated for dynamic typing.
 
- if (tabGroup.openTabs.length !== tabGroup.viewedOpenTabs.length || tabGroup.viewedPermutation !== tabGroup.permutationRouteID) {
+ if (tabGroup.openTabs.length !== tabGroup.viewedOpenTabs.length || tabGroup.viewedPermutation !== tabGroup.permutationRouteID || tabGroup.viewedPayload !== tabGroup.payloadRouteID) {
   // This is a dead-simple approach ... more performant approaches exist.
-  const tabContainer = document.getElementById("tab-group")
+  const tabContainer = Q("#tab-group")
   const existingTabCount = tabGroup.viewedOpenTabs.length
   const targetTabCount = tabGroup.openTabs.length
   const maxLength = Math.max(existingTabCount, targetTabCount)
@@ -31,7 +27,7 @@ if (hydrated) {
 
    const newTabElement = (() => {
     const offscreen = document.createElement("div")
-    offscreen.innerHTML = tabGroup.renderTabHTML(newOpenTab.part, newOpenTab.filename, i)
+    offscreen.innerHTML = tabGroup.renderTabHTML(newOpenTab.part, newOpenTab.filename, newOpenTab.payload, i)
     return offscreen.querySelector("tab-")
    })()
 
@@ -43,71 +39,78 @@ if (hydrated) {
    tabContainer.appendChild(newTabElement)
   }
   tabGroup.viewedPermutation = tabGroup.permutationRouteID
+  tabGroup.viewedPayload = tabGroup.payloadRouteID
   tabGroup.viewedOpenTabs = [...tabGroup.openTabs]
  }
 
- if (tabGroup.viewedTab && tabGroup.viewedTab !== selectedTab)
-  document.querySelector(`tab-[data-selected]`)?.removeAttribute("data-selected")
+ if (tabGroup.viewedActiveTab && tabGroup.viewedActiveTab !== activeTab)
+  Q(`tab-[data-active]`)?.removeAttribute("data-active")
 
- const currentTabLayout = tabGroup.viewedTab ? (tabGroup.viewedTab.filename ? "file" : "summary") : "empty"
+ if (tabGroup.viewedPreviewTab && tabGroup.viewedPreviewTab !== previewTab)
+  Q(`tab-[data-preview]`)?.removeAttribute("data-preview")
 
- tabGroup.viewedTab = selectedTab
+ const currentTabLayout = tabGroup.viewedActiveTab ? (tabGroup.viewedActiveTab.filename ? "file" : "summary") : "empty"
+
+ tabGroup.viewedActiveTab = activeTab
+ tabGroup.viewedPreviewTab = previewTab
+
  if (!hasNoTabs) {
-  const activeTabElement = document.querySelector(`tab-:nth-child(${tabGroup.activeTabIndex + 1})`)
+  const activeTabElement = Q(`tab-:nth-child(${tabGroup.activeTabIndex + 1})`)
 
-  if (!activeTabElement.hasAttribute("data-selected")) {
-   activeTabElement.setAttribute("data-selected", "")
+  if (!activeTabElement.hasAttribute("data-active")) {
+   activeTabElement.setAttribute("data-active", "")
    activeTabElement.scrollIntoView({
     behavior: "smooth",
     inline: 'nearest',
    })
   }
 
-  if (!selectedTab.filename && !tabGroup.viewedTab.part.isAbstract)
-   addListeners()
+  tabGroup.attachListeners()
+
+  const previewTabElement = tabGroup.previewTabIndex === null ? null : Q(`tab-:nth-child(${tabGroup.previewTabIndex + 1})`)
+
+  if (previewTabElement && !previewTabElement.hasAttribute("data-preview"))
+   previewTabElement.setAttribute("data-preview", "")
  }
 
  if (currentTabLayout === "summary") {
   if (hasNoTabs) {
-   document.querySelector(`editor-view scroll-content`).innerHTML = editor["empty-view.html"]
-  } else if (!tabGroup.viewedTab.filename) {
+   Q(`editor-view scroll-content`).innerHTML = editor["empty-view.html"]
+  } else if (!tabGroup.viewedActiveTab.filename) {
    for (const word of ["about", "state-space", "state", "properties"]) {
-    const element = document.getElementById(`info-${word}`)
+    const element = Q(`#info-${word}`)
     element.innerHTML = editor[`info-${word}.html`]
     if (word.startsWith("state")) {
-     if (selectedPart.isAbstract || word === "state" && selectedPart.disabled)
+     if (activePart.isAbstract || word === "state" && activePart.disabled)
       element.setAttribute("disabled", "")
      else
       element.removeAttribute("disabled")
     }
    }
   } else {
-   document.querySelector(`editor-view scroll-content`).innerHTML = editor["file-view.html"]
+   Q(`editor-view scroll-content`).innerHTML = editor["file-view.html"]
   }
-  document.querySelector(`crumbs-`).innerHTML = editor["crumbs.html"]
+  Q(`crumbs-`).innerHTML = editor["crumbs.html"]
  } else if (currentTabLayout === "file") {
   if (hasNoTabs) {
-   document.querySelector(`editor-view scroll-content`).innerHTML = editor["empty-view.html"]
-  } else if (tabGroup.viewedTab.filename) {
-   document.querySelector('editor-view scroll-content').innerHTML = editor["file-view.html"]
+   Q(`editor-view scroll-content`).innerHTML = editor["empty-view.html"]
+  } else if (tabGroup.viewedActiveTab.filename) {
+   Q('editor-view scroll-content').innerHTML = editor["file-view.html"]
   } else {
-   document.querySelector(`editor-view scroll-content`).innerHTML = editor["summary-view.html"]
+   Q(`editor-view scroll-content`).innerHTML = editor["summary-view.html"]
   }
-  document.querySelector(`crumbs-`).innerHTML = editor["crumbs.html"]
+  Q(`crumbs-`).innerHTML = editor["crumbs.html"]
  } else {
   if (hasNoTabs)
    throw `Unexpected update to empty tab group without adding any new tabs.`
-  if (tabGroup.viewedTab.filename) {
-   document.querySelector(`editor-view scroll-content`).innerHTML = editor["file-view.html"]
+  if (tabGroup.viewedActiveTab.filename) {
+   Q(`editor-view scroll-content`).innerHTML = editor["file-view.html"]
   } else {
-   document.querySelector(`editor-view scroll-content`).innerHTML = editor["summary-view.html"]
+   Q(`editor-view scroll-content`).innerHTML = editor["summary-view.html"]
   }
-  document.querySelector(`crumbs-`).innerHTML = editor["crumbs.html"]
+  Q(`crumbs-`).innerHTML = editor["crumbs.html"]
  }
- document.querySelector("#sidebar-view summary[data-selected]")?.removeAttribute("data-selected")
+ Q("#sidebar-view summary[data-active]")?.removeAttribute("data-active")
  if (!hasNoTabs)
-  document.querySelector(`#sidebar-view summary[data-index="${allParts.indexOf(tabGroup.viewedTab.part)}"]`)?.setAttribute("data-selected", "")
-} else _.parts.core.client.promise.then(() => {
- if (tabGroup.selectedTab && !tabGroup.selectedTab.filename && !tabGroup.selectedTab.part.isAbstract)
-  addListeners()
-})
+  Q(`#sidebar-view summary[data-index="${allParts.indexOf(tabGroup.viewedActiveTab.part)}"]`)?.setAttribute("data-active", "")
+} else _.parts.core.client.promise.then(() => tabGroup.attachListeners())

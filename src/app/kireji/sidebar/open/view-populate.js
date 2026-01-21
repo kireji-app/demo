@@ -6,7 +6,7 @@ if (hydrated) {
   scroller.removeView()
   sidebar.element.remove()
  } else {
-  document.querySelector("tool-bar").after(sidebar.element)
+  Q("tool-bar").after(sidebar.element)
   scroller.addView()
  }
 }

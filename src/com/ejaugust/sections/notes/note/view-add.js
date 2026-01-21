@@ -1,12 +1,12 @@
 if (hydrated) {
- document.querySelector("#notebook-section").innerHTML = note["part.html"]
- document.querySelector("#note-title").innerHTML = note.title ?? "Untitled Note"
- document.querySelector("#note-subtitle").innerHTML = note.subtitle ?? ""
- document.querySelector("#note-credit").innerHTML = note["credit.html"]
+ Q("#notebook-section").innerHTML = note["part.html"]
+ Q("#note-title").innerHTML = note.title ?? "Untitled Note"
+ Q("#note-subtitle").innerHTML = note.subtitle ?? ""
+ Q("#note-credit").innerHTML = note["credit.html"]
  document.title = ejaugust.title
- document.querySelector(`meta[name="description"]`).setAttribute("content", ejaugust.descriptionMeta)
- document.getElementById("application-css").innerHTML = ejaugust["part.css"]
+ Q(`meta[name="description"]`).setAttribute("content", ejaugust.descriptionMeta)
+ Q("#application-css").innerHTML = ejaugust["part.css"]
  const canonicalURL = note.canonicalURL
- document.querySelector(`link[rel="canonical"]`).setAttribute("href", canonicalURL)
- document.getElementById("footer-top").href = `${canonicalURL}#top`
+ Q(`link[rel="canonical"]`).setAttribute("href", canonicalURL)
+ Q("#footer-top").href = `${canonicalURL}#top`
 }

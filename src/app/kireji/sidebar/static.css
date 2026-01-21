@@ -59,13 +59,13 @@ side-bar {
  outline: none;
 }
 
-#sidebar-view summary[data-selected] {
+#sidebar-view summary[data-active] {
  background-color: var(--accent);
  color: var(--bg-mode-est);
  font-weight: 500;
 }
 
-#sidebar-view summary:hover:not(:has(svg:hover)):not([data-selected]) {
+#sidebar-view summary:hover:not(:has(svg:hover)):not([data-active]) {
  background-color: var(--bg-mode-est);
  color: var(--fg-un-mode-est);
 }
@@ -74,7 +74,7 @@ side-bar {
  stroke: var(--accent);
 }
 
-#sidebar-view summary[data-selected]>svg:hover {
+#sidebar-view summary[data-active]>svg:hover {
  stroke: var(--bg-mode-er);
 }
 

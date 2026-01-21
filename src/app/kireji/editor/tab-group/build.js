@@ -2,6 +2,7 @@
 const tabBitDepths = [0n, 0n]
 const tabOffsets = [0n]
 const permutationSizes = [1n]
+const payloadSizes = [1n]
 const partOffsets = [0, allParts.length]
 const subjectCount = BigInt(allParts.reduce((subjectCount, part, i) =>
  partOffsets[i + 2] = subjectCount + part.filenames.length, allParts.length
@@ -9,44 +10,59 @@ const subjectCount = BigInt(allParts.reduce((subjectCount, part, i) =>
 const maxTabCount = subjectCount
 const LSB = []
 const powerFloor = 2n ** BigInt(subjectCount.toString(2).length - 1)
+const payloadCardinality = 1n
 
 let cardinality = 1n
 
-for (let k = 1n, p = 1n; k <= subjectCount; k++) {
+for (let tabCount = 1n, permutationSize = 1n, payloadSize = 1n; tabCount <= subjectCount; tabCount++) {
 
  // Memoize a prototype LSB array to simplify initialization of Fenwick tree instances.
- LSB[k - 1n] = k & -k
+ LSB[tabCount - 1n] = tabCount & -tabCount
 
- if (k > maxTabCount)
+ if (tabCount > maxTabCount)
   continue
 
  // Increase the permutation size based on tab count.
- p *= subjectCount - k + 1n
- permutationSizes[k] = p
- tabOffsets[k] = cardinality
+ permutationSize *= subjectCount - tabCount + 1n
 
- // We multiply by this k to account for the active tab index as an independent variable.
- // Consider 2^k additional factor here for masking _keep open_ status on tabs.
- cardinality += p * k
+ // Increase the payload size.
+ payloadSize *= payloadCardinality
+ permutationSizes[tabCount] = permutationSize
+ payloadSizes[tabCount] = payloadSize
+ tabOffsets[tabCount] = cardinality
 
- // Enable O(1) recovery of k later.
+ // tabCount = range of active tab datum [0, k-1]
+ // tabCount + 1n = range of preview tab datum
+ cardinality +=
+  (tabCount + 1n)
+  * tabCount
+  * permutationSize
+  * payloadSize
+
+ // Enable O(1) recovery of tabCount later.
  const bitDepth = cardinality.toString(2).length
  while (bitDepth > tabBitDepths.length)
-  tabBitDepths.push(k - 1n)
- tabBitDepths[bitDepth] = k
+  tabBitDepths.push(tabCount - 1n)
+ tabBitDepths[bitDepth] = tabCount
 }
 
 tabGroup.define({
  cardinality: { value: cardinality },
+ payloadCardinality: { value: payloadCardinality },
  permutationRouteID: { value: null, writable: true },
+ payloadRouteID: { value: null, writable: true },
  activeTabIndex: { value: null, writable: true },
- viewedTab: { value: null, writable: true },
+ previewTabIndex: { value: null, writable: true },
+ viewedActiveTab: { value: null, writable: true },
+ viewedPreviewTab: { value: null, writable: true },
  viewedPermutation: { value: null, writable: true },
+ viewedPayload: { value: null, writable: true },
  viewedOpenTabs: { value: null, writable: true },
  openTabs: { value: [] },
  tabOffsets: { value: tabOffsets },
  tabBitDepths: { value: tabBitDepths },
  permutationSizes: { value: permutationSizes },
+ payloadSizes: { value: payloadSizes },
  partOffsets: { value: partOffsets },
  subjectCount: { value: subjectCount },
  maxTabCount: { value: maxTabCount },

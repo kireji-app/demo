@@ -1,4 +1,5 @@
 return {
  activeTabIndex: tabGroup.activeTabIndex,
- openTabs: tabGroup.openTabs.map(({ part, filename }) => ({ host: part.host, filename }))
+ previewTabIndex: tabGroup.previewTabIndex,
+ openTabs: tabGroup.openTabs.map(({ part, filename, payload }) => ({ host: part.host, filename, payload: Number(payload) }))
 }

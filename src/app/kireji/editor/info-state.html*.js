@@ -1,7 +1,7 @@
 return (
  `<summary onpointerdown=${editor.settings.runtimeReference}.point(event,this)>State</summary>` + (
-  instances.includes(selectedPart) ? (
-   selectedPart.disabled ? (
+  instances.includes(activePart) ? (
+   activePart.disabled ? (
     "<p class=disabled-message>This part is currently disabled.</p>" +
     "<h3>Integer</h3>" +
     `<pre id=live-route-id>-1</pre>` +
@@ -14,13 +14,13 @@ return (
    ) : (
     "<p class=disabled-message></p>" +
     "<h3>Integer</h3>" +
-    `<pre id=live-route-id>${selectedPart.routeID}</pre>` +
+    `<pre id=live-route-id>${activePart.routeID}</pre>` +
     "<hr>" +
     "<h3>Hash</h3>" +
-    `<pre id=live-route-hash>${encodeSegment(selectedPart.routeID) || "&nbsp;"}</pre>` +
+    `<pre id=live-route-hash>${encodeSegment(activePart.routeID) || "&nbsp;"}</pre>` +
     "<hr>" +
     "<h3>Model</h3>" +
-    `<pre id=live-model>${serialize(selectedPart.model)}</pre>`
+    `<pre id=live-model>${serialize(activePart.model)}</pre>`
    )
   ) : (
    "<p class=disabled-message>Abstract parts do not have a state.</p>"

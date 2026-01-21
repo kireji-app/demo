@@ -113,6 +113,10 @@ tab-[data-drop-target="before"]::before {
  left: -1px;
 }
 
+tab-[data-preview]>.tab-button {
+ font-style: italic;
+}
+
 body.modern tab- button:hover {
  color: var(--fg);
 }
@@ -129,7 +133,7 @@ body.modern tab- .close-tab:hover {
  background-color: var(--bg-light-er);
 }
 
-body.modern tab-[data-selected] .close-tab:hover {
+body.modern tab-[data-active] .close-tab:hover {
  background-color: var(--bg-light-est);
 }
 
@@ -140,15 +144,15 @@ body.modern #tab-group {
   inset 0 2px 0 -1px var(--bg-un-mode);
 }
 
-body.modern.dark tab-:not([data-selected]):hover {
+body.modern.dark tab-:not([data-active]):hover {
  background-color: var(--bg-mode);
 }
 
-body.modern.dark tab-[data-selected] {
+body.modern.dark tab-[data-active] {
  background-color: var(--bg-mode);
 }
 
-body.modern.light tab-:is([data-selected], :not([data-selected]):hover) {
+body.modern.light tab-:is([data-active], :not([data-active]):hover) {
  background-color: var(--bg-light-est);
 }
 
@@ -159,7 +163,7 @@ body.modern tab- {
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
-body.modern tab-[data-selected] {
+body.modern tab-[data-active] {
  box-shadow:
   inset 0 3px 0 -1px var(--accent),
   inset -2px 0 0 -1px var(--bg-un-mode);
@@ -204,12 +208,12 @@ body.vintage tab- .close-tab:active {
  box-shadow: var(--deep-inset);
 }
 
-body.vintage tab-[data-selected] .close-tab {
+body.vintage tab-[data-active] .close-tab {
  right: 6px;
  top: 5px;
 }
 
-body.vintage tab-[data-selected] {
+body.vintage tab-[data-active] {
  height: calc(var(--tab-group-height) + 4px);
  border-bottom-right-radius: 3px;
  border-bottom-left-radius: 3px;
@@ -222,13 +226,13 @@ body.vintage tab- .tab-path {
  display: none;
 }
 
-body.vintage tab-:not([data-selected]) {
+body.vintage tab-:not([data-active]) {
  height: var(--tab-group-height);
  position: relative;
  top: 2px;
 }
 
-body.vintage tab-[data-selected] .tab-button {
+body.vintage tab-[data-active] .tab-button {
  height: calc(var(--tab-group-height) + 4px);
  padding-top: 2px;
  padding-right: calc(var(--tab-group-height) + 10px);
@@ -271,7 +275,7 @@ body.vintage tab- .tab-button:focus::after {
  right: calc(var(--tab-group-height) + var(--inset));
 }
 
-body.vintage tab-[data-selected] .tab-button:focus::after {
+body.vintage tab-[data-active] .tab-button:focus::after {
  --inset: 4px;
 }
 
@@ -292,13 +296,13 @@ body.vintage tab-[data-drop-target="before"]::before {
  left: -2px;
 }
 
-body.vintage tab-[data-selected][data-drop-target="after"]::before {
+body.vintage tab-[data-active][data-drop-target="after"]::before {
  right: 0;
  top: 2px;
  bottom: 2px;
 }
 
-body.vintage tab-[data-selected][data-drop-target="before"]::before {
+body.vintage tab-[data-active][data-drop-target="before"]::before {
  left: 0;
  top: 2px;
  bottom: 2px;

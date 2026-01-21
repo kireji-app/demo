@@ -1,19 +1,19 @@
 return (
  `<summary onpointerdown=${editor.settings.runtimeReference}.point(event,this)>About Part</summary>` +
  "<div id=part-intro>" + (
-  `<img src="${selectedPart.placeholderImage("part.png")}"/>` +
+  `<img src="${activePart.placeholderImage("part.png")}"/>` +
   "<div>" + (
    "<h3>" + (
-    selectedPart.title ?? selectedPart.key
+    activePart.title ?? activePart.key
    ) + "</h3>" + (
-    selectedPart.host === "part.abstract.parts" ?
+    activePart.host === "part.abstract.parts" ?
      "<span disabled>This part has no prototype.</span>" :
-     `Extends <a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(selectedPart.prototype)})">` + (
-      selectedPart.prototype.title ?? selectedPart.prototype.key
+     `Extends <a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(activePart.prototype)})">` + (
+      activePart.prototype.title ?? activePart.prototype.key
      ) + '</a>'
    )
   ) + "</div>"
  ) + "</div>" +
  "<hr>" +
- `<p id=description${selectedPart.description ? "" : " disabled"}>${selectedPart.description ?? "This part has no description."}</p>`
+ `<p id=description${activePart.description ? "" : " disabled"}>${activePart.description ?? "This part has no description."}</p>`
 )

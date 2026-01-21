@@ -1,62 +1,71 @@
 const
- changeActiveTab = (newActiveTabIndex, changesPermutation) => {
+ changeActiveTab = (newActiveTabIndex, newPreviewTabIndex = tabGroup.previewTabIndex, changesPermutation) => {
   history.pushState(null, null, location.href)
-  if (changesPermutation)
+  if (changesPermutation) {
    tabGroup.permutationRouteID = tabGroup.getPermutationRouteID(tabGroup.openTabs)
+   tabGroup.payloadRouteID = tabGroup.getPayloadRouteID(tabGroup.openTabs)
+  }
+  const changesActiveTab = tabGroup.activeTabIndex !== newActiveTabIndex
   tabGroup.activeTabIndex = newActiveTabIndex
+  tabGroup.previewTabIndex = newPreviewTabIndex
   changedEditorSubparts.add(tabGroup)
   changedAppSubparts.add(editor)
 
   const activePart = tabGroup.openTabs[newActiveTabIndex].part
   const sidebarIsOpen = sidebar.open.model
 
-  if (sidebarIsOpen) {
-   let parentFolder = sidebar.view.getParent(activePart)
-   let finalRouteID = sidebar.view.folders.routeID
+  const summarizedRouteID = tabGroup.summarizeRouteID()
+  if (tabGroup.routeID !== summarizedRouteID) {
+   tabGroup.detachListeners()
 
-   while (parentFolder) {
-    const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
-    finalRouteID |= 1n << BigInt(folderIndex)
-    parentFolder = sidebar.view.getParent(parentFolder)
+   if (changesActiveTab) {
+    if (sidebarIsOpen) {
+     let parentFolder = sidebar.view.getParent(activePart)
+     let finalRouteID = sidebar.view.folders.routeID
+
+     while (parentFolder) {
+      const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
+      finalRouteID |= 1n << BigInt(folderIndex)
+      parentFolder = sidebar.view.getParent(parentFolder)
+     }
+
+     if (sidebar.view.folders.routeID !== finalRouteID) {
+      sidebar.view.folders.distributeRouteID(finalRouteID)
+      sidebar.view.collectRouteID([sidebar.view.folders], 1)
+      sidebar.collectRouteID([sidebar.view], 1)
+      changedAppSubparts.add(sidebar)
+     }
+    }
+    if (scroller.routeID !== 0n) {
+     scroller.updateRouteID(0n)
+     changedEditorSubparts.add(scroller)
+    }
    }
 
-   if (sidebar.view.folders.routeID !== finalRouteID) {
-    sidebar.view.folders.distributeRouteID(finalRouteID)
-    sidebar.view.collectRouteID([sidebar.view.folders], 1)
-    sidebar.collectRouteID([sidebar.view], 1)
-    changedAppSubparts.add(sidebar)
+   tabGroup.updateRouteID(summarizedRouteID)
+   editor.collectRouteID([...changedEditorSubparts], 1)
+   kirejiApp.collectRouteID([...changedAppSubparts])
+   kirejiApp[".."].collectPopulateView()
+   kirejiApp.distributePopulateView()
+   kirejiApp.distributeClean()
+   kirejiApp.collectClean()
+
+   if (changesActiveTab && sidebarIsOpen) {
+    const { top: sidebarTop, bottom: sidebarBottom } = sidebar.view.scroller.container.getBoundingClientRect()
+    const item = sidebar.view.scroller.container.querySelector(`[data-index="${allParts.indexOf(activePart)}"]`)
+    const { top, bottom } = item.getBoundingClientRect()
+
+    if ((bottom > sidebarBottom) || (top < sidebarTop))
+     item.scrollIntoView({
+      behavior: 'instant',
+      block: 'center',
+     })
    }
-  }
-
-  tabGroup.detachListeners()
-  if (scroller.routeID !== 0n) {
-   scroller.updateRouteID(0n)
-   changedEditorSubparts.add(scroller)
-  }
-  const numberOfTabsOpen = tabGroup.openTabs.length
-  tabGroup.updateRouteID(tabGroup.permutationRouteID + (numberOfTabsOpen > 0 ? BigInt(tabGroup.activeTabIndex) : 0n) * tabGroup.permutationSizes[numberOfTabsOpen] + tabGroup.tabOffsets[numberOfTabsOpen])
-  editor.collectRouteID([...changedEditorSubparts], 1)
-  kirejiApp.collectRouteID([...changedAppSubparts])
-  kirejiApp[".."].collectPopulateView()
-  kirejiApp.distributePopulateView()
-  kirejiApp.distributeClean()
-  kirejiApp.collectClean()
-
-  if (sidebarIsOpen) {
-   const { top: sidebarTop, bottom: sidebarBottom } = sidebar.view.scroller.container.getBoundingClientRect()
-   const item = sidebar.view.scroller.container.querySelector(`[data-index="${allParts.indexOf(activePart)}"]`)
-   const { top, bottom } = item.getBoundingClientRect()
-
-   if ((bottom > sidebarBottom) || (top < sidebarTop))
-    item.scrollIntoView({
-     behavior: 'instant',
-     block: 'center',
-    })
   }
  },
  changedEditorSubparts = new Set(),
  changedAppSubparts = new Set(),
- tabContainer = document.getElementById("tab-group"),
+ tabContainer = Q("#tab-group"),
  activeTabIndexOfDraggedItem = Array.prototype.indexOf.call(tabContainer.children, TARGET_ELEMENT.parentElement)
 /** @type {HTMLElement?} */
 let dropTargetElement = null
@@ -113,11 +122,11 @@ pointer.handle({
   if (!dragPreviewElement) {
    dragPreviewElement = activeTabIndexOfDraggedItem === -1 ? (() => {
     const offscreen = document.createElement("div")
-    offscreen.innerHTML = tabGroup.renderTabHTML(allParts[PART_INDEX], isNaN(FILE_INDEX) ? undefined : allParts[PART_INDEX].filenames[FILE_INDEX], -1)
+    offscreen.innerHTML = tabGroup.renderTabHTML(allParts[PART_INDEX], isNaN(FILE_INDEX) ? undefined : allParts[PART_INDEX].filenames[FILE_INDEX], 0n, -1)
     return offscreen.querySelector("tab-")
    })() : TARGET_ELEMENT.parentElement.cloneNode(true)
    dragPreviewElement.setAttribute("data-drag-preview", "")
-   dragPreviewElement.setAttribute("data-selected", "")
+   dragPreviewElement.setAttribute("data-active", "")
    dragPreviewElement.removeAttribute("data-drop-target")
    document.body.appendChild(dragPreviewElement)
   }
@@ -133,29 +142,41 @@ pointer.handle({
    editorRect = tabContainer.parentElement.getBoundingClientRect(),
    draggedItemWasDroppedOntoEditor = pointerEvent.clientX >= editorRect.left && pointerEvent.clientX <= editorRect.right && pointerEvent.clientY >= editorRect.top && pointerEvent.clientY <= editorRect.bottom,
    draggedItemIsAlreadyTheActiveTab = activeTabIndexOfDraggedItem !== -1,
-   draggedItemFileData = draggedItemIsAlreadyTheActiveTab ? tabGroup.openTabs[activeTabIndexOfDraggedItem] : { part: allParts[PART_INDEX], filename: isNaN(FILE_INDEX) ? undefined : allParts[PART_INDEX].filenames[FILE_INDEX] },
+   draggedItemFileData = draggedItemIsAlreadyTheActiveTab ? tabGroup.openTabs[activeTabIndexOfDraggedItem] : { part: allParts[PART_INDEX], filename: isNaN(FILE_INDEX) ? undefined : allParts[PART_INDEX].filenames[FILE_INDEX], payload: TAB_PAYLOAD },
    existingTabIndexOfFileData = draggedItemIsAlreadyTheActiveTab ? activeTabIndexOfDraggedItem : tabGroup.openTabs.findIndex(tab => tab.part === draggedItemFileData.part && tab.filename === draggedItemFileData.filename),
    tabAlreadyExistsForFileData = existingTabIndexOfFileData !== -1,
    numberOfTabsOpen = tabGroup.openTabs.length,
-   conditionallyActivateExistingTab = () => {
-    if (existingTabIndexOfFileData !== tabGroup.activeTabIndex)
-     changeActiveTab(existingTabIndexOfFileData)
-   },
-   createAndActivateNewTabAt = indexOfNewlyCreatedTab => {
-    tabGroup.openTabs.splice(indexOfNewlyCreatedTab, 0, draggedItemFileData)
-    changeActiveTab(indexOfNewlyCreatedTab, true)
-   },
-   handleItemClick = () => {
+   handleItemClick = droppedOntoEditor => {
     if (draggedItemIsAlreadyTheActiveTab)
      return
 
     if (tabAlreadyExistsForFileData) {
-     conditionallyActivateExistingTab()
+     if (droppedOntoEditor && existingTabIndexOfFileData === tabGroup.previewTabIndex)
+      tabGroup.previewTabIndex = null
+     // if (existingTabIndexOfFileData !== tabGroup.activeTabIndex)
+     changeActiveTab(existingTabIndexOfFileData)
      return
     }
 
-    const nearestIndexToTheRight = numberOfTabsOpen === 0 ? 0 : tabGroup.activeTabIndex + 1
-    createAndActivateNewTabAt(nearestIndexToTheRight)
+    let indexOfNewlyCreatedTab = numberOfTabsOpen === 0 ? 0 : tabGroup.activeTabIndex + 1
+    let newPreviewTabIndex = null
+
+    if (tabGroup.previewTabIndex === null) {
+     if (!droppedOntoEditor)
+      newPreviewTabIndex = indexOfNewlyCreatedTab
+    } else {
+     if (droppedOntoEditor) {
+      newPreviewTabIndex = tabGroup.previewTabIndex + (indexOfNewlyCreatedTab <= tabGroup.previewTabIndex)
+     } else {
+      tabGroup.openTabs.splice(tabGroup.previewTabIndex, 1)
+      if (tabGroup.previewTabIndex < indexOfNewlyCreatedTab)
+       indexOfNewlyCreatedTab--
+      newPreviewTabIndex = indexOfNewlyCreatedTab
+     }
+    }
+
+    tabGroup.openTabs.splice(indexOfNewlyCreatedTab, 0, draggedItemFileData)
+    changeActiveTab(indexOfNewlyCreatedTab, newPreviewTabIndex, true)
    },
    handleTabGroupDragAndDrop = () => {
     const indexWhereItemWasDropped = Array.prototype.indexOf.call(tabContainer.children, dropTargetElement) + (dropTargetElement.getAttribute("data-drop-target") === "before" ? 0 : 1)
@@ -163,22 +184,45 @@ pointer.handle({
     if (draggedItemIsAlreadyTheActiveTab || tabAlreadyExistsForFileData) {
 
      const itemWasDroppedToTheRightOfItself = indexWhereItemWasDropped > existingTabIndexOfFileData
-     const correctedIndexWhereItemWasDropped = indexWhereItemWasDropped - +itemWasDroppedToTheRightOfItself
+     const adjustedIndexWhereItemWasDropped = indexWhereItemWasDropped - +itemWasDroppedToTheRightOfItself
 
-     if (correctedIndexWhereItemWasDropped === existingTabIndexOfFileData) {
-      conditionallyActivateExistingTab()
+     if (adjustedIndexWhereItemWasDropped === existingTabIndexOfFileData) {
+      if (existingTabIndexOfFileData === tabGroup.previewTabIndex)
+       tabGroup.previewTabIndex = null
+      // if (existingTabIndexOfFileData !== tabGroup.activeTabIndex)
+      changeActiveTab(existingTabIndexOfFileData)
       return
      }
 
-     tabGroup.openTabs.splice(existingTabIndexOfFileData, 1)
-     createAndActivateNewTabAt(correctedIndexWhereItemWasDropped)
+     const previewTab = tabGroup.previewTab
 
-    } else createAndActivateNewTabAt(indexWhereItemWasDropped)
+     // Remove the original tab.
+     tabGroup.openTabs.splice(existingTabIndexOfFileData, 1)
+
+     // Add the new tab.
+     tabGroup.openTabs.splice(adjustedIndexWhereItemWasDropped, 0, draggedItemFileData)
+
+     // Compute the new preview tab index.
+     const adjustedPreviewTabIndex = (tabGroup.previewTabIndex === existingTabIndexOfFileData || tabGroup.previewTabIndex === null) ? null : tabGroup.openTabs.indexOf(previewTab)
+
+     changeActiveTab(adjustedIndexWhereItemWasDropped, adjustedPreviewTabIndex, true)
+    } else {
+
+     const previewTab = tabGroup.previewTab
+
+     // Add the new tab.
+     tabGroup.openTabs.splice(indexWhereItemWasDropped, 0, draggedItemFileData)
+
+     // Compute the new preview tab index.
+     const adjustedPreviewTabIndex = tabGroup.previewTabIndex === null ? null : tabGroup.openTabs.indexOf(previewTab)
+
+     changeActiveTab(indexWhereItemWasDropped, adjustedPreviewTabIndex, true)
+    }
    }
 
   if (draggedItemWasDroppedOntoItself) handleItemClick()
   else if (draggedItemWasDroppedOntoTabGroup) handleTabGroupDragAndDrop()
-  else if (draggedItemWasDroppedOntoEditor) handleItemClick()
+  else if (draggedItemWasDroppedOntoEditor) handleItemClick(true)
   else { /* Do nothing. */ }
  },
  reset() {

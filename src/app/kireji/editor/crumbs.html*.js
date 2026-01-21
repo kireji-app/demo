@@ -2,13 +2,13 @@ function generateCrumb(part, filename) {
  return `<a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(part)}${filename ? "," + part.filenames.indexOf(filename) : ""})">${filename ?? (part === _ ? "ecosystem" : part.key)}</a>`
 }
 
-if (selectedPart) {
+if (activePart) {
  const crumbs = []
 
- let part = selectedPart
+ let part = activePart
 
- if (selectedTab.filename)
-  crumbs.push(generateCrumb(selectedPart, selectedTab.filename))
+ if (activeTab.filename)
+  crumbs.push(generateCrumb(activePart, activeTab.filename))
 
  while (part) {
   crumbs.push(generateCrumb(part))

@@ -1,7 +1,7 @@
 pointer.handle({
  click() {
   const
-   tabIndex = Array.prototype.indexOf.call(document.getElementById("tab-group").children, TARGET_ELEMENT.parentElement),
+   tabIndex = Array.prototype.indexOf.call(Q("#tab-group").children, TARGET_ELEMENT.parentElement),
    changedAppSubparts = new Set([editor])
 
   if (tabIndex < 0)
@@ -10,17 +10,22 @@ pointer.handle({
   const
    targetTab = tabGroup.openTabs[tabIndex],
    isClosingActiveTab = tabGroup.activeTabIndex === tabIndex,
+   isClosingPreviewTab = tabGroup.previewTabIndex === tabIndex,
    finalTabIndex = isClosingActiveTab ? (tabGroup.activeTabIndex < 1 ? 0 : tabGroup.activeTabIndex - 1) : (tabGroup.activeTabIndex > tabIndex ? tabGroup.activeTabIndex - 1 : tabGroup.activeTabIndex)
 
-  const fallbackTabElement = tabGroup.openTabs.length === 1 ? null : document.querySelector(`tab-:nth-child(${finalTabIndex + 1})`)
+  const fallbackTabElement = tabGroup.openTabs.length === 1 ? null : Q(`tab-:nth-child(${finalTabIndex + 1})`)
 
   tabGroup.detachListeners()
   tabGroup.activeTabIndex = null
   tabGroup.openTabs.splice(tabIndex, 1)
   tabGroup.permutationRouteID = tabGroup.getPermutationRouteID(tabGroup.openTabs)
+  tabGroup.payloadRouteID = tabGroup.getPayloadRouteID(tabGroup.openTabs)
 
   let activePart = null
   const sidebarIsOpen = sidebar.open.model
+
+  if (isClosingPreviewTab)
+   tabGroup.previewTabIndex = tabGroup.openTabs.length
 
   if (fallbackTabElement) {
    tabGroup.activeTabIndex = finalTabIndex
@@ -45,8 +50,7 @@ pointer.handle({
    }
   }
 
-  const numberOfTabsOpen = tabGroup.openTabs.length
-  tabGroup.updateRouteID(tabGroup.permutationRouteID + (numberOfTabsOpen > 0 ? BigInt(tabGroup.activeTabIndex) : 0n) * tabGroup.permutationSizes[numberOfTabsOpen] + tabGroup.tabOffsets[numberOfTabsOpen])
+  tabGroup.updateRouteID(tabGroup.summarizeRouteID())
   editor.collectRouteID([tabGroup], 1)
   kirejiApp.collectRouteID([...changedAppSubparts])
   kirejiApp[".."].collectPopulateView()
