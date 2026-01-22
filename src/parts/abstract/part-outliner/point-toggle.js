@@ -4,11 +4,11 @@ pointer.handle({
 
   let toggleMask = 0n
   // let toggleElements = new Set([TARGET_ELEMENT])
-  const triggerPart = folders.folderParts[FOLDER_INDEX]
+  const triggerPart = folders.superset[FOLDER_INDEX]
 
   if (["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo)) {
    function gatherRecursively(part) {
-    const folderIndex = folders.folderParts.indexOf(part)
+    const folderIndex = folders.superset.indexOf(part)
 
     if (folderIndex === -1)
      return
@@ -16,10 +16,10 @@ pointer.handle({
     toggleMask |= 1n << BigInt(folderIndex)
 
     if (closing) {
-     if (folders.openParts.has(part))
-      folders.openParts.delete(part)
-    } else if (!folders.openParts.has(part))
-     folders.openParts.add(part)
+     if (folders.chosenParts.has(part))
+      folders.chosenParts.delete(part)
+    } else if (!folders.chosenParts.has(part))
+     folders.chosenParts.add(part)
 
     partOutliner.getChildren(part).map(childPart => gatherRecursively(childPart))
 
@@ -31,10 +31,10 @@ pointer.handle({
   } else {
    toggleMask = 1n << BigInt(FOLDER_INDEX)
    if (closing) {
-    if (folders.openParts.has(triggerPart))
-     folders.openParts.delete(triggerPart)
-   } else if (!folders.openParts.has(triggerPart))
-    folders.openParts.add(triggerPart)
+    if (folders.chosenParts.has(triggerPart))
+     folders.chosenParts.delete(triggerPart)
+   } else if (!folders.chosenParts.has(triggerPart))
+    folders.chosenParts.add(triggerPart)
   }
 
   /*

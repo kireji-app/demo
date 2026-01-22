@@ -1,6 +1,6 @@
 return partOutliner.getChildren(SUBJECT).map((childPart, i, childArray) => {
  const hasSubparts = partOutliner.getChildren(childPart).length !== 0
- const folderIndex = hasSubparts ? folders.folderParts.indexOf(childPart) : -1
+ const folderIndex = hasSubparts ? folders.superset.indexOf(childPart) : -1
  const isOpen = hasSubparts && !!((folders.routeID >> BigInt(folderIndex)) & 1n)
  const partIndex = allParts.indexOf(childPart)
  const symbol = `<img src="${childPart.placeholderImage("part.png")}"/>`

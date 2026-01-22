@@ -58,6 +58,8 @@ declare interface IPart<TOwner, TSubpart>
  readonly modelToRouteID(MODEL: any): bigint
  /** A URI-encoded svg data segment that can represent the bounding box of a part image but is small enough to be inlined in image-heavy server-rendered views. */
  readonly placeholderImage(IMAGE_NAME: string): string
+ /** A css variable representing the absolute css name of the given image, traversing the prototype chain if necessary. */
+ readonly cssVariableOfImage(IMAGE_NAME: string): string
  /** Collects every build function in its prototype chain and then calls them all on itself. */
  readonly startBuild(): void
  /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */

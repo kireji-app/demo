@@ -577,21 +577,14 @@ function ƒ(_) {
 
    _.define({ "..": { value: null } })
 
-   logScope(3, "\nBuilding Part Instances", () => {
-    for (const part of instances)
-     part.startBuild()
-   })
-
-   logScope(1, "\nLogging Part Entropy", () => {
-    logEntropy(1, ...instances)
-   })
-
    logScope(1, "\nRegistering Applications", () => {
+
+    // Applications must be registered before build in order for the list to be available at each part's build-time.
 
     _.define({
      application: { value: null, writable: true },
      applications: { value: {} },
-     liveApplications: { value: {} },
+     menuApplications: { value: {} },
     })
 
     for (const part of instances) {
@@ -601,18 +594,24 @@ function ƒ(_) {
 
        _.applications[part.host] = part
 
-       if (_.parts.abstract.error.isPrototypeOf(part)) {
-        log("Error " + part.status + " - Not added to menu.")
-        return
+       if (part.appearOnMenu) {
+        log("Added to menu.")
+        _.menuApplications[part.host] = part
        }
-
-       log("200 - Added to menu.")
-       _.liveApplications[part.host] = part
       }
      })
     }
 
-    _.defaultApplicationHost ??= Object.keys(_.liveApplications)[0]
+    _.defaultApplicationHost ??= Object.keys(_.menuApplications)[0]
+   })
+
+   logScope(3, "\nBuilding Part Instances", () => {
+    for (const part of instances)
+     part.startBuild()
+   })
+
+   logScope(1, "\nLogging Part Entropy", () => {
+    logEntropy(1, ...instances)
    })
 
    logScope(1, "\nInstalling Facets", () => {
@@ -659,5 +658,5 @@ function ƒ(_) {
  mapping: false,
  change: "major",
  hangHydration: 0,
- defaultApplicationHost: "kireji.app",
+ defaultApplicationHost: "desktop.parts",
 })

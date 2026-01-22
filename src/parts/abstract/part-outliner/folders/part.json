@@ -1,3 +1,4 @@
 {
- "abstract": true
+ "abstract": true,
+ "extends": "part-mask"
 }

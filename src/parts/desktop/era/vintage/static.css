@@ -377,8 +377,7 @@ desktop-icon .label {
  position: relative;
 }
 
-menu-button:focus::before,
-desktop-icon:focus .label::before {
+menu-button:focus::before {
  border: 1px dotted white;
  mix-blend-mode: difference;
  content: "";

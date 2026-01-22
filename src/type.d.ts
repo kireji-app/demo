@@ -52,8 +52,8 @@ declare interface IEcosystem
  readonly application: IApplicationAny
  /** A host-keyed object with all of the applications that are available from the web at their host thanks to DNS records. */
  readonly applications: Record<string, IApplicationAny>
- /** A host-keyed object with all of the applications that are available which are not using the `error.abstract.parts` prototype. */
- readonly liveApplications: Record<string, IApplicationAny>
+ /** A host-keyed object with all of the applications that should appear in the task menu. */
+ readonly menuApplications: Record<string, IApplicationAny>
  /** The hash of the desired landing page, as computed from data parameters during the initial boot process. */
  readonly landingHash: string
  /** The model of the desired landing page, used during the initial boot process to compute `_.landingHash` and `_.landingRouteID`. */

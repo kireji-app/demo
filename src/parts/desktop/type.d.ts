@@ -5,6 +5,7 @@ declare interface IDesktop
  readonly color: IColor
  readonly era: IEra
  readonly taskBar: ITaskBar
+ readonly icons: IDesktopIcons
 
  // Runtime Properties.
  readonly wallpaper: HTMLElement

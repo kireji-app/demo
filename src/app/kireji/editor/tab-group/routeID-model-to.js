@@ -1,6 +1,6 @@
 const validTabs = []
 
-let activeTabRouteID = BigInt(MODEL.activeTabIndex)
+let activeTabRouteID = BigInt(MODEL.activeTabIndex ?? 0)
 let previewTabRouteID = BigInt(MODEL.previewTabIndex ?? MODEL.openTabs.length)
 
 let invalidTabCount = 0n
@@ -12,7 +12,7 @@ for (let i = 0n; i < MODEL.openTabs.length; i++) {
  if (part) {
   if (filename === undefined || part.filenames.includes(filename)) {
    if (payload === undefined || typeof payload === "number") {
-    if (payload >= 0n && payload < tabGroup.payloadCardinality) {
+    if (payload === undefined || payload >= 0n && payload < tabGroup.payloadCardinality) {
      validTabs.push({ part, filename, payload: payload ?? 0 })
      continue
     } else warn(new RangeError(`Model To RouteID Error: Tab Group "${tabGroup.host}" does not support out of range payload ${payload} (found on part "${host}").`))

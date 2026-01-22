@@ -8,6 +8,11 @@ declare interface IPointer
  // Runtime Properties.
  /** If there is a pointer session active, the id of the pointer that controls it. Otherwise, `null`. */
  readonly id: number | null
+ readonly doubleClick: {
+  target?: HTMLElement
+  timeout?: number
+  confirmed?: true
+ }
 }
 
 declare interface IPointerConfig {
@@ -15,6 +20,7 @@ declare interface IPointerConfig {
  drag: (pointerEvent) => void,
  drop: (pointerEvent) => void,
  click: (pointerEvent) => void,
+ doubleClick: (pointerEvent) => void,
  reset: () => void,
  readonly POINTER_EVENT: PointerEvent,
  readonly TARGET_ELEMENT: HTMLElement,

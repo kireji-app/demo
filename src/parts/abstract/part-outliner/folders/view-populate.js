@@ -1,5 +1,5 @@
 if (hydrated) {
- const partsToOpen = new Set(folders.openParts)
+ const partsToOpen = new Set(folders.chosenParts)
 
  for (const alreadyOpenView of document.querySelectorAll(`#${folders[".."].id} details[open]>summary`)) {
   const folderPart = allParts[alreadyOpenView.getAttribute("data-index")]

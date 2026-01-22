@@ -1,1 +1,1 @@
-This part manages the state of an array of collapsible outliner items. It uses the binary expansion of its route ID as a bitmask, with each bit representing the state (collapsed or expanded) of each item that it manages.
+This part manages the state of an array of collapsible outliner items.

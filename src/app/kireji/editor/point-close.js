@@ -36,7 +36,7 @@ pointer.handle({
     let finalRouteID = sidebar.view.folders.routeID
 
     while (parentFolder) {
-     const folderIndex = sidebar.view.folders.folderParts.indexOf(parentFolder)
+     const folderIndex = sidebar.view.folders.superset.indexOf(parentFolder)
      finalRouteID |= 1n << BigInt(folderIndex)
      parentFolder = sidebar.view.getParent(parentFolder)
     }

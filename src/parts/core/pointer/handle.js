@@ -36,22 +36,28 @@ const
    return
 
   // Determine if the drop should be handled using a click override.
-  const wasClick = (typeof POINTER_CONFIG.click === "function" || POINTER_CONFIG.focus === "click") && (
+  const hasDoubleClick = typeof POINTER_CONFIG.doubleClick === "function"
+  const wasClick = (typeof POINTER_CONFIG.click === "function" || hasDoubleClick || POINTER_CONFIG.focus === "click") && (
    ({ left, right, top, bottom }) => pointerEvent.clientX >= left && pointerEvent.clientX <= right && pointerEvent.clientY >= top && pointerEvent.clientY <= bottom
   )(POINTER_CONFIG.TARGET_ELEMENT.getBoundingClientRect())
 
   if (wasClick) {
 
-   // Perform custom action.
-   if (typeof POINTER_CONFIG.click === "function")
-    POINTER_CONFIG.click(pointerEvent)
+   if (hasDoubleClick && pointer.doubleClick.confirmed) {
+    POINTER_CONFIG.doubleClick(pointerEvent)
+    endDoubleClick()
+   } else {
+    // Perform custom single click action.
+    if (typeof POINTER_CONFIG.click === "function")
+     POINTER_CONFIG.click(pointerEvent)
 
-   // Conditionally focus the element.
-   if (POINTER_CONFIG.focus === "click")
-    POINTER_CONFIG.TARGET_ELEMENT.focus()
-
+    // Conditionally focus the element.
+    if (POINTER_CONFIG.focus === "click")
+     POINTER_CONFIG.TARGET_ELEMENT.focus()
+   }
   } else {
 
+   endDoubleClick()
    // Perform custom action.
    if (typeof POINTER_CONFIG.drop === 'function')
     POINTER_CONFIG.drop(pointerEvent)
@@ -75,6 +81,12 @@ const
   // Perform custom action.
   if (typeof POINTER_CONFIG.reset === "function")
    POINTER_CONFIG.reset()
+ },
+ endDoubleClick = () => {
+  clearTimeout(pointer.doubleClick.timeout)
+  pointer.doubleClick.target = null
+  pointer.doubleClick.timeout = null
+  pointer.doubleClick.confirmed = null
  }
 
 // Attach to the follow-up event handlers along the whole document.
@@ -92,3 +104,20 @@ if (POINTER_CONFIG.focus === "down")
 // Perform custom action.
 if (typeof POINTER_CONFIG.down === "function")
  POINTER_CONFIG.down()
+
+if (pointer.doubleClick.target) {
+ // There is a double click waiter in progress.
+ if (pointer.doubleClick.target !== POINTER_CONFIG.TARGET_ELEMENT) {
+  // Cancel it because we just interfered with it.
+  endDoubleClick()
+ } else {
+  pointer.doubleClick.confirmed = true
+ }
+} else {
+ // There is no double click waiter in progress.
+ if (typeof POINTER_CONFIG.doubleClick === "function") {
+  // This element should start one.
+  pointer.doubleClick.target = POINTER_CONFIG.TARGET_ELEMENT
+  pointer.doubleClick.timeout = setTimeout(endDoubleClick, 500)
+ }
+}

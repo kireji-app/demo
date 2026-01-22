@@ -1,0 +1,7 @@
+{
+ "extends": "part-mask",
+ "point": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ]
+}

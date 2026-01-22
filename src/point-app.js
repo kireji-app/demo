@@ -5,7 +5,7 @@ pointer.handle({
   if (host === _.application?.host)
    return
 
-  const targetLocation = (_.local ? `http://${host}.localhost:3000` : `https://${host}`) + location.pathname
+  const targetLocation = (_.local ? `http://${host}.localhost:3000` : `https://${host}`) + encodePathname(_.routeID)
 
   location = targetLocation
  },
