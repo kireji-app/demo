@@ -287,6 +287,12 @@ declare function encodeSegment(routeID: bigint): string
 declare function scientific(x: bigint, html: boolean = false): string
 /** Makes the given text html-friendly by escaping special characters using ampersand codes. */
 declare function sanitizeAttr(input: string): string
+/** Produces a bigint corresponding to a random sequence of bits of the given length. */
+declare function randomBits(bigCount: number): bigint
+/** Produces a cryptographically random route ID between 0 and one less than the given cardinality. */
+declare function randomRouteID(cardinality: bigint): bigint
+/** Returns a random boolean value. */
+declare function flipCoin(): boolean
 /** The immutable list of runtime instances for the root space, in order of when they were fully hydrated. */
 declare const instances: IPartAny[]
 /** The immutable list of every part in the root space, in order of when they were fully hydrated. */

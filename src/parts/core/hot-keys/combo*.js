@@ -15,7 +15,7 @@ for (const code of hotKeys.pressed)
   terminalKeys.add(code.slice(5).toLowerCase())
  else if (/^(Minus|Equal|Semicolon|Quote|Comma|Period|Slash|Backquote|Backslash|Bracket(Right|Left)|Arrow(Up|Down|Left|Right)|Escape|Tab|Enter|Backspace)$/.test(code))
   terminalKeys.add(code.toLowerCase())
- else warn(code)
+ else debug("Unhandled Key Code: " + code)
 
 const combo = [...terminalKeys].sort()
 

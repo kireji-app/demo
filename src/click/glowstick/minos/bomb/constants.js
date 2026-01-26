@@ -1,0 +1,1 @@
+const minosBomb = this

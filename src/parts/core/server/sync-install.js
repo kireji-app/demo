@@ -62,7 +62,7 @@ const
 
     // color.device.light = !prefersDarkMode
     _.setRoute(`https://${host}${pathname}`)
-    status = +(host in _.menuApplications ? 200 : _.applications[host].status)
+    status = +(host in _.menuApplications ? 200 : _.applications[host].status ?? 503)
     const customHeaders = _.applications[host].customHeaders ?? {}
     head = { ...indexHeader, ...customHeaders }
     body = _['part.html']

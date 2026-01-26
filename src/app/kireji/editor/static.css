@@ -415,7 +415,7 @@ body.vintage.dark editor-view {
  background-color: var(--bg);
 }
 
-body.vintage :not(#info-about)>hr {
+body.vintage wallpaper- :not(#info-about)>hr {
  display: none;
 }
 
@@ -459,7 +459,7 @@ body.vintage :not(#part-intro>div)>h3::after {
  content: ":";
 }
 
-body.vintage :not(#info-about):not([disabled])> :is(pre, p) {
+body.vintage wallpaper- :not(#info-about):not([disabled])> :is(pre, p) {
  box-shadow: var(--deep-inset);
  padding: 5px 4px 9px 4px;
  background: white;
@@ -468,10 +468,10 @@ body.vintage :not(#info-about):not([disabled])> :is(pre, p) {
  word-wrap: none;
 }
 
-body.vintage :not(#info-about):not([disabled])> :is(pre, p):focus {
+body.vintage wallpaper- :not(#info-about):not([disabled])> :is(pre, p):focus {
  user-select: text;
 }
 
-body.dark.vintage :not(#info-about):not([disabled])> :is(pre, p) {
+body.dark.vintage wallpaper- :not(#info-about):not([disabled])> :is(pre, p) {
  background: transparent;
 }

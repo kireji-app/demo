@@ -199,6 +199,59 @@ function ƒ(_) {
   btoaUnicode = string => btoa(new TextEncoder("utf-8").encode(string).reduce((data, byte) => data + String.fromCharCode(byte), "")),
   sanitizeAttr = string => string.replaceAll(/&/g, '&amp;').replaceAll(/"/g, '&quot;').replaceAll(/'/g, '&#39;').replaceAll(/</g, '&lt;').replaceAll(/>/g, '&gt;')
 
+ // Random Number Generation
+ const
+  randomBits = bitCount => {
+   const byteCount = Math.ceil(bitCount / 8)
+   const bytes = new Uint8Array(byteCount)
+
+   crypto.getRandomValues(bytes)
+
+   let value = 0n
+
+   for (const b of bytes)
+    value = (value << 8n) | BigInt(b)
+
+   const excessBits = BigInt(byteCount * 8 - bitCount)
+
+   if (excessBits > 0)
+    value >>= excessBits
+
+   return value
+  },
+  randomRouteID = cardinality => {
+   if (typeof cardinality !== "bigint" || cardinality < 0n)
+    throw new RangeError("Random BigInt error: Cardinality must be a bigint greater than 0.")
+
+   if (cardinality === 1n)
+    return 0n
+
+   const bitCount = toBits(cardinality, false)
+
+   while (true) {
+    const r = randomBits(bitCount)
+    if (r < cardinality) return r
+   }
+  },
+  flipCoin = (() => {
+   let pool = 0
+   let bitsLeft = 0
+   return () => {
+    if (bitsLeft === 0) {
+     const b = new Uint8Array(1)
+     crypto.getRandomValues(b)
+     pool = b[0]
+     bitsLeft = 8
+    }
+    const bit = pool & 1
+    pool >>= 1
+    bitsLeft--
+    return bit === 1
+   }
+  })()
+
+
+
  // Path and Route Encoding Utilities
  const
   pathRadix = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_0",

@@ -1,0 +1,1 @@
+return minosPiece.allPrimitives[Number(minosPiece.routeID)].minos

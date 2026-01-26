@@ -38,16 +38,16 @@ desktop-icon>.label {
  text-align: center;
 }
 
-desktop-icon[data-selected]>.label {
- background-color: var(--accent);
-}
-
 #selection-box {
  position: fixed;
  left: var(--x);
  top: var(--y);
  width: var(--w);
  height: var(--h);
+}
+
+body.modern wallpaper- {
+ padding: calc(var(--spacing) / 2);
 }
 
 body.modern desktop-icon>.label {
@@ -59,21 +59,21 @@ body.modern desktop-icon>.label {
  border-radius: 4px;
 }
 
-body.vintage wallpaper- {
- background: #377f7f;
- color: white;
+body.modern desktop-icon[data-selected]>.label {
+ background-color: var(--accent-mode);
+ color: var(--bg-mode-est);
 }
 
 body.modern #selection-box {
- background-color: var(--accent);
- border: 1px solid var(--accent-un-mode-est);
+ background-color: var(--accent-mode-est);
+ border: 1px solid var(--accent-mode);
  opacity: 0.75;
 }
 
-body.vintage #selection-box {
- background-color: transparent;
- border: 1px dotted white;
- mix-blend-mode: difference;
+
+body.vintage wallpaper- {
+ background: #377f7f;
+ color: white;
 }
 
 body.vintage desktop-icon[data-selected]>.label {
@@ -106,4 +106,10 @@ body.vintage desktop-icon:focus .label::before {
  top: 0;
  bottom: 0;
  pointer-events: none;
+}
+
+body.vintage #selection-box {
+ background-color: transparent;
+ border: 1px dotted white;
+ mix-blend-mode: difference;
 }

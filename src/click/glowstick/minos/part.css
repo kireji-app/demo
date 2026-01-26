@@ -1,27 +1,245 @@
-.game-svg {
- width: 100%;
- height: 100%;
+wallpaper- {
+ --unit: calc(min(max(var(--wallpaper-width), var(--wallpaper-height)) / 66, min(var(--wallpaper-width), var(--wallpaper-height)) / 38));
+ --side: calc(36 * var(--unit));
+ --mino: calc(var(--unit) * 3);
+ container-type: size;
+ container-name: wallpaper;
 }
 
-.ui-panel,
-.slot {
- fill: #222;
- stroke: #333;
- stroke-width: 0.1;
+wallpaper->section {
+ position: fixed;
+ top: calc((var(--wallpaper-height) - var(--side)) / 2 + var(--warning-height));
+ left: calc((var(--wallpaper-width) - var(--side)) / 2);
+ width: var(--side);
+ height: var(--side);
+ --grid-size: var(--mino);
 }
 
-.board-bg {
- fill: #151515;
+#board {
+ overflow: hidden;
 }
 
-@media (orientation: landscape) {
- .game-svg.portrait {
-  display: none;
+#score,
+#pieces {
+ --grid-size: calc(var(--mino) * 4);
+ display: grid;
+ place-items: center;
+}
+
+mino- {
+ position: absolute;
+ left: calc(var(--mino) * var(--x));
+ top: calc(var(--mino) * var(--y));
+ width: var(--mino);
+ height: var(--mino);
+ background-color: var(--bg);
+}
+
+minos- {
+ position: relative;
+ width: calc(var(--mino) * var(--w));
+ height: calc(var(--mino) * var(--h));
+}
+
+#pieces>minos-.dragging {
+ left: var(--x);
+ top: var(--y);
+}
+
+#pieces>minos-.bomb>mino-,
+#bomb>mino- {
+ background: tomato;
+}
+
+:is(.bomb>mino-, #bomb>mino-)::after {
+ position: absolute;
+ left: 0;
+ right: 0;
+ top: 0;
+ bottom: 0;
+ line-height: var(--mino);
+ text-align: center;
+ color: white;
+}
+
+:is(.bomb.radial>mino-, #bomb>mino-.radial)::after {
+ content: "✺";
+}
+
+.dragging.bomb.radial::before {
+ content: "";
+ position: absolute;
+ left: calc(-4.5 * var(--mino));
+ right: calc(-4.5 * var(--mino));
+ top: calc(-4.5 * var(--mino));
+ bottom: calc(-4.5 * var(--mino));
+ border-radius: calc(5 * var(--mino));
+ background-color: #ff00007f;
+}
+
+.dragging.bomb.crosshair::before,
+.dragging.bomb.crosshair::after {
+ content: "";
+ position: absolute;
+ left: calc(var(--mino) / 4);
+ right: calc(var(--mino) / 4);
+ top: calc(var(--mino) / 4);
+ bottom: calc(var(--mino) / 4);
+ background-color: #ff00007f;
+}
+
+.dragging.bomb.crosshair::before {
+ top: calc(-2 * var(--mino));
+ bottom: calc(-2 * var(--mino));
+}
+
+.dragging.bomb.crosshair::after {
+ left: calc(-2 * var(--mino));
+ right: calc(-2 * var(--mino));
+}
+
+:is(.bomb.crosshair>mino-, #bomb>mino-.crosshair)::after {
+ content: "✛";
+}
+
+#board>mino-.target {
+ background: #00ff007f;
+ box-shadow: inset 0 0 0 var(--px) #00ff00 !important;
+ width: calc(var(--mino) * var(--w));
+ height: calc(var(--mino) * var(--h));
+}
+
+#board>mino-.target[data-valid="false"] {
+ background: #ff00007f;
+ box-shadow: inset 0 0 0 var(--px) #ff0000 !important;
+}
+
+@container wallpaper (aspect-ratio > 1 / 1) {
+
+ #score,
+ #pieces {
+  width: var(--grid-size);
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+ }
+
+ #score {
+  left: calc((var(--wallpaper-width) - var(--side)) / 2 - var(--grid-size) - (var(--unit) * 2));
+ }
+
+ #pieces {
+  left: calc((var(--wallpaper-width) - var(--side)) / 2 + var(--side) + (var(--unit) * 2));
  }
 }
 
-@media (orientation: portrait) {
- .game-svg.landscape {
-  display: none;
+@container wallpaper (aspect-ratio <=1 / 1) {
+
+ #score,
+ #pieces {
+  height: var(--grid-size);
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
  }
+
+ #score {
+  top: calc((var(--wallpaper-height) - var(--side)) / 2 + var(--warning-height) - var(--grid-size) - (var(--unit) * 2));
+ }
+
+ #pieces {
+  top: calc((var(--wallpaper-height) - var(--side)) / 2 + var(--warning-height) + var(--side) + (var(--unit) * 2));
+ }
+}
+
+body.modern wallpaper- {
+ --px: calc(var(--unit) / 4);
+ --px-1: calc(var(--px) * -1);
+ --px2: calc(var(--px) * 2);
+ --px-2: calc(var(--px) * -2);
+ --grid-color: var(--bg-mode);
+}
+
+body.modern wallpaper->section:not(#bomb) {
+ background-color: var(--bg-mode-er);
+ border-radius: var(--px2);
+ box-shadow:
+  inset 0 0 0 var(--px) var(--accent-mode-est),
+  0 0 0 var(--px) var(--accent-mode-est);
+ background-image:
+  repeating-linear-gradient(90deg,
+   var(--grid-color) 0 var(--px),
+   transparent 0 calc(var(--grid-size) - var(--px)),
+   var(--grid-color) calc(var(--grid-size) - var(--px)) var(--grid-size)),
+  repeating-linear-gradient(0deg,
+   var(--grid-color) 0 var(--px),
+   transparent 0 calc(var(--grid-size) - var(--px)),
+   var(--grid-color) calc(var(--grid-size) - var(--px)) var(--grid-size));
+ background-size: var(--grid-size);
+}
+
+body.modern mino- {
+ background-color: var(--accent-mode-est);
+ box-shadow:
+  inset var(--px-1) var(--px-1) black,
+  inset var(--px) var(--px) var(--accent-un-light-er),
+  inset var(--px-2) var(--px-2) var(--accent-un-dark),
+  inset var(--px2) var(--px2) var(--accent-un-light-est),
+  inset 0 var(--px-1) var(--px-2) var(--px-1) var(--accent-un-dark-est),
+  inset var(--px-2) 0 calc(var(--unit) * 3) calc(var(--unit) * -3) var(--accent-un);
+}
+
+body.modern #board mino-[style="--x:0;--y:0"] {
+ border-top-left-radius: var(--px2);
+}
+
+body.modern #board mino-[style="--x:11;--y:0"] {
+ border-top-right-radius: var(--px2);
+}
+
+body.modern #board mino-[style="--x:0;--y:11"] {
+ border-bottom-left-radius: var(--px2);
+}
+
+body.modern #board mino-[style="--x:11;--y:11"] {
+ border-bottom-right-radius: var(--px2);
+}
+
+body.modern.dark mino- {
+ background-color: var(--accent-mode);
+}
+
+body.vintage :is(#score, #board, #pieces)::before {
+ content: "";
+ position: absolute;
+ left: -2px;
+ top: -2px;
+ bottom: -2px;
+ right: -2px;
+ box-shadow: var(--deep-inset);
+}
+
+body.vintage wallpaper- {
+ --px: 1px;
+ --grid-color: var(--bg-un-mode);
+}
+
+body.vintage wallpaper->section:not(#bomb) {
+ background:
+  repeating-linear-gradient(90deg,
+   var(--grid-color) 0 var(--px),
+   transparent 0 var(--grid-size),
+   var(--grid-color) var(--grid-size) var(--grid-size)),
+  repeating-linear-gradient(0deg,
+   var(--grid-color) 0 var(--px),
+   transparent 0 var(--grid-size),
+   var(--grid-color) var(--grid-size) var(--grid-size)),
+  var(--pressed-checker),
+  var(--bg-dark);
+}
+
+body.vintage.dark :is(#score, #board, #pieces) {
+ background-color: unset;
+}
+
+body.vintage mino- {
+ box-shadow: var(--deep-outset);
 }

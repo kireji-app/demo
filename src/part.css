@@ -30,8 +30,10 @@ body {
  --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
  --menu-tween: 0;
  --h: 100vh;
+ --h: 100dvh;
  --warning-height: 28px;
  --wallpaper-height: calc(var(--h) - var(--task-bar-height) - var(--warning-height));
+ --wallpaper-width: 100vw;
  overscroll-behavior: none;
  margin: 0;
  height: var(--h);
