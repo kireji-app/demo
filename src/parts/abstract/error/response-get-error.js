@@ -45,6 +45,8 @@ payload.body = `<style>html {
   font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
  }${errorApp.getErrorCSS(payload.body)}
 </style>
-${errorApp.getErrorHTML(payload.status, payload.body)}`
+<body class=app-container>
+${errorApp.getErrorHTML(payload.status, payload.body)}
+</body>`
 
 return payload
