@@ -12,5 +12,9 @@
   "A",
   "B",
   "MODE=\"screen\""
+ ],
+ "point": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
  ]
 }

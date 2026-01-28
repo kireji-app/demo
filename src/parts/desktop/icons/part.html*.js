@@ -13,7 +13,7 @@ for (let iconIndex = 0; iconIndex < desktopIcons.superset.length; iconIndex++) {
  }
  const isSelected = (desktopIcons.routeID & 1n << BigInt(iconIndex)) !== 0n
  const maskVar = application.cssVariableOfImage("part.png")
- result += `<desktop-icon tabIndex=0 onpointerdown=${desktopIcons.runtimeReference}.point(event,this) data-index=${iconIndex}${isSelected ? " data-selected" : ""}><icon-mask style="-webkit-mask-image:${maskVar};mask-image:${maskVar}"><img class=icon src="${application.placeholderImage("part.png")}"/></icon-mask><span class=label>${truncatedName}</span></desktop-icon>`
+ result += `<desktop-icon ${desktopIcons.pointAttr()} tabIndex=0 data-index=${iconIndex}${isSelected ? " data-selected" : ""}><icon-mask style="-webkit-mask-image:${maskVar};mask-image:${maskVar}"><img class=icon src="${application.placeholderImage("part.png")}"/></icon-mask><span class=label>${truncatedName}</span></desktop-icon>`
 }
 
 return result

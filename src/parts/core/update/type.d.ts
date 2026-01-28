@@ -17,7 +17,7 @@ declare interface IUpdateManager
  // Runtime Properties.
  /** If an update is found, the latest version number. Otherwise, `null`. */
  readonly version?: string
- /** The array of service worker registrations that is currently active for this application. */
+ /** The array of service worker registrations that is currently active for the current application. */
  readonly registrations: ServiceWorkerRegistration[]
 }
 

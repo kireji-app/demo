@@ -7,7 +7,7 @@ if (hydrated) {
  // TODO: Create a "pseudo-part" that has all the same view methods, etc. of a normal part but is dynamically instantiated for dynamic typing.
 
  if (tabGroup.openTabs.length !== tabGroup.viewedOpenTabs.length || tabGroup.viewedPermutation !== tabGroup.permutationRouteID || tabGroup.viewedPayload !== tabGroup.payloadRouteID) {
-  // This is a dead-simple approach ... more performant approaches exist.
+  // TODO: This is a dead-simple approach ... more performant approaches exist.
   const tabContainer = Q("#tab-group")
   const existingTabCount = tabGroup.viewedOpenTabs.length
   const targetTabCount = tabGroup.openTabs.length
@@ -77,11 +77,11 @@ if (hydrated) {
   if (hasNoTabs) {
    Q(`editor-view scroll-content`).innerHTML = editor["empty-view.html"]
   } else if (!tabGroup.viewedActiveTab.filename) {
-   for (const word of ["about", "state-space", "state", "properties"]) {
-    const element = Q(`#info-${word}`)
-    element.innerHTML = editor[`info-${word}.html`]
-    if (word.startsWith("state")) {
-     if (activePart.isAbstract || word === "state" && activePart.disabled)
+   for (const section of sections) {
+    const element = Q(`#info-${section.key}>section`)
+    element.innerHTML = section["part.html"]
+    if (section.key.startsWith("state")) {
+     if (activePart.isAbstract || section.key === "state" && activePart.disabled)
       element.setAttribute("disabled", "")
      else
       element.removeAttribute("disabled")

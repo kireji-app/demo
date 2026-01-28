@@ -9,10 +9,12 @@ if (hydrated) {
    minosBoard.viewedTiles.add(tile)
    const newTile = document.createElement("mino-")
    newTile.setAttribute("style", `--x:${tile.x};--y:${tile.y}`)
-   Q("#board").appendChild(newTile)
+   minosBoard.element.appendChild(newTile)
   }
  }
 } else {
+ minosBoard.element = Q("#board")
+
  for (const activeTile of minosBoard.activeTiles)
   minosBoard.viewedTiles.add(activeTile)
 

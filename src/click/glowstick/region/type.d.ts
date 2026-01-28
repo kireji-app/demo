@@ -3,7 +3,7 @@ declare interface IGlowstickRegion
  IWebComponent {
 
  // Serialized Properties.
- /** The space-separated list of HTML element attributes for this region. */
+ /** The space-separated list of HTML element attributes for the region. */
  readonly "attributes": string
  /** The current user position on the x-axis if in the region, -1n otherwise. */
  readonly "xPosition": bigint
@@ -15,7 +15,7 @@ declare interface IGlowstickRegion
  readonly "h": bigint
  /** An array providing the static x-position, y-position, width and height of the region in the world. */
  readonly "xywh": [bigint | number, bigint | number, bigint | number, bigint | number]
- /** Tests whether or not the given region or user overlaps with this region. */
+ /** Tests whether or not the given region or user overlaps with the region. */
  readonly overlaps(REGION: IGlowstickRegion | IGlowstickUser): boolean
 
  // Runtime Properties.
@@ -25,9 +25,9 @@ declare interface IGlowstickRegion
  readonly y: bigint
  /** The color of the grid when previewing the region, if one is defined. */
  readonly gridColor?: string
- /** The DOM element (client only) representing this region. */
+ /** The DOM element (client only) representing the region. */
  readonly element: HTMLElement
- /** The list of regions which are overlapping this region. */
+ /** The list of regions which are overlapping the region. */
  readonly neighbors: IGlowstickRegion[]
 }
 

@@ -33,15 +33,17 @@ declare interface IPart<TOwner, TSubpart>
  readonly "runtimeReference": string
  /** An optional display name for the part. */
  readonly "title"?: string
+ /** Generates the attribute string that sets up an onpointerdown listener that calls `part[METHOD_NAME](event,this,...ARGS)`. */
+ readonly pointAttr(METHOD_NAME: string = "point", ...ARGS: any[])
  /** Registers a listener that calls RECEIVER[CALLBACK_NAME](this) after the event of the given type occurs. */
  readonly attach(EVENT_TYPE: string, RECEIVER: IPartAny, CALLBACK_NAME: string): void
  /** Unregisters the listener that calls RECEIVER[CALLBACK_NAME](this) after the event of the given type occurs. */
  readonly detach(EVENT_TYPE: string, RECEIVER: IPartAny, CALLBACK_NAME: string): void
  /** Calls receiver[callbackName](this) for every receiver/callback pair registered to the given event type. */
  readonly notify(EVENT_TYPE: string): void
- /** Computes the cardinality of this part from its subparts and defines any other necessary properties. */
+ /** Computes the cardinality of the part from its subparts and defines any other necessary properties. */
  readonly build(): void
- /** Calls loop on this part and then propagates the call leafward to all subparts. */
+ /** Calls loop on the part and then propagates the call leafward to all subparts. */
  readonly distributeLoop(): void
  /** Returns the subparts that meet the condition provided by FILTER_FUNCTION.  */
  readonly filter(FILTER_FUNCTION: (subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => TSubpart): TSubpart[]
@@ -50,7 +52,7 @@ declare interface IPart<TOwner, TSubpart>
  /** Returns a boolean indicating whether or not the part includes the given SUBPART.  */
  readonly includes(SUBPART: TSubpart): boolean
  readonly reduce(REDUCE_FUNCTION: (result: TResult, subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => TResult, INITIAL_VALUE: TResult): TResult
- /** If defined, the per-frame update method for this part. Useful for implementing game features. */
+ /** If defined, the per-frame update method for the part. Useful for implementing game features. */
  readonly loop?(TIME: DOMHighResTimeStamp): void
  /** Performs MAP_FUNCTION on every subpart of the part and returns an array of the results. */
  readonly map(MAP_FUNCTION: (subpart: TSubpart, index: number, part: IPart<TOwner, TSubpart>) => TResult): TResult[]
@@ -62,8 +64,8 @@ declare interface IPart<TOwner, TSubpart>
  readonly cssVariableOfImage(IMAGE_NAME: string): string
  /** Collects every build function in its prototype chain and then calls them all on itself. */
  readonly startBuild(): void
- /** Sets the part's routeID, propagating it leafward and rootward and updating all views. */
- readonly setRouteID(ROUTE_ID: bigint): void
+ /** Sets the part's routeID, propagating it leafward and rootward and updating all views. If DELTA is true, then ROUTE_ID is added to the part's current route ID. */
+ readonly setRouteID(ROUTE_ID: bigint, DELTA: boolean = false): void
  /** Recomputes and then updates the part's routeID in response to a change in the the given subpart's routeID.
   * 
   * If the part has a parent, it calls collectRoute on that parent, passing the signal rootward.
@@ -112,7 +114,7 @@ declare interface IPart<TOwner, TSubpart>
  readonly cardinality: bigint
  /** The difference between the current routeID and the previous one. */
  readonly deltaRouteID: bigint
- /** True if the routeID of this part just changed in the current, still incomplete route propagation cycle.
+ /** True if the routeID of the part just changed in the current, still incomplete route propagation cycle.
   * 
   * Unlike other historical route properties which hold information about the part's last route change even if that change occurred one or more cycles ago, this property is always cleared at the end of the cycle so that view functions are not run multiple times. */
  readonly dirty: true | undefined
@@ -120,7 +122,7 @@ declare interface IPart<TOwner, TSubpart>
  readonly disabled: boolean
  /** The array of subdomain names corresponding to `part.host` split along ".". */
  readonly domains: string[]
- /** The set of parts which extend from this part. */
+ /** The set of parts which extend from the part. */
  readonly inheritors: IPartAny[]
  /** Whether or not the part has a routeID greater than `-1n`. */
  readonly enabled: boolean
@@ -144,17 +146,17 @@ declare interface IPart<TOwner, TSubpart>
   * !part.enabled && part.wasEnabled
   * ```*/
  readonly justDisabled: boolean
- /** The object created by parsing this part's "part.json" file. */
+ /** The object created by parsing the part's "part.json" and assigning its prototype to the part's prototype's own manifest. */
  readonly manifest: {
-  /** Whether or not this part should be considered a subpart of its parent part (abstract = false) or an uninstanceable prototype for other parts (abstract = true). */
+  /** Whether or not the part should be considered a subpart of its parent part (abstract = false) or an uninstanceable prototype for other parts (abstract = true). */
   readonly abstract?: boolean
-  /** Whether or not this part will be instanced (inherit = false) or retained (inherit = true) during the create step. */
+  /** Whether or not the part will be instanced (inherit = false) or retained (inherit = true) during the create step. */
   readonly inherit?: boolean
  }
  /** The previous route of the part, changed at the last call to distributeRouteID or collectRouteID. */
  readonly previousRouteID: bigint
  readonly Property: typeof Property
- /** The part that is this part's prototype object.
+ /** The part's prototype part.
   * 
   * *Note: The part `part.abstract.parts` does not have a prototype part.* */
  readonly prototype?: IPartAny
@@ -172,7 +174,7 @@ declare interface IPart<TOwner, TSubpart>
   * 
   * All runtime properties are added using this method.
   * 
-  * No property descriptor should have its "enumerable" property set to true, as this would make the property appear to be a serialized property, which can only be added by adding a new file into the part's repository folder. */
+  * No property descriptor should have its "enumerable" property set to true, as that would make the property appear to be a serialized property which can only be added by adding a new file into the part's repository folder. */
  readonly define(propertyDescriptorMap: PropertyDescriptorMap): this
 }
 
@@ -192,12 +194,14 @@ declare interface IWebComponent {
  * 
  * Alias for `this` to disambiguate it from globalThis in IDEs.*/
 declare const part: IPartAny
-/** The Property object describing this property. */
+/** The Property object describing the currently running method. */
 declare const property: Property
-/** This function's prototype. */
+/** The prototype part method which the currently running method overrides (if one is defined). */
 declare function base(...args): any
 /** The current function, so that it can be called again from within itself. */
 declare function recurse(...args): any
+/** Sets the current ecosystem route ID and host application as the undo point (the state the back button will return to). */
+declare function setUndoPoint(): void
 /** The current incoming route ID argument.
  * 
  * *Available within distributeRouteID, setRouteID and updateRouteID methods only.*  */

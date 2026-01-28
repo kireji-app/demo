@@ -1,3 +1,6 @@
+// Allow undoing of placement using the back button/context+z.
+setUndoPoint()
+
 // Place this piece on the board.
 if (minosPiece.primitive === minosPiece.radialBomb) {
  minos.bomb.setRouteID(minos.bomb.offsets.get(minos.bomb.radial) + BigInt(Y * minos.board.width + X))

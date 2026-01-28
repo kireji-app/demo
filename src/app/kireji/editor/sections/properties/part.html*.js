@@ -12,7 +12,7 @@ const
   const isView = isProperty && subjectProperty.isView
   const isGenerated = isProperty && subjectProperty.isGenerated
 
-  return `<div>&nbsp;&nbsp;<a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(subject)},${subject.filenames.indexOf(filename)})">${filename in Object.getPrototypeOf(subject) ? "<i>" : ""}${!isAlias && modifiers ? `<span class=modifier>${modifiers}</span>` : ""}${!isAlias && modifiers === "get " ? `<span class=readonly>${niceName}</span>` : !isAlias && (isView || args) ? `<span class=function>${niceName}</span>` : `<span class=string>${isAlias ? `"${niceName}"` : niceName}</span>`}${!isAlias && (isView || isGenerated || args) ? `<span class=modifier>(</span>${(isView || isGenerated) ? "" : args.map(arg => `<span class=readonly>${arg}</span>`).join("<span class=modifier>, </span>")}<span class=modifier>)</span>` : ""}${filename in Object.getPrototypeOf(subject) ? "</i>" : ""}</a></div>${subject === activePart ? "<div>" + (
+  return `<div>&nbsp;&nbsp;<a ${editor.pointAttr("point", allParts.indexOf(subject), subject.filenames.indexOf(filename))} href="/">${filename in Object.getPrototypeOf(subject) ? "<i>" : ""}${!isAlias && modifiers ? `<span class=modifier>${modifiers}</span>` : ""}${!isAlias && modifiers === "get " ? `<span class=readonly>${niceName}</span>` : !isAlias && (isView || args) ? `<span class=function>${niceName}</span>` : `<span class=string>${isAlias ? `"${niceName}"` : niceName}</span>`}${!isAlias && (isView || isGenerated || args) ? `<span class=modifier>(</span>${(isView || isGenerated) ? "" : args.map(arg => `<span class=readonly>${arg}</span>`).join("<span class=modifier>, </span>")}<span class=modifier>)</span>` : ""}${filename in Object.getPrototypeOf(subject) ? "</i>" : ""}</a></div>${subject === activePart ? "<div>" + (
    // The number of whitespace characters before the filename entry in the table.
    subject.domains.length + 1 +
    // The number of characters taken up by the filename itself, including quotes.
@@ -21,7 +21,7 @@ const
    2 +
    // The length of the record itself, including escape characters and outer quotes.
    serialize(subject[filename]).length +
-   // The comma separating this record from siblings and the following line break.
+   // The comma separating the record from siblings and the following line break.
    2).toLocaleString() + " bytes</div>" : ""}`
  },
  createRecordsHTML = subject => {
@@ -30,13 +30,13 @@ const
 
   const isActivePart = subject === activePart
 
-  records.push(`<div><b>${isActivePart ? "" : `extends <a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(subject)})">`}${subject === _ ? "ecosystem" : subject.host}${isActivePart ? "" : "</a>"}</b></div>${isActivePart ? `<div><b>${serialize(subject).length.toLocaleString()} bytes</b></div>` : ""}`)
+  records.push(`<div><b>${isActivePart ? "" : `extends <a ${editor.pointAttr("point", allParts.indexOf(subject))} href="/">`}${subject === _ ? "ecosystem" : subject.host}${isActivePart ? "" : "</a>"}</b></div>${isActivePart ? `<div><b>${serialize(subject).length.toLocaleString()} bytes</b></div>` : ""}`)
 
   if (isActivePart)
    for (const key of activePart.subdomains) {
     /** @type {IPartAny} */
     const childPart = activePart[key]
-    records.push(`<div>&nbsp;&nbsp;<a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(childPart)})">${childPart.isAbstract ? "<i>" : ""}<b>${childPart.key}</b>${childPart.isAbstract ? "</i>" : ""}</a></div><div><b>${serialize(childPart).length.toLocaleString()} bytes</b></div>`)
+    records.push(`<div>&nbsp;&nbsp;<a ${editor.pointAttr("point", allParts.indexOf(childPart))} href="/">${childPart.isAbstract ? "<i>" : ""}<b>${childPart.key}</b>${childPart.isAbstract ? "</i>" : ""}</a></div><div><b>${serialize(childPart).length.toLocaleString()} bytes</b></div>`)
    }
 
   for (const id of subject.Property.ids) {
@@ -65,7 +65,7 @@ const
 
   return `${isActivePart ? "" : "<hr>"}<part-${isActivePart ? "table" : "rows"}>${records.join("")}</part-${isActivePart ? "table" : "rows"}>`
  },
- recordHTML = [`<summary onpointerdown=${editor.settings.runtimeReference}.point(event,this)>Serialized Properties</summary>${createRecordsHTML(activePart)}`]
+ recordHTML = [createRecordsHTML(activePart)]
 
 let prototype = activePart.prototype
 while (prototype !== Object.prototype) {

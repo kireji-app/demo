@@ -5,6 +5,10 @@ declare interface IMinosGameBoard
  // Serialized Properties.
  /** The width (and height) of the square game board. */
  readonly width: number
+ /** *Client-only*
+  * 
+  * The client pixel information of the board. */
+ readonly clientSize: IMinosGameBoardClientSize
 
  // Runtime Properties.
  /** An array of coordinate objects relating each tile index to its coordinates. */
@@ -19,9 +23,17 @@ declare interface IMinosGameBoard
  readonly viewedTiles: Set<IMino>
  readonly filledColumns: Set<number>
  readonly filledRows: Set<number>
+ /** The board's HTML element. */
+ readonly element: HTMLElement
 }
 
-declare type IMino = {
+declare interface IMinosGameBoardClientSize {
+ readonly left: number
+ readonly top: number
+ readonly tileSize: number
+}
+
+declare interface IMino {
  readonly x: number,
  readonly y: number
 }

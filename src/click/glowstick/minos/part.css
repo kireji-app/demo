@@ -102,16 +102,16 @@ minos- {
  content: "✛";
 }
 
-#board>mino-.target {
+#board>mino-.drop-marker.allowed {
  background: #00ff007f;
  box-shadow: inset 0 0 0 var(--px) #00ff00 !important;
- width: calc(var(--mino) * var(--w));
- height: calc(var(--mino) * var(--h));
 }
 
-#board>mino-.target[data-valid="false"] {
+#board>mino-.drop-marker {
  background: #ff00007f;
  box-shadow: inset 0 0 0 var(--px) #ff0000 !important;
+ width: calc(var(--mino) * var(--w));
+ height: calc(var(--mino) * var(--h));
 }
 
 @container wallpaper (aspect-ratio > 1 / 1) {
@@ -207,7 +207,7 @@ body.modern.dark mino- {
  background-color: var(--accent-mode);
 }
 
-body.vintage :is(#score, #board, #pieces)::before {
+body.vintage :is(#score, #bomb, #pieces)::before {
  content: "";
  position: absolute;
  left: -2px;
@@ -236,7 +236,7 @@ body.vintage wallpaper->section:not(#bomb) {
   var(--bg-dark);
 }
 
-body.vintage.dark :is(#score, #board, #pieces) {
+body.vintage.dark :is(#score, #bomb, #pieces) {
  background-color: unset;
 }
 

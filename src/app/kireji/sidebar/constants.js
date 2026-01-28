@@ -1,2 +1,5 @@
 const sidebar = this
-const toolBar = sidebar[".."].toolBar
+const kirejiApp = sidebar[".."]
+const toolBar = kirejiApp.toolBar
+const editor = kirejiApp.editor
+const tabGroup = editor.tabGroup

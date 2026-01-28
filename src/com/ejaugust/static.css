@@ -242,7 +242,7 @@ wallpaper- footer>img {
  display: none;
 }
 
-wallpaper- footer a[target="_blank"]::after {
+wallpaper- footer a.external::after {
  content: unset;
  display: none;
 }

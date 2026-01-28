@@ -1,1 +1,1 @@
-return `<menu-button tabIndex=0 class="btn" onpointerdown="${menu.runtimeReference}.point(event,this)"><img class="part-icon" src="${_.application.placeholderImage("part.png")}"/></menu-button>`
+return `<menu-button ${menu.pointAttr()} tabIndex=0 class="btn"><img class="part-icon" src="${_.application.placeholderImage("part.png")}"/></menu-button>`

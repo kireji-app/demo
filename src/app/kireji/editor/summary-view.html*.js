@@ -1,1 +1,10 @@
-return ["about", "state-space", "state", "properties"].map(word => `<details id=info-${word}${word.startsWith("state") && (activePart.isAbstract || word === "state" && activePart.disabled) ? " disabled" : ""}${settings[word].model ? " open" : ""}>${editor[`info-${word}.html`]}</details>`).join("")
+return sections.map(section =>
+ `<details class=info-section id=info-${section.key}${section.model ? " open" : ""}>` + (
+  `<summary ${section.pointAttr()}>` + (
+   section.title
+  ) + `</summary>` +
+  `<section${section.key.startsWith("state") && (activePart.isAbstract || section.key === "state" && activePart.disabled) ? " disabled" : ""}>` + (
+   section["part.html"]
+  ) + `</section>`
+ ) + `</details>`
+).join("")

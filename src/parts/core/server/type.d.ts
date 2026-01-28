@@ -4,7 +4,7 @@ declare interface IServer
 
 /** An interface that represents an internal server API contract between modules of different versions. */
 declare interface IVersionedExports {
- /** Allows pass-through access to this version's server-side rendering features. */
+ /** Allows pass-through access to this build's server-side rendering features. */
  proxy(host: string, pathname: string, ifNoneMatch: string, prefersDarkMode: boolean): any
  /** Allows conversion of a URL pathname segment to a data model using the server's hash function. */
  decode(segmnt: string): any

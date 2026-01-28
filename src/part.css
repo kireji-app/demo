@@ -86,11 +86,11 @@ a:hover {
  color: var(--fg-un-mode-er);
 }
 
-a[target="_blank"] {
+a.external {
  white-space: nowrap;
 }
 
-a[target="_blank"]::after {
+a.external::after {
  content: '↗';
  color: inherit;
  display: inline-block;

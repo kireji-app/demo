@@ -4,15 +4,11 @@ declare interface IKirejiAppEditor
 
  // Subparts.
  readonly tabGroup: IKirejiAppTabGroup
- readonly settings: IKirejiAppEditorSettings
+ readonly sections: IKirejiAppEditorSections
  readonly scroller: IScroller<IKirejiAppEditor>
 
  // Serialized Properties.
  readonly "crumbs.html": string
- readonly "info-about.html": string
- readonly "info-state-space.html": string
- readonly "info-state.html": string
- readonly "info-properties.html": string
  readonly "static.css": string
  readonly "summary-view.html": string
  readonly "file-view.html": string
@@ -33,5 +29,15 @@ declare interface IKirejiAppEditor
 
 declare type IKirejiAppEditorPart =
  IPart<IKirejiAppEditor, IPart<IKirejiAppEditorPart, IPartAny>>
+
+declare interface IKirejiAppEditorPointerConfig
+ extends IPointerConfig {
+ /** The index of TARGET_ELEMENT within the tab group or -1 if TARGET_ELEMENT is not a tab in the group. */
+ readonly activeTabIndexOfDraggedItem: number
+ /** The element currently visually marked as the drop destination for the drag-and-drop operation. */
+ readonly dropTargetElement?: HTMLElement
+ /** An orphaned tab element that follows the user's pointer movements to show them what item they are currently dragging. */
+ readonly dragPreviewElement?: HTMLElement
+}
 
 declare const editor: IKirejiAppEditor

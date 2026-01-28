@@ -7,9 +7,9 @@ declare interface IMinosGamePiece
  readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
  /** Scans the game board and caches the set of tiles where the piece can be placed. */
  readonly recompute(): void
- /** Places this piece at the given X and Y coordinates of the game board. */
+ /** Places the piece at the given X and Y coordinates of the game board. */
  readonly place(X: number, Y: number): void
- /** Randomly changes this piece to a different piece, setting its route ID which in turn recomputes its placeability. */
+ /** Randomly changes the piece to a different piece, setting its route ID which in turn recomputes its placeability. */
  readonly randomize(): void
 
  // Runtime Properties.
@@ -41,4 +41,18 @@ declare interface IMinosGamePiecePrimitive {
  readonly height: number
  /** The set of minos that compose the piece, with coordinates relative to the origin at the top left corner of the piece's bounding box. */
  readonly minos: IMino[]
+}
+
+declare interface IMinosGamePiecePointerConfig
+ extends IPointerConfig {
+ /** The display details in pixels of the game board at the moment the pointer was pressed. */
+ readonly boardSize: IMinosGameBoardClientSize,
+ /** The style string defining the width and height of TARGET_ELEMENT, measured in minos. */
+ readonly itemStyle: string,
+ /** The display details in pixels of TARGET_ELEMENT. */
+ readonly itemSize: DOMRect,
+ /** An HTML element created and added to the game board to visualize the drop position of the game piece. */
+ readonly dropMarker: HTMLElement,
+ /** If defined, the valid drop position of the dragged game piece, measured in minos. */
+ readonly dropPosition?: { x: number, y: number },
 }

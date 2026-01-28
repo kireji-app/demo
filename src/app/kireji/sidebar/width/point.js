@@ -1,20 +1,19 @@
-const
- toolBarWidth = Q("tool-bar").clientWidth,
- sidebarWidthRouteIDCache = sidebarWidth.routeID
-
-pointer.handle({
+/** @type {IKirejiAppSidebarWidthPointerConfig} */
+const pointerConfig = {
+ toolBarWidth: Q("tool-bar").clientWidth,
+ sidebarWidthRouteIDCache: sidebarWidth.routeID,
  down() {
   document.body.classList.add("dragging-width-handle")
  },
  drag(pointerEvent) {
-  if (pointerEvent.clientX < (sidebarWidth.min / 2 + toolBarWidth)) {
+  if (pointerEvent.clientX < (sidebarWidth.min / 2 + this.toolBarWidth)) {
    if (sidebar.open.routeID === 1n) {
     sidebar.open.setRouteID(0n)
-    if (sidebarWidth.routeID !== sidebarWidthRouteIDCache)
-     sidebarWidth.setRouteID(sidebarWidthRouteIDCache)
+    if (sidebarWidth.routeID !== this.sidebarWidthRouteIDCache)
+     sidebarWidth.setRouteID(this.sidebarWidthRouteIDCache)
    }
   } else {
-   const targetWidth = Math.min(Number(sidebarWidth.cardinality) - 1, Math.max(0, Math.trunc(pointerEvent.clientX) - sidebarWidth.min - toolBarWidth))
+   const targetWidth = Math.min(Number(sidebarWidth.cardinality) - 1, Math.max(0, Math.trunc(pointerEvent.clientX) - sidebarWidth.min - this.toolBarWidth))
    if (sidebar.open.routeID === 0n)
     sidebar.open.setRouteID(1n)
    const targetRouteID = BigInt(targetWidth)
@@ -27,4 +26,6 @@ pointer.handle({
  },
  POINTER_EVENT,
  TARGET_ELEMENT
-})
+}
+
+pointer.handle(pointerConfig)

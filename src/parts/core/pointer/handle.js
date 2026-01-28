@@ -90,9 +90,9 @@ const
  }
 
 // Attach to the follow-up event handlers along the whole document.
-document.addEventListener("pointermove", drag, { signal: controller.signal })
-document.addEventListener("pointerup", drop, { signal: controller.signal })
-document.addEventListener("pointercancel", reset, { signal: controller.signal })
+document.addEventListener("pointermove", drag, { capture: true, signal: controller.signal })
+document.addEventListener("pointerup", drop, { capture: true, signal: controller.signal })
+document.addEventListener("pointercancel", reset, { capture: true, signal: controller.signal })
 
 // Don't allow anything else to start picking up events.
 POINTER_CONFIG.TARGET_ELEMENT.setPointerCapture(pointer.id = POINTER_CONFIG.POINTER_EVENT.pointerId)

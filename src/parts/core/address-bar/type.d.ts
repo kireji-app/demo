@@ -4,6 +4,8 @@ declare interface IAddressBar
  // Serialized Properties.
  /** Takes the current location.href and uses it to set the full framework state. */
  readonly useRoute(): void
+ /** Pushes the current ecosystem route ID onto the history stack to mark the current state as the undo point (where the back button will return to). */
+ readonly setUndoPoint(): void
 
  // Runtime Properties.
  /** The minimum time between address bar changes, used to throttle them to prevent from triggering the browser's own, much more aggressive throttle. */

@@ -6,6 +6,7 @@ for (let tileIndex = 0; tileIndex < tileCount; tileIndex++)
  tiles.push({ x: tileIndex % boardWidth, y: Math.floor(tileIndex / boardWidth) })
 
 minosBoard.define({
+ element: { value: null, writable: true },
  tileCount: { value: tileCount },
  cardinality: { value: 1n << BigInt(tileCount) },
  activeTiles: { value: new Set() },

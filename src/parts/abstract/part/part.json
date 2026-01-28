@@ -63,5 +63,9 @@
  "loop-distribute": [],
  "loop": [
   "TIME"
+ ],
+ "attr-point": [
+  "METHOD_NAME = 'point'",
+  "...ARGS"
  ]
 }

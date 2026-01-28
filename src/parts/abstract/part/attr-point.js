@@ -1,0 +1,1 @@
+return `onpointerdown="${part.runtimeReference}.${METHOD_NAME}(event,this${ARGS ? "," + ARGS.join(",") : ""})"`

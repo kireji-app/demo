@@ -1,4 +1,4 @@
-// TODO: check for support and show this button only if the browser supports it. Prefer instructing user to enter the browser's native fullscreen instead of JS fullscreen (which doesn't have cross-origin support).
+// TODO: check for support and show the tray item only if the browser supports it. Prefer instructing user to enter the browser's native fullscreen instead of JS fullscreen (which doesn't have cross-origin support).
 pointer.handle({
  click() {
   if (!document.fullscreenElement) {

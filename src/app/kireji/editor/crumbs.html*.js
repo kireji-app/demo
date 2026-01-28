@@ -1,5 +1,5 @@
 function generateCrumb(part, filename) {
- return `<a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(part)}${filename ? "," + part.filenames.indexOf(filename) : ""})">${filename ?? (part === _ ? "ecosystem" : part.key)}</a>`
+ return `<a ${editor.pointAttr("point", allParts.indexOf(part), ...(filename ? [part.filenames.indexOf(filename)] : []))} href="/">${filename ?? (part === _ ? "ecosystem" : part.key)}</a>`
 }
 
 if (activePart) {

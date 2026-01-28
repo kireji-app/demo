@@ -13,8 +13,8 @@ declare interface IKirejiAppTabGroup
  readonly getPermutationRouteID(TABS: IKirejiAppTabGroupTabArray): bigint
  /** Returns the specific payload ID of the given array of tab models without changing the state of the tab group. */
  readonly getPayloadRouteID(TABS: IKirejiAppTabGroupTabArray): bigint
- /** Returns a route ID corresponding to the current distributed model data by adding and multiplying cached component properties (like `permutationRouteID`) without recomputing them. */
- readonly summarizeRouteID(): bigint
+ /** Sets the tab group route ID based on the current distributed model data by adding and multiplying cached component properties, recomputing them if RECOMPUTE_OPEN_TABS is true. If the active tab has changed, it resets the editor scroller and frames the new active item in any open sidebar. */
+ readonly recomputeRouteID(RECOMPUTE_OPEN_TABS: boolean = false): bigint
  /** Updates the state fields for the currently active part part, if it is a summary view. */
  readonly listener(SENDER: IPartAny): void
  /** Attaches to events for the active part so that changes to the part's state triggers changes to the summary page. */
@@ -28,6 +28,10 @@ declare interface IKirejiAppTabGroup
  readonly permutationSizes: bigint[]
  readonly payloadCardinality: bigint
  readonly payloadSizes: bigint[]
+ /** *Client-only*
+  * 
+  * The tab group's main HTML element. */
+ readonly container: HTMLElement
  /** *Client-only*
   * 
   * The most recent tab model, as determined while populating the view (not when propagating the route ID). */
@@ -51,7 +55,7 @@ declare interface IKirejiAppTabGroup
  readonly openTabs: IKirejiAppTabGroupTabArray
  /** The index of the currently active tab. */
  readonly activeTabIndex: number
- /** The index of the preview tab, if one exists. This is the tab which can be replaced when opening a new tab. */
+ /** The index of the preview tab, if one exists. The preview tab is the tab which can be replaced when opening a new tab. */
  readonly previewTabIndex?: number
  /** The array of memoized offset route IDs corresponding to the start of each part's filename plane. */
  readonly partOffsets: number[]

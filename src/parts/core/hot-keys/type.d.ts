@@ -16,9 +16,7 @@ declare interface IHotKeys
  readonly contextPrefix: "Meta" | "Control"
  /** The set of keys which the user is currently pressing. */
  readonly pressed: Set<string>
- /** A table, parsed from hotKeys["table.json"], which relates canonical keyboard shortcuts to method names defined on the hotKeys object.
-  * 
-  * This represents the global hot keys map, which all applications agree on. */
+ /** A table, parsed from hotKeys["table.json"], which relates canonical keyboard shortcuts to method names defined on the hotKeys object. It act as a global default hot keys map for all applications. */
  readonly table: Record<string, string>
 }
 

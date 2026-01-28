@@ -14,7 +14,9 @@
  "routeID-get-payload": [
   "TABS"
  ],
- "routeID-summarize": [],
+ "routeID-recompute": [
+  "RECOMPUTE_OPEN_TABS"
+ ],
  "factor-get-permutation": [
   "NUMBER_OF_TABS_OPEN",
   "CURRENT_TAB_INDEX"

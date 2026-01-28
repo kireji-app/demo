@@ -3,11 +3,11 @@ declare interface IBodyMode<TOwner>
  IWebComponent {
 
  // Serialized Properties.
- /** The class to assign to the body when this body mode is active. */
+ /** The class to assign to the body when the mode is active. */
  readonly "class": string
- /** The query for selecting any visible control of the body mode. */
+ /** The query for selecting any visible control of the mode. */
  readonly "id": string
- /** The data-state attribute value for the control button when the body mode is active. */
+ /** The data-state attribute value for the control button when the mode is active. */
  readonly "stateData": string
 }
 

@@ -68,6 +68,7 @@ tabGroup.define({
  maxTabCount: { value: maxTabCount },
  previousPart: { value: null, writable: true },
  tree: { value: null, writable: true },
+ container: { value: null, writable: true },
  FenwickTree: {
   value: class FenwickTree {
    constructor() {

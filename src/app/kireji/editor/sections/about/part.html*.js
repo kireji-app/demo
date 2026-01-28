@@ -1,5 +1,4 @@
 return (
- `<summary onpointerdown=${editor.settings.runtimeReference}.point(event,this)>About Part</summary>` +
  "<div id=part-intro>" + (
   `<img src="${activePart.placeholderImage("part.png")}"/>` +
   "<div>" + (
@@ -8,7 +7,7 @@ return (
    ) + "</h3>" + (
     activePart.host === "part.abstract.parts" ?
      "<span disabled>This part has no prototype.</span>" :
-     `Extends <a href="/" onpointerdown="${editor.runtimeReference}.point(event,this,${allParts.indexOf(activePart.prototype)})">` + (
+     `Extends <a ${editor.pointAttr("point", allParts.indexOf(activePart.prototype))} href="/">` + (
       activePart.prototype.title ?? activePart.prototype.key
      ) + '</a>'
    )

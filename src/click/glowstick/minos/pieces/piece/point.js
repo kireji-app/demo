@@ -1,52 +1,46 @@
-pointer.handle({
+/** @type {IMinosGamePiecePointerConfig} */
+const pointerConfig = {
+ boardSize: minos.board.clientSize,
+ itemStyle: TARGET_ELEMENT.getAttribute("style"),
+ itemSize: TARGET_ELEMENT.getBoundingClientRect(),
+ dropMarker: minos.board.element.appendChild(document.createElement("mino-")),
+ dropPosition: null,
  down() {
-  const
-   startPosition = this.startPosition = { x: POINTER_EVENT.clientX, y: POINTER_EVENT.clientY },
-   existingStyle = this.existingStyle = TARGET_ELEMENT.getAttribute("style"),
-   boardElement = this.boardElement = Q("#board"),
-   targetMark = this.targetMark = boardElement.appendChild(document.createElement("mino-")),
-   boardRect = this.boardElement.getBoundingClientRect(),
-   boardOrigin = this.boardOrigin = { x: boardRect.left, y: boardRect.top },
-   itemRect = this.itemRect = TARGET_ELEMENT.getBoundingClientRect(),
-   tileSize = this.tileSize = boardRect.width / minos.board.width,
-   dropPosition = this.dropPosition = { x: Math.round((itemRect.left - boardRect.left) / tileSize), y: Math.round((itemRect.top - boardRect.top) / tileSize) }
-
-  this.canPlace = false
-  targetMark.setAttribute("style", `--w:${minosPiece.width};--h:${minosPiece.height};--x:${dropPosition.x};--y:${dropPosition.y}`)
-  targetMark.classList.add("target")
+  this.dropMarker.setAttribute("style", `display:none`)
+  this.dropMarker.classList.add("drop-marker")
+  TARGET_ELEMENT.setAttribute("style", `${this.itemStyle};--x:0;--y:0`)
   TARGET_ELEMENT.classList.add("dragging")
-  TARGET_ELEMENT.setAttribute("style", `${existingStyle};--x:0;--y:0`)
  },
  drag(pointerEvent) {
+  const
+   offset = { left: pointerEvent.clientX - POINTER_EVENT.clientX, top: pointerEvent.clientY - POINTER_EVENT.clientY },
+   x = Math.round((this.itemSize.left - this.boardSize.left + offset.left) / this.boardSize.tileSize),
+   y = Math.round((this.itemSize.top - this.boardSize.top + offset.top) / this.boardSize.tileSize),
+   isOnBoard = x >= 0 && x < minos.board.width && y >= 0 && y < minos.board.width,
+   isAllowed = isOnBoard && minosPiece.allowedTiles.has(minos.board.allTiles[y * minos.board.width + x])
 
-  const offset = { x: pointerEvent.clientX - this.startPosition.x, y: pointerEvent.clientY - this.startPosition.y }
-  this.dropPosition.x = Math.round((this.itemRect.left - this.boardOrigin.x + offset.x) / this.tileSize)
-  this.dropPosition.y = Math.round((this.itemRect.top - this.boardOrigin.y + offset.y) / this.tileSize)
+  if (isAllowed) {
+   this.dropPosition = { x, y }
+   this.dropMarker.classList.add("allowed")
+  } else {
+   this.dropPosition = null
+   this.dropMarker.classList.remove("allowed")
+  }
 
-  this.canPlace = true
-
-  if (this.dropPosition.y < 0 || this.dropPosition.y >= minos.board.width || this.dropPosition.x < 0 || this.dropPosition.x >= minos.board.width)
-   this.canPlace = false
-
-  const dropIndex = (this.dropPosition.y * minos.board.width) + this.dropPosition.x
-  const dropTile = minos.board.allTiles[dropIndex]
-
-  if (!minosPiece.allowedTiles.has(dropTile))
-   this.canPlace = false
-
-  this.targetMark.setAttribute("data-valid", this.canPlace)
-  this.targetMark.setAttribute("style", `--w:${minosPiece.width};--h:${minosPiece.height};--x:${this.dropPosition.x};--y:${this.dropPosition.y}`)
-  TARGET_ELEMENT.setAttribute("style", `${this.existingStyle};--x:${offset.x}px;--y:${offset.y}px`)
+  this.dropMarker.setAttribute("style", `${this.itemStyle};--x:${x};--y:${y}`)
+  TARGET_ELEMENT.setAttribute("style", `${this.itemStyle};--x:${offset.left}px;--y:${offset.top}px`)
  },
  drop(pointerEvent) {
-  if (this.canPlace)
+  if (this.dropPosition)
    minosPiece.place(this.dropPosition.x, this.dropPosition.y)
  },
  reset() {
-  this.targetMark.remove()
-  TARGET_ELEMENT.setAttribute("style", this.existingStyle)
+  this.dropMarker.remove()
+  TARGET_ELEMENT.setAttribute("style", this.itemStyle)
   TARGET_ELEMENT.classList.remove("dragging")
  },
  POINTER_EVENT,
  TARGET_ELEMENT
-})
+}
+
+pointer.handle(pointerConfig)

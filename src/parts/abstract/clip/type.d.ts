@@ -16,11 +16,11 @@ declare interface IClip<TOwner>
  readonly elapsedFrames?: number
  /** Determines the next step when the clip autoplays past it's last frame. */
  readonly endOfPlaybackBehavior: "autoplay" | "autoplayInto" | "loop"
- /** The framerate at which to play this movie clip. */
+ /** The framerate at which to play the movie clip. */
  readonly frameRate: number
  /** The amount of time each frame would be on the screen, given ideal performance. */
  readonly frameTime: number
- /** If defined, a number that the JavaScript engine assigned to the last requested animation frame for this clip. */
+ /** If defined, a number that the JavaScript engine assigned to the last requested animation frame for the clip. */
  readonly pendingFrame?: number
  /** Whether or not the clip is currently playing. */
  readonly playing: boolean

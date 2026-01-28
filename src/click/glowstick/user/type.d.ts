@@ -15,7 +15,7 @@ declare interface IGlowstickUser
  readonly "x": bigint
  /** The current user world position along x. */
  readonly "y": bigint
- /** Converts the given x/y facing vector into a bigint that can be used as this part's route ID. */
+ /** Converts the given x/y facing vector into a bigint that can be used as the part's route ID. */
  readonly vectorToRouteID(X: number, Y: number): bigint
  /** Converts the given route ID into an x/y facing vector that can be used to control which directional graphic is used to display the character in the world. */
  readonly vectorFromRouteID(ROUTE_ID: bigint): { x: number, y: number }

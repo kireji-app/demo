@@ -1,1 +1,1 @@
-return `onpointerdown=${desktop.icons.runtimeReference}.point(event,this)`
+return `${desktop.icons.pointAttr()}`

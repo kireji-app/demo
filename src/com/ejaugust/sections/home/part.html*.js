@@ -3,7 +3,7 @@ return (
  "<section>" + (
   "<div id=note-links>" + (
    [...notes].reverse().map(note =>
-    `<a href=${note.canonicalURL} onpointerdown=self._?.point(event,this)>` + (
+    `<a ${_.pointAttr()} href=${note.canonicalURL}>` + (
      `<h4 class=topic>${note.topic ?? "No Topic"}</h4>` +
      "<h3>" + (
       note.title

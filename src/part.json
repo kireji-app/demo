@@ -4,10 +4,6 @@
   "REQUEST_URL"
  ],
  "validate": [],
- "point-app": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ],
  "point": [
   "POINTER_EVENT",
   "TARGET_ELEMENT"

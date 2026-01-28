@@ -13,23 +13,23 @@ declare interface IApplication<TOwner, TFactor>
  readonly "customHeaders": Record<string, string>
  /** A JSON-serialized map of hot-key combos that the application should listen to and the methods each combo should call. */
  readonly "hot-keys.json"
- /** One of the six theme colors for this part. This is the accent/hover color when dark mode is enabled. */
+ /** The application's accent/hover color when dark mode is enabled. */
  readonly "darkAccentTheme": string
- /** One of the six theme colors for this part. This is the background color when dark mode is enabled. */
+ /** The application's background color when dark mode is enabled. */
  readonly "darkBgTheme": string
- /** One of the six theme colors for this part. This is the foreground color when dark mode is enabled. */
+ /** The application's foreground color when dark mode is enabled. */
  readonly "darkFgTheme": string
- /** One of the six theme colors for this part. This is the accent/hover color when the dark is disabled. */
+ /** The application's accent/hover color when the dark is disabled. */
  readonly "lightAccentTheme": string
- /** One of the six theme colors for this part. This is the background color when the dark is disabled. */
+ /** The application's background color when the dark is disabled. */
  readonly "lightBgTheme": string
- /** One of the six theme colors for this part. This is the foreground color when the dark is disabled. */
+ /** The application's foreground color when the dark is disabled. */
  readonly "lightFgTheme": string
  /** An optional menu title for showing apps in the taskbar menu. If undefined, the application's part title will be used instead. */
  readonly "titleMenu"?: string
- /** For SEO, an xml file detailing this application's available canonical links, which will be fetched by search engines. */
+ /** For SEO, an xml file detailing the application's available canonical links, which will be fetched by search engines. */
  readonly "sitemap.xml"
- /** This optional method converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current ecosystem state as the base state. */
+ /** Optional method that, when defined, converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname?(PATHNAME: string, HASH?: string): string
 }
 
@@ -49,7 +49,7 @@ declare interface IApplicationDetails
  readonly "attributes"?: string
  /** An optional string representing the style attribute of the `<wallpaper->` tag, which can be used for making quick (quicker than replacing part.css) changes to css variables. */
  readonly "style"?: string
- /** For SEO, the portion of the "sitemap.xml" file listing this application or application section's available canonical links. */
+ /** For SEO, the portion of the "sitemap.xml" file listing the application or application section's available canonical links. */
  readonly "urls.xml"
 }
 
