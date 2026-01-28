@@ -1,4 +1,4 @@
-side-bar {
+#kireji_app side-bar {
  position: absolute;
  top: 0;
  left: var(--tool-bar-width);
@@ -6,7 +6,7 @@ side-bar {
  bottom: 0;
 }
 
-#sidebar-view-header {
+#kireji_app #sidebar-view-header {
  position: absolute;
  z-index: 10;
  top: 0;
@@ -23,7 +23,7 @@ side-bar {
  overflow: hidden;
 }
 
-#sidebar-view {
+#kireji_app #sidebar-view {
  position: absolute;
  top: var(--tab-group-height);
  right: 0;
@@ -33,19 +33,19 @@ side-bar {
  overflow: clip;
 }
 
-#sidebar-view>scroller->scroll-content>details {
+#kireji_app #sidebar-view>scroller->scroll-content>details {
  overflow: hidden;
  width: fit-content;
  width: 100%;
  padding: 0;
 }
 
-#sidebar-view details {
+#kireji_app #sidebar-view details {
  margin: 0;
  padding: 0;
 }
 
-#sidebar-view summary {
+#kireji_app #sidebar-view summary {
  display: block;
  height: var(--tab-line-height);
  line-height: var(--tab-line-height);
@@ -59,29 +59,29 @@ side-bar {
  outline: none;
 }
 
-#sidebar-view summary[data-active] {
+#kireji_app #sidebar-view summary[data-active] {
  background-color: var(--accent);
  color: var(--bg-mode-est);
  font-weight: 500;
 }
 
-#sidebar-view summary:hover:not(:has(svg:hover)):not([data-active]) {
+#kireji_app #sidebar-view summary:hover:not(:has(svg:hover)):not([data-active]) {
  background-color: var(--bg-mode-est);
  color: var(--fg-un-mode-est);
 }
 
-#sidebar-view summary>svg:hover {
+#kireji_app #sidebar-view summary>svg:hover {
  stroke: var(--accent);
 }
 
-#sidebar-view summary[data-active]>svg:hover {
+#kireji_app #sidebar-view summary[data-active]>svg:hover {
  stroke: var(--bg-mode-er);
 }
 
-#sidebar-view summary>.explore-toggle,
-#sidebar-view summary>img,
-#sidebar-view svg,
-outliner-spacer {
+#kireji_app #sidebar-view summary>.explore-toggle,
+#kireji_app #sidebar-view summary>img,
+#kireji_app #sidebar-view svg,
+#kireji_app outliner-spacer {
  stroke: var(--fg);
  vertical-align: top;
  display: inline-block;
@@ -92,75 +92,75 @@ outliner-spacer {
  position: relative;
 }
 
-#sidebar-view summary>.explore-toggle,
-#sidebar-view summary>img,
-#sidebar-view svg {
+#kireji_app #sidebar-view summary>.explore-toggle,
+#kireji_app #sidebar-view summary>img,
+#kireji_app #sidebar-view svg {
  height: var(--tab-icon-size);
  width: var(--tab-icon-size);
  margin: calc((var(--tab-line-height) - var(--tab-icon-size)) / 2);
 }
 
-outliner-spacer {
+#kireji_app outliner-spacer {
  width: calc(var(--tab-line-height) / 2);
  border-radius: 0;
  border-right: 1px solid var(--bg-un-mode);
 }
 
-outliner-spacer:has(+ img) {
+#kireji_app outliner-spacer:has(+ img) {
  margin-right: calc(var(--tab-line-height) / 2);
 }
 
-details.empty>summary>outliner-spacer:last-of-type {
+#kireji_app details.empty>summary>outliner-spacer:last-of-type {
  border: none;
 }
 
-#sidebar-view summary .label {
+#kireji_app #sidebar-view summary .label {
  padding-left: calc((var(--tab-line-height) - var(--tab-icon-size)) / 2);
  padding-right: calc(var(--tab-line-height) - var(--tab-icon-size));
  font-weight: 300;
 }
 
-#sidebar-view summary .label.abstract {
+#kireji_app #sidebar-view summary .label.abstract {
  font-style: italic;
  font-weight: 100;
 }
 
 /* Modern */
 
-body.modern #sidebar-view-header {
+body.modern #kireji_app #sidebar-view-header {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode),
   inset 0 2px 0 -1px var(--bg-un-mode);
 }
 
-body.modern #sidebar-view {
+body.modern #kireji_app #sidebar-view {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
-body.modern.light #sidebar-view {
+body.modern.light #kireji_app #sidebar-view {
  background-color: var(--bg-light-er);
 }
 
-body.modern.dark #sidebar-view {
+body.modern.dark #kireji_app #sidebar-view {
  background-color: var(--bg-mode-er);
 }
 
-body.modern #sidebar-view summary {
+body.modern #kireji_app #sidebar-view summary {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
 /* Vintage */
 
-body.vintage side-bar {
+body.vintage #kireji_app side-bar {
  top: 6px;
  width: calc(var(--sidebar-view-width) - (var(--handle-thickness) / 2) - 2px);
  left: calc(6px + var(--tool-bar-width));
  bottom: 6px;
 }
 
-body.vintage side-bar::after {
+body.vintage #kireji_app side-bar::after {
  content: "";
  position: absolute;
  box-shadow: var(--deep-inset);
@@ -171,7 +171,7 @@ body.vintage side-bar::after {
  pointer-events: none;
 }
 
-body.vintage #sidebar-view-header {
+body.vintage #kireji_app #sidebar-view-header {
  font-size: var(--default-font-size);
  padding: 0 4px;
  line-height: var(--tab-group-height);
@@ -179,10 +179,10 @@ body.vintage #sidebar-view-header {
  background-color: var(--bg);
 }
 
-body.vintage.light #sidebar-view {
+body.vintage.light #kireji_app #sidebar-view {
  background-color: white;
 }
 
-body.vintage.dark #sidebar-view {
+body.vintage.dark #kireji_app #sidebar-view {
  background-color: black;
 }

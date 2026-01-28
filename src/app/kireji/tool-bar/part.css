@@ -1,4 +1,4 @@
-tool-bar {
+#kireji_app tool-bar {
  position: absolute;
  top: 0;
  left: 0;
@@ -8,7 +8,7 @@ tool-bar {
  flex-flow: column;
 }
 
-tool-bar>button {
+#kireji_app tool-bar>button {
  width: var(--tool-bar-width);
  height: var(--tool-bar-width);
  display: block;
@@ -19,7 +19,7 @@ tool-bar>button {
  position: relative;
 }
 
-body.modern tool-bar {
+body.modern #kireji_app tool-bar {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode),
   inset 2px 0 0 -1px var(--bg-un-mode),
@@ -27,30 +27,30 @@ body.modern tool-bar {
  background-color: var(--bg-mode-er);
 }
 
-body.modern wallpaper-:has(side-bar) tool-bar>button[data-active] {
+body.modern #kireji_app:has(side-bar) tool-bar>button[data-active] {
  box-shadow: inset 3px 0 0 -1px var(--accent);
 }
 
-body.vintage tool-bar {
+body.vintage #kireji_app tool-bar {
  top: 4px;
  bottom: 6px;
 }
 
-body.vintage tool-bar>button {
+body.vintage #kireji_app tool-bar>button {
  box-shadow: var(--deep-outset);
 }
 
-body.vintage tool-bar>button:active,
-body.vintage wallpaper-:has(side-bar) tool-bar>button[data-active] {
+body.vintage #kireji_app tool-bar>button:active,
+body.vintage #kireji_app:has(side-bar) tool-bar>button[data-active] {
  box-shadow: var(--deep-inset);
  background: var(--pressed-checker), var(--bg-un-mode);
 }
 
-body.vintage tool-bar>button {
+body.vintage #kireji_app tool-bar>button {
  background-color: var(--bg);
 }
 
-body.vintage tool-bar>button:focus::after {
+body.vintage #kireji_app tool-bar>button:focus::after {
  border: 1px dotted white;
  mix-blend-mode: difference;
  content: "";

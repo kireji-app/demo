@@ -1,35 +1,31 @@
-#note-subtitle:empty {
+#ejaugust_com #note-subtitle:empty {
  display: none;
 }
 
-#note-credit {
+#ejaugust_com #note-credit {
  color: var(--fg-mode-er);
  font-weight: 400;
 }
 
-#notebook-section h2,
-#notebook-section h3:not(#note-subtitle),
-#notebook-section h4,
-#notebook-section h5,
-#notebook-section h6 {
+#ejaugust_com #notebook-section :is(h2, h3:not(#note-subtitle), h4, h5, h6) {
  padding-top: calc(2.5 * var(--spacing));
 }
 
-#notebook-section>h2 {
+#ejaugust_com #notebook-section>h2 {
  padding-top: calc(1.5 * var(--spacing));
  box-shadow: 0 -1px 0 0 var(--bg-un-mode);
 }
 
-#notebook-section>*:has(+ h2) {
+#ejaugust_com #notebook-section>*:has(+ h2) {
  padding-bottom: calc(1.5 * var(--spacing));
 }
 
-#notebook-section :is(ol, ul) {
+#ejaugust_com #notebook-section :is(ol, ul) {
  padding-right: calc(3.5 * var(--spacing));
  padding-left: calc(3.5 * var(--spacing));
 }
 
-#notebook-section pre {
+#ejaugust_com #notebook-section pre {
  --edge-color: #ffffff0f !important;
  --paper-color: var(--light-bg);
  --text-color: var(--light-accent);
@@ -51,21 +47,20 @@
  overflow: hidden;
 }
 
-#notebook-section pre::before {
+#ejaugust_com #notebook-section pre::before {
  background: var(--paper-color);
 }
 
-#notebook-section pre::after {
+#ejaugust_com #notebook-section pre::after {
  z-index: 0;
  filter: invert(1);
 }
 
-
-body.light #notebook-section pre::after {
+body.light #ejaugust_com #notebook-section pre::after {
  filter: contrast(0.1) sepia(1) hue-rotate(188deg) saturate(10) brightness(0.5);
 }
 
-body.dark #notebook-section pre {
+body.dark #ejaugust_com #notebook-section pre {
  --edge-color: #ffffff03 !important;
  --paper-color: var(--light-accent);
  --text-color: var(--light-bg);

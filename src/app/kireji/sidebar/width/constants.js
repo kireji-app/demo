@@ -1,4 +1,4 @@
 const sidebarWidth = this
-const wallpaper = _.parts.desktop.wallpaper
 const sidebar = this[".."]
-const toolBar = sidebar[".."].toolBar
+const kirejiApp = sidebar[".."]
+const toolBar = kirejiApp.toolBar

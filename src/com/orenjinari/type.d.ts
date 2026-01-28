@@ -2,7 +2,7 @@ declare interface IOrenjinari
  extends IComApplication {
 
  // Subparts.
- /** The scroller that controls the entire wallpaper. */
+ /** The scroller that controls the entire application. */
  readonly scroller: IScroller<IOrenjinari>
 
  // Serialized Properties.

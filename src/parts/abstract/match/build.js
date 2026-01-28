@@ -12,5 +12,5 @@ else for (const subpart of match) {
 match.define({
  offsets: { value: offsets },
  cardinality: { value: sum },
- arm: { value: undefined, writable: true },
+ arm: { value: null, writable: true },
 })

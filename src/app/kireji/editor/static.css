@@ -1,4 +1,4 @@
-editor- {
+#kireji_app editor- {
  position: absolute;
  top: 0;
  left: var(--sidebar-width);
@@ -6,7 +6,7 @@ editor- {
  bottom: 0;
 }
 
-editor-view {
+#kireji_app editor-view {
  container-type: inline-size;
  container-name: editor-view;
  position: absolute;
@@ -17,7 +17,7 @@ editor-view {
  overflow: clip;
 }
 
-editor-[data-drop-target] :is(editor-view, crumbs-)::after {
+#kireji_app editor-[data-drop-target] :is(editor-view, crumbs-)::after {
  content: "";
  position: absolute;
  top: 0;
@@ -28,7 +28,7 @@ editor-[data-drop-target] :is(editor-view, crumbs-)::after {
  opacity: 0.35;
 }
 
-crumbs- {
+#kireji_app crumbs- {
  position: absolute;
  top: var(--tab-group-height);
  left: 0;
@@ -39,73 +39,71 @@ crumbs- {
  padding: 0 calc(var(--spacing) / 2);
 }
 
-crumbs->span {
+#kireji_app crumbs->span {
  display: block;
  transform: translateX(calc(100% / -6)) rotateZ(-45deg) scale(calc(1 / 3));
  box-shadow: 3px 3px 0 0 var(--fg);
  width: var(--crumbs-height);
 }
 
-crumbs->a:last-of-type {
+#kireji_app crumbs->a:last-of-type {
  pointer-events: none;
  text-decoration: none;
  color: inherit;
 }
 
-crumbs->a:not(:hover) {
+#kireji_app crumbs->a:not(:hover) {
  text-decoration: none;
 }
 
-a .modifier {
+#kireji_app a .modifier {
  color: var(--accent-mode);
 }
 
-a .readonly {
+#kireji_app a .readonly {
  color: var(--accent-un-mode-er);
 }
 
-a .function {
+#kireji_app a .function {
  color: darkkhaki;
 }
 
-a .string {
+#kireji_app a .string {
  color: darksalmon;
 }
 
-
-
-body.light a .modifier {
+body.light #kireji_app a .modifier {
  color: var(--accent-mode);
 }
 
-body.light a .readonly {
+body.light #kireji_app a .readonly {
  color: var(--accent-un-mode-er);
 }
 
-body.light a .function {
+body.light #kireji_app a .function {
  color: darkgoldenrod;
 }
 
-body.light a .string {
+body.light #kireji_app a .string {
  color: sienna;
 }
 
-body.light editor-[data-drop-target] :is(editor-view, crumbs-)::after {
+body.light #kireji_app editor-[data-drop-target] :is(editor-view, crumbs-)::after {
  background: var(--accent-light-er);
 }
 
-editor-view>scroller->scroll-content {
+#kireji_app editor-view>scroller->scroll-content {
  padding: var(--spacing);
  gap: var(--spacing);
  display: flex;
  flex-flow: column;
 }
 
-editor-view>scroller->scroll-content:has(#file-viewer) {
+#kireji_app editor-view>scroller->scroll-content:has(#file-viewer) {
  padding: 0;
 }
 
-editor-:has(#tab-group:empty) editor-view>scroller->scroll-content {
+#kireji_app editor-:has(#tab-group:empty) editor-view>scroller->scroll-content {
  display: flex;
  flex-flow: column nowrap;
  align-items: center;
@@ -114,15 +112,15 @@ editor-:has(#tab-group:empty) editor-view>scroller->scroll-content {
  color: var(--bg-un-mode);
 }
 
-editor-:has(#tab-group:empty) editor-view>scroller->scroll-content>svg {
+#kireji_app editor-:has(#tab-group:empty) editor-view>scroller->scroll-content>svg {
  opacity: 50%;
 }
 
-wallpaper-:has(#tab-group:empty) :is(editor-view>scroll-bar, crumbs-) {
+#kireji_app:has(#tab-group:empty) :is(editor-view>scroll-bar, crumbs-) {
  display: none;
 }
 
-wallpaper-:has(#tab-group:empty) editor-view>scroller- {
+#kireji_app:has(#tab-group:empty) editor-view>scroller- {
  margin-right: 0;
  width: 100%;
  transform: unset !important;
@@ -136,7 +134,7 @@ wallpaper-:has(#tab-group:empty) editor-view>scroller- {
  padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--code-line-height));
 }
 
-editor-view>scroller-:has(#file-viewer) {
+#kireji_app editor-view>scroller-:has(#file-viewer) {
  --code-line-height: calc(var(--default-font-size) + 4px);
  line-height: var(--code-line-height);
 }
@@ -180,45 +178,45 @@ editor-view>scroller-:has(#file-viewer) {
  -ms-user-select: none;
 }
 
-editor-view>scroller->scroll-content>section>h1 {
+#kireji_app editor-view>scroller->scroll-content>section>h1 {
  text-overflow: ellipsis;
  white-space: nowrap;
  overflow: hidden;
 }
 
-#description {
+#kireji_app #description {
  white-space: pre-wrap;
 }
 
-#part-intro>* {
+#kireji_app #part-intro>* {
  vertical-align: middle;
 }
 
-#part-intro>div {
+#kireji_app #part-intro>div {
  display: inline-block;
 }
 
-#part-intro>img {
+#kireji_app #part-intro>img {
  width: 64px;
  margin-right: var(--spacing);
 }
 
-part-table,
-part-rows {
+#kireji_app part-table,
+#kireji_app part-rows {
  display: grid;
  grid-template-columns: 1fr auto;
  width: 100%;
 }
 
-part-rows {
+#kireji_app part-rows {
  grid-template-columns: 1fr;
 }
 
-part-table>*:nth-child(even) {
+#kireji_app part-table>*:nth-child(even) {
  text-align: right;
 }
 
-:is(part-table, part-rows)>* {
+#kireji_app :is(part-table, part-rows)>* {
  line-height: var(--tab-line-height);
  padding: 0 !important;
  text-overflow: ellipsis;
@@ -226,7 +224,7 @@ part-table>*:nth-child(even) {
  overflow: hidden;
 }
 
-editor-view>scroller->scroll-content :is(h1, h2, h3, summary) {
+#kireji_app editor-view>scroller->scroll-content :is(h1, h2, h3, summary) {
  margin: 0;
 }
 
@@ -234,37 +232,37 @@ editor-view>scroller->scroll-content :is(h1, h2, h3, summary) {
  text-decoration: none;
 }
 
-.info-section:not(#info-about)>section:not([disabled])> :is(pre, p) {
+#kireji_app .info-section:not(#info-about)>section:not([disabled])> :is(pre, p) {
  overflow: hidden;
 }
 
-:is(#info-state, #info-state-space)>section[disabled]>:not(.disabled-message),
-:is(#info-state, #info-state-space)>section:not([disabled])>.disabled-message {
+#kireji_app :is(#info-state, #info-state-space)>section[disabled]>:not(.disabled-message),
+#kireji_app :is(#info-state, #info-state-space)>section:not([disabled])>.disabled-message {
  display: none;
 }
 
-body.modern editor-view {
+body.modern #kireji_app editor-view {
  box-shadow:
   inset -2px 0 0 -1px var(--bg-un-mode);
 }
 
-body.modern editor-view>scroller->scroll-content {
+body.modern #kireji_app editor-view>scroller->scroll-content {
  /* Set max-width of pane
   padding: var(--padding) max(calc((100vw - var(--sidebar-width) - 696px) / 2), var(--spacing));
  */
  gap: var(--padding);
 }
 
-body.modern.light :is(editor-view, crumbs-) {
+body.modern.light #kireji_app :is(editor-view, crumbs-) {
  background-color: var(--bg-light-est);
 }
 
-body.modern.dark :is(editor-view, crumbs-) {
+body.modern.dark #kireji_app :is(editor-view, crumbs-) {
  background-color: var(--bg-mode);
 }
 
 /*@container editor-view (width < 696px) {*/
-body.modern editor-view>scroller->scroll-content {
+body.modern #kireji_app editor-view>scroller->scroll-content {
  --padding: var(--spacing);
  --gap: calc(1.5 * var(--spacing));
 }
@@ -272,21 +270,21 @@ body.modern editor-view>scroller->scroll-content {
 /*}*/
 
 @container editor-view (width > 350px) {
- body.modern #info-state-space>section:not([disabled])>:is(p, h3) {
+ body.modern #kireji_app #info-state-space>section:not([disabled])>:is(p, h3) {
   display: inline-block;
  }
 
- body.modern #info-state-space>section:not([disabled])>p {
+ body.modern #kireji_app #info-state-space>section:not([disabled])>p {
   float: right;
   margin: 0;
  }
 }
 
-body.modern wallpaper-:has(#tab-group:empty) editor-view {
+body.modern #kireji_app:has(#tab-group:empty) editor-view {
  top: 0;
 }
 
-body.modern .info-section {
+body.modern #kireji_app .info-section {
  box-shadow:
   inset 0 0 0 1px var(--bg-un-mode),
   2px 3px 8px -2px var(--bg-dark);
@@ -294,17 +292,17 @@ body.modern .info-section {
  border-radius: 3px;
 }
 
-body.modern .info-section>summary {
+body.modern #kireji_app .info-section>summary {
  padding: var(--spacing);
  margin: 0;
 }
 
-body.modern .info-section>section {
+body.modern #kireji_app .info-section>section {
  margin: var(--spacing);
  padding: 0;
 }
 
-body.modern .info-section>section>hr {
+body.modern #kireji_app .info-section>section>hr {
  padding: 0;
  margin: var(--spacing) calc(var(--spacing) * -1);
  border: none;
@@ -312,7 +310,7 @@ body.modern .info-section>section>hr {
  background-color: var(--bg-un-mode);
 }
 
-body.modern .info-section>summary {
+body.modern #kireji_app .info-section>summary {
  background-color: var(--accent-mode-est);
  box-shadow: inset 0 0 0 1px var(--bg-un-mode);
  cursor: pointer;
@@ -320,22 +318,22 @@ body.modern .info-section>summary {
  font-weight: bold;
 }
 
-body.modern wallpaper- [disabled] {
+body.modern #kireji_app [disabled] {
  color: var(--fg-mode-er);
 }
 
-body.modern .info-section:has(>section[disabled])>summary {
+body.modern #kireji_app .info-section:has(>section[disabled])>summary {
  background-color: var(--bg-light);
 }
 
-body.vintage editor- {
+body.vintage #kireji_app editor- {
  left: calc(12px + var(--sidebar-width));
  top: 12px;
  right: 10px;
  bottom: 10px;
 }
 
-body.vintage editor-::before {
+body.vintage #kireji_app editor-::before {
  box-shadow: var(--deep-inset);
  position: absolute;
  content: "";
@@ -345,7 +343,7 @@ body.vintage editor-::before {
  bottom: -2px;
 }
 
-body.vintage editor-::after {
+body.vintage #kireji_app editor-::after {
  content: "";
  position: absolute;
  box-shadow: var(--outset);
@@ -357,92 +355,92 @@ body.vintage editor-::after {
 }
 
 @container editor-view (width > 350px) {
- body.vintage #info-state-space>section {
+ body.vintage #kireji_app #info-state-space>section {
   display: grid;
   grid-template-columns: max-content 1fr;
  }
 
- body.vintage #info-state-space>section>h3 {
+ body.vintage #kireji_app #info-state-space>section>h3 {
   align-self: center;
   margin-right: 1ch;
  }
 }
 
-body.vintage editor-view {
+body.vintage #kireji_app editor-view {
  top: calc(var(--tab-group-height) + var(--crumbs-height) + 2px);
 }
 
-body.vintage editor-view:not(:has(#file-viewer)) {
+body.vintage #kireji_app editor-view:not(:has(#file-viewer)) {
  background-color: var(--bg);
 }
 
-body.vintage editor-:has(#tab-group:empty) editor-view {
+body.vintage #kireji_app editor-:has(#tab-group:empty) editor-view {
  top: 0;
 }
 
-body.vintage editor-:has(#tab-group:empty)::before {
+body.vintage #kireji_app editor-:has(#tab-group:empty)::before {
  content: unset;
 }
 
-body.vintage editor-:has(#tab-group:empty)::after {
+body.vintage #kireji_app editor-:has(#tab-group:empty)::after {
  top: -8px;
 }
 
-body.vintage crumbs- {
+body.vintage #kireji_app crumbs- {
  top: calc(var(--tab-group-height) - 2px);
  left: -2px;
  right: -2px;
 }
 
-body.vintage #file-viewer {
+body.vintage #kireji_app #file-viewer {
  padding-bottom: calc(100vh - var(--tab-group-height) - var(--crumbs-height) - var(--task-bar-height) - var(--warning-height) - var(--code-line-height) - 24px);
 }
 
-body.vintage.light editor-view {
+body.vintage.light #kireji_app editor-view {
  background-color: white;
 }
 
-body.vintage.dark editor-view {
+body.vintage.dark #kireji_app editor-view {
  background-color: var(--bg);
 }
 
-body.vintage .info-section:not(#info-about)>section>hr {
+body.vintage #kireji_app .info-section:not(#info-about)>section>hr {
  display: none;
 }
 
-body.vintage part-table>* {
+body.vintage #kireji_app part-table>* {
  padding: 0;
  line-height: var(--tab-line-height);
 }
 
-body.vintage #description {
+body.vintage #kireji_app #description {
  margin: 0;
 }
 
 /* Single-line closed boxes
 
- body.vintage .info-section:not([open]) {
+ body.vintage #kireji_app .info-section:not([open]) {
   border: 1px inset var(--bg-mode-er);
   margin-bottom: 6px;
   padding: 0;
  }
 
- body.vintage .info-section[open] {
+ body.vintage #kireji_app .info-section[open] {
   border: 2px groove var(--bg-mode-er);
   padding: calc(var(--tab-line-height) / 2);
  }
 */
 
-body.vintage .info-section {
+body.vintage #kireji_app .info-section {
  border: 2px groove var(--bg-mode-er);
  padding: calc(var(--tab-line-height) / 2);
 }
 
-body.vintage .info-section {
+body.vintage #kireji_app .info-section {
  position: relative;
 }
 
-body.vintage .info-section>summary {
+body.vintage #kireji_app .info-section>summary {
  top: calc(var(--tab-line-height) * -0.5 - 2px);
  left: calc(var(--tab-line-height) / 2);
  font-weight: 400;
@@ -455,16 +453,16 @@ body.vintage .info-section>summary {
  pointer-events: all;
 }
 
-body.vintage h3 {
+body.vintage #kireji_app h3 {
  font-size: inherit;
  font-weight: inherit;
 }
 
-body.vintage :not(#part-intro>div)>h3::after {
+body.vintage #kireji_app :not(#part-intro>div)>h3::after {
  content: ":";
 }
 
-body.vintage .info-section:not(#info-about)>section:not([disabled])> :is(pre, p) {
+body.vintage #kireji_app .info-section:not(#info-about)>section:not([disabled])> :is(pre, p) {
  box-shadow: var(--deep-inset);
  padding: 5px 4px 9px 4px;
  background: white;
@@ -473,10 +471,10 @@ body.vintage .info-section:not(#info-about)>section:not([disabled])> :is(pre, p)
  word-wrap: none;
 }
 
-body.vintage .info-section:not(#info-about)>section:not([disabled])> :is(pre, p):focus {
+body.vintage #kireji_app .info-section:not(#info-about)>section:not([disabled])> :is(pre, p):focus {
  user-select: text;
 }
 
-body.dark.vintage .info-section:not(#info-about)>section:not([disabled])> :is(pre, p) {
+body.dark.vintage #kireji_app .info-section:not(#info-about)>section:not([disabled])> :is(pre, p) {
  background: transparent;
 }

@@ -1,4 +1,5 @@
-wallpaper- {
+body,
+html {
  --scrollbar-width: 16px;
  --pressed-checker:
   linear-gradient(45deg, var(--bg-light-er) 25%, transparent 25%, transparent 75%, var(--bg-light-er) 75%, var(--bg-light-er)) 0 0 / 2px 2px,

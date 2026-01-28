@@ -1,4 +1,4 @@
-wallpaper- {
+#desktop_parts {
  display: flex;
  flex-flow: column wrap;
  align-items: baseline;
@@ -7,7 +7,7 @@ wallpaper- {
  padding: 0;
 }
 
-desktop-icon {
+#desktop_parts desktop-icon {
  display: flex;
  flex-flow: column;
  flex: 0 0 64px;
@@ -17,7 +17,7 @@ desktop-icon {
  --icon-size: 32px;
 }
 
-desktop-icon>icon-mask {
+#desktop_parts desktop-icon>icon-mask {
  width: var(--icon-size);
  height: var(--icon-size);
  flex: 0 0 var(--icon-size);
@@ -28,17 +28,17 @@ desktop-icon>icon-mask {
  mask-repeat: no-repeat;
 }
 
-desktop-icon>icon-mask>img {
+#desktop_parts desktop-icon>icon-mask>img {
  width: 100%;
  height: 100%;
 }
 
-desktop-icon>.label {
+#desktop_parts desktop-icon>.label {
  margin: 3px;
  text-align: center;
 }
 
-#selection-box {
+#desktop_parts #selection-box {
  position: fixed;
  left: var(--x);
  top: var(--y);
@@ -46,11 +46,11 @@ desktop-icon>.label {
  height: var(--h);
 }
 
-body.modern wallpaper- {
+body.modern #desktop_parts {
  padding: calc(var(--spacing) / 2);
 }
 
-body.modern desktop-icon>.label {
+body.modern #desktop_parts desktop-icon>.label {
  flex: 1 0 34px;
  width: 74px;
  margin: 0;
@@ -59,28 +59,28 @@ body.modern desktop-icon>.label {
  border-radius: 4px;
 }
 
-body.modern desktop-icon[data-selected]>.label {
+body.modern #desktop_parts desktop-icon[data-selected]>.label {
  background-color: var(--accent-mode);
  color: var(--bg-mode-est);
 }
 
-body.modern #selection-box {
+body.modern #desktop_parts #selection-box {
  background-color: var(--accent-mode-est);
  border: 1px solid var(--accent-mode);
  opacity: 0.75;
 }
 
 
-body.vintage wallpaper- {
+body.vintage #desktop_parts {
  background: #377f7f;
  color: white;
 }
 
-body.vintage desktop-icon[data-selected]>.label {
+body.vintage #desktop_parts desktop-icon[data-selected]>.label {
  background-color: var(--accent);
 }
 
-body.vintage desktop-icon[data-selected]>icon-mask::after {
+body.vintage #desktop_parts desktop-icon[data-selected]>icon-mask::after {
  content: "";
  position: absolute;
  top: 0;
@@ -92,11 +92,11 @@ body.vintage desktop-icon[data-selected]>icon-mask::after {
   linear-gradient(45deg, darkblue 25%, transparent 25%, transparent 75%, darkblue 75%, darkblue) 1px 1px / 2px 2px;
 }
 
-body.vintage desktop-icon[data-selected]>.label {
+body.vintage #desktop_parts desktop-icon[data-selected]>.label {
  background-color: darkblue;
 }
 
-body.vintage desktop-icon:focus .label::before {
+body.vintage #desktop_parts desktop-icon:focus .label::before {
  border: 1px dotted white;
  mix-blend-mode: difference;
  content: "";
@@ -108,7 +108,7 @@ body.vintage desktop-icon:focus .label::before {
  pointer-events: none;
 }
 
-body.vintage #selection-box {
+body.vintage #desktop_parts #selection-box {
  background-color: transparent;
  border: 1px dotted white;
  mix-blend-mode: difference;

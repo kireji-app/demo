@@ -1,14 +1,14 @@
 const dragStart = { x: POINTER_EVENT.clientX, y: POINTER_EVENT.clientY }
-const isOnWallpaper = TARGET_ELEMENT === desktop.wallpaper
+const isOnContainer = TARGET_ELEMENT === desktop.container
 const selectionStart = desktopIcons.routeID
-const iconElements = document.querySelectorAll(`wallpaper->desktop-icon`)
+const iconElements = document.querySelectorAll(`#desktop_parts>desktop-icon`)
 const focusIcon = document.activeElement.tagName === "desktop-icon" ? document.activeElement : null
 
 pointer.handle({
  down() {
   let mask = selectionStart
 
-  if (!isOnWallpaper) {
+  if (!isOnContainer) {
 
    const itemMask = 1n << BigInt(TARGET_ELEMENT.getAttribute("data-index"))
 
@@ -26,14 +26,14 @@ pointer.handle({
   if (desktopIcons.routeID !== mask)
    desktopIcons.setRouteID(mask)
 
-  if (isOnWallpaper) {
-   this.dragBox ??= desktop.wallpaper.appendChild(document.createElement("div"))
+  if (isOnContainer) {
+   this.dragBox ??= desktop.container.appendChild(document.createElement("div"))
    this.dragBox.setAttribute("id", "selection-box")
    this.dragBox.setAttribute("style", `--x:${dragStart.x}px;--y:${dragStart.y};--w:0px;--h:0px`)
   }
  },
  drag(pointerEvent) {
-  if (isOnWallpaper) {
+  if (isOnContainer) {
    focusIcon?.blur()
    let mask = selectionStart
 
@@ -53,7 +53,7 @@ pointer.handle({
   }
  },
  reset() {
-  if (isOnWallpaper) {
+  if (isOnContainer) {
    this.dragBox?.remove()
    this.dragBox = null
    if (desktopIcons.routeID !== selectionStart) {
@@ -64,7 +64,7 @@ pointer.handle({
   }
  },
  doubleClick() {
-  if (TARGET_ELEMENT === desktop.wallpaper || ["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo))
+  if (TARGET_ELEMENT === desktop.container || ["shift", "alt", "context"].includes(_.parts.core.hotKeys.combo))
    return
 
   desktopIcons.setRouteID(0n)

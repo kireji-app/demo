@@ -1,8 +1,8 @@
-wallpaper- header {
+#ejaugust_com header {
  pointer-events: none;
 }
 
-#bio>img[title="Me"] {
+#ejaugust_com #bio>img[title="Me"] {
  float: right;
  width: calc(16 * var(--spacing));
  box-shadow:
@@ -14,29 +14,29 @@ wallpaper- header {
  margin: var(--spacing);
 }
 
-#bio>img:not([title="Me"]) {
+#ejaugust_com #bio>img:not([title="Me"]) {
  transform: scale(0.5);
 }
 
-wallpaper- .topic {
+#ejaugust_com .topic {
  font-weight: 400;
  text-transform: uppercase;
  font-size: 0.75em;
  color: var(--fg-mode-er);
 }
 
-#bio>p {
+#ejaugust_com #bio>p {
  padding-top: var(--spacing);
  text-align: right;
 }
 
-#note-links {
+#ejaugust_com #note-links {
  display: grid;
  gap: var(--spacing);
  grid-template-columns: 1fr;
 }
 
-#note-links>:is(a, a:visited, a:hover) {
+#ejaugust_com #note-links>:is(a, a:visited, a:hover) {
  text-decoration: none;
  margin: 2px;
  padding: calc(var(--spacing) - 2px);
@@ -51,14 +51,14 @@ wallpaper- .topic {
  background-color: var(--surface);
 }
 
-#note-links>a {
+#ejaugust_com #note-links>a {
  box-shadow:
   1px 1px 2px -1px #0005,
   0 0 8px 3px #0001,
   inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
 }
 
-#note-links>a::before {
+#ejaugust_com #note-links>a::before {
  content: "";
  position: absolute;
  left: 0;
@@ -68,7 +68,7 @@ wallpaper- .topic {
  z-index: 0 !important;
 }
 
-#note-links>a:hover {
+#ejaugust_com #note-links>a:hover {
  transform: scale(101%) translate(-5px, -4px);
  box-shadow:
   10px 8px 12px -6px #0004,
@@ -77,10 +77,10 @@ wallpaper- .topic {
  z-index: 10;
 }
 
-#note-links>a>* {
+#ejaugust_com #note-links>a>* {
  margin: 0;
 }
 
-#footer-home {
+#ejaugust_com #footer-home {
  display: none;
 }

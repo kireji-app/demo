@@ -1,10 +1,9 @@
-html,
-body {
+#orenjinari_com {
  background-color: var(--bg);
 }
 
-wallpaper->scroller->scroll-content::before,
-wallpaper->scroller->scroll-content::after {
+#orenjinari_com>scroller->scroll-content::before,
+#orenjinari_com>scroller->scroll-content::after {
  position: absolute;
  width: 100%;
  height: 100%;
@@ -13,13 +12,13 @@ wallpaper->scroller->scroll-content::after {
  top: 0;
 }
 
-wallpaper- {
+#orenjinari_com {
  --signature: var(--orenjinari-com--signature-png);
  --ground: var(--orenjinari-com--ground-png);
 }
 
-wallpaper->scroller->scroll-content {
- padding-top: calc(var(--wallpaper-height) + var(--section-gap));
+#orenjinari_com>scroller->scroll-content {
+ padding-top: calc(var(--app-height) + var(--section-gap));
  --sections: 5;
  --section-gap: 128px;
  background:
@@ -33,65 +32,65 @@ wallpaper->scroller->scroll-content {
  position: relative;
 }
 
-wallpaper->scroller->scroll-content::after {
+#orenjinari_com>scroller->scroll-content::after {
  background:
-  var(--ground) 12.5vw calc(.8 * var(--wallpaper-height))/75vw 3.75vw no-repeat;
+  var(--ground) 12.5vw calc(.8 * var(--app-height))/75vw 3.75vw no-repeat;
  z-index: -1;
 }
 
-body.dark wallpaper->scroller->scroll-content::after {
+body.dark #orenjinari_com>scroller->scroll-content::after {
  filter: invert(100%);
  -webkit-filter: invert(100%);
 }
 
-body.modern task-bar {
+body.modern:has(wallpaper-#orenjinari_com) task-bar {
  background: transparent;
  box-shadow: none;
 }
 
-wallpaper- .bunny {
+#orenjinari_com .bunny {
  position: absolute;
  cursor: pointer;
 }
 
-wallpaper- #connect-btn {
+#orenjinari_com #connect-btn {
  left: calc(75vw - 3.7vw);
- top: calc(calc(.8 * var(--wallpaper-height)) - 7.6vw);
+ top: calc(calc(.8 * var(--app-height)) - 7.6vw);
  width: 7.4vw;
 }
 
-wallpaper- #others-btn {
+#orenjinari_com #others-btn {
  left: calc(57.5vw - 4vw);
- top: calc(calc(.8 * var(--wallpaper-height)) - 9.3vw);
+ top: calc(calc(.8 * var(--app-height)) - 9.3vw);
  width: 8vw;
 }
 
-wallpaper- #portfolio-btn {
+#orenjinari_com #portfolio-btn {
  left: calc(42.5vw - 5vw);
- top: calc(calc(.8 * var(--wallpaper-height)) - 10.5vw);
+ top: calc(calc(.8 * var(--app-height)) - 10.5vw);
  width: 10vw;
 }
 
-wallpaper- #about-btn {
+#orenjinari_com #about-btn {
  left: calc(25vw - 4vw);
- top: calc(.8 * var(--wallpaper-height) - 8vw);
+ top: calc(.8 * var(--app-height) - 8vw);
  width: 8vw;
 }
 
-wallpaper- .zone {
+#orenjinari_com .zone {
  width: 100%;
- height: var(--wallpaper-height);
+ height: var(--app-height);
  position: relative;
  margin-top: var(--section-gap);
 }
 
-wallpaper- .zone img {
+#orenjinari_com .zone img {
  width: 64px;
 }
 
-wallpaper- .zone h1 {
+#orenjinari_com .zone h1 {
  text-align: center;
- line-height: var(--wallpaper-height);
+ line-height: var(--app-height);
  height: 100%;
  position: absolute;
  width: 100%;
@@ -104,11 +103,11 @@ wallpaper- .zone h1 {
  opacity: 25%;
 }
 
-wallpaper- .zone .thin {
+#orenjinari_com .zone .thin {
  font-weight: 200;
 }
 
-wallpaper- .float {
+#orenjinari_com .float {
  font-size: 32px;
  height: 100%;
  align-items: center;
@@ -120,7 +119,7 @@ wallpaper- .float {
 }
 
 @media (width < 500px) {
- wallpaper- .float {
-  font-size: max(min(5vw, calc(.05 * var(--wallpaper-height))), 16px);
+ #orenjinari_com .float {
+  font-size: max(min(5vw, calc(.05 * var(--app-height))), 16px);
  }
 }

@@ -1,8 +1,8 @@
-return `#error-message>.thin {
+return `.app-container #error-message>.thin {
  font-weight: 200;
 }
 
-#error-message {
+.app-container #error-message {
  font-size: ${Math.trunc(200 / (MESSAGE.replaceAll(/(<([^>]+)>)/g, "").length + 3))}vw;
  height: 100%;
  align-items: center;
@@ -12,11 +12,11 @@ return `#error-message>.thin {
  line-height: 1em;
 }
 
-#error-status {
+.app-container #error-status {
  font-size: 35vw;
  text-align: center;
  color: var(--bg-un-mode);
- line-height: var(--wallpaper-height);
+ line-height: var(--app-height);
  height: 100%;
  position: absolute;
  width: 100%;

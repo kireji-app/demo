@@ -39,7 +39,7 @@ if (ERROR_STRING.startsWith("Favicon")) {
 const themeBGColor = (_.applications[REQUEST_HOST] ?? _.applications[_.defaultApplicationHost])[`theme-light-bg`];
 payload.body = `<style>html {
   background-color: var(--bg);
-  --wallpaper-height: 100vh;
+  --app-height: 100vh;
   --bg: ${themeBGColor};
   --bg-un-mode: #${color.blendHex(themeBGColor, "cfcfcf", "multiply")};
   font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";

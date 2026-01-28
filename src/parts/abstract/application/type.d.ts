@@ -1,7 +1,8 @@
-/** An application part is a major component dedicated to displaying content (as the desktop wallpaper) and
- * overriding the css of the desktop environment whenever the part's host is accessed as a webpage in a browser.
+/** An application part is a major component dedicated to controlling and displaying application content.
  * 
- * It represents a domain which has an `A` record that points to a server implementing the project's build artifact.*/
+ * When an application is the desktop host application (the URL origin), its container is the desktop wallpaper and its theme colors override the colors of the desktop environment.
+ * 
+ * All applications in an ecosystem should have an `A` record that points to the same server implementing the project's build artifact.*/
 declare interface IApplication<TOwner, TFactor>
  extends IMix<TOwner, TFactor>,
  IApplicationDetails {
@@ -31,6 +32,10 @@ declare interface IApplication<TOwner, TFactor>
  readonly "sitemap.xml"
  /** Optional method that, when defined, converts the given human-readable, SEO-friendly canonical pathname to a stateful hash, using the current ecosystem state as the base state. */
  readonly translateCanonicalPathname?(PATHNAME: string, HASH?: string): string
+
+ // Runtime Properties.
+ /** The host element that contains the entire app. */
+ readonly container: HTMLElement
 }
 
 declare interface IApplicationDetails
@@ -45,9 +50,9 @@ declare interface IApplicationDetails
  readonly "canonicalURL": string
  /** The partial pathname or segment corresponding to the current page of the application. */
  readonly "pathname": string
- /** An optional string of attributes which will be added to the `<wallpaper->` tag of the desktop environment. */
+ /** An optional string of attributes which will be added to the application host element. */
  readonly "attributes"?: string
- /** An optional string representing the style attribute of the `<wallpaper->` tag, which can be used for making quick (quicker than replacing part.css) changes to css variables. */
+ /** An optional string representing the style attribute of the application host element, which can be used for making quick (quicker than replacing part.css) changes to css variables. */
  readonly "style"?: string
  /** For SEO, the portion of the "sitemap.xml" file listing the application or application section's available canonical links. */
  readonly "urls.xml"

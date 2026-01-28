@@ -3,7 +3,7 @@ declare interface IKirejiAppSidebarWidth
  IWebComponent {
 
  // Serialized Properties.
- /** A string which is used as the style string for the wallpaper- element, allowing rapid updating. */
+ /** A string which is used as the style string for the application's host element, allowing rapid updating. */
  readonly "style": string
  /** The event handler for clicking and dragging to resize the sidebar. */
  readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void

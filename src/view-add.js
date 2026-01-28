@@ -13,8 +13,6 @@ for (const faviconLink of faviconLinks)
 Q("#img-css").innerHTML ||= _["images.css"]
 Q("#early-img-css")?.remove()
 
-desktop.wallpaper = Q("wallpaper-")
-
 // Prevent normal click events to ensure the pointerdown event always takes precedence.
 document.addEventListener("click", event => {
  event.preventDefault()

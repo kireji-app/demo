@@ -1,1 +1,1 @@
-wallpaper.setAttribute("style", sidebarWidth.style)
+kirejiApp.container.setAttribute("style", sidebarWidth.style)

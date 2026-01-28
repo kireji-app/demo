@@ -2,7 +2,7 @@ pointer.handle({
  down() {
   // Down.
   glowstick.thumbstickStart = { x: POINTER_EVENT.clientX, y: POINTER_EVENT.clientY }
-  glowstick.thumbstickElement = wallpaper.appendChild(document.createElement("thumbstick-"))
+  glowstick.thumbstickElement = glowstick.container.appendChild(document.createElement("thumbstick-"))
   glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
   glowstick.thumbstickElement.style.setProperty("--y", glowstick.thumbstickStart.y + "px")
   glowstick.handleElement = glowstick.thumbstickElement.appendChild(document.createElement("handle-"))

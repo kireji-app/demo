@@ -1,32 +1,32 @@
-wallpaper- {
- --unit: calc(min(max(var(--wallpaper-width), var(--wallpaper-height)) / 66, min(var(--wallpaper-width), var(--wallpaper-height)) / 38));
+#minos_glowstick_click {
+ --unit: calc(min(max(var(--app-width), var(--app-height)) / 66, min(var(--app-width), var(--app-height)) / 38));
  --side: calc(36 * var(--unit));
  --mino: calc(var(--unit) * 3);
  container-type: size;
- container-name: wallpaper;
+ container-name: application;
 }
 
-wallpaper->section {
+#minos_glowstick_click>section {
  position: fixed;
- top: calc((var(--wallpaper-height) - var(--side)) / 2 + var(--warning-height));
- left: calc((var(--wallpaper-width) - var(--side)) / 2);
+ top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height));
+ left: calc((var(--app-width) - var(--side)) / 2);
  width: var(--side);
  height: var(--side);
  --grid-size: var(--mino);
 }
 
-#board {
+#minos_glowstick_click #board {
  overflow: hidden;
 }
 
-#score,
-#pieces {
+#minos_glowstick_click #score,
+#minos_glowstick_click #pieces {
  --grid-size: calc(var(--mino) * 4);
  display: grid;
  place-items: center;
 }
 
-mino- {
+#minos_glowstick_click mino- {
  position: absolute;
  left: calc(var(--mino) * var(--x));
  top: calc(var(--mino) * var(--y));
@@ -35,23 +35,23 @@ mino- {
  background-color: var(--bg);
 }
 
-minos- {
+#minos_glowstick_click minos- {
  position: relative;
  width: calc(var(--mino) * var(--w));
  height: calc(var(--mino) * var(--h));
 }
 
-#pieces>minos-.dragging {
+#minos_glowstick_click #pieces>minos-.dragging {
  left: var(--x);
  top: var(--y);
 }
 
-#pieces>minos-.bomb>mino-,
-#bomb>mino- {
+#minos_glowstick_click #pieces>minos-.bomb>mino-,
+#minos_glowstick_click #bomb>mino- {
  background: tomato;
 }
 
-:is(.bomb>mino-, #bomb>mino-)::after {
+#minos_glowstick_click :is(.bomb>mino-, #bomb>mino-)::after {
  position: absolute;
  left: 0;
  right: 0;
@@ -62,11 +62,11 @@ minos- {
  color: white;
 }
 
-:is(.bomb.radial>mino-, #bomb>mino-.radial)::after {
+#minos_glowstick_click :is(.bomb.radial>mino-, #bomb>mino-.radial)::after {
  content: "✺";
 }
 
-.dragging.bomb.radial::before {
+#minos_glowstick_click .dragging.bomb.radial::before {
  content: "";
  position: absolute;
  left: calc(-4.5 * var(--mino));
@@ -77,8 +77,8 @@ minos- {
  background-color: #ff00007f;
 }
 
-.dragging.bomb.crosshair::before,
-.dragging.bomb.crosshair::after {
+#minos_glowstick_click .dragging.bomb.crosshair::before,
+#minos_glowstick_click .dragging.bomb.crosshair::after {
  content: "";
  position: absolute;
  left: calc(var(--mino) / 4);
@@ -88,69 +88,69 @@ minos- {
  background-color: #ff00007f;
 }
 
-.dragging.bomb.crosshair::before {
+#minos_glowstick_click .dragging.bomb.crosshair::before {
  top: calc(-2 * var(--mino));
  bottom: calc(-2 * var(--mino));
 }
 
-.dragging.bomb.crosshair::after {
+#minos_glowstick_click .dragging.bomb.crosshair::after {
  left: calc(-2 * var(--mino));
  right: calc(-2 * var(--mino));
 }
 
-:is(.bomb.crosshair>mino-, #bomb>mino-.crosshair)::after {
+#minos_glowstick_click :is(.bomb.crosshair>mino-, #bomb>mino-.crosshair)::after {
  content: "✛";
 }
 
-#board>mino-.drop-marker.allowed {
+#minos_glowstick_click #board>mino-.drop-marker.allowed {
  background: #00ff007f;
  box-shadow: inset 0 0 0 var(--px) #00ff00 !important;
 }
 
-#board>mino-.drop-marker {
+#minos_glowstick_click #board>mino-.drop-marker {
  background: #ff00007f;
  box-shadow: inset 0 0 0 var(--px) #ff0000 !important;
  width: calc(var(--mino) * var(--w));
  height: calc(var(--mino) * var(--h));
 }
 
-@container wallpaper (aspect-ratio > 1 / 1) {
+@container application (aspect-ratio > 1 / 1) {
 
- #score,
- #pieces {
+ #minos_glowstick_click #score,
+ #minos_glowstick_click #pieces {
   width: var(--grid-size);
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr;
  }
 
- #score {
-  left: calc((var(--wallpaper-width) - var(--side)) / 2 - var(--grid-size) - (var(--unit) * 2));
+ #minos_glowstick_click #score {
+  left: calc((var(--app-width) - var(--side)) / 2 - var(--grid-size) - (var(--unit) * 2));
  }
 
- #pieces {
-  left: calc((var(--wallpaper-width) - var(--side)) / 2 + var(--side) + (var(--unit) * 2));
+ #minos_glowstick_click #pieces {
+  left: calc((var(--app-width) - var(--side)) / 2 + var(--side) + (var(--unit) * 2));
  }
 }
 
-@container wallpaper (aspect-ratio <=1 / 1) {
+@container application (aspect-ratio <=1 / 1) {
 
- #score,
- #pieces {
+ #minos_glowstick_click #score,
+ #minos_glowstick_click #pieces {
   height: var(--grid-size);
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr;
  }
 
- #score {
-  top: calc((var(--wallpaper-height) - var(--side)) / 2 + var(--warning-height) - var(--grid-size) - (var(--unit) * 2));
+ #minos_glowstick_click #score {
+  top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) - var(--grid-size) - (var(--unit) * 2));
  }
 
- #pieces {
-  top: calc((var(--wallpaper-height) - var(--side)) / 2 + var(--warning-height) + var(--side) + (var(--unit) * 2));
+ #minos_glowstick_click #pieces {
+  top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) + var(--side) + (var(--unit) * 2));
  }
 }
 
-body.modern wallpaper- {
+body.modern #minos_glowstick_click {
  --px: calc(var(--unit) / 4);
  --px-1: calc(var(--px) * -1);
  --px2: calc(var(--px) * 2);
@@ -158,7 +158,7 @@ body.modern wallpaper- {
  --grid-color: var(--bg-mode);
 }
 
-body.modern wallpaper->section:not(#bomb) {
+body.modern #minos_glowstick_click>section:not(#bomb) {
  background-color: var(--bg-mode-er);
  border-radius: var(--px2);
  box-shadow:
@@ -176,7 +176,7 @@ body.modern wallpaper->section:not(#bomb) {
  background-size: var(--grid-size);
 }
 
-body.modern mino- {
+body.modern #minos_glowstick_click mino- {
  background-color: var(--accent-mode-est);
  box-shadow:
   inset var(--px-1) var(--px-1) black,
@@ -187,27 +187,27 @@ body.modern mino- {
   inset var(--px-2) 0 calc(var(--unit) * 3) calc(var(--unit) * -3) var(--accent-un);
 }
 
-body.modern #board mino-[style="--x:0;--y:0"] {
+body.modern #minos_glowstick_click #board mino-[style="--x:0;--y:0"] {
  border-top-left-radius: var(--px2);
 }
 
-body.modern #board mino-[style="--x:11;--y:0"] {
+body.modern #minos_glowstick_click #board mino-[style="--x:11;--y:0"] {
  border-top-right-radius: var(--px2);
 }
 
-body.modern #board mino-[style="--x:0;--y:11"] {
+body.modern #minos_glowstick_click #board mino-[style="--x:0;--y:11"] {
  border-bottom-left-radius: var(--px2);
 }
 
-body.modern #board mino-[style="--x:11;--y:11"] {
+body.modern #minos_glowstick_click #board mino-[style="--x:11;--y:11"] {
  border-bottom-right-radius: var(--px2);
 }
 
-body.modern.dark mino- {
+body.modern.dark #minos_glowstick_click mino- {
  background-color: var(--accent-mode);
 }
 
-body.vintage :is(#score, #bomb, #pieces)::before {
+body.vintage #minos_glowstick_click :is(#score, #bomb, #pieces)::before {
  content: "";
  position: absolute;
  left: -2px;
@@ -217,12 +217,12 @@ body.vintage :is(#score, #bomb, #pieces)::before {
  box-shadow: var(--deep-inset);
 }
 
-body.vintage wallpaper- {
+body.vintage #minos_glowstick_click {
  --px: 1px;
  --grid-color: var(--bg-un-mode);
 }
 
-body.vintage wallpaper->section:not(#bomb) {
+body.vintage #minos_glowstick_click>section:not(#bomb) {
  background:
   repeating-linear-gradient(90deg,
    var(--grid-color) 0 var(--px),
@@ -236,10 +236,10 @@ body.vintage wallpaper->section:not(#bomb) {
   var(--bg-dark);
 }
 
-body.vintage.dark :is(#score, #bomb, #pieces) {
+body.vintage.dark #minos_glowstick_click :is(#score, #bomb, #pieces) {
  background-color: unset;
 }
 
-body.vintage mino- {
+body.vintage #minos_glowstick_click mino- {
  box-shadow: var(--deep-outset);
 }

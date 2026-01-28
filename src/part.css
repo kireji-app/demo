@@ -30,10 +30,13 @@ body {
  --system-ui-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Mono", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Consolas", "Courier New", monospace;
  --menu-tween: 0;
  --h: 100vh;
- --h: 100dvh;
  --warning-height: 28px;
  --wallpaper-height: calc(var(--h) - var(--task-bar-height) - var(--warning-height));
  --wallpaper-width: 100vw;
+ --padding: calc(3.5 * var(--spacing));
+ --gap: calc(2.5 * var(--spacing));
+ --scrollbar-width: 20px;
+ --radius: calc(var(--spacing) / 2.5);
  overscroll-behavior: none;
  margin: 0;
  height: var(--h);
@@ -46,9 +49,8 @@ body {
 }
 
 wallpaper- {
- --padding: calc(3.5 * var(--spacing));
- --gap: calc(2.5 * var(--spacing));
- --radius: calc(var(--spacing) / 2.5);
+ --app-height: var(--wallpaper-height);
+ --app-width: var(--wallpaper-width);
  position: fixed;
  top: var(--warning-height);
  height: var(--wallpaper-height);
@@ -57,11 +59,12 @@ wallpaper- {
  overflow: hidden;
  overflow: clip;
  touch-action: manipulation;
- --scrollbar-width: 20px;
 }
 
 @media (width < 640px) {
- wallpaper- {
+
+ html,
+ body {
   --padding: var(--spacing);
   --gap: calc(1.5 * var(--spacing));
  }
