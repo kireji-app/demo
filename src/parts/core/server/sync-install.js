@@ -179,7 +179,7 @@ const httpServer = require('http').createServer((request, response) => logServer
     if (pathname.startsWith("/apple-touch-icon") || pathname.startsWith("/mstile-") || ["/favicon.ico"].includes(pathname)) {
      status = 200
      head = { 'Content-Type': 'image/png', ...securityHeader }
-     body = Buffer.from(_.application["part.png"], 'base64')
+     body = Buffer.from(_.applications[host]["part.png"], 'base64')
      logMessage = "Serving Icon"
      break respond
     }
