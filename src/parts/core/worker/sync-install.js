@@ -15,13 +15,13 @@ globalThis.onfetch = event => logServerScope(
    respond: {
 
     if (searchParams.get("from")) {
-     status = 444
+     status = 999
      logMessage = "Updating Version"
      break respond
     }
 
     if (pathname === '/-v') {
-     status = 444
+     status = 999
      logMessage = "Serving Version"
      break respond
     }
@@ -61,9 +61,9 @@ globalThis.onfetch = event => logServerScope(
     event.respondWith(Promise.reject(metaError))
    }
   } finally {
-   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, get 302() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 444: `↪`, 500: "!", 503: `#`, }[status])
+   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, get 302() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 999: `↪`, 500: "!", 503: `#`, }[status])
 
-   if (status === 444) {
+   if (status === 999) {
     // Let the server field the request.
     return
    }

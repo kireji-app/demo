@@ -147,7 +147,7 @@ const httpServer = require('http').createServer((request, response) => logServer
     */
 
     if (isLocalRequest && !(host in _.applications)) {
-     /* This is handled by NGINX when not testing locally. */
+     /* This is handled by the reverse proxy when not testing locally. */
      if (host && host.startsWith("www."))
       host = host.slice(4)
 
@@ -252,7 +252,7 @@ const httpServer = require('http').createServer((request, response) => logServer
     logMessage = "Meta Error"
    }
   } finally {
-   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, get 301() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 444: `↪`, 500: "!", 503: `#`, }[status])
+   log(logMessage, status, { 200: `✓`, get 302() { return `↪ ${head.Location}` }, get 301() { return `↪ ${head.Location}` }, 304: "♻", 400: "✕", 404: "?", 500: "!", 503: `#`, }[status])
    response.writeHead(status, head)
    response.end(body)
   }
