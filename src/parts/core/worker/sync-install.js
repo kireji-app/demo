@@ -25,6 +25,7 @@ globalThis.onfetch = event => logServerScope(
      logMessage = "Serving Version"
      break respond
     }
+
     if (pathname === `/${_.version}/`) {
      status = 301
      head = { 'Location': `/${_.version}/${_.landingHash}/` }

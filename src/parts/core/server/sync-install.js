@@ -132,18 +132,20 @@ const httpServer = require('http').createServer((request, response) => logServer
      break respond
     }
 
-    if (["/robots.txt", "/ads.txt", "/sitemap.txt"].includes(pathname))
+    if (["/robots.txt", "/ads.txt", "/sitemap.txt", "/browserconfig.xml", "/mstile-150x150.png"].includes(pathname) || pathname.startsWith("/apple-touch-icon"))
      throw `Config 404:${pathname.slice(1)}`
 
-    if (pathname.startsWith("/.well-known/"))
-     throw `Config 404:.well-known`
+    if (pathname.startsWith("/.well-known"))
+     throw `Config 404:.well-known folder`
+
+    if (pathname.endsWith(".map"))
+     throw `Config 404:.map file`
 
     if (["/favicon.ico"].includes(pathname))
      throw `Favicon`
 
     if (isLocalRequest && !(host in _.applications)) {
-     /* 301 forward invalid application requests.
-        This is handled by NGINX when not testing locally. */
+     /* This is handled by NGINX when not testing locally. */
      if (host && host.startsWith("www."))
       host = host.slice(4)
 

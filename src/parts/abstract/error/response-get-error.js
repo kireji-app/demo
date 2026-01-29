@@ -1,12 +1,11 @@
 const payload = {}
 
 if (ERROR_STRING.startsWith("Favicon")) {
- const version = ERROR_STRING.split(": ").pop()
  payload.logMessage = "Favicon"
  payload.status = 404
  payload.body = `<span class=thin>📜 favicon.ico -</span><span>We haven't had that spirit here since 1999.</span>`
 } else if (ERROR_STRING.startsWith("Config 404")) {
- const version = ERROR_STRING.split(": ").pop()
+ const version = ERROR_STRING.split(":").pop()
  payload.logMessage = "Config 404"
  payload.status = 404
  payload.body = `<span>We don't have</span><span class=thin>${ERROR_STRING.split(":").pop()}</span><span>... but we have <a href="/sitemap.xml">sitemap.xml</a> and <a href="/humans.txt">humans.txt</a>.</span>`
