@@ -17,11 +17,11 @@ if (ERROR_STRING.startsWith("Favicon")) {
 } else if (ERROR_STRING.startsWith("Bad Canonical Path: ") || ERROR_STRING.startsWith("Unsupported `from` ") || ERROR_STRING.startsWith("Pathname missing ")) {
  payload.logMessage = "Bad Path"
  payload.status = 400
- payload.body = "<span class=thin>Your request</span><span>was not valid.</span>"
+ payload.body = "<span class=thin>The resource you requested</span><span>was removed or never existed.</span>"
 } else if (ERROR_STRING.startsWith("Bad Hash Character: ")) {
  const character = ERROR_STRING.split(": ").pop()
  payload.logMessage = "Bad Hash"
- payload.status = 400
+ payload.status = 422
  payload.body = `<span>Path contained unsupported character "${character}".</span>`
 } else if (ERROR_STRING.startsWith("Unknown Canonical Path: ")) {
  const path = ERROR_STRING.split(": ").pop()
