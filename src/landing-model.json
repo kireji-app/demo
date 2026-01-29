@@ -35,9 +35,9 @@
   "glowstick": {
    "minos": {
     "pieces": {
-     "piece0": 17,
-     "piece1": 28,
-     "piece2": 11
+     "piece0": 11,
+     "piece1": 3,
+     "piece2": 7
     },
     "board": {
      "width": 12,
