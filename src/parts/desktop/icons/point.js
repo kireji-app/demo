@@ -13,7 +13,7 @@ pointer.handle({
    const itemMask = 1n << BigInt(TARGET_ELEMENT.getAttribute("data-index"))
 
    if (_.parts.core.hotKeys.combo === "shift") {
-    warn('handle ranged selection here')
+    debug('handle ranged selection here')
    } else if (_.parts.core.hotKeys.combo === "context") {
     mask ^= itemMask
    } else {
@@ -57,7 +57,7 @@ pointer.handle({
    this.dragBox?.remove()
    this.dragBox = null
    if (desktopIcons.routeID !== selectionStart) {
-    warn('determine new focus item now')
+    debug('determine new focus item now')
    } else {
     focusIcon?.focus()
    }

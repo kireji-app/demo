@@ -1,3 +1,3 @@
 part.define({
- cardinality: { value: 1000n }
+ cardinality: { value: 1_000n }
 })

@@ -9,6 +9,7 @@ declare interface IMinosGameBoard
   * 
   * The client pixel information of the board. */
  readonly clientSize: IMinosGameBoardClientSize
+ readonly scramble(): void
 
  // Runtime Properties.
  /** An array of coordinate objects relating each tile index to its coordinates. */

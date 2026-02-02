@@ -1,0 +1,6 @@
+{
+ "extends": "mix",
+ "open": [
+  "TARGET_PIECE"
+ ]
+}

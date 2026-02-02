@@ -1,0 +1,1 @@
+return `Confirm trading piece #${minosTradeModal.target.routeID} with replacement #${part.routeID}?<br><button ${part.pointAttr("submit")}>Yes</button><button ${part.pointAttr("cancel")}>No</button>`

@@ -3,6 +3,7 @@ declare interface IMinosGameScore
  IWebComponent {
 
  // Subparts.
+ readonly cash: IMinosGameScoreCash
  readonly wins: IMinosGameScoreWins
 }
 

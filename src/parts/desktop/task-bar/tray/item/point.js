@@ -1,15 +1,15 @@
 pointer.handle({
  down() {
-  warn(part.host + ' down (unhandled)')
+  debug(part.host + ' down (unhandled)')
  },
  drag() {
-  warn(part.host + ' drag (unhandled)')
+  debug(part.host + ' drag (unhandled)')
  },
  drop() {
-  warn(part.host + ' drop (unhandled)')
+  debug(part.host + ' drop (unhandled)')
  },
  click() {
-  warn(part.host + ' click (unhandled)')
+  debug(part.host + ' click (unhandled)')
  },
  POINTER_EVENT,
  TARGET_ELEMENT,

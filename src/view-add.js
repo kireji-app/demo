@@ -1,9 +1,11 @@
 // The base HTML is always server-rendered, making this a hydrating task.
 
-const manifestLink = Q('link[rel="manifest"]')
+if (!production) {
+ const manifestLink = Q('link[rel="manifest"]')
 
-if (!manifestLink.hasAttribute("href"))
- manifestLink.setAttribute("href", `/${_.version}/manifest.json`)
+ if (!manifestLink.hasAttribute("href"))
+  manifestLink.setAttribute("href", `/${_.version}/manifest.json`)
+}
 
 const faviconLinks = document.querySelectorAll('link.favicon')
 

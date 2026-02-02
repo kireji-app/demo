@@ -15,15 +15,40 @@
  --grid-size: var(--mino);
 }
 
+#minos_glowstick_click[data-modal] #board,
+#minos_glowstick_click:not(.dragging) #trade,
+#minos_glowstick_click:not([data-modal]) #modal,
+#minos_glowstick_click.dragging #score {
+ opacity: 0;
+ pointer-events: none;
+}
+
+#minos_glowstick_click>#modal {
+ display: grid;
+ grid-template-rows: 1fr 5fr;
+ overflow: hidden;
+}
+
+#minos_glowstick_click>#modal>div {
+ min-width: 0;
+ min-height: 0;
+ overflow-y: scroll;
+}
+
 #minos_glowstick_click #board {
  overflow: hidden;
 }
 
 #minos_glowstick_click #score,
-#minos_glowstick_click #pieces {
+#minos_glowstick_click #pieces,
+#minos_glowstick_click #trade {
  --grid-size: calc(var(--mino) * 4);
  display: grid;
  place-items: center;
+}
+
+#minos_glowstick_click #bomb {
+ pointer-events: none;
 }
 
 #minos_glowstick_click mino- {
@@ -66,7 +91,7 @@
  content: "✺";
 }
 
-#minos_glowstick_click .dragging.bomb.radial::before {
+#minos_glowstick_click #pieces>minos-.dragging.bomb.radial::before {
  content: "";
  position: absolute;
  left: calc(-4.5 * var(--mino));
@@ -77,8 +102,8 @@
  background-color: #ff00007f;
 }
 
-#minos_glowstick_click .dragging.bomb.crosshair::before,
-#minos_glowstick_click .dragging.bomb.crosshair::after {
+#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::before,
+#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::after {
  content: "";
  position: absolute;
  left: calc(var(--mino) / 4);
@@ -88,12 +113,12 @@
  background-color: #ff00007f;
 }
 
-#minos_glowstick_click .dragging.bomb.crosshair::before {
+#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::before {
  top: calc(-2 * var(--mino));
  bottom: calc(-2 * var(--mino));
 }
 
-#minos_glowstick_click .dragging.bomb.crosshair::after {
+#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::after {
  left: calc(-2 * var(--mino));
  right: calc(-2 * var(--mino));
 }
@@ -117,13 +142,15 @@
 @container application (aspect-ratio > 1 / 1) {
 
  #minos_glowstick_click #score,
- #minos_glowstick_click #pieces {
+ #minos_glowstick_click #pieces,
+ #minos_glowstick_click #trade {
   width: var(--grid-size);
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr;
  }
 
- #minos_glowstick_click #score {
+ #minos_glowstick_click #score,
+ #minos_glowstick_click #trade {
   left: calc((var(--app-width) - var(--side)) / 2 - var(--grid-size) - (var(--unit) * 2));
  }
 
@@ -135,13 +162,15 @@
 @container application (aspect-ratio <=1 / 1) {
 
  #minos_glowstick_click #score,
- #minos_glowstick_click #pieces {
+ #minos_glowstick_click #pieces,
+ #minos_glowstick_click #trade {
   height: var(--grid-size);
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr;
  }
 
- #minos_glowstick_click #score {
+ #minos_glowstick_click #score,
+ #minos_glowstick_click #trade {
   top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) - var(--grid-size) - (var(--unit) * 2));
  }
 
@@ -176,6 +205,12 @@ body.modern #minos_glowstick_click>section:not(#bomb) {
  background-size: var(--grid-size);
 }
 
+body.modern #minos_glowstick_click.will-trade #trade {
+ box-shadow:
+  inset 0 0 0 var(--px) #00ff00,
+  0 0 0 var(--px) #00ff00;
+}
+
 body.modern #minos_glowstick_click mino- {
  background-color: var(--accent-mode-est);
  box-shadow:
@@ -207,7 +242,7 @@ body.modern.dark #minos_glowstick_click mino- {
  background-color: var(--accent-mode);
 }
 
-body.vintage #minos_glowstick_click :is(#score, #bomb, #pieces)::before {
+body.vintage #minos_glowstick_click :is(#score, #bomb, #pieces, #trade)::before {
  content: "";
  position: absolute;
  left: -2px;
@@ -236,7 +271,7 @@ body.vintage #minos_glowstick_click>section:not(#bomb) {
   var(--bg-dark);
 }
 
-body.vintage.dark #minos_glowstick_click :is(#score, #bomb, #pieces) {
+body.vintage.dark #minos_glowstick_click :is(#score, #bomb, #pieces, #trade) {
  background-color: unset;
 }
 

@@ -1,5 +1,5 @@
 if (typeof MODEL !== "number")
- throw new TypeError(`Model To RouteID Error: Part "${part.host}" only accepts a number as its model.`)
+ throw new TypeError(`Model To RouteID Error: Part "${part.host}" only accepts a number as its model (found ${typeof MODEL}).`)
 
 const resultRouteID = BigInt(MODEL)
 

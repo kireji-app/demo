@@ -1,7 +1,8 @@
 declare interface IMinosGamePiece
  extends IPart<IMinosGamePieces, null>,
  IWebComponent,
- IMinosGamePiecePrimitive {
+ IMinosGamePrimitive,
+ IMinosGamePrimitives {
 
  // Serialized Properties.
  readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
@@ -15,33 +16,15 @@ declare interface IMinosGamePiece
  // Runtime Properties.
  /** The cached array of tiles where the piece can be placed. */
  readonly allowedTiles: Set<IMino>
- /** The array of all available mino primitives. */
- readonly allPrimitives: IMinosGamePiecePrimitive[]
- readonly easyPrimitives: IMinosGamePiecePrimitive[]
- readonly normalPrimitives: IMinosGamePiecePrimitive[]
- readonly hardPrimitives: IMinosGamePiecePrimitive[]
- readonly crosshairBomb: IMinosGamePiecePrimitive
- readonly radialBomb: IMinosGamePiecePrimitive
  readonly easyCardinality: bigint
  readonly normalCardinality: bigint
  readonly hardCardinality: bigint
  readonly bombCardinality: bigint
  /** The currently assigned primitive, as determined by the current route ID. */
- readonly primitive: IMinosGamePiecePrimitive
+ readonly primitive: IMinosGamePrimitive
 }
 
 declare const minosPiece: IMinosGamePiece
-
-declare interface IMinosGamePiecePrimitive {
-
- // Serialized Properties.
- /** The width of the bounding box of the piece. */
- readonly width: number
- /** The height of the bounding box of the piece. */
- readonly height: number
- /** The set of minos that compose the piece, with coordinates relative to the origin at the top left corner of the piece's bounding box. */
- readonly minos: IMino[]
-}
 
 declare interface IMinosGamePiecePointerConfig
  extends IPointerConfig {
@@ -55,4 +38,8 @@ declare interface IMinosGamePiecePointerConfig
  readonly dropMarker: HTMLElement,
  /** If defined, the valid drop position of the dragged game piece, measured in minos. */
  readonly dropPosition?: { x: number, y: number },
+ /** The bounding rectangle of the drop zone where pieces can be traded for other pieces. */
+ readonly tradeZone: DOMRect
+ /** If true, a piece is currently being held over the drop zone. */
+ readonly trade: boolean
 }

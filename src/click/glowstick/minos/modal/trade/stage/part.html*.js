@@ -1,0 +1,1 @@
+return minosTradeStage.arm["part.html"]

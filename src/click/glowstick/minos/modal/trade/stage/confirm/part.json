@@ -1,0 +1,10 @@
+{
+ "submit": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ],
+ "cancel": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ]
+}
