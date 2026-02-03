@@ -70,7 +70,7 @@ pointer.handle({
   desktopIcons.setRouteID(0n)
 
   const application = desktopIcons.superset[Number(TARGET_ELEMENT.getAttribute("data-index"))]
-  const targetLocation = (_.local ? `http://${application.host}.localhost:3000` : `https://${application.host}`) + encodePathname(_.routeID)
+  const targetLocation = (_.local ? `http://${application.host}.localhost:${_.port}` : `https://${application.host}`) + encodePathname(_.routeID)
   location = targetLocation
  },
  getIntersectionMask() {

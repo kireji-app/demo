@@ -26,7 +26,7 @@ declare interface IEcosystem
  readonly "ETag": string
  /** The current unix timestamp, acquired using the high-precision performance.now() + performance.timeOrigin. */
  readonly "now": DOMHighResTimeStamp
- /** The host of the desired default app. The server will redirect to this when the user visits localhost:3000 to test locally. */
+ /** The host of the desired default app. The server will redirect to this when the user visits localhost at the designated port to test locally. */
  readonly "defaultApplicationHost": string
  /** A stylesheet containing CSS variables with `url()` values that correspond to images. Used to seamlessly hand-off image rendering from the server-rendered page to the client-rendered page without modifying the DOM. */
  readonly "images.css": string
@@ -34,6 +34,8 @@ declare interface IEcosystem
  readonly "manifest.json": string
  /** A JSON object serializing the desired landing model of the ecosystem. */
  readonly "landing-model.json": string
+ /** The internal port (typically between 3000 and 4000) where the server will be hosted for both the reverse proxy in production and when testing locally via `localhost`. */
+ readonly "port": number
  /** Returns a css that inlines `early-*` compressed images for enhancing the first page appearance when using server-side rendering. It scans the given body HTML for usages of the early images to optimize inclusion. */
  readonly getImagesEarly(BODY_HTML: string): string
  /** Handles standard anchor link clicks in one of four ways:
@@ -136,7 +138,7 @@ class SourceMappedFile {
  * 1. "server"
  *     - Unpacked in a clone of the project git repo in node.
  *     - It's called by `node build` in order to pack the repo into a single client artifact and run as a backend to serve that artifact and to server-render HTML.
- *     = Its state is set by http requests on port 3000.
+ *     = Its state is set by http requests at the designated port.
  * 3. "worker"
  *     - Packed and deployed as the browser's ServiceWorker.
  *     - It's booted by the browser after a client registers it.

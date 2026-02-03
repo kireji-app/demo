@@ -317,28 +317,27 @@ function ƒ(_) {
    return decodeSegment(segments[2])
   }
 
- logScope(1, `\n${welcomeMessage}`, log => {
-  log(`
-
+ logScope(0, `\n${welcomeMessage}`, bootLog => {
+  bootLog(`
  ╭┈┈┈┈┈┈┈┈┈┈┈ BOOT BEGINNING ┈┈┈┈┈┈┈┈┈┈┈╮
  ┊ Now booting the Kireji Web Framework ┊
  ╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯
-
 `)
+  const buildStartTime = Date.now()
   if (environment === "server" && require.main === module) {
    const stats = { fileCount: 0, domainCount: 0 }
-   logScope(1, "Archiving Repository", log => {
+   logScope(1, "Archiving Repository", archiveLog => {
     let lastLogFlush = Date.now()
     const
-     packingStartTime = Date.now(),
-     { extname } = require("path"),
      { readdirSync: readFolder, readFileSync: readFile } = require("fs"),
      batchedLogs = [],
-     bufferLog = msg => {
-      const now = Date.now()
+     bufferLog = (verbosity, msg) => {
+      if (verbosity > _.verbosity)
+       return
       batchedLogs.push(msg)
+      const now = Date.now()
       if (now - lastLogFlush > 17 && batchedLogs.length) {
-       log(batchedLogs.join("\n"))
+       archiveLog(batchedLogs.join("\n"))
        batchedLogs.length = 0
        lastLogFlush = now
       }
@@ -349,19 +348,19 @@ function ƒ(_) {
       for (const entry of readFolder(folderPath, { withFileTypes: true })) {
        const itemName = entry.name
        if (itemName.startsWith(".") || itemName === "Icon" || (!host && itemName === "build.js") || itemName.endsWith(".ts")) {
-        bufferLog("".padEnd(depth, " ") + `⬚ ${itemName.padEnd(20, " ")} - ignored`)
+        bufferLog(4, "".padEnd(depth, " ") + `⬚ ${itemName.padEnd(20, " ")} - ignored`)
         continue
        }
        const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
        if (entry.isDirectory()) {
-        bufferLog("".padEnd(depth, "  ") + `▼ ${itemName}/`)
+        bufferLog(2, "".padEnd(depth, "  ") + `▼ ${itemName}/`)
         readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}), depth + 1)
        } else if (entry.isFile()) filenames.push([itemName, filePath])
       }
       for (const [filename, filePath] of filenames) {
        const isBinary = filename.endsWith("png") || filename.endsWith("gif")
        const content = readFile(filePath, isBinary ? "base64" : "utf-8")
-       bufferLog("".padEnd(depth, " ") + `${isBinary ? "▣" : "≡"} ${filename}`)
+       bufferLog(3, "".padEnd(depth, " ") + `${isBinary ? "▣" : "≡"} ${filename}`)
        part[filename] = content
        stats.fileCount++
       }
@@ -371,9 +370,9 @@ function ƒ(_) {
     readRecursive("", "./", _, 0)
 
     if (batchedLogs.length)
-     log(batchedLogs.join("\n"))
+     archiveLog(batchedLogs.join("\n") + "\n")
 
-    log(`\nPacked in ${Date.now() - packingStartTime}ms`)
+    archiveLog(`Archived in ${Date.now() - buildStartTime}ms`)
    })
 
    logScope(2, "\nLogging Domain Stats", () => {
@@ -383,8 +382,9 @@ function ƒ(_) {
     }], "table")
    })
   }
-  logScope(3, "\nRecursively Hydrating Parts", () => {
+  logScope(1, "\nRecursively Hydrating Parts", hydrateLog => {
    const
+    hydrationStartTime = Date.now(),
     instances = [],
     allParts = [],
     imageSources = [],
@@ -636,6 +636,7 @@ function ƒ(_) {
 
    hydrateRecursive(_)
    countAndSortInheritorsRecursive(_.parts.abstract.part)
+   hydrateLog(`\nParts hydrated in ${Date.now() - hydrationStartTime}ms.`)
 
    _.define({ "..": { value: null } })
 
@@ -650,7 +651,7 @@ function ƒ(_) {
     })
 
     for (const part of instances) {
-     logScope(1, `${part.host}`, log => {
+     logScope(3, `${part.host}`, log => {
 
       if (_.parts.abstract.application.isPrototypeOf(part)) {
 
@@ -667,13 +668,15 @@ function ƒ(_) {
     _.defaultApplicationHost ??= Object.keys(_.menuApplications)[0]
    })
 
-   logScope(3, "\nBuilding Part Instances", () => {
+   logScope(1, "\nBuilding Part Instances", buildLog => {
+    const buildStartTime = Date.now()
     for (const part of instances)
      part.startBuild()
+    buildLog(`Parts built in ${Date.now() - buildStartTime}ms.`)
    })
 
-   logScope(1, "\nLogging Part Entropy", () => {
-    logEntropy(1, ...instances)
+   logScope(2, "\nLogging Part Entropy", () => {
+    logEntropy(2, ...instances)
    })
 
    logScope(1, "\nInstalling Facets", () => {
@@ -688,7 +691,7 @@ function ƒ(_) {
    })
   })
 
-  logScope(3, "\nComputing Landing Hash & Route ID", log => {
+  logScope(1, "\nComputing Landing Hash & Route ID", hashLog => {
 
    const landingModel = JSON.parse(_["landing-model.json"])
    const landingRouteID = _.modelToRouteID(landingModel)
@@ -700,29 +703,30 @@ function ƒ(_) {
     landingRouteID: { value: landingRouteID },
    })
 
-   log("Landing hash: " + _.landingHash)
+   hashLog("Landing hash: " + _.landingHash)
   })
 
   logScope(1, "\nValidating Build", () => {
    _.validate()
   })
 
-  log(`
-
+  bootLog(`
  ╭┈┈┈┈┈┈┈┈┈┈┈ BOOT SUCCEEDED ┈┈┈┈┈┈┈┈┈┈┈╮
+ ┊ Booted in ${(Date.now() - buildStartTime + "ms.").padEnd(27, " ")}┊
+ ┊                                      ┊
  ┊ End of synchronous script execution. ┊
  ╰┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈╯
-
 `)
  })
 }
 
 ƒ({
- verbosity: 100,
+ verbosity: 0,
  // TODO: Fix source mapping bugs.
  mapping: false,
  change: "major",
  hangHydration: 0,
  haltHydration: false,
  defaultApplicationHost: "desktop.parts",
+ port: 3000
 })

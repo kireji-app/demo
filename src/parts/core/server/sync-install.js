@@ -84,11 +84,11 @@ const
 module.exports = currentExports
 
 if (require.main !== module) {
- logScope(0, "Module is not main. Skipping HTTP server.")
+ logScope(0, "Server Ready - Proxy Module")
  return
 }
 
-logScope(0, `\nCreating Deployment Artifact`, log => {
+logScope(1, `\nCreating Deployment Artifact`, log => {
  const
   fs = require("fs"),
   archiveFolder = '../.versions',
@@ -116,7 +116,7 @@ const httpServer = require('http').createServer((request, response) => logServer
   let status, head = {}, body, logMessage
   let host = request.headers.host
   const { href, pathname, searchParams } = new URL(`https://${host}${request.url}`)
-  const devSuffix = "localhost:3000"
+  const devSuffix = "localhost:" + _.port
   const isLocalRequest = host.endsWith(devSuffix)
   if (isLocalRequest)
    host = host.slice(0, -1 - devSuffix.length)
@@ -259,4 +259,4 @@ const httpServer = require('http').createServer((request, response) => logServer
  }
 ))
 
-httpServer.listen(3000, () => logScope(0, "HTTP server active on port 3000."))
+httpServer.listen(_.port, () => logScope(0, `Server Ready - http://localhost:${_.port}`))

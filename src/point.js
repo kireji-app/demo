@@ -10,7 +10,7 @@ pointer.handle({
   if (host !== _.application.host) {
    if (host in _.applications) {
     if (pathname === "/" && !hash) {
-     const targetLocation = (_.local ? `http://${host}.localhost:3000` : `https://${host}`) + encodePathname(_.routeID)
+     const targetLocation = (_.local ? `http://${host}.localhost:${_.port}` : `https://${host}`) + encodePathname(_.routeID)
      location = targetLocation
     } else warn(`Cross-host navigation and canonical pathname are not yet handled because of ambiguity between simply changing applications and linking to a canonical home page (while attempting to navigate to "${TARGET_ELEMENT.href}").`)
    } else window.open(TARGET_ELEMENT.href, '_blank')
