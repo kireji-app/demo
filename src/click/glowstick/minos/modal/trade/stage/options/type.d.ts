@@ -1,5 +1,6 @@
 declare interface IMinosGameModelTradeOptions
- extends IScroller<IMinosGameModalTradeStage> {
+ extends IScroller<IMinosGameModalTradeStage>,
+ IWebComponent {
 
 }
 

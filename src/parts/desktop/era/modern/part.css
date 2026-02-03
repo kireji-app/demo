@@ -53,8 +53,8 @@ task-menu {
  opacity: var(--menu-tween);
 }
 
-button,
-menu-button {
+task-bar button,
+task-bar menu-button {
  height: var(--icon-size);
  line-height: var(--icon-size);
  cursor: pointer;

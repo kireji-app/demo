@@ -1,1 +1,1 @@
-return "$" + minosCash.routeID
+return "$" + minosCash.routeID.toLocaleString()

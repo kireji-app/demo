@@ -20,5 +20,8 @@ if (minosPiece.primitive === minosPiece.radialBomb) {
 // Change this piece (which updates its placeability).
 minosPiece.randomize()
 
+// Increment the move count (needed for determining certain achievements).
+minos.score.moves.count()
+
 // Update the status of the game.
 minos.checkState()

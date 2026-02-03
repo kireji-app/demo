@@ -1,0 +1,5 @@
+{
+ "abstract": true,
+ "extends": "trophy...",
+ "examine": []
+}

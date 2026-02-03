@@ -1,4 +1,6 @@
 {
  "abstract": true,
- "toggle": []
+ "toggle": [],
+ "clear": [],
+ "set": []
 }

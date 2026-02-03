@@ -4,6 +4,7 @@ declare interface IMinosGameModalTrade
  // Subparts.
  readonly target: IMinosGameModalTradePage
  readonly stage: IMinosGameModalTradeStage
+ readonly scroller: IScroller<IMinosGameModalTrade>
 
  // Serialized Properties.
  /** Opens the trade options for the given piece. */

@@ -1,1 +1,1 @@
-return minosTradeStage.arm["part.html"]
+return match.arm["part.html"]

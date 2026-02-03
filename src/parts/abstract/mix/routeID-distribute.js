@@ -1,14 +1,19 @@
 mix.updateRouteID(ROUTE_ID)
 
-const factors = [...mix]
+if (ROUTE_ID === -1n) {
+ for (const factor of mix)
+  factor.distributeRouteID(-1n)
+} else {
+ const factors = [...mix]
 
-for (let i = factors.length - 1; i >= 0; i--) {
- const factor = factors[i]
- const placeValue = mix.placeValues.get(factor)
- const routeID = ROUTE_ID / placeValue
+ for (let i = factors.length - 1; i >= 0; i--) {
+  const factor = factors[i]
+  const placeValue = mix.placeValues.get(factor)
+  const routeID = ROUTE_ID / placeValue
 
- if (factor.routeID !== routeID)
-  factor.distributeRouteID(routeID)
+  if (factor.routeID !== routeID)
+   factor.distributeRouteID(routeID)
 
- ROUTE_ID %= placeValue
+  ROUTE_ID %= placeValue
+ }
 }

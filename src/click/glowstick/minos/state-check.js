@@ -2,12 +2,13 @@ minos.lock()
 
 // Detonate bomb.
 if (minosBomb.arm !== minosBomb.none) setTimeout(() => {
- let maskedRouteID = minos.board.routeID
+ let maskedRouteID = minosBoard.routeID
  let earnings = 0n
- const tile = minos.board.allTiles[Number(minosBomb.arm.routeID)]
- const boardSize = BigInt(minos.board.width)
+ const tile = minosBoard.allTiles[Number(minosBomb.arm.routeID)]
+ const boardSize = BigInt(minosBoard.width)
+ const isRadialBomb = minosBomb.arm === minosBomb.radial
 
- if (minosBomb.arm === minosBomb.radial) {
+ if (isRadialBomb) {
   const radius = 5n
   const r2 = radius * radius
   let radialMask = 0n
@@ -28,10 +29,12 @@ if (minosBomb.arm !== minosBomb.none) setTimeout(() => {
   maskedRouteID &= ~colMask
  }
 
- minos.bomb.setRouteID(0n)
+ minosBomb.setRouteID(0n)
 
  if (maskedRouteID !== minosBoard.routeID) {
   const cachedActiveTiles = minosBoard.activeTiles.size
+  if (cachedActiveTiles === 1 && isRadialBomb && minosScore.trophies.special.overkill.routeID !== 1n)
+   minosScore.trophies.special.overkill.setRouteID(1n)
   minosBoard.setRouteID(maskedRouteID)
   const earnings = cachedActiveTiles - minosBoard.activeTiles.size
   debug(`Earned $${earnings}!`)
@@ -39,25 +42,27 @@ if (minosBomb.arm !== minosBomb.none) setTimeout(() => {
   minosPieces.forEach(piece => piece.recompute())
  }
 
+ minosScore.usedBomb.set()
+ minosScore.trophies.checkState()
  minos.checkState()
 }, 250)
 
 // Clear row or column.
 else if (minosBoard.filledRows.size || minosBoard.filledColumns.size) setTimeout(() => {
- let maskedRouteID = minos.board.routeID
+ let maskedRouteID = minosBoard.routeID
  let earnings = 0
- let multiplier = 1
+ let multiplier = 0
  const cachedActiveTiles = minosBoard.activeTiles.size
- for (const row of minos.board.filledRows) {
-  const rowSize = BigInt(minos.board.width)
+ for (const row of minosBoard.filledRows) {
+  const rowSize = BigInt(minosBoard.width)
   const rowTarget = BigInt(row)
   const rowMask = ((1n << rowSize) - 1n) << (rowTarget * rowSize)
   maskedRouteID &= ~rowMask
   earnings += 10
   multiplier++
  }
- for (const column of minos.board.filledColumns) {
-  const N = BigInt(minos.board.width)
+ for (const column of minosBoard.filledColumns) {
+  const N = BigInt(minosBoard.width)
   const colTarget = BigInt(column)
   const oneBitPerRow = ((1n << (N * N)) - 1n) / ((1n << N) - 1n)
   const colMask = oneBitPerRow << colTarget
@@ -70,6 +75,7 @@ else if (minosBoard.filledRows.size || minosBoard.filledColumns.size) setTimeout
  minosPieces.forEach(piece => piece.recompute())
  debug(`Earned $${earnings} * ${multiplier}!`)
  minosCash.earn(earnings * multiplier)
+ minosScore.trophies.checkState()
  minos.checkState()
 }, 1)
 
@@ -82,20 +88,40 @@ else if (minosBoard.routeID === 0n) setTimeout(() => {
   minosCash.earn(1000)
   minosBoard.scramble()
   minosPieces.scramble()
+  if (!minosScore.usedBomb.model)
+   minosScore.trophies.special.pacifist.set()
+  if (minosScore.moves.routeID <= 20n) {
+   minosScore.trophies.moveLimit[20].set()
+   if (minosScore.moves.routeID <= 10n) {
+    minosScore.trophies.moveLimit[10].set()
+    if (minosScore.moves.routeID <= 4n)
+     minosScore.trophies.moveLimit[4].set()
+   }
+  }
+  minosScore.usedBomb.clear()
+  minosScore.moves.clear()
+  minosScore.trophies.checkState()
   minos.checkState()
  }, 1500)
 }, 1)
 
 // Acknowledge locked board.
-else if (![...minos.pieces].some(piece => piece.allowedTiles.size > 0)) setTimeout(() => {
+else if (![...minosPieces].some(piece => piece.allowedTiles.size > 0)) setTimeout(() => {
  error("Error: You lost.")
  setTimeout(() => {
-  minosCash.reset()
+  if (!minosScore.trophies.basic.lock.isEarned)
+   minosScore.trophies.basic.lock.setRouteID(1n)
   minosBoard.scramble()
   minosPieces.scramble()
+  minosScore.usedBomb.clear()
+  minosScore.moves.clear()
+  minosScore.trophies.checkState()
   minos.checkState()
  }, 1500)
 }, 1)
 
 // Continue game normally.
-else minos.unlock()
+else {
+ minosScore.trophies.checkState()
+ minos.unlock()
+}

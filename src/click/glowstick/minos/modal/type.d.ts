@@ -3,7 +3,7 @@ declare interface IMinosGameModal
  IWebComponent {
 
  // Subparts.
- readonly achievements: IMinosGameModalPage
+ readonly trophies: IMinosGameModalTrophies
  readonly none: IMinosGameModalPage
  readonly trade: IMinosGameModalTrade
 }

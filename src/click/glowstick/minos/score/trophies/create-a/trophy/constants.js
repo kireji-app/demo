@@ -1,0 +1,1 @@
+const minosShapeTrophy = this

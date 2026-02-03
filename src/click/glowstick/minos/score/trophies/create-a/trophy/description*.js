@@ -1,0 +1,1 @@
+return `Clear the board, except for a perfect ${minosShapeTrophy.key} by ${minosShapeTrophy.key} square.`

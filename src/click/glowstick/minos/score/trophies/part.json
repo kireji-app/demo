@@ -1,0 +1,9 @@
+{
+ "extends": "mix",
+ "state-check": [],
+ "recompute": [],
+ "modal-view": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ]
+}

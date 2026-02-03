@@ -709,5 +709,6 @@ function ƒ(_) {
  mapping: false,
  change: "major",
  hangHydration: 0,
+ haltHydration: false,
  defaultApplicationHost: "desktop.parts",
 })

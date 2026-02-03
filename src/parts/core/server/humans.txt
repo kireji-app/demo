@@ -13,5 +13,6 @@
 /* SITE */
  Language: English
  Standards: HTML, CSS, JS
- Tools: Debian, nginx, pm2, Let's Encrypt, Node.js, Kireji, NPM, VS Code, Git, GitHub
+ Dev Tools: Debian, nginx, pm2, Let's Encrypt, Node.js, Kireji, NPM, VS Code, Git, GitHub
+ Art Tools: ProCreate, GIMP, Blender
  GitHub: https://github.com/kireji-app/demo

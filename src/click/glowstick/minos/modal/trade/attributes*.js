@@ -1,0 +1,1 @@
+return `data-modal="trade.${minosTradeModal.stage.arm.key}"`

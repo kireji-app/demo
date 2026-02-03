@@ -15,12 +15,12 @@ part.define({
  dirty: { value: false, writable: true },
  routeID: { value: -1n, writable: true },
  deltaRouteID: { value: 0n, writable: true },
- enabled: { value: undefined, writable: true },
+ enabled: { value: false, writable: true },
  disabled: { value: true, writable: true },
  cardinality: { value: 1n, configurable: true },
  previousRouteID: { value: -1n, writable: true },
- wasEnabled: { value: undefined, writable: true },
- justEnabled: { value: undefined, writable: true },
- justDisabled: { value: undefined, writable: true },
+ wasEnabled: { value: false, writable: true },
+ justEnabled: { value: false, writable: true },
+ justDisabled: { value: false, writable: true },
  callbacks: { value: { add: {}, populate: {}, remove: {} } }
 })

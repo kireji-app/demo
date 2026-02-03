@@ -35,6 +35,8 @@ declare interface IMinosGamePrimitive {
  readonly height: number
  /** The set of minos that compose the piece, with coordinates relative to the origin at the top left corner of the piece's bounding box. */
  readonly minos: IMino[]
+ /** The cost of the primitive when trading. */
+ readonly price: number
 }
 
 declare interface IMinosGamePrimitives {

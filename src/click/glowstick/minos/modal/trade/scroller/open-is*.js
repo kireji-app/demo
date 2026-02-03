@@ -1,0 +1,1 @@
+return minosTradeModal.isOpen && (minosTradeModal.stage.arm === minosTradeModal.stage.options || minosTradeModal.dirty && minosTradeModal.justDisabled)
