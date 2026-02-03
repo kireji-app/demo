@@ -136,16 +136,17 @@ function ƒ(_) {
     _.gitSHA = _.$("git rev-parse HEAD").toString().trim(),
     _.version = (([M, m, p], c) => _.local ? +M && c === "major" ? `${++M}.0.0` : c === "minor" || (!+M && c === "major") ? `${M}.${++m}.0` : `${M}.${m}.${++p}` : `${M}.${m}.${p}`)(_.$("git log -1 --pretty=%s").toString().match(/^\s*(\d+\.\d+\.\d+)/)[1].split("."), _.change),
     _.modified = _.$('git show -s --format=%ci HEAD').toString().trim(),
-    _.ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`
+    _.ETag = `"${_.version}.${_.gitSHA.slice(0, 7)}${_.local ? ("." + Math.random()).slice(2, 10) : ""}"`,
+    _.name = _.$("echo \"$(basename \"$(dirname \"$PWD\")\")\"")
    ),
    "server"
   ),
   production = _.branch === "main" && environment !== "server" && !_.local,
   welcomeMessage = `
-     ▌ ▘     ▘▘ ${_.branch}
- k = ▙▘▌▛▘█▌ ▌▌ ${_.version}
-     ▛▖▌▌ ▙▖ ▌▌ ${environment}
-            ▙▌    `.slice(1)
+     ▌ ▘     ▘▘ ${_.name}
+ k = ▙▘▌▛▘█▌ ▌▌ ${_.branch}
+     ▛▖▌▌ ▙▖ ▌▌ ${_.version}
+            ▙▌  `.slice(1)
 
  // Logging Functions
  const
@@ -317,7 +318,7 @@ function ƒ(_) {
    return decodeSegment(segments[2])
   }
 
- logScope(0, `\n${welcomeMessage}`, bootLog => {
+ logScope(0, `\n${welcomeMessage}${environment}`, bootLog => {
   bootLog(`
  ╭┈┈┈┈┈┈┈┈┈┈┈ BOOT BEGINNING ┈┈┈┈┈┈┈┈┈┈┈╮
  ┊ Now booting the Kireji Web Framework ┊

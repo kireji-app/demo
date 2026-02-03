@@ -6,7 +6,7 @@ if (!("com" in model))
 if (!("ejaugust" in model.com))
  model.com.ejaugust = {}
 
-model.com.ejaugust.scroller = ""
+model.com.ejaugust.scroller = 0
 
 if (PATHNAME === "/") {
 
