@@ -1,0 +1,14 @@
+return `<p>I am excited to announce that I have finally deployed my first Kireji Web Framework ecosystem (besides this demo one)! You can visit the ecosystem by going to <a ${_.pointAttr()} class="external" title="Visit orenjinari.com" href="https://orenjinari.com">https://orenjinari.com</a>. You can check out its dedicated GitHub repo <a ${_.pointAttr()} class="external" title="Visit orenjinari.com" href="https://github.com/EJAugust/orenjinari">right here</a>.</p>
+<p>This is an important milestone for me because, up until now, it wasn't always clear where the Kireji Web Framework ended and the Demo App Ecosystem began. Publishing the new ecosystem with its own repository has allowed me to clearly delineate the two.</p>
+<h2>What I Learned</h2>
+<p>Creating and deploying my first non-demo ecosystem took perhaps an hour (two at the most). The whole process highlighted some key things:</p>
+<ul>
+ <li>The strategy I used was pretty fast and easy. It is an effective template for future ecosystems as I work my way up to a user-friendly automated approach to new project creation using the framework.</li>
+ <li>There were/are some interesting details in the framework which help to get apps off the ground but should be optional for framework users.</li>
+ <li>The separation across domains is a very clean way to isolate projects even when they share the same ecosystem. It was not complicated at all to "uninstall" an application from the Demo App Ecosystem and "install" it into an "empty" ecosystem.</li>
+</ul>
+<h2>The Future of the Framework</h2>
+<p>The go-to "empty" ecosystem I end up using after performing this process multiple times will ultimately become the Kireji Web Framework package. In the future, I'll write a guide for creating a new app ecosystem using the framework. My desire to keep this guide dead-simple will put pressure on the configuration methods for the framework.</p>
+<p>One day, I'd like to think about server-to-server communication so that cross-ecosystem links can negotiate common preferences (like dark mode and vintage mode) and maybe even larger part states. Perhaps it would use query parameters to serialize those common attributes. But how would one Kireji ecosystem know that an external link goes to another, separate Kireji ecosystem deployment? Perhaps there could be a common URL feature that gives it away and is designed for intra-ecosystem communication? Right now, this is all just speculation but now that I have multiple ecosystem deployments, it will be possible for me to iterate on these ideas.</p>
+<h2>Conclusion</h2>
+<p>Thanks for reading. I can't wait to create and deploy more applications and ecosystems as the need and opportunity arise.</p>`
