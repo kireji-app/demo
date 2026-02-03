@@ -328,41 +328,52 @@ function ƒ(_) {
   if (environment === "server" && require.main === module) {
    const stats = { fileCount: 0, domainCount: 0 }
    logScope(1, "Archiving Repository", log => {
+    let lastLogFlush = Date.now()
     const
+     packingStartTime = Date.now(),
      { extname } = require("path"),
-     { statSync: getItemStats, existsSync: itemExists, readdirSync: readFolder, readFileSync: readFile } = require("fs"),
-     readRecursive = (host, folderPath, part) => {
+     { readdirSync: readFolder, readFileSync: readFile } = require("fs"),
+     batchedLogs = [],
+     bufferLog = msg => {
+      const now = Date.now()
+      batchedLogs.push(msg)
+      if (now - lastLogFlush > 17 && batchedLogs.length) {
+       log(batchedLogs.join("\n"))
+       batchedLogs.length = 0
+       lastLogFlush = now
+      }
+     },
+     readRecursive = (host, folderPath, part, depth) => {
       if (host && host.length > 253) throw SyntaxError(`requested host is ${host.length} characters long, exceeding the maximum domain name length of 253. \n${host}`)
-      if (!itemExists(folderPath)) throw new ReferenceError("Can't pack nonexistent folder " + folderPath)
       const filenames = []
-      for (const itemName of readFolder(folderPath)) {
-       if (!host && itemName.startsWith(".")) continue
-       const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
-       if (itemExists(filePath)) {
-        try {
-         if (filePath !== "build.js" && !itemName.endsWith(".ts") && !_.$(`git check-ignore -v ${filePath}`).includes(".gitignore:")) throw "Don't ignore."
-         log(`❌ ${itemName.padEnd(20, " ")} - ignored`)
-        } catch {
-         const itemStats = getItemStats(filePath)
-         if (itemStats.isDirectory())
-          logScope(2, `📦 ${itemName}/`, () => {
-           readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}))
-          })
-         else if (itemStats.isFile()) filenames.push([itemName, filePath])
-        }
+      for (const entry of readFolder(folderPath, { withFileTypes: true })) {
+       const itemName = entry.name
+       if (itemName.startsWith(".") || itemName === "Icon" || (!host && itemName === "build.js") || itemName.endsWith(".ts")) {
+        bufferLog("".padEnd(depth, " ") + `⬚ ${itemName.padEnd(20, " ")} - ignored`)
+        continue
        }
+       const filePath = (host ? host.split(".").reverse().join("/") + "/" : "") + itemName
+       if (entry.isDirectory()) {
+        bufferLog("".padEnd(depth, "  ") + `▼ ${itemName}/`)
+        readRecursive(host ? (itemName ? itemName + "." + host : host) : itemName ?? "", filePath, (part[itemName] = {}), depth + 1)
+       } else if (entry.isFile()) filenames.push([itemName, filePath])
       }
       for (const [filename, filePath] of filenames) {
-       const extension = extname(filePath)
-       const content = readFile(filePath, [".png", ".gif"].includes(extension) ? "base64" : "utf-8")
-       log(`📄 ${filename}`)
+       const isBinary = filename.endsWith("png") || filename.endsWith("gif")
+       const content = readFile(filePath, isBinary ? "base64" : "utf-8")
+       bufferLog("".padEnd(depth, " ") + `${isBinary ? "▣" : "≡"} ${filename}`)
        part[filename] = content
        stats.fileCount++
       }
       stats.domainCount++
      }
 
-    readRecursive("", "./", _)
+    readRecursive("", "./", _, 0)
+
+    if (batchedLogs.length)
+     log(batchedLogs.join("\n"))
+
+    log(`\nPacked in ${Date.now() - packingStartTime}ms`)
    })
 
    logScope(2, "\nLogging Domain Stats", () => {
@@ -676,6 +687,7 @@ function ƒ(_) {
     gate.resolve(promiseArray)
    })
   })
+
   logScope(3, "\nComputing Landing Hash & Route ID", log => {
 
    const landingModel = JSON.parse(_["landing-model.json"])
@@ -690,9 +702,11 @@ function ƒ(_) {
 
    log("Landing hash: " + _.landingHash)
   })
+
   logScope(1, "\nValidating Build", () => {
    _.validate()
   })
+
   log(`
 
  ╭┈┈┈┈┈┈┈┈┈┈┈ BOOT SUCCEEDED ┈┈┈┈┈┈┈┈┈┈┈╮
