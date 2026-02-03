@@ -1,7 +1,0 @@
-{
- "extends": "application",
- "point": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ]
-}

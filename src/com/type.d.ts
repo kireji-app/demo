@@ -2,7 +2,6 @@ declare interface ICom
  extends ITopLevelDomain<IComApplication> {
 
  // Subparts.
- readonly orenjinari: IOrenjinari
  readonly ejaugust: IEJAugust
 }
 
