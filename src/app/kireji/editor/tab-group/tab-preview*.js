@@ -1,1 +1,0 @@
-return tabGroup.openTabs.length ? tabGroup.openTabs[tabGroup.previewTabIndex] ?? null : null

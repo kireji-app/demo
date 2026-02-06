@@ -1,1 +1,0 @@
-This part represents a subset of a set of parts. It uses the binary expansion of its route ID as a bitmask, with each bit representing the presence of a corresponding part in the subset.

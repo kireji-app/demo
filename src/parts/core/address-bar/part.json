@@ -1,7 +1,0 @@
-{
- "extends": "facet",
- "update": [],
- "push": [],
- "route-use": [],
- "undoPoint-set": []
-}

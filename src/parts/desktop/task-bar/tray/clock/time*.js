@@ -1,1 +1,0 @@
-return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' }).format(_.now)

@@ -1,7 +1,8 @@
-# NOTE: Ignored files are skipped by the server's packing process.
-
 ## Don't track the build output archive.
 .versions/
+
+## Don't track node packages.
+node_modules/
 
 ## Don't track IDE configuration.
 .vscode/

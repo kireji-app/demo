@@ -1,1 +1,0 @@
-return kirejiApp["static.css"] + toolBar["part.css"] + sidebar["part.css"] + editor["part.css"]

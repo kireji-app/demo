@@ -1,5 +1,0 @@
-This facet installs on both the worker and client. On the client, it provides a direct connection to the Service Worker that is currently in control of the client. In the worker environment, it installs event listeners which intercept network connections and keep the app offline.
-
-After the ecosystem is booted in the client environment for the first time, this part acts as a drop-in replacement for the real HTTP server, which is handled by "server.desktop.parts".
-
-The ecosystem provides certain long-term support (LTS) versions of the ecosystem, which might need to be patched later. This part provides a graceful hand-off to any new version of the worker if and when a patch is available on the server.

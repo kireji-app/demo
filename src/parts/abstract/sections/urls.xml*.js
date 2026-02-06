@@ -1,1 +1,0 @@
-return sections.map(section => section["urls.xml"]).join("")

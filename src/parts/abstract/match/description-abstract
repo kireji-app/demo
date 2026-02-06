@@ -1,1 +1,0 @@
-This part defines the structure for a set of mutually exclusive state spaces. Its state space is the disjoint union of its subpart spaces so its cardinality is the sum of its subpart cardinalities.

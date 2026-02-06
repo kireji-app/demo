@@ -1,1 +1,0 @@
-return sidebar[toolBar.arm.key]

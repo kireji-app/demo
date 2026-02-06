@@ -1,1 +1,0 @@
-const application = this

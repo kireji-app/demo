@@ -1,1 +1,0 @@
-return part.subparts.indexOf(...ARGS)

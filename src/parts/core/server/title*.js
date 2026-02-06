@@ -1,1 +1,0 @@
-return `Server ${_.ETag}`

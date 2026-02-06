@@ -1,1 +1,0 @@
-return part[".."].instancePath + "/" + part.key

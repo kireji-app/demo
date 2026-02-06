@@ -1,7 +1,0 @@
-{
- "abstract": true,
- "point": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ]
-}

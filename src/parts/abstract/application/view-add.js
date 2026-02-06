@@ -1,1 +1,0 @@
-application.container = Q(`#${application.host.replaceAll(".", "_")}`)

@@ -1,1 +1,0 @@
-return `<tray->${tray.stats["tray.html"]}${tray.share["tray.html"]}${tray.fullscreen["tray.html"]}${tray.clock["tray.html"]}</tray->`

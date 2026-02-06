@@ -1,1 +1,0 @@
-return { subdomains: [""], "": _ }

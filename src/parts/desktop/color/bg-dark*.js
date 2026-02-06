@@ -1,1 +1,0 @@
-return "#" + color.blendHex(color.bg.slice(1), "cfcfcf", "multiply")

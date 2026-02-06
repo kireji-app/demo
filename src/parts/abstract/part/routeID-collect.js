@@ -1,1 +1,0 @@
-throw "can't collect the route ID of base part type " + part.host

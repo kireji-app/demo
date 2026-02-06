@@ -1,1 +1,0 @@
-return `--sidebar-view-width:${Number(sidebarWidth.routeID) + sidebarWidth.min}px`

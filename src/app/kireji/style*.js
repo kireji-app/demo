@@ -1,1 +1,0 @@
-return sidebar.width.style

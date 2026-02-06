@@ -1,1 +1,0 @@
-return "#" + color.blendHex(color.fg.slice(1), "3f3f3f", "screen")

@@ -1,1 +1,0 @@
-This client-only facet provides an abstraction which manages reading from the location global object and writing to the history global object for the purposes of keeping the browser's address bar in sync with the route ID of the ecosystem space.

@@ -1,1 +1,0 @@
-return SUBPART === part[SUBPART.key]

@@ -1,1 +1,0 @@
-return color.isLight ? _.application.lightAccentTheme : _.application.darkAccentTheme

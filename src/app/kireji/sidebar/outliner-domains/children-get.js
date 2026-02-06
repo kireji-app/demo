@@ -1,1 +1,0 @@
-return SUBJECT.subdomains.map(subdomain => SUBJECT[subdomain])

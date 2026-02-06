@@ -1,1 +1,0 @@
-This match reads the six common color swatches that the current application provides as its color scheme and computes a wide array of shades and colors – some relative to the color mode and some absolute – in order to provide a consistent color interface. It also provides a switch between two color modes: light and dark.

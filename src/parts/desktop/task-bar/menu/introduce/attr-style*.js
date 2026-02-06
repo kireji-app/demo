@@ -1,1 +1,0 @@
-return "--menu-tween:" + (Number(part.routeID) / Number(part.cardinality))

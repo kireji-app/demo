@@ -1,1 +1,0 @@
-This part is the base type from which all other parts extend. It defines the default behavior of all parts, providing state management and event propagation.

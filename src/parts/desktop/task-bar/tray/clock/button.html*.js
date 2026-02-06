@@ -1,1 +1,0 @@
-return clock.time

@@ -1,1 +1,0 @@
-return scroller["part.css"] + editor["static.css"] + tabGroup["part.css"]

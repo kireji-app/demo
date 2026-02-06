@@ -1,1 +1,0 @@
-This part provides a set of independent state variables just like the mix but the box keeps its factors self-contained instead of distributing them across subparts. The box is ideal for cartesian product spaces whose factors don't need to handle their own view updates or store any data beyond their cardinality.

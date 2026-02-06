@@ -1,1 +1,0 @@
-This part defines the structure for a set of independent state variables. Its state space is the cartesian product of each of its subpart spaces so its cardinality is the product of its subpart cardinalities.

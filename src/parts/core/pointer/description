@@ -1,1 +1,0 @@
-This client-only facet unifies interaction events (like click and touch) across platforms into a single handler. When an interaction begins, this part tracks the ID of the event and ensures that only one interaction is handled at a time.

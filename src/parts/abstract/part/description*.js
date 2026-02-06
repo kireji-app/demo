@@ -1,1 +1,0 @@
-return Object.hasOwn(part, "abstractDescription") ? part.abstractDescription : undefined

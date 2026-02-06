@@ -1,1 +1,0 @@
-return "Top-Level Domain " + (part.host === host ? "Prototype" : "(." + part.key + ")")

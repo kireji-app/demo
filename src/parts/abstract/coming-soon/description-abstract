@@ -1,9 +1,0 @@
-The Coming Soon Application prototype provides a landing page that is not indexed by search engines until launch day.
-
-These applications return a simple 503 error and a styled 503 page in the application's theme colors (if set). An optional launch timestamp tells search engines to come back on the day of the launch to check on the state of the application.
-
-If there is no timestamp for the launch date, the application tells search engines to return in one week. In theory, this sets up a weekly poll for either the launch date to be set or for the application to be launched.
-
-If there is a launch date but the date has passed, then there is a 24 hour grace period in which the application tells search engines to come back in five minutes (just in case the launch is fashionably late). In theory, this sets up a poll every 5 minutes for new content.
-
-If the launch date has come and gone, then the application again suggests once-per-week polling.

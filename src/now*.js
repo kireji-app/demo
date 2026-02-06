@@ -1,1 +1,0 @@
-return performance.now() + performance.timeOrigin

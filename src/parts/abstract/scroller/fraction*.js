@@ -1,1 +1,0 @@
-return Number(scroller.routeID) / Number(scroller.cardinality - 1n)

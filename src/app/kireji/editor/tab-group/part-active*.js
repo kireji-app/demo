@@ -1,1 +1,0 @@
-return tabGroup.activeTab?.part ?? null

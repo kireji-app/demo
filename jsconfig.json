@@ -7,5 +7,9 @@
  "exclude": [
   "build.js",
   "*/**/constants.js",
+ ],
+ "include": [
+  "src/**/*",
+  "node_modules/kireji/src/**/*.d.ts"
  ]
 }

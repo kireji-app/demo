@@ -1,1 +1,0 @@
-This client-only facet acquires a connection to the user's graphics card, if their browser supports it. This provides an abstraction for hardware-accelerated computation and rendering.

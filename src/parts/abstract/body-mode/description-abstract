@@ -1,1 +1,0 @@
-This is a simple part which assigns its key to the body as a class when its view is added and removes it when it is removed. It also looks for an on-screen control corresponding to the mode and updates its state.

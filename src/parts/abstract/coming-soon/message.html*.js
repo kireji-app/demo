@@ -1,1 +1,0 @@
-return `📦<span class=thin>${comingSoon.title}</span><span>is coming soon.</span>`

@@ -1,1 +1,0 @@
-This client-only facet takes control of the user's keyboard shortcuts, allowing standard keyboard shortcuts to interface with browser APIs. For example, it links the common undo and redo keyboard actions to the history global object so that browser history can feel like a familiar undo/redo cache. 

@@ -1,1 +1,0 @@
-An application is a part located at an origin which is accessible from the web via an A record. An application part cannot be named "www" because the server strips this subdomain automatically. All applications extend the `mix.abstract.parts` prototype.

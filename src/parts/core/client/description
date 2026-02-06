@@ -1,1 +1,0 @@
-This asynchronous client-only facet awaits all other necessary facets before removing the "unhydrated" class from the body page and declaring the server- or worker-rendered DOM fully hydrated. The user cannot interact with the page until it is declared hydrated. Parts can attach callbacks to the client promise to ensure that they are only called immediately after hydration.

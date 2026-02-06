@@ -1,1 +1,0 @@
-return [...box.placeStates]

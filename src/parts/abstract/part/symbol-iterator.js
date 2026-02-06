@@ -1,1 +1,0 @@
-return part.subparts[Symbol.iterator]()

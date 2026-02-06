@@ -1,1 +1,0 @@
-return errorApp.getErrorCSS(errorApp["message.html"])

@@ -1,1 +1,0 @@
-This part provides version information. Every version of the ecosystem has a unique hash function which may not provide direct compatibility. This part will enable a special upgrade/downgrade mechanism which will allow users to translate hashes between different versions of the ecosystem.

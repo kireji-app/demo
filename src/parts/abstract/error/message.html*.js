@@ -1,1 +1,0 @@
-return `An <span class=thin>unknown error</span><span>occured.</span>`

@@ -1,1 +1,0 @@
-const boolean = this

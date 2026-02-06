@@ -1,7 +1,0 @@
-{
- "abstract": true,
- "playback-initiate": [],
- "playback-stop": [],
- "playback-handle-end": [],
- "next": []
-}

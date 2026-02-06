@@ -1,1 +1,0 @@
-return `<task-bar tabIndex=0>${taskBar.menu["part.html"]}<!-- tasks --><flex-spacer></flex-spacer>${taskBar.tray["part.html"]}</task-bar>`

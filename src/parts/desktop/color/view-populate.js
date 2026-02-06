@@ -1,1 +1,0 @@
-Q("#color-css").innerHTML = color["part.css"]

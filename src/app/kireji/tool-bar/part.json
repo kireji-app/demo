@@ -1,8 +1,0 @@
-{
- "extends": "match",
- "point": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT",
-  "VIEW_INDEX"
- ]
-}

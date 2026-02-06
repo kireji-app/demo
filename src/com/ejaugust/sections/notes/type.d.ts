@@ -4,6 +4,8 @@ declare interface IEJAugustNotes
  // Subparts.
  readonly 1743765678: IEJAugustNote
  readonly 1743772658: IEJAugustNote
+ readonly 1749276077: IEJAugustNote
+ readonly 1753817767: IEJAugustNote
  readonly 1762062190: IEJAugustNote
  readonly 1762063104: IEJAugustNote
  readonly 1762063947: IEJAugustNote

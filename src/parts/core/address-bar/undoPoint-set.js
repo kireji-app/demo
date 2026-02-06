@@ -1,1 +1,0 @@
-history.pushState(null, null, location.origin + encodePathname(_.routeID))

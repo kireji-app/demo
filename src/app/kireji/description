@@ -1,7 +1,0 @@
-This application allows you to view all of the parts that define the Kireji Web Framework and the Demo App Ecosystem. It includes a sidebar pane and a property viewer pane.
-
-By clicking on a part in the sidebar, you can view the properties of that part and its contribution - if any - to the minimal perfect hash function that provides the ecosystem's optimal state compression.
-
-The properties also allow you to view the list of the files which are associated with each part and to see the current state of each part and its corresponding base 64 hash. These values update in real-time as you interact with any of the apps.
-
-You can travel away from this application, make changes in other applications, and then return here to see how those cross-origin interactions have impacted each part in the ecosystem.
