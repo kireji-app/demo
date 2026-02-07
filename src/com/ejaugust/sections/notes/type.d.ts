@@ -13,6 +13,9 @@ declare interface IEJAugustNotes
  readonly 1762140334: IEJAugustNote
  readonly 1762150560: IEJAugustNote
  readonly 1762157702: IEJAugustNote
+ readonly 1766995600: IEJAugustNote
+ readonly 1770103757: IEJAugustNote
+ readonly 1770376827: IEJAugustNote
  readonly note: IEJAugustNote
 }
 
