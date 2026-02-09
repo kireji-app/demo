@@ -16,11 +16,11 @@ return scroller.wrap(
    `<a ${_.pointAttr()} id=footer-top href=${ejaugust.canonicalURL}><span class=unicode-icon>↑</span> Back to Top</a>`
   ) +
   "</section>" +
-  `<a ${_.pointAttr()} class="external" title="Visit Site Repo" id=k-logo href="https://github.com/kireji-app/demo#readme"><pre>${welcomeMessage}</pre></a>` +
+  `<a ${_.pointAttr()} class=external  title="Visit Site Repo" id=k-logo href="https://github.com/kireji-app/demo#readme"><pre>${welcomeMessage}</pre></a>` +
   "<section id=social>" + (
-   `<a ${_.pointAttr()} class="external" title="My GitHub Profile" href=https://github.com/EJAugust>${ejaugust["github.svg"]}</a>` +
-   `<a ${_.pointAttr()} class="external" title="Me on LinkedIn" href=https://linkedin.com/in/kireji>${ejaugust["linkedin.svg"]}</a>` +
-   `<a ${_.pointAttr()} class="external" title="♡ Sponsor Me" href=https://github.com/sponsors/EJAugust>♡</a>`
+   `<a ${_.pointAttr()} class=external  title="My GitHub Profile" href=https://github.com/EJAugust>${ejaugust["github.svg"]}</a>` +
+   `<a ${_.pointAttr()} class=external  title="Me on LinkedIn" href=https://linkedin.com/in/kireji>${ejaugust["linkedin.svg"]}</a>` +
+   `<a ${_.pointAttr()} class=external  title="♡ Sponsor Me" href=https://github.com/sponsors/EJAugust>♡</a>`
   ) +
   "</section>"
  ) +

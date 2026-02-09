@@ -1,7 +1,7 @@
 const markupReductionFactor = 0.80
 const averageWordsPerMinute = 220
 const averageWordLength = 7
-const noteDataLength = (note["part.html_.js"] ?? note["part.html"] ?? "").length
+const noteDataLength = (note["note.html_.js"] ?? note["note.html"] ?? "").length
 const estimatedWordCharacters = noteDataLength * markupReductionFactor
 const averageCharactersPerMinute = averageWordLength * averageWordsPerMinute
 

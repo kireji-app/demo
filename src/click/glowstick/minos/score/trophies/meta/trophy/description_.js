@@ -1,1 +1,1 @@
-return `Earn all of the ${minosTrophies[minosMetaTrophy.key].title.replaceAll(" ", "-")} trophies.`
+return `Earn all of the ${minosTrophies[minosMetaTrophy.key].title?.replaceAll(" ", "-") ?? "{category title}"} trophies.`

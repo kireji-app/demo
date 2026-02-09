@@ -1,1 +1,1 @@
-return `Clear the board ${minosWinsTrophy.goal} times.`
+return `Clear the board ${minosWinsTrophy.goal ?? "{n}"} times.`

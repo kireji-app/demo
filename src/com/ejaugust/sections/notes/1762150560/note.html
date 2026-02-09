@@ -41,7 +41,7 @@
    <li>Any anchor links <i>inside</i> Kireji web apps (including any sitemap) will get indexed by search engines and become external links, so we don't want to see this anywhere in the web app's source code:
     <pre>&lt;a href="https://example.com/1.0.0/4gw5-g5wnzzw35h4g"&gt;Click here&lt;/a&gt;</pre>
    </li>
-   <li>Besides, rendering versioned anchor links inside app HTML would be annoying and not straightforward - link elements would need to be tracked and their <code>href</code> attributes updated every time the ecosystem state changed. This would cause an explosion of URLs that would confuse search engine spiders.</li>
+   <li>Besides, rendering versioned anchor links inside app HTML would be annoying and not straightforward - link elements would need to be tracked and their <code>href</code> attributes updated every time the ecosystem state changed. This would cause an explosion of URLs that would confuse search engine crawlers.</li>
    <li>
     Hovering over links helps desktop users gain additional context about where the link will go. This doesn't look like anything to the user:
     <pre>https://example.com/1.0.0/4gw5-g5wnzzw35h4g</pre>
