@@ -5,7 +5,11 @@ declare interface IMinosGameModal
  // Subparts.
  readonly trophies: IMinosGameModalTrophies
  readonly none: IMinosGameModalPage
- readonly trade: IMinosGameModalTrade
+ readonly shop: IMinosGameModalShop
+
+ // Serialized Properties.
+ /** Closes any open modal. */
+ readonly close(): void
 }
 
 declare const minosModal: IMinosGameModal

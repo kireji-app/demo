@@ -1,0 +1,13 @@
+{
+ "reset": [],
+ "earn": [
+  "EARNINGS"
+ ],
+ "spend": [
+  "COST"
+ ],
+ "modal-view": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ]
+}

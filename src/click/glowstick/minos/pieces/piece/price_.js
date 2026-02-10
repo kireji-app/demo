@@ -1,0 +1,1 @@
+return minosPiece.primitive.price

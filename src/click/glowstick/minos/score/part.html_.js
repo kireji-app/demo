@@ -1,11 +1,11 @@
 return (
- "<div id=cash>" + (
-  minosScore.cash["part.html"]
- ) + "</div>" +
- "<div id=wins>" + (
+ `<button id=wins ${minosScore.wins.pointAttr("viewModal")}>` + (
   minosScore.wins["part.html"]
- ) + "</div>" +
+ ) + "</button>" +
  `<button id=trophies ${minosScore.trophies.pointAttr("viewModal")}>` + (
   minosScore.trophies["part.html"]
+ ) + "</button>" +
+ `<button id=points ${minosScore.points.pointAttr("viewModal")}>` + (
+  minosScore.points["part.html"]
  ) + "</button>"
 )

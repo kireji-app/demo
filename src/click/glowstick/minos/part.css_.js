@@ -1,1 +1,1 @@
-return minos["static.css"] + minos.modal.trade.scroller["part.css"] + minos.modal.trophies.scroller["part.css"]
+return minos["static.css"] + minos.modal.shop.scroller["part.css"] + minos.modal.trophies.scroller["part.css"]

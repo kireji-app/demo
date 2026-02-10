@@ -1,1 +1,0 @@
-return `<h2><span class=label>Are you sure?</span></h2>#${minosTradeModal.target.routeID} => #${part.routeID}?<br><button ${part.pointAttr("submit")}>Yes</button><button ${part.pointAttr("cancel")}>No</button>`

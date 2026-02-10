@@ -1,0 +1,1 @@
+minos.container.removeAttribute("data-shop-target")

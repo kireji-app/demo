@@ -4,12 +4,12 @@ declare interface IMinosGameScoreTrophies
 
  // Subparts.
  readonly basic: IMinosGameTrophyCategory
- readonly cash: IMinosGameTrophyCategory
+ readonly points: IMinosGameTrophyCategory
  readonly createA: IMinosGameTrophyCategory
  readonly meta: IMinosGameTrophyCategory
  readonly moveLimit: IMinosGameTrophyCategory
  readonly special: IMinosGameTrophyCategory
- readonly trades: IMinosGameTrophyCategory
+ readonly shop: IMinosGameTrophyCategory
  readonly wins: IMinosGameTrophyCategory
 
  // Serialized Properties.

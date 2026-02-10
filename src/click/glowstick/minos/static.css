@@ -16,14 +16,12 @@
 }
 
 #minos_glowstick_click[data-modal] #board,
-#minos_glowstick_click:not(.dragging) #trade,
-#minos_glowstick_click:not([data-modal]) #modal,
-#minos_glowstick_click.dragging #score {
+#minos_glowstick_click:not([data-modal]) #modal {
  opacity: 0;
  pointer-events: none;
 }
 
-#minos_glowstick_click[data-modal] :is(#pieces, #score) {
+#minos_glowstick_click[data-modal="trophies"] #pieces {
  pointer-events: none;
 }
 
@@ -48,10 +46,6 @@
 #minos_glowstick_click[data-modal]>#modal>h2>button {
  font-size: inherit;
  line-height: inherit;
-}
-
-#minos_glowstick_click[data-modal]>#modal>h2>:is(.label, button) {
- padding: calc(var(--mino) / 2);
 }
 
 #minos_glowstick_click[data-modal]>#modal>h2>button {
@@ -82,20 +76,22 @@
  width: 100%;
 }
 
+#minos_glowstick_click[data-modal="trophies"] #trophies,
+#minos_glowstick_click[data-modal="shop"] #points,
+#minos_glowstick_click:not([data-modal]) #wins {
+ pointer-events: none;
+}
+
 #minos_glowstick_click[data-modal="trophies"] .item {
  grid-template: "label" 1fr / 1fr;
 }
 
-#minos_glowstick_click[data-modal="trophies"] .item.earned {
- background-color: #00ff007f;
-}
-
-#minos_glowstick_click #trophies {
+#minos_glowstick_click :is(#trophies, #wins, #points) {
  width: 100%;
  height: 100%;
 }
 
-#minos_glowstick_click[data-modal] .item:hover {
+#minos_glowstick_click[data-modal="shop"] .item:hover {
  background-color: var(--accent);
  color: var(--fg);
 }
@@ -108,11 +104,7 @@
  text-align: left;
 }
 
-#minos_glowstick_click[data-modal] .item[disabled]>.label {
- color: #ff00007f;
-}
-
-#minos_glowstick_click[data-modal="trade.options"] .item>minos- {
+#minos_glowstick_click[data-modal="shop"] .item>minos- {
  width: calc(var(--mino) * var(--w));
  height: calc(var(--mino) * var(--h));
  transform: scale(50%);
@@ -122,7 +114,7 @@
  position: absolute;
 }
 
-#minos_glowstick_click[data-modal="trade.options"] h2>minos- {
+#minos_glowstick_click[data-modal="shop"] h2>minos- {
  width: calc(var(--mino) * var(--w));
  height: calc(var(--mino) * var(--h));
  transform: scale(50%);
@@ -138,8 +130,7 @@
 }
 
 #minos_glowstick_click #score,
-#minos_glowstick_click #pieces,
-#minos_glowstick_click #trade {
+#minos_glowstick_click #pieces {
  --grid-size: calc(var(--mino) * 4);
  display: grid;
  place-items: center;
@@ -158,10 +149,20 @@
  background-color: var(--bg);
 }
 
+#minos_glowstick_click #pieces>minos-:not(.dragging)>mino- {
+ left: calc(var(--mino) * var(--x) + (100% - var(--mino) * var(--w)) / 2);
+ top: calc(var(--mino) * var(--y) + (100% - var(--mino) * var(--h)) / 2);
+}
+
 #minos_glowstick_click minos- {
  position: relative;
  width: calc(var(--mino) * var(--w));
  height: calc(var(--mino) * var(--h));
+}
+
+#minos_glowstick_click #pieces>minos-:not(.dragging) {
+ width: 100%;
+ height: 100%;
 }
 
 #minos_glowstick_click #pieces>minos-.dragging {
@@ -243,15 +244,13 @@
 @container application (aspect-ratio > 1 / 1) {
 
  #minos_glowstick_click #score,
- #minos_glowstick_click #pieces,
- #minos_glowstick_click #trade {
+ #minos_glowstick_click #pieces {
   width: var(--grid-size);
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr;
  }
 
- #minos_glowstick_click #score,
- #minos_glowstick_click #trade {
+ #minos_glowstick_click #score {
   left: calc((var(--app-width) - var(--side)) / 2 - var(--grid-size) - (var(--unit) * 2));
  }
 
@@ -263,15 +262,13 @@
 @container application (aspect-ratio <=1 / 1) {
 
  #minos_glowstick_click #score,
- #minos_glowstick_click #pieces,
- #minos_glowstick_click #trade {
+ #minos_glowstick_click #pieces {
   height: var(--grid-size);
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr;
  }
 
- #minos_glowstick_click #score,
- #minos_glowstick_click #trade {
+ #minos_glowstick_click #score {
   top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) - var(--grid-size) - (var(--unit) * 2));
  }
 
@@ -290,6 +287,10 @@ body.modern #minos_glowstick_click {
  --px2: calc(var(--px) * 2);
  --px-2: calc(var(--px) * -2);
  --grid-color: var(--bg-mode);
+}
+
+body.modern #minos_glowstick_click[data-modal="trophies"] .item.earned {
+ background-color: #00ff007f;
 }
 
 body.modern #minos_glowstick_click>section:not(#bomb) {
@@ -315,6 +316,10 @@ body.modern #minos_glowstick_click[data-modal] .item:last-child {
   inset 0 var(--px) 0 var(--bg);
 }
 
+body.modern #minos_glowstick_click[data-modal] .item[disabled]>.label {
+ color: #ff00007f;
+}
+
 body.modern #minos_glowstick_click>section:not(#bomb, #modal) {
  background-image:
   repeating-linear-gradient(90deg,
@@ -334,11 +339,16 @@ body.modern #minos_glowstick_click>section:not(#bomb, #modal) {
   0 var(--px) 0 var(--accent-mode-est);
 }
 
-body.modern #minos_glowstick_click.will-trade #trade {
- background-color: #00ff007f;
+body.modern #minos_glowstick_click[data-modal="trophies"] #trophies,
+body.modern #minos_glowstick_click[data-modal="shop"] #points,
+body.modern #minos_glowstick_click:not([data-modal]) #wins,
+body.modern #minos_glowstick_click[data-shop-target="0"] #pieces>:nth-child(1),
+body.modern #minos_glowstick_click[data-shop-target="1"] #pieces>:nth-child(2),
+body.modern #minos_glowstick_click[data-shop-target="2"] #pieces>:nth-child(3) {
  box-shadow:
-  inset 0 0 0 var(--px) #00ff00,
-  0 0 0 var(--px) #00ff00;
+  inset 0 0 0 var(--px) var(--accent),
+  0 0 0 var(--px) var(--accent) !important;
+ border-radius: var(--px2);
 }
 
 body.modern #minos_glowstick_click mino- {
@@ -372,7 +382,7 @@ body.modern.dark #minos_glowstick_click mino- {
  background-color: var(--accent-mode);
 }
 
-body.vintage #minos_glowstick_click :is(#score, #bomb, #pieces, #trade)::before {
+body.vintage #minos_glowstick_click :is(#score, #bomb, #pieces)::before {
  content: "";
  position: absolute;
  left: -2px;
@@ -381,6 +391,10 @@ body.vintage #minos_glowstick_click :is(#score, #bomb, #pieces, #trade)::before 
  right: -2px;
  box-shadow: var(--deep-inset);
  pointer-events: none;
+}
+
+body.modern #minos_glowstick_click[data-modal]>#modal>h2>:is(.label, button) {
+ padding: calc(var(--mino) / 2);
 }
 
 body.vintage #minos_glowstick_click {
@@ -402,7 +416,39 @@ body.vintage #minos_glowstick_click>section:not(#bomb) {
   var(--bg-dark);
 }
 
-body.vintage.dark #minos_glowstick_click :is(#score, #bomb, #pieces, #trade) {
+body.vintage #minos_glowstick_click[data-modal]>#modal {
+ --line-height: calc(1.2 * var(--default-font-size));
+ --header-height: calc(var(--line-height) + 12px);
+ grid-template:
+  "title" var(--header-height) "content" 1fr;
+}
+
+
+body.vintage #minos_glowstick_click[data-modal]>#modal>h2 {
+ font-size: var(--default-font-size);
+ line-height: calc(1.2 * var(--default-font-size));
+ background-color: var(--bg);
+ box-shadow: var(--deep-outset);
+ padding: 6px;
+ font-weight: 400;
+}
+
+body.vintage #minos_glowstick_click[data-modal]>#modal>h2>button {
+ position: absolute;
+ right: 3px;
+ top: 3px;
+ width: calc(var(--header-height) - 6px);
+ height: calc(var(--header-height) - 6px);
+ line-height: calc(var(--header-height) - 6px);
+ text-align: center;
+ box-shadow: var(--deep-outset);
+}
+
+body.vintage #minos_glowstick_click[data-modal]>#modal>h2>button:active {
+ box-shadow: var(--deep-inset);
+}
+
+body.vintage.dark #minos_glowstick_click :is(#score, #bomb, #pieces) {
  background-color: unset;
 }
 
@@ -412,29 +458,84 @@ body.vintage #minos_glowstick_click mino- {
 
 body.vintage #minos_glowstick_click[data-modal] #categories>scroller->scroll-content {
  padding: var(--spacing);
+ gap: var(--spacing);
 }
 
-body.vintage #minos_glowstick_click[data-modal] #categories {
- background: white;
+body.vintage #minos_glowstick_click[data-modal] :is(#categories, #options) {
+ background: var(--bg);
 }
 
-body.dark.vintage #minos_glowstick_click[data-modal] #categories {
- background: black;
+body.vintage #minos_glowstick_click[data-modal] #categories .category {
+ border: 2px groove var(--bg-mode-er);
+ padding: var(--spacing);
+ position: relative;
 }
 
-body.vintage #minos_glowstick_click[data-modal] .item {
+body.vintage #minos_glowstick_click[data-modal] #categories .category>h3 {
+ top: calc(var(--line-height) * -0.5 - 2px);
+ left: calc(var(--line-height) / 2);
+ font-weight: 400;
+ line-height: var(--line-height);
+ margin: 0;
+ padding: 0 2px;
+ background-color: var(--bg);
+ font-size: var(--default-font-size);
+ position: absolute;
+}
+
+body.vintage #minos_glowstick_click[data-modal="trophies"] #categories .category .trophies {
+ display: flex;
+ flex-flow: column nowrap;
+ gap: var(--spacing);
+}
+
+body.vintage #minos_glowstick_click[data-modal="trophies"] .item {
+ display: flex;
+ flex-flow: row nowrap;
+}
+
+body.vintage #minos_glowstick_click[data-modal="trophies"] .item:before {
+ content: "";
+ display: block;
+ width: 16px;
+ height: 16px;
+ background: var(--bg);
+ box-shadow: var(--deep-inset);
+ flex-shrink: 0;
+ text-align: center;
+ line-height: 16px;
+ font-weight: 900;
+ color: var(--bg-un-mode-er);
+}
+
+body.vintage #minos_glowstick_click[data-modal="trophies"] .item.earned:before {
+ content: "✓";
+}
+
+body.vintage #minos_glowstick_click[data-modal="trophies"] .item {
  flex-basis: calc(var(--default-font-size) * 1.2);
  line-height: calc(var(--default-font-size) * 1.2);
  font-size: var(--default-font-size);
 }
 
-body.vintage #minos_glowstick_click[data-modal] .item>.label {
+body.vintage #minos_glowstick_click[data-modal="trophies"] .item>.label {
  font-size: inherit;
  line-height: inherit;
  padding: 0 var(--spacing);
 }
 
-body.vintage #minos_glowstick_click :is(#cash, #wins, #trophies) {
+
+body.vintage #minos_glowstick_click[data-modal="trophies"] .item.earned>.label {
+ color: var(--bg-dark-er);
+ text-shadow: 1px 1px var(--bg-light-est);
+}
+
+body.dark.vintage #minos_glowstick_click[data-modal="trophies"] .item.earned>.label {
+ color: var(--bg-dark-est);
+ text-shadow: 1px 1px var(--bg-light-er);
+}
+
+body.vintage #minos_glowstick_click :is(#points, #wins, #trophies) {
  box-shadow: var(--deep-outset);
  background-color: var(--bg);
  width: 100%;
@@ -442,9 +543,27 @@ body.vintage #minos_glowstick_click :is(#cash, #wins, #trophies) {
  text-align: center;
 }
 
-body.vintage #minos_glowstick_click #score button:active,
+body.vintage #minos_glowstick_click[data-modal="shop"] #pieces>* {
+ box-shadow: var(--deep-outset);
+ background-color: var(--bg);
+}
+
+body.vintage #minos_glowstick_click[data-modal="shop"] .item>.label {
+ font-size: var(--default-font-size);
+}
+
+body.vintage #minos_glowstick_click #pieces button:active,
 body.vintage #minos_glowstick_click[data-modal="trophies"] #trophies,
-body.vintage #minos_glowstick_click[data-modal="trade.options"] #cash {
+body.vintage #minos_glowstick_click[data-modal="shop"] #points,
+body.vintage #minos_glowstick_click[data-modal="shop"] #score button:active,
+body.vintage #minos_glowstick_click:not([data-modal]) #wins,
+body.vintage #minos_glowstick_click[data-shop-target="0"] #pieces>:nth-child(1),
+body.vintage #minos_glowstick_click[data-shop-target="1"] #pieces>:nth-child(2),
+body.vintage #minos_glowstick_click[data-shop-target="2"] #pieces>:nth-child(3) {
  box-shadow: unset;
- background: var(--pressed-checker), var(--bg-un-mode);
+ background: transparent;
+}
+
+body.vintage #minos_glowstick_click :is(.bomb>mino-, #bomb>mino-)::after {
+ color: var(--accent);
 }

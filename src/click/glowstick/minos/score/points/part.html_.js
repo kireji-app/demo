@@ -1,0 +1,1 @@
+return minosPoints.routeID.toLocaleString() + " points"

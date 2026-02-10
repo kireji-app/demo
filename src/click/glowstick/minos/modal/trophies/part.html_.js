@@ -2,7 +2,7 @@ function createCategoryHTML(category) {
  const trophies = []
 
  for (const trophy of category)
-  trophies.push(`<button ${minosTrophyModal.pointAttr("select", category.key, trophy.key)} class="item ${minosTrophies.earned.has(trophy) ? "earned" : ""}"><span class=label>${trophy.description}</span></button>`)
+  trophies.push(`<div class="item ${minosTrophies.earned.has(trophy) ? "earned" : ""}"><span class=label>${trophy.description}</span></div>`)
 
  categories.push(`<section class=category><h3>${category.title}</h3><div class=trophies>${trophies.join("")}</div></section>`)
 }
@@ -14,9 +14,9 @@ const categories = []
 createCategoryHTML(minosTrophies.basic)
 createCategoryHTML(minosTrophies.wins)
 createCategoryHTML(minosTrophies.moveLimit)
-createCategoryHTML(minosTrophies.cash)
+createCategoryHTML(minosTrophies.points)
 createCategoryHTML(minosTrophies.createA)
-createCategoryHTML(minosTrophies.trades)
+createCategoryHTML(minosTrophies.shop)
 createCategoryHTML(minosTrophies.special)
 createCategoryHTML(minosTrophies.meta)
 

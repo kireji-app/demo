@@ -37,10 +37,13 @@ if (minosBomb.arm !== minosBomb.none) setTimeout(() => {
    minosScore.trophies.special.overkill.setRouteID(1n)
   minosBoard.setRouteID(maskedRouteID)
   const earnings = cachedActiveTiles - minosBoard.activeTiles.size
-  debug(`Earned $${earnings}!`)
-  minosCash.earn(earnings)
+  debug(`Earned ${earnings} points!`)
+  minosPoints.earn(earnings)
   minosPieces.forEach(piece => piece.recompute())
  }
+
+ if (!minosScore.trophies.basic.boom.model)
+  minosScore.trophies.basic.boom.setRouteID(1n)
 
  minosScore.usedBomb.set()
  minosScore.trophies.checkState()
@@ -70,11 +73,18 @@ else if (minosBoard.filledRows.size || minosBoard.filledColumns.size) setTimeout
   earnings += 10
   multiplier++
  }
+
+ if ((minosBoard.filledRows.size >= 2 || minosBoard.filledColumns.size >= 2) && !minosScore.trophies.basic.combo.model)
+  minosScore.trophies.basic.combo.setRouteID(1n)
+
+ if (minosBoard.filledRows.size >= 1 && minosBoard.filledColumns.size >= 1 && !minosScore.trophies.basic.crosshair.model)
+  minosScore.trophies.basic.crosshair.setRouteID(1n)
+
  minosBoard.setRouteID(maskedRouteID)
  earnings += cachedActiveTiles - minosBoard.activeTiles.size
  minosPieces.forEach(piece => piece.recompute())
- debug(`Earned $${earnings} * ${multiplier}!`)
- minosCash.earn(earnings * multiplier)
+ debug(`Earned ${earnings} * ${multiplier} points!`)
+ minosPoints.earn(earnings * multiplier)
  minosScore.trophies.checkState()
  minos.checkState()
 }, 1)
@@ -84,8 +94,8 @@ else if (minosBoard.routeID === 0n) setTimeout(() => {
  debug("You won!")
  setTimeout(() => {
   minosWins.increment()
-  debug(`Earned $1000!`)
-  minosCash.earn(1000)
+  debug(`Earned 1000 points!`)
+  minosPoints.earn(1000)
   minosBoard.scramble()
   minosPieces.scramble()
   if (!minosScore.usedBomb.model)
@@ -105,23 +115,29 @@ else if (minosBoard.routeID === 0n) setTimeout(() => {
  }, 1500)
 }, 1)
 
-// Acknowledge locked board.
-else if (![...minosPieces].some(piece => piece.allowedTiles.size > 0)) setTimeout(() => {
- error("Error: You lost.")
- setTimeout(() => {
-  if (!minosScore.trophies.basic.lock.isEarned)
-   minosScore.trophies.basic.lock.setRouteID(1n)
-  minosBoard.scramble()
-  minosPieces.scramble()
-  minosScore.usedBomb.clear()
-  minosScore.moves.clear()
-  minosScore.trophies.checkState()
-  minos.checkState()
- }, 1500)
-}, 1)
-
-// Continue game normally.
 else {
- minosScore.trophies.checkState()
- minos.unlock()
+
+ if (!minosScore.trophies.special.crowded.model && minosBoard.activeTiles.size === minosBoard.width * (minosBoard.width - 1))
+  minosScore.trophies.special.crowded.setRouteID(1n)
+
+ // Acknowledge locked board.
+ if (![...minosPieces].some(piece => piece.allowedTiles.size > 0)) setTimeout(() => {
+  error("Error: You lost.")
+  setTimeout(() => {
+   if (!minosScore.trophies.basic.lock.isEarned)
+    minosScore.trophies.basic.lock.setRouteID(1n)
+   minosBoard.scramble()
+   minosPieces.scramble()
+   minosScore.usedBomb.clear()
+   minosScore.moves.clear()
+   minosScore.trophies.checkState()
+   minos.checkState()
+  }, 1500)
+ }, 1)
+
+ // Continue game normally.
+ else {
+  minosScore.trophies.checkState()
+  minos.unlock()
+ }
 }

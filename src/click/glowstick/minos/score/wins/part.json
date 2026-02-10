@@ -1,3 +1,7 @@
 {
- "increment": []
+ "increment": [],
+ "modal-view": [
+  "POINTER_EVENT",
+  "TARGET_ELEMENT"
+ ]
 }

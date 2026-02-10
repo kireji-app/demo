@@ -1,3 +1,3 @@
 part.define({
- cardinality: { value: 21n }
+ cardinality: { value: 22n }
 })

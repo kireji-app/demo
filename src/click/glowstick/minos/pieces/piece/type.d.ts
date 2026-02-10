@@ -39,7 +39,7 @@ declare interface IMinosGamePiecePointerConfig
  /** If defined, the valid drop position of the dragged game piece, measured in minos. */
  readonly dropPosition?: { x: number, y: number },
  /** The bounding rectangle of the drop zone where pieces can be traded for other pieces. */
- readonly tradeZone: DOMRect
+ readonly shopZone: DOMRect
  /** If true, a piece is currently being held over the drop zone. */
- readonly trade: boolean
+ readonly shop: boolean
 }
