@@ -1,5 +1,5 @@
 {
- "dependencies": {
-  "kireji": "latest"
- }
+  "dependencies": {
+    "kireji": "^0.5.0"
+  }
 }

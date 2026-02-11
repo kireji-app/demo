@@ -8,7 +8,7 @@
 
 #minos_glowstick_click>section {
  position: fixed;
- top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height));
+ top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) + var(--title-bar-height));
  left: calc((var(--app-width) - var(--side)) / 2);
  width: var(--side);
  height: var(--side);
@@ -269,11 +269,11 @@
  }
 
  #minos_glowstick_click #score {
-  top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) - var(--grid-size) - (var(--unit) * 2));
+  top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) + var(--title-bar-height) - var(--grid-size) - (var(--unit) * 2));
  }
 
  #minos_glowstick_click #pieces {
-  top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) + var(--side) + (var(--unit) * 2));
+  top: calc((var(--app-height) - var(--side)) / 2 + var(--warning-height) + var(--title-bar-height) + var(--side) + (var(--unit) * 2));
  }
 }
 
@@ -402,7 +402,12 @@ body.vintage #minos_glowstick_click {
  --grid-color: var(--bg-un-mode);
 }
 
+body.vintage.dark #minos_glowstick_click {
+ --grid-color: var(--bg-dark-est);
+}
+
 body.vintage #minos_glowstick_click>section:not(#bomb) {
+ --checker-bg: var(--bg-mode-est);
  background:
   repeating-linear-gradient(90deg,
    var(--grid-color) 0 var(--px),
@@ -412,8 +417,8 @@ body.vintage #minos_glowstick_click>section:not(#bomb) {
    var(--grid-color) 0 var(--px),
    transparent 0 var(--grid-size),
    var(--grid-color) var(--grid-size) var(--grid-size)),
-  var(--pressed-checker),
-  var(--bg-dark);
+  var(--bg-checker),
+  var(--checker-bg);
 }
 
 body.vintage #minos_glowstick_click[data-modal]>#modal {

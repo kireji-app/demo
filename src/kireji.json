@@ -1,5 +1,6 @@
 {
  "verbosity": "100",
  "change": "major",
- "defaultApplicationHost": "desktop.parts"
+ "defaultApplicationHost": "desktop.parts",
+ "resetLocalState": "1"
 }
