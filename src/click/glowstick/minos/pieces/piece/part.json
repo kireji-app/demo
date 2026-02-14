@@ -1,13 +1,15 @@
 {
  "abstract": true,
- "recompute": [],
- "point": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ],
- "place": [
-  "X",
-  "Y"
- ],
- "randomize": []
+ "methods": {
+  "recompute": [],
+  "point": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ],
+  "place": [
+   "X",
+   "Y"
+  ],
+  "randomize": []
+ }
 }

@@ -1,13 +1,15 @@
 {
- "reset": [],
- "earn": [
-  "EARNINGS"
- ],
- "spend": [
-  "COST"
- ],
- "modal-view": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ]
+ "methods": {
+  "reset": [],
+  "earn": [
+   "EARNINGS"
+  ],
+  "spend": [
+   "COST"
+  ],
+  "modal-view": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ]
+ }
 }

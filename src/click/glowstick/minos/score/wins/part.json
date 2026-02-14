@@ -1,7 +1,9 @@
 {
- "increment": [],
- "modal-view": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ]
+ "methods": {
+  "increment": [],
+  "modal-view": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ]
+ }
 }

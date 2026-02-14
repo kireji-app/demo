@@ -1,8 +1,10 @@
 {
- "routeID-vector-to": [
-  "VECTOR"
- ],
- "routeID-vector-from": [
-  "ROUTE_ID"
- ]
+ "methods": {
+  "routeID-vector-to": [
+   "VECTOR"
+  ],
+  "routeID-vector-from": [
+   "ROUTE_ID"
+  ]
+ }
 }

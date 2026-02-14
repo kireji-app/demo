@@ -1,6 +1,8 @@
 {
  "extends": "mix",
- "open": [
-  "SCROLL_TO"
- ]
+ "methods": {
+  "open": [
+   "SCROLL_TO"
+  ]
+ }
 }

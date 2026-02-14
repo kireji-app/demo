@@ -1,5 +1,7 @@
 {
  "abstract": true,
  "extends": "trophy...",
- "examine": []
+ "methods": {
+  "examine": []
+ }
 }

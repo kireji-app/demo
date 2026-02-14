@@ -1,7 +1,9 @@
 {
  "extends": "match",
- "close": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT"
- ]
+ "methods": {
+  "close": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ]
+ }
 }

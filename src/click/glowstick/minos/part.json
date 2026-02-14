@@ -1,7 +1,9 @@
 {
  "extends": "application",
- "state-check": [],
- "lock": [],
- "unlock": [],
- "primitives-install": []
+ "methods": {
+  "state-check": [],
+  "lock": [],
+  "unlock": [],
+  "primitives-install": []
+ }
 }

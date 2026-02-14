@@ -1,17 +1,19 @@
 {
  "extends": "mix",
- "open": [
-  "TARGET_PIECE"
- ],
- "select": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT",
-  "REPLACEMENT_INDEX"
- ],
- "retarget": [
-  "POINTER_EVENT",
-  "TARGET_ELEMENT",
-  "TARGET_INDEX"
- ],
- "repopulate": []
+ "methods": {
+  "open": [
+   "TARGET_PIECE"
+  ],
+  "select": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT",
+   "REPLACEMENT_INDEX"
+  ],
+  "retarget": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT",
+   "TARGET_INDEX"
+  ],
+  "repopulate": []
+ }
 }
