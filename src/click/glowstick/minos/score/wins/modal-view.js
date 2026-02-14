@@ -3,5 +3,6 @@ pointer.handle({
   minos.modal.close()
  },
  POINTER_EVENT,
- TARGET_ELEMENT
+ TARGET_ELEMENT,
+ focus: "down"
 })

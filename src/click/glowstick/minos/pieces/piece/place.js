@@ -20,6 +20,9 @@ if (minosPiece.primitive === minosPiece.radialBomb) {
 // Change this piece (which updates its placeability).
 minosPiece.randomize()
 
+// Ensure focus remains in the application, since the focused piece was removed.
+Q("title-bar").focus()
+
 // Increment the move count (needed for determining certain achievements).
 minos.score.moves.count()
 

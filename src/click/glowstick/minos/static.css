@@ -449,7 +449,7 @@ body.vintage #minos_glowstick_click[data-modal]>#modal>h2>button {
  box-shadow: var(--deep-outset);
 }
 
-body.vintage #minos_glowstick_click[data-modal]>#modal>h2>button:active {
+body.vintage #minos_glowstick_click[data-modal]>#modal>h2>button.down {
  box-shadow: var(--deep-inset);
 }
 
@@ -557,14 +557,15 @@ body.vintage #minos_glowstick_click[data-modal="shop"] .item>.label {
  font-size: var(--default-font-size);
 }
 
-body.vintage #minos_glowstick_click #pieces button:active,
+body.vintage #minos_glowstick_click #pieces button.down,
 body.vintage #minos_glowstick_click[data-modal="trophies"] #trophies,
 body.vintage #minos_glowstick_click[data-modal="shop"] #points,
-body.vintage #minos_glowstick_click[data-modal="shop"] #score button:active,
+body.vintage #minos_glowstick_click #score button.down,
 body.vintage #minos_glowstick_click:not([data-modal]) #wins,
 body.vintage #minos_glowstick_click[data-shop-target="0"] #pieces>:nth-child(1),
 body.vintage #minos_glowstick_click[data-shop-target="1"] #pieces>:nth-child(2),
-body.vintage #minos_glowstick_click[data-shop-target="2"] #pieces>:nth-child(3) {
+body.vintage #minos_glowstick_click[data-shop-target="2"] #pieces>:nth-child(3),
+body.vintage #minos_glowstick_click[data-shop-target] #pieces>.down {
  box-shadow: unset;
  background: transparent;
 }

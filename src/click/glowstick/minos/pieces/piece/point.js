@@ -20,6 +20,7 @@ const pointerConfig = minos.modal.shop.enabled ? {
   TARGET_ELEMENT.classList.add("dragging")
   minos.container.classList.add("dragging")
   this.itemSize = TARGET_ELEMENT.getBoundingClientRect()
+  TARGET_ELEMENT.focus()
  },
  drag(pointerEvent) {
   const
