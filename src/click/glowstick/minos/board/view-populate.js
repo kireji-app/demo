@@ -1,4 +1,4 @@
-if (hydrated) {
+if (client.hydrated) {
  for (const tile of minosBoard.allTiles) {
   if (minosBoard.viewedTiles.has(tile)) {
    if (!minosBoard.activeTiles.has(tile)) {

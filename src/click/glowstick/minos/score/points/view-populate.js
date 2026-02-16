@@ -1,2 +1,2 @@
-if (hydrated)
+if (client.hydrated)
  Q("#points").innerHTML = minosPoints["part.html"]

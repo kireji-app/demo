@@ -1,4 +1,4 @@
-if (!hydrated) {
+if (!client.hydrated) {
  minosTrophies.recompute()
 
  minosTrophies.viewedEarned.clear()

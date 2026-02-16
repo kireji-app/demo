@@ -1,4 +1,4 @@
-if (hydrated) {
+if (client.hydrated) {
  Q("#notebook-section").innerHTML = home["part.html"]
  document.title = ejaugust.title
  Q(`meta[name="description"]`).setAttribute("content", ejaugust.descriptionMeta)

@@ -1,4 +1,4 @@
-if (hydrated) {
+if (client.hydrated) {
  Q("#notebook-section").innerHTML = note["part.html"]
  Q("#note-title").innerHTML = note.title ?? "Untitled Note"
  Q("#note-subtitle").innerHTML = note.subtitle ?? ""
