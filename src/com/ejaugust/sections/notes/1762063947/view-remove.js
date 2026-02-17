@@ -1,1 +1,1 @@
-_.detach("populate", note, "listener")
+_.detach("update", note, "listener")

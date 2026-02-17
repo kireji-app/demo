@@ -1,1 +1,3 @@
-return `data-modal="trophies"`
+return [
+ `data-modal="trophies"`
+]

@@ -1,1 +1,1 @@
-return `<region- ${region.attributes}></region->`
+return `<region- ${region.attributes.join(" ")}></region->`

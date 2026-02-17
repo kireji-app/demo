@@ -1,0 +1,1 @@
+client.promise.then(() => _.attach("update", note, "listener"))

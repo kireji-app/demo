@@ -18,13 +18,6 @@
  transform: scale(0.5);
 }
 
-#ejaugust_com .topic {
- font-weight: 400;
- text-transform: uppercase;
- font-size: 0.75em;
- color: var(--fg-mode-er);
-}
-
 #ejaugust_com #bio>p {
  padding-top: var(--spacing);
  text-align: right;

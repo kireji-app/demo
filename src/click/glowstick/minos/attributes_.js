@@ -1,1 +1,1 @@
-return minosModal.arm.attributes ?? ""
+return minosModal.arm.attributes

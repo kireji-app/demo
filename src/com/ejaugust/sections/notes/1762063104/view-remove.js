@@ -1,1 +1,1 @@
-_.com.ejaugust.detach("populate", note, "listener")
+ejaugust.detach("update", note, "listener")

@@ -14,6 +14,14 @@
  margin: 0;
 }
 
+#ejaugust_com .details {
+ font-weight: 400;
+ text-transform: uppercase;
+ font-size: 0.75em;
+ color: var(--fg-mode-er);
+ display: flex;
+}
+
 #ejaugust_com ::after,
 #ejaugust_com ::before {
  pointer-events: none;

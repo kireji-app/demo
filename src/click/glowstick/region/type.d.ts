@@ -3,8 +3,8 @@ declare interface IGlowstickRegion
  IWebComponent {
 
  // Serialized Properties.
- /** The space-separated list of HTML element attributes for the region. */
- readonly "attributes": string
+ /** The array of HTML element attributes for the region. */
+ readonly "attributes": string[]
  /** The current user position on the x-axis if in the region, -1n otherwise. */
  readonly "xPosition": bigint
  /** The current user position on the y-axis if in the region, -1n otherwise. */

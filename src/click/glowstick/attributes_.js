@@ -1,1 +1,3 @@
-return glowstick.pointAttr()
+return [
+ glowstick.pointAttr()
+]

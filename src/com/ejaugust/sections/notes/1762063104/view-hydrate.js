@@ -1,0 +1,1 @@
+client.promise.then(() => ejaugust.attach("update", note, "listener"))

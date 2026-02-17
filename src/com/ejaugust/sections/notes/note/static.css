@@ -5,6 +5,18 @@
 #ejaugust_com #note-credit {
  color: var(--fg-mode-er);
  font-weight: 400;
+ display: flex;
+ flex-flow: row nowrap;
+}
+
+#ejaugust_com #note-credit>img {
+ height: calc(4 * var(--spacing));
+ width: calc(4 * var(--spacing));
+ margin-right: var(--spacing);
+}
+
+#ejaugust_com #note-credit>span>* {
+ line-height: calc(2 * var(--spacing));
 }
 
 #ejaugust_com #notebook-section :is(h2, h3:not(#note-subtitle), h4, h5, h6) {

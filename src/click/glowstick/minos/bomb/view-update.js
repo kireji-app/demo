@@ -1,0 +1,1 @@
+Q("#bomb").innerHTML = minosBomb["part.html"]

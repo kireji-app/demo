@@ -4,7 +4,7 @@ return (
   "<div id=note-links>" + (
    [...notes].reverse().map(note =>
     `<a ${_.pointAttr()} href=${note.canonicalURL}>` + (
-     `<h4 class=topic>${note.topic ?? "No Topic"}</h4>` +
+     `<span class=details><span class=topic>${note.topic ?? "No Topic"}</span><flex-spacer></flex-spacer><span class=date>${note.niceDate(note.key)}</span></span>` +
      "<h3>" + (
       note.title
      ) +
