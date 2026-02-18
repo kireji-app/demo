@@ -505,3 +505,43 @@ body.vintage #ejaugust_com #footer-top {
 body.vintage #ejaugust_com #footer-home {
  padding-top: 6px;
 }
+
+@media (width < 500px) {
+
+ body.vintage #ejaugust_com>scroller->scroll-content {
+  grid-template:
+   "banner" 128px
+   "article" minmax(calc(var(--app-height) - 160px), auto)
+   /* */
+   "nav" min-content
+   / 1fr;
+  margin: 8px;
+  font-size: inherit;
+ }
+
+ body.vintage #ejaugust_com #notebook-section {
+  margin-left: 12px;
+ }
+
+ body.vintage #ejaugust_com>scroller->scroll-content>footer {
+  flex-flow: row wrap;
+  justify-content: center;
+ }
+
+ body.vintage #ejaugust_com>scroller->scroll-content>footer>section {
+  display: contents;
+ }
+
+ body.vintage #ejaugust_com>scroller->scroll-content>footer::before,
+ body.vintage #ejaugust_com>scroller->scroll-content>footer::after {
+  content: unset;
+ }
+
+ body.vintage #ejaugust_com #footer-top {
+  position: static;
+ }
+
+ body.vintage #ejaugust_com #footer-home {
+  padding-top: unset;
+ }
+}
