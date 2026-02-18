@@ -9,8 +9,10 @@ declare interface IEJAugustNote
  readonly "credit.html": string
  /** The full display title and subtitle for the note. */
  readonly "heading.html": string
- /** An optional topic which can be used to categorize the note. */
- readonly "topic"?: string
+ /** A card that can be used to display and link to the note. */
+ readonly "card.html": string
+ /** A topic which can be used to categorize the note. */
+ readonly "topic": string
  /** An optional tagline appearing as a subheading below the note's title. */
  readonly "subtitle"?: string
  /** The timestamp of the last time the note was edited. */

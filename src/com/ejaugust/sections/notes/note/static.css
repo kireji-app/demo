@@ -2,42 +2,42 @@
  display: none;
 }
 
-#ejaugust_com #note-credit {
+body.modern #ejaugust_com #note-credit {
  color: var(--fg-mode-er);
  font-weight: 400;
  display: flex;
  flex-flow: row nowrap;
 }
 
-#ejaugust_com #note-credit>img {
+body.modern #ejaugust_com #note-credit>img {
  height: calc(4 * var(--spacing));
  width: calc(4 * var(--spacing));
  margin-right: var(--spacing);
 }
 
-#ejaugust_com #note-credit>span>* {
+body.modern #ejaugust_com #note-credit>span>* {
  line-height: calc(2 * var(--spacing));
 }
 
-#ejaugust_com #notebook-section :is(h2, h3:not(#note-subtitle), h4, h5, h6) {
+body.modern #ejaugust_com #notebook-section :is(h2, h3:not(#note-subtitle), h4, h5, h6) {
  padding-top: calc(2.5 * var(--spacing));
 }
 
-#ejaugust_com #notebook-section>h2 {
+body.modern #ejaugust_com #notebook-section>h2 {
  padding-top: calc(1.5 * var(--spacing));
  box-shadow: 0 -1px 0 0 var(--bg-un-mode);
 }
 
-#ejaugust_com #notebook-section>*:has(+ h2) {
+body.modern #ejaugust_com #notebook-section>*:has(+ h2) {
  padding-bottom: calc(1.5 * var(--spacing));
 }
 
-#ejaugust_com #notebook-section :is(ol, ul) {
+body.modern #ejaugust_com #notebook-section :is(ol, ul) {
  padding-right: calc(3.5 * var(--spacing));
  padding-left: calc(3.5 * var(--spacing));
 }
 
-#ejaugust_com #notebook-section pre {
+body.modern #ejaugust_com #notebook-section pre {
  --edge-color: #ffffff0f !important;
  --paper-color: var(--light-bg);
  --text-color: var(--light-accent);
@@ -59,21 +59,30 @@
  overflow: hidden;
 }
 
-#ejaugust_com #notebook-section pre::before {
+body.modern #ejaugust_com #notebook-section pre::before {
  background: var(--paper-color);
 }
 
-#ejaugust_com #notebook-section pre::after {
+body.modern #ejaugust_com #notebook-section pre::after {
  z-index: 0;
  filter: invert(1);
 }
 
-body.light #ejaugust_com #notebook-section pre::after {
+body.modern.light #ejaugust_com #notebook-section pre::after {
  filter: contrast(0.1) sepia(1) hue-rotate(188deg) saturate(10) brightness(0.5);
 }
 
-body.dark #ejaugust_com #notebook-section pre {
+body.modern.dark #ejaugust_com #notebook-section pre {
  --edge-color: #ffffff03 !important;
  --paper-color: var(--light-accent);
  --text-color: var(--light-bg);
+}
+
+body.vintage #ejaugust_com #note-credit img {
+ display: none;
+}
+
+body.vintage #ejaugust_com #notebook-section pre {
+ white-space: pre-wrap;
+ word-break: break-all;
 }

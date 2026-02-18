@@ -1,0 +1,79 @@
+#ejaugust_com header {
+ pointer-events: none;
+}
+
+#ejaugust_com #bio>img[title="Me"] {
+ float: right;
+ width: calc(16 * var(--spacing));
+ box-shadow:
+  1px 1px 2px -1px #0005,
+  0 0 8px 3px #0001,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ border-radius: 50%;
+ shape-outside: circle(50%);
+ margin: var(--spacing);
+}
+
+#ejaugust_com #bio>img:not([title="Me"]) {
+ transform: scale(0.5);
+}
+
+#ejaugust_com #bio>p {
+ padding-top: var(--spacing);
+ text-align: right;
+}
+
+#ejaugust_com #note-links {
+ display: grid;
+ gap: var(--spacing);
+ grid-template-columns: 1fr;
+}
+
+#ejaugust_com #note-links>:is(a, a:visited, a:hover) {
+ text-decoration: none;
+ margin: 2px;
+ padding: calc(var(--spacing) - 2px);
+ cursor: pointer;
+ transform-origin: center;
+ display: flex;
+ flex-flow: column;
+ border-radius: var(--radius);
+ transition: transform 0.15s ease, box-shadow 0.15s ease;
+ position: relative;
+ overflow: hidden;
+ background-color: var(--surface);
+}
+
+#ejaugust_com #note-links>a {
+ box-shadow:
+  1px 1px 2px -1px #0005,
+  0 0 8px 3px #0001,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+}
+
+#ejaugust_com #note-links>a::before {
+ content: "";
+ position: absolute;
+ left: 0;
+ top: 0;
+ bottom: 0;
+ right: 0;
+ z-index: 0 !important;
+}
+
+#ejaugust_com #note-links>a:hover {
+ transform: scale(101%) translate(-5px, -4px);
+ box-shadow:
+  10px 8px 12px -6px #0004,
+  0 0 13px -3px #0002,
+  inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ z-index: 10;
+}
+
+#ejaugust_com #note-links>a>* {
+ margin: 0;
+}
+
+#ejaugust_com #footer-home {
+ display: none;
+}

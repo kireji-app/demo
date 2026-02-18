@@ -1,10 +1,16 @@
 ejaugust.define({
+ topics: { value: {} },
  canonicalLinks: {
-  value: notes.reduce((result, note) => {
-   if (note.pathname)
-    result[note.pathname.slice(1)] = note.key
+  resolve() {
+   return notes.reduce((result, note) => {
+    if (note.pathname) {
+     result[note.pathname.slice(1)] = note.key
+    }
 
-   return result
-  }, {})
+    (this.topics[note.topic] ??= []).push(note)
+
+    return result
+   }, {})
+  }
  }
 })

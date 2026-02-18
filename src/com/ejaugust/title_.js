@@ -1,1 +1,1 @@
-return `${ejaugust.titleMenu}${section?.title ? " - " + section.title : ""}`
+return `${!section || section === ejaugust.sections.home ? ejaugust.titleMenu : section.title}`

@@ -115,6 +115,11 @@
    }
   }
  },
+ "com": {
+  "ejaugust": {
+   "sections": "home"
+  }
+ },
  "parts": {
   "desktop": {
    "color": "light",

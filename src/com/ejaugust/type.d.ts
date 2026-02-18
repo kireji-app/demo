@@ -16,6 +16,7 @@ declare interface IEJAugust
  // Runtime Properties.
  /** An object that maps canonical link pathnames of notes back to their true key (their creation timestamp). */
  readonly canonicalLinks: Record<string, string>
+ readonly topics: Record<string, IEJAugustNote[]>
 }
 
 /** The entire www.ejaugust.com application, including home page and all notes. */

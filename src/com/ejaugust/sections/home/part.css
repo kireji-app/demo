@@ -2,7 +2,11 @@
  pointer-events: none;
 }
 
-#ejaugust_com #bio>img[title="Me"] {
+#ejaugust_com #footer-home {
+ display: none;
+}
+
+body.modern #ejaugust_com #bio>img[title="Me"] {
  float: right;
  width: calc(16 * var(--spacing));
  box-shadow:
@@ -14,22 +18,22 @@
  margin: var(--spacing);
 }
 
-#ejaugust_com #bio>img:not([title="Me"]) {
+body.modern #ejaugust_com #bio>img:not([title="Me"]) {
  transform: scale(0.5);
 }
 
-#ejaugust_com #bio>p {
+body.modern #ejaugust_com #bio>p {
  padding-top: var(--spacing);
  text-align: right;
 }
 
-#ejaugust_com #note-links {
+body.modern #ejaugust_com #note-links {
  display: grid;
  gap: var(--spacing);
  grid-template-columns: 1fr;
 }
 
-#ejaugust_com #note-links>:is(a, a:visited, a:hover) {
+body.modern #ejaugust_com #note-links>:is(a, a:visited, a:hover) {
  text-decoration: none;
  margin: 2px;
  padding: calc(var(--spacing) - 2px);
@@ -44,14 +48,14 @@
  background-color: var(--surface);
 }
 
-#ejaugust_com #note-links>a {
+body.modern #ejaugust_com #note-links>a {
  box-shadow:
   1px 1px 2px -1px #0005,
   0 0 8px 3px #0001,
   inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
 }
 
-#ejaugust_com #note-links>a::before {
+body.modern #ejaugust_com #note-links>a::before {
  content: "";
  position: absolute;
  left: 0;
@@ -61,7 +65,7 @@
  z-index: 0 !important;
 }
 
-#ejaugust_com #note-links>a:hover {
+body.modern #ejaugust_com #note-links>a:hover {
  transform: scale(101%) translate(-5px, -4px);
  box-shadow:
   10px 8px 12px -6px #0004,
@@ -70,10 +74,61 @@
  z-index: 10;
 }
 
-#ejaugust_com #note-links>a>* {
+body.modern #ejaugust_com #note-links>a>* {
  margin: 0;
 }
 
-#ejaugust_com #footer-home {
- display: none;
+body.vintage:is(.dark, .light) #note-links>a {
+ display: grid;
+ grid-template:
+  "link" 1fr
+  "details" min-content
+  "body" min-content;
+ text-decoration: none;
+ color: var(--fg);
+ pointer-events: none;
+ padding-left: 24px;
+ position: relative;
+ margin-bottom: 24px;
+}
+
+body.vintage #note-links>a>h3 {
+ margin: 0;
+ grid-area: link;
+ text-decoration: underline;
+ color: blue;
+ pointer-events: all;
+ font-weight: 500 !important;
+}
+
+body.vintage.dark #note-links>a>h3 {
+ color: aqua;
+}
+
+body.vintage #note-links>a>h3:active {
+ color: red;
+}
+
+body.vintage #note-links>a>p {
+ margin: 0;
+ grid-area: body;
+}
+
+body.vintage #note-links>a>.details {
+ grid-area: details;
+}
+
+body.vintage #note-links>a>.details .topic::after {
+ content: " - "
+}
+
+body.vintage #note-links>a::before {
+ content: "";
+ position: absolute;
+ left: 0;
+ background: var(--note-notes-sections-ejaugust-com--part-png);
+ background-size: contain;
+ top: 0;
+ height: 16px;
+ width: 16px;
 }
