@@ -22,7 +22,13 @@ for (const trophy of minosTrophies.earned) {
 }
 
 if (newTrophies.size || newMetaTrophies.size) {
- for (const trophy of [...newTrophies, ...newMetaTrophies, ...newMetaMetaTrophy])
-  debug('🏆 ' + trophy.description + '')
+ for (const trophy of [...newTrophies, ...newMetaTrophies, ...newMetaMetaTrophy]) {
+  debug(`
+ 🏆 ${trophy[".."].title}: ${trophy.key} 🏆
+ 📝 ${trophy.description}
+ 💰 ${trophy.reward} points
+`)
+  minosScore.points.earn(trophy.reward)
+ }
  Q("#trophies").innerHTML = minosTrophies["part.html"]
 }

@@ -1,0 +1,1 @@
+return minosPointsTrophy.key / 10

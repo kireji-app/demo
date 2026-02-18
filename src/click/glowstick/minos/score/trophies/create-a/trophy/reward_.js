@@ -1,0 +1,1 @@
+return minosShapeTrophy.key * 200

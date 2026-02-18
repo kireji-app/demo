@@ -44,4 +44,8 @@ declare interface IMinosGameTrophy
  // Serialized Properties.
  /** Returns true if the trophy has been earned. */
  readonly isEarned: boolean
+ /** The description of the trophy as it appears to the player. */
+ readonly description: string
+ /** The number of points the player gains when the trophy is earned. */
+ readonly reward: number
 }
