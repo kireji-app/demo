@@ -13,6 +13,8 @@ const pointerConfig = minos.modal.shop.enabled ? {
  itemSize: null,
  dropMarker: minos.board.element.appendChild(document.createElement("mino-")),
  dropPosition: null,
+ isRadialBomb: minosPiece.primitive === minosPiece.radialBomb,
+ isCrosshairBomb: minosPiece.primitive === minosPiece.crosshairBomb,
  down() {
   this.dropMarker.setAttribute("style", `display:none`)
   this.dropMarker.classList.add("drop-marker")
@@ -32,11 +34,36 @@ const pointerConfig = minos.modal.shop.enabled ? {
 
   if (isAllowed) {
    this.dropPosition = { x, y }
-   this.dropMarker.classList.add("allowed")
+   minos.board.element.classList.add("allowed")
    this.shop = false
   } else {
    this.dropPosition = null
-   this.dropMarker.classList.remove("allowed")
+   minos.board.element.classList.remove("allowed")
+  }
+
+  if (this.isRadialBomb) {
+   for (const oldThreatened of minos.board.element.querySelectorAll(".threatened"))
+    oldThreatened.classList.remove("threatened")
+
+   const radius = 5n
+   const r2 = radius * radius
+   for (let dy = -radius; dy <= radius; dy++) {
+    for (let dx = -radius; dx <= radius; dx++) {
+     const nx = BigInt(x) + dx
+     const ny = BigInt(y) + dy
+     if (nx >= 0n && nx < minos.board.width && ny >= 0n && ny < minos.board.width && dx * dx + dy * dy <= r2)
+      Q(`#board mino-[style="--x:${nx};--y:${ny}"]`)?.classList.add("threatened")
+    }
+   }
+  } else if (this.isCrosshairBomb) {
+   for (const oldThreatened of minos.board.element.querySelectorAll(".threatened"))
+    oldThreatened.classList.remove("threatened")
+
+   for (const columnMino of minos.board.element.querySelectorAll(`[style*="--x:${x};"]`))
+    columnMino.classList.add("threatened")
+
+   for (const rowMino of minos.board.element.querySelectorAll(`[style$="--y:${y}"]`))
+    rowMino.classList.add("threatened")
   }
 
   this.dropMarker.setAttribute("style", `${this.itemStyle};--x:${x};--y:${y}`)
@@ -51,6 +78,9 @@ const pointerConfig = minos.modal.shop.enabled ? {
   TARGET_ELEMENT.setAttribute("style", this.itemStyle)
   TARGET_ELEMENT.classList.remove("dragging")
   minos.container.classList.remove("dragging")
+  for (const oldThreatened of minos.board.element.querySelectorAll(".threatened"))
+   oldThreatened.classList.remove("threatened")
+  minos.board.element.classList.remove("allowed")
  },
  POINTER_EVENT,
  TARGET_ELEMENT

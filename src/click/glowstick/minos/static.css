@@ -195,50 +195,24 @@
  content: "✛";
 }
 
-#minos_glowstick_click #pieces>minos-.dragging.bomb.radial::before {
- content: "";
- position: absolute;
- left: calc(-4.5 * var(--mino));
- right: calc(-4.5 * var(--mino));
- top: calc(-4.5 * var(--mino));
- bottom: calc(-4.5 * var(--mino));
- border-radius: calc(5 * var(--mino));
- background-color: #ff00007f;
- pointer-events: none;
+#minos_glowstick_click #board:not(.allowed)>mino-:is(.drop-marker, .threatened) {
+ background: #ff00007f;
+ box-shadow: inset 0 0 0 var(--px) #ff0000 !important;
 }
 
-#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::before,
-#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::after {
- content: "";
- position: absolute;
- left: calc(var(--mino) / 4);
- right: calc(var(--mino) / 4);
- top: calc(var(--mino) / 4);
- bottom: calc(var(--mino) / 4);
- background-color: #ff00007f;
- pointer-events: none;
+#minos_glowstick_click #board>mino-.drop-marker {
+ width: calc(var(--mino) * var(--w));
+ height: calc(var(--mino) * var(--h));
 }
 
-#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::before {
- top: calc(-2 * var(--mino));
- bottom: calc(-2 * var(--mino));
-}
-
-#minos_glowstick_click #pieces>minos-.dragging.bomb.crosshair::after {
- left: calc(-2 * var(--mino));
- right: calc(-2 * var(--mino));
-}
-
-#minos_glowstick_click #board>mino-.drop-marker.allowed {
+#minos_glowstick_click #board.allowed>mino-:is(.drop-marker, .threatened) {
  background: #00ff007f;
  box-shadow: inset 0 0 0 var(--px) #00ff00 !important;
 }
 
-#minos_glowstick_click #board>mino-.drop-marker {
- background: #ff00007f;
- box-shadow: inset 0 0 0 var(--px) #ff0000 !important;
- width: calc(var(--mino) * var(--w));
- height: calc(var(--mino) * var(--h));
+body.light #minos_glowstick_click #board.allowed>mino-:is(.drop-marker, .threatened) {
+ background: #00aa007f;
+ box-shadow: inset 0 0 0 var(--px) #00aa00 !important;
 }
 
 @container application (aspect-ratio > 1 / 1) {
