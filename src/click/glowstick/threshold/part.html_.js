@@ -1,1 +1,0 @@
-return `<region- class="threshold" ${region.attributes.join(" ")}></region->`

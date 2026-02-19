@@ -1,5 +1,5 @@
 world.define({
- gridColor: { value: "var(--fg-mode-er)" },
+ gridColor: { value: "var(--bg)" },
  element: { value: null, writable: true }
 })
 

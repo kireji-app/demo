@@ -3,7 +3,6 @@ declare interface IGlowstick
 
  // Subparts.
  readonly region: IGlowstickRegion
- readonly threshold: IGlowstickRegion
  readonly user: IGlowstickUser
  readonly world: IGlowstickWorld
 
@@ -20,6 +19,10 @@ declare interface IGlowstick
  readonly tilesCount: number
  /** When the user is walking, the moment the walking started (used for computing walking speed). */
  readonly walkMark: number
+ /** Whether or not to skip the view update on the world when the route ID changes (because it was already updated by the user interaction loop before the route ID was updated). */
+ readonly skipMoveWorld: boolean
+ /** The ratio of art pixel size to css pixel size. */
+ readonly pixelRatio: number
 }
 
 declare const glowstick: IGlowstick

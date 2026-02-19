@@ -29,7 +29,7 @@ pointer.handle({
     minos.score.trophies.shop.myFirstTrade.setRouteID(1n)
   }
 
-  minosModal.setRouteID(minosModal.modelToRouteID("none"))
+  minosModal.setModel("none")
 
   minos.checkState()
  },

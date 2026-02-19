@@ -4,12 +4,12 @@ declare interface IGlowstickWorld
 
  // Subparts.
  readonly bathroom: IGlowstickRegion
- readonly bathroomDoor: IGlowstickThreshold
+ readonly bathroomDoor: IGlowstickRegion
  readonly bridge: IGlowstickRegion
  readonly hallway: IGlowstickRegion
- readonly hallwayDoor: IGlowstickThreshold
+ readonly hallwayDoor: IGlowstickRegion
  readonly officeA: IGlowstickRegion
- readonly officeADoor: IGlowstickThreshold
+ readonly officeADoor: IGlowstickRegion
  readonly openOffice: IGlowstickRegion
 
  // Runtime Properties.

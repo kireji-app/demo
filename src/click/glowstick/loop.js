@@ -1,94 +1,112 @@
-const keys = hotKeys.pressed
+/** A normalized vector representing the player's movement direction. */
+const moveVector = (() => {
 
-const moveVector = { x: 0, y: 0, speed: 1 }
+ if (glowstick.thumbstickStart) {
+  // The pointer is controlling the player character.
+  const result = Vector.normalize(glowstick.thumbstickVector)
+  const magnitude = Vector.magnitude(glowstick.thumbstickVector)
 
-if (glowstick.thumbstickStart) {
- const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
- const magnitude = Math.hypot(glowstick.thumbstickVector.x, glowstick.thumbstickVector.y)
- if (magnitude) {
-  moveVector.x = glowstick.thumbstickVector.x / magnitude
-  moveVector.y = glowstick.thumbstickVector.y / magnitude
-  if (magnitude > maxRadius) {
-   glowstick.thumbstickVector.x = moveVector.x * maxRadius
-   glowstick.thumbstickVector.y = moveVector.y * maxRadius
-  } else {
-   moveVector.speed = (magnitude / maxRadius) ** 1.5
-  }
+  // Position the visual thumbstick.
+  const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
+  glowstick.handleElement.style.setProperty("--x", result.x * Math.min(magnitude, maxRadius) + "px")
+  glowstick.handleElement.style.setProperty("--y", result.y * Math.min(magnitude, maxRadius) + "px")
+  return result
  }
- glowstick.handleElement.style.setProperty("--x", moveVector.x * Math.min(magnitude, maxRadius) + "px")
- glowstick.handleElement.style.setProperty("--y", moveVector.y * Math.min(magnitude, maxRadius) + "px")
- moveVector.x = Math.abs(moveVector.x) >= Math.sin((Math.PI / 8)) ? Math.sign(moveVector.x) : 0
- moveVector.y = Math.abs(moveVector.y) >= Math.sin((Math.PI / 8)) ? Math.sign(moveVector.y) : 0
-} else {
- if (keys.has("KeyA")) moveVector.x -= 1
- if (keys.has("KeyD")) moveVector.x += 1
- if (keys.has("KeyW")) moveVector.y -= 1
- if (keys.has("KeyS")) moveVector.y += 1
+
+ // The keyboard might be controlling the player character.
+ const keyboardVector = { x: 0, y: 0 }
+ if (hotKeys.pressed.has("KeyA")) keyboardVector.x -= 1
+ if (hotKeys.pressed.has("KeyD")) keyboardVector.x += 1
+ if (hotKeys.pressed.has("KeyW")) keyboardVector.y -= 1
+ if (hotKeys.pressed.has("KeyS")) keyboardVector.y += 1
+ return Vector.normalize(keyboardVector)
+})()
+
+/** The player character's facing direction (undefined if the vector has no magnitude). */
+let facingDirectionRouteID = user.vectorToRouteID(moveVector)
+
+/** The move vector, scaled by character speed, client framerate and a vertical factor that accounts for the camera angle. */
+const forceVector = {
+ x: moveVector.x * user.pixelsPerSecond / stats.fps,
+ y: moveVector.y * (user.pixelsPerSecond / stats.fps) * 0.75
 }
 
-const newUserRouteID = user.vectorToRouteID(moveVector)
+if (facingDirectionRouteID !== undefined) {
+ // The player is moving.
 
-if (newUserRouteID !== undefined) {
+ // Prevent route ID updates from propagating to the view because view updates will be more precise than route ID updates.
+ glowstick.skipMoveWorld = true
 
- if (newUserRouteID !== user.routeID)
-  user.setRouteID(newUserRouteID)
+ region.placeStates[0] += forceVector.x
+ region.placeStates[1] += forceVector.y
 
- user.element.classList.add("walking")
+ const collision = { x: null, y: null }
 
- let takeStep = true
-
- if (glowstick.walkMark) {
-  const diagonal = (moveVector.x !== 0 && moveVector.y !== 0)
-  const tilesPerSecond = user.tilesPerSecond * moveVector.speed / (diagonal ? Math.SQRT2 : 1)
-  const secondsSinceLastMovement = (TIME - glowstick.walkMark) / 1000
-  takeStep = (secondsSinceLastMovement * tilesPerSecond) > 1
+ if (region.placeStates[0] < 0) {
+  region.placeStates[0] = 0
+  collision.x = forceVector.x
+ } else if (region.placeStates[0] > region.placeLimits[0] - 1) {
+  region.placeStates[0] = region.placeLimits[0] - 1
+  collision.x = forceVector.x
  }
 
- if (takeStep) {
-  glowstick.walkMark = TIME
+ if (region.placeStates[1] < 0) {
+  region.placeStates[1] = 0
+  collision.y = forceVector.y
+ } else if (region.placeStates[1] > region.placeLimits[1] - 1) {
+  region.placeStates[1] = region.placeLimits[1] - 1
+  collision.y = forceVector.y
+ }
 
-  let
-   xCollide = 0n,
-   yCollide = 0n,
-   moved = false,
-   movedToNeighbor = false
+ let movedToNeighbor = false
 
-  if (moveVector.x) {
-   const xPotential = BigInt(moveVector.x)
-   const xRouteID = region.placeStates[0] + xPotential
-   if (xRouteID >= 0n && xRouteID < region.placeLimits[0]) {
-    region.placeStates[0] = xRouteID
-    moved = true
-   } else xCollide = xPotential
-  }
-
-  if (moveVector.y) {
-   const yPotential = BigInt(moveVector.y)
-   const yRouteID = region.placeStates[1] + yPotential
-   if (yRouteID >= 0n && yRouteID < region.placeLimits[1]) {
-    region.placeStates[1] = yRouteID
-    moved = true
-   } else yCollide = yPotential
-  }
-
-  if (xCollide || yCollide) {
-   for (const neighbor of region.neighbors) {
-    const x = user.x + xCollide
-    const y = user.y + yCollide
-    if (neighbor.overlaps({ x, y, w: 0n, h: 0n })) {
-     world.setRouteID(world.modelToRouteID({
-      [neighbor.key]: [x - neighbor.x - user.w, y - neighbor.y - user.h]
-     }))
-     movedToNeighbor = true
-     break
-    }
+ if (collision.x || collision.y) {
+  for (const neighbor of region.neighbors) {
+   const x = user.x + collision.x
+   const y = user.y + collision.y
+   if (neighbor.overlaps({ x, y, w: 0, h: 0 })) {
+    // Set the place states of the neighbor manually because it will be more precise than what the route distribution method can provide.
+    neighbor.placeStates[0] = x - neighbor.x
+    neighbor.placeStates[1] = y - neighbor.y
+    world.setModel({ [neighbor.key]: neighbor.placeStates })
+    movedToNeighbor = true
+    break
    }
   }
-
-  if (!movedToNeighbor && moved)
-   region.setRouteID(region.modelToRouteID(region.placeStates))
-
+  if (!movedToNeighbor) {
+   facingDirectionRouteID = user.vectorToRouteID({
+    x: collision.x ? 0 : Math.sign(moveVector.x),
+    y: collision.y ? 0 : Math.sign(moveVector.y)
+   })
+  }
  }
+
+ // Conditionally enable a walking animation.
+ if (movedToNeighbor || (collision.x === null && (Math.abs(forceVector.x) > 0.01)) || (collision.y === null && (Math.abs(forceVector.y) > 0.01)))
+  user.element.classList.add("walking")
+ else {
+  user.element.classList.remove("walking")
+
+  // This lets the player turn to face the wall or corner even if they are already up against it and not walking.
+  facingDirectionRouteID = user.vectorToRouteID(moveVector)
+ }
+
+ // Conditionally update the player character's facing direction.
+ // TODO: Try modifying the user's facing vector based on collision.
+ if (facingDirectionRouteID !== undefined && facingDirectionRouteID !== user.routeID)
+  user.setRouteID(facingDirectionRouteID)
+
+ if (!movedToNeighbor) {
+  // This will round the place states to integer values, giving the stored position less precision than the one used during gameplay.
+  const newRouteID = region.modelToRouteID(region.placeStates)
+  if (region.routeID !== newRouteID)
+   region.setRouteID(newRouteID)
+ }
+
+ world.moveView()
+
+ glowstick.skipMoveWorld = false
+
 } else {
  glowstick.walkMark = null
  user.element.classList.remove("walking")

@@ -5,6 +5,6 @@ const xywhCache = region.xywh
 region.define({
  element: { value: null, writable: true },
  neighbors: { value: [] },
- x: { value: BigInt(xywhCache[0]) },
- y: { value: BigInt(xywhCache[1]) },
+ x: { value: xywhCache[0] },
+ y: { value: xywhCache[1] },
 })

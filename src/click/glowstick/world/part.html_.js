@@ -1,1 +1,1 @@
-return `<world- style="---x:${user.x * -1n};---y:${user.y * -1n};--grid-color:${world.gridColor}">${world.map(region => region["part.html"]).join("")}</world->`
+return `<world- style="---x:${user.x * -1};---y:${user.y * -1};--grid-color:${world.gridColor}">${world.map(region => region["part.html"]).join("")}</world->`

@@ -1,5 +1,5 @@
-minosModal.setRouteID(minosModal.modelToRouteID({
+minosModal.setModel({
  shop: {
   target: TARGET_PIECE?.key ?? "piece0"
  }
-}))
+})

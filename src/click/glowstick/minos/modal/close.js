@@ -1,6 +1,5 @@
 function close() {
- const closedRouteID = minosModal.modelToRouteID("none")
- minosModal.setRouteID(closedRouteID)
+ minosModal.setModel("none")
 }
 
 if (!POINTER_EVENT) {

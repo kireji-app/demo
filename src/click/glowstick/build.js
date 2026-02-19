@@ -5,4 +5,6 @@ glowstick.define({
  thumbstickElement: { value: null, writable: true },
  tilesCount: { value: null, writable: true },
  walkMark: { value: null, writable: true },
+ skipMoveWorld: { value: false, writable: true },
+ pixelRatio: { value: 3 },
 })

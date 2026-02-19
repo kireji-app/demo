@@ -1,0 +1,124 @@
+#glowstick_click {
+ --px: calc(1px * var(--ratio));
+ --px2: calc(2px * var(--ratio));
+ --px3: calc(3px * var(--ratio));
+ --px4: calc(4px * var(--ratio));
+ touch-action: none;
+ background-color: var(--bg-un-mode);
+}
+
+#glowstick_click {
+ image-rendering: pixelated;
+}
+
+#glowstick_click world- {
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ /* TODO: Don't hard code the width and height of the whole world. */
+ width: calc(808 * var(--px));
+ height: calc(196 * var(--px));
+ will-change: transform;
+ transform: translate(calc(var(---x) * var(--px)), calc(var(---y) * var(--px)));
+}
+
+#glowstick_click world-,
+#glowstick_click region- {
+ box-shadow:
+  calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 calc(var(--px) / 2) var(--bg),
+  inset calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 calc(var(--px) / 2) var(--bg);
+}
+
+#glowstick_click region- {
+ position: absolute;
+ left: calc(var(---x) * var(--px));
+ top: calc(var(---y) * var(--px));
+ width: calc(var(---w) * var(--px));
+ height: calc(var(---h) * var(--px));
+ background:
+  linear-gradient(45deg, var(--bg) 25%, transparent 25%, transparent 75%, var(--bg) 75%, var(--bg)) 0 0 / var(--px2) var(--px2),
+  linear-gradient(45deg, var(--bg) 25%, transparent 25%, transparent 75%, var(--bg) 75%, var(--bg)) var(--px) var(--px) / var(--px2) var(--px2),
+  var(--grid-color);
+}
+
+#glowstick_click user- {
+ position: absolute;
+ top: calc(50% - 30 * var(--px));
+ left: calc(50% - 8 * var(--px));
+ width: calc(16 * var(--px));
+ height: calc(32 * var(--px));
+ overflow: hidden;
+ z-index: 20;
+ background-size: cover;
+ background-repeat: no-repeat;
+ /* Reduce the jitter of pixel-perfect snapping. */
+ transform: translateX(calc(-1 * var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
+ transition: transform 0.1s;
+}
+
+#glowstick_click user-.front {
+ background-image: var(--user-glowstick-click--front_idle-png);
+}
+
+#glowstick_click user-.left {
+ background-image: var(--user-glowstick-click--left_idle-png);
+}
+
+#glowstick_click user-.right {
+ background-image: var(--user-glowstick-click--right_idle-png);
+}
+
+#glowstick_click user-.back {
+ background-image: var(--user-glowstick-click--back_idle-png);
+}
+
+#glowstick_click user-.front.walking {
+ background-image: var(--user-glowstick-click--front_walk-gif);
+}
+
+#glowstick_click user-.left.walking {
+ background-image: var(--user-glowstick-click--left_walk-gif);
+}
+
+#glowstick_click user-.right.walking {
+ background-image: var(--user-glowstick-click--right_walk-gif);
+}
+
+#glowstick_click user-.back.walking {
+ background-image: var(--user-glowstick-click--back_walk-gif);
+}
+
+#glowstick_click thumbstick- {
+ mix-blend-mode: multiply;
+ --color: black;
+ --mask: white;
+}
+
+body.dark #glowstick_click thumbstick- {
+ mix-blend-mode: screen;
+ --color: white;
+ --mask: black;
+}
+
+#glowstick_click thumbstick-,
+#glowstick_click handle- {
+ --large-radius: max(min(10vmin, 128px), 32px);
+ --radius: var(--large-radius);
+ display: block;
+ position: fixed;
+ background-color: var(--mask);
+ border-radius: var(--radius);
+ z-index: 30;
+ width: calc(2 * var(--radius));
+ height: calc(2 * var(--radius));
+ top: calc(var(--y) - var(--large-radius));
+ left: calc(var(--x) - var(--large-radius));
+ box-shadow: 0 0 0 var(--px) var(--color);
+}
+
+#glowstick_click handle- {
+ --radius: 24px;
+ top: calc((var(--large-radius) - var(--radius)) + var(--y));
+ left: calc((var(--large-radius) - var(--radius)) + var(--x));
+ position: absolute;
+}

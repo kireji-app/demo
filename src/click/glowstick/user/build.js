@@ -1,8 +1,8 @@
-const ftPerSec = 16 // realistic max: 5.9
-const ftPerTile = 1
+const ftPerSec = 7.9 // realistic max: 5.9
+const pixelsPerFoot = 9
 
 user.define({
  cardinality: { value: 8n },
  element: { value: null, writable: true },
- tilesPerSecond: { value: ftPerSec / ftPerTile }
+ pixelsPerSecond: { value: ftPerSec * pixelsPerFoot }
 })

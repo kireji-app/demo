@@ -1,1 +1,1 @@
-return region.placeStates[0] + user.w
+return region.placeStates[0]
