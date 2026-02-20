@@ -1,4 +1,4 @@
-if (glowstick.skipMoveWorld)
+if (world.skipWorldMove)
  return
 
 world.moveView()

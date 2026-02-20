@@ -1,1 +1,0 @@
-return region.yPosition + region.y

@@ -108,10 +108,9 @@
    },
    "user": "4",
    "world": {
-    "open-office": [
-     80,
-     68
-    ]
+    "triangleIndex": 0,
+    "x": 55,
+    "y": 55
    }
   }
  },

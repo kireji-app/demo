@@ -31,83 +31,65 @@ const forceVector = {
  y: moveVector.y * user.pixelsPerSecond * client.deltaTime * 0.00075
 }
 
+let walking = false
+
 if (facingDirectionRouteID !== undefined) {
- // The player is moving.
+ // The player is trying to walk.
 
- // Prevent route ID updates from propagating to the view because view updates will be more precise than route ID updates.
- glowstick.skipMoveWorld = true
-
- region.placeStates[0] += forceVector.x
- region.placeStates[1] += forceVector.y
-
- const collision = { x: null, y: null }
-
- if (region.placeStates[0] < 0) {
-  region.placeStates[0] = 0
-  collision.x = forceVector.x
- } else if (region.placeStates[0] > region.placeLimits[0] - 1) {
-  region.placeStates[0] = region.placeLimits[0] - 1
-  collision.x = forceVector.x
+ const futurePosition = {
+  triangleIndex: world.triangleIndex,
+  x: world.x + forceVector.x,
+  y: world.y + forceVector.y
  }
 
- if (region.placeStates[1] < 0) {
-  region.placeStates[1] = 0
-  collision.y = forceVector.y
- } else if (region.placeStates[1] > region.placeLimits[1] - 1) {
-  region.placeStates[1] = region.placeLimits[1] - 1
-  collision.y = forceVector.y
- }
+ // Check current triangle
+ const currentTriangle = world.triangles[world.triangleIndex]
+ if (world.isPointInTriangle(futurePosition, currentTriangle)) {
+  walking = true
+ } else handleEdge: {
+  // Check neighbors
+  for (let triangleIndex = 0; triangleIndex < world.triangles.length; triangleIndex++) {
+   // TODO: Memoize neighbors instead of iterating over every single one. This will enable creating incredible dynamic levels using 3D collision meshes.
+   if (triangleIndex === world.triangleIndex)
+    continue
 
- let movedToNeighbor = false
-
- if (collision.x || collision.y) {
-  for (const neighbor of region.neighbors) {
-   const x = user.x + collision.x
-   const y = user.y + collision.y
-   if (neighbor.overlaps({ x, y, w: 0, h: 0 })) {
-    // Set the place states of the neighbor manually because it will be more precise than what the route distribution method can provide.
-    neighbor.placeStates[0] = x - neighbor.x
-    neighbor.placeStates[1] = y - neighbor.y
-    world.setModel({ [neighbor.key]: neighbor.placeStates })
-    movedToNeighbor = true
-    break
+   if (world.isPointInTriangle(futurePosition, world.triangles[triangleIndex])) {
+    futurePosition.triangleIndex = triangleIndex
+    walking = true
+    break handleEdge
    }
   }
-  if (!movedToNeighbor) {
-   facingDirectionRouteID = user.vectorToRouteID({
-    x: collision.x ? 0 : Math.sign(moveVector.x),
-    y: collision.y ? 0 : Math.sign(moveVector.y)
-   })
-  }
+
+  // TODO: Implement collision sliding.
+  // When sliding, we should call `facingDirectionRouteID = user.vectorToRouteID(moveVector)` with the adjusted move vector.
+  // We should be walking unless the move vector is moving exactly perpendicular to the wall (the "true" angled wall not the pixelated wall which is always composed of 90 angles) OR the move vector is pushing into a corner with no triangle to transfer to.
+  // It should not create jagged speed along the edge just because the triangle edge is jagged due to aliasing; if the move vector is constant every frame and the angle of the triangle is constant, I shouldn't speed up and slow down while sliding along that edge.
+  // Everything else in this loop works perfectly except for edge sliding.
  }
 
- // Conditionally enable a walking animation.
- if (movedToNeighbor || (collision.x === null && (Math.abs(forceVector.x) > 0.01)) || (collision.y === null && (Math.abs(forceVector.y) > 0.01)))
-  user.element.classList.add("walking")
- else {
-  user.element.classList.remove("walking")
-
+ if (walking) {
+  world.triangleIndex = futurePosition.triangleIndex
+  world.x = futurePosition.x
+  world.y = futurePosition.y
+  const newRouteID = world.modelToRouteID(futurePosition)
+  if (newRouteID !== world.routeID) {
+   // Prevent route ID updates from propagating to the view because view updates will be more precise than route ID updates.
+   world.skipWorldMove = true
+   world.setRouteID(newRouteID)
+   world.skipWorldMove = false
+  }
+  world.moveView()
+ } else {
   // This lets the player turn to face the wall or corner even if they are already up against it and not walking.
   facingDirectionRouteID = user.vectorToRouteID(moveVector)
  }
-
- // Conditionally update the player character's facing direction.
- // TODO: Try modifying the user's facing vector based on collision.
- if (facingDirectionRouteID !== undefined && facingDirectionRouteID !== user.routeID)
-  user.setRouteID(facingDirectionRouteID)
-
- if (!movedToNeighbor) {
-  // This will round the place states to integer values, giving the stored position less precision than the one used during gameplay.
-  const newRouteID = region.modelToRouteID(region.placeStates)
-  if (region.routeID !== newRouteID)
-   region.setRouteID(newRouteID)
- }
-
- world.moveView()
-
- glowstick.skipMoveWorld = false
-
-} else {
- glowstick.walkMark = null
- user.element.classList.remove("walking")
 }
+
+// Conditionally update the player character's facing direction.
+if (facingDirectionRouteID !== undefined && facingDirectionRouteID !== user.routeID)
+ user.setRouteID(facingDirectionRouteID)
+
+if (walking)
+ user.element.classList.add("walking")
+else
+ user.element.classList.remove("walking")

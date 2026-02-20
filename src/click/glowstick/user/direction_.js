@@ -1,1 +1,1 @@
-return ['left', 'back', 'right', 'left', 'right', 'left', 'front', 'right'][user.routeID]
+return ['left', 'back', 'right', 'left', 'right', 'front-left', 'front', 'front-right'][user.routeID]

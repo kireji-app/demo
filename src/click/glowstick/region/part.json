@@ -1,9 +1,0 @@
-{
- "abstract": true,
- "extends": "box",
- "methods": {
-  "overlaps": [
-   "REGION"
-  ]
- }
-}

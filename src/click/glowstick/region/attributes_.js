@@ -1,7 +1,0 @@
-const { x, y, w, h, key, gridColor } = region
-
-return [
- `data-key=${key}`,
- `data-occupancy="${region === world.arm ? "primary" : world.arm.neighbors.includes(region) ? "secondary" : "tertiary"}"`,
- `style="---x:${x};---y:${y};---w:${w};---h:${h};--grid-color:${gridColor ?? "var(--bg-un-mode)"}"`
-]

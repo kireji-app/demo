@@ -1,22 +1,12 @@
 declare interface IGlowstickWorld
- extends IMatch<IGlowstick, IGlowstickRegion>,
+ extends IMesh<IGlowstick>,
  IWebComponent {
 
- // Subparts.
- readonly bathroom: IGlowstickRegion
- readonly bathroomDoor: IGlowstickRegion
- readonly bridge: IGlowstickRegion
- readonly hallway: IGlowstickRegion
- readonly hallwayDoor: IGlowstickRegion
- readonly officeA: IGlowstickRegion
- readonly officeADoor: IGlowstickRegion
- readonly openOffice: IGlowstickRegion
-
  // Runtime Properties.
- /** The color of the grid when previewing the world, if one is defined. */
- readonly gridColor?: string
  /** The html element that represents the glowstick world (client only). */
  readonly element: HTMLElement
+ /** Skips distributing the route ID into the runtime model, useful if the method calling to set the world's route ID already distributed a model to it beforehand. */
+ readonly skipWorldMove: boolean
 }
 
 declare const world: IGlowstickWorld

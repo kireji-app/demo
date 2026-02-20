@@ -11,34 +11,27 @@
  image-rendering: pixelated;
 }
 
-#glowstick_click world- {
+#glowstick_click #world {
  position: absolute;
  left: 50%;
  top: 50%;
- /* TODO: Don't hard code the width and height of the whole world. */
- width: calc(808 * var(--px));
- height: calc(196 * var(--px));
  will-change: transform;
  transform: translate(calc(var(---x) * var(--px)), calc(var(---y) * var(--px)));
+ shape-rendering: crispEdges;
 }
 
-#glowstick_click world-,
-#glowstick_click region- {
- box-shadow:
-  calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 calc(var(--px) / 2) var(--bg),
-  inset calc(-.5 * var(--px)) calc(-.5 * var(--px)) 0 calc(var(--px) / 2) var(--bg);
+#glowstick_click #world path {
+ fill: none;
+ stroke: var(--bg);
+ stroke-width: 0.5;
 }
 
-#glowstick_click region- {
- position: absolute;
- left: calc(var(---x) * var(--px));
- top: calc(var(---y) * var(--px));
- width: calc(var(---w) * var(--px));
- height: calc(var(---h) * var(--px));
- background:
-  linear-gradient(45deg, var(--bg) 25%, transparent 25%, transparent 75%, var(--bg) 75%, var(--bg)) 0 0 / var(--px2) var(--px2),
-  linear-gradient(45deg, var(--bg) 25%, transparent 25%, transparent 75%, var(--bg) 75%, var(--bg)) var(--px) var(--px) / var(--px2) var(--px2),
-  var(--grid-color);
+#glowstick_click #world path.current {
+ fill: url(#checkerboard);
+}
+
+#glowstick_click #world #checkerboard {
+ fill: var(--bg);
 }
 
 #glowstick_click user- {
@@ -53,15 +46,24 @@
  background-repeat: no-repeat;
  /* Reduce the jitter of pixel-perfect snapping. */
  transform: translateX(calc(-1 * var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
- transition: transform 0.1s;
+ transition: translate 0.1s;
 }
 
 #glowstick_click user-.front {
  background-image: var(--user-glowstick-click--front_idle-png);
 }
 
+#glowstick_click user-.front-left {
+ background-image: var(--user-glowstick-click--front_left_idle-png);
+}
+
+#glowstick_click user-.front-right {
+ background-image: var(--user-glowstick-click--front_right_idle-png);
+}
+
 #glowstick_click user-.left {
- background-image: var(--user-glowstick-click--left_idle-png);
+ background-image: var(--user-glowstick-click--right_idle-png);
+ transform: scaleX(-1);
 }
 
 #glowstick_click user-.right {
@@ -76,8 +78,17 @@
  background-image: var(--user-glowstick-click--front_walk-gif);
 }
 
+#glowstick_click user-.front-left.walking {
+ background-image: var(--user-glowstick-click--front_left_walk-gif);
+}
+
+#glowstick_click user-.front-right.walking {
+ background-image: var(--user-glowstick-click--front_right_walk-gif);
+}
+
 #glowstick_click user-.left.walking {
- background-image: var(--user-glowstick-click--left_walk-gif);
+ background-image: var(--user-glowstick-click--right_walk-gif);
+ transform: scaleX(-1);
 }
 
 #glowstick_click user-.right.walking {

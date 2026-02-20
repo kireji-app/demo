@@ -1,1 +1,0 @@
-return region.xPosition + region.x

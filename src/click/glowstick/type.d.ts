@@ -2,7 +2,6 @@ declare interface IGlowstick
  extends IClickApplication {
 
  // Subparts.
- readonly region: IGlowstickRegion
  readonly user: IGlowstickUser
  readonly world: IGlowstickWorld
 
@@ -15,12 +14,6 @@ declare interface IGlowstick
  readonly thumbstickVector: { x: number, y: number }
  /** If currently using the mobile thumbstick, the on-screen element representing the handle of the thumbstick. */
  readonly thumbstickElement?: HTMLElement
- /** When the user is walking, an iterator tracking the distance the yser has walking in tiles (used for computing walking speed). */
- readonly tilesCount: number
- /** When the user is walking, the moment the walking started (used for computing walking speed). */
- readonly walkMark: number
- /** Whether or not to skip the view update on the world when the route ID changes (because it was already updated by the user interaction loop before the route ID was updated). */
- readonly skipMoveWorld: boolean
  /** The ratio of art pixel size to css pixel size. */
  readonly pixelRatio: number
 }
