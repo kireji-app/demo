@@ -25,10 +25,10 @@ const moveVector = (() => {
 /** The player character's facing direction (undefined if the vector has no magnitude). */
 let facingDirectionRouteID = user.vectorToRouteID(moveVector)
 
-/** The move vector, scaled by character speed, client framerate and a vertical factor that accounts for the camera angle. */
+/** The move vector, scaled by character speed, framerate and a vertical factor that accounts for the camera angle. */
 const forceVector = {
- x: moveVector.x * user.pixelsPerSecond / stats.fps,
- y: moveVector.y * (user.pixelsPerSecond / stats.fps) * 0.75
+ x: moveVector.x * user.pixelsPerSecond * client.deltaTime * .001,
+ y: moveVector.y * user.pixelsPerSecond * client.deltaTime * 0.00075
 }
 
 if (facingDirectionRouteID !== undefined) {
