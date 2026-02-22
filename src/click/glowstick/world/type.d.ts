@@ -6,7 +6,7 @@ declare interface IGlowstickWorld
  /** The html element that represents the glowstick world (client only). */
  readonly element: HTMLElement
  /** Skips distributing the route ID into the runtime model, useful if the method calling to set the world's route ID already distributed a model to it beforehand. */
- readonly skipWorldMove: boolean
+ readonly skipRuntimeStateDistribution: boolean
 }
 
 declare const world: IGlowstickWorld

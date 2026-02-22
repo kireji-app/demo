@@ -108,9 +108,8 @@
    },
    "user": "4",
    "world": {
-    "triangleIndex": 0,
-    "x": 55,
-    "y": 55
+    "x": 220,
+    "y": 53
    }
   }
  },
@@ -121,8 +120,8 @@
  },
  "parts": {
   "desktop": {
-   "color": "light",
-   "era": "modern"
+   "color": "dark",
+   "era": "vintage"
   }
  }
 }

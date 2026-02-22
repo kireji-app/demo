@@ -1,4 +1,4 @@
-if (world.skipWorldMove) {
+if (world.skipRuntimeStateDistribution) {
  world.updateRouteID(ROUTE_ID)
  return
 }

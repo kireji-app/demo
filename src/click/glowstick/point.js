@@ -24,5 +24,6 @@ pointer.handle({
   glowstick.thumbstickVector.y = 0
  },
  POINTER_EVENT,
- TARGET_ELEMENT
+ TARGET_ELEMENT,
+ focus: "down"
 })

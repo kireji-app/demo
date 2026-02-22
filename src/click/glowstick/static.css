@@ -4,7 +4,6 @@
  --px3: calc(3px * var(--ratio));
  --px4: calc(4px * var(--ratio));
  touch-action: none;
- background-color: var(--bg-un-mode);
 }
 
 #glowstick_click {
@@ -16,22 +15,29 @@
  left: 50%;
  top: 50%;
  will-change: transform;
- transform: translate(calc(var(---x) * var(--px)), calc(var(---y) * var(--px)));
+ transform: translate(calc((var(---x) - 50) * var(--px)), calc((var(---y) - 50) * var(--px)));
  shape-rendering: crispEdges;
+ background-color: var(--bg-un-mode);
+ pointer-events: none;
 }
 
 #glowstick_click #world path {
  fill: none;
- stroke: var(--bg);
- stroke-width: 0.5;
+ stroke: var(--fg-mode-er);
+ stroke-width: 1;
+}
+
+#glowstick_click #world path {
+ fill: url(#checkerboard);
+ fill-opacity: 50%;
 }
 
 #glowstick_click #world path.current {
- fill: url(#checkerboard);
+ fill-opacity: 100%;
 }
 
 #glowstick_click #world #checkerboard {
- fill: var(--bg);
+ fill: var(--bg-mode);
 }
 
 #glowstick_click user- {
@@ -63,7 +69,7 @@
 
 #glowstick_click user-.left {
  background-image: var(--user-glowstick-click--right_idle-png);
- transform: scaleX(-1);
+ transform: scaleX(-1) translateX(calc(var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
 }
 
 #glowstick_click user-.right {
@@ -88,7 +94,7 @@
 
 #glowstick_click user-.left.walking {
  background-image: var(--user-glowstick-click--right_walk-gif);
- transform: scaleX(-1);
+ transform: scaleX(-1) translateX(calc(var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
 }
 
 #glowstick_click user-.right.walking {
