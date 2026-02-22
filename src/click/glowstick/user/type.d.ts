@@ -3,24 +3,22 @@ declare interface IGlowstickUser
  IWebComponent {
 
  // Serialized Properties.
- /** A unicode arrow character pointing in the same direction as the user. */
- readonly "arrow": string
- /** A string (either left, right, front or back) representing which direction the user is currently facing. */
- readonly "direction": string
- /** The current user world position along x. */
- readonly "x": number
- /** The current user world position along y. */
- readonly "y": number
- /** Converts the given x/y facing vector into a bigint that can be used as the user's route ID. */
- readonly vectorToRouteID(VECTOR: { x: number, y: number }): bigint | undefined
- /** Converts the given route ID into an x/y facing vector that can be used to control which directional graphic is used to display the character in the world. */
- readonly vectorFromRouteID(ROUTE_ID: bigint): { x: number, y: number }
+ /** Converts the given vector into a bigint that can be used as the user's route ID. */
+ readonly vectorToRouteID(VECTOR: IVector2): bigint | undefined
 
  // Runtime Properties.
  /** The HTML element representing the user in the DOM (client only). */
  readonly element: HTMLElement
  /** The walking speed of the user. */
  readonly pixelsPerSecond: number
+ /** The current phase of the user's walk cycle. */
+ readonly walkPhase: number
+ /** The number of frames in the animation walk cycle. */
+ readonly walkFrames: number
+ /** The best frame of the walk cycle to start with when walking initiates. */
+ readonly walkStartFrame: number
+ /** A multiplier used to tweak the relationship between distance and walk animation playback speed. */
+ readonly strideFactor: number
 }
 
 declare const user: IGlowstickUser

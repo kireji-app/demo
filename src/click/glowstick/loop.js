@@ -1,5 +1,3 @@
-let facingDirectionRouteID
-
 /** A normalized vector representing the player's movement direction. */
 const controlVector = (() => {
 
@@ -15,7 +13,6 @@ const controlVector = (() => {
   // Position the visual thumbstick.
   glowstick.handleElement.style.setProperty("--x", clamped.x + "px")
   glowstick.handleElement.style.setProperty("--y", clamped.y + "px")
-  facingDirectionRouteID = user.vectorToRouteID(normalized)
   return clamped2
  }
 
@@ -26,32 +23,49 @@ const controlVector = (() => {
  if (hotKeys.pressed.has("KeyW")) keyboardVector.y -= 1
  if (hotKeys.pressed.has("KeyS")) keyboardVector.y += 1
  const normalized = Vector.normalize(keyboardVector)
- facingDirectionRouteID = user.vectorToRouteID(normalized)
  return normalized
 })()
 
-if (facingDirectionRouteID === undefined) {
+// Speed going up and down should be slower than speed going left and right to account for camera angle.
+const adjustedSpeed = Vector.magnitude(Vector.multiply(
+ Vector.multiply(controlVector, user.pixelsPerSecond),
+ { x: 1, y: 3 / 4 }
+))
 
+if (adjustedSpeed === 0) {
+
+ user.walkPhase = user.walkStartFrame / user.walkFrames
  // Nothing is happening.
  user.element.classList.remove("walking")
 
  return
 }
 
-/** The forceVector vector, scaled by character speed per second and a vertical factor that accounts for the camera angle. */
-const forceVector = Vector.multiply(
- Vector.multiply(controlVector, user.pixelsPerSecond),
- { x: 1, y: 0.75 }
-)
+// The force vector should still have the same screen-space angle as the player's thumbstick.
+const forceVector = Vector.multiply(Vector.normalize(controlVector), adjustedSpeed)
 
 // Cast a ray to determine how this force vector will reposition the player.
-const { hit, triIndex, point } = world.castRay(forceVector, client.deltaTime / 1000)
+const { hit, triIndex, point, forceVector: outputForceVector } = world.castRay(forceVector, client.deltaTime / 1000, true)
 
-if (!hit) {
+if (hit) {
+ user.walkPhase = user.walkStartFrame / user.walkFrames
+ user.element.classList.remove("walking")
+} else {
+
+ // Counter-act screen-space vertical scale.
+ const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), { x: 1, y: 4 / 3 }))
 
  // Use the walking animations.
  user.element.classList.add("walking")
+
+ // Iterate walk cycle phase based on speed.
+ user.walkPhase = (user.walkPhase + distance * user.strideFactor) % 1
 }
+
+// const speed = Vector.magnitude(Vector.subtract(point, world.position)) / (client.deltaTime / 1000)
+// if (Math.floor(speed * 100) > Math.floor(adjustedSpeed * 100)) {
+//  warn('speed violation from cast', { speed, adjustedSpeed })
+// }
 
 // Distribute the runtime state.
 world.position.x = point.x
@@ -72,6 +86,9 @@ if (newRouteID !== world.routeID) {
  world.updateView()
 }
 
-// Let the player aim the character even if he can't move in the given direction.
-if (facingDirectionRouteID !== undefined && facingDirectionRouteID !== user.routeID)
+// TODO: if the output vector is not the input vector, smooth it over several frames just like the camera.
+// const facingDirectionRouteID = user.vectorToRouteID(outputForceVector)
+const facingDirectionRouteID = user.vectorToRouteID(forceVector)
+
+if (facingDirectionRouteID !== null && facingDirectionRouteID !== user.routeID)
  user.setRouteID(facingDirectionRouteID)

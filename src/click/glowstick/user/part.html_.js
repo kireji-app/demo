@@ -1,1 +1,1 @@
-return `<user- class="${user.direction}" style="--t-x:0;--t-y:0"></user->`
+return `<user- style="--t-x:0;--t-y:0;--direction:${user.routeID}"></user->`

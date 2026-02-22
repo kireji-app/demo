@@ -22,12 +22,6 @@
 }
 
 #glowstick_click #world path {
- fill: none;
- stroke: var(--fg-mode-er);
- stroke-width: 1;
-}
-
-#glowstick_click #world path {
  fill: url(#checkerboard);
  fill-opacity: 50%;
 }
@@ -50,59 +44,17 @@
  z-index: 20;
  background-size: cover;
  background-repeat: no-repeat;
- /* Reduce the jitter of pixel-perfect snapping. */
- transform: translateX(calc(-1 * var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
+ /* Counter-act camera smoothing. */
+ transform: translateX(calc(var(--t-x) * var(--px))) translateY(calc(var(--t-y) * var(--px)));
  transition: translate 0.1s;
+ background-image: var(--user-glowstick-click--sprite-png);
+ background-position: calc(var(--frame) * -16 * var(--px)) calc(var(--direction) * -32 * var(--px));
+ background-size: calc(256 * var(--px));
+ --frame: 8;
 }
 
-#glowstick_click user-.front {
- background-image: var(--user-glowstick-click--front_idle-png);
-}
-
-#glowstick_click user-.front-left {
- background-image: var(--user-glowstick-click--front_left_idle-png);
-}
-
-#glowstick_click user-.front-right {
- background-image: var(--user-glowstick-click--front_right_idle-png);
-}
-
-#glowstick_click user-.left {
- background-image: var(--user-glowstick-click--right_idle-png);
- transform: scaleX(-1) translateX(calc(var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
-}
-
-#glowstick_click user-.right {
- background-image: var(--user-glowstick-click--right_idle-png);
-}
-
-#glowstick_click user-.back {
- background-image: var(--user-glowstick-click--back_idle-png);
-}
-
-#glowstick_click user-.front.walking {
- background-image: var(--user-glowstick-click--front_walk-gif);
-}
-
-#glowstick_click user-.front-left.walking {
- background-image: var(--user-glowstick-click--front_left_walk-gif);
-}
-
-#glowstick_click user-.front-right.walking {
- background-image: var(--user-glowstick-click--front_right_walk-gif);
-}
-
-#glowstick_click user-.left.walking {
- background-image: var(--user-glowstick-click--right_walk-gif);
- transform: scaleX(-1) translateX(calc(var(--t-x) * var(--px))) translateY(calc(-1 * var(--t-y) * var(--px)));
-}
-
-#glowstick_click user-.right.walking {
- background-image: var(--user-glowstick-click--right_walk-gif);
-}
-
-#glowstick_click user-.back.walking {
- background-image: var(--user-glowstick-click--back_walk-gif);
+#glowstick_click user-.walking {
+ --frame: var(--anim-frame);
 }
 
 #glowstick_click thumbstick- {
