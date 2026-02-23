@@ -120,8 +120,8 @@
  },
  "parts": {
   "desktop": {
-   "color": "dark",
-   "era": "vintage"
+   "color": "light",
+   "era": "modern"
   }
  }
 }
