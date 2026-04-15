@@ -5,7 +5,7 @@ const newTrophies = new Set()
 const newMetaTrophies = new Set()
 const newMetaMetaTrophy = new Set()
 
-// TODO: put these in canonical order.
+// TODO: implement a canonical trophy order.
 
 for (const trophy of minosTrophies.earned) {
  if (minosTrophies.viewedEarned.has(trophy))

@@ -4,7 +4,7 @@ minosTrophies.earned.clear()
 
 const metaTrophies = []
 
-// TODO: put these in canonical order.
+// TODO: implement a caconical trophy order.
 
 for (const trophy of minosTrophies.possible) {
  if (trophy[".."] === minosTrophies.meta) {

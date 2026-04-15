@@ -1,5 +1,5 @@
 /** A normalized vector representing the player's movement direction. */
-const controlVector = (() => {
+const { controlVector, isSprinting } = (() => {
 
  if (glowstick.thumbstickStart) {
 
@@ -8,12 +8,15 @@ const controlVector = (() => {
   const magnitude = Vector.magnitude(glowstick.thumbstickVector)
   const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
   const clamped = { x: normalized.x * Math.min(magnitude, maxRadius), y: normalized.y * Math.min(magnitude, maxRadius) }
-  const clamped2 = { x: normalized.x * Math.min(magnitude / maxRadius, 1), y: normalized.y * Math.min(magnitude / maxRadius, 1) }
 
   // Position the visual thumbstick.
   glowstick.handleElement.style.setProperty("--x", clamped.x + "px")
   glowstick.handleElement.style.setProperty("--y", clamped.y + "px")
-  return clamped2
+
+  return {
+   controlVector: { x: normalized.x * Math.min(magnitude / maxRadius, 1), y: normalized.y * Math.min(magnitude / maxRadius, 1) },
+   isSprinting: (maxRadius * 1.5) < magnitude
+  }
  }
 
  // The keyboard might be controlling the player character.
@@ -22,14 +25,17 @@ const controlVector = (() => {
  if (hotKeys.pressed.has("KeyD")) keyboardVector.x += 1
  if (hotKeys.pressed.has("KeyW")) keyboardVector.y -= 1
  if (hotKeys.pressed.has("KeyS")) keyboardVector.y += 1
- const normalized = Vector.normalize(keyboardVector)
- return normalized
+
+ return {
+  controlVector: Vector.normalize(keyboardVector),
+  isSprinting: hotKeys.pressed.has("ShiftLeft") || hotKeys.pressed.has("ShiftRight")
+ }
 })()
 
 // Speed going up and down should be slower than speed going left and right to account for camera angle.
 const adjustedSpeed = Vector.magnitude(Vector.multiply(
  Vector.multiply(controlVector, user.pixelsPerSecond),
- { x: 1, y: 3 / 4 }
+ { x: 1, y: 1 / 2 }
 ))
 
 if (adjustedSpeed === 0) {
@@ -42,7 +48,7 @@ if (adjustedSpeed === 0) {
 }
 
 // The force vector should still have the same screen-space angle as the player's thumbstick.
-const forceVector = Vector.multiply(Vector.normalize(controlVector), adjustedSpeed)
+const forceVector = Vector.multiply(Vector.normalize(controlVector), adjustedSpeed * (isSprinting ? 2.5 : 1))
 
 // Cast a ray to determine how this force vector will reposition the player.
 const { hit, triIndex, point, forceVector: outputForceVector } = world.castRay(forceVector, client.deltaTime / 1000, true)
@@ -53,7 +59,7 @@ if (hit) {
 } else {
 
  // Counter-act screen-space vertical scale.
- const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), { x: 1, y: 4 / 3 }))
+ const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), { x: 1, y: 2 }))
 
  // Use the walking animations.
  user.element.classList.add("walking")
@@ -86,8 +92,10 @@ if (newRouteID !== world.routeID) {
  world.updateView()
 }
 
+// When edge sliding, turn the user toward the direction of travel instead of the direction of force.
 // TODO: if the output vector is not the input vector, smooth it over several frames just like the camera.
 // const facingDirectionRouteID = user.vectorToRouteID(outputForceVector)
+
 const facingDirectionRouteID = user.vectorToRouteID(forceVector)
 
 if (facingDirectionRouteID !== null && facingDirectionRouteID !== user.routeID)

@@ -1,0 +1,181 @@
+#glowstick_click {
+ --tiles: 20;
+ --target-long: calc(16px * var(--tiles));
+ --target-short: calc(9px * var(--tiles));
+ --ratio: round(down, min(max(var(--app-width), var(--app-height)) / var(--target-long), min(var(--app-width), var(--app-height)) / var(--target-short)), 0.5);
+ --px: calc(1px * var(--ratio));
+ --ui-width: calc(var(--ratio) * var(--target-long));
+ --ui-height: calc(var(--ratio) * var(--target-short));
+ --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-long)) / 2);
+ --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-short)) / 2);
+ touch-action: none;
+ background-color: var(--bg-un-mode);
+ image-rendering: pixelated;
+ container-type: size;
+ container-name: application;
+}
+
+/* DEBUG */
+
+#glowstick_click world->svg,
+#glowstick_click ui-:after {
+ shape-rendering: crispEdges;
+ /* DISABLE */
+ display: none;
+ /**/
+}
+
+#glowstick_click world->svg path {
+ fill: url(#checkerboard);
+ fill-opacity: 50%;
+ stroke: red;
+ stroke-width: 0.5px;
+}
+
+#glowstick_click world->svg path.current {
+ fill-opacity: 100%;
+}
+
+#glowstick_click world->svg #checkerboard {
+ fill: var(--bg-mode);
+}
+
+/* END DEBUG */
+
+#glowstick_click thumbstick- {
+ mix-blend-mode: multiply;
+ --color: black;
+ --mask: white;
+}
+
+body.dark #glowstick_click thumbstick- {
+ mix-blend-mode: screen;
+ --color: white;
+ --mask: black;
+}
+
+#glowstick_click thumbstick-,
+#glowstick_click handle- {
+ --large-radius: max(min(10vmin, 128px), 32px);
+ --radius: var(--large-radius);
+ display: block;
+ position: fixed;
+ background-color: var(--mask);
+ border-radius: var(--radius);
+ z-index: 30;
+ width: calc(2 * var(--radius));
+ height: calc(2 * var(--radius));
+ top: calc(var(--y) - var(--large-radius));
+ left: calc(var(--x) - var(--large-radius));
+ box-shadow: 0 0 0 var(--px) var(--color);
+}
+
+#glowstick_click handle- {
+ --radius: 24px;
+ top: calc((var(--large-radius) - var(--radius)) + var(--y));
+ left: calc((var(--large-radius) - var(--radius)) + var(--x));
+ position: absolute;
+}
+
+#glowstick_click world- {
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ will-change: transform;
+ transform: translate(calc((var(--x) - 50) * var(--px)), calc((var(--y) - 50) * var(--px))) scale(var(--ratio));
+ transform-origin: 0 0;
+ pointer-events: none;
+}
+
+body.vintage #glowstick_click world- {
+ transform: translate(calc((round(down, var(--x)) - 50) * var(--px)), calc((round(down, var(--y)) - 50) * var(--px))) scale(var(--ratio));
+}
+
+#glowstick_click world-::after {
+ background-image: var(--glowstick-click--carpet-png);
+ content: "";
+ clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+ position: absolute;
+ top: 18px;
+ left: -14px;
+ width: 384px;
+ height: 192px;
+ z-index: -100000;
+}
+
+#glowstick_click prop- {
+ background: var(--sheet);
+ top: calc((50 + var(--y)) * 1px);
+ left: calc((50 + var(--x)) * 1px);
+ width: calc(var(--w) * 1px);
+ height: calc(var(--h) * 1px);
+ background-position: calc(var(--bg-y) * -1px) calc(var(--bg-x) * -1px);
+ background-size: calc(var(--bg-w) * 1px) calc(var(--bg-h) * 1px);
+ position: absolute;
+ z-index: var(--z);
+}
+
+#glowstick_click user- {
+ position: absolute;
+ left: calc((var(--user-x) - 8 + 50) * 1px);
+ top: calc((var(--user-y) - 30 + 50) * 1px);
+ width: 16px;
+ height: 32px;
+ overflow: hidden;
+ z-index: var(--user-y);
+ background-size: cover;
+ background-repeat: no-repeat;
+ background-image: var(--user-glowstick-click--sprite-png);
+ background-position: calc(var(--frame) * -16px) calc(var(--direction) * -32px);
+ background-size: 256px;
+ --frame: 8;
+}
+
+#glowstick_click user-.walking {
+ --frame: var(--anim-frame);
+}
+
+#glowstick_click ui- {
+ position: absolute;
+ pointer-events: none;
+ width: var(--ui-width);
+ height: var(--ui-height);
+ left: var(--ui-left);
+ top: var(--ui-top);
+}
+
+body.vintage #glowstick_click ui- {
+ box-shadow: 0 0 0 max(var(--app-height), var(--app-width)) var(--bg);
+}
+
+@container application (aspect-ratio <=1 / 1) {
+
+ #glowstick_click>* {
+  --ui-width: calc(var(--ratio) * var(--target-short));
+  --ui-height: calc(var(--ratio) * var(--target-long));
+  --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-short)) / 2);
+  --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-long)) / 2);
+ }
+}
+
+#glowstick_click ui- span:not(.char) {
+ display: flex;
+ flex-flow: row wrap;
+ margin: 0;
+ padding: 0;
+}
+
+#glowstick_click .char {
+ --cx: 0;
+ --cy: 0;
+ background-image: var(--glowstick-click--font-png);
+ background-size: calc(var(--ratio) * 128px);
+ width: calc(8 * var(--px));
+ height: calc(16 * var(--px));
+ background-position: calc(var(--px) * -8 * var(--cx)) calc(var(--px) * -16 * var(--cy));
+ filter: brightness(0);
+}
+
+body.dark #glowstick_click .char {
+ filter: invert(1);
+}

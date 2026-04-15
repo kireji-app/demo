@@ -37,42 +37,52 @@ body.modern #ejaugust_com #notebook-section :is(ol, ul) {
  padding-left: calc(3.5 * var(--spacing));
 }
 
-body.modern #ejaugust_com #notebook-section pre {
+body.modern #ejaugust_com #notebook-section :is(pre, code) {
  --edge-color: #ffffff0f !important;
  --paper-color: var(--light-bg);
  --text-color: var(--light-accent);
+ color: var(--text-color);
+ border-radius: var(--radius);
+ font-family: var(--system-ui-mono);
+ line-height: inherit;
+ position: relative;
+ overflow: hidden;
+}
+
+body.modern #ejaugust_com #notebook-section pre {
+ white-space: pre-wrap;
+ word-break: break-all;
+ margin: calc(var(--spacing) / 2 + 2px);
+ padding: calc(var(--spacing) - 2px);
+ padding-left: calc(2 * var(--spacing) - 2px);
  box-shadow:
   1px 1px 2px -1px #0005,
   0 0 8px 3px #0001,
   inset 0 0 var(--spacing) var(--spacing) var(--edge-color),
   calc(var(--spacing) / -4) 0 var(--text-color);
- color: var(--text-color);
- border-radius: var(--radius);
- white-space: pre-wrap;
- word-break: break-all;
- font-family: var(--system-ui-mono);
- line-height: inherit;
- margin: calc(var(--spacing) / 2 + 2px);
- padding: calc(var(--spacing) - 2px);
- padding-left: calc(2 * var(--spacing) - 2px);
- position: relative;
- overflow: hidden;
 }
 
-body.modern #ejaugust_com #notebook-section pre::before {
+body.modern #ejaugust_com #notebook-section code {
+ padding-left: calc(var(--spacing) / 2);
+ padding-right: calc(var(--spacing) / 2);
+ display: inline-block;
+ vertical-align: middle;
+}
+
+body.modern #ejaugust_com #notebook-section :is(pre, code)::before {
  background: var(--paper-color);
 }
 
-body.modern #ejaugust_com #notebook-section pre::after {
+body.modern #ejaugust_com #notebook-section :is(pre, code)::after {
  z-index: 0;
  filter: invert(1);
 }
 
-body.modern.light #ejaugust_com #notebook-section pre::after {
+body.modern.light #ejaugust_com #notebook-section :is(pre, code)::after {
  filter: contrast(0.1) sepia(1) hue-rotate(188deg) saturate(10) brightness(0.5);
 }
 
-body.modern.dark #ejaugust_com #notebook-section pre {
+body.modern.dark #ejaugust_com #notebook-section :is(pre, code) {
  --edge-color: #ffffff03 !important;
  --paper-color: var(--light-accent);
  --text-color: var(--light-bg);

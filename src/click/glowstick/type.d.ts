@@ -14,8 +14,6 @@ declare interface IGlowstick
  readonly thumbstickVector: { x: number, y: number }
  /** If currently using the mobile thumbstick, the on-screen element representing the handle of the thumbstick. */
  readonly thumbstickElement?: HTMLElement
- /** The ratio of art pixel size to css pixel size. */
- readonly pixelRatio: number
 }
 
 declare const glowstick: IGlowstick

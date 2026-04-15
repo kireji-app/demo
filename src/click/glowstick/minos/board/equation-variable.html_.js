@@ -1,1 +1,0 @@
-return `<msup><mn>2</mn><mn>${minosBoard.width}</mn></msup>`

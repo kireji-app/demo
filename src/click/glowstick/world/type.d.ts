@@ -11,6 +11,17 @@ declare interface IGlowstickWorld
  readonly skipRuntimeStateDistribution: boolean
  readonly viewedTriIndex: IMeshTriIndex
  readonly viewedPosition: IVector2
+ readonly manifest: IGlowstickWorldManifest
+}
+
+declare interface IGlowstickWorldManifest
+ extends IMeshManifest {
+ /** The layout of the world as a flat array of numbers representing the positions of props. */
+ readonly layout: number[],
+ /** The available props as a flat array of numbers representing their shape and texture. Used to index props in the layout. */
+ readonly props: number[],
+ /** An array of css variable names representing sprite sheets that are available for props. */
+ readonly sheets: string[]
 }
 
 declare const world: IGlowstickWorld

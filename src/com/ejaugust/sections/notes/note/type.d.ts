@@ -7,6 +7,8 @@ declare interface IEJAugustNote
  readonly "note.html": string
  /** The full date and reading time description line for the note. */
  readonly "credit.html": string
+ /** Creates the elements necessary for some cheesy confetti effects. */
+ readonly "confetti.html": string
  /** The full display title and subtitle for the note. */
  readonly "heading.html": string
  /** A card that can be used to display and link to the note. */

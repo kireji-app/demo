@@ -9,7 +9,7 @@ function createCategoryHTML(category) {
 
 const categories = []
 
-// TODO: put these in canonical order.
+// TODO: implement a canonical trophy order.
 
 createCategoryHTML(minosTrophies.basic)
 createCategoryHTML(minosTrophies.wins)

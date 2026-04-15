@@ -1,1 +1,0 @@
-return `<math>${part["equation-variable.html"]}</math>`

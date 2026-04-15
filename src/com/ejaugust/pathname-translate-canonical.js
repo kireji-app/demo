@@ -31,5 +31,4 @@ if (PATHNAME === "/") {
  model.com.ejaugust.sections.notes = note
 }
 
-
 return encodePathname(_.modelToRouteID(model))

@@ -1,0 +1,138 @@
+#mathML-anim-odd,
+#mathML-anim-even {
+ display: block;
+ height: calc(7 * var(--spacing));
+ line-height: calc(7 * var(--spacing));
+}
+
+#anim-button {
+ position: relative;
+ width: 100%;
+ overflow: hidden;
+}
+
+#anim-button::before {
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ font-size: calc(8 * var(--spacing));
+ line-height: calc(18 * var(--spacing));
+ text-align: center;
+ font-weight: 900;
+ opacity: 50%;
+}
+
+#anim-button[data-playing="false"]::before {
+ content: "▶";
+ background-color: var(--accent-mode-est);
+}
+
+#anim-button[data-playing="true"]::before {
+ content: unset;
+}
+
+#anim-button[data-playing="true"]:hover::before {
+ content: "■";
+ background-color: var(--accent-mode-est);
+}
+
+.confetti-wrapper {
+ pointer-events: none;
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ overflow: hidden;
+}
+
+#anim-button[data-playing="false"] .confetti-wrapper {
+ display: none;
+}
+
+
+.confetti {
+ position: absolute;
+ width: 10px;
+ height: 10px;
+ background: hsl(calc(360 * var(--hue)), 100%, 50%);
+ animation: confetti-fall 2.5s ease-out infinite;
+ opacity: 0.8;
+ border-radius: 2px;
+ transform: rotate(45deg);
+}
+
+.confetti:nth-child(1) {
+ left: 10%;
+ animation-delay: 0s;
+ --hue: 0.1;
+}
+
+.confetti:nth-child(2) {
+ left: 20%;
+ animation-delay: 0.2s;
+ --hue: 0.3;
+}
+
+.confetti:nth-child(3) {
+ left: 30%;
+ animation-delay: 0.4s;
+ --hue: 0.5;
+}
+
+.confetti:nth-child(4) {
+ left: 40%;
+ animation-delay: 0.1s;
+ --hue: 0.7;
+}
+
+.confetti:nth-child(5) {
+ left: 50%;
+ animation-delay: 0.3s;
+ --hue: 0.9;
+}
+
+.confetti:nth-child(6) {
+ left: 60%;
+ animation-delay: 0.6s;
+ --hue: 0.2;
+}
+
+.confetti:nth-child(7) {
+ left: 70%;
+ animation-delay: 0.8s;
+ --hue: 0.4;
+}
+
+.confetti:nth-child(8) {
+ left: 80%;
+ animation-delay: 0.1s;
+ --hue: 0.6;
+}
+
+.confetti:nth-child(9) {
+ left: 90%;
+ animation-delay: 0.5s;
+ --hue: 0.8;
+}
+
+.confetti:nth-child(10) {
+ left: 95%;
+ animation-delay: 0.7s;
+ --hue: 1.0;
+}
+
+@keyframes confetti-fall {
+ 0% {
+  top: -10px;
+  transform: rotate(0deg) scale(1);
+ }
+
+ 100% {
+  top: 100%;
+  transform: rotate(720deg) scale(0.7);
+  opacity: 0;
+ }
+}

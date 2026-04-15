@@ -1,1 +1,1 @@
-return world["part.html"] + user["part.html"]
+return world["part.html"]

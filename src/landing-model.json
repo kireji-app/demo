@@ -15,6 +15,9 @@
      "about": true
     }
    },
+   "issue-tracker": {
+    "sections": "summary"
+   },
    "sidebar": {
     "outliner-domains": {
      "folders": [

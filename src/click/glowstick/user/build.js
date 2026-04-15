@@ -1,5 +1,5 @@
 const ftPerSec = 5.9 // realistic max: 5.9
-const pixelsPerFoot = 7
+const pixelsPerFoot = 5
 
 user.define({
  cardinality: { value: 8n },
@@ -8,5 +8,5 @@ user.define({
  walkPhase: { value: null, writable: true },
  walkFrames: { value: 8 },
  walkStartFrame: { value: 1 },
- strideFactor: { value: (pixelsPerFoot * 11.5) / 1000 }
+ strideFactor: { value: (pixelsPerFoot * ftPerSec) / 400 }
 })

@@ -2,5 +2,8 @@
  "verbosity": "100",
  "change": "major",
  "defaultApplicationHost": "desktop.parts",
- "resetLocalState": "1"
+ "resetLocalState": "enabled",
+ "includeWarning": "enabled",
+ "includeDesktop": "demo",
+ "includeKirejiApp": "demo"
 }

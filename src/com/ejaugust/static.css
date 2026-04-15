@@ -1,3 +1,25 @@
+#ejaugust_com #notebook-section>p.math {
+ display: flex;
+ flex-flow: row nowrap;
+ overflow-x: auto;
+ padding: calc(1.5 * var(--spacing)) !important;
+ white-space: nowrap;
+ align-items: center;
+ justify-content: space-around;
+}
+
+mo.product:has(+ .parenthetic),
+mo.product:has(+ msub),
+mo.product:has(+ mrow),
+mo.product:has(+ munder),
+mo.product:has(+ [largeop]) {
+ display: none;
+}
+
+#ejaugust_com #notebook-section math:not(.labelled) mrow.parenthetic {
+ padding: calc(0.5 * var(--spacing)) 0;
+}
+
 body.modern #ejaugust_com {
  --spacing: 12px;
  --max-width: 696px;
@@ -91,8 +113,8 @@ body.modern #ejaugust_com #notebook-section {
 body.modern #ejaugust_com header::before,
 body.modern #ejaugust_com #notebook-section::before,
 body.modern #ejaugust_com #notebook-section::after,
-body.modern #ejaugust_com #notebook-section pre::before,
-body.modern #ejaugust_com #notebook-section pre::after {
+body.modern #ejaugust_com #notebook-section :is(pre, code)::before,
+body.modern #ejaugust_com #notebook-section :is(pre, code)::after {
  content: "";
  position: absolute;
  left: 0;
@@ -104,7 +126,7 @@ body.modern #ejaugust_com #notebook-section pre::after {
 
 body.modern #ejaugust_com #note-links>a::before,
 body.modern #ejaugust_com #notebook-section::before,
-body.modern #ejaugust_com #notebook-section pre::after {
+body.modern #ejaugust_com #notebook-section :is(pre, code)::after {
  pointer-events: none;
  background: var(--ejaugust-com--grid-png);
  background-size: var(--spacing);
@@ -113,8 +135,8 @@ body.modern #ejaugust_com #notebook-section pre::after {
  z-index: -2;
 }
 
-body.modern #ejaugust_com #notebook-section pre {
- font-size: 0.875em;
+body.modern #ejaugust_com #notebook-section :is(pre, code) {
+ font-size: 12px;
 }
 
 body.modern #ejaugust_com #notebook-section::after {
@@ -150,7 +172,7 @@ body.modern #ejaugust_com :is(p, h1, h2, h3, h4, h5, h6) {
  color: var(--fg-mode);
 }
 
-body.modern #ejaugust_com :is(b, i, em, figcaption) {
+body.modern #ejaugust_com #notebook-section :is(b, i, em, figcaption) {
  color: var(--fg-un-mode);
 }
 
@@ -247,6 +269,27 @@ body.modern #ejaugust_com #k-logo {
  line-height: var(--spacing);
 }
 
+body.modern #ejaugust_com #k-logo #k {
+ color: var(--fg);
+ position: relative;
+}
+
+body.modern #ejaugust_com #k-logo #k:before {
+ color: var(--bg);
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ content: "𝑘";
+ text-align: center;
+ line-height: inherit;
+}
+
+body.modern #ejaugust_com #k-logo:hover #k:before {
+ color: var(--accent-un);
+}
+
 @media (width < 256px) {
  body.modern #ejaugust_com #k-logo {
   display: none;
@@ -316,6 +359,23 @@ body.modern #ejaugust_com .unicode-icon {
   font-size: 75%;
   line-height: calc(1.5 * var(--spacing));
  }
+
+ body.modern #ejaugust_com>scroller- {
+  padding: 0;
+ }
+
+ body.modern #ejaugust_com #notebook-section {
+  padding: calc(var(--spacing) - 2px) var(--outer-pad);
+ }
+
+ body.modern #ejaugust_com #notebook-section::before {
+  left: calc(var(--outer-pad) - var(--spacing));
+  right: calc(var(--outer-pad) - var(--spacing));
+ }
+
+ body.modern #ejaugust_com>scroller->scroll-content>footer {
+  border-radius: 0;
+ }
 }
 
 @media (width < 390px) {
@@ -360,14 +420,15 @@ body.vintage.dark #ejaugust_com a {
 
 body.vintage #ejaugust_com>scroller->scroll-content {
  display: grid;
- grid-template:
-  "nav banner" 128px
-  "nav article" minmax(calc(var(--app-height) - 128px), auto) / 140px minmax(auto, 650px);
+ grid-template: "nav banner" 128px
+  "nav article" minmax(calc(var(--app-height) - 128px), auto) / 140px minmax(auto, min(650px, calc(100% - 140px - 64px)));
  margin: 12px;
  font-size: 12px;
 }
 
 body.vintage #ejaugust_com #notebook-section {
+ display: flex;
+ flex-direction: column;
  grid-area: article;
  margin-left: 48px;
 }
