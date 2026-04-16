@@ -5,7 +5,7 @@ const depthOdd = depthEven + 1
 return /* html */`
 <p>From the start, I've envisioned my web framework as one that allows me to see components represented as equations. These equations would represent components as a relationship between their subcomponents. As it happens, all ecosystem components extend directly or indirectly from the same base type, meaning that I don't have to typeset an equation for every single part. They can just inherit and override their prototype's markup.</p>
 <p>On top of that, <a ${_.pointAttr()} class=external href="">MathML</a> is now <a ${_.pointAttr()} class=external href="https://caniuse.com/mathml">widely supported</a> across the web! This is a fairly recent development that was two and a half decades in the making (<a ${_.pointAttr()} class=external href="https://www.w3.org/TR/1998/REC-MathML-19980407/">MathML 1.0</a> was recommended by the W3C in 1998). This means that I can typeset these equations without third-party tools.</p>
-<p>Still, I didn't have a reliable method of looking at the entire cardinality expression of the demo app ecosystem with various levels of detail... until today. Let's dive in and explore the approach that I used.</p>
+<p>Still, I didn't have a reliable method of looking at the entire cardinality expression of the Demo Ecosystem with various levels of detail... until today. Let's dive in and explore the approach that I used.</p>
 <h2>Method</h2>
 <p>I started by equipping the base part type with a new function. This will be inherited by every part of the ecosystem. You can think of it like this:</p>
 <pre>interface IPart {<br> // ...<br><br> mathML(<br>  DEPTH: number = 0,<br>  EQUATION_TYPE: string = "none",<br>  PARENTHESIZE: boolean = false<br> ): string<br><br> // ...<br>}</pre>
@@ -17,7 +17,7 @@ return /* html */`
 <p class="math">${notes.mathML(0, false)}</p>
 <p>The parent part of <code>notes</code> is <code>sections</code>. It controls which section of <code>https://ejaugust.com</code> you are on (currently, there's only <code>notes</code> and <code>home</code>) and it has a variable too. It looks like this:</p>
 <p class="math">${sections.mathML(0, false)}</p>
-<p>The root of the entire app ecosystem has one as well, which looks like this:</p>
+<p>The root of the entire ecosystem has one as well, which looks like this:</p>
 <p class="math">${_.mathML(0, false)}</p>
 <p>These single-variable expressions don't tell us a lot. It's not until we start changing these arguments that we get to see more detail.</p>
 <h3>Parameter <code>DEPTH</code></h3>

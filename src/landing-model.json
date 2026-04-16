@@ -16,7 +16,25 @@
     }
    },
    "issue-tracker": {
-    "sections": "summary"
+    "sections": "summary",
+    "filters": {
+     "dropdown": "none",
+     "order": {
+      "descending": true,
+      "by": "date"
+     },
+     "priority": {
+      "a": true,
+      "b": true,
+      "c": true
+     },
+     "status": {
+      "to-do": true,
+      "doing": true,
+      "done": true
+     }
+    },
+    "scroller": 0
    },
    "sidebar": {
     "outliner-domains": {

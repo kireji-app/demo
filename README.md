@@ -1,7 +1,7 @@
-# Demo - *App Ecosystem*
+# Demo - *Ecosystem*
 > **<sub>Part of the Kireji Project</sub>**<br><sup><i>omnia ex una linea</i></sup>
 
-The Demo App Ecosystem serves as the unified host for all applications demonstrating the Kireji Project. It represents a multi-origin app ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a portable save-state system.
+The Demo Ecosystem serves as the unified host for all applications demonstrating the Kireji Project. It represents a multi-origin ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a portable save-state system.
 ## The Kireji Project
 The Kireji Project poses a question: **What if we could treat every web page as a point in a unified, mathematically mapped space?**
 
@@ -9,9 +9,9 @@ The Kireji Project poses a question: **What if we could treat every web page as 
 | ---- | -------
 | [MPHF](https://github.com/kireji-app/mphf#readme) | [Coordinate System<br><sup>A bijective coordinate system for hashing structured data</sup>](https://github.com/kireji-app/mphf#readme)
 | [Kireji](https://github.com/kireji-app/kireji#readme) | [Web Framework<br><sup>A reactive web framework with MPHF routing</sup>](https://github.com/kireji-app/kireji#readme)
-| **Demo**| **App Ecosystem - ★ You are here<br><sup>An example app ecosystem demonstrating the project</sup>**
+| **Demo**| **Ecosystem - ★ You are here<br><sup>An example ecosystem demonstrating the project</sup>**
 
-## Demo Applications
+## Demo Apps
 These applications are in *alpha* and still undergoing research and development.
 
 <h3><a href="https://ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>EJ's Notebook</sup></a></h3>
@@ -20,15 +20,15 @@ These applications are in *alpha* and still undergoing research and development.
 
 <h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Part Viewer</sup></a></h3>
 
-- Explore the demo app ecosystem and its component parts using an IDE-style application.
+- Explore the Demo Ecosystem and its component parts using an IDE-style application.
 
 <h3><a href="https://glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Glowstick</sup></a></h3>
 
-- Explore the app ecosystem through the lens of an open-world pixel art game.
+- Explore the ecosystem through the lens of an open-world pixel art game.
 
 <h3><a href="https://desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts</sup></a></h3>
 
-- Experience the app ecosystem with a familiar operating system look-and-feel.
+- Experience the ecosystem with a familiar operating system look-and-feel.
 
 ### Coming Soon
 These applications coming soon!
@@ -50,7 +50,7 @@ The ecosystem is built on a minimal dependency stack. It is powered by the **Kir
 <br>[![JavaScript](https://img.shields.io/badge/JavaScript-Logic-212121?labelColor=F7DF1E&style=for-the-badge&logo=javascript&logoColor=black)](https://262.ecma-international.org/)
 
 ### Status and License
-The Demo App Ecosystem is in **Alpha**
+The Demo Ecosystem is in **Alpha**
 
 The Kireji Project is in **early research and development**.
 
