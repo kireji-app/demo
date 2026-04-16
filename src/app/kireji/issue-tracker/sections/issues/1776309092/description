@@ -1,10 +1,8 @@
-In the Glowstick world, it is not immediately easy to use rooms and space as a method of editing parts. This is because although parts can contain a large number of subparts (especially when considering the entire tree), having to scale the parent part to be larger than the subpart goes against the design of the part: parts should all feel equal in nature, despite their constituents.
+In the Glowstick world, it is not immediately easy to use rooms and space as a method of editing parts. This is because although parts can contain a large number of subparts (especially when considering the ecosystem part which contains all others), having to scale the parent part to be larger than the subpart goes against the design of the part: individual parts should all feel equal in nature and scale, despite their constituents.
 
-In a world where dimension is completely linear requires a massive change in presentation due purely to scaling the hierarchy.
+To resolve this, the system will take inspiration from the TARDIS (Time and Relative Dimension in Space) from Doctor Who. In other words, parts will be bigger on the inside. 
 
-To resolve this, the system will take inspiration from the TARDIS (Time and Relative Dimension in Space) from Doctor Who. In other words, parts will always be the same size: they will occupy a certain cube. They will be just big enough to climb inside. Once inside, they will be bigger on the inside.
-
-This particular TARDIS presentation will allow parts to be filled with other parts on the inside, each of which can be entered and seen to be bigger on the inside.
+Each part will have the same footprint - representing perhaps 3 meters along each side. In the isometric view, the pixel art for each part will fit neatly inside a 64px by 64px square. For reference, the player's avatar is contained in a 16px by 32px sprite. It will be possible for the player to walk inside any given part. Once inside, they will transition to a bigger space representing the inside of the part. This larger space can itself contain parts which can themselves be entered and explored.
 
 Parts can be exactly the size they need to be to comfortably present an explorable level that is completely dedicated to the part itself, rather than having the size be locked to some fixed size for every part. This could involve implementing a mesh onto every single part, including the framework's own parts.
 
