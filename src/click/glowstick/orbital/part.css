@@ -1,0 +1,104 @@
+#orbital_glowstick_click {
+ --tiles: 30;
+ --target-long: calc(16px * var(--tiles));
+ --target-short: calc(9px * var(--tiles));
+ --ratio: round(down, min(max(var(--app-width), var(--app-height)) / var(--target-long), min(var(--app-width), var(--app-height)) / var(--target-short)), 0.5);
+ --px: calc(1px * var(--ratio));
+ --ui-width: calc(var(--ratio) * var(--target-long));
+ --ui-height: calc(var(--ratio) * var(--target-short));
+ --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-long)) / 2);
+ --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-short)) / 2);
+ touch-action: none;
+ background-color: var(--bg-un-mode);
+ image-rendering: pixelated;
+ image-rendering: crisp-edges;
+ container-type: size;
+ container-name: application;
+}
+
+@container application (aspect-ratio <=1 / 1) {
+
+ #orbital_glowstick_click>* {
+  --ui-width: calc(var(--ratio) * var(--target-short));
+  --ui-height: calc(var(--ratio) * var(--target-long));
+  --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-short)) / 2);
+  --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-long)) / 2);
+ }
+}
+
+#orbital_glowstick_click>* {
+ position: absolute;
+ left: 0;
+ top: 0;
+ width: 100% !important;
+ height: 100% !important;
+}
+
+#orbital_glowstick_click world- {
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ will-change: transform;
+ transform: rotate(var(--angle)) translate(calc((var(--x) - 50) * var(--px)), calc((var(--y) - 50) * var(--px))) scale(var(--ratio));
+ transform-origin: 0 0;
+ pointer-events: none;
+}
+
+#orbital_glowstick_click ui-,
+#orbital_glowstick_click world- {
+ pointer-events: none;
+}
+
+#orbital_glowstick_click world->svg,
+#orbital_glowstick_click ui-:after {
+ shape-rendering: crispEdges;
+ /* DISABLE */
+ display: none;
+ /**/
+}
+
+#orbital_glowstick_click world->svg path {
+ fill: url(#checkerboard);
+ fill-opacity: 50%;
+ stroke: red;
+ stroke-width: 0.5px;
+}
+
+#orbital_glowstick_click world->svg path.current {
+ fill-opacity: 100%;
+}
+
+#orbital_glowstick_click world->svg #checkerboard {
+ fill: var(--bg-mode);
+}
+
+#orbital_glowstick_click ui- {
+ position: absolute;
+ pointer-events: none;
+ width: var(--ui-width);
+ height: var(--ui-height);
+ left: var(--ui-left);
+ top: var(--ui-top);
+}
+
+#orbital_glowstick_click ui- span:not(.char) {
+ display: flex;
+ flex-flow: row wrap;
+ margin: 0;
+ padding: 0;
+}
+
+#orbital_glowstick_click .char {
+ --cx: 0;
+ --cy: 0;
+ background-image: var(--glowstick-click--font-png);
+ background-size: calc(var(--ratio) * 128px);
+ width: calc(8 * var(--px));
+ height: calc(16 * var(--px));
+ background-position: calc(var(--px) * -8 * var(--cx)) calc(var(--px) * -16 * var(--cy));
+ filter: brightness(0);
+}
+
+body.dark #orbital_glowstick_click .char {
+ filter: invert(1);
+}

@@ -1,4 +1,4 @@
 minosModal.setModel("trophies")
 
 if (SCROLL_TO !== undefined)
- debug('scroll to ' + SCROLL_TO + ' here.')
+ warn(`Scroll-to-trophy shortcut is not yet implemented for the Minos trophy modal.`)

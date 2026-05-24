@@ -1,0 +1,1 @@
+gpu.device.queue.writeBuffer(orbitalGame.uniformBuffer, 0, orbitalCamera.buffer)

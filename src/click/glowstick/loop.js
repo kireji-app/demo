@@ -84,10 +84,7 @@ const row = triData.rows[Math.floor(point.y) - triData.range.min]
 const newRouteID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.range.min)
 if (newRouteID !== world.routeID) {
 
- // Skip redundant runtime state distribution.
- world.skipRuntimeStateDistribution = true
- world.setRouteID(newRouteID)
- world.skipRuntimeStateDistribution = false
+ world.setRouteID(newRouteID, false, true)
 } else {
  world.updateView()
 }

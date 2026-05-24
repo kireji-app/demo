@@ -1,0 +1,5 @@
+It feels tedious to sell-off multiple bombs in the shop in Minos because the shop closes after each sale. Let's keep the shop open until the user manually closes it.
+
+At the same time, let's retain the scroll positions for both the shop and trophies. This will make the experience of switching between the different modals feel more grounded.
+
+Additionally, the shop might look cooler if we use a grid of tiles with an overlayed price instead of using rows. This is because previewing the minos requires a lot of height but the label doesn't need to be that tall, nor does it need the "Spend x points" verbosity. Just show the price over the square minos tile and leave it at that. Exactly four files should fit side-by-side with the header of the shop preventing 4 complete tiles from appearing top-to-bottom, ensuring there is always at least some partial tiles which helps to hint to the user that the panel can be scrolled.

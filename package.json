@@ -1,5 +1,8 @@
 {
+  "devDependencies": {
+    "@webgpu/types": "^0.1.70"
+  },
   "dependencies": {
-    "kireji": "^0.10.0"
+    "kireji": "^0.11.0"
   }
 }

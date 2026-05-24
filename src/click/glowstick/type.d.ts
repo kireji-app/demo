@@ -4,6 +4,7 @@ declare interface IGlowstick
  // Subparts.
  readonly user: IGlowstickUser
  readonly world: IGlowstickWorld
+ readonly minos: IMinosGame
 
  // Runtime Properties.
  /** If currently using the mobile thumbstick, the on-screen element representing the thumbstick. */

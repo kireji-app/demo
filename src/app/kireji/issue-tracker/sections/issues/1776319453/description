@@ -1,0 +1,1 @@
+Some tools (like the unix timestamp tool) are not apps but specific pages within an app. Either turn them into dedicated apps so they appear on the desktop or make it possible to create icons which are canonical links.
