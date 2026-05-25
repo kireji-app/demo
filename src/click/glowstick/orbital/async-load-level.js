@@ -37,9 +37,11 @@ for (const mesh of gltf.meshes) {
   const textureInfo = material?.pbrMetallicRoughness?.baseColorTexture
 
   let gpuTexture
+  let gpuSampler
 
   if (textureInfo != null) {
    const texture = gltf.textures[textureInfo.index]
+   const sampler = gltf.samplers[texture.sampler]
    const image = gltf.images[texture.source]
    const blob = new Blob([image.data], { type: image.mimeType })
    const bitmap = await createImageBitmap(blob, { colorSpaceConversion: 'none' })
@@ -58,6 +60,36 @@ for (const mesh of gltf.meshes) {
 
    bitmap.close()
 
+   const FILTER_MAP = {
+    9728: 'nearest',
+    9729: 'linear',
+    9984: 'nearest',
+    9985: 'linear',
+    9986: 'nearest',
+    9987: 'linear',
+   }
+
+   const WRAP_MAP = {
+    33071: 'clamp-to-edge',
+    33648: 'mirror-repeat',
+    10497: 'repeat',
+   }
+
+   gpuSampler = gpu.device.createSampler({
+    magFilter: FILTER_MAP[sampler?.magFilter] ?? 'nearest',
+    minFilter: FILTER_MAP[sampler?.minFilter] ?? 'nearest',
+    addressModeU: WRAP_MAP[sampler?.wrapS] ?? 'repeat',
+    addressModeV: WRAP_MAP[sampler?.wrapT] ?? 'repeat',
+    mipmapFilter: {
+     9728: 'nearest',
+     9729: 'linear',
+     9984: 'linear',
+     9985: 'nearest',
+     9986: 'nearest',
+     9987: 'linear',
+    }[sampler?.minFilter] ?? 'nearest',
+   })
+
   } else {
    gpuTexture = gpu.device.createTexture({
     size: [1, 1],
@@ -70,14 +102,13 @@ for (const mesh of gltf.meshes) {
     { bytesPerRow: 4 },
     [1, 1]
    )
+   gpuSampler = gpu.device.createSampler({
+    magFilter: 'linear',
+    minFilter: 'linear',
+    addressModeU: 'repeat',
+    addressModeV: 'repeat',
+   })
   }
-
-  const sampler = gpu.device.createSampler({
-   magFilter: 'linear',
-   minFilter: 'linear',
-   addressModeU: 'repeat',
-   addressModeV: 'repeat',
-  })
 
   // END MATERIAL
 
@@ -141,7 +172,7 @@ for (const mesh of gltf.meshes) {
     entries: [
      { binding: 0, resource: { buffer: orbitalGame.uniformBuffer } },
      { binding: 1, resource: gpuTexture.createView() },
-     { binding: 2, resource: sampler },
+     { binding: 2, resource: gpuSampler },
     ]
    }),
    indexArray

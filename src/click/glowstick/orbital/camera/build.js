@@ -1,5 +1,5 @@
 orbitalCamera.define({
- fov: { value: 45 },
+ fov: { value: 50 },
  near: { value: 1 },
  far: { value: 10000 },
  scope: { value: 3 },

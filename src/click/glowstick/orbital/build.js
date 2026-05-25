@@ -14,3 +14,4 @@ orbitalGame.define({
 // TODO: implement pause button (full screen and pointer capture when not paused)
 // TODO: implement crouch control (sets camera height only)
 // TODO: improve controls including mobile controls
+// TODO: Add loading screen fallback and/or overlay

@@ -135,8 +135,8 @@
    "orbital": {
     "levels": {
      "warehouse": {
-      "x": 0,
-      "y": 0
+      "x": -16,
+      "y": 94
      }
     },
     "camera": {

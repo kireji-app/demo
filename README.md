@@ -18,24 +18,29 @@ These applications are in *alpha* and still undergoing research and development.
 
 - Essays and notes about the concepts that drive the project.
 
-<h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Part Viewer</sup></a></h3>
+<h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/kireji/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Part Viewer</sup></a></h3>
 
 - Explore the Demo Ecosystem and its component parts using an IDE-style application.
 
 <h3><a href="https://glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Glowstick</sup></a></h3>
 
-- Explore the ecosystem through the lens of an open-world pixel art game.
+- A simple, work-in-progress top-down pixel art game showcasing the framework's 2D game engine.
 
-<h3><a href="https://desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/desktop/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts</sup></a></h3>
+<h3><a href="https://orbital.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/orbital/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Orbital</sup></a></h3>
 
-- Experience the ecosystem with a familiar operating system look-and-feel.
+- A work-in-progress first-person game showcasing the framework's 3D game engine component.
 
-### Coming Soon
-These applications coming soon!
-<h3><a href="https://kireji.io"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/io/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>kireji.io</sup></a></h3>
-<h3><a href="https://core.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>core.parts</sup></a></h3>
-<h3><a href="https://abstract.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>abstract.parts</sup></a></h3>
-<h3><a href="https://user.parts"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>user.parts</sup></a></h3>
+<h3><a href="https://minos.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/minos/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Minos</sup></a></h3>
+
+- A quick and fun Tetris-like puzzle game where you place and destroy tiles to earn achievements.
+
+<h3><a href="https://desktop.parts"><img src="https://raw.githubusercontent.com/kireji-app/kireji/refs/heads/main/src/parts/desktop/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>desktop.parts</sup></a></h3>
+
+- A familiar operating system-style desktop view that ties the rest of the apps together.
+
+<h3><a href="https://issue-tracker.kireji.app/"><img src="https://raw.githubusercontent.com/kireji-app/kireji/refs/heads/main/src/parts/abstract/part/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Issue Tracker</sup></a></h3>
+
+- A simple project tracker showcasing the ongoing bugs and tasks for the ecosystem.
 
 ### Tech Stack
 The ecosystem is built on a minimal dependency stack. It is powered by the **Kireji Web Framework** and uses **Vanilla JavaScript** with no third-party dependencies to ensure a fully self-contained, auditable runtime environment.
