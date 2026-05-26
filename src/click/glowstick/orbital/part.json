@@ -17,7 +17,7 @@
    "TARGET_ELEMENT"
   ]
  },
- "debug": true,
+ "debug": false,
  "walkingSpeed": 142,
  "sprintingSpeed": 240,
  "mouseSensitivity": 0.5,
