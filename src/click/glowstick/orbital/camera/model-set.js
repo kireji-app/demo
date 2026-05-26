@@ -1,7 +1,7 @@
 const { x, y } = MODEL
 
-orbitalCamera.x.smooth = x
-orbitalCamera.y.smooth = y
+orbitalCamera.x.smooth = Math.min(Math.max(x, -90), 90)
+orbitalCamera.y.smooth = ((y % 360) + 360) % 360
 
 const newCameraRouteID = orbitalCamera.modelToRouteID(MODEL)
 

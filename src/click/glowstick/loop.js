@@ -7,27 +7,31 @@ const { controlVector, isSprinting } = (() => {
   const normalized = Vector.normalize(glowstick.thumbstickVector)
   const magnitude = Vector.magnitude(glowstick.thumbstickVector)
   const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
-  const clamped = { x: normalized.x * Math.min(magnitude, maxRadius), y: normalized.y * Math.min(magnitude, maxRadius) }
+  const clamped = { x: normalized.x * Math.min(magnitude, maxRadius), z: normalized.z * Math.min(magnitude, maxRadius) }
 
   // Position the visual thumbstick.
   glowstick.handleElement.style.setProperty("--x", clamped.x + "px")
-  glowstick.handleElement.style.setProperty("--y", clamped.y + "px")
+  glowstick.handleElement.style.setProperty("--z", clamped.z + "px")
 
   return {
-   controlVector: { x: normalized.x * Math.min(magnitude / maxRadius, 1), y: normalized.y * Math.min(magnitude / maxRadius, 1) },
+   controlVector: {
+    x: normalized.x * Math.min(magnitude / maxRadius, 1),
+    y: 0,
+    z: normalized.z * Math.min(magnitude / maxRadius, 1)
+   },
    isSprinting: (maxRadius * 1.5) < magnitude
   }
  }
 
  // The keyboard might be controlling the player character.
- const keyboardVector = { x: 0, y: 0 }
- if (hotKeys.pressed.has("KeyA")) keyboardVector.x -= 1
- if (hotKeys.pressed.has("KeyD")) keyboardVector.x += 1
- if (hotKeys.pressed.has("KeyW")) keyboardVector.y -= 1
- if (hotKeys.pressed.has("KeyS")) keyboardVector.y += 1
+ const WASDVector = { x: 0, y: 0, z: 0 }
+ if (hotKeys.pressed.has("KeyA")) WASDVector.x -= 1
+ if (hotKeys.pressed.has("KeyD")) WASDVector.x += 1
+ if (hotKeys.pressed.has("KeyW")) WASDVector.z -= 1
+ if (hotKeys.pressed.has("KeyS")) WASDVector.z += 1
 
  return {
-  controlVector: Vector.normalize(keyboardVector),
+  controlVector: Vector.normalize(WASDVector),
   isSprinting: hotKeys.pressed.has("ShiftLeft") || hotKeys.pressed.has("ShiftRight")
  }
 })()
@@ -35,7 +39,7 @@ const { controlVector, isSprinting } = (() => {
 // Speed going up and down should be slower than speed going left and right to account for camera angle.
 const adjustedSpeed = Vector.magnitude(Vector.multiply(
  Vector.multiply(controlVector, user.pixelsPerSecond),
- { x: 1, y: 1 / 2 }
+ { x: 1, y: 1, z: 1 / 2 }
 ))
 
 if (adjustedSpeed === 0) {
@@ -59,7 +63,7 @@ if (hit) {
 } else {
 
  // Counter-act screen-space vertical scale.
- const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), { x: 1, y: 2 }))
+ const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), { x: 1, y: 1, z: 2 }))
 
  // Use the walking animations.
  user.element.classList.add("walking")
@@ -76,12 +80,13 @@ if (hit) {
 // Distribute the runtime state.
 world.position.x = point.x
 world.position.y = point.y
+world.position.z = point.z
 world.triIndex = triIndex
 
 // Move the world to the tri and point provided by the ray cast results.
 const triData = world.triTable[triIndex]
-const row = triData.rows[Math.floor(point.y) - triData.range.min]
-const newRouteID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.range.min)
+const row = triData.rows[Math.floor(point.z) - triData.zRange.min]
+const newRouteID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.xyRange.min.x)
 if (newRouteID !== world.routeID) {
 
  world.setRouteID(newRouteID, false, true)

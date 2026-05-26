@@ -1,8 +1,7 @@
 declare interface IMinosGamePiece
  extends IPart<IMinosGamePieces, null>,
  IWebComponent,
- IMinosGamePrimitive,
- IMinosGamePrimitives {
+ IMinosGamePrimitive {
 
  // Serialized Properties.
  readonly point(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement): void
@@ -16,10 +15,6 @@ declare interface IMinosGamePiece
  // Runtime Properties.
  /** The cached array of tiles where the piece can be placed. */
  readonly allowedTiles: Set<IMino>
- readonly easyCardinality: bigint
- readonly normalCardinality: bigint
- readonly hardCardinality: bigint
- readonly bombCardinality: bigint
  /** The currently assigned primitive, as determined by the current route ID. */
  readonly primitive: IMinosGamePrimitive
 }

@@ -11,4 +11,10 @@ return /* html */`
  <span class="char" style="--cx:${alphabet.indexOf(char)}"></span>`).join(`
  `)}
 </span>
+<span class="char" style="--cx:12"></span>
+<span class="char" style="background:transparent"></span>
+<span>${[...Math.trunc(world.position.z).toString()].map(char => /* html */`
+ <span class="char" style="--cx:${alphabet.indexOf(char)}"></span>`).join(`
+ `)}
+</span>
 <span class="char" style="--cx:11"></span>`

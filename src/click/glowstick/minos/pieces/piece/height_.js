@@ -1,1 +1,1 @@
-return minosPiece.allPrimitives[Number(minosPiece.routeID)].height
+return minos.primitives.allPrimitives[Number(minosPiece.routeID)].height

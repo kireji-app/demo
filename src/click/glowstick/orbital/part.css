@@ -39,7 +39,7 @@
  left: 50%;
  top: 50%;
  will-change: transform;
- transform: rotate(var(--angle)) translate(calc((var(--x) - 50) * var(--px)), calc((var(--y) - 50) * var(--px))) scale(var(--ratio));
+ transform: rotate(var(--angle)) translate(calc((var(--x) + var(--map-left)) * var(--px)), calc((var(--z) + var(--map-top)) * var(--px))) scale(var(--ratio));
  transform-origin: 0 0;
  pointer-events: none;
 }
@@ -52,7 +52,7 @@
 #orbital_glowstick_click world->svg,
 #orbital_glowstick_click ui-:after {
  shape-rendering: crispEdges;
- /* DISABLE */
+ /* DISABLE * /
  display: none;
  /**/
 }
@@ -90,15 +90,51 @@
 
 #orbital_glowstick_click .char {
  --cx: 0;
- --cy: 0;
+ --cz: 0;
  background-image: var(--glowstick-click--font-png);
  background-size: calc(var(--ratio) * 128px);
  width: calc(8 * var(--px));
  height: calc(16 * var(--px));
- background-position: calc(var(--px) * -8 * var(--cx)) calc(var(--px) * -16 * var(--cy));
+ background-position: calc(var(--px) * -8 * var(--cx)) calc(var(--px) * -16 * var(--cz));
  filter: brightness(0);
 }
 
 body.dark #orbital_glowstick_click .char {
  filter: invert(1);
+}
+
+body:not(.paused) #orbital_glowstick_click #pause-menu {
+ display: none;
+}
+
+body:not(.paused) #orbital_glowstick_click {
+ height: unset !important;
+ width: unset !important;
+ position: fixed;
+ top: 0;
+ bottom: 0;
+ right: 0;
+ left: 0;
+ z-index: 1000;
+}
+
+#orbital_glowstick_click #pause-menu {
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ z-index: 2000;
+}
+
+body.paused #orbital_glowstick_click::before {
+ content: "";
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ background-color: var(--bg-dark-est);
+ opacity: 50%;
+ z-index: 1500;
 }

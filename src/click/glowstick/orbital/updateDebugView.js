@@ -1,12 +1,12 @@
 const cameraGoal = Vector.multiply(orbitalLevel.position, -1)
 const epsilon = 0.00001
-if (Math.abs(cameraGoal.x - orbitalLevel.camera.x) > epsilon || Math.abs(cameraGoal.y - orbitalLevel.camera.y) > epsilon) {
+if (Math.abs(cameraGoal.x - orbitalLevel.camera.x) > epsilon || Math.abs(cameraGoal.z - orbitalLevel.camera.z) > epsilon) {
  const cameraSmoothing = _.parts.desktop.era.arm === _.parts.desktop.era.vintage ? 0 : 30 / client.deltaTime
  orbitalLevel.camera = Vector.multiply(Vector.add(Vector.multiply(orbitalLevel.camera, cameraSmoothing), cameraGoal), 1 / (cameraSmoothing + 1))
  orbitalLevel.element.style.setProperty("--x", orbitalLevel.camera.x)
- orbitalLevel.element.style.setProperty("--y", orbitalLevel.camera.y)
+ orbitalLevel.element.style.setProperty("--z", orbitalLevel.camera.z)
  orbitalLevel.element.style.setProperty("--user-x", Math.floor(orbitalLevel.position.x))
- orbitalLevel.element.style.setProperty("--user-y", Math.floor(orbitalLevel.position.y))
+ orbitalLevel.element.style.setProperty("--user-z", Math.floor(orbitalLevel.position.z))
  Q("ui->.debug").innerHTML = orbitalLevel["coords.html"]
 }
 
@@ -21,11 +21,11 @@ if (orbitalLevel.viewedTriIndex !== orbitalLevel.triIndex) {
  orbitalLevel.viewedTriIndex = orbitalLevel.triIndex
 }
 
-if (orbitalLevel.viewedPosition.x !== orbitalLevel.position.x || orbitalLevel.viewedPosition.y !== orbitalLevel.position.y) {
+if (orbitalLevel.viewedPosition.x !== orbitalLevel.position.x || orbitalLevel.viewedPosition.z !== orbitalLevel.position.z) {
 
  // Move the single-pixel mark showing the player's position.
  Q(`world->svg #player-marker`).setAttribute("x", Math.floor(orbitalLevel.position.x))
- Q(`world->svg #player-marker`).setAttribute("y", Math.floor(orbitalLevel.position.y))
+ Q(`world->svg #player-marker`).setAttribute("y", Math.floor(orbitalLevel.position.z))
 
  orbitalLevel.viewedPosition = { ...orbitalLevel.position }
 }

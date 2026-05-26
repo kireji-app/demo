@@ -81,7 +81,7 @@ const perspective = [
 const rotation = orbitalCamera.model
 const position = orbitalGame.levels.arm.model
 
-const t = matrix.t(-position.x, -orbitalCamera.height, -position.y)
+const t = matrix.t(-position.x, -orbitalCamera.height - position.y, -position.z)
 const ry = matrix.ry(rotation.y * Math.PI / 180)
 const rx = matrix.rx(rotation.x * Math.PI / 180)
 const rz = matrix.rz(rotation.z * Math.PI / 180)

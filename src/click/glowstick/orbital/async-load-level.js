@@ -98,7 +98,7 @@ for (const mesh of gltf.meshes) {
    })
    gpu.device.queue.writeTexture(
     { texture: gpuTexture },
-    new Uint8Array([255, 0, 255, 255]),
+    new Uint8Array([Math.floor(Math.random() * 128) + 127, , Math.floor(Math.random() * 128) + 127, 255]),
     { bytesPerRow: 4 },
     [1, 1]
    )

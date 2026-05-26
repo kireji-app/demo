@@ -1,1 +1,1 @@
-return VECTOR.x || VECTOR.y ? BigInt(Math.round(Math.atan2(VECTOR.y, VECTOR.x) / (Math.PI / 4) + 8) % 8) : null
+return VECTOR.x || VECTOR.z ? BigInt(Math.round(Math.atan2(VECTOR.z, VECTOR.x) / (Math.PI / 4) + 8) % 8) : null

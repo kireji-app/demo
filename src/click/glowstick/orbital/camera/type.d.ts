@@ -12,8 +12,6 @@ declare interface IOrbitalCamera
   y: number,
   z: number
  }
- // Conditionally sets the route ID of the camera while updating the smooth camera rotation model.
- readonly setSmooth(MODEL: { x: number, y: number }): void
 
  // Runtime Properties.
  readonly fov: number

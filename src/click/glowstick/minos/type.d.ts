@@ -47,7 +47,10 @@ declare interface IMinosGamePrimitives {
  /** The array of the smallest mino primitives. */
  readonly easyPrimitives: IMinosGamePrimitive[]
 
- /** The array of standard/medium-size mino primitives. */
+ /** The array of medium-size mino primitives. */
+ readonly mediumPrimitives: IMinosGamePrimitive[]
+
+ /** The array of standard-size mino primitives. */
  readonly normalPrimitives: IMinosGamePrimitive[]
 
  /** The array of large and awkwardly shaped mino primitives. */
@@ -58,4 +61,18 @@ declare interface IMinosGamePrimitives {
 
  /** The mino primitive representing the bomb which clears all minos within a certain radius around itself. */
  readonly radialBomb: IMinosGamePrimitive
+
+ /** The cardinality offset for each subtype of primitive. */
+ readonly ranges: {
+  readonly easy: IMinosGamePrimitiveRange
+  readonly medium: IMinosGamePrimitiveRange
+  readonly normal: IMinosGamePrimitiveRange
+  readonly hard: IMinosGamePrimitiveRange
+  readonly bomb: IMinosGamePrimitiveRange
+ }
+}
+
+declare interface IMinosGamePrimitiveRange {
+ readonly cardinality: bigint
+ readonly offset: bigint
 }

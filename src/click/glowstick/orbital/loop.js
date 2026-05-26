@@ -3,18 +3,27 @@ if (orbitalGame.loading) {
  return
 }
 
+let skipFrame = true
+
 if (orbitalGame.loadedLevel !== orbitalLevel) {
+ skipFrame = false
  orbitalGame.loadedLevel = orbitalLevel
  orbitalGame.loadLevelAsync()
  return
 }
 
 if (orbitalGame.canvasSizeChanged) {
+ skipFrame = false
  orbitalGame.updateCanvasSize()
  orbitalGame.canvasSizeChanged = false
 }
 
-orbitalGame.reactToUserInput()
+if (document.body.classList.contains("paused") && skipFrame)
+ return
+
+orbitalGame.reactToKeyboardInput()
 orbitalGame.updateUniformBuffer()
 orbitalGame.render()
-orbitalGame.updateDebugView()
+
+if (orbitalGame.manifest.debug)
+ orbitalGame.updateDebugView()

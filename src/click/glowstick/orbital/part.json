@@ -4,8 +4,22 @@
   "render": [],
   "updateDebugView": [],
   "async-load-level": [],
-  "reactToUserInput": [],
+  "reactToKeyboardInput": [],
+  "reactToMouseMovement": [
+   "MOUSE_MOVEMENT_X",
+   "MOUSE_MOVEMENT_Y"
+  ],
   "updateCanvasSize": [],
-  "updateUniformBuffer": []
- }
+  "updateUniformBuffer": [],
+  "game-pause": [],
+  "game-play": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ]
+ },
+ "debug": true,
+ "walkingSpeed": 142,
+ "sprintingSpeed": 240,
+ "mouseSensitivity": 0.5,
+ "keyboardSensitivity": 1.2
 }

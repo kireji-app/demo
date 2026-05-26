@@ -6,9 +6,9 @@ declare interface IGlowstickWorld
  /** The html element that represents the glowstick world (client only). */
  readonly element: HTMLElement
  /** represents the runtime position of the camera, which gently lags behind player movement to prevent popping due to pixel-perfect player motion. */
- readonly camera: IVector2
+ readonly camera: IVector3
  readonly viewedTriIndex: IMeshTriIndex
- readonly viewedPosition: IVector2
+ readonly viewedPosition: IVector3
  readonly manifest: IGlowstickWorldManifest
 }
 

@@ -1,8 +1,11 @@
 minosPiece.define({
- easyCardinality: { value: BigInt(minosPiece.easyPrimitives.length) },
- normalCardinality: { value: BigInt(minosPiece.normalPrimitives.length) },
- hardCardinality: { value: BigInt(minosPiece.hardPrimitives.length) },
- bombCardinality: { value: 2n },
- cardinality: { value: BigInt(minosPiece.allPrimitives.length) },
+ cardinality: {
+  resolve() {
+   if (!minos.primitives)
+    minos.installPrimitives()
+
+   return BigInt(minos.primitives.allPrimitives.length)
+  }
+ },
  allowedTiles: { value: new Set() }
 })

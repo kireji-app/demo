@@ -3,6 +3,6 @@
     "@webgpu/types": "^0.1.70"
   },
   "dependencies": {
-    "kireji": "^0.12.0"
+    "kireji": "^0.13.0"
   }
 }

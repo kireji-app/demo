@@ -1,22 +1,20 @@
-const {
- easyCardinality,
- bombCardinality,
- normalCardinality,
- hardCardinality,
- routeID: existingPieceID
-} = minosPiece
+const { easy, normal, hard, bomb } = minos.primitives.ranges
 
-let newPieceID = existingPieceID
+let newPieceID = minosPiece.routeID
+while (newPieceID === minosPiece.routeID) {
 
-while (newPieceID === existingPieceID) {
+ let range = null
+
  if (flipCoin() || flipCoin())
-  newPieceID = randomRouteID(easyCardinality)
+  range = easy
  else if (flipCoin() || flipCoin())
-  newPieceID = randomRouteID(bombCardinality) + easyCardinality
+  range = bomb
  else if (flipCoin() || flipCoin() || flipCoin() || flipCoin())
-  newPieceID = randomRouteID(normalCardinality) + bombCardinality + easyCardinality
+  range = normal
  else
-  newPieceID = randomRouteID(hardCardinality) + normalCardinality + bombCardinality + easyCardinality
+  range = hard
+
+ newPieceID = randomRouteID(range.cardinality) + range.offset
 }
 
 minosPiece.setRouteID(newPieceID)

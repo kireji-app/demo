@@ -77,9 +77,8 @@ const { attributes: { POSITION }, indices } = json.meshes[collisionMeshIndex].pr
 const points = json.accessors[POSITION].data
 const tris = json.accessors[indices].data
 
-// TODO: retain y (index + 1) for depth movement.
 for (let index = 0; index < points.length; index += 3)
- data.collision[0].push([Math.round(points[index]), Math.round(points[index + 2])])
+ data.collision[0].push([Math.round(points[index]), Math.round(points[index + 1]), Math.round(points[index + 2])])
 
 for (let index = 0; index < tris.length; index += 3)
  data.collision[1].push([tris[index], tris[index + 1], tris[index + 2]])

@@ -11,6 +11,8 @@ const
   { width: 2, height: 2, price: 500, minos: [{ x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }] },
   { width: 2, height: 2, price: 500, minos: [{ x: 0, y: 0 }, { x: 1, y: 1 }] },
   { width: 2, height: 2, price: 500, minos: [{ x: 1, y: 0 }, { x: 0, y: 1 }] },
+ ],
+ mediumPrimitives = [
   { width: 3, height: 2, price: 400, minos: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 1 }] },
   { width: 3, height: 2, price: 400, minos: [{ x: 0, y: 1 }, { x: 1, y: 0 }, { x: 2, y: 0 }] },
   { width: 2, height: 3, price: 400, minos: [{ x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 2 }] },
@@ -54,17 +56,40 @@ const
  ],
  radialBomb = { width: 1, height: 1, price: 750, minos: [{ x: 0, y: 0 }] },
  crosshairBomb = { width: 1, height: 1, price: 750, minos: [{ x: 0, y: 0 }] },
- allPrimitives = [...easyPrimitives, radialBomb, crosshairBomb, ...normalPrimitives, ...hardPrimitives]
+ allPrimitives = [...easyPrimitives, ...mediumPrimitives, ...normalPrimitives, ...hardPrimitives, crosshairBomb, radialBomb]
 
 minos.define({
  primitives: {
   value: {
    easyPrimitives,
+   mediumPrimitives,
    normalPrimitives,
    hardPrimitives,
    crosshairBomb,
    radialBomb,
    allPrimitives,
+   ranges: {
+    easy: {
+     cardinality: BigInt(easyPrimitives.length),
+     offset: 0n
+    },
+    medium: {
+     cardinality: BigInt(mediumPrimitives.length),
+     offset: BigInt(easyPrimitives.length)
+    },
+    normal: {
+     cardinality: BigInt(normalPrimitives.length),
+     offset: BigInt(easyPrimitives.length + mediumPrimitives.length)
+    },
+    hard: {
+     cardinality: BigInt(hardPrimitives.length),
+     offset: BigInt(easyPrimitives.length + mediumPrimitives.length + normalPrimitives.length)
+    },
+    bomb: {
+     cardinality: 2n,
+     offset: BigInt(easyPrimitives.length + mediumPrimitives.length + normalPrimitives.length + hardPrimitives.length)
+    }
+   }
   }
  }
 })

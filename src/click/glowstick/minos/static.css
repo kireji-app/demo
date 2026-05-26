@@ -60,12 +60,35 @@
  overflow: clip;
 }
 
-#minos_glowstick_click[data-modal]>#modal>:is(#options, #categories)>scroller->scroll-content {
+#minos_glowstick_click[data-modal="trophies"]>#modal scroll-content {
  display: flex;
  flex-flow: column nowrap;
 }
 
-#minos_glowstick_click[data-modal] .item {
+#minos_glowstick_click[data-modal="shop"]>#modal scroll-content {
+ display: grid;
+ grid-template-columns: 1fr 1fr 1fr;
+}
+
+#minos_glowstick_click[data-modal="shop"] .item {
+ height: calc(var(--mino) * 3);
+ position: relative;
+}
+
+#minos_glowstick_click[data-modal="shop"] .item .price {
+ position: absolute;
+ right: var(--px);
+ bottom: var(--px);
+ padding: calc(2 * var(--px));
+ border-radius: calc(3 * var(--px)) 0 0 0;
+}
+
+body.modern #minos_glowstick_click[data-modal="shop"] .item .price {
+ background-color: var(--accent-mode-est);
+ font-size: calc(var(--mino) / 2);
+}
+
+#minos_glowstick_click[data-modal="trophies"] .item {
  text-align: left;
  display: grid;
  grid-template:
@@ -91,12 +114,27 @@
  height: 100%;
 }
 
-#minos_glowstick_click[data-modal="shop"] .item:hover {
+body.modern #minos_glowstick_click[data-modal="shop"] .item:not([disabled]):hover {
  background-color: var(--accent);
  color: var(--fg);
 }
 
-#minos_glowstick_click[data-modal] .item>.label {
+body.modern #minos_glowstick_click[data-modal="shop"] .item[disabled] {
+ background-color: #ff00007f;
+ cursor: not-allowed;
+ filter: saturate(0.375);
+}
+
+#minos_glowstick_click[data-modal="shop"] .item.sell {
+ background-color: #00ff007f;
+ filter: saturate(0.375);
+}
+
+body.vintage #minos_glowstick_click[data-modal="shop"] .item {
+ box-shadow: var(--deep-outset);
+}
+
+#minos_glowstick_click[data-modal="trophies"] .item>.label {
  font-size: calc(var(--mino) / 2);
  line-height: var(--mino);
  padding: var(--mino);
@@ -111,6 +149,13 @@
  transform-origin: 0 0;
  top: calc((4 - var(--h)) * var(--mino) / 4 + var(--mino) / 2);
  left: calc((4 - var(--w)) * var(--mino) / 4 + var(--mino) / 2);
+ position: absolute;
+}
+
+#minos_glowstick_click[data-modal="shop"] .item>minos-.bomb {
+ transform: scale(150%);
+ top: calc(var(--mino) / 4 + var(--mino) / 2);
+ left: calc(var(--mino) / 4 + var(--mino) / 2);
  position: absolute;
 }
 
@@ -279,8 +324,8 @@ body.modern #minos_glowstick_click[data-modal] .item {
  box-shadow:
   inset var(--px) 0 0 var(--accent-mode-est),
   inset var(--px-1) 0 0 var(--accent-mode-est),
-  inset 0 var(--px) 0 var(--bg),
-  inset 0 var(--px-1) 0 var(--bg);
+  inset 0 var(--px) 0 var(--accent-mode-est),
+  inset 0 var(--px-1) 0 var(--accent-mode-est);
 }
 
 body.modern #minos_glowstick_click[data-modal] .item:last-child {
@@ -290,8 +335,9 @@ body.modern #minos_glowstick_click[data-modal] .item:last-child {
   inset 0 var(--px) 0 var(--bg);
 }
 
-body.modern #minos_glowstick_click[data-modal] .item[disabled]>.label {
- color: #ff00007f;
+body.modern #minos_glowstick_click[data-modal] .item[disabled]>.price {
+ background-color: #ff00007f;
+ color: var(--bg);
 }
 
 body.modern #minos_glowstick_click>section:not(#bomb, #modal) {
@@ -503,7 +549,6 @@ body.vintage #minos_glowstick_click[data-modal="trophies"] .item>.label {
  padding: 0 var(--spacing);
 }
 
-
 body.vintage #minos_glowstick_click[data-modal="trophies"] .item.earned>.label {
  color: var(--bg-dark-er);
  text-shadow: 1px 1px var(--bg-light-est);
@@ -527,7 +572,7 @@ body.vintage #minos_glowstick_click[data-modal="shop"] #pieces>* {
  background-color: var(--bg);
 }
 
-body.vintage #minos_glowstick_click[data-modal="shop"] .item>.label {
+body.vintage #minos_glowstick_click[data-modal="shop"] .item>.price {
  font-size: var(--default-font-size);
 }
 
