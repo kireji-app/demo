@@ -1,7 +1,7 @@
 if (hotKeys.pressed.has("Escape")) {
 
  // TODO: Allow mobile pausing.
- orbitalGame.pauseGame()
+ orbitalGame.pauseGameAsync()
  return
 }
 

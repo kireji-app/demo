@@ -11,8 +11,12 @@
   ],
   "updateCanvasSize": [],
   "updateUniformBuffer": [],
-  "game-pause": [],
-  "game-play": [
+  "async-pause-game": [],
+  "async-play-game": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ],
+  "doAction": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"
   ]

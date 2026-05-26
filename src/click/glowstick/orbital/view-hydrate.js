@@ -23,6 +23,19 @@ addEventListener('mousemove', (mouseEvent) => {
 })
 
 addEventListener("fullscreenchange", () => {
- if (!document.fullscreenElement)
-  orbitalGame.pauseGame()
+ if (!document.fullscreenElement && !document.pointerLockElement)
+  orbitalGame.pauseGameAsync()
+})
+
+addEventListener('pointerlockchange', (e) => {
+ if (!document.fullscreenElement && !document.pointerLockElement)
+  orbitalGame.pauseGameAsync()
+})
+
+addEventListener("fullscreenerror", (e) => {
+ warn(e)
+})
+
+document.addEventListener('pointerlockerror', (e) => {
+ warn(e)
 })

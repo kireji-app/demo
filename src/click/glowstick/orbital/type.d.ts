@@ -16,9 +16,11 @@ declare interface IOrbitalGame
  readonly updateUniformBuffer(): void
  readonly reactToKeyboardInput(): void
  /** Pauses the game, cancelling any pointer lock and full screen that may exist. */
- readonly pauseGame(): void
+ readonly pauseGameAsync(): void
  /** Unpauses the game, requests pointer lock and fullscreen. @remarks **MUST** be called in response to a user gesture (like a click) to work properly. */
- readonly playGame(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
+ readonly playGameAsync(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
+ /** Requests to enter full screen after pointer lock. */
+ readonly reactToPointerLock(): void
  readonly manifest: IOrbitalGameManifest
 
  // Runtime Properties.

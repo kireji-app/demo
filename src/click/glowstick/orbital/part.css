@@ -118,13 +118,20 @@ body:not(.paused) #orbital_glowstick_click {
  z-index: 1000;
 }
 
-#orbital_glowstick_click #pause-menu {
+#orbital_glowstick_click :is(#pause-menu, #hud) {
  position: absolute;
  top: 0;
  bottom: 0;
  left: 0;
  right: 0;
+}
+
+#orbital_glowstick_click #pause-menu {
  z-index: 2000;
+}
+
+#orbital_glowstick_click #hud {
+ z-index: 1250;
 }
 
 body.paused #orbital_glowstick_click::before {
@@ -137,4 +144,53 @@ body.paused #orbital_glowstick_click::before {
  background-color: var(--bg-dark-est);
  opacity: 50%;
  z-index: 1500;
+}
+
+#orbital_glowstick_click #reticle {
+ position: absolute;
+ --reticle-radius: 2px;
+ width: calc(var(--reticle-radius) * 2);
+ height: calc(var(--reticle-radius) * 2);
+ left: calc(50% - var(--reticle-radius));
+ top: calc(50% - var(--reticle-radius));
+ border-radius: var(--reticle-radius);
+ z-index: 1050;
+ background-color: #fffa;
+}
+
+#orbital_glowstick_click #reticle .label {
+ position: absolute;
+ width: 8em;
+ font-family: var(--system-ui-mono);
+ top: 125%;
+ left: 125%;
+ border-radius: var(--reticle-radius);
+ text-align: center;
+ background-color: var(--bg);
+ color: var(--fg);
+ opacity: 0;
+}
+
+#orbital_glowstick_click #reticle .label.blinked {
+ animation: blinkAndHide 0.75s ease-in-out forwards;
+}
+
+@keyframes blinkAndHide {
+
+ 25% {
+  opacity: 1.0;
+ }
+
+ 50% {
+  opacity: 0.2;
+ }
+
+ 75% {
+  opacity: 1.0;
+ }
+
+ 100% {
+  opacity: 0;
+  visibility: hidden;
+ }
 }
