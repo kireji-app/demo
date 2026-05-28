@@ -2,7 +2,7 @@ orbitalCamera.setModel(
  Vector.add(
   orbitalCamera.model,
   Vector.multiply(
-   { x: MOUSE_MOVEMENT_Y, y: MOUSE_MOVEMENT_X, z: 0 },
+   Vector[3](MOUSE_MOVEMENT_Y, MOUSE_MOVEMENT_X),
    orbitalGame.manifest.mouseSensitivity
   )
  )

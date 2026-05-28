@@ -1,0 +1,1 @@
+orbitalGame.canvasSizeChanged = true

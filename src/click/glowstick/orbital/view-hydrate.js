@@ -15,27 +15,42 @@ orbitalGame.offscreenContext.configure({
 
 orbitalGame.uniformBuffer = gpu.createBuffer(orbitalCamera.buffer, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST)
 
-new ResizeObserver(() => setTimeout(() => orbitalGame.canvasSizeChanged = true, 0)).observe(onscreenCanvas)
+addEventListener("resize", () => orbitalGame.reactToCanvasChange())
+// _.parts.desktop.era.attach("update", orbitalGame, "reactToCanvasChange")
 
-addEventListener('mousemove', (mouseEvent) => {
- if (document.pointerLockElement === onscreenCanvas)
+orbitalGame.container.addEventListener('mousemove', mouseEvent => {
+ if (document.pointerLockElement === orbitalGame.container)
   orbitalGame.reactToMouseMovement(mouseEvent.movementX, mouseEvent.movementY)
 })
 
-addEventListener("fullscreenchange", () => {
- if (!document.fullscreenElement && !document.pointerLockElement)
-  orbitalGame.pauseGameAsync()
+orbitalGame.container.addEventListener('pointerdown', pointerEvent => {
+ if (document.pointerLockElement === orbitalGame.container)
+  orbitalGame.actionPoint(pointerEvent, orbitalGame.container)
 })
 
-addEventListener('pointerlockchange', (e) => {
- if (!document.fullscreenElement && !document.pointerLockElement)
-  orbitalGame.pauseGameAsync()
-})
+// TODO: Handle systems without fullscreen support (i.e. mobile).
+function reactivePause() {
+ if (document.body.classList.contains("paused"))
+  return
 
-addEventListener("fullscreenerror", (e) => {
- warn(e)
-})
+ if (!document.pointerLockElement)
+  orbitalGame.pauseAsync()
+}
 
-document.addEventListener('pointerlockerror', (e) => {
- warn(e)
-})
+/* 
+ addEventListener("fullscreenchange", () => {
+  if (document.body.classList.contains("paused"))
+   return
+
+  if (!document.fullscreenElement)
+   orbitalGame.pauseAsync()
+ })
+
+ document.addEventListener("fullscreenerror", reactivePause)
+*/
+
+document.addEventListener('pointerlockchange', reactivePause)
+document.addEventListener('pointerlockerror', reactivePause)
+document.addEventListener('visibilitychange', reactivePause)
+window.addEventListener('blur', reactivePause)
+window.addEventListener('focus', reactivePause)

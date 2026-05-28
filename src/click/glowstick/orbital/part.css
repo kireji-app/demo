@@ -1,33 +1,31 @@
 #orbital_glowstick_click {
- --tiles: 30;
- --target-long: calc(16px * var(--tiles));
- --target-short: calc(9px * var(--tiles));
- --ratio: round(down, min(max(var(--app-width), var(--app-height)) / var(--target-long), min(var(--app-width), var(--app-height)) / var(--target-short)), 0.5);
- --px: calc(1px * var(--ratio));
- --ui-width: calc(var(--ratio) * var(--target-long));
- --ui-height: calc(var(--ratio) * var(--target-short));
- --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-long)) / 2);
- --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-short)) / 2);
  touch-action: none;
- background-color: var(--bg-un-mode);
  image-rendering: pixelated;
  image-rendering: crisp-edges;
- container-type: size;
- container-name: application;
 }
 
-@container application (aspect-ratio <=1 / 1) {
-
- #orbital_glowstick_click>* {
-  --ui-width: calc(var(--ratio) * var(--target-short));
-  --ui-height: calc(var(--ratio) * var(--target-long));
-  --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-short)) / 2);
-  --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-long)) / 2);
- }
+body.vintage #orbital_glowstick_click>* {
+ --d1px: 1px !important;
 }
 
-#orbital_glowstick_click>* {
- position: absolute;
+body.modern #orbital_glowstick_click>* {
+ --d1px: min(var(--design-pixel), 2px);
+}
+
+body.paused:has(#orbital_glowstick_click) :is(warning-, title-bar, task-bar) {
+ z-index: 3000;
+}
+
+body.paused:has(#orbital_glowstick_click) :is(title-bar, task-bar) {
+ background-color: var(--bg);
+}
+
+body:not(.paused):has(#orbital_glowstick_click) :is(warning-, title-bar, task-bar) {
+ display: hidden;
+}
+
+#orbital_glowstick_click>#onscreen-canvas {
+ position: fixed;
  left: 0;
  top: 0;
  width: 100% !important;
@@ -39,7 +37,12 @@
  left: 50%;
  top: 50%;
  will-change: transform;
- transform: rotate(var(--angle)) translate(calc((var(--x) + var(--map-left)) * var(--px)), calc((var(--z) + var(--map-top)) * var(--px))) scale(var(--ratio));
+ transform:
+  rotate(var(--angle))
+  /* */
+  translate(calc(var(--px) * (var(--x) + var(--map-left))), calc(var(--px) * (var(--z) + var(--map-top))))
+  /* */
+  scale(var(--design-scale));
  transform-origin: 0 0;
  pointer-events: none;
 }
@@ -92,9 +95,9 @@
  --cx: 0;
  --cz: 0;
  background-image: var(--glowstick-click--font-png);
- background-size: calc(var(--ratio) * 128px);
- width: calc(8 * var(--px));
- height: calc(16 * var(--px));
+ background-size: calc(var(--design-scale) * 128px);
+ width: calc(var(--px) * 8);
+ height: calc(var(--px) * 16);
  background-position: calc(var(--px) * -8 * var(--cx)) calc(var(--px) * -16 * var(--cz));
  filter: brightness(0);
 }
@@ -103,8 +106,10 @@ body.dark #orbital_glowstick_click .char {
  filter: invert(1);
 }
 
-body:not(.paused) #orbital_glowstick_click #pause-menu {
- display: none;
+body:not(.paused) #orbital_glowstick_click #pause-menu,
+body.paused #orbital_glowstick_click #hud {
+ visibility: hidden;
+ pointer-events: none;
 }
 
 body:not(.paused) #orbital_glowstick_click {
@@ -121,29 +126,124 @@ body:not(.paused) #orbital_glowstick_click {
 #orbital_glowstick_click :is(#pause-menu, #hud) {
  position: absolute;
  top: 0;
- bottom: 0;
  left: 0;
- right: 0;
+ width: var(--app-width);
+ height: var(--app-height);
 }
 
 #orbital_glowstick_click #pause-menu {
  z-index: 2000;
+ display: flex;
+ flex-flow: column nowrap;
+ align-items: center;
+ justify-content: center;
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ grid-template-rows: repeat(5, 1fr);
+ grid-auto-flow: column;
+ padding: calc(var(--d16px) + var(--ui-top)) calc(var(--d16px) + var(--ui-left));
+ /* Gap must be a in diophantine solution to 4a + 5b = 148
+    where b is the final button height. */
+ gap: var(--d7px);
+ font-family: var(--system-ui);
+}
+
+@container design (aspect-ratio <=1 / 1) {
+
+ #orbital_glowstick_click #pause-menu {
+  grid-template-columns: 1fr;
+  grid-template-rows: 5fr repeat(5, 1fr);
+  grid-auto-flow: column;
+ }
+}
+
+@container design (aspect-ratio >1 / 1) {
+
+ #orbital_glowstick_click #pause-menu>h1 {
+  grid-column: 2;
+  grid-row: span 5;
+  text-align: right;
+ }
+}
+
+#orbital_glowstick_click #pause-menu>h1 {
+ font-size: calc(var(--d1px) * 30);
+ padding: 0;
+ margin: 0;
+ line-height: 1;
+ text-align: center;
+ align-self: center;
+ font-style: oblique;
+ font-family: var(--system-ui-mono);
+}
+
+#orbital_glowstick_click #pause-menu button {
+ font-size: inherit;
+ line-height: 1;
+ align-self: center;
+ height: 100%;
+}
+
+
+body.modern #orbital_glowstick_click #pause-menu button:hover {
+ background-color: var(--accent);
+ color: var(--bg);
+ opacity: 100%;
+}
+
+body.modern #orbital_glowstick_click #pause-menu button.down {
+ background-color: var(--accent-mode);
+ color: var(--bg-mode);
+}
+
+body.modern #orbital_glowstick_click #pause-menu button[disabled] {
+ pointer-events: none;
+ background-color: var(--bg-mode);
+ color: var(--bg-un-mode);
+}
+
+#orbital_glowstick_click #pause-menu button:empty {
+ visibility: hidden;
+}
+
+body.vintage #orbital_glowstick_click #pause-menu {
+ background: var(--bg-checker-dpx);
+}
+
+#orbital_glowstick_click,
+body.modern #orbital_glowstick_click #pause-menu {
+ background: #7777;
+}
+
+body.dark #orbital_glowstick_click,
+body.dark.modern #orbital_glowstick_click #pause-menu {
+ background: #0007;
+}
+
+body.light.vintage #orbital_glowstick_click #pause-menu {
+ --bg-checker-dpx-color: var(--bg-un-mode-er);
+}
+
+body.vintage #orbital_glowstick_click #pause-menu button {
+ box-shadow: var(--deep-outset-dpx);
+ background-color: var(--bg);
+}
+
+body.modern #orbital_glowstick_click #pause-menu button {
+ border-radius: calc(var(--d1px) * 12);
+ background-color: var(--accent-mode-est);
+ font-size: min(var(--d1px) * 11, 13px);
+ opacity: 50%
+}
+
+body.vintage #orbital_glowstick_click #pause-menu button.down {
+ box-shadow: var(--deep-inset-dpx);
 }
 
 #orbital_glowstick_click #hud {
+ --app-width: 100%;
+ --app-height: 100%;
  z-index: 1250;
-}
-
-body.paused #orbital_glowstick_click::before {
- content: "";
- position: absolute;
- top: 0;
- bottom: 0;
- left: 0;
- right: 0;
- background-color: var(--bg-dark-est);
- opacity: 50%;
- z-index: 1500;
 }
 
 #orbital_glowstick_click #reticle {
@@ -192,5 +292,30 @@ body.paused #orbital_glowstick_click::before {
  100% {
   opacity: 0;
   visibility: hidden;
+ }
+}
+
+body.paused #orbital_glowstick_click #pause-menu.played {
+ opacity: 0;
+ animation: fadeIn 1.25s ease-in forwards;
+ pointer-events: none;
+}
+
+#orbital_glowstick_click #onscreen-canvas:not(.loading) {
+ opacity: 0;
+ animation: fadeIn 0.75s ease-in forwards;
+ pointer-events: none;
+}
+
+@keyframes fadeIn {
+
+ 99% {
+  opacity: 1;
+  pointer-events: none;
+ }
+
+ 100% {
+  opacity: 1;
+  pointer-events: all;
  }
 }

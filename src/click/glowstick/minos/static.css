@@ -79,8 +79,8 @@
  position: absolute;
  right: var(--px);
  bottom: var(--px);
- padding: calc(2 * var(--px));
- border-radius: calc(3 * var(--px)) 0 0 0;
+ padding: calc(var(--px) * 2);
+ border-radius: calc(var(--px) * 3) 0 0 0;
 }
 
 body.modern #minos_glowstick_click[data-modal="shop"] .item .price {

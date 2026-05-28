@@ -1,4 +1,4 @@
-const [points] = mesh.data.collision
+const [points] = walkable.data.walkable
 const scale = 1
 const mapTop = Math.min(...points.flatMap(point => point[2])) * scale
 const mapRight = Math.max(...points.flatMap(point => point[0])) * scale
@@ -6,7 +6,7 @@ const mapBottom = Math.max(...points.flatMap(point => point[2])) * scale
 const mapLeft = Math.min(...points.flatMap(point => point[0])) * scale
 
 return /* html */`
-<world- style="--map-left:${mapLeft};--map-top:${mapTop};--x:${mesh.position.x * -1};--z:${mesh.position.z * -1};--user-x:${mesh.position.x};--user-z:${mesh.position.z}">
+<world- style="--map-left:${mapLeft};--map-top:${mapTop};--x:${walkable.position.x * -1};--z:${walkable.position.z * -1};--user-x:${walkable.position.x};--user-z:${walkable.position.z}">
  <svg width="${mapRight - mapLeft}" height="${mapBottom - mapTop}" viewBox="${mapLeft} ${mapTop} ${mapRight - mapLeft} ${mapBottom - mapTop}">
   <defs>
    <pattern id="checkerboard" width="${scale * 2}" height="${scale * 2}" patternUnits="userSpaceOnUse">
@@ -14,7 +14,7 @@ return /* html */`
     <rect x="${scale}" y="${scale}" width="${scale}" height="${scale}"/>
    </pattern>
   </defs>
-  ${mesh.triTable.map((triData, triIndex) => {
+  ${walkable.triTable.map((triData, triIndex) => {
 
  if (!triData.rows || triData.rows.length === 0)
   return ''
@@ -39,14 +39,14 @@ return /* html */`
   }
  })
 
- return /* svg */`<path data-index="${triIndex}" ${triIndex === mesh.triIndex ? "class=current " : ""}d="M ${[...leftPoints, ...rightPoints.reverse()].join(' L ')} Z"/>`
+ return /* svg */`<path data-index="${triIndex}" ${triIndex === walkable.triIndex ? "class=current " : ""}d="M ${[...leftPoints, ...rightPoints.reverse()].join(' L ')} Z"/>`
 }).join(`
    `)}
-  <rect id="player-marker" x="${mesh.position.x * scale}" y="${mesh.position.z * scale}" width="${scale}" height="${scale}" fill="white" stroke="black" stroke-width="0.5"/>
+  <rect id="player-marker" x="${walkable.position.x * scale}" y="${walkable.position.z * scale}" width="${scale}" height="${scale}" fill="white" stroke="black" stroke-width="0.5"/>
  </svg>
 </world->
 <ui->
  <span class=debug>
-  ${mesh["coords.html"]}
+  ${walkable["coords.html"]}
  </span>
 </ui->`.trim()

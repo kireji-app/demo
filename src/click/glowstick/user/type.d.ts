@@ -4,7 +4,7 @@ declare interface IGlowstickUser
 
  // Serialized Properties.
  /** Converts the given vector into a bigint that can be used as the user's route ID. */
- readonly vectorToRouteID(VECTOR: IVector2): bigint | undefined
+ readonly vectorToRouteID(VECTOR: IVector3): bigint | undefined
 
  // Runtime Properties.
  /** The HTML element representing the user in the DOM (client only). */

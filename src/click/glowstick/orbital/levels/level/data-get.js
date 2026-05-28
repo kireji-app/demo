@@ -63,24 +63,30 @@ for (const accessor of json.accessors) {
 }
 
 const data = {
- collision: [[], []],
+ walkable: [[], []],
  gltf: json
 }
 
-const collisionMeshIndex = json.meshes.findIndex(mesh => mesh.name === 'collision')
+const walkableIndices = json.meshes.reduce((indices, mesh, index) => {
+ if (mesh.name.startsWith('walkable_'))
+  indices.push(index)
 
-if (collisionMeshIndex === -1)
- throw new ReferenceError(`No mesh named "collision" found in level.gltf for level "${part.key}" of game "${part[".."][".."].host}". Be sure that the scene contains a single collision mesh and that it is named correctly.`)
+ return indices
+}, [])
 
-const { attributes: { POSITION }, indices } = json.meshes[collisionMeshIndex].primitives[0]
+if (walkableIndices.length === 0)
+ throw new ReferenceError(`No mesh prefixed with "walkable_" found in level.gltf for level "${part.key}" of game "${part[".."][".."].host}". Be sure that the scene contains at least one walkable mesh and that it is named correctly.`)
+
+// TODO: handle more than one walkable mesh.
+const { attributes: { POSITION }, indices } = json.meshes[walkableIndices[0]].primitives[0]
 
 const points = json.accessors[POSITION].data
 const tris = json.accessors[indices].data
 
 for (let index = 0; index < points.length; index += 3)
- data.collision[0].push([Math.round(points[index]), Math.round(points[index + 1]), Math.round(points[index + 2])])
+ data.walkable[0].push([Math.round(points[index]), Math.round(points[index + 1]), Math.round(points[index + 2])])
 
 for (let index = 0; index < tris.length; index += 3)
- data.collision[1].push([tris[index], tris[index + 1], tris[index + 2]])
+ data.walkable[1].push([tris[index], tris[index + 1], tris[index + 2]])
 
 return data

@@ -1,5 +1,5 @@
 declare interface IOrbitalLevel
- extends IMesh<IOrbitalLevels> {
+ extends IWalkable<IOrbitalLevels> {
 
  // Serialized Properties.
  readonly getData(): IOrbitalLevelData
@@ -12,15 +12,15 @@ declare interface IOrbitalLevel
  /** The html element that represents the glowstick world (client only). */
  readonly element: HTMLElement
  /** represents the runtime position of the camera, which gently lags behind player movement to prevent popping due to pixel-perfect player motion. */
- readonly camera: IVector2
- readonly viewedTriIndex: IMeshTriIndex
- readonly viewedPosition: IVector2
+ readonly camera: IVector3
+ readonly viewedTriIndex: IWalkableTriIndex
+ readonly viewedPosition: IVector3
 }
 
 declare const orbitalLevel: IOrbitalLevel
 
 declare interface IOrbitalLevelData
- extends IMeshData {
+ extends IWalkableData {
  readonly gltf: GLTFDocument
 }
 

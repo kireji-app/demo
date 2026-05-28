@@ -4,6 +4,9 @@
   "render": [],
   "updateDebugView": [],
   "async-load-level": [],
+  "async-play": [],
+  "async-pause": [],
+  "reactToCanvasChange": [],
   "reactToKeyboardInput": [],
   "reactToMouseMovement": [
    "MOUSE_MOVEMENT_X",
@@ -11,12 +14,24 @@
   ],
   "updateCanvasSize": [],
   "updateUniformBuffer": [],
-  "async-pause-game": [],
-  "async-play-game": [
+  "point-pause": [],
+  "point-play": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"
   ],
-  "doAction": [
+  "point-restart": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ],
+  "point-settings": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ],
+  "point-credits": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ],
+  "point-action": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"
   ]

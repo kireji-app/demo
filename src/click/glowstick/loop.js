@@ -7,24 +7,24 @@ const { controlVector, isSprinting } = (() => {
   const normalized = Vector.normalize(glowstick.thumbstickVector)
   const magnitude = Vector.magnitude(glowstick.thumbstickVector)
   const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
-  const clamped = { x: normalized.x * Math.min(magnitude, maxRadius), z: normalized.z * Math.min(magnitude, maxRadius) }
+  const clamped = Vector[3](normalized.x * Math.min(magnitude, maxRadius), 0, normalized.z * Math.min(magnitude, maxRadius))
 
   // Position the visual thumbstick.
   glowstick.handleElement.style.setProperty("--x", clamped.x + "px")
   glowstick.handleElement.style.setProperty("--z", clamped.z + "px")
 
   return {
-   controlVector: {
-    x: normalized.x * Math.min(magnitude / maxRadius, 1),
-    y: 0,
-    z: normalized.z * Math.min(magnitude / maxRadius, 1)
-   },
+   controlVector: Vector[3](
+    normalized.x * Math.min(magnitude / maxRadius, 1),
+    0,
+    normalized.z * Math.min(magnitude / maxRadius, 1)
+   ),
    isSprinting: (maxRadius * 1.5) < magnitude
   }
  }
 
  // The keyboard might be controlling the player character.
- const WASDVector = { x: 0, y: 0, z: 0 }
+ const WASDVector = Vector[3]()
  if (hotKeys.pressed.has("KeyA")) WASDVector.x -= 1
  if (hotKeys.pressed.has("KeyD")) WASDVector.x += 1
  if (hotKeys.pressed.has("KeyW")) WASDVector.z -= 1
@@ -39,7 +39,7 @@ const { controlVector, isSprinting } = (() => {
 // Speed going up and down should be slower than speed going left and right to account for camera angle.
 const adjustedSpeed = Vector.magnitude(Vector.multiply(
  Vector.multiply(controlVector, user.pixelsPerSecond),
- { x: 1, y: 1, z: 1 / 2 }
+ Vector[3](1, 1, 1 / 2)
 ))
 
 if (adjustedSpeed === 0) {
@@ -63,7 +63,7 @@ if (hit) {
 } else {
 
  // Counter-act screen-space vertical scale.
- const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), { x: 1, y: 1, z: 2 }))
+ const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), Vector[3](1, 1, 2)))
 
  // Use the walking animations.
  user.element.classList.add("walking")

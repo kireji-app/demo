@@ -2,13 +2,13 @@
 setUndoPoint()
 
 // Place this piece on the board.
-if (minosPiece.primitive === minosPiece.radialBomb) {
- minos.bomb.setRouteID(minos.bomb.offsets.get(minos.bomb.radial) + BigInt(Y * minos.board.width + X))
-} else if (minosPiece.primitive === minosPiece.crosshairBomb) {
- minos.bomb.setRouteID(minos.bomb.offsets.get(minos.bomb.crosshair) + BigInt(Y * minos.board.width + X))
+if (minosPiece.primitive === minos.primitives.radialBomb) {
+ minos.bomb.setRouteID(minos.bomb.offsets.get(minos.bomb.radial) + BigInt(POINT.y * minos.board.width + POINT.x))
+} else if (minosPiece.primitive === minos.primitives.crosshairBomb) {
+ minos.bomb.setRouteID(minos.bomb.offsets.get(minos.bomb.crosshair) + BigInt(POINT.y * minos.board.width + POINT.x))
 } else {
  minos.board.setRouteID(minosPiece.minos.reduce(
-  (routeID, { x, y }) => routeID |= 1n << BigInt(((Y + y) * minos.board.width) + X + x),
+  (routeID, { x, y }) => routeID |= 1n << BigInt(((POINT.y + y) * minos.board.width) + POINT.x + x),
   minos.board.routeID))
 
  // Update the placeability of all pieces but this one.

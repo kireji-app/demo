@@ -1,7 +1,7 @@
 if (hotKeys.pressed.has("Escape")) {
 
  // TODO: Allow mobile pausing.
- orbitalGame.pauseGameAsync()
+ orbitalGame.pauseAsync()
  return
 }
 
@@ -40,17 +40,17 @@ const forceVector = (() => {
  const yaw = -facingVector.y * Math.PI / 180
 
  // The keyboard might be controlling the player character.
- const WASDVector = { x: 0, z: 0 }
+ const WASDVector = Vector[3]()
  if (hotKeys.pressed.has("KeyA")) WASDVector.x -= 1
  if (hotKeys.pressed.has("KeyD")) WASDVector.x += 1
  if (hotKeys.pressed.has("KeyW")) WASDVector.z -= 1
  if (hotKeys.pressed.has("KeyS")) WASDVector.z += 1
 
- const controlVector = Vector.normalize({
-  x: WASDVector.x * Math.cos(yaw) + WASDVector.z * Math.sin(yaw),
-  y: 0,
-  z: -WASDVector.x * Math.sin(yaw) + WASDVector.z * Math.cos(yaw)
- })
+ const controlVector = Vector.normalize(Vector[3](
+  WASDVector.x * Math.cos(yaw) + WASDVector.z * Math.sin(yaw),
+  0,
+  -WASDVector.x * Math.sin(yaw) + WASDVector.z * Math.cos(yaw)
+ ))
 
  const isSprinting = hotKeys.pressed.has("ShiftLeft") || hotKeys.pressed.has("ShiftRight")
 

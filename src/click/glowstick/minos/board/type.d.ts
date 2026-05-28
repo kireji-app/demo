@@ -13,15 +13,15 @@ declare interface IMinosGameBoard
 
  // Runtime Properties.
  /** An array of coordinate objects relating each tile index to its coordinates. */
- readonly allTiles: IMino[]
+ readonly allTiles: IVector2[]
  /** The total number of tiles on the game board. */
  readonly tileCount: number
  /** The set of active tile indices. */
- readonly activeTiles: Set<IMino>
+ readonly activeTiles: Set<IVector2>
  /** *Client only*
   * 
   * The set of tile indices already rendered on the screen. */
- readonly viewedTiles: Set<IMino>
+ readonly viewedTiles: Set<IVector2>
  readonly filledColumns: Set<number>
  readonly filledRows: Set<number>
  /** The board's HTML element. */
@@ -32,11 +32,6 @@ declare interface IMinosGameBoardClientSize {
  readonly left: number
  readonly top: number
  readonly tileSize: number
-}
-
-declare interface IMino {
- readonly x: number,
- readonly y: number
 }
 
 declare const minosBoard: IMinosGameBoard

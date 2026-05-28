@@ -13,8 +13,8 @@ const pointerConfig = minos.modal.shop.enabled ? {
  itemSize: null,
  dropMarker: minos.board.element.appendChild(document.createElement("mino-")),
  dropPosition: null,
- isRadialBomb: minosPiece.primitive === minosPiece.radialBomb,
- isCrosshairBomb: minosPiece.primitive === minosPiece.crosshairBomb,
+ isRadialBomb: minosPiece.primitive === minos.primitives.radialBomb,
+ isCrosshairBomb: minosPiece.primitive === minos.primitives.crosshairBomb,
  down() {
   this.dropMarker.setAttribute("style", `display:none`)
   this.dropMarker.classList.add("drop-marker")
@@ -33,7 +33,7 @@ const pointerConfig = minos.modal.shop.enabled ? {
    isAllowed = isOnBoard && minosPiece.allowedTiles.has(minos.board.allTiles[y * minos.board.width + x])
 
   if (isAllowed) {
-   this.dropPosition = { x, y }
+   this.dropPosition = Vector[2](x, y)
    minos.board.element.classList.add("allowed")
    this.shop = false
   } else {
@@ -71,7 +71,7 @@ const pointerConfig = minos.modal.shop.enabled ? {
  },
  drop(pointerEvent) {
   if (this.dropPosition)
-   minosPiece.place(this.dropPosition.x, this.dropPosition.y)
+   minosPiece.place(this.dropPosition)
  },
  reset() {
   this.dropMarker.remove()

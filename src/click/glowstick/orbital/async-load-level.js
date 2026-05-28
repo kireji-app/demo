@@ -7,7 +7,7 @@ orbitalGame.renderPassDefinitions.length = 0
 
 for (const mesh of gltf.meshes) {
 
- if (mesh.name === "collision")
+ if (mesh.name.startsWith("walkable_"))
   continue
 
  for (const primitive of mesh.primitives) {
@@ -33,7 +33,7 @@ for (const mesh of gltf.meshes) {
   }
 
   // START MATERIAL
-  const material = gltf.materials?.[primitive.material]
+  const material = primitive.material !== undefined ? gltf.materials?.[primitive.material] : undefined
   const textureInfo = material?.pbrMetallicRoughness?.baseColorTexture
 
   let gpuTexture
@@ -112,7 +112,7 @@ for (const mesh of gltf.meshes) {
 
   // END MATERIAL
 
-  const shaderCode = orbitalGame["shader.wgsl"].replace('{$0}', shaderBuffers.join(','))
+  const shaderCode = orbitalGame["unlit.wgsl"].replace('{$0}', shaderBuffers.join(','))
   const module = gpu.device.createShaderModule({ code: shaderCode })
   const pipeline = gpu.device.createRenderPipeline({
    layout: 'auto',
@@ -142,7 +142,7 @@ for (const mesh of gltf.meshes) {
    },
    primitive: {
     frontFace: 'ccw',
-    cullMode: 'back',
+    cullMode: material?.doubleSided === true ? 'none' : 'back',
     topology: {
      // TODO: instead of throwing errors, perform a build-time conversion from the two unsupported modes to a compatable one.
      0: "point-list",

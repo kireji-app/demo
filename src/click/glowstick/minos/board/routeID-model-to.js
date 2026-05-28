@@ -1,4 +1,4 @@
-/** @type {{ readonly width: number, readonly tileIndices: IMino[] }} */
+/** @type {{ readonly width: number, readonly tileIndices: IVector2[] }} */
 
 if (typeof MODEL !== "object" || !("width" in MODEL) || !("tileIndices" in MODEL) || typeof MODEL.width !== "number" || !Array.isArray(MODEL.tileIndices))
  throw new TypeError(`Model To RouteID Error: Part "${part.host}" only accepts an object with format { width: number, tileIndices: number[] }.`)
@@ -9,7 +9,7 @@ let resultRouteID = 0n
 
 for (const tileIndex of tileIndices) {
  if (typeof tileIndex === "number") {
-  const tile = { x: tileIndex % width, y: Math.floor(tileIndex / width) }
+  const tile = Vector[2](tileIndex % width, Math.floor(tileIndex / width))
   if (tile.y >= 0 && tile.x >= 0 && tile.x < minosBoard.width && tile.y < minosBoard.width) {
    const tileIndex = BigInt((tile.y * minosBoard.width) + tile.x)
    resultRouteID |= 1n << tileIndex

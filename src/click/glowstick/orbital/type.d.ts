@@ -1,5 +1,5 @@
 declare interface IOrbitalGame
- extends IMix<IGlowstick, IPartAny> {
+ extends IApplication<IGlowstick, IPartAny> {
 
  // Subparts.
  readonly camera: IOrbitalCamera
@@ -7,20 +7,28 @@ declare interface IOrbitalGame
 
  // Serialized Properties.
  readonly position: IVector3
- /** A universal shader template for rendering all materials. */
- readonly "shader.wgsl": string
+ /** A universal shader template for rendering unlit materials. */
+ readonly "unlit.wgsl": string
  /** Uses the GPU to render an image of the current game frame to the offscreen canvas. */
  readonly render(): void
  readonly updateCanvasSize(): void
  readonly async loadLevelAsync(): Promise<void>
  readonly updateUniformBuffer(): void
  readonly reactToKeyboardInput(): void
- /** Pauses the game, cancelling any pointer lock and full screen that may exist. */
- readonly pauseGameAsync(): void
  /** Unpauses the game, requests pointer lock and fullscreen. @remarks **MUST** be called in response to a user gesture (like a click) to work properly. */
- readonly playGameAsync(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
- /** Requests to enter full screen after pointer lock. */
- readonly reactToPointerLock(): void
+ readonly async playAsync(): Promise<void>
+ /** Pauses the game, cancelling any pointer lock and full screen that may exist. */
+ readonly async pauseAsync(): Promise<void>
+ /** Calls `playAsync()`. */
+ readonly playPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
+ /** Resets the game back to the landing model and calls `playAsync()`.  */
+ readonly restartPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
+ /** Shows the settings UI.  */
+ readonly settingsPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
+ /** Plays the game's credits sequence.  */
+ readonly creditsPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
+ /** Engages the player click action.  */
+ readonly actionPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
  readonly manifest: IOrbitalGameManifest
 
  // Runtime Properties.
@@ -43,7 +51,7 @@ declare interface IOrbitalGame
 declare interface IOrbitalGameManifest
  extends IPartManifest {
 
- /** Whether or not to show the debug overlay which includes a collision map and the player's current coordinates. */
+ /** Whether or not to show the debug overlay which includes a map of the walkable and the player's current coordinates. */
  readonly debug: boolean
  readonly walkingSpeed: number
  readonly sprintingSpeed: number

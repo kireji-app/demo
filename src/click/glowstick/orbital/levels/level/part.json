@@ -1,4 +1,4 @@
 {
  "abstract": true,
- "extends": "mesh"
+ "extends": "walkable"
 }

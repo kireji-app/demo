@@ -4,6 +4,6 @@ To resolve this, the system will take inspiration from the TARDIS (Time and Rela
 
 Each part will have the same footprint - representing perhaps 3 meters along each side. In the isometric view, the pixel art for each part will fit neatly inside a 64px by 64px square. For reference, the player's avatar is contained in a 16px by 32px sprite. It will be possible for the player to walk inside any given part. Once inside, they will transition to a bigger space representing the inside of the part. This larger space can itself contain parts which can themselves be entered and explored.
 
-Parts can be exactly the size they need to be to comfortably present an explorable level that is completely dedicated to the part itself, rather than having the size be locked to some fixed size for every part. This could involve implementing a mesh onto every single part, including the framework's own parts.
+Parts can be exactly the size they need to be to comfortably present an explorable level that is completely dedicated to the part itself, rather than having the size be locked to some fixed size for every part. This could involve implementing a walkable for every single part, including the framework's own parts.
 
-Potentially, a separation can be established between a project's parts and the framework's parts. As a first pass - and because the Glowstick game is part of the Demo Ecosystem and not the framework - it might make sense to only flesh out the meshes for the Demo Ecosystem.
+Potentially, a separation can be established between a project's parts and the framework's parts. As a first pass - and because the Glowstick game is part of the Demo Ecosystem and not the framework - it might make sense to only flesh out the walkables for the Demo Ecosystem.

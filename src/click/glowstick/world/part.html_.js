@@ -1,4 +1,4 @@
-const [points] = world.data.collision
+const [points] = world.data.walkable
 const scale = 1
 const width = Math.max(...points.flatMap(point => point[0])) * scale
 const height = Math.max(...points.flatMap(point => point[1])) * scale

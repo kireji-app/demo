@@ -1,6 +1,9 @@
 if (orbitalGame.loading) {
+ orbitalGame.onscreenContext.canvas.classList.add("loading")
  debug('loading for 1 frame')
  return
+} else {
+ orbitalGame.onscreenContext.canvas.classList.remove("loading")
 }
 
 let skipFrame = true

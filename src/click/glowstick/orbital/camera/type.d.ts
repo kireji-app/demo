@@ -4,14 +4,11 @@ declare interface IOrbitalCamera
  // Subparts.
  readonly x: IAngle<IOrbitalCamera>
  readonly y: IAngle<IOrbitalCamera>
+ readonly z: IAngle<IOrbitalCamera>
 
  // Serialized Properties.
  readonly buffer: Float32Array
- readonly model: {
-  x: number,
-  y: number,
-  z: number
- }
+ readonly model: IVector3
 
  // Runtime Properties.
  readonly fov: number

@@ -1,7 +1,7 @@
 pointer.handle({
  down() {
   // Down.
-  glowstick.thumbstickStart = { x: POINTER_EVENT.clientX, z: POINTER_EVENT.clientY }
+  glowstick.thumbstickStart = Vector[3](POINTER_EVENT.clientX, 0, POINTER_EVENT.clientY)
   glowstick.thumbstickElement = glowstick.container.appendChild(document.createElement("thumbstick-"))
   glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
   glowstick.thumbstickElement.style.setProperty("--z", glowstick.thumbstickStart.z + "px")

@@ -1,18 +1,8 @@
 #glowstick_click {
- --tiles: 20;
- --target-long: calc(16px * var(--tiles));
- --target-short: calc(9px * var(--tiles));
- --ratio: round(down, min(max(var(--app-width), var(--app-height)) / var(--target-long), min(var(--app-width), var(--app-height)) / var(--target-short)), 0.5);
- --px: calc(1px * var(--ratio));
- --ui-width: calc(var(--ratio) * var(--target-long));
- --ui-height: calc(var(--ratio) * var(--target-short));
- --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-long)) / 2);
- --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-short)) / 2);
  touch-action: none;
  background-color: var(--bg-un-mode);
  image-rendering: pixelated;
- container-type: size;
- container-name: application;
+ image-rendering: crisp-edges;
 }
 
 /* DEBUG */
@@ -67,7 +57,7 @@ body.dark #glowstick_click thumbstick- {
  height: calc(2 * var(--radius));
  top: calc(var(--z) - var(--large-radius));
  left: calc(var(--x) - var(--large-radius));
- box-shadow: 0 0 0 var(--px) var(--color);
+ box-shadow: 0 0 0 var(--d1px) var(--color);
 }
 
 #glowstick_click handle- {
@@ -82,13 +72,13 @@ body.dark #glowstick_click thumbstick- {
  left: 50%;
  top: 50%;
  will-change: transform;
- transform: translate(calc((var(--x) - 50) * var(--px)), calc((var(--z) - 50) * var(--px))) scale(var(--ratio));
+ transform: translate(calc(var(--d1px) * (var(--x) - 50)), calc(var(--d1px) * (var(--z) - 50))) scale(var(--design-scale));
  transform-origin: 0 0;
  pointer-events: none;
 }
 
 body.vintage #glowstick_click world- {
- transform: translate(calc((round(down, var(--x)) - 50) * var(--px)), calc((round(down, var(--z)) - 50) * var(--px))) scale(var(--ratio));
+ transform: translate(calc(var(--d1px) * (round(down, var(--x)) - 50)), calc(var(--d1px) * (round(down, var(--z)) - 50))) scale(var(--design-scale));
 }
 
 #glowstick_click world-::after {
@@ -144,20 +134,6 @@ body.vintage #glowstick_click world- {
  top: var(--ui-top);
 }
 
-body.vintage #glowstick_click ui- {
- box-shadow: 0 0 0 max(var(--app-height), var(--app-width)) var(--bg);
-}
-
-@container application (aspect-ratio <=1 / 1) {
-
- #glowstick_click>* {
-  --ui-width: calc(var(--ratio) * var(--target-short));
-  --ui-height: calc(var(--ratio) * var(--target-long));
-  --ui-left: calc((var(--app-width) - var(--ratio) * var(--target-short)) / 2);
-  --ui-top: calc((var(--app-height) - var(--ratio) * var(--target-long)) / 2);
- }
-}
-
 #glowstick_click ui- span:not(.char) {
  display: flex;
  flex-flow: row wrap;
@@ -169,10 +145,10 @@ body.vintage #glowstick_click ui- {
  --cx: 0;
  --cz: 0;
  background-image: var(--glowstick-click--font-png);
- background-size: calc(var(--ratio) * 128px);
- width: calc(8 * var(--px));
- height: calc(16 * var(--px));
- background-position: calc(var(--px) * -8 * var(--cx)) calc(var(--px) * -16 * var(--cz));
+ background-size: calc(var(--design-scale) * 128px);
+ width: var(--d8px);
+ height: var(--d16px);
+ background-position: calc(var(--d-8px) * var(--cx)) calc(var(--d-16px) * var(--cz));
  filter: brightness(0);
 }
 
