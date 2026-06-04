@@ -1,6 +1,6 @@
-pointer.handle({
+Pointer.handle({
  click() {
-  minos.modal.shop.open()
+  MinosGame.modal.shop.open()
  },
  POINTER_EVENT,
  TARGET_ELEMENT,

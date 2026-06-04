@@ -1,1 +1,1 @@
-return `https://${ejaugust.host}${home.canonicalPathname}`
+return `https://${EJAugust.host}${EJAugustHome.canonicalPathname}`

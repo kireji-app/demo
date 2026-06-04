@@ -1,24 +1,22 @@
-minosTrophies.recompute()
+MinosTrophies.recompute()
 
 /** @type {Set<IMinosGameTrophy>} */
 const newTrophies = new Set()
 const newMetaTrophies = new Set()
 const newMetaMetaTrophy = new Set()
 
-// TODO: implement a canonical trophy order.
-
-for (const trophy of minosTrophies.earned) {
- if (minosTrophies.viewedEarned.has(trophy))
+for (const trophy of MinosTrophies.earned) {
+ if (MinosTrophies.viewedEarned.has(trophy))
   continue
 
- if (trophy[".."] === minosTrophies.meta) {
+ if (trophy[".."] === MinosTrophies.meta) {
   if (trophy.key !== "meta")
    newMetaTrophies.add(trophy)
   else
    newMetaMetaTrophy.add(trophy)
  } else
   newTrophies.add(trophy)
- minosTrophies.viewedEarned.add(trophy)
+ MinosTrophies.viewedEarned.add(trophy)
 }
 
 if (newTrophies.size || newMetaTrophies.size) {
@@ -28,7 +26,7 @@ if (newTrophies.size || newMetaTrophies.size) {
  📝 ${trophy.description}
  💰 ${trophy.reward} points
 `)
-  minosScore.points.earn(trophy.reward)
+  MinosScore.points.earn(trophy.reward)
  }
- Q("#trophies").innerHTML = minosTrophies["part.html"]
+ Q("#trophies").innerHTML = MinosTrophies["part.html"]
 }

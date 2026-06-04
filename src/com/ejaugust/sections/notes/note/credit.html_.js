@@ -1,1 +1,1 @@
-return `<img src="${ejaugust.placeholderImage('part.png')}"/><span><span class=author>Eric Augustinowicz</span><br><span class=details>${note.niceDate(note.unixTimestamp)} ⋮ ${note.topic} ⋮ ${Math.ceil(note.readingLength)} min read</span></span>`
+return `<img src="${EJAugust.placeholderImage('part.png')}"/><span><span class=author>Eric Augustinowicz</span><br><span class=details>${thisNote.niceDate(thisNote.unixTimestamp)} ⋮ ${thisNote.topic} ⋮ ${Math.ceil(thisNote.readingLength)} min read</span></span>`

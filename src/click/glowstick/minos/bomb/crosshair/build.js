@@ -1,3 +1,3 @@
-part.define({
- cardinality: { value: BigInt(minos.board.width) ** 2n }
+define(MinosBombLayerCrosshairBomb, {
+ cardinality: { value: BigInt(MinosGame.board.width) ** 2n }
 })

@@ -1,13 +1,13 @@
-for (const tile of minosBoard.allTiles) {
- if (minosBoard.viewedTiles.has(tile)) {
-  if (!minosBoard.activeTiles.has(tile)) {
-   minosBoard.viewedTiles.delete(tile)
+for (const tile of MinosBoard.allTiles) {
+ if (MinosBoard.viewedTiles.has(tile)) {
+  if (!MinosBoard.activeTiles.has(tile)) {
+   MinosBoard.viewedTiles.delete(tile)
    Q(`[style="--x:${tile.x};--y:${tile.y}"]`).remove()
   }
- } else if (minosBoard.activeTiles.has(tile)) {
-  minosBoard.viewedTiles.add(tile)
-  const newTile = document.createElement("mino-")
+ } else if (MinosBoard.activeTiles.has(tile)) {
+  MinosBoard.viewedTiles.add(tile)
+  const newTile = document.createElement("tile-")
   newTile.setAttribute("style", `--x:${tile.x};--y:${tile.y}`)
-  minosBoard.element.appendChild(newTile)
+  MinosBoard.element.appendChild(newTile)
  }
 }

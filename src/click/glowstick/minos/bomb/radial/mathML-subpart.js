@@ -1,1 +1,1 @@
-return [`<msup><mn>2</mn><mn>${minos.board.width}</mn></msup>`]
+return [`<msup><mn>2</mn><mn>${MinosGame.board.width}</mn></msup>`]

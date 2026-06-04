@@ -1,1 +1,1 @@
-return note.description ?? note.subtitle
+return thisNote.description ?? thisNote.subtitle

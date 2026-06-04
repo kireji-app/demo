@@ -22,13 +22,13 @@ if (PATHNAME === "/") {
  if (parts[0] !== "notes" || !parts[1] || parts.length !== 2)
   throw "Unknown Canonical Path: " + PATHNAME
 
- const note = isNaN(parts[1]) ? ejaugust.canonicalLinks[parts[1]] : parts[1]
+ const note = isNaN(parts[1]) ? EJAugust.canonicalLinks[parts[1]] : parts[1]
 
- if (!(note in notes))
+ if (!(note in EJAugustNotes))
   throw "Unknown Canonical Path: " + PATHNAME
 
  model.com.ejaugust.sections = {}
  model.com.ejaugust.sections.notes = note
 }
 
-return encodePathname(_.modelToRouteID(model))
+return RID.toPath(_.modelToRID(model))

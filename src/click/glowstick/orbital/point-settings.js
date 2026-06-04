@@ -1,4 +1,4 @@
-pointer.handle({
+Pointer.handle({
  click() {
   debug('open settings')
  },

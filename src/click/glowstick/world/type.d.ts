@@ -1,9 +1,9 @@
 declare interface IGlowstickWorld
- extends IWalkable<IGlowstick>,
- IWebComponent {
+ extends IWalkable<IGlowstickGame>,
+ IWebView {
 
- // Runtime Properties.
- /** The html element that represents the glowstick world (client only). */
+ // Properties.
+ /** The html element that represents the Glowstick game world (client only). */
  readonly element: HTMLElement
  /** represents the runtime position of the camera, which gently lags behind player movement to prevent popping due to pixel-perfect player motion. */
  readonly camera: IVector3
@@ -22,4 +22,5 @@ declare interface IGlowstickWorldManifest
  readonly sheets: string[]
 }
 
-declare const world: IGlowstickWorld
+declare const GlowstickWorld: IGlowstickWorld
+type GlowstickWorld = T

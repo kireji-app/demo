@@ -1,9 +1,9 @@
 declare interface ICom
- extends ITopLevelDomain<IComApplication> {
+ extends ITopLevelDomain<IComApp> {
 
  // Subparts.
  readonly ejaugust: IEJAugust
 }
 
-declare type IComApplication =
- IApplication<ICom, IPart<IComApplication, IPartAny>>
+declare type IComApp =
+ IApp<ICom, IPart<IComApp, IPartAny>>

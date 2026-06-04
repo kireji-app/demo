@@ -1,3 +1,3 @@
 return [
- _.com.ejaugust
+ EJAugust
 ]

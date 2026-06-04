@@ -1,7 +1,7 @@
-pointer.handle({
+Pointer.handle({
  click() {
-  note.isPlaying = !note.isPlaying
-  Q("#anim-button").setAttribute("data-playing", note.isPlaying)
+  thisNote.isPlaying = !thisNote.isPlaying
+  Q("#anim-button").setAttribute("data-playing", thisNote.isPlaying)
  },
  POINTER_EVENT,
  TARGET_ELEMENT

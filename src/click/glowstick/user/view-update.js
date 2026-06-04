@@ -1,1 +1,1 @@
-user.element.style.setProperty("--direction", user.routeID)
+GlowstickUser.element.style.setProperty("--direction", GlowstickUser.rid)

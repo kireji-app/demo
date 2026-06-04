@@ -1,23 +1,23 @@
-const [points] = world.data.walkable
+const [points] = GlowstickWorld.data.walkable
 const scale = 1
 const width = Math.max(...points.flatMap(point => point[0])) * scale
 const height = Math.max(...points.flatMap(point => point[1])) * scale
 
 const props = []
-for (let index = 0; index < world.manifest.props.length; index += 7) {
- const [sheetIndex, top, left, width, height, offsetLeft, offsetTop] = world.manifest.props.slice(index, index + 7)
- const sheetData = world.manifest.sheets[sheetIndex]
+for (let index = 0; index < GlowstickWorld.manifest.props.length; index += 7) {
+ const [sheetIndex, top, left, width, height, offsetLeft, offsetTop] = GlowstickWorld.manifest.props.slice(index, index + 7)
+ const sheetData = GlowstickWorld.manifest.sheets[sheetIndex]
  props.push({ sheet: { name: sheetData[0], width: sheetData[1], height: sheetData[2] }, top, left, width, height, offsetLeft, offsetTop })
 }
 
 const layout = []
-for (let index = 0; index < world.manifest.layout.length; index += 3) {
- const [propIndex, left, top] = world.manifest.layout.slice(index, index + 3)
+for (let index = 0; index < GlowstickWorld.manifest.layout.length; index += 3) {
+ const [propIndex, left, top] = GlowstickWorld.manifest.layout.slice(index, index + 3)
  layout.push({ prop: props[propIndex], propIndex, left, top })
 }
 
 return /* html */`
-<world- style="--x:${world.position.x * -1};--z:${world.position.z * -1};--user-x:${Math.floor(world.position.x)};--user-z:${Math.floor(world.position.z)}">
+<world- style="--x:${GlowstickWorld.position.x * -1};--z:${GlowstickWorld.position.z * -1};--user-x:${Math.floor(GlowstickWorld.position.x)};--user-z:${Math.floor(GlowstickWorld.position.z)}">
  <svg width="${width + 100 * scale}" height="${height + 100 * scale}" viewBox="${scale * -50} ${scale * -50} ${width + 100 * scale} ${height + 100 * scale}">
   <defs>
    <pattern id="checkerboard" width="${scale * 2}" height="${scale * 2}" patternUnits="userSpaceOnUse">
@@ -25,7 +25,7 @@ return /* html */`
     <rect x="${scale}" y="${scale}" width="${scale}" height="${scale}"/>
    </pattern>
   </defs>
-  ${world.triTable.map((triData, triIndex) => {
+  ${GlowstickWorld.triTable.map((triData, triIndex) => {
 
  if (!triData.rows || triData.rows.length === 0)
   return ''
@@ -50,17 +50,17 @@ return /* html */`
   }
  })
 
- return /* svg */`<path data-index="${triIndex}" ${triIndex === world.triIndex ? "class=current " : ""}d="M ${[...leftPoints, ...rightPoints.reverse()].join(' L ')} Z"/>`
+ return /* svg */`<path data-index="${triIndex}" ${triIndex === GlowstickWorld.triIndex ? "class=current " : ""}d="M ${[...leftPoints, ...rightPoints.reverse()].join(' L ')} Z"/>`
 }).join(`
    `)}
-  <rect id="player-marker" x="${world.position.x * scale}" y="${world.position.z * scale}" width="${scale}" height="${scale}" fill="white" stroke="black" stroke-width="0.5"/>
+  <rect id="player-marker" x="${GlowstickWorld.position.x * scale}" y="${GlowstickWorld.position.z * scale}" width="${scale}" height="${scale}" fill="white" stroke="black" stroke-width="0.5"/>
  </svg>
 ${layout.map(({ prop: { sheet: { name, width: sheetWidth, height: sheetHeight }, width, height, offsetLeft, offsetTop, top: propTop, left: propLeft }, top, left }) => /* html */`
  <prop- style="--x:${left - offsetLeft};--z:${top - offsetTop};--z-index:${top};--w:${width};--h:${height};--bg-x:${propLeft};--bg-z:${propTop};--sheet:var(${name});--bg-w:${sheetWidth};--bg-h:${sheetHeight}"></prop->`).join("")}
- ${user["part.html"]}
+ ${GlowstickUser["part.html"]}
 </world->
 <ui->
  <span class=debug>
-  ${world["coords.html"]}
+  ${GlowstickWorld["coords.html"]}
  </span>
 </ui->`.trim();

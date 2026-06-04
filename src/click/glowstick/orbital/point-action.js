@@ -1,4 +1,4 @@
-pointer.handle({
+Pointer.handle({
  down() {
   const label = Q("#reticle .label")
   label.classList.remove("blinked")

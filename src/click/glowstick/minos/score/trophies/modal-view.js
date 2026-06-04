@@ -1,6 +1,6 @@
-pointer.handle({
+Pointer.handle({
  click() {
-  minos.modal.trophies.open()
+  MinosGame.modal.trophies.open()
  },
  POINTER_EVENT,
  TARGET_ELEMENT,

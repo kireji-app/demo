@@ -1,4 +1,4 @@
-if (part.routeID === part.cardinality - 1n)
+if (MinosMovesCount.rid === MinosMovesCount.cardinality - 1n)
  return
 
-part.setRouteID(1n, true)
+MinosMovesCount.setRID(1n, true)

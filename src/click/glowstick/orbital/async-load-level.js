@@ -1,9 +1,9 @@
-orbitalGame.loading = true
+OrbitalGame.loading = true
 
 // Create new level buffers, pipeline, bind group and render pass definitions.
-const { gltf } = orbitalLevel
+const { gltf } = OrbitalLevels.arm
 
-orbitalGame.renderPassDefinitions.length = 0
+OrbitalGame.renderPassDefinitions.length = 0
 
 for (const mesh of gltf.meshes) {
 
@@ -21,7 +21,7 @@ for (const mesh of gltf.meshes) {
   for (const attribute in primitive.attributes) {
    if (!(['POSITION'/*, 'NORMAL'*/, 'TEXCOORD_0'].includes(attribute))) continue
    const accessor = gltf.accessors[primitive.attributes[attribute]]
-   const buffer = gpu.createBuffer(accessor.data)
+   const buffer = Graphics.createBuffer(accessor.data)
    vertexBuffers.push(buffer)
    vertexBufferDescriptors.push({
     attributes: [{ shaderLocation, offset: 0, format: accessor.format2 }],
@@ -46,13 +46,13 @@ for (const mesh of gltf.meshes) {
    const blob = new Blob([image.data], { type: image.mimeType })
    const bitmap = await createImageBitmap(blob, { colorSpaceConversion: 'none' })
 
-   gpuTexture = gpu.device.createTexture({
+   gpuTexture = Graphics.device.createTexture({
     size: [bitmap.width, bitmap.height],
     format: 'rgba8unorm',
     usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
    })
 
-   gpu.device.queue.copyExternalImageToTexture(
+   Graphics.device.queue.copyExternalImageToTexture(
     { source: bitmap },
     { texture: gpuTexture },
     [bitmap.width, bitmap.height]
@@ -75,7 +75,7 @@ for (const mesh of gltf.meshes) {
     10497: 'repeat',
    }
 
-   gpuSampler = gpu.device.createSampler({
+   gpuSampler = Graphics.device.createSampler({
     magFilter: FILTER_MAP[sampler?.magFilter] ?? 'nearest',
     minFilter: FILTER_MAP[sampler?.minFilter] ?? 'nearest',
     addressModeU: WRAP_MAP[sampler?.wrapS] ?? 'repeat',
@@ -91,18 +91,18 @@ for (const mesh of gltf.meshes) {
    })
 
   } else {
-   gpuTexture = gpu.device.createTexture({
+   gpuTexture = Graphics.device.createTexture({
     size: [1, 1],
     format: 'rgba8unorm',
     usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
    })
-   gpu.device.queue.writeTexture(
+   Graphics.device.queue.writeTexture(
     { texture: gpuTexture },
     new Uint8Array([Math.floor(Math.random() * 128) + 127, , Math.floor(Math.random() * 128) + 127, 255]),
     { bytesPerRow: 4 },
     [1, 1]
    )
-   gpuSampler = gpu.device.createSampler({
+   gpuSampler = Graphics.device.createSampler({
     magFilter: 'linear',
     minFilter: 'linear',
     addressModeU: 'repeat',
@@ -112,9 +112,9 @@ for (const mesh of gltf.meshes) {
 
   // END MATERIAL
 
-  const shaderCode = orbitalGame["unlit.wgsl"].replace('{$0}', shaderBuffers.join(','))
-  const module = gpu.device.createShaderModule({ code: shaderCode })
-  const pipeline = gpu.device.createRenderPipeline({
+  const shaderCode = OrbitalGame["unlit.wgsl"].replace('{$0}', shaderBuffers.join(','))
+  const module = Graphics.device.createShaderModule({ code: shaderCode })
+  const pipeline = Graphics.device.createRenderPipeline({
    layout: 'auto',
    vertex: {
     module,
@@ -162,15 +162,15 @@ for (const mesh of gltf.meshes) {
   })
 
 
-  orbitalGame.renderPassDefinitions.push({
+  OrbitalGame.renderPassDefinitions.push({
    vertexBuffers,
    pipeline,
    indexCount: indexArray.length,
-   indexBuffer: gpu.createBuffer(indexArray, GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST),
-   bindGroup: gpu.device.createBindGroup({
+   indexBuffer: Graphics.createBuffer(indexArray, GPUBufferUsage.INDEX | GPUBufferUsage.COPY_DST),
+   bindGroup: Graphics.device.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
     entries: [
-     { binding: 0, resource: { buffer: orbitalGame.uniformBuffer } },
+     { binding: 0, resource: { buffer: OrbitalGame.uniformBuffer } },
      { binding: 1, resource: gpuTexture.createView() },
      { binding: 2, resource: gpuSampler },
     ]
@@ -181,4 +181,4 @@ for (const mesh of gltf.meshes) {
  }
 }
 
-orbitalGame.loading = false
+OrbitalGame.loading = false

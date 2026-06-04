@@ -1,0 +1,1 @@
+When there are HTML errors in a note, it breaks the notebook's outer layout. Find a way to sanitize the HTML or throw an error for syntax errors. The technique needs to work in all environments.

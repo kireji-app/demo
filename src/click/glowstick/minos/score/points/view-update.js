@@ -1,1 +1,1 @@
-Q("#points").innerHTML = minosPoints["part.html"]
+Q("#points").innerHTML = MinosPoints["part.html"]

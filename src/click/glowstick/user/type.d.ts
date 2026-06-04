@@ -1,12 +1,12 @@
 declare interface IGlowstickUser
- extends IPart<IGlowstick, null>,
- IWebComponent {
+ extends IPart<IGlowstickGame, null>,
+ IWebView {
 
- // Serialized Properties.
- /** Converts the given vector into a bigint that can be used as the user's route ID. */
- readonly vectorToRouteID(VECTOR: IVector3): bigint | undefined
+ // Components.
+ /** Converts the given vector into a bigint that can be used as the user's RID. */
+ readonly vectorToRID(VECTOR: IVector3): bigint | undefined
 
- // Runtime Properties.
+ // Properties.
  /** The HTML element representing the user in the DOM (client only). */
  readonly element: HTMLElement
  /** The walking speed of the user. */
@@ -21,4 +21,5 @@ declare interface IGlowstickUser
  readonly strideFactor: number
 }
 
-declare const user: IGlowstickUser
+declare const GlowstickUser: IGlowstickUser
+type GlowstickUser = T

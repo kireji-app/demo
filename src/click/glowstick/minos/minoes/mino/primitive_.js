@@ -1,0 +1,1 @@
+return MinosGame.primitives.allPrimitives[Number(thisMinosMino.rid)]

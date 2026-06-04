@@ -1,1 +1,1 @@
-return `/${note.key}`
+return `/${thisNote.key}`

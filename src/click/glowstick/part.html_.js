@@ -1,1 +1,1 @@
-return world["part.html"]
+return GlowstickWorld["part.html"]

@@ -6,11 +6,11 @@ declare interface IOrbitalCamera
  readonly y: IAngle<IOrbitalCamera>
  readonly z: IAngle<IOrbitalCamera>
 
- // Serialized Properties.
+ // Components.
  readonly buffer: Float32Array
  readonly model: IVector3
 
- // Runtime Properties.
+ // Properties.
  readonly fov: number
  readonly near: number
  readonly far: number
@@ -23,6 +23,9 @@ declare interface IOrbitalCamera
 declare interface IAngle<TOwner>
  extends IPart<TOwner, null> {
 
+ // Properties.
+ readonly smooth: number
 }
 
-declare const orbitalCamera: IOrbitalCamera
+declare const OrbitalCamera: IOrbitalCamera
+type OrbitalCamera = T

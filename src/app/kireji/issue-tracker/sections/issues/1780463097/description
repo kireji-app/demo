@@ -1,0 +1,1 @@
+Allow the player to crouch. This should be used to determine whether or not the player can enter small spaces (such as air vents).

@@ -1,14 +1,14 @@
-const landingRoute = orbitalGame.modelToRouteID(_.landingModel.click.glowstick.orbital)
-const isLandingRoute = orbitalGame.routeID === landingRoute
+const landingRID = OrbitalGame.modelToRID(_.landingModel.click.glowstick.orbital)
+const isLandingRID = OrbitalGame.rid === landingRID
 
-return /* html */`<h1>Orbital</h1>` + (isLandingRoute ? /* html */`
-<button ${orbitalGame.pointAttr("playPoint")}>Campaign</button>
+return /* html */`<h1>Orbital</h1>` + (isLandingRID ? /* html */`
+<button ${OrbitalGame.pointAttr("playPoint")}>Campaign</button>
 <button disabled></button>
 ` : /* html */`
-<button ${orbitalGame.pointAttr("playPoint")}>Resume Game</button>
-<button ${orbitalGame.pointAttr("restartPoint")}>Restart Level</button>
+<button ${OrbitalGame.pointAttr("playPoint")}>Resume Game</button>
+<button ${OrbitalGame.pointAttr("restartPoint")}>Restart Level</button>
 `) + (/* html */`
-<button disabled ${orbitalGame.pointAttr("settingsPoint")}>Settings (Coming Soon)</button>
-<button disabled ${orbitalGame.pointAttr("creditsPoint")}>Credits (Coming Soon)</button>
-<button ${_.parts.desktop.windows.pointAttr("closePoint")}>Quit</button>
+<button disabled ${OrbitalGame.pointAttr("settingsPoint")}>Settings (Coming Soon)</button>
+<button disabled ${OrbitalGame.pointAttr("creditsPoint")}>Credits (Coming Soon)</button>
+<button ${Windows.pointAttr("closePoint")}>Quit</button>
 `)

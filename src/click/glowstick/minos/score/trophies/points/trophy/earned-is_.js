@@ -1,8 +1,8 @@
-if (minosPointsTrophy.model)
+if (thisMinosPointsTrophy.model)
  return true
 
-if ((environment === "client" && client.hydrated) && Number(minosScore.points.routeID) >= minosPointsTrophy.goal) {
- minosPointsTrophy.setRouteID(1n)
+if ((environment === "client" && Client.hydrated) && Number(MinosScore.points.rid) >= thisMinosPointsTrophy.goal) {
+ thisMinosPointsTrophy.setRID(1n)
  return true
 }
 

@@ -1,8 +1,8 @@
 declare interface IMinosGameBoard
  extends IPart<IMinosGame, null>,
- IWebComponent {
+ IWebView {
 
- // Serialized Properties.
+ // Components.
  /** The width (and height) of the square game board. */
  readonly width: number
  /** *Client-only*
@@ -11,7 +11,7 @@ declare interface IMinosGameBoard
  readonly clientSize: IMinosGameBoardClientSize
  readonly scramble(): void
 
- // Runtime Properties.
+ // Properties.
  /** An array of coordinate objects relating each tile index to its coordinates. */
  readonly allTiles: IVector2[]
  /** The total number of tiles on the game board. */
@@ -34,4 +34,5 @@ declare interface IMinosGameBoardClientSize {
  readonly tileSize: number
 }
 
-declare const minosBoard: IMinosGameBoard
+declare const MinosBoard: IMinosGameBoard
+type MinosBoard = T

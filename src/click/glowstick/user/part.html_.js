@@ -1,1 +1,1 @@
-return `<user- style="--direction:${user.routeID}"></user->`
+return `<user- style="--direction:${GlowstickUser.rid}"></user->`

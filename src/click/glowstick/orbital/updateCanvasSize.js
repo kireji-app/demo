@@ -1,7 +1,7 @@
-const canvasRect = orbitalGame.onscreenContext.canvas.getBoundingClientRect()
+const canvasRect = OrbitalGame.onscreenContext.canvas.getBoundingClientRect()
 
-const newCanvasWidth = Math.ceil(canvasRect.width / orbitalCamera.pixelRatio)
-const newCanvasHeight = Math.ceil(canvasRect.height / orbitalCamera.pixelRatio)
+const newCanvasWidth = Math.ceil(canvasRect.width / OrbitalCamera.pixelRatio)
+const newCanvasHeight = Math.ceil(canvasRect.height / OrbitalCamera.pixelRatio)
 
-orbitalGame.onscreenContext.canvas.width = orbitalGame.offscreenContext.canvas.width = newCanvasWidth
-orbitalGame.onscreenContext.canvas.height = orbitalGame.offscreenContext.canvas.height = newCanvasHeight
+OrbitalGame.onscreenContext.canvas.width = OrbitalGame.offscreenContext.canvas.width = newCanvasWidth
+OrbitalGame.onscreenContext.canvas.height = OrbitalGame.offscreenContext.canvas.height = newCanvasHeight

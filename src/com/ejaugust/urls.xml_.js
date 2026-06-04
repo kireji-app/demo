@@ -1,1 +1,1 @@
-return sections["urls.xml"]
+return EJAugustSections["urls.xml"]

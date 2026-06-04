@@ -1,17 +1,17 @@
 /** A normalized vector representing the player's movement direction. */
 const { controlVector, isSprinting } = (() => {
 
- if (glowstick.thumbstickStart) {
+ if (GlowstickGame.thumbstickStart) {
 
   // The pointer is controlling the player character.
-  const normalized = Vector.normalize(glowstick.thumbstickVector)
-  const magnitude = Vector.magnitude(glowstick.thumbstickVector)
+  const normalized = Vector.normalize(GlowstickGame.thumbstickVector)
+  const magnitude = Vector.magnitude(GlowstickGame.thumbstickVector)
   const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
   const clamped = Vector[3](normalized.x * Math.min(magnitude, maxRadius), 0, normalized.z * Math.min(magnitude, maxRadius))
 
   // Position the visual thumbstick.
-  glowstick.handleElement.style.setProperty("--x", clamped.x + "px")
-  glowstick.handleElement.style.setProperty("--z", clamped.z + "px")
+  GlowstickGame.handleElement.style.setProperty("--x", clamped.x + "px")
+  GlowstickGame.handleElement.style.setProperty("--z", clamped.z + "px")
 
   return {
    controlVector: Vector[3](
@@ -25,28 +25,28 @@ const { controlVector, isSprinting } = (() => {
 
  // The keyboard might be controlling the player character.
  const WASDVector = Vector[3]()
- if (hotKeys.pressed.has("KeyA")) WASDVector.x -= 1
- if (hotKeys.pressed.has("KeyD")) WASDVector.x += 1
- if (hotKeys.pressed.has("KeyW")) WASDVector.z -= 1
- if (hotKeys.pressed.has("KeyS")) WASDVector.z += 1
+ if (HotKeys.pressed.has("KeyA")) WASDVector.x -= 1
+ if (HotKeys.pressed.has("KeyD")) WASDVector.x += 1
+ if (HotKeys.pressed.has("KeyW")) WASDVector.z -= 1
+ if (HotKeys.pressed.has("KeyS")) WASDVector.z += 1
 
  return {
   controlVector: Vector.normalize(WASDVector),
-  isSprinting: hotKeys.pressed.has("ShiftLeft") || hotKeys.pressed.has("ShiftRight")
+  isSprinting: HotKeys.pressed.has("ShiftLeft") || HotKeys.pressed.has("ShiftRight")
  }
 })()
 
 // Speed going up and down should be slower than speed going left and right to account for camera angle.
 const adjustedSpeed = Vector.magnitude(Vector.multiply(
- Vector.multiply(controlVector, user.pixelsPerSecond),
+ Vector.multiply(controlVector, GlowstickUser.pixelsPerSecond),
  Vector[3](1, 1, 1 / 2)
 ))
 
 if (adjustedSpeed === 0) {
 
- user.walkPhase = user.walkStartFrame / user.walkFrames
+ GlowstickUser.walkPhase = GlowstickUser.walkStartFrame / GlowstickUser.walkFrames
  // Nothing is happening.
- user.element.classList.remove("walking")
+ GlowstickUser.element.classList.remove("walking")
 
  return
 }
@@ -55,50 +55,50 @@ if (adjustedSpeed === 0) {
 const forceVector = Vector.multiply(Vector.normalize(controlVector), adjustedSpeed * (isSprinting ? 2.5 : 1))
 
 // Cast a ray to determine how this force vector will reposition the player.
-const { hit, triIndex, point, forceVector: outputForceVector } = world.castRay(forceVector, client.deltaTime / 1000, true)
+const { hit, triIndex, point, forceVector: outputForceVector } = GlowstickWorld.castRay(forceVector, Client.deltaTime / 1000, true)
 
 if (hit) {
- user.walkPhase = user.walkStartFrame / user.walkFrames
- user.element.classList.remove("walking")
+ GlowstickUser.walkPhase = GlowstickUser.walkStartFrame / GlowstickUser.walkFrames
+ GlowstickUser.element.classList.remove("walking")
 } else {
 
  // Counter-act screen-space vertical scale.
- const distance = Vector.magnitude(Vector.multiply(Vector.subtract(world.position, point), Vector[3](1, 1, 2)))
+ const distance = Vector.magnitude(Vector.multiply(Vector.subtract(GlowstickWorld.position, point), Vector[3](1, 1, 2)))
 
  // Use the walking animations.
- user.element.classList.add("walking")
+ GlowstickUser.element.classList.add("walking")
 
  // Iterate walk cycle phase based on speed.
- user.walkPhase = (user.walkPhase + distance * user.strideFactor) % 1
+ GlowstickUser.walkPhase = (GlowstickUser.walkPhase + distance * GlowstickUser.strideFactor) % 1
 }
 
-// const speed = Vector.magnitude(Vector.subtract(point, world.position)) / (client.deltaTime / 1000)
+// const speed = Vector.magnitude(Vector.subtract(point, GlowstickWorld.position)) / (Client.deltaTime / 1000)
 // if (Math.floor(speed * 100) > Math.floor(adjustedSpeed * 100)) {
 //  warn('speed violation from cast', { speed, adjustedSpeed })
 // }
 
 // Distribute the runtime state.
-world.position.x = point.x
-world.position.y = point.y
-world.position.z = point.z
-world.triIndex = triIndex
+GlowstickWorld.position.x = point.x
+GlowstickWorld.position.y = point.y
+GlowstickWorld.position.z = point.z
+GlowstickWorld.triIndex = triIndex
 
 // Move the world to the tri and point provided by the ray cast results.
-const triData = world.triTable[triIndex]
+const triData = GlowstickWorld.triTable[triIndex]
 const row = triData.rows[Math.floor(point.z) - triData.zRange.min]
-const newRouteID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.xyRange.min.x)
-if (newRouteID !== world.routeID) {
+const newRID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.xyRange.min.x)
+if (newRID !== GlowstickWorld.rid) {
 
- world.setRouteID(newRouteID, false, true)
+ GlowstickWorld.setRID(newRID, false, true)
 } else {
- world.updateView()
+ GlowstickWorld.updateView()
 }
 
-// When edge sliding, turn the user toward the direction of travel instead of the direction of force.
+// When edge sliding, turn the GlowstickUser toward the direction of travel instead of the direction of force.
 // TODO: if the output vector is not the input vector, smooth it over several frames just like the camera.
-// const facingDirectionRouteID = user.vectorToRouteID(outputForceVector)
+// const facingDirectionRID = GlowstickUser.vectorToRID(outputForceVector)
 
-const facingDirectionRouteID = user.vectorToRouteID(forceVector)
+const facingDirectionRID = GlowstickUser.vectorToRID(forceVector)
 
-if (facingDirectionRouteID !== null && facingDirectionRouteID !== user.routeID)
- user.setRouteID(facingDirectionRouteID)
+if (facingDirectionRID !== null && facingDirectionRID !== GlowstickUser.rid)
+ GlowstickUser.setRID(facingDirectionRID)

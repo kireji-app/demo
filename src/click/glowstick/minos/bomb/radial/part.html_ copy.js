@@ -1,1 +1,0 @@
-return `<mino- style="--x:${x};--y:${y}" class="bomb radial"></mino->`

@@ -1,9 +1,12 @@
 {
- "verbosity": "0",
+ "verbosity": "3",
  "change": "major",
- "defaultApplicationHost": "desktop.parts",
+ "defaultHost": "desktop.parts",
  "resetLocalState": "disabled",
  "includeWarning": "disabled",
  "includeDesktop": "demo",
- "includeKirejiApp": "demo"
+ "includeKirejiApp": "demo",
+ "gitHubRepo": "https://github.com/kireji-app/demo",
+ "mapping": "disabled",
+ "publicHosts": "kireji.app issue-tracker.kireji.app desktop.parts about.desktop.parts abstract.parts core.parts ejaugust.com glowstick.click minos.glowstick.click orbital.glowstick.click"
 }

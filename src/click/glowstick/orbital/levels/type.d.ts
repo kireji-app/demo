@@ -6,4 +6,5 @@ declare interface IOrbitalLevels
  readonly test: IOrbitalLevel
 }
 
-declare const orbitalLevels: IOrbitalLevels
+declare const OrbitalLevels: IOrbitalLevels
+type OrbitalLevels = T

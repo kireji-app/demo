@@ -1,15 +1,15 @@
 // Submit render pass(es) to GPU.
-const { width, height } = orbitalGame.onscreenContext.canvas
-const encoder = gpu.device.createCommandEncoder()
+const { width, height } = OrbitalGame.onscreenContext.canvas
+const encoder = Graphics.device.createCommandEncoder()
 const pass = encoder.beginRenderPass({
  colorAttachments: [{
-  view: orbitalGame.offscreenContext.getCurrentTexture().createView(),
+  view: OrbitalGame.offscreenContext.getCurrentTexture().createView(),
   clearValue: { r: 0, g: 0, b: 0, a: 0 },
   loadOp: 'clear',
   storeOp: 'store'
  }],
  depthStencilAttachment: {
-  view: gpu.device.createTexture({
+  view: Graphics.device.createTexture({
    size: [width, height, 1],
    dimension: '2d',
    format: 'depth24plus-stencil8',
@@ -25,7 +25,7 @@ const pass = encoder.beginRenderPass({
 })
 pass.setViewport(0, 0, width, height, 0, 1)
 pass.setScissorRect(0, 0, width, height)
-for (const renderPassDefinition of orbitalGame.renderPassDefinitions) {
+for (const renderPassDefinition of OrbitalGame.renderPassDefinitions) {
  pass.setPipeline(renderPassDefinition.pipeline)
  pass.setBindGroup(0, renderPassDefinition.bindGroup)
  pass.setIndexBuffer(renderPassDefinition.indexBuffer, renderPassDefinition.indexArray instanceof Uint32Array ? 'uint32' : 'uint16')
@@ -33,8 +33,8 @@ for (const renderPassDefinition of orbitalGame.renderPassDefinitions) {
  pass.drawIndexed(renderPassDefinition.indexCount)
 }
 pass.end()
-gpu.device.queue.submit([encoder.finish()])
+Graphics.device.queue.submit([encoder.finish()])
 
 // Draw to canvas.
-orbitalGame.onscreenContext.clearRect(0, 0, width, height)
-orbitalGame.onscreenContext.drawImage(orbitalGame.offscreenContext.canvas, 0, 0)
+OrbitalGame.onscreenContext.clearRect(0, 0, width, height)
+OrbitalGame.onscreenContext.drawImage(OrbitalGame.offscreenContext.canvas, 0, 0)

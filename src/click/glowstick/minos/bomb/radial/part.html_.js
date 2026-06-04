@@ -1,2 +1,2 @@
-const tile = minos.board.allTiles[Number(part.routeID)]
-return `<mino- style="--x:${tile.x};--y:${tile.y}" class="radial"></mino->`
+const tile = MinosGame.board.allTiles[Number(MinosBombLayerRadialBomb.rid)]
+return `<tile- style="--x:${tile.x};--y:${tile.y}" class="radial"></tile->`

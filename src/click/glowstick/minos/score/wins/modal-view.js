@@ -1,6 +1,6 @@
-pointer.handle({
+Pointer.handle({
  click() {
-  minos.modal.close()
+  MinosGame.modal.close()
  },
  POINTER_EVENT,
  TARGET_ELEMENT,

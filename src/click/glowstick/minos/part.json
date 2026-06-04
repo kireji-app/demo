@@ -1,9 +1,4 @@
 {
- "extends": "application",
- "methods": {
-  "state-check": [],
-  "lock": [],
-  "unlock": [],
-  "primitives-install": []
- }
+ "name": "MinosGame",
+ "extends": "app"
 }

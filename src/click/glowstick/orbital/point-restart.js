@@ -1,7 +1,7 @@
-pointer.handle({
+Pointer.handle({
  click() {
-  orbitalGame.resetModel()
-  orbitalGame.playAsync()
+  OrbitalGame.resetModel()
+  OrbitalGame.playAsync()
  },
  POINTER_EVENT,
  TARGET_ELEMENT

@@ -1,4 +1,4 @@
-if (part.routeID === 0n)
+if (MinosMovesCount.rid === 0n)
  return
 
-part.setRouteID(0n)
+MinosMovesCount.setRID(0n)

@@ -1,7 +1,7 @@
 {
  "abstract": true,
  "extends": "mix",
- "methods": {
+ "actions": {
   "date-nice": [
    "UNIX_TIMESTAMP"
   ]

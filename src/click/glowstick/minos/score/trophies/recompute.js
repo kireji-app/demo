@@ -1,28 +1,26 @@
-minosTrophies.recomputing = true
+MinosTrophies.recomputing = true
 
-minosTrophies.earned.clear()
+MinosTrophies.earned.clear()
 
 const metaTrophies = []
 
-// TODO: implement a caconical trophy order.
-
-for (const trophy of minosTrophies.possible) {
- if (trophy[".."] === minosTrophies.meta) {
+for (const trophy of MinosTrophies.possible) {
+ if (trophy[".."] === MinosTrophies.meta) {
   metaTrophies.push(trophy)
   continue
  }
  if (trophy.isEarned)
-  minosTrophies.earned.add(trophy)
+  MinosTrophies.earned.add(trophy)
 }
 
 for (const trophy of metaTrophies) {
  if (trophy.key === "meta")
   continue
  if (trophy.isEarned)
-  minosTrophies.earned.add(trophy)
+  MinosTrophies.earned.add(trophy)
 }
 
-if (minosTrophies.meta.meta.isEarned)
- minosTrophies.earned.add(minosTrophies.meta.meta)
+if (MinosTrophies.meta.meta.isEarned)
+ MinosTrophies.earned.add(MinosTrophies.meta.meta)
 
-minosTrophies.recomputing = false
+MinosTrophies.recomputing = false

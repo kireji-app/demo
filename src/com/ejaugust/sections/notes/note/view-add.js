@@ -1,10 +1,10 @@
-Q("#notebook-section").innerHTML = note["part.html"]
-Q("#note-title").innerHTML = note.title ?? "Untitled Note"
-Q("#note-subtitle").innerHTML = note.subtitle ?? ""
-Q("#note-credit").innerHTML = note["credit.html"]
-Q("#application-title").textContent = Q(`.task[data-host="${ejaugust.host}"]>.title`).textContent = document.title = ejaugust.title
-Q(`meta[name="description"]`).setAttribute("content", ejaugust.descriptionMeta)
-Q("#application-css").innerHTML = ejaugust["part.css"]
-Q(`link[rel="canonical"]`).setAttribute("href", note.canonicalURL)
-Q("#footer-top").href = `${note.canonicalURL}#top`
-note.hydrateView()
+Q("#notebook-section").innerHTML = thisNote["part.html"]
+Q("#note-title").innerHTML = thisNote.title ?? "Untitled Note"
+Q("#note-subtitle").innerHTML = thisNote.subtitle ?? ""
+Q("#note-credit").innerHTML = thisNote["credit.html"]
+Q("#part-title").textContent = Q(`.task[data-host="${EJAugust.host}"]>.title`).textContent = document.title = EJAugust.title
+Q(`meta[name="description"]`).setAttribute("content", EJAugust.descriptionMeta)
+Q("#part-css").innerHTML = EJAugust["part.css"]
+Q(`link[rel="canonical"]`).setAttribute("href", thisNote.canonicalURL)
+Q("#footer-top").href = `${thisNote.canonicalURL}#top`
+thisNote.hydrateView()

@@ -1,9 +1,9 @@
-if (minosPoints.routeID === minosPoints.cardinality - 1n)
+if (MinosPoints.rid === MinosPoints.cardinality - 1n)
  return
 
-const earnedRouteID = BigInt(EARNINGS) + minosPoints.routeID
+const earnedRID = BigInt(EARNINGS) + MinosPoints.rid
 
-if (earnedRouteID > minosPoints.cardinality - 1n)
- minosPoints.setRouteID(minosPoints.cardinality - 1n)
+if (earnedRID > MinosPoints.cardinality - 1n)
+ MinosPoints.setRID(MinosPoints.cardinality - 1n)
 else
- minosPoints.setRouteID(earnedRouteID)
+ MinosPoints.setRID(earnedRID)

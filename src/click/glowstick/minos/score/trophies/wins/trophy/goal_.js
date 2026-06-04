@@ -1,1 +1,1 @@
-return minosWinsTrophy.isAbstract ? undefined : +minosWinsTrophy.key
+return thisMinosWinsTrophy.isAbstract ? undefined : +thisMinosWinsTrophy.key

@@ -1,8 +1,8 @@
-const shapeMask = minosShapeTrophy.mask
-const shapeWidth = minosShapeTrophy.width
+const shapeMask = thisMinosShapeTrophy.mask
+const shapeWidth = thisMinosShapeTrophy.width
 
-const boardMask = minos.board.routeID
-const boardWidth = BigInt(minos.board.width)
+const boardMask = MinosGame.board.rid
+const boardWidth = BigInt(MinosGame.board.width)
 
 const examineWidth = boardWidth - shapeWidth
 

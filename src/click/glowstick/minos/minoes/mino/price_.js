@@ -1,0 +1,1 @@
+return thisMinosMino.primitive.price

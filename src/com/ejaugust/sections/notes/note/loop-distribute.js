@@ -1,7 +1,7 @@
-if (note.enabled) {
- if (note.isOpen)
-  part.loop?.(_.now)
+if (thisNote.enabled) {
+ if (thisNote.isOpen)
+  thisNote.loop?.(_.now)
 
- for (const subpart of note)
+ for (const subpart of thisNote)
   subpart.distributeLoop()
 }

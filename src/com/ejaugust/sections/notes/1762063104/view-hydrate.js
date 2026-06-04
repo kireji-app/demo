@@ -1,1 +1,1 @@
-client.promise.then(() => ejaugust.attach("update", note, "listener"))
+Client.promise.then(() => EJAugust.attach("update", thisNote, "listener"))

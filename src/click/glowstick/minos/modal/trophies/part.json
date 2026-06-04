@@ -1,6 +1,7 @@
 {
+ "name": "MinosTrophiesModal",
  "extends": "mix",
- "methods": {
+ "actions": {
   "open": [
    "SCROLL_TO"
   ]

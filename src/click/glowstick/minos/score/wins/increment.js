@@ -1,2 +1,2 @@
-if (minosWins.routeID < minosWins.cardinality - 1n)
- minosWins.setRouteID(minosWins.routeID + 1n)
+if (MinosWins.rid < MinosWins.cardinality - 1n)
+ MinosWins.setRID(MinosWins.rid + 1n)

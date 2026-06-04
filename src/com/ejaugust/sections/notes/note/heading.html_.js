@@ -1,1 +1,1 @@
-return `<h1 id=note-title>${note.title ?? "Untitled Note"}</h1><h3 id=note-subtitle>${note.subtitle ?? ""}</h3>`
+return `<h1 id=note-title>${thisNote.title ?? "Untitled Note"}</h1><h3 id=note-subtitle>${thisNote.subtitle ?? ""}</h3>`

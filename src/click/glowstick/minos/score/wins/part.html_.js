@@ -1,1 +1,1 @@
-return "Wins:&nbsp;" + minosWins.routeID
+return "Wins:&nbsp;" + MinosWins.rid

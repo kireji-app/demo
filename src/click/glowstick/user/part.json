@@ -1,10 +1,11 @@
 {
- "methods": {
-  "routeID-vector-to": [
+ "name": "GlowstickUser",
+ "actions": {
+  "RID-vector-to": [
    "VECTOR"
   ],
-  "routeID-vector-from": [
-   "ROUTE_ID"
+  "RID-vector-from": [
+   "INPUT_RID"
   ]
  }
 }

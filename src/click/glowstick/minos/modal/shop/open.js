@@ -1,5 +1,5 @@
-minosModal.setModel({
+MinosModal.setModel({
  shop: {
-  target: TARGET_PIECE?.key ?? "piece0"
+  target: TARGET_MINO?.key ?? "mino0"
  }
 })

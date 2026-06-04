@@ -1,3 +1,3 @@
 return [
- glowstick.pointAttr()
+ GlowstickGame.pointAttr()
 ]

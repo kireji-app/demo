@@ -3,51 +3,37 @@ base()
 const onscreenCanvas = Q("#onscreen-canvas")
 const offscreenCanvas = new OffscreenCanvas(64, 64)
 
-orbitalGame.onscreenContext = onscreenCanvas.getContext("2d", { willReadFrequently: true })
-orbitalGame.offscreenContext = offscreenCanvas.getContext('webgpu')
+OrbitalGame.onscreenContext = onscreenCanvas.getContext("2d", { willReadFrequently: true })
+OrbitalGame.offscreenContext = offscreenCanvas.getContext('webgpu')
 
-orbitalGame.offscreenContext.configure({
- device: gpu.device,
+OrbitalGame.offscreenContext.configure({
+ device: Graphics.device,
  format: 'bgra8unorm',
  usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC,
  alphaMode: 'premultiplied'
 })
 
-orbitalGame.uniformBuffer = gpu.createBuffer(orbitalCamera.buffer, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST)
+OrbitalGame.uniformBuffer = Graphics.createBuffer(OrbitalCamera.buffer, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST)
 
-addEventListener("resize", () => orbitalGame.reactToCanvasChange())
-// _.parts.desktop.era.attach("update", orbitalGame, "reactToCanvasChange")
+addEventListener("resize", () => OrbitalGame.reactToCanvasChange())
 
-orbitalGame.container.addEventListener('mousemove', mouseEvent => {
- if (document.pointerLockElement === orbitalGame.container)
-  orbitalGame.reactToMouseMovement(mouseEvent.movementX, mouseEvent.movementY)
+OrbitalGame.container.addEventListener('mousemove', mouseEvent => {
+ if (document.pointerLockElement === OrbitalGame.container)
+  OrbitalGame.reactToMouseMovement(mouseEvent.movementX, mouseEvent.movementY)
 })
 
-orbitalGame.container.addEventListener('pointerdown', pointerEvent => {
- if (document.pointerLockElement === orbitalGame.container)
-  orbitalGame.actionPoint(pointerEvent, orbitalGame.container)
+OrbitalGame.container.addEventListener('pointerdown', pointerEvent => {
+ if (document.pointerLockElement === OrbitalGame.container)
+  OrbitalGame.actionPoint(pointerEvent, OrbitalGame.container)
 })
 
-// TODO: Handle systems without fullscreen support (i.e. mobile).
 function reactivePause() {
  if (document.body.classList.contains("paused"))
   return
 
  if (!document.pointerLockElement)
-  orbitalGame.pauseAsync()
+  OrbitalGame.pauseAsync()
 }
-
-/* 
- addEventListener("fullscreenchange", () => {
-  if (document.body.classList.contains("paused"))
-   return
-
-  if (!document.fullscreenElement)
-   orbitalGame.pauseAsync()
- })
-
- document.addEventListener("fullscreenerror", reactivePause)
-*/
 
 document.addEventListener('pointerlockchange', reactivePause)
 document.addEventListener('pointerlockerror', reactivePause)

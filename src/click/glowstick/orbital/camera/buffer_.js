@@ -5,9 +5,9 @@ const { cos, sin } = Math
 // To change unit scale later, only this constant needs updating.
 const unitScale = 1  // world units per meter
 
-const near = orbitalCamera.near * unitScale
-const far = orbitalCamera.far * unitScale
-const scope = orbitalCamera.scope * unitScale
+const near = OrbitalCamera.near * unitScale
+const far = OrbitalCamera.far * unitScale
+const scope = OrbitalCamera.scope * unitScale
 
 // ── Matrix constructors (row-major, row-vector convention) ────────────────────
 const matrix = {
@@ -63,9 +63,9 @@ const matrix = {
 }
 
 // ── Perspective projection (WebGPU NDC depth range: 0 to 1) ───────────────────
-const f = 1.0 / Math.tan((orbitalCamera.fov * Math.PI / 180) / 2)
-const aspect = orbitalGame.onscreenContext.canvas.width /
- orbitalGame.onscreenContext.canvas.height
+const f = 1.0 / Math.tan((OrbitalCamera.fov * Math.PI / 180) / 2)
+const aspect = OrbitalGame.onscreenContext.canvas.width /
+ OrbitalGame.onscreenContext.canvas.height
 const nf = 1 / (near - far)
 
 const perspective = [
@@ -78,10 +78,10 @@ const perspective = [
 // ── View transform chain ──────────────────────────────────────────────────────
 // Reading right to left: translate to player, rotate, pull back by scope.
 // In row-vector convention the rightmost matrix is applied last (closest to P).
-const rotation = orbitalCamera.model
-const position = orbitalGame.levels.arm.model
+const rotation = OrbitalCamera.model
+const position = OrbitalGame.levels.arm.model
 
-const t = matrix.t(-position.x, -orbitalCamera.height - position.y, -position.z)
+const t = matrix.t(-position.x, -OrbitalCamera.height - position.y, -position.z)
 const ry = matrix.ry(rotation.y * Math.PI / 180)
 const rx = matrix.rx(rotation.x * Math.PI / 180)
 const rz = matrix.rz(rotation.z * Math.PI / 180)

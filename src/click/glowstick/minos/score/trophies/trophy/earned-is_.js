@@ -1,1 +1,1 @@
-return minosTrophy.model
+return thisMinosTrophy.model

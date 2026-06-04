@@ -1,2 +1,2 @@
-minos.container.setAttribute("data-modal", minosTrophyModal.key)
-Q("#modal").innerHTML = minosTrophyModal["part.html"]
+MinosGame.container.setAttribute("data-modal", MinosTrophiesModal.key)
+Q("#modal").innerHTML = MinosTrophiesModal["part.html"]

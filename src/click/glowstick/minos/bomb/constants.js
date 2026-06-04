@@ -1,1 +1,0 @@
-const minosBomb = this

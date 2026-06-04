@@ -1,1 +1,1 @@
-return sections.canonicalPathname
+return EJAugustSections.canonicalPathname

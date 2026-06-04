@@ -1,8 +1,8 @@
 declare interface IEJAugustNote
  extends IPart<IEJAugustNotes, IPartAny>,
- IApplicationDetails {
+ IAppDetails {
 
- // Serialized Properties.
+ // Components.
  /** The content of the note. */
  readonly "note.html": string
  /** The full date and reading time description line for the note. */
@@ -22,7 +22,7 @@ declare interface IEJAugustNote
  /** Outputs unix timestamps as a human-readable date, for consistent date formats across the notebook. */
  readonly niceDate(UNIX_TIMESTAMP: string | number): string
 
- // Runtime Properties.
+ // Properties.
  /** A real number representing the estimated number of minutes that it might take the average person to read the note. */
  readonly readingLength: number
  /** The timestamp of when the note was first published, taken from the subdomain of the note. */
@@ -30,4 +30,4 @@ declare interface IEJAugustNote
 }
 
 /** The currently active note for ejaugust. */
-declare const note: IEJAugustNote
+declare const thisNote: IEJAugustNote

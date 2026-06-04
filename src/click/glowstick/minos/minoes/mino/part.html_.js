@@ -1,0 +1,3 @@
+return `<mino- tabIndex=0 ${thisMinosMino.pointAttr()} style="--w:${thisMinosMino.width};--h:${thisMinosMino.height}" class="${thisMinosMino.primitive === MinosGame.primitives.radialBomb ? "bomb radial" : thisMinosMino.primitive === MinosGame.primitives.crosshairBomb ? "bomb crosshair" : ""}">` + (
+ thisMinosMino.tiles.map(({ x, y }) => `<tile- style="--x:${x};--y:${y}"></tile->`).join("")
+) + "</mino->"

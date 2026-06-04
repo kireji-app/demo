@@ -1,3 +1,4 @@
 {
+ "name": "MinosScore",
  "extends": "mix"
 }

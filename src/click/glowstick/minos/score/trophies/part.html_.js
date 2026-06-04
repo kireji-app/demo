@@ -1,3 +1,3 @@
-minosTrophies.recompute()
+MinosTrophies.recompute()
 
-return `🏆 ${minosTrophies.earned.size}/${minosTrophies.possible.size}`
+return `🏆 ${MinosTrophies.earned.size}/${MinosTrophies.possible.size}`

@@ -1,6 +1,6 @@
 {
- "methods": {
-  "reset": [],
+ "name": "MinosPoints",
+ "actions": {
   "earn": [
    "EARNINGS"
   ],

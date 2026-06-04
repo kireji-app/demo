@@ -1,1 +1,1 @@
-return sections.canonicalURL
+return EJAugustSections.canonicalURL

@@ -1,6 +1,6 @@
-minosBoard.element = Q("#board")
+MinosBoard.element = Q("#board")
 
-for (const activeTile of minosBoard.activeTiles)
- minosBoard.viewedTiles.add(activeTile)
+for (const activeTile of MinosBoard.activeTiles)
+ MinosBoard.viewedTiles.add(activeTile)
 
-client.promise.then(() => minos.checkState())
+Client.promise.then(() => MinosGame.checkState())

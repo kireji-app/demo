@@ -1,32 +1,32 @@
-if (orbitalGame.loading) {
- orbitalGame.onscreenContext.canvas.classList.add("loading")
+if (OrbitalGame.loading) {
+ OrbitalGame.onscreenContext.canvas.classList.add("loading")
  debug('loading for 1 frame')
  return
 } else {
- orbitalGame.onscreenContext.canvas.classList.remove("loading")
+ OrbitalGame.onscreenContext.canvas.classList.remove("loading")
 }
 
 let skipFrame = true
 
-if (orbitalGame.loadedLevel !== orbitalLevel) {
+if (OrbitalGame.loadedLevel !== OrbitalLevels.arm) {
  skipFrame = false
- orbitalGame.loadedLevel = orbitalLevel
- orbitalGame.loadLevelAsync()
+ OrbitalGame.loadedLevel = OrbitalLevels.arm
+ OrbitalGame.loadLevelAsync()
  return
 }
 
-if (orbitalGame.canvasSizeChanged) {
+if (OrbitalGame.canvasSizeChanged) {
  skipFrame = false
- orbitalGame.updateCanvasSize()
- orbitalGame.canvasSizeChanged = false
+ OrbitalGame.updateCanvasSize()
+ OrbitalGame.canvasSizeChanged = false
 }
 
 if (document.body.classList.contains("paused") && skipFrame)
  return
 
-orbitalGame.reactToKeyboardInput()
-orbitalGame.updateUniformBuffer()
-orbitalGame.render()
+OrbitalGame.reactToKeyboardInput()
+OrbitalGame.updateUniformBuffer()
+OrbitalGame.render()
 
-if (orbitalGame.manifest.debug)
- orbitalGame.updateDebugView()
+if (OrbitalGame.manifest.debug)
+ OrbitalGame.updateDebugView()

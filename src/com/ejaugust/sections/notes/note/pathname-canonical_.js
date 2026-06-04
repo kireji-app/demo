@@ -1,1 +1,1 @@
-return notes.pathname + note.pathname
+return EJAugustNotes.pathname + thisNote.pathname

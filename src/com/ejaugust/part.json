@@ -1,6 +1,7 @@
 {
- "extends": "application",
- "methods": {
+ "name": "EJAugust",
+ "extends": "app",
+ "actions": {
   "pathname-translate-canonical": [
    "PATHNAME",
    "HASH"

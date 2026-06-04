@@ -1,1 +1,1 @@
-return `https://${ejaugust.host}${allTopics.canonicalPathname}`
+return `https://${EJAugust.host}${EJAugustTopics.canonicalPathname}`

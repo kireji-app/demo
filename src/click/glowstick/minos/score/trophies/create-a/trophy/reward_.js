@@ -1,1 +1,1 @@
-return minosShapeTrophy.key * 200
+return thisMinosShapeTrophy.key * 200

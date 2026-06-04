@@ -1,1 +1,1 @@
-return `${!section || section === ejaugust.sections.home ? ejaugust.titleMenu : section.title}`
+return `${!EJAugustSections.arm || EJAugustSections.arm === EJAugustSections.home ? EJAugust.titleMenu : EJAugustSections.arm.title}`

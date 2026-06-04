@@ -1,4 +1,4 @@
-orbitalLevel.define({
+define(thisOrbitalLevel, {
  gltf: { resolve() { return this.data.gltf } },
  element: { value: null, writable: true },
  camera: { value: null, writable: true },

@@ -1,1 +1,1 @@
-return sections.descriptionMeta
+return EJAugustSections.descriptionMeta

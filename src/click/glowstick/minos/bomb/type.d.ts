@@ -1,6 +1,6 @@
 declare interface IMinosGameBomb
  extends IMatch<IMinosGame, IPart<IMinosGameBomb, null>>,
- IWebComponent {
+ IWebView {
 
  // Subparts.
  readonly none: IPart<IMinosGameBomb, null>
@@ -8,4 +8,5 @@ declare interface IMinosGameBomb
  readonly crosshair: IPart<IMinosGameBomb, null>
 }
 
-declare const minosBomb: IMinosGameBomb
+declare const MinosBombLayer: IMinosGameBomb
+type MinosBombLayer = T

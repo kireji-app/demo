@@ -1,1 +1,1 @@
-minosBoard.setRouteID(randomRouteID(minosBoard.cardinality))
+MinosBoard.setRID(RID.random(MinosBoard.cardinality))

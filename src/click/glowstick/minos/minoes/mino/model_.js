@@ -1,0 +1,1 @@
+return Number(thisMinosMino.rid)

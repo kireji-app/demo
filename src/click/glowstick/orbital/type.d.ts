@@ -1,11 +1,11 @@
 declare interface IOrbitalGame
- extends IApplication<IGlowstick, IPartAny> {
+ extends IApp<IGlowstickGame, IPartAny> {
 
  // Subparts.
  readonly camera: IOrbitalCamera
  readonly levels: IOrbitalLevels
 
- // Serialized Properties.
+ // Components.
  readonly position: IVector3
  /** A universal shader template for rendering unlit materials. */
  readonly "unlit.wgsl": string
@@ -31,7 +31,7 @@ declare interface IOrbitalGame
  readonly actionPoint(POINTER_EVENT: PointerEvent, TARGET_ELEMENT: HTMLElement, ...ARGS: any[]): void
  readonly manifest: IOrbitalGameManifest
 
- // Runtime Properties.
+ // Properties.
  readonly loading: boolean
  readonly loadedLevel?: IOrbitalLevel
  /** The player's walking speed in inches per second. */
@@ -77,4 +77,5 @@ declare interface GPURenderPassDefinition {
  readonly pipeline: GPURenderPipeline
 }
 
-declare const orbitalGame: IOrbitalGame
+declare const OrbitalGame: IOrbitalGame
+type OrbitalGame = T

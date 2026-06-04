@@ -1,0 +1,1 @@
+return MinosMinoes.map(mino => mino["part.html"]).join("")

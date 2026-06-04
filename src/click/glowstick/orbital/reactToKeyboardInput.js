@@ -1,50 +1,49 @@
-if (hotKeys.pressed.has("Escape")) {
+if (HotKeys.pressed.has("Escape")) {
 
- // TODO: Allow mobile pausing.
- orbitalGame.pauseAsync()
+ OrbitalGame.pauseAsync()
  return
 }
 
 /** A normalized vector representing the player's movement direction. */
 const forceVector = (() => {
- const sensitivity = orbitalGame.manifest.keyboardSensitivity
- const facingVector = orbitalCamera.model
+ const sensitivity = OrbitalGame.manifest.keyboardSensitivity
+ const facingVector = OrbitalCamera.model
  const acceleration = 850
  const maxTurnSpeed = 250
 
  // For non-accellerating arrow key turning.
- // if (hotKeys.pressed.has("ArrowRight")) facingVector.y += sensitivity
- // if (hotKeys.pressed.has("ArrowLeft")) facingVector.y -= sensitivity
+ // if (HotKeys.pressed.has("ArrowRight")) facingVector.y += sensitivity
+ // if (HotKeys.pressed.has("ArrowLeft")) facingVector.y -= sensitivity
 
- const horizontalInput = hotKeys.pressed.has("ArrowRight") ? 1 : (hotKeys.pressed.has("ArrowLeft") ? -1 : 0)
+ const horizontalInput = HotKeys.pressed.has("ArrowRight") ? 1 : (HotKeys.pressed.has("ArrowLeft") ? -1 : 0)
 
  // 2. Accelerate or Decelerate
  if (horizontalInput != 0) {
 
-  if (Math.sign(horizontalInput) !== Math.sign(orbitalGame.currentTurnSpeed))
-   orbitalGame.currentTurnSpeed = 0
+  if (Math.sign(horizontalInput) !== Math.sign(OrbitalGame.currentTurnSpeed))
+   OrbitalGame.currentTurnSpeed = 0
 
-  orbitalGame.currentTurnSpeed += horizontalInput * acceleration * client.deltaTime / 1000
-  orbitalGame.currentTurnSpeed = Math.max(Math.min(orbitalGame.currentTurnSpeed, maxTurnSpeed), -maxTurnSpeed)
+  OrbitalGame.currentTurnSpeed += horizontalInput * acceleration * Client.deltaTime / 1000
+  OrbitalGame.currentTurnSpeed = Math.max(Math.min(OrbitalGame.currentTurnSpeed, maxTurnSpeed), -maxTurnSpeed)
  } else {
-  orbitalGame.currentTurnSpeed = 0
+  OrbitalGame.currentTurnSpeed = 0
  }
 
- if (hotKeys.pressed.has("ArrowUp")) facingVector.x -= sensitivity
- if (hotKeys.pressed.has("ArrowDown")) facingVector.x += sensitivity
+ if (HotKeys.pressed.has("ArrowUp")) facingVector.x -= sensitivity
+ if (HotKeys.pressed.has("ArrowDown")) facingVector.x += sensitivity
 
- facingVector.y += orbitalGame.currentTurnSpeed * client.deltaTime / 1000
+ facingVector.y += OrbitalGame.currentTurnSpeed * Client.deltaTime / 1000
 
- orbitalCamera.setModel(facingVector)
+ OrbitalCamera.setModel(facingVector)
 
  const yaw = -facingVector.y * Math.PI / 180
 
  // The keyboard might be controlling the player character.
  const WASDVector = Vector[3]()
- if (hotKeys.pressed.has("KeyA")) WASDVector.x -= 1
- if (hotKeys.pressed.has("KeyD")) WASDVector.x += 1
- if (hotKeys.pressed.has("KeyW")) WASDVector.z -= 1
- if (hotKeys.pressed.has("KeyS")) WASDVector.z += 1
+ if (HotKeys.pressed.has("KeyA")) WASDVector.x -= 1
+ if (HotKeys.pressed.has("KeyD")) WASDVector.x += 1
+ if (HotKeys.pressed.has("KeyW")) WASDVector.z -= 1
+ if (HotKeys.pressed.has("KeyS")) WASDVector.z += 1
 
  const controlVector = Vector.normalize(Vector[3](
   WASDVector.x * Math.cos(yaw) + WASDVector.z * Math.sin(yaw),
@@ -52,9 +51,9 @@ const forceVector = (() => {
   -WASDVector.x * Math.sin(yaw) + WASDVector.z * Math.cos(yaw)
  ))
 
- const isSprinting = hotKeys.pressed.has("ShiftLeft") || hotKeys.pressed.has("ShiftRight")
+ const isSprinting = HotKeys.pressed.has("ShiftLeft") || HotKeys.pressed.has("ShiftRight")
 
- return Vector.multiply(controlVector, isSprinting ? orbitalGame.manifest.sprintingSpeed : orbitalGame.manifest.walkingSpeed)
+ return Vector.multiply(controlVector, isSprinting ? OrbitalGame.manifest.sprintingSpeed : OrbitalGame.manifest.walkingSpeed)
 })()
 
 const adjustedSpeed = Vector.magnitude(forceVector)
@@ -66,23 +65,23 @@ if (adjustedSpeed === 0) {
 
 
 // Cast a ray to determine how this force vector will reposition the player.
-const { hit, triIndex, point, forceVector: outputForceVector } = orbitalLevel.castRay(forceVector, client.deltaTime / 1000, true)
+const { hit, triIndex, point, forceVector: outputForceVector } = OrbitalLevels.arm.castRay(forceVector, Client.deltaTime / 1000, true)
 
 // if (!hit) {
-//  const distance = Vector.magnitude(Vector.subtract(orbitalLevel.position, point))
+//  const distance = Vector.magnitude(Vector.subtract(OrbitalLevels.arm.position, point))
 // }
 
 // Distribute the runtime state.
-orbitalLevel.position.x = point.x
-orbitalLevel.position.y = point.y
-orbitalLevel.position.z = point.z
-orbitalLevel.triIndex = triIndex
+OrbitalLevels.arm.position.x = point.x
+OrbitalLevels.arm.position.y = point.y
+OrbitalLevels.arm.position.z = point.z
+OrbitalLevels.arm.triIndex = triIndex
 
 // Move the world to the tri and point provided by the ray cast results.
-const triData = orbitalLevel.triTable[triIndex]
+const triData = OrbitalLevels.arm.triTable[triIndex]
 const row = triData.rows[Math.floor(point.z) - triData.zRange.min]
-const newRouteID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.xyRange.min.x)
-if (newRouteID !== orbitalLevel.routeID)
- orbitalLevel.setRouteID(newRouteID, false, true)
+const newRID = triData.offset + row.offset + BigInt(Math.floor(point.x) - row.xyRange.min.x)
+if (newRID !== OrbitalLevels.arm.rid)
+ OrbitalLevels.arm.setRID(newRID, false, true)
 /* else
- orbitalLevel.updateView() */
+ OrbitalLevels.arm.updateView() */

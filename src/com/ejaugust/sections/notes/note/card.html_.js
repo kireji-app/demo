@@ -1,12 +1,12 @@
 return /* html */`
-<a ${_.pointAttr()} href=${note.canonicalURL}>
+<a ${_.pointAttr()} href=${thisNote.canonicalURL}>
  <span class=details>
-  <span class=topic>${note.topic}</span>
+  <span class=topic>${thisNote.topic}</span>
   <flex-spacer></flex-spacer>
-  <span class=date>${note.niceDate(note.key)}</span>
+  <span class=date>${thisNote.niceDate(thisNote.key)}</span>
  </span>
- <h3>${note.title}</h3>
+ <h3>${thisNote.title}</h3>
  <p>
-  ${note.description ?? note.subtitle ?? "No description"}
+  ${thisNote.description ?? thisNote.subtitle ?? "No description"}
  </p>
 </a>`

@@ -1,1 +1,1 @@
-return `https://${ejaugust.host}${note.canonicalPathname}`
+return `https://${EJAugust.host}${thisNote.canonicalPathname}`

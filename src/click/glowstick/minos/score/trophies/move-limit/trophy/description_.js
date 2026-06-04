@@ -1,1 +1,1 @@
-return `Clear the board in only ${minosTrophy.isAbstract ? "{n}" : minosTrophy.key} moves or less.`
+return `Clear the board in only ${thisMinosTrophy.isAbstract ? "{n}" : thisMinosTrophy.key} moves or less.`

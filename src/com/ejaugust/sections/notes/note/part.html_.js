@@ -1,8 +1,6 @@
-return note["heading.html"] +
+return thisNote["heading.html"] +
  "<p id=note-credit>" + (
-  note["credit.html"]
+  thisNote["credit.html"]
  ) +
  "</p>" +
- note["note.html"]
-
-// TODO: Somehow sanitize note html.
+ thisNote["note.html"]

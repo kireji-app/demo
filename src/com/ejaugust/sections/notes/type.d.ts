@@ -1,5 +1,5 @@
 declare interface IEJAugustNotes
- extends IApplicationSections<IEJAugustSections, IEJAugustNote> {
+ extends IAppSections<IEJAugustSections, IEJAugustNote> {
 
  // Subparts.
  readonly 1743765678: IEJAugustNote
@@ -20,5 +20,6 @@ declare interface IEJAugustNotes
 }
 
 /** The section of ejaugust that contains all of the note entries and
- * can display one individual note in the application at a time. */
-declare const notes: IEJAugustNotes
+ * can display one individual note in the app at a time. */
+declare const EJAugustNotes: IEJAugustNotes
+type EJAugustNotes = T

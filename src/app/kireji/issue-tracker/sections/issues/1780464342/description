@@ -1,0 +1,1 @@
+Orbital lebels currently only have one walkable collision surface. The surface has depth but there is no gravity, jumping, z-axis layering or other 3D dynamics. The walkable mesh already supports state support for z-layered meshes but does not have a reliable method to cast rays accurately across layers.

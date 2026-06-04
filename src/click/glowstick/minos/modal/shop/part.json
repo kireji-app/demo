@@ -1,8 +1,9 @@
 {
+ "name": "MinosShopModal",
  "extends": "mix",
- "methods": {
+ "actions": {
   "open": [
-   "TARGET_PIECE"
+   "TARGET_MINO"
   ],
   "select": [
    "POINTER_EVENT",
@@ -13,7 +14,6 @@
    "POINTER_EVENT",
    "TARGET_ELEMENT",
    "TARGET_INDEX"
-  ],
-  "repopulate": []
+  ]
  }
 }

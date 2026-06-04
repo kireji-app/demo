@@ -1,1 +1,1 @@
-return part.smooth
+return OrbitalCameraY.smooth

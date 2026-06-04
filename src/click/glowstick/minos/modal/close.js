@@ -1,5 +1,5 @@
 function close() {
- minosModal.setModel("none")
+ MinosModal.setModel("none")
 }
 
 if (!POINTER_EVENT) {
@@ -7,7 +7,7 @@ if (!POINTER_EVENT) {
  return
 }
 
-pointer.handle({
+Pointer.handle({
  click() {
   close()
  },

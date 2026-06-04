@@ -1,11 +1,11 @@
-const boardWidth = minosBoard.width
+const boardWidth = MinosBoard.width
 const tileCount = boardWidth * boardWidth
 const tiles = []
 
 for (let tileIndex = 0; tileIndex < tileCount; tileIndex++)
  tiles.push(Vector[2](tileIndex % boardWidth, Math.floor(tileIndex / boardWidth)))
 
-minosBoard.define({
+define(MinosBoard, {
  element: { value: null, writable: true },
  tileCount: { value: tileCount },
  cardinality: { value: 1n << BigInt(tileCount) },

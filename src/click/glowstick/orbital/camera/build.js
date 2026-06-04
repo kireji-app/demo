@@ -1,4 +1,4 @@
-orbitalCamera.define({
+define(OrbitalCamera, {
  fov: { value: 50 },
  near: { value: 1 },
  far: { value: 10000 },

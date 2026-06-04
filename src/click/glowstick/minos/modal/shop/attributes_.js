@@ -1,4 +1,4 @@
 return [
  `data-modal="shop"`,
- `data-shop-target="${minosShopModal.target.routeID}"`
+ `data-shop-target="${MinosShopModal.target.rid}"`
 ]

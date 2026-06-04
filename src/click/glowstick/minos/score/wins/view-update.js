@@ -1,1 +1,1 @@
-Q("#wins").innerHTML = minosWins["part.html"]
+Q("#wins").innerHTML = MinosWins["part.html"]

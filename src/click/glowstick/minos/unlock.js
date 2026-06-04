@@ -1,4 +1,4 @@
-if (!minos.locked)
- throw 'Error: Duplicate call to unlock Minos. Should it have been locked prior to this?'
+if (!MinosGame.locked)
+ throw error('already unlocked')
 
-minos.locked = false
+MinosGame.locked = false

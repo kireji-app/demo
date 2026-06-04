@@ -1,0 +1,12 @@
+{
+ "abstract": true,
+ "actions": {
+  "point": [
+   "POINTER_EVENT",
+   "TARGET_ELEMENT"
+  ],
+  "place": [
+   "POINT"
+  ]
+ }
+}

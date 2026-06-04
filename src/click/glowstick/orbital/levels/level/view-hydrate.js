@@ -1,4 +1,4 @@
-orbitalLevel.element = Q("world-")
-orbitalLevel.camera = Vector.multiply(walkable.position, -1)
-orbitalLevel.viewedTriIndex = walkable.triIndex
-orbitalLevel.viewedPosition = { ...walkable.position }
+thisOrbitalLevel.element = Q("world-")
+thisOrbitalLevel.camera = Vector.multiply(thisWalkable.position, -1)
+thisOrbitalLevel.viewedTriIndex = thisWalkable.triIndex
+thisOrbitalLevel.viewedPosition = { ...thisWalkable.position }

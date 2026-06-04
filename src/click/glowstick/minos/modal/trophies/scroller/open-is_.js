@@ -1,1 +1,1 @@
-return minosTrophyModal.isOpen && (minosTrophyModal.enabled || minosTrophyModal.dirty && minosTrophyModal.justDisabled)
+return MinosTrophiesModal.isOpen && (MinosTrophiesModal.enabled || MinosTrophiesModal.dirty && MinosTrophiesModal.justDisabled)

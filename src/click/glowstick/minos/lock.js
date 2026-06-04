@@ -1,4 +1,4 @@
-if (minos.locked)
+if (MinosGame.locked)
  return
 
-minos.locked = true
+MinosGame.locked = true

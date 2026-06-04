@@ -1,5 +1,11 @@
-declare interface IEJAugustAllTopics
+declare interface IEJAugustTopics
  extends IMatch<IEJAugustSections, null>,
- IApplicationDetails { }
+ IAppDetails {
 
-declare const allTopics: IEJAugustAllTopics
+ // Properties.
+ /** The set of all topic strings that could be discovered at buil time. */
+ readonly all: Set<string>
+}
+
+declare const EJAugustTopics: IEJAugustTopics
+type EJAugustTopics = T

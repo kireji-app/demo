@@ -1,1 +1,1 @@
-Q("#bomb").innerHTML = minosBomb["part.html"]
+Q("#bomb").innerHTML = MinosBombLayer["part.html"]

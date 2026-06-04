@@ -1,4 +1,4 @@
-pointer.handle({
+Pointer.handle({
  click() {
   navigator.clipboard.writeText(TARGET_ELEMENT.firstChild.innerHTML)
   TARGET_ELEMENT.setAttribute("data-copied", "")

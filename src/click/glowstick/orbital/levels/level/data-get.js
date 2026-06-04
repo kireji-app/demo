@@ -1,20 +1,19 @@
 /** @type {GLTFDocument} */
-const json = JSON.parse(part["level.gltf"])
+const json = JSON.parse(thisOrbitalLevel["level.gltf"])
 
 for (const resourceArray of [json.images ?? [], json.buffers ?? []]) {
  for (const resource of resourceArray)
   if (resource.uri) {
 
    if (resource.uri.startsWith("..") || resource.uri.startsWith("/") || !(resource.uri.endsWith(".png") || resource.uri.endsWith(".bin")))
-    throw new ReferenceError(`Orbital Level Error: invalid resource URI. Resource must be the name of a .png or .bin file with the correct extension and cannot include a path (found "${resource.uri}").`)
+    throw error(`invalid resource URI "${resource.uri}" - must be a .png or .bin file without a path`)
 
-   // TODO: prevent duplicate resource loading across shared resources.
-   const base64 = part[resource.uri]
+   const base64 = thisOrbitalLevel[resource.uri]
 
    if (!base64)
-    throw new Error(`Get 3D Data Error: resource "${resource.uri}" could not be found or was empty for level ${part.key} of game ${part[".."][".."].host}.`)
+    throw error(`can't find resource "${resource.uri}"`)
 
-   resource.data = btoaBuffer(base64)
+   resource.data = atoBuffer(base64)
   }
 }
 
@@ -75,7 +74,7 @@ const walkableIndices = json.meshes.reduce((indices, mesh, index) => {
 }, [])
 
 if (walkableIndices.length === 0)
- throw new ReferenceError(`No mesh prefixed with "walkable_" found in level.gltf for level "${part.key}" of game "${part[".."][".."].host}". Be sure that the scene contains at least one walkable mesh and that it is named correctly.`)
+ throw error(`no mesh called "walkable_*" found in level.gltf`)
 
 // TODO: handle more than one walkable mesh.
 const { attributes: { POSITION }, indices } = json.meshes[walkableIndices[0]].primitives[0]

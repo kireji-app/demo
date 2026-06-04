@@ -1,0 +1,1 @@
+Name the mino primitives in Minos so that the data model will survive updates that change the total number of items in the set. They are currently identified by their index.

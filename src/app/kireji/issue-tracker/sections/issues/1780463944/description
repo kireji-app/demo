@@ -1,0 +1,1 @@
+Implement mesh instancing and enable sharing of texture and mesh objects across different levels in Orbital. The solutions should align with the design of the glTF file type and be both easy to export and comfortable to work with in Blender.

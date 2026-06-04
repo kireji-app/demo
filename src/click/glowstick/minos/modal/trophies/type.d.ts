@@ -4,8 +4,9 @@ declare interface IMinosGameModalTrophies
  // Subparts.
  readonly scroller: IScroller<IMinosGameModalTrophies>
 
- // Serialized Properties.
+ // Components.
  readonly open(): void
 }
 
-declare const minosTrophyModal: IMinosGameModalTrophies
+declare const MinosTrophiesModal: IMinosGameModalTrophies
+type MinosTrophiesModal = T

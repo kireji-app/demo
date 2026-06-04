@@ -1,4 +1,4 @@
-const [points] = walkable.data.walkable
+const [points] = thisWalkable.data.walkable
 const scale = 1
 const mapTop = Math.min(...points.flatMap(point => point[2])) * scale
 const mapRight = Math.max(...points.flatMap(point => point[0])) * scale
@@ -6,7 +6,7 @@ const mapBottom = Math.max(...points.flatMap(point => point[2])) * scale
 const mapLeft = Math.min(...points.flatMap(point => point[0])) * scale
 
 return /* html */`
-<world- style="--map-left:${mapLeft};--map-top:${mapTop};--x:${walkable.position.x * -1};--z:${walkable.position.z * -1};--user-x:${walkable.position.x};--user-z:${walkable.position.z}">
+<world- style="--map-left:${mapLeft};--map-top:${mapTop};--x:${thisWalkable.position.x * -1};--z:${thisWalkable.position.z * -1};--user-x:${thisWalkable.position.x};--user-z:${thisWalkable.position.z}">
  <svg width="${mapRight - mapLeft}" height="${mapBottom - mapTop}" viewBox="${mapLeft} ${mapTop} ${mapRight - mapLeft} ${mapBottom - mapTop}">
   <defs>
    <pattern id="checkerboard" width="${scale * 2}" height="${scale * 2}" patternUnits="userSpaceOnUse">
@@ -14,7 +14,7 @@ return /* html */`
     <rect x="${scale}" y="${scale}" width="${scale}" height="${scale}"/>
    </pattern>
   </defs>
-  ${walkable.triTable.map((triData, triIndex) => {
+  ${thisWalkable.triTable.map((triData, triIndex) => {
 
  if (!triData.rows || triData.rows.length === 0)
   return ''
@@ -39,14 +39,14 @@ return /* html */`
   }
  })
 
- return /* svg */`<path data-index="${triIndex}" ${triIndex === walkable.triIndex ? "class=current " : ""}d="M ${[...leftPoints, ...rightPoints.reverse()].join(' L ')} Z"/>`
+ return /* svg */`<path data-index="${triIndex}" ${triIndex === thisWalkable.triIndex ? "class=current " : ""}d="M ${[...leftPoints, ...rightPoints.reverse()].join(' L ')} Z"/>`
 }).join(`
    `)}
-  <rect id="player-marker" x="${walkable.position.x * scale}" y="${walkable.position.z * scale}" width="${scale}" height="${scale}" fill="white" stroke="black" stroke-width="0.5"/>
+  <rect id="player-marker" x="${thisWalkable.position.x * scale}" y="${thisWalkable.position.z * scale}" width="${scale}" height="${scale}" fill="white" stroke="black" stroke-width="0.5"/>
  </svg>
 </world->
 <ui->
  <span class=debug>
-  ${walkable["coords.html"]}
+  ${thisWalkable["coords.html"]}
  </span>
 </ui->`.trim()

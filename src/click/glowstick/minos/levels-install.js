@@ -1,8 +1,8 @@
 /**
  * Levels are defined as experiences where one or more of the following might be true:
  * 1. The level begins with a specific board layout
- * 2. The level begins with three specific pieces
- * 3. The level has a preset queue of next pieces
+ * 2. The level begins with three specific minoes
+ * 3. The level has a preset queue of next minoes
  * 4. There are specific check-state rules
  * 6. There are specific colors and/or graphics
  * 7. There are specific trophy that can only be earned on that level
@@ -27,8 +27,8 @@
  * This is elegantly resolved by letting the switch between fully-set trophies and the meta-meta mask indicate whether or not the user has spent points to unlock the meta-meta level.
  * The meta-meta level should have art tools like a pencil and a bomb. To implement speedrun plays, we can require the level's trophies to be completed already.
  * We make each level a match between two arms: the bitmask of the trophy and the timestamp.
- * Some pieces are special and can only appear in the random queue if the corresponding level is in its speedrun arm.
- * In order to prevent impossible states (like having the pencil in the piece array when the meta-meta level is not unlocked), the pieces would somehow have to be an element of the level unlock mechanism.
+ * Some minoes are special and can only appear in the random queue if the corresponding level is in its speedrun arm.
+ * In order to prevent impossible states (like having the pencil in the minoes array when the meta-meta level is not unlocked), the minoes would somehow have to be an element of the level unlock mechanism.
  * 
  * Let each level be purchased by points in any order.
  * Let there be a match over every k where k is the number of levels currently unlocked (our of a possible j).
@@ -38,11 +38,11 @@
  * Let each level be a match between two arms:
  * 1. The trophy grind state.
  * 2. The speedrun state.
- * Let each speedrun state unlock the same number of custom pieces (one?).
+ * Let each speedrun state unlock the same number of custom minoes (one?).
  * 
- * Let the pieces superset be a component of each arm.
+ * Let the minoes superset be a component of each arm.
  */
-minos.define({
+define(MinosGame, {
  levels: {
   value: {
    noise: {
@@ -50,10 +50,10 @@ minos.define({
    },
    skull: {
     board: 54538784753132372812239451939922428n,
-    pieces: [19, 19, 19],
+    minoes: [19, 19, 19],
     queue: [19, 0, 19, 0, 19, 0, 19, 0, 19, 0, 19, 0]
    },
-   minos: {
+   layout: {
     board: 2050170099309742521972756347412707008512n
    }
   },

@@ -1,7 +1,7 @@
 return (
- "<section id=score>" + minosScore["part.html"] + "</section>" +
- "<section id=modal>" + minosModal["part.html"] + "</section>" +
- "<section id=board>" + minosBoard["part.html"] + "</section>" +
- "<section id=bomb>" + minosBomb["part.html"] + "</section>" +
- "<section id=pieces>" + minosPieces["part.html"] + "</section>"
+ "<section id=score>" + MinosScore["part.html"] + "</section>" +
+ "<section id=modal>" + MinosModal["part.html"] + "</section>" +
+ "<section id=board>" + MinosBoard["part.html"] + "</section>" +
+ "<section id=bomb>" + MinosBombLayer["part.html"] + "</section>" +
+ "<section id=minoes>" + MinosMinoes["part.html"] + "</section>"
 )

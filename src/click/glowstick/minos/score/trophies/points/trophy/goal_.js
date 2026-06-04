@@ -1,1 +1,1 @@
-return +minosPointsTrophy.key
+return +thisMinosPointsTrophy.key

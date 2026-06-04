@@ -1,12 +1,12 @@
 /** @type {IMinosGameTrophyCategory} */
-const category = minosTrophies[minosMetaTrophy.key]
+const category = MinosTrophies[thisMinosMetaTrophy.key]
 
 for (const trophy of category) {
- if (trophy === minosMetaTrophy)
+ if (trophy === thisMinosMetaTrophy)
   continue
 
- if (minosTrophies.recomputing) {
-  if (!minosTrophies.earned.has(trophy))
+ if (MinosTrophies.recomputing) {
+  if (!MinosTrophies.earned.has(trophy))
    return false
  } else if (!trophy.isEarned)
   return false

@@ -1,3 +1,3 @@
-part.define({
+define(MinosShopTarget, {
  cardinality: { value: 3n }
 })

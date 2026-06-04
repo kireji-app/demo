@@ -1,7 +1,7 @@
 const ftPerSec = 5.9 // realistic max: 5.9
 const pixelsPerFoot = 5
 
-user.define({
+define(GlowstickUser, {
  cardinality: { value: 8n },
  element: { value: null, writable: true },
  pixelsPerSecond: { value: ftPerSec * pixelsPerFoot },

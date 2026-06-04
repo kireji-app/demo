@@ -1,8 +1,7 @@
 {
+ "name": "MinosTrophies",
  "extends": "mix",
- "methods": {
-  "state-check": [],
-  "recompute": [],
+ "actions": {
   "modal-view": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"

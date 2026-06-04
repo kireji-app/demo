@@ -1,1 +1,1 @@
-return minosModal.arm["part.html"] ?? ""
+return MinosModal.arm["part.html"] ?? ""

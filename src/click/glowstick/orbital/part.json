@@ -1,20 +1,11 @@
 {
- "extends": "application",
- "methods": {
-  "render": [],
-  "updateDebugView": [],
-  "async-load-level": [],
-  "async-play": [],
-  "async-pause": [],
-  "reactToCanvasChange": [],
-  "reactToKeyboardInput": [],
+ "name": "OrbitalGame",
+ "extends": "app",
+ "actions": {
   "reactToMouseMovement": [
    "MOUSE_MOVEMENT_X",
    "MOUSE_MOVEMENT_Y"
   ],
-  "updateCanvasSize": [],
-  "updateUniformBuffer": [],
-  "point-pause": [],
   "point-play": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"

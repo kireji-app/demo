@@ -4,4 +4,4 @@ declare interface IMinosGameMetaTrophy
 
 }
 
-declare const minosMetaTrophy: IMinosGameMetaTrophy
+declare const thisMinosMetaTrophy: IMinosGameMetaTrophy

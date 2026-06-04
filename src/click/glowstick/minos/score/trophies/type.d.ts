@@ -1,6 +1,6 @@
 declare interface IMinosGameScoreTrophies
  extends IMix<IMinosGameScore, IMinosGameTrophyCategory>,
- IWebComponent {
+ IWebView {
 
  // Subparts.
  readonly basic: IMinosGameTrophyCategory
@@ -12,7 +12,7 @@ declare interface IMinosGameScoreTrophies
  readonly shop: IMinosGameTrophyCategory
  readonly wins: IMinosGameTrophyCategory
 
- // Serialized Properties.
+ // Components.
  /** Scans the trophies to determine which ones have been completed. This does not evaluate the trophy win conditions for all cases. */
  readonly recompute(): void
  /** *Client-only*
@@ -20,18 +20,19 @@ declare interface IMinosGameScoreTrophies
   * Scans the trophies and win conditions to determine if any new trophies should be awarded. */
  readonly checkState(): void
 
- // Runtime Properties.
+ // Properties.
  /** The set of earned trophies. */
  readonly earned: Set<IMinosGameTrophy>
  /** The complete set of trophies available in the game. */
  readonly possible: Set<IMinosGameTrophy>
  /** The set of earned trophies, the last time the trophy view was updated. */
  readonly viewedEarned: Set<IMinosGameTrophy>
- /** Indicates whether or not the system is looping in the `recompute()` method, preventing duplicate checks to trophy conditions by meta trophies. */
+ /** Indicates whether or not the system is looping in the `recompute()` action, preventing duplicate checks to trophy conditions by meta trophies. */
  readonly recomputing: boolean
 }
 
-declare const minosTrophies: IMinosGameScoreTrophies
+declare const MinosTrophies: IMinosGameScoreTrophies
+type MinosTrophies = T
 
 declare interface IMinosGameTrophyCategory
  extends IPart<IMinosGameScoreTrophy, IMinosGameTrophy> {
@@ -41,7 +42,7 @@ declare interface IMinosGameTrophyCategory
 declare interface IMinosGameTrophy
  extends IPart<IMinosGameTrophyCategory, null> {
 
- // Serialized Properties.
+ // Components.
  /** Returns true if the trophy has been earned. */
  readonly isEarned: boolean
  /** The description of the trophy as it appears to the player. */

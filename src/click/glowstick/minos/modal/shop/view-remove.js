@@ -1,1 +1,1 @@
-minos.container.removeAttribute("data-shop-target")
+MinosGame.container.removeAttribute("data-shop-target")

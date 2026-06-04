@@ -1,4 +1,4 @@
-minosTrophies.recompute()
+MinosTrophies.recompute()
 
-for (const trophy of minosTrophies.earned)
- minosTrophies.viewedEarned.add(trophy)
+for (const trophy of MinosTrophies.earned)
+ MinosTrophies.viewedEarned.add(trophy)

@@ -1,6 +1,7 @@
 {
+ "name": "MinosModal",
  "extends": "match",
- "methods": {
+ "actions": {
   "close": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"

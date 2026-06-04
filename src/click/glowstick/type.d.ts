@@ -1,12 +1,13 @@
-declare interface IGlowstick
- extends IClickApplication {
+declare interface IGlowstickGame
+ extends IClickApp {
 
  // Subparts.
  readonly user: IGlowstickUser
  readonly world: IGlowstickWorld
  readonly minos: IMinosGame
+ readonly orbital: IOrbitalGame
 
- // Runtime Properties.
+ // Properties.
  /** If currently using the mobile thumbstick, the on-screen element representing the thumbstick. */
  readonly handleElement?: HTMLElement
  /** If currently using the mobile thumbstick, the origin point (center) of the thumbstick. */
@@ -17,4 +18,5 @@ declare interface IGlowstick
  readonly thumbstickElement?: HTMLElement
 }
 
-declare const glowstick: IGlowstick
+declare const GlowstickGame: IGlowstickGame
+type GlowstickGame = T

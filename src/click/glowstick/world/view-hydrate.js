@@ -1,4 +1,4 @@
-world.element = Q("world-")
-world.camera = Vector.multiply(world.position, -1)
-world.viewedTriIndex = world.triIndex
-world.viewedPosition = { ...world.position }
+GlowstickWorld.element = Q("world-")
+GlowstickWorld.camera = Vector.multiply(GlowstickWorld.position, -1)
+GlowstickWorld.viewedTriIndex = GlowstickWorld.triIndex
+GlowstickWorld.viewedPosition = { ...GlowstickWorld.position }

@@ -1,7 +1,7 @@
 # Demo - *Ecosystem*
 > **<sub>Part of the Kireji Project</sub>**<br><sup><i>omnia ex una linea</i></sup>
 
-The Demo Ecosystem serves as the unified host for all applications demonstrating the Kireji Project. It represents a multi-origin ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a portable save-state system.
+The Demo Ecosystem serves as the unified host for all apps demonstrating the Kireji Project. It represents a multi-origin ecosystem that uses the Kireji Web Framework so that all apps share a **single, unified state** encoded in a URL, enabling cross-origin task-switching and a portable save-state system.
 ## The Kireji Project
 The Kireji Project poses a question: **What if we could treat every web page as a point in a unified, mathematically mapped space?**
 
@@ -12,7 +12,7 @@ The Kireji Project poses a question: **What if we could treat every web page as 
 | **Demo**| **Ecosystem - ★ You are here<br><sup>An example ecosystem demonstrating the project</sup>**
 
 ## Demo Apps
-These applications are in *alpha* and still undergoing research and development.
+These apps are in *alpha* and still undergoing research and development.
 
 <h3><a href="https://ejaugust.com"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/com/ejaugust/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>EJ's Notebook</sup></a></h3>
 
@@ -20,7 +20,7 @@ These applications are in *alpha* and still undergoing research and development.
 
 <h3><a href="https://kireji.app"><img src="https://raw.githubusercontent.com/kireji-app/kireji/refs/heads/main/src/app/kireji/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Part Viewer</sup></a></h3>
 
-- Explore the Demo Ecosystem and its component parts using an IDE-style application.
+- Explore the Demo Ecosystem and its parts and components using an IDE-style app.
 
 <h3><a href="https://glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Glowstick</sup></a></h3>
 
@@ -28,7 +28,7 @@ These applications are in *alpha* and still undergoing research and development.
 
 <h3><a href="https://orbital.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/orbital/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Orbital</sup></a></h3>
 
-- A work-in-progress first-person game showcasing the framework's 3D game engine component.
+- A work-in-progress first-person game showcasing the framework's 3D game engine.
 
 <h3><a href="https://minos.glowstick.click"><img src="https://raw.githubusercontent.com/kireji-app/demo/refs/heads/main/src/click/glowstick/minos/part.png" style="width:1.25em"/>&nbsp;&nbsp;<sup>Minos</sup></a></h3>
 

@@ -1,1 +1,1 @@
-return sections.enabled ? section.title : "Notes"
+return EJAugustNotes.enabled ? EJAugustNotes.arm.title : "Notes"

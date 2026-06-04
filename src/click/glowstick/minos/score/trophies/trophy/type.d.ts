@@ -4,4 +4,4 @@ declare interface IMinosGameBooleanTrophy
 
 }
 
-declare const minosTrophy: IMinosGameBooleanTrophy
+declare const thisMinosTrophy: IMinosGameBooleanTrophy

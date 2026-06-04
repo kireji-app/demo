@@ -1,27 +1,27 @@
-pointer.handle({
+Pointer.handle({
  down() {
   // Down.
-  glowstick.thumbstickStart = Vector[3](POINTER_EVENT.clientX, 0, POINTER_EVENT.clientY)
-  glowstick.thumbstickElement = glowstick.container.appendChild(document.createElement("thumbstick-"))
-  glowstick.thumbstickElement.style.setProperty("--x", glowstick.thumbstickStart.x + "px")
-  glowstick.thumbstickElement.style.setProperty("--z", glowstick.thumbstickStart.z + "px")
-  glowstick.handleElement = glowstick.thumbstickElement.appendChild(document.createElement("handle-"))
-  glowstick.handleElement.style.setProperty("--x", "0px")
-  glowstick.handleElement.style.setProperty("--z", "0px")
+  GlowstickGame.thumbstickStart = Vector[3](POINTER_EVENT.clientX, 0, POINTER_EVENT.clientY)
+  GlowstickGame.thumbstickElement = GlowstickGame.container.appendChild(document.createElement("thumbstick-"))
+  GlowstickGame.thumbstickElement.style.setProperty("--x", GlowstickGame.thumbstickStart.x + "px")
+  GlowstickGame.thumbstickElement.style.setProperty("--z", GlowstickGame.thumbstickStart.z + "px")
+  GlowstickGame.handleElement = GlowstickGame.thumbstickElement.appendChild(document.createElement("handle-"))
+  GlowstickGame.handleElement.style.setProperty("--x", "0px")
+  GlowstickGame.handleElement.style.setProperty("--z", "0px")
  },
  drag(pointerEvent) {
   // Drag.
-  glowstick.thumbstickVector.x = pointerEvent.clientX - glowstick.thumbstickStart.x
-  glowstick.thumbstickVector.z = pointerEvent.clientY - glowstick.thumbstickStart.z
+  GlowstickGame.thumbstickVector.x = pointerEvent.clientX - GlowstickGame.thumbstickStart.x
+  GlowstickGame.thumbstickVector.z = pointerEvent.clientY - GlowstickGame.thumbstickStart.z
  },
  reset() {
   // Reset.
-  glowstick.thumbstickStart = null
-  glowstick.thumbstickElement.remove()
-  glowstick.thumbstickElement = null
-  glowstick.handleElement = null
-  glowstick.thumbstickVector.x = 0
-  glowstick.thumbstickVector.z = 0
+  GlowstickGame.thumbstickStart = null
+  GlowstickGame.thumbstickElement.remove()
+  GlowstickGame.thumbstickElement = null
+  GlowstickGame.handleElement = null
+  GlowstickGame.thumbstickVector.x = 0
+  GlowstickGame.thumbstickVector.z = 0
  },
  POINTER_EVENT,
  TARGET_ELEMENT,

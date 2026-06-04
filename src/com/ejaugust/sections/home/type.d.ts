@@ -1,5 +1,6 @@
 declare interface IEJAugustHome
  extends IMatch<IEJAugustSections, null>,
- IApplicationDetails { }
+ IAppDetails { }
 
-declare const home: IEJAugustHome
+declare const EJAugustHome: IEJAugustHome
+type EJAugustHome = T

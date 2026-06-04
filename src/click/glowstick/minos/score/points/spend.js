@@ -1,4 +1,4 @@
-if (minosPoints.routeID < COST)
- throw new RangeError(`Spend Error: You cannot spend more points than you have.`)
+if (MinosPoints.rid < COST)
+ throw error(`can't spend more points than you have`)
 
-minosPoints.setRouteID(minosPoints.routeID - BigInt(COST))
+MinosPoints.setRID(MinosPoints.rid - BigInt(COST))

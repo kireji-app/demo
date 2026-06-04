@@ -1,2 +1,2 @@
-Q("#options>scroller->scroll-content").innerHTML = minosShopModal["options.html"]
-minos.container.setAttribute("data-shop-target", minosShopTarget.routeID)
+Q("#options>scroller->scroll-content").innerHTML = MinosShopModal["options.html"]
+MinosGame.container.setAttribute("data-shop-target", MinosShopTarget.rid)

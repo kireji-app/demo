@@ -1,6 +1,6 @@
 declare interface IMinosGameScore
  extends IPart<IMinosGame, null>,
- IWebComponent {
+ IWebView {
 
  // Subparts.
  readonly points: IMinosGameScorePoints
@@ -10,4 +10,5 @@ declare interface IMinosGameScore
  readonly usedBomb: IBoolean<IMinosGameScore>
 }
 
-declare const minosScore: IMinosGameScore
+declare const MinosScore: IMinosGameScore
+type MinosScore = T

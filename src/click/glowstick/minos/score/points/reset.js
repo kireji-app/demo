@@ -1,2 +1,2 @@
-if (minosPoints.routeID !== 0n)
- minosPoints.setRouteID(0n)
+if (MinosPoints.rid !== 0n)
+ MinosPoints.setRID(0n)

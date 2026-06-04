@@ -1,11 +1,11 @@
 declare interface IMinosGameShapeTrophy
  extends IMinosGameBooleanTrophy {
 
- // Serialized Properties.
+ // Components.
  /** Examines the current board and returns true of the shape on the board matches the goal shape. */
  readonly examine(): boolean
 
- // Runtime Properties.
+ // Properties.
  /** A Bigint representing the exact number of active tiles that make up the shape. */
  readonly size: bigint
  /** The bigint mask of the shape, if it were positioned at {0,0}, encoded with the same width as the board itself. */
@@ -16,4 +16,4 @@ declare interface IMinosGameShapeTrophy
  readonly height: bigint
 }
 
-declare const minosShapeTrophy: IMinosGameShapeTrophy
+declare const thisMinosShapeTrophy: IMinosGameShapeTrophy

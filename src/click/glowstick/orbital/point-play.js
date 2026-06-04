@@ -1,6 +1,6 @@
-pointer.handle({
+Pointer.handle({
  click() {
-  orbitalGame.playAsync()
+  OrbitalGame.playAsync()
  },
  POINTER_EVENT,
  TARGET_ELEMENT

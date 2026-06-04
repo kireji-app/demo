@@ -1,5 +1,5 @@
 return [
- _.click.glowstick,
- _.click.glowstick.world,
+ GlowstickGame,
+ GlowstickWorld,
  _.parts.abstract.walkable
 ]

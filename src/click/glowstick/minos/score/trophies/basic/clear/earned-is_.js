@@ -1,1 +1,1 @@
-return !!minosScore.wins.routeID
+return !!MinosScore.wins.rid

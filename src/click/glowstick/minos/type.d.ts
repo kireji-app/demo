@@ -1,14 +1,14 @@
 declare interface IMinosGame
- extends IApplication<IGlowstick, IPartAny> {
+ extends IApp<IGlowstickGame, IPartAny> {
 
  // Subparts.
  readonly board: IMinosGameBoard
  readonly bomb: IMinosGameBomb
  readonly modal: IMinosGameModal
- readonly pieces: IMinosGamePieces
+ readonly minoes: IMinosGameMinoes
  readonly score: IMinosGameScore
 
- // Serialized Properties.
+ // Components.
  /** Checks to see if the game's current state has met any of the scoring, winning or losing conditions. */
  readonly checkState(): void
  /** Prevents user interaction with the game until `unlock()` is called. */
@@ -16,25 +16,26 @@ declare interface IMinosGame
  /** If lock was called, enables user interaction again. */
  readonly unlock(): void
 
- // Runtime Properties.
- /** Whether or not the minos game is allowing interaction. */
+ // Properties.
+ /** Whether or not the Minos game is allowing interaction. */
  readonly locked: boolean
 
- /** Once installed, the collection of archived primitive mino instances representing potential game pieces. */
+ /** Once installed, the collection of archived mino primitives representing user-placeable game minoes. */
  readonly primitives?: IMinosGamePrimitives
 }
 
-declare const minos: IMinosGame
+declare const MinosGame: IMinosGame
+type MinosGame = T
 
 declare interface IMinosGamePrimitive {
 
- // Serialized Properties.
- /** The width of the bounding box of the piece. */
+ // Components.
+ /** The width of the bounding box of the mino. */
  readonly width: number
- /** The height of the bounding box of the piece. */
+ /** The height of the bounding box of the mino. */
  readonly height: number
- /** The set of minos that compose the piece, with coordinates relative to the origin at the top left corner of the piece's bounding box. */
- readonly minos: IVector2[]
+ /** The set of tiles that compose the mino, with coordinates relative to the origin at the top left corner of the mino's bounding box. */
+ readonly tiles: IVector2[]
  /** The cost of the primitive when trading. */
  readonly price: number
 }
@@ -59,7 +60,7 @@ declare interface IMinosGamePrimitives {
  /** The mino primitive representing the bomb which clears the row and column it is placed in. */
  readonly crosshairBomb: IMinosGamePrimitive
 
- /** The mino primitive representing the bomb which clears all minos within a certain radius around itself. */
+ /** The mino primitive representing the bomb which clears all tiles within a certain radius around itself. */
  readonly radialBomb: IMinosGamePrimitive
 
  /** The cardinality offset for each subtype of primitive. */

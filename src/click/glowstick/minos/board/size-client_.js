@@ -1,2 +1,2 @@
-const { left, top, width } = minosBoard.element.getBoundingClientRect()
-return { left, top, tileSize: width / minosBoard.width }
+const { left, top, width } = MinosBoard.element.getBoundingClientRect()
+return { left, top, tileSize: width / MinosBoard.width }

@@ -1,1 +1,1 @@
-return minosPointsTrophy.key / 10
+return thisMinosPointsTrophy.key / 10

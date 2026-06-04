@@ -1,1 +1,1 @@
-return `piece${part.routeID}`
+return `mino${MinosShopTarget.rid}`

@@ -1,4 +1,4 @@
-glowstick.define({
+define(GlowstickGame, {
  handleElement: { value: null, writable: true },
  thumbstickStart: { value: null, writable: true },
  thumbstickVector: { value: Vector[3]() },

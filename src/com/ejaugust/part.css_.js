@@ -1,1 +1,612 @@
-return _.com.ejaugust.scroller["part.css"] + ejaugust["static.css"] + "\n" + sections["part.css"]
+return /* css */`
+
+#ejaugust_com #notebook-section>p.math {
+ display: flex;
+ flex-flow: row nowrap;
+ overflow-x: auto;
+ padding: calc(1.5 * var(--spacing)) !important;
+ white-space: nowrap;
+ align-items: center;
+ justify-content: space-around;
+}
+
+mo.product:has(+ .parenthetic),
+mo.product:has(+ msub),
+mo.product:has(+ mrow),
+mo.product:has(+ munder),
+mo.product:has(+ [largeop]) {
+ display: none;
+}
+
+#ejaugust_com #notebook-section math:not(.labelled) mrow.parenthetic {
+ padding: calc(0.5 * var(--spacing)) 0;
+}
+
+body.modern #ejaugust_com {
+ --spacing: 12px;
+ --max-width: 696px;
+ --radius: calc(var(--spacing) / 2);
+ --surface: var(--bg-light-est);
+ --edge-color: #ffffff1f;
+ --graphic-opacity: 50%;
+ background-color: var(--bg-dark);
+ font-size: calc(1.3 * var(--spacing));
+ line-height: calc(2 * var(--spacing));
+}
+
+body.modern #ejaugust_com #notebook-section :not(pre) {
+ margin: 0;
+}
+
+body.modern #ejaugust_com .details {
+ font-weight: 400;
+ text-transform: uppercase;
+ font-size: 0.75em;
+ color: var(--fg-mode-er);
+ display: flex;
+}
+
+body.modern #ejaugust_com ::after,
+body.modern #ejaugust_com ::before {
+ pointer-events: none;
+}
+
+body.modern.dark #ejaugust_com>scroller->scroll-content {
+ --surface: var(--bg);
+ --edge-color: #ffffff04;
+ --graphic-opacity: 30%;
+}
+
+body.modern #ejaugust_com header {
+ position: relative;
+ margin-left: -2px;
+ margin-right: -0.5px;
+ z-index: 1;
+ --padding: 0;
+ --title-size: calc((4 - var(--padding)) * var(--spacing));
+ padding: calc((var(--padding) + 1) * var(--spacing) / 2) var(--spacing);
+}
+
+body.modern #ejaugust_com header :is(a, a:visited) {
+ text-decoration: none;
+}
+
+body.modern #ejaugust_com :is(header, header::before) {
+ border-radius: calc(var(--radius) * 0.5) calc(var(--radius) * 0.2) 0 var(--radius);
+}
+
+body.modern #ejaugust_com header::before {
+ background: var(--ejaugust-com--spine-png), var(--accent-mode-est);
+ background-size: 100% 100%;
+ box-shadow: 1px 2px 7px -1px #0003, 0px 0.5px 2px -1px #0001, inset -6px -7px 3px -6px #0001, inset 5px 8px 3px -4px #fff2;
+}
+
+body.modern.dark #ejaugust_com header::before {
+ filter: hue-rotate(18deg) saturate(1.3) brightness(0.5) contrast(1.5);
+}
+
+body.modern #ejaugust_com>scroller- {
+ --outer-pad: calc((100vw - var(--rounded-width)) / 2);
+ --rounded-width: calc(min(calc(round(down, 100vw, var(--spacing)) - (2 * var(--spacing))), var(--max-width)) - 4px);
+ padding: var(--padding) var(--outer-pad);
+}
+
+body.modern #ejaugust_com>scroller->scroll-content {
+ box-shadow: 10px 8px 12px -6px #0004, 0 0 13px -3px #0002, inset 0 0 var(--spacing) var(--spacing) var(--edge-color);
+ border-radius: var(--radius);
+ background-color: var(--surface);
+ z-index: 1;
+}
+
+body.modern #ejaugust_com li~li {
+ padding-top: var(--spacing);
+}
+
+body.modern #ejaugust_com #notebook-section {
+ padding: calc((2 * var(--spacing)) - 2px);
+ display: flex;
+ flex-flow: column;
+ position: relative;
+ padding-bottom: calc(6 * var(--spacing) - 2px);
+ overflow: hidden;
+ z-index: 0;
+}
+
+body.modern #ejaugust_com header::before,
+body.modern #ejaugust_com #notebook-section::before,
+body.modern #ejaugust_com #notebook-section::after,
+body.modern #ejaugust_com #notebook-section :is(pre, code)::before,
+body.modern #ejaugust_com #notebook-section :is(pre, code)::after {
+ content: "";
+ position: absolute;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ top: 0;
+ z-index: -1;
+}
+
+body.modern #ejaugust_com #note-links>a::before,
+body.modern #ejaugust_com #notebook-section::before,
+body.modern #ejaugust_com #notebook-section :is(pre, code)::after {
+ pointer-events: none;
+ background: var(--ejaugust-com--grid-png);
+ background-size: var(--spacing);
+ background-position: left -2px top -2px;
+ opacity: var(--graphic-opacity);
+ z-index: -2;
+}
+
+body.modern #ejaugust_com #notebook-section :is(pre, code) {
+ font-size: 12px;
+}
+
+body.modern #ejaugust_com #notebook-section::after {
+ background-image: var(--ejaugust-com--chart_b-png);
+ --scaled-pixel: calc(var(--spacing) / (615 / 31));
+ background-size: calc(var(--scaled-pixel) * 640) calc(var(--scaled-pixel) * 120);
+ background-position: bottom calc(var(--scaled-pixel) * 4) right calc(var(--scaled-pixel) * 5);
+ background-repeat: no-repeat;
+ z-index: -1;
+}
+
+body.modern.dark #ejaugust_com #notebook-section::after {
+ filter: hue-rotate(-130deg) saturate(2);
+}
+
+body.modern.dark #ejaugust_com #notebook-section::before,
+body.modern.dark #ejaugust_com #note-links>a::before {
+ filter: invert();
+}
+
+body.modern #ejaugust_com #notebook-section,
+body.modern #ejaugust_com #notebook-section * {
+ -webkit-user-select: text;
+ -ms-user-select: text;
+ user-select: text;
+}
+
+body.modern #ejaugust_com #notebook-section>* {
+ padding: calc(var(--spacing) / 2);
+}
+
+body.modern #ejaugust_com :is(p, h1, h2, h3, h4, h5, h6) {
+ color: var(--fg-mode);
+}
+
+body.modern #ejaugust_com #notebook-section :is(b, i, em, figcaption) {
+ color: var(--fg-un-mode);
+}
+
+body.modern #ejaugust_com figcaption {
+ font-style: italic;
+ font-weight: 200;
+ text-align: center;
+}
+
+body.modern #ejaugust_com b {
+ font-weight: 500;
+}
+
+body.modern #ejaugust_com :is(h1, h2, h3, h4, h5, h6) {
+ font-weight: 600;
+ color: var(--fg-un-mode-er);
+}
+
+body.modern #ejaugust_com :is(h1, h2) {
+ font-weight: 300;
+ font-family: 'Linux Libertine', 'Georgia', 'Times', 'Source Serif Pro', serif;
+}
+
+body.modern #ejaugust_com h1:not(#notebook-title>h1) {
+ font-size: calc(3 * var(--spacing));
+ line-height: calc(3 * var(--spacing));
+ font-weight: 400;
+ color: var(--fg-un-mode-est);
+}
+
+body.modern #ejaugust_com #notebook-title {
+ border: none;
+}
+
+body.modern #ejaugust_com #notebook-title>h1 {
+ line-height: var(--title-size);
+ font-weight: 800;
+ margin: 0;
+}
+
+body.modern #ejaugust_com #notebook-title>h1>img {
+ height: var(--title-size);
+ vertical-align: top;
+}
+
+body.modern.dark #ejaugust_com #notebook-title:not(:hover)>h1>img {
+ filter: invert(1);
+}
+
+body.modern #ejaugust_com #notebook-title:hover>h1>img {
+ filter: invert(1) sepia(1) brightness(0.4) saturate(10) hue-rotate(140deg) blur(0.3px);
+}
+
+body.modern #ejaugust_com details {
+ padding: var(--spacing);
+ border-radius: var(--radius);
+}
+
+body.modern #ejaugust_com summary {
+ display: block;
+ cursor: pointer;
+}
+
+body.modern #ejaugust_com footer {
+ background-color: var(--fg);
+ border-radius: 0 0 var(--radius) var(--radius);
+ margin: 0;
+ padding: var(--spacing);
+ display: flex;
+ justify-content: space-between;
+}
+
+body.modern #ejaugust_com footer>img {
+ display: none;
+}
+
+body.modern #ejaugust_com footer a.external::after {
+ content: unset;
+ display: none;
+}
+
+body.modern #ejaugust_com #social {
+ display: flex;
+}
+
+body.modern #ejaugust_com #k-logo>pre {
+ margin: 0;
+}
+
+body.modern #ejaugust_com #k-logo {
+ display: flex;
+ font-family: var(--system-ui-mono);
+ font-size: var(--spacing);
+ line-height: var(--spacing);
+}
+
+body.modern #ejaugust_com #k-logo #k {
+ color: var(--fg);
+ position: relative;
+}
+
+body.modern #ejaugust_com #k-logo #k:before {
+ color: var(--bg);
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ content: "𝑘";
+ text-align: center;
+ line-height: inherit;
+}
+
+body.modern #ejaugust_com #k-logo:hover #k:before {
+ color: var(--accent-un);
+}
+
+@media (width < 256px) {
+ body.modern #ejaugust_com #k-logo {
+  display: none;
+ }
+}
+
+body.modern #ejaugust_com #social>a {
+ margin: calc(var(--spacing) / 2);
+ display: block;
+ font-size: calc(3 * var(--spacing));
+ line-height: calc(3 * var(--spacing));
+}
+
+body.modern #ejaugust_com #social>:is(a, a>svg) {
+ width: calc(3 * var(--spacing));
+ height: calc(3 * var(--spacing));
+}
+
+body.modern #ejaugust_com :is(#k-logo, #social>:is(a, a>svg), #quick-links>a) {
+ fill: var(--bg);
+ color: var(--bg);
+ text-decoration: none;
+ border: none;
+}
+
+body.modern #ejaugust_com :is(#k-logo, #social>:is(a, a>svg), #quick-links>a):hover {
+ fill: var(--accent-un);
+ color: var(--accent-un);
+}
+
+body.modern.dark #ejaugust_com footer {
+ background-color: var(--fg-mode);
+}
+
+body.modern #ejaugust_com #quick-links {
+ display: flex;
+ flex-flow: column;
+ justify-content: space-around;
+}
+
+body.modern #ejaugust_com .unicode-icon {
+ display: inline-block;
+ width: calc(1.3 * var(--spacing));
+ text-align: center;
+ font-weight: 900;
+}
+
+@media (width < 500px) {
+ body.modern #ejaugust_com #social>:is(a, a>svg) {
+  width: calc(2 * var(--spacing));
+  height: calc(2 * var(--spacing));
+ }
+
+ body.modern #ejaugust_com #social>a {
+  margin: calc(var(--spacing) / 2);
+  display: block;
+  font-size: calc(2 * var(--spacing));
+  line-height: calc(2 * var(--spacing));
+ }
+
+ body.modern #ejaugust_com #k-logo {
+  font-size: calc(var(--spacing) / 1.5);
+  line-height: calc(var(--spacing) / 1.5);
+ }
+
+ body.modern #ejaugust_com #quick-links {
+  font-size: 75%;
+  line-height: calc(1.5 * var(--spacing));
+ }
+
+ body.modern #ejaugust_com>scroller- {
+  padding: 0;
+ }
+
+ body.modern #ejaugust_com #notebook-section {
+  padding: calc(var(--spacing) - 2px) var(--outer-pad);
+ }
+
+ body.modern #ejaugust_com #notebook-section::before {
+  left: calc(var(--outer-pad) - var(--spacing));
+  right: calc(var(--outer-pad) - var(--spacing));
+ }
+
+ body.modern #ejaugust_com>scroller->scroll-content>footer {
+  border-radius: 0;
+ }
+}
+
+@media (width < 390px) {
+ body.modern #ejaugust_com #social>:is(a, a>svg) {
+  width: calc(1.5 * var(--spacing));
+  height: calc(1.5 * var(--spacing));
+ }
+
+ body.modern #ejaugust_com #social>a {
+  font-size: calc(1.5 * var(--spacing));
+  line-height: calc(1.5 * var(--spacing));
+ }
+
+ body.modern #ejaugust_com #k-logo {
+  display: none;
+ }
+}
+
+@media (width < 325px) {
+ body.modern #ejaugust_com header {
+  --padding: 1;
+ }
+}
+
+@media (width < 275px) {
+ body.modern #ejaugust_com #quick-links {
+  display: none;
+ }
+
+ body.modern #ejaugust_com header {
+  --padding: 2;
+ }
+}
+
+body.vintage #ejaugust_com a {
+ color: blue;
+}
+
+body.vintage.dark #ejaugust_com a {
+ color: cyan;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content {
+ display: grid;
+ grid-template: "nav banner" 128px
+  "nav article" minmax(calc(var(--app-height) - 128px), auto) / 140px minmax(auto, min(650px, calc(100% - 140px - 64px)));
+ margin: 12px;
+ font-size: 12px;
+}
+
+body.vintage #ejaugust_com #notebook-section {
+ display: flex;
+ flex-direction: column;
+ grid-area: article;
+ margin-left: 48px;
+}
+
+body.vintage.light #ejaugust_com #notebook-section {
+ color: black;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>header {
+ grid-area: banner;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>header>a {
+ text-decoration: none;
+ padding-left: 48px;
+ display: block;
+ color: inherit;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>header h1>img {
+ display: none;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>header h1::before {
+ content: "EJ's Notebook";
+ display: block;
+ font-weight: 900;
+ font-style: italic;
+ font-size: 32px;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>header h1::after {
+ content: "A perfectly hashed blog";
+ display: block;
+ font-size: 16px;
+ margin-left: 48px;
+ color: yellowgreen;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>header h1>img {
+ display: none;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer {
+ grid-area: nav;
+ height: 100%;
+ text-align: center;
+ display: flex;
+ flex-flow: column;
+ gap: 6px;
+ position: relative;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer::before {
+ content: "";
+ height: 120px;
+ background: var(--ejaugust-com--ramp-png);
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer::after {
+ content: "";
+ position: relative;
+ right: 0;
+ height: 620px;
+ flex: 1;
+ background: var(--ejaugust-com--chart_c-png);
+ background-repeat: no-repeat;
+ background-position: 20px 0;
+ margin-bottom: 36px;
+ pointer-events: none;
+}
+
+body.vintage.light #ejaugust_com footer {
+ background-color: #cfdfff;
+}
+
+body.vintage.dark #ejaugust_com footer {
+ background-color: darkslategray;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer :is(svg, pre) {
+ display: none;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer a::before {
+ content: attr(title);
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer a::after {
+ content: unset;
+}
+
+body.vintage #ejaugust_com>scroller->scroll-content>footer section {
+ display: flex;
+ flex-flow: column nowrap;
+ gap: 6px;
+}
+
+body.vintage #ejaugust_com {
+ --spacing: 10px;
+ --max-width: 640px;
+ font-family: Verdana, Geneva, Tahoma, sans-serif;
+ font-smooth: never;
+ -webkit-font-smoothing: none;
+}
+
+body.vintage #ejaugust_com :is(h1, h2, h3, h4, h5, h6, #note-title) {
+ font-weight: 600;
+ font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body.vintage #ejaugust_com>scroller- {
+ --outer-pad: calc((100vw - var(--scrollbar-width) - var(--rounded-width)) / 2);
+ --rounded-width: calc(min(calc(round(down, 100vw - var(--scrollbar-width), var(--spacing)) - (2 * var(--spacing))), var(--max-width)) - 4px);
+}
+
+body.vintage #ejaugust_com #notebook-section::after {
+ background-position: bottom calc(var(--scaled-pixel) * 3) right calc(var(--scaled-pixel) * 3);
+}
+
+body.vintage #ejaugust_com {
+ background-color: white;
+}
+
+body.vintage.dark #ejaugust_com {
+ background-color: black;
+}
+
+body.vintage #ejaugust_com #footer-top {
+ position: absolute;
+ bottom: 12px;
+ width: 100%;
+}
+
+body.vintage #ejaugust_com #footer-home {
+ padding-top: 6px;
+}
+
+@media (width < 500px) {
+
+ body.vintage #ejaugust_com>scroller->scroll-content {
+  grid-template:
+   "banner" 128px
+   "article" minmax(calc(var(--app-height) - 160px), auto)
+   /* */
+   "nav" min-content
+   / 1fr;
+  margin: 8px;
+  font-size: inherit;
+ }
+
+ body.vintage #ejaugust_com #notebook-section {
+  margin-left: 12px;
+ }
+
+ body.vintage #ejaugust_com>scroller->scroll-content>footer {
+  flex-flow: row wrap;
+  justify-content: center;
+ }
+
+ body.vintage #ejaugust_com>scroller->scroll-content>footer>section {
+  display: contents;
+ }
+
+ body.vintage #ejaugust_com>scroller->scroll-content>footer::before,
+ body.vintage #ejaugust_com>scroller->scroll-content>footer::after {
+  content: unset;
+ }
+
+ body.vintage #ejaugust_com #footer-top {
+  position: static;
+ }
+
+ body.vintage #ejaugust_com #footer-home {
+  padding-top: unset;
+ }
+}
+
+` + EJAugustSections["part.css"]

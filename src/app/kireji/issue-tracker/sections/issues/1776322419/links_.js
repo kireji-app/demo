@@ -1,5 +1,5 @@
 return [
- kirejiIssues[1776321594],
- kirejiIssues[1776322576],
- kirejiIssues[1776322825],
+ KirejiIssues[1776321594],
+ KirejiIssues[1776322576],
+ KirejiIssues[1776322825],
 ]

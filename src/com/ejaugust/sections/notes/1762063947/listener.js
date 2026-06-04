@@ -1,3 +1,3 @@
-Q("#current-state-ecosystem").textContent = SENDER.routeID
-Q("#current-hash-ecosystem").textContent = encodeSegment(SENDER.routeID)
-Q("#current-encoded-pathname").textContent = encodePathname(SENDER.routeID)
+Q("#current-state-ecosystem").textContent = SENDER.rid
+Q("#current-hash-ecosystem").textContent = RID.toHash(SENDER.rid)
+Q("#current-encoded-pathname").textContent = RID.toPath(SENDER.rid)

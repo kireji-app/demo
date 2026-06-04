@@ -1,1 +1,1 @@
-ejaugust.detach("update", note, "listener")
+EJAugust.detach("update", thisNote, "listener")

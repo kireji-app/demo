@@ -1,1 +1,0 @@
-return minosPieces.map(piece => piece["part.html"]).join("")

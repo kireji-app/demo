@@ -1,6 +1,6 @@
 {
  "extends": "note..",
- "methods": {
+ "actions": {
   "point": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"

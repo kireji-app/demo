@@ -1,8 +1,8 @@
-if (minosTrophy.model)
+if (thisMinosTrophy.model)
  return true
 
-if ((environment === "client" && client.hydrated) && minos.board.activeTiles.size === 1) {
- minosTrophy.setRouteID(1n)
+if ((environment === "client" && Client.hydrated) && MinosGame.board.activeTiles.size === 1) {
+ thisMinosTrophy.setRID(1n)
  return true
 }
 

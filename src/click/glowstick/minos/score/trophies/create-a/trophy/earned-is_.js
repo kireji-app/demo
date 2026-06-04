@@ -1,8 +1,8 @@
-if (minosShapeTrophy.model)
+if (thisMinosShapeTrophy.model)
  return true
 
-if ((environment === "client" && client.hydrated) && BigInt(minos.board.activeTiles.size) === minosShapeTrophy.size && minosShapeTrophy.examine()) {
- minosShapeTrophy.setRouteID(1n)
+if ((environment === "client" && Client.hydrated) && BigInt(MinosGame.board.activeTiles.size) === thisMinosShapeTrophy.size && thisMinosShapeTrophy.examine()) {
+ thisMinosShapeTrophy.setRID(1n)
  return true
 }
 

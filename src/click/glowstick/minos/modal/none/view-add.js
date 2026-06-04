@@ -1,2 +1,2 @@
-minos.container.removeAttribute("data-modal")
+MinosGame.container.removeAttribute("data-modal")
 Q("#modal").innerHTML = ""

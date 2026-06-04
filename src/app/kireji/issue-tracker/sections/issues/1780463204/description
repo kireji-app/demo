@@ -1,0 +1,1 @@
+The game is currently unplayable on mobile, even when it renders successfully over WebGPU. Add mobile touch-screen controls. This includes giving the ability to pause the game once it starts playing, which is currently handled by closing the pointer lock on desktop.

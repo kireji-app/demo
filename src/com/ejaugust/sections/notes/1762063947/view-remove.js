@@ -1,1 +1,1 @@
-_.detach("update", note, "listener")
+_.detach("update", thisNote, "listener")

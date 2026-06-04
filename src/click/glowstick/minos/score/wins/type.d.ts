@@ -1,9 +1,10 @@
 declare interface IMinosGameScoreWins
  extends IPart<IMinosGameScore, null>,
- IWebComponent {
+ IWebView {
 
- // Serialized Properties.
+ // Components.
  readonly increment(): void
 }
 
-declare const minosWins: IMinosGameScoreWins
+declare const MinosWins: IMinosGameScoreWins
+type MinosWins = T

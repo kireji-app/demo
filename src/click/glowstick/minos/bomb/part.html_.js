@@ -1,1 +1,1 @@
-return minosBomb.arm["part.html"]
+return MinosBombLayer.arm["part.html"]

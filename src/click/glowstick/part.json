@@ -1,6 +1,7 @@
 {
- "extends": "application",
- "methods": {
+ "name": "GlowstickGame",
+ "extends": "app",
+ "actions": {
   "point": [
    "POINTER_EVENT",
    "TARGET_ELEMENT"

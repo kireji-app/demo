@@ -1,1 +1,1 @@
-return `<h2><span class=label>Shop</span><flex-spacer></flex-spacer><button ${minosModal.pointAttr("close")}>✕</button></h2><div id=options>${minosShopModal.scroller.wrap(minosShopModal["options.html"])}</div>`
+return `<h2><span class=label>Shop</span><flex-spacer></flex-spacer><button ${MinosModal.pointAttr("close")}>✕</button></h2><div id=options>${MinosShopModal.scroller.wrap(MinosShopModal["options.html"])}</div>`

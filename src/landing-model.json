@@ -55,10 +55,10 @@
  "click": {
   "glowstick": {
    "minos": {
-    "pieces": {
-     "piece0": 11,
-     "piece1": 3,
-     "piece2": 7
+    "minoes": {
+     "mino0": 11,
+     "mino1": 3,
+     "mino2": 7
     },
     "board": {
      "width": 12,

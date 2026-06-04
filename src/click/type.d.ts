@@ -1,9 +1,9 @@
 declare interface IClick
- extends ITopLevelDomain<IClickApplication> {
+ extends ITopLevelDomain<IClickApp> {
 
  // Subparts.
- readonly glowstick: IGlowstick
+ readonly glowstick: IGlowstickGame
 }
 
-declare type IClickApplication =
- IApplication<IClick, IPart<IClickApplication, IPartAny>>
+declare type IClickApp =
+ IApp<IClick, IPart<IClickApp, IPartAny>>

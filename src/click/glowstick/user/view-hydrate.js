@@ -1,2 +1,2 @@
-user.element = Q("user-")
-user.walkPhase = 0
+GlowstickUser.element = Q("user-")
+GlowstickUser.walkPhase = 0

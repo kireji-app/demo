@@ -1,15 +1,17 @@
 declare interface IOrbitalLevel
  extends IWalkable<IOrbitalLevels> {
 
- // Serialized Properties.
+ // Components.
  readonly getData(): IOrbitalLevelData
+ readonly "level.gltf": string
+ readonly "level.bin": string
 
- // Runtime Properties.
+ // Properties.
  readonly gltf: GLTFDocument
- /** A cache of the pre-processed geometry data obtained by running the getData method. */
+ /** A cache of the pre-processed geometry data obtained by running the getData action. */
  readonly data: IOrbitalLevelData
- // Runtime Properties.
- /** The html element that represents the glowstick world (client only). */
+ // Properties.
+ /** The html element that represents the Orbital debug map overlay (client only). */
  readonly element: HTMLElement
  /** represents the runtime position of the camera, which gently lags behind player movement to prevent popping due to pixel-perfect player motion. */
  readonly camera: IVector3
@@ -17,7 +19,7 @@ declare interface IOrbitalLevel
  readonly viewedPosition: IVector3
 }
 
-declare const orbitalLevel: IOrbitalLevel
+declare const thisOrbitalLevel: IOrbitalLevel
 
 declare interface IOrbitalLevelData
  extends IWalkableData {

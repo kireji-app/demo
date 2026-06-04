@@ -1,21 +1,22 @@
 declare interface IMinosGameModal
  extends IMatch<IMinosGame, IMinosGameModalPage>,
- IWebComponent {
+ IWebView {
 
  // Subparts.
  readonly trophies: IMinosGameModalTrophies
  readonly none: IMinosGameModalPage
  readonly shop: IMinosGameModalShop
 
- // Serialized Properties.
+ // Components.
  /** Closes any open modal. */
  readonly close(): void
 }
 
-declare const minosModal: IMinosGameModal
+declare const MinosModal: IMinosGameModal
+type MinosModal = T
 
 declare interface IMinosGameModalPage
  extends IPart<IMinosGameModal, null>,
- IWebComponent {
+ IWebView {
 
 }
