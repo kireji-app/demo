@@ -7,14 +7,14 @@ const { controlVector, isSprinting } = (() => {
   const normalized = Vector.normalize(GlowstickGame.thumbstickVector)
   const magnitude = Vector.magnitude(GlowstickGame.thumbstickVector)
   const maxRadius = Math.max(Math.min(Math.min(globalThis.innerWidth, globalThis.innerHeight) * 0.10, 128), 48)
-  const clamped = Vector[3](normalized.x * Math.min(magnitude, maxRadius), 0, normalized.z * Math.min(magnitude, maxRadius))
+  const clamped = Vector.multiply(normalized, Math.min(magnitude, maxRadius))
 
   // Position the visual thumbstick.
   GlowstickGame.handleElement.style.setProperty("--x", clamped.x + "px")
   GlowstickGame.handleElement.style.setProperty("--z", clamped.z + "px")
 
   return {
-   controlVector: Vector[3](
+   controlVector: Vector.xyz(
     normalized.x * Math.min(magnitude / maxRadius, 1),
     0,
     normalized.z * Math.min(magnitude / maxRadius, 1)
@@ -24,7 +24,7 @@ const { controlVector, isSprinting } = (() => {
  }
 
  // The keyboard might be controlling the player character.
- const WASDVector = Vector[3]()
+ const WASDVector = Vector.xyz()
  if (HotKeys.pressed.has("KeyA")) WASDVector.x -= 1
  if (HotKeys.pressed.has("KeyD")) WASDVector.x += 1
  if (HotKeys.pressed.has("KeyW")) WASDVector.z -= 1
@@ -39,7 +39,7 @@ const { controlVector, isSprinting } = (() => {
 // Speed going up and down should be slower than speed going left and right to account for camera angle.
 const adjustedSpeed = Vector.magnitude(Vector.multiply(
  Vector.multiply(controlVector, GlowstickUser.pixelsPerSecond),
- Vector[3](1, 1, 1 / 2)
+ Vector.xyz(1, 1, 1 / 2)
 ))
 
 if (adjustedSpeed === 0) {
@@ -63,7 +63,7 @@ if (hit) {
 } else {
 
  // Counter-act screen-space vertical scale.
- const distance = Vector.magnitude(Vector.multiply(Vector.subtract(GlowstickWorld.position, point), Vector[3](1, 1, 2)))
+ const distance = Vector.magnitude(Vector.multiply(Vector.subtract(GlowstickWorld.position, point), Vector.xyz(1, 1, 2)))
 
  // Use the walking animations.
  GlowstickUser.element.classList.add("walking")

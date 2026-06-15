@@ -1,7 +1,7 @@
 /** @type {IMinosGameMinoPointerConfig} */
 const pointerConfig = MinosGame.modal.shop.enabled ? {
  click() {
-  const newTargetID = BigInt(thisMinosMino.key.slice(5))
+  const newTargetID = BigInt(thisMinosMino.key.slice(4))
   if (newTargetID !== MinosGame.modal.shop.target.rid)
    MinosGame.modal.shop.target.setRID(newTargetID)
  },
@@ -33,7 +33,7 @@ const pointerConfig = MinosGame.modal.shop.enabled ? {
    isAllowed = isOnBoard && thisMinosMino.allowedTiles.has(MinosGame.board.allTiles[y * MinosGame.board.width + x])
 
   if (isAllowed) {
-   this.dropPosition = Vector[2](x, y)
+   this.dropPosition = Vector.xy(x, y)
    MinosGame.board.element.classList.add("allowed")
    this.shop = false
   } else {

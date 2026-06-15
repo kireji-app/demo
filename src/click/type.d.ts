@@ -1,5 +1,5 @@
 declare interface IClick
- extends ITopLevelDomain<IClickApp> {
+ extends IMix<IClickApp, IGlowstickGame> {
 
  // Subparts.
  readonly glowstick: IGlowstickGame

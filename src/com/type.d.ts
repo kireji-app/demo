@@ -1,5 +1,5 @@
 declare interface ICom
- extends ITopLevelDomain<IComApp> {
+ extends IMix<IComApp, IEJAugust> {
 
  // Subparts.
  readonly ejaugust: IEJAugust

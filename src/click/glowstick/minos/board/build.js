@@ -3,7 +3,7 @@ const tileCount = boardWidth * boardWidth
 const tiles = []
 
 for (let tileIndex = 0; tileIndex < tileCount; tileIndex++)
- tiles.push(Vector[2](tileIndex % boardWidth, Math.floor(tileIndex / boardWidth)))
+ tiles.push(Vector.xy(tileIndex % boardWidth, Math.floor(tileIndex / boardWidth)))
 
 define(MinosBoard, {
  element: { value: null, writable: true },

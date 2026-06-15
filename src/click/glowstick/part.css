@@ -144,7 +144,7 @@ body.vintage #glowstick_click world- {
 #glowstick_click .char {
  --cx: 0;
  --cz: 0;
- background-image: var(--glowstick-click--font-png);
+ background-image: var(--abstract-parts--font-png);
  background-size: calc(var(--design-scale) * 128px);
  width: var(--d8px);
  height: var(--d16px);

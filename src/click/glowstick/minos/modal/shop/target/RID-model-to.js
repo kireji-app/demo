@@ -6,4 +6,4 @@ const minoArray = [...MinosGame.minoes]
 if (!minoArray.some(mino => mino.key === MODEL))
  throw error(`can't find game mino called "${MODEL}"`)
 
-return BigInt(MODEL.slice(5))
+return BigInt(MODEL.slice(4))

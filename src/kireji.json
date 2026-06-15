@@ -1,7 +1,7 @@
 {
  "verbosity": "3",
  "change": "major",
- "defaultHost": "desktop.parts",
+ "defaultHost": "about.desktop.parts",
  "resetLocalState": "disabled",
  "includeWarning": "disabled",
  "includeDesktop": "demo",

@@ -1,35 +1,4 @@
 {
  "name": "OrbitalGame",
- "extends": "app",
- "actions": {
-  "reactToMouseMovement": [
-   "MOUSE_MOVEMENT_X",
-   "MOUSE_MOVEMENT_Y"
-  ],
-  "point-play": [
-   "POINTER_EVENT",
-   "TARGET_ELEMENT"
-  ],
-  "point-restart": [
-   "POINTER_EVENT",
-   "TARGET_ELEMENT"
-  ],
-  "point-settings": [
-   "POINTER_EVENT",
-   "TARGET_ELEMENT"
-  ],
-  "point-credits": [
-   "POINTER_EVENT",
-   "TARGET_ELEMENT"
-  ],
-  "point-action": [
-   "POINTER_EVENT",
-   "TARGET_ELEMENT"
-  ]
- },
- "debug": false,
- "walkingSpeed": 142,
- "sprintingSpeed": 240,
- "mouseSensitivity": 0.5,
- "keyboardSensitivity": 1.2
+ "extends": "gltf-game"
 }

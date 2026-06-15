@@ -16,9 +16,8 @@
     }
    },
    "issue-tracker": {
-    "sections": "summary",
+    "active-overlay": "command-palette",
     "filters": {
-     "dropdown": "none",
      "order": {
       "descending": true,
       "by": "date"
@@ -38,12 +37,12 @@
    },
    "sidebar": {
     "outliner-domains": {
-     "folders": [
+     "folder-mask": [
       ""
      ]
     },
     "outliner-types": {
-     "folders": [
+     "folder-mask": [
       "part.abstract.parts"
      ]
     },
@@ -155,7 +154,7 @@
   }
  },
  "parts": {
-  "desktop": {
+  "core": {
    "color": "light",
    "era": "modern"
   }

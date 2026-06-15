@@ -1,1 +1,0 @@
-Graphics.device.queue.writeBuffer(OrbitalGame.uniformBuffer, 0, OrbitalCamera.buffer)

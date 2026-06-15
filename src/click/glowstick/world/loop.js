@@ -26,5 +26,5 @@ if (GlowstickWorld.viewedPosition.x !== GlowstickWorld.position.x || GlowstickWo
  Q(`world->svg #player-marker`).setAttribute("x", Math.floor(GlowstickWorld.position.x))
  Q(`world->svg #player-marker`).setAttribute("y", Math.floor(GlowstickWorld.position.z))
 
- GlowstickWorld.viewedPosition = { ...GlowstickWorld.position }
+ GlowstickWorld.viewedPosition = Vector.copy(GlowstickWorld.position)
 }

@@ -9,7 +9,7 @@ let resultRID = 0n
 
 for (const tileIndex of tileIndices) {
  if (typeof tileIndex === "number") {
-  const tile = Vector[2](tileIndex % width, Math.floor(tileIndex / width))
+  const tile = Vector.xy(tileIndex % width, Math.floor(tileIndex / width))
   if (tile.y >= 0 && tile.x >= 0 && tile.x < MinosBoard.width && tile.y < MinosBoard.width) {
    const tileIndex = BigInt((tile.y * MinosBoard.width) + tile.x)
    resultRID |= 1n << tileIndex
