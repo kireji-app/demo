@@ -1,0 +1,1 @@
+Q("#level").innerHTML = MinosLevel["part.html"]

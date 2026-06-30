@@ -1,6 +1,6 @@
 return (
- `<button id=wins ${MinosScore.wins.pointAttr("viewModal")}>` + (
-  MinosScore.wins["part.html"]
+ `<button id=level ${MinosScore.level.pointAttr("viewModal")}>` + (
+  MinosScore.level["part.html"]
  ) + "</button>" +
  `<button id=trophies ${MinosScore.trophies.pointAttr("viewModal")}>` + (
   MinosScore.trophies["part.html"]

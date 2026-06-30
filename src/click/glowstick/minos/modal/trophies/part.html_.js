@@ -10,7 +10,7 @@ function createCategoryHTML(category) {
 const categories = []
 
 createCategoryHTML(MinosTrophies.basic)
-createCategoryHTML(MinosTrophies.wins)
+createCategoryHTML(MinosTrophies.level)
 createCategoryHTML(MinosTrophies.moveLimit)
 createCategoryHTML(MinosTrophies.points)
 createCategoryHTML(MinosTrophies.createA)

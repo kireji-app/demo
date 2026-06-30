@@ -93,7 +93,7 @@ else if (MinosBoard.filledRows.size || MinosBoard.filledColumns.size) setTimeout
 else if (MinosBoard.rid === 0n) setTimeout(() => {
  debug("You won!")
  setTimeout(() => {
-  MinosWins.increment()
+  MinosLevel.increment()
   debug(`Earned 1000 points!`)
   MinosPoints.earn(1000)
   MinosBoard.scramble()

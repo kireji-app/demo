@@ -1,1 +1,0 @@
-return Number(MinosScore.wins.rid) >= thisMinosWinsTrophy.goal

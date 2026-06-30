@@ -1,1 +1,0 @@
-return "Wins:&nbsp;" + MinosWins.rid

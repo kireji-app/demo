@@ -1,1 +1,1 @@
-return !!MinosScore.wins.rid
+return !!MinosScore.level.rid

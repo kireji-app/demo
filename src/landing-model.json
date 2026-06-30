@@ -134,10 +134,10 @@
    },
    "orbital": {
     "levels": {
-     "space-platform": {
-      "x": 389.78058483688375,
+     "corridor": {
+      "x": 30,
       "y": -16,
-      "z": 95.38089880293258
+      "z": 95
      }
     },
     "camera": {
@@ -156,6 +156,7 @@
  "parts": {
   "core": {
    "color": "light",
+   "debug": "hide-debug",
    "era": "modern"
   }
  }

@@ -4,7 +4,7 @@ declare interface IMinosGameScore
 
  // Subparts.
  readonly points: IMinosGameScorePoints
- readonly wins: IMinosGameScoreWins
+ readonly level: IMinosGameScoreLevel
  readonly trophies: IMinosGameScoreTrophies
  readonly moves: IMinosGameMovesCount
  readonly usedBomb: IBoolean<IMinosGameScore>

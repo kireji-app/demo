@@ -101,7 +101,7 @@ body.modern #minos_glowstick_click[data-modal="shop"] .item .price {
 
 #minos_glowstick_click[data-modal="trophies"] #trophies,
 #minos_glowstick_click[data-modal="shop"] #points,
-#minos_glowstick_click:not([data-modal]) #wins {
+#minos_glowstick_click:not([data-modal]) #level {
  pointer-events: none;
 }
 
@@ -109,7 +109,7 @@ body.modern #minos_glowstick_click[data-modal="shop"] .item .price {
  grid-template: "label" 1fr / 1fr;
 }
 
-#minos_glowstick_click :is(#trophies, #wins, #points) {
+#minos_glowstick_click :is(#trophies, #level, #points) {
  width: 100%;
  height: 100%;
 }
@@ -135,11 +135,9 @@ body.vintage #minos_glowstick_click[data-modal="shop"] .item {
 }
 
 #minos_glowstick_click[data-modal="trophies"] .item>.label {
- font-size: calc(var(--tile) / 2);
- line-height: var(--tile);
- padding: var(--tile);
  grid-area: label;
  text-align: left;
+ padding: calc(var(--spacing) / 2);
 }
 
 #minos_glowstick_click[data-modal="shop"] .item>mino- {
@@ -308,10 +306,6 @@ body.modern #minos_glowstick_click {
  --grid-color: var(--bg-mode);
 }
 
-body.modern #minos_glowstick_click[data-modal="trophies"] .item.earned {
- background-color: #00ff007f;
-}
-
 body.modern #minos_glowstick_click>section:not(#bomb) {
  background-color: var(--bg-mode-er);
  border-radius: var(--px2);
@@ -326,13 +320,33 @@ body.modern #minos_glowstick_click[data-modal] .item {
   inset var(--px-1) 0 0 var(--accent-mode-est),
   inset 0 var(--px) 0 var(--accent-mode-est),
   inset 0 var(--px-1) 0 var(--accent-mode-est);
+
+ [data-modal="trophies"] & {
+  box-shadow:
+   inset var(--px) 0 0 var(--accent-mode-est),
+   inset var(--px-1) 0 0 var(--accent-mode-est);
+
+  &:nth-child(even) {
+   background-color: var(--bg-mode-er);
+
+   &.earned {
+    background-color: #00ff005f;
+
+    body.dark & {
+     background-color: #007f005f;
+    }
+   }
+  }
+ }
 }
 
-body.modern #minos_glowstick_click[data-modal] .item:last-child {
- box-shadow:
-  inset var(--px) 0 0 var(--accent-mode-est),
-  inset var(--px-1) 0 0 var(--accent-mode-est),
-  inset 0 var(--px) 0 var(--bg);
+body.modern #minos_glowstick_click[data-modal="trophies"] .item.earned {
+ background-color: #00ff007f;
+}
+
+body.dark.modern #minos_glowstick_click[data-modal="trophies"] .item.earned {
+ background-color: #007f007f;
+ color: #00ff00;
 }
 
 body.modern #minos_glowstick_click[data-modal] .item[disabled]>.price {
@@ -361,7 +375,7 @@ body.modern #minos_glowstick_click>section:not(#bomb, #modal) {
 
 body.modern #minos_glowstick_click[data-modal="trophies"] #trophies,
 body.modern #minos_glowstick_click[data-modal="shop"] #points,
-body.modern #minos_glowstick_click:not([data-modal]) #wins,
+body.modern #minos_glowstick_click:not([data-modal]) #level,
 body.modern #minos_glowstick_click[data-shop-target="0"] #minoes>:nth-child(1),
 body.modern #minos_glowstick_click[data-shop-target="1"] #minoes>:nth-child(2),
 body.modern #minos_glowstick_click[data-shop-target="2"] #minoes>:nth-child(3) {
@@ -400,6 +414,29 @@ body.modern #minos_glowstick_click #board tile-[style="--x:11;--y:11"] {
 
 body.modern.dark #minos_glowstick_click tile- {
  background-color: var(--accent-mode);
+}
+
+body.modern #minos_glowstick_click[data-modal] #categories .category>h3 {
+ margin: 0;
+ padding: var(--spacing);
+ text-align: center;
+ background-color: var(--accent-mode-est);
+}
+
+body.modern #minos_glowstick_click .trophies {
+ background-color: var(--accent-mode-est);
+
+ >.item {
+  background-color: var(--bg-mode-est);
+
+  &:first-child {
+   border-radius: calc(var(--spacing) / 2) calc(var(--spacing) / 2) 0 0;
+  }
+
+  &:last-child {
+   border-radius: 0 0 calc(var(--spacing) / 2) calc(var(--spacing) / 2);
+  }
+ }
 }
 
 body.vintage #minos_glowstick_click :is(#score, #bomb, #minoes)::before {
@@ -559,7 +596,7 @@ body.dark.vintage #minos_glowstick_click[data-modal="trophies"] .item.earned>.la
  text-shadow: 1px 1px var(--bg-light-er);
 }
 
-body.vintage #minos_glowstick_click :is(#points, #wins, #trophies) {
+body.vintage #minos_glowstick_click :is(#points, #level, #trophies) {
  box-shadow: var(--deep-outset);
  background-color: var(--bg);
  width: 100%;
@@ -580,7 +617,7 @@ body.vintage #minos_glowstick_click #minoes button.down,
 body.vintage #minos_glowstick_click[data-modal="trophies"] #trophies,
 body.vintage #minos_glowstick_click[data-modal="shop"] #points,
 body.vintage #minos_glowstick_click #score button.down,
-body.vintage #minos_glowstick_click:not([data-modal]) #wins,
+body.vintage #minos_glowstick_click:not([data-modal]) #level,
 body.vintage #minos_glowstick_click[data-shop-target="0"] #minoes>:nth-child(1),
 body.vintage #minos_glowstick_click[data-shop-target="1"] #minoes>:nth-child(2),
 body.vintage #minos_glowstick_click[data-shop-target="2"] #minoes>:nth-child(3),

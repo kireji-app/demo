@@ -1,0 +1,1 @@
+return `Reach level ${thisMinosLevelTrophy.goal ?? "{n}"}.`

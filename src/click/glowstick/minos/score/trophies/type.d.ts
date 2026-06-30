@@ -10,7 +10,7 @@ declare interface IMinosGameScoreTrophies
  readonly moveLimit: IMinosGameTrophyCategory
  readonly special: IMinosGameTrophyCategory
  readonly shop: IMinosGameTrophyCategory
- readonly wins: IMinosGameTrophyCategory
+ readonly level: IMinosGameTrophyCategory
 
  // Components.
  /** Scans the trophies to determine which ones have been completed. This does not evaluate the trophy win conditions for all cases. */

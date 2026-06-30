@@ -1,0 +1,26 @@
+{
+ "name": "OrbitalSoundtrack",
+ "extends": "mix",
+ "actions": {
+  "playArpeggio": [
+   "TONE",
+   "START_TIME"
+  ],
+  "playBass": [
+   "TONE",
+   "START_TIME",
+   "BEATS"
+  ],
+  "playPad": [
+   "TONES",
+   "START_TIME"
+  ]
+ },
+ "chords": [
+  { "bass": 45, "pad": [57, 60, 64, 67], "arp": [57, 60, 64, 67, 69, 67, 64, 60] },
+  { "bass": 41, "pad": [53, 57, 60, 64], "arp": [53, 57, 60, 64, 65, 64, 60, 57] },
+  { "bass": 36, "pad": [48, 52, 55, 60], "arp": [52, 55, 60, 64, 67, 64, 60, 55] },
+  { "bass": 40, "pad": [52, 55, 59, 64], "arp": [52, 55, 59, 64, 67, 64, 59, 55] }
+ ],
+ "bpm": 70
+}

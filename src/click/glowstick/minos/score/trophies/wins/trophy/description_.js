@@ -1,1 +1,0 @@
-return `Clear the board ${thisMinosWinsTrophy.goal ?? "{n}"} times.`

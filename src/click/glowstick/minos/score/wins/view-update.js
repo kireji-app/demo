@@ -1,1 +1,0 @@
-Q("#wins").innerHTML = MinosWins["part.html"]

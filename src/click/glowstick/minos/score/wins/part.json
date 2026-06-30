@@ -1,9 +1,0 @@
-{
- "name": "MinosWins",
- "actions": {
-  "modal-view": [
-   "POINTER_EVENT",
-   "TARGET_ELEMENT"
-  ]
- }
-}

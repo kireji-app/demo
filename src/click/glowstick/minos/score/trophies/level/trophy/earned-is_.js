@@ -1,0 +1,1 @@
+return Number(MinosScore.level.rid + 1n) >= thisMinosLevelTrophy.goal

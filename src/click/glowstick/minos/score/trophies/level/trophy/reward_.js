@@ -1,0 +1,1 @@
+return thisMinosPointsTrophy.key * 100

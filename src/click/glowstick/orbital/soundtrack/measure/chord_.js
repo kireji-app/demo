@@ -1,0 +1,1 @@
+return OrbitalSoundtrack.manifest.chords[thisPart.rid]
